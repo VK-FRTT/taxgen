@@ -60,3 +60,18 @@ configure(rootProject) {
 	jar.enabled = false
 	uploadArchives.enabled = false
 }
+
+
+subprojects { subproj ->
+
+    configurations {
+        shadowed
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin/'
+        test.java.srcDirs += 'src/test/kotlin/'
+        main.compileClasspath += configurations.shadowed
+        test.runtimeClasspath += configurations.shadowed
+    }
+}

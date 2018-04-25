@@ -1,13 +1,27 @@
 description = 'Stand-alone command line application for executing taxonomy generation from console'
 
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("com.github.jengelman.gradle.plugins:shadow:${shadowVersion}")
+    }
+}
+
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
 dependencies {
-    implementation libs.kotlinStdLib
-    implementation libs.kotlinReflect
-    implementation libs.okHttp3
-    implementation(project(':yti-taxgen-commons'))
-    implementation(project(':yti-taxgen-data-point-meta-model'))
-    implementation(project(':yti-taxgen-ycl-input-parser'))
-    implementation(project(':yti-taxgen-fixta-generator'))
+    shadowed libs.kotlinStdLib
+    shadowed libs.kotlinReflect
+    shadowed libs.okHttp3
+    shadowed(project(':yti-taxgen-commons'))
+    shadowed(project(':yti-taxgen-data-point-meta-model'))
+    shadowed(project(':yti-taxgen-ycl-input-parser'))
+    shadowed(project(':yti-taxgen-fixta-generator'))
 
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams
@@ -17,10 +31,31 @@ dependencies {
 }
 
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'fi.vm.yti.taxgen.cli.MainKt'
+    }
+}
+
+
+jar.enabled = false
+jar.dependsOn shadowJar
+
+
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+
+shadowJar {
+    classifier = null
+    configurations = [project.configurations.shadowed]
+}
+
+
+artifacts {
+    archives shadowJar
+}
 
 
 publishing {
