@@ -1,3 +1,5 @@
+description = 'Produces Finnish taxonomy architecture based XBRL Taxonomy from Data Point Meta Model data'
+
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
@@ -25,7 +27,7 @@ publishing {
             version '0.1-SNAPSHOT'
 
             pom.withXml {
-                asNode().appendNode('description', 'Produces Finnish taxonomy architecture based XBRL Taxonomy from Data Point Meta Model data.')
+                asNode().appendNode('description', description)
             }
             artifact jar
             artifact sourceJar {

@@ -1,3 +1,5 @@
+description = 'Data Point Meta Model implementation for YTI XBRL Taxonomy Generator'
+
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
@@ -24,7 +26,7 @@ publishing {
             version '0.1-SNAPSHOT'
 
             pom.withXml {
-                asNode().appendNode('description', 'Data Point Meta Model implementation for YTI XBRL Taxonomy Generator')
+                asNode().appendNode('description', description)
             }
             artifact jar
             artifact sourceJar {

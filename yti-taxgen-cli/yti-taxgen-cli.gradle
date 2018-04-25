@@ -1,3 +1,5 @@
+description = 'Stand-alone command line application for executing taxonomy generation from console'
+
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
@@ -29,7 +31,7 @@ publishing {
             version '0.1-SNAPSHOT'
 
             pom.withXml {
-                asNode().appendNode('description', 'Stand-alone command line application for executing taxonomy generation from console')
+                asNode().appendNode('description', description)
             }
             artifact jar
             artifact sourceJar {

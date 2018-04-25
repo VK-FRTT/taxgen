@@ -1,3 +1,5 @@
+description = 'Parser for reading YTI Codelist (YCL) based financial data models'
+
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
@@ -25,7 +27,7 @@ publishing {
             version '0.1-SNAPSHOT'
 
             pom.withXml {
-                asNode().appendNode('description', 'Parser for reading YTI Codelist (YCL) based financial data models')
+                asNode().appendNode('description', description)
             }
             artifact jar
             artifact sourceJar {
