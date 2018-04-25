@@ -1,18 +1,14 @@
+description = 'YTI XBRL Taxonomy Generator'
+
 apply from: "gradle/dependencies.gradle"
 
 buildscript {
-    ext {
-        versions = [
-                kotlin_plugin: "1.2.31",
-        ]
-    }
-
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin_plugin"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinPluginVersion}"
     }
 }
 
@@ -23,10 +19,9 @@ task wrapper(type: Wrapper) {
 
 
 allprojects { subproj ->
-    apply plugin: "kotlin"
+    apply plugin: 'kotlin'
     apply plugin: 'java-library'
     apply plugin: 'idea'
-    apply plugin: 'maven-publish'
 
     group = 'fi.vm.yti.taxgen'
 
@@ -55,14 +50,13 @@ allprojects { subproj ->
 
 
 configure(rootProject) {
-	description = 'YTI XBRL Taxonomy Generator'
-
 	jar.enabled = false
 	uploadArchives.enabled = false
 }
 
 
 subprojects { subproj ->
+    apply plugin: 'maven-publish'
 
     configurations {
         shadowed
@@ -73,5 +67,28 @@ subprojects { subproj ->
         test.java.srcDirs += 'src/test/kotlin/'
         main.compileClasspath += configurations.shadowed
         test.runtimeClasspath += configurations.shadowed
+    }
+
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allSource
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId subproj.group
+                artifactId subproj.name
+                version '0.1-SNAPSHOT'
+
+                pom.withXml {
+                    asNode().appendNode('description', subproj.description)
+                }
+                artifact jar
+                artifact sourceJar {
+                    classifier "sources"
+                }
+            }
+        }
     }
 }

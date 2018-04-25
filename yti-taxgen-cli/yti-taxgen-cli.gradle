@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.github.jengelman.gradle.plugins:shadow:${shadowVersion}")
+        classpath("com.github.jengelman.gradle.plugins:shadow:${shadowPluginVersion}")
     }
 }
 
@@ -42,11 +42,6 @@ jar.enabled = false
 jar.dependsOn shadowJar
 
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-}
-
-
 shadowJar {
     classifier = null
     configurations = [project.configurations.shadowed]
@@ -58,20 +53,3 @@ artifacts {
 }
 
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'fi.vm.yti.taxgen'
-            artifactId 'yti-taxgen-cli'
-            version '0.1-SNAPSHOT'
-
-            pom.withXml {
-                asNode().appendNode('description', description)
-            }
-            artifact jar
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
-    }
-}
