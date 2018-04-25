@@ -1,0 +1,27 @@
+ext {
+    versions = [
+            kotlin:         "1.2.31",
+            okhttp:         "3.10.0",
+
+            jupiter:        "5.1.0",
+            assertj:        "3.9.0",
+    ]
+
+
+    libs = [
+            kotlinStdLib:           "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+            kotlinReflect:          "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin",
+
+            okHttp3:                "com.squareup.okhttp3:okhttp:$versions.okhttp",
+
+            kotlinTest:             "org.jetbrains.kotlin:kotlin-test:$versions.kotlin",
+            kotlinTestJunit:        "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin",
+
+            junitJupiterApi:        "org.junit.jupiter:junit-jupiter-api:$versions.jupiter",
+            junitJupiterEngine:     "org.junit.jupiter:junit-jupiter-engine:$versions.jupiter",
+            junitJupiterParams:     "org.junit.jupiter:junit-jupiter-params:$versions.jupiter",
+
+            assertjCore:            "org.assertj:assertj-core:$versions.assertj"
+    ]
+}
+

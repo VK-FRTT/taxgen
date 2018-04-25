@@ -1,0 +1,35 @@
+dependencies {
+    implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
+    implementation(project(':yti-taxgen-commons'))
+
+    testCompile libs.junitJupiterApi
+    testCompile libs.junitJupiterParams
+    testCompile libs.assertjCore
+
+    testRuntimeOnly libs.junitJupiterEngine
+}
+
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'fi.vm.yti.taxgen'
+            artifactId 'yti-taxgen-data-point-meta-model'
+            version '0.1-SNAPSHOT'
+
+            pom.withXml {
+                asNode().appendNode('description', 'Data Point Meta Model implementation for YTI XBRL Taxonomy Generator')
+            }
+            artifact jar
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}

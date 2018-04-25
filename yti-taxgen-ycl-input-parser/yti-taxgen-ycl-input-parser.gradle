@@ -1,0 +1,36 @@
+dependencies {
+    implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
+    implementation(project(':yti-taxgen-commons'))
+    implementation(project(':yti-taxgen-data-point-meta-model'))
+
+    testCompile libs.junitJupiterApi
+    testCompile libs.junitJupiterParams
+    testCompile libs.assertjCore
+
+    testRuntimeOnly libs.junitJupiterEngine
+}
+
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'fi.vm.yti.taxgen'
+            artifactId 'yti-taxgen-ycl-input-parser'
+            version '0.1-SNAPSHOT'
+
+            pom.withXml {
+                asNode().appendNode('description', 'Parser for reading YTI Codelist (YCL) based financial data models')
+            }
+            artifact jar
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}

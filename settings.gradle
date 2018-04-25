@@ -1,0 +1,15 @@
+rootProject.name = "yti-xbrl-taxgen"
+
+include 'yti-taxgen-commons'
+include 'yti-taxgen-data-point-meta-model'
+include 'yti-taxgen-ycl-input-parser'
+include 'yti-taxgen-fixta-generator'
+include 'yti-taxgen-cli'
+
+
+// Customise subprojects build file name & validate that it exists
+rootProject.children.each { project ->
+    project.buildFileName = "${project.name}.gradle"
+    assert project.buildFile.isFile()
+}
+

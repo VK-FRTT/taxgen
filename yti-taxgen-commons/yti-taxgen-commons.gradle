@@ -1,0 +1,34 @@
+dependencies {
+    implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
+
+    implementation libs.junitJupiterApi
+    implementation libs.junitJupiterParams
+    implementation libs.assertjCore
+
+    testRuntimeOnly libs.junitJupiterEngine
+}
+
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'fi.vm.yti.taxgen'
+            artifactId 'yti-taxgen-commons'
+            version '0.1-SNAPSHOT'
+
+            pom.withXml {
+                asNode().appendNode('description', 'Common utilities of YTI Taxonomy Generator.')
+            }
+            artifact jar
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
