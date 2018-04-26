@@ -4,10 +4,8 @@ import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.DataDefinition
 import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.dynamicAttribute
 import java.time.LocalDate
 
-
 fun dataPointMetaModelTestData(): Set<DataDefinition> {
     var definitions = HashSet<DataDefinition>()
-
 
     definitions.add(
         DataDefinition(
@@ -21,7 +19,6 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         )
     )
 
-
     definitions.add(
         DataDefinition(
             kClass = Owner::class,
@@ -34,7 +31,6 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
             )
         )
     )
-
 
     definitions.add(
         DataDefinition(
@@ -61,7 +57,6 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         )
     )
 
-
     definitions.add(
         DataDefinition(
             kClass = ExplicitDomain::class,
@@ -74,7 +69,6 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         )
     )
 
-
     definitions.add(
         DataDefinition(
             kClass = TypedDomain::class,
@@ -85,8 +79,5 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         )
     )
 
-
     return definitions
 }
-
-

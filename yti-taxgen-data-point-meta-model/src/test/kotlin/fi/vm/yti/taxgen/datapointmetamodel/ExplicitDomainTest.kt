@@ -8,14 +8,12 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-
 internal class ExplicitDomainTest {
 
     @BeforeEach
     fun init() {
         Factory.registerDefinitions(dataPointMetaModelTestData())
     }
-
 
     @DisplayName("PropertyOptionality")
     @ParameterizedTest(name = "{0} should be {1}")
@@ -32,7 +30,6 @@ internal class ExplicitDomainTest {
         )
     }
 
-
     @DisplayName("PropertyLengthValidation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
@@ -43,4 +40,3 @@ internal class ExplicitDomainTest {
         propertyLengthValidationTemplate<ExplicitDomain>(testedProperty, validationType, expectedLimit)
     }
 }
-

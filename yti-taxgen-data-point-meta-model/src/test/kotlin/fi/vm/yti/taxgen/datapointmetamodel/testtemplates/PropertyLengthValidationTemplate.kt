@@ -12,7 +12,6 @@ import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.isSupertypeOf
 import kotlin.reflect.full.memberProperties
 
-
 inline fun <reified T : Any> propertyLengthValidationTemplate(
     testedProperty: String,
     validationType: String,
@@ -49,7 +48,6 @@ inline fun <reified T : Any> propertyLengthValidationTemplate(
     )
 }
 
-
 inline fun <reified T : Any> generateTestValueForMemberProperty(
     propertyName: String,
     length: Int
@@ -67,7 +65,6 @@ inline fun <reified T : Any> generateTestValueForMemberProperty(
 
     throw UnsupportedOperationException("Unsupported value type in property: $propertyName")
 }
-
 
 fun assertExceptionIsDataValidationFailedException(
     exception: Throwable?,

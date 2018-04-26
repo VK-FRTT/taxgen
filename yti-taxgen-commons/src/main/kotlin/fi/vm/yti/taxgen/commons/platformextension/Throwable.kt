@@ -12,7 +12,6 @@ inline fun <reified T : Any> Throwable.rootExceptionOfClass(): T? {
     return null
 }
 
-
 fun Throwable.chainToString(): String {
     val messages = mutableListOf<String>()
     var exception: Throwable? = this

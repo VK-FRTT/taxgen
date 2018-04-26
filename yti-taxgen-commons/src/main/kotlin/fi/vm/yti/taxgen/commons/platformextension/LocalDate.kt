@@ -1,9 +1,6 @@
 package fi.vm.yti.taxgen.commons.platformextension
 
-
 import java.time.LocalDate
-import kotlin.reflect.full.memberProperties
-
 
 fun LocalDate.isBeforeOrEqualOrUndefined(other: LocalDate?): Boolean {
     if (other == null) {
@@ -16,4 +13,3 @@ fun LocalDate.isBeforeOrEqualOrUndefined(other: LocalDate?): Boolean {
 
     return false
 }
-

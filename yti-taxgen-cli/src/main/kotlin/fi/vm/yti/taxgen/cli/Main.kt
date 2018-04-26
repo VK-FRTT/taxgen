@@ -66,7 +66,6 @@ fun main(args: Array<String>) {
     val generationResult = FixtaGenerator.generateTaxonomy()
 }
 
-
 private fun sampleFetchRequest() {
     val client = OkHttpClient()
 

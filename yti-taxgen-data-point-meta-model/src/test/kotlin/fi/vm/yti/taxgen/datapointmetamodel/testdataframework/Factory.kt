@@ -5,7 +5,6 @@ import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
 
-
 class Factory {
 
     private object Registry {
@@ -21,7 +20,6 @@ class Factory {
         }
     }
 
-
     object Builder {
         private var dynamicAttributeContext = DynamicAttributeContext()
 
@@ -30,7 +28,6 @@ class Factory {
             val definition = Registry.definitionFor(kClass)
             return buildOutgoingAttributes(definition.attributes, overrideAttributes)
         }
-
 
         private fun buildOutgoingAttributes(
             definedAttributes: Map<String, Any?>,
@@ -59,7 +56,6 @@ class Factory {
             return outgoingAttributes
         }
 
-
         fun instantiate(kClass: KClass<*>, attributes: Map<String, Any?>): Any {
             val primaryConstructor: KFunction<*> = primaryConstructorFrom(kClass)
 
@@ -72,12 +68,10 @@ class Factory {
             return primaryConstructor.callBy(arguments)!!
         }
 
-
         private fun primaryConstructorFrom(kClass: KClass<*>): KFunction<*> {
             return kClass.primaryConstructor
                     ?: throw UnsupportedOperationException("No primary constructor for ${kClass.qualifiedName}")
         }
-
 
         private fun mapAttributesToFunctionParams(
             attributes: Map<String, Any?>,
@@ -104,24 +98,21 @@ class Factory {
         }
     }
 
-
     companion object {
 
         fun registerDefinitions(definitions: Set<DataDefinition>) {
             Registry.registerDefinitions(definitions)
         }
 
-
         inline fun <reified T : Any> attributesFor(overrides: Map<String, Any?>? = null): MutableMap<String, Any?> {
             val kClass = T::class
             return Builder.attributesFor(kClass, overrides)
         }
 
-
         inline fun <reified T : Any> instantiate(attributes: Map<String, Any?>? = null): T {
             val kClass = T::class
 
-            if (attributes == null){
+            if (attributes == null) {
                 return Builder.instantiate(
                     kClass,
                     Builder.attributesFor(kClass, null)) as T

@@ -2,10 +2,8 @@ package fi.vm.yti.taxgen.datapointmetamodel.validationfw
 
 import fi.vm.yti.taxgen.commons.platformextension.getPropertyValue
 
-
 class DataValidationException(override var message: String) : Exception(message)
 class DataValidationConfigurationError(override var message: String) : Error(message)
-
 
 fun validateProperty(
     instance: Any,
@@ -28,7 +26,6 @@ fun validateProperty(
         throw DataValidationException("[${messages.joinToString()}]")
     }
 }
-
 
 private fun doValidate(
     validatorType: String,
@@ -73,7 +70,6 @@ private fun doValidate(
         }
     }
 }
-
 
 private fun unsupportedDataTypeForValidator(validatorType: String, propertyName: String, value: Any) {
     throw DataValidationConfigurationError("$validatorType validator: Unsupported data type ${value::class.simpleName} " +

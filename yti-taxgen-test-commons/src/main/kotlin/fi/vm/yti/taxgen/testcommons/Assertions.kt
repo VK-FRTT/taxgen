@@ -3,7 +3,6 @@ package fi.vm.yti.taxgen.testcommons
 import fi.vm.yti.taxgen.commons.platformextension.chainToString
 import org.assertj.core.api.Assertions
 
-
 fun assertExceptionIsNull(exception: Throwable?) {
     if (exception == null) return
 
@@ -13,10 +12,8 @@ fun assertExceptionIsNull(exception: Throwable?) {
     )
 }
 
-
 fun failTestCase(description: String, cause: Throwable? = null): Nothing {
     Assertions.fail(description, cause)
 
     throw RuntimeException("Unreachable, but needed to keep Kotlin compiler NullSafety analyzer happy")
 }
-

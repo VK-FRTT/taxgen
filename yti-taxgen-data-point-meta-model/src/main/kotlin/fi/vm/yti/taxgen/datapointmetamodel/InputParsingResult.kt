@@ -1,4 +1,3 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-class InputParsingResult {
-}
+class InputParsingResult

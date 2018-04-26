@@ -9,4 +9,3 @@ data class TypedDomain(
         domainValidation()
     }
 }
-

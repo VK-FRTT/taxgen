@@ -9,7 +9,6 @@ import fi.vm.yti.taxgen.testcommons.failTestCase
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 
-
 inline fun <reified T : Any> propertyOptionalityTemplate(
     testedProperty: String,
     expectedOptionality: String
@@ -22,7 +21,6 @@ inline fun <reified T : Any> propertyOptionalityTemplate(
     assertThat(propertyValue)
         .isNotNull()
         .isEqualTo(defaultAttributes[testedProperty])
-
 
     //2. Test property optionality
     val attributes = Factory.attributesFor<T>(
@@ -40,7 +38,6 @@ inline fun <reified T : Any> propertyOptionalityTemplate(
         else -> throw UnsupportedOperationException("Unsupported optionality: $expectedOptionality")
     }
 }
-
 
 fun assertExceptionIsRequiredPropertyValueMissingException(
     exception: Throwable?,

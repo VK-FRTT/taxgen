@@ -29,4 +29,3 @@ data class Concept(
         }
     }
 }
-

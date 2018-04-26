@@ -12,7 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 
-
 internal class ConceptTest {
 
     @BeforeEach
@@ -37,7 +36,6 @@ internal class ConceptTest {
             expectedOptionality
         )
     }
-
 
     @Nested
     inner class PropertyValidation {
@@ -71,7 +69,6 @@ internal class ConceptTest {
             assertThat(concept.createdAt).isEqualTo(concept.modifiedAt)
         }
 
-
         @Test
         fun `applicableFrom should precede applicableUntil`() {
             val attributes = Factory.attributesFor<Concept>(
@@ -88,7 +85,6 @@ internal class ConceptTest {
                 .hasMessageContaining("applicableUntil")
         }
 
-
         @Test
         fun `applicableFrom may be equal with applicableUntil`() {
             val attributes = Factory.attributesFor<Concept>(
@@ -101,7 +97,6 @@ internal class ConceptTest {
             val concept = Factory.instantiate<Concept>(attributes)
             assertThat(concept.applicableFrom).isEqualTo(concept.applicableUntil)
         }
-
 
         @Test
         fun `label may not be empty`() {

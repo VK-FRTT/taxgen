@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-
 internal class OwnerTest {
 
     @BeforeEach
@@ -32,7 +31,6 @@ internal class OwnerTest {
         )
     }
 
-
     @DisplayName("PropertyLengthValidation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
@@ -49,4 +47,3 @@ internal class OwnerTest {
         propertyLengthValidationTemplate<Owner>(testedProperty, validationType, expectedLimit)
     }
 }
-
