@@ -3,9 +3,9 @@ package fi.vm.yti.taxgen.datapointmetamodel.testtemplates
 import fi.vm.yti.taxgen.commons.platformextension.chainToString
 import fi.vm.yti.taxgen.commons.platformextension.rootExceptionOfClass
 import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.Factory
-import fi.vm.yti.taxgen.commons.test.helpers.assertExceptionIsNull
-import fi.vm.yti.taxgen.commons.test.helpers.failTestCase
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.DataValidationException
+import fi.vm.yti.taxgen.testcommons.assertExceptionIsNull
+import fi.vm.yti.taxgen.testcommons.failTestCase
 import org.assertj.core.api.Assertions
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf

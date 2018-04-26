@@ -4,8 +4,8 @@ import fi.vm.yti.taxgen.commons.platformextension.getPropertyValue
 import fi.vm.yti.taxgen.commons.platformextension.chainToString
 import fi.vm.yti.taxgen.commons.platformextension.rootExceptionOfClass
 import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.Factory
-import fi.vm.yti.taxgen.commons.test.helpers.assertExceptionIsNull
-import fi.vm.yti.taxgen.commons.test.helpers.failTestCase
+import fi.vm.yti.taxgen.testcommons.assertExceptionIsNull
+import fi.vm.yti.taxgen.testcommons.failTestCase
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 

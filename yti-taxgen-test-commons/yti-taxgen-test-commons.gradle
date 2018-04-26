@@ -1,0 +1,16 @@
+description = 'Common test utilities of YTI Taxonomy Generator'
+
+
+dependencies {
+    implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
+
+    implementation libs.junitJupiterApi
+    implementation libs.junitJupiterParams
+    implementation libs.assertjCore
+
+    implementation(project(':yti-taxgen-commons'))
+
+    testRuntimeOnly libs.junitJupiterEngine
+}
+

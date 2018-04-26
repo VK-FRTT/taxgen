@@ -36,24 +36,29 @@ Taxonomy Generator is modularized to somewhat isolated modules with clear respon
 
 ### 2.1 `yti-taxgen-commons`
 - Common utilities of Taxonomy Generator.
-- Contains both production and testing related utilities.
+- Note: Only production related utilities here.
 
 
-### 2.2 `yti-taxgen-data-point-meta-model`
+### 2.2 `yti-taxgen-test-commons`
+- Common test utilities of Taxonomy Generator.
+- Note: Testing related common stuff goes here.
+
+
+### 2.3 `yti-taxgen-data-point-meta-model`
 - Taxonomy Generator's internal data model: Data Point Meta Model
 - In practice this module implements concepts and entities used in Data Point Modeling.
 
 
-### 2.3 `yti-taxgen-ycl-input-parser`
+### 2.4 `yti-taxgen-ycl-input-parser`
 - Parser for reading YTI Codelist (YCL) based financial data models.
 - Parses YTI Codelist data and maps its contents to Data Point Meta Model.
 
 
-### 2.4 `yti-taxgen-fixta-generator`
+### 2.5 `yti-taxgen-fixta-generator`
 - Produces Finnish taxonomy architecture based XBRL Taxonomy from Data Point Meta Model data.
 
 
-### 2.5 `yti-taxgen-cli`
+### 2.6 `yti-taxgen-cli`
 - Stand-alone command line application for executing taxonomy generation from console.
 - Takes taxonomy configuration file as input.
 

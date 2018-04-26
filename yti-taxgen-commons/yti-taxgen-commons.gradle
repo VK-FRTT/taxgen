@@ -5,9 +5,9 @@ dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
 
-    implementation libs.junitJupiterApi
-    implementation libs.junitJupiterParams
-    implementation libs.assertjCore
+    testCompile libs.junitJupiterApi
+    testCompile libs.junitJupiterParams
+    testCompile libs.assertjCore
 
     testRuntimeOnly libs.junitJupiterEngine
 }

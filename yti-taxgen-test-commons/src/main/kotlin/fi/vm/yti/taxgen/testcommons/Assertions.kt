@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons.test.helpers
+package fi.vm.yti.taxgen.testcommons
 
 import fi.vm.yti.taxgen.commons.platformextension.chainToString
 import org.assertj.core.api.Assertions
