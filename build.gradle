@@ -5,10 +5,12 @@ apply from: "gradle/dependencies.gradle"
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinPluginVersion}"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:${spotlessPluginVersion}"
     }
 }
 
@@ -57,6 +59,7 @@ configure(rootProject) {
 
 subprojects { subproj ->
     apply plugin: 'maven-publish'
+    apply plugin: 'com.diffplug.gradle.spotless'
 
     configurations {
         shadowed
@@ -89,6 +92,20 @@ subprojects { subproj ->
                     classifier "sources"
                 }
             }
+        }
+    }
+
+    spotless {
+
+        java {
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+
+        kotlin {
+            ktlint("${ktlintVersion}")
+            trimTrailingWhitespace()
+            endWithNewline()
         }
     }
 }
