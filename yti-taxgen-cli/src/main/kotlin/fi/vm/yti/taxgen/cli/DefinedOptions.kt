@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.cli
 
+import joptsimple.OptionException
 import joptsimple.OptionParser
-import joptsimple.OptionSet
 import joptsimple.OptionSpec
 import java.io.File
-import java.io.Writer
+import java.io.PrintWriter
 
 class DefinedOptions {
 
@@ -24,22 +24,27 @@ class DefinedOptions {
             .ofType<File>(File::class.java)
     }
 
-    fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {
-        val optionSet = optionParser.parse(*args)
+    fun detectOptionsFromArgs(args: Array<String>, consoleOut: PrintWriter): DetectedOptions {
+        return try {
+            val detectedOptions = parseArgsToToDetectedOptions(args)
+            if (detectedOptions.help) {
+                optionParser.printHelpOn(consoleOut)
+                halt(TAXGEN_CLI_SUCCESS)
+            }
 
-        return mapParseResultToDetectedOptions(optionSet)
+            detectedOptions
+        } catch (exception: OptionException) {
+            consoleOut.println("yti-taxgen-cli: ${exception.message}")
+            halt(TAXGEN_CLI_FAIL)
+        }
     }
 
-    private fun mapParseResultToDetectedOptions(optionSet: OptionSet): DetectedOptions {
-        optionSet.valueOf(this.yclConfig)
+    private fun parseArgsToToDetectedOptions(args: Array<String>): DetectedOptions {
+        val optionSet = optionParser.parse(*args)
 
         return DetectedOptions(
             help = optionSet.has(this.help),
             yclConfigFile = optionSet.valueOf(this.yclConfig)
         )
-    }
-
-    fun renderHelp(writer: Writer) {
-        optionParser.printHelpOn(writer)
     }
 }
