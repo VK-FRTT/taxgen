@@ -1,9 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.fixtagenerator.FixtaGenerator
-import fi.vm.yti.taxgen.yclinputparser.YclInputParser
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import java.nio.charset.Charset
 import kotlin.system.exitProcess
 
 /*
@@ -59,13 +56,18 @@ fun main(args: Array<String>) {
      *
      */
 
-    val yclInputContainer = "yclInputContainer"
+    val status = TaxgenCli(
+        System.out,
+        System.err,
+        Charset.defaultCharset(),
+        DefinedOptions()
+    ).use { cli ->
+        cli.execute(args)
+    }
 
-    val parsingResult = YclInputParser.parseInput(yclInputContainer)
-
-    val generationResult = FixtaGenerator.generateTaxonomy()
+    exitProcess(status)
 }
-
+/*
 private fun sampleFetchRequest() {
     val client = OkHttpClient()
 
@@ -87,3 +89,4 @@ private fun sampleFetchRequest() {
 
     System.out.println(response.body()?.string())
 }
+*/

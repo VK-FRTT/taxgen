@@ -17,6 +17,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 dependencies {
     shadowed libs.kotlinStdLib
     shadowed libs.kotlinReflect
+    shadowed libs.joptSimple
     shadowed libs.okHttp3
     shadowed(project(':yti-taxgen-commons'))
     shadowed(project(':yti-taxgen-data-point-meta-model'))

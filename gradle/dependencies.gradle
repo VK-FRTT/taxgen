@@ -1,6 +1,7 @@
 ext {
     versions = [
             kotlin:         "1.2.31",
+            joptSimple:     "5.0.4",
             okhttp:         "3.10.0",
 
             jupiter:        "5.1.0",
@@ -12,6 +13,7 @@ ext {
             kotlinStdLib:           "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
             kotlinReflect:          "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin",
 
+            joptSimple:             "net.sf.jopt-simple:jopt-simple:$versions.joptSimple",
             okHttp3:                "com.squareup.okhttp3:okhttp:$versions.okhttp",
 
             kotlinTest:             "org.jetbrains.kotlin:kotlin-test:$versions.kotlin",
