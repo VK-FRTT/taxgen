@@ -4,5 +4,5 @@ import java.io.File
 
 data class DetectedOptions(
     val help: Boolean,
-    val yclConfigFile: File?
+    val yclSourceConfigFile: File?
 )

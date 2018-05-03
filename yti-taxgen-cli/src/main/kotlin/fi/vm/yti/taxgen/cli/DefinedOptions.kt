@@ -10,7 +10,7 @@ class DefinedOptions {
 
     private val optionParser = OptionParser()
     private val help: OptionSpec<Void>
-    private val yclConfig: OptionSpec<File>
+    private val yclSourceConfig: OptionSpec<File>
 
     init {
         help = optionParser.acceptsAll(
@@ -18,15 +18,18 @@ class DefinedOptions {
             "Show this help message"
         ).forHelp()
 
-        yclConfig = optionParser
-            .accepts("ycl-config", "YCL configuration file")
+        yclSourceConfig = optionParser
+            .accepts(
+                "ycl-source-config",
+                """Define taxonomy source configuration,
+                |YTI CodeList service is used as information source""".trimMargin())
             .withOptionalArg()
             .ofType<File>(File::class.java)
     }
 
     fun detectOptionsFromArgs(args: Array<String>, consoleOut: PrintWriter): DetectedOptions {
         return try {
-            val detectedOptions = parseArgsToToDetectedOptions(args)
+            val detectedOptions = doDetectOptions(args)
             if (detectedOptions.help) {
                 optionParser.printHelpOn(consoleOut)
                 halt(TAXGEN_CLI_SUCCESS)
@@ -39,12 +42,12 @@ class DefinedOptions {
         }
     }
 
-    private fun parseArgsToToDetectedOptions(args: Array<String>): DetectedOptions {
+    private fun doDetectOptions(args: Array<String>): DetectedOptions {
         val optionSet = optionParser.parse(*args)
 
         return DetectedOptions(
             help = optionSet.has(this.help),
-            yclConfigFile = optionSet.valueOf(this.yclConfig)
+            yclSourceConfigFile = optionSet.valueOf(this.yclSourceConfig)
         )
     }
 }

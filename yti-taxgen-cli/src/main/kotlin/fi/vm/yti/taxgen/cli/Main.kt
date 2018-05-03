@@ -28,13 +28,13 @@ fun main(args: Array<String>) {
      *          - List of CodeSchemeApiUrls (https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/XBRL1)
      *          - List of CodeSchemeUris (http://uri.suomi.fi/codelist/yti-xbrl/XBRL1)
      *
-     * - For each CodeScheme pointed in config, fetch required contents from YTI Codelist -service, in JSON format
-     *      - CodeScheme
+     * - For each CodeList pointed in config, fetch required contents from YTI Codelist -service, in JSON format
+     *      - CodeList
      *      - Codes
      *      - Extensions: partial hierarchies, tags
      *
      * - Compose input data container (ycl-input)
-     *      - A ZIP file containing Owner metadata + fetched CodeScheme contents
+     *      - A ZIP file containing Owner metadata + fetched CodeList contents
      *      - Directory structure:
      *          .
      *          +-- owner_01
