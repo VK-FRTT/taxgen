@@ -3,7 +3,7 @@ rootProject.name = "yti-xbrl-taxgen"
 include 'yti-taxgen-commons'
 include 'yti-taxgen-test-commons'
 include 'yti-taxgen-data-point-meta-model'
-include 'yti-taxgen-ycl-input-parser'
+include 'yti-taxgen-ycl-source-parser'
 include 'yti-taxgen-fixta-generator'
 include 'yti-taxgen-cli'
 

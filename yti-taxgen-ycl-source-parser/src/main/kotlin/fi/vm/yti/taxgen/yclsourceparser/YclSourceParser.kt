@@ -1,12 +1,12 @@
-package fi.vm.yti.taxgen.yclinputparser
+package fi.vm.yti.taxgen.yclsourceparser
 
 import fi.vm.yti.taxgen.datapointmetamodel.InputParsingResult
 
-class YclInputParser {
+class YclSourceParser {
 
     companion object {
         fun parseInput(yclInputContainer: String ): InputParsingResult? {
-            println("YclInputParser.parseInput => $yclInputContainer")
+            println("YclSourceParser.parseInput => $yclInputContainer")
 
             val result = InputParsingResult()
             return result
