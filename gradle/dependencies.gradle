@@ -4,6 +4,7 @@ ext {
             joptSimple:     "5.0.4",
             jacksonKotlin:  "2.8.11.1",
             okhttp:         "3.10.0",
+            googleGuava:    "25.0-jre",
 
             jupiter:        "5.1.0",
             assertj:        "3.9.0",
@@ -17,6 +18,7 @@ ext {
             joptSimple:             "net.sf.jopt-simple:jopt-simple:$versions.joptSimple",
             jacksonKotlin:          "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jacksonKotlin",
             okHttp3:                "com.squareup.okhttp3:okhttp:$versions.okhttp",
+            googleGuava:            "com.google.guava:guava:$versions.googleGuava",
 
             kotlinTest:             "org.jetbrains.kotlin:kotlin-test:$versions.kotlin",
             kotlinTestJunit:        "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin",

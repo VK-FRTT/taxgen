@@ -12,7 +12,7 @@
       },
       "codeLists": [
         {
-          "uri": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/XBRL1"
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/XBRL1?env=dev"
         }
       ]
     }

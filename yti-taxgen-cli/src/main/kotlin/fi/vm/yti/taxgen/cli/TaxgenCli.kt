@@ -3,7 +3,9 @@ package fi.vm.yti.taxgen.cli
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import fi.vm.yti.taxgen.cli.yclsourcebundler.toSourceBundle
 import fi.vm.yti.taxgen.cli.yclsourceconfig.YclSourceConfig
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.YclSourceBundle
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.File
@@ -13,16 +15,18 @@ import java.io.PrintWriter
 import java.nio.charset.Charset
 
 class TaxgenCli(
-    val outStream: PrintStream,
-    val errStream: PrintStream,
-    val charset: Charset,
-    val definedOptions: DefinedOptions
+    private val outStream: PrintStream,
+    private val errStream: PrintStream,
+    charset: Charset,
+    private val definedOptions: DefinedOptions
 ) : Closeable {
 
-    private val consoleOut = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)))
+    private val outWriter = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)))
+    private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)))
 
     override fun close() {
-        consoleOut.close()
+        outWriter.close()
+        errWriter.close()
 
         outStream.flush()
         errStream.flush()
@@ -30,13 +34,11 @@ class TaxgenCli(
 
     fun execute(args: Array<String>): Int {
         return unlessHaltOrFail {
-            val detectedOptions = definedOptions.detectOptionsFromArgs(args, consoleOut)
+            val detectedOptions = definedOptions.detectOptionsFromArgs(args, outWriter, errWriter)
 
-            if (detectedOptions.yclSourceConfigFile != null) {
-                val yclSourceConfig = readYclSourceConfig(detectedOptions.yclSourceConfigFile)
-                val yclSourceBundle = bundleYclSources(yclSourceConfig)
-                //val dpmMetamodel = YclSourceParser.parseSources(yclSourceBundle)
-                //val taxonomy = FixtaGenerator.generateTaxonomy(dpmMetamodel)
+            if (detectedOptions.cmdBundleSources != null) {
+                val sourceBundle = resolveSources(detectedOptions)
+                //writeSourceBundle(sourceBundle, detectedOptions)
             }
         }
     }
@@ -60,7 +62,12 @@ class TaxgenCli(
         }.readValue(yclSourceConfigFile)
     }
 
-    private fun bundleYclSources(yclSourceConfig: YclSourceConfig): String {
-        return ""
+    private fun resolveSources(detectedOptions: DetectedOptions): YclSourceBundle {
+        if (detectedOptions.yclSourceConfig != null) {
+            val yclSourceConfig = readYclSourceConfig(detectedOptions.yclSourceConfig.toFile())
+            return yclSourceConfig.toSourceBundle()
+        }
+
+        halt(1)
     }
 }

@@ -1,5 +1,5 @@
 package fi.vm.yti.taxgen.cli.yclsourceconfig
 
-data class CodeList(
+data class CodeListConf(
     val uri: String
 )
