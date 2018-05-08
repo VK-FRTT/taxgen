@@ -2,11 +2,11 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
 
-class Owner(
+data class Owner(
     val namespace: String,
     val namespacePrefix: String,
     val officialLocation: String,
-    val copyrightText: String?,
+    val copyrightText: String,
     val supportedLanguages: List<String>
 ) {
 

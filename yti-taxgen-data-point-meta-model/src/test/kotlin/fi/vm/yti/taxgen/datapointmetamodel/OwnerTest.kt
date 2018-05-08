@@ -21,7 +21,7 @@ internal class OwnerTest {
         "namespace,             required",
         "namespacePrefix,       required",
         "officialLocation,      required",
-        "copyrightText,         optional",
+        "copyrightText,         required",
         "supportedLanguages,    required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {

@@ -1,10 +1,8 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 
+import fi.vm.yti.taxgen.datapointmetamodel.Owner
+
 interface TaxonomyUnit {
-    fun namespace(): String
-    fun namespacePrefix(): String
-    fun officialLocation(): String
-    fun copyrightText(): String
-    fun supportedLanguages(): List<String>
+    fun owner(): Owner
     fun codeLists(): Iterator<CodeList>
 }
