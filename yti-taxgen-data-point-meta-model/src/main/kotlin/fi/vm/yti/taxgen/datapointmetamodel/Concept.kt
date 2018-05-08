@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.platformextension.isBeforeOrEqualOrUndefined
+import fi.vm.yti.taxgen.commons.ext.java.isBeforeOrEqualOrUndefined
 import java.time.LocalDate
 
 data class Concept(

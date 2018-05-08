@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.testcommons
 
-import fi.vm.yti.taxgen.commons.platformextension.chainToString
+import fi.vm.yti.taxgen.commons.ext.kotlin.chainToString
 import org.assertj.core.api.Assertions
 
 fun assertExceptionIsNull(exception: Throwable?) {

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import fi.vm.yti.taxgen.yclsourceparser.jacksonextension.nonBlankTextOrNullAt
+import fi.vm.yti.taxgen.yclsourceparser.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.YclCodeListConfig
 import okhttp3.OkHttpClient

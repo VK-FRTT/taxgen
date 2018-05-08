@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons.platformextension
+package fi.vm.yti.taxgen.commons.ext.java
 
 import java.time.LocalDate
 

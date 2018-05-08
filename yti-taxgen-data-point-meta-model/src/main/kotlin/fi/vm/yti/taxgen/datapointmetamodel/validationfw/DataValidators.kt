@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.datapointmetamodel.validationfw
 
-import fi.vm.yti.taxgen.commons.platformextension.getPropertyValue
+import fi.vm.yti.taxgen.commons.ext.kotlin.getPropertyValue
 
 class DataValidationException(override var message: String) : Exception(message)
 class DataValidationConfigurationError(override var message: String) : Error(message)

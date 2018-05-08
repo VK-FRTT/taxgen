@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel.testtemplates
 
-import fi.vm.yti.taxgen.commons.platformextension.chainToString
-import fi.vm.yti.taxgen.commons.platformextension.rootExceptionOfClass
+import fi.vm.yti.taxgen.commons.ext.kotlin.chainToString
+import fi.vm.yti.taxgen.commons.ext.kotlin.rootExceptionOfClass
 import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.Factory
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.DataValidationException
 import fi.vm.yti.taxgen.testcommons.assertExceptionIsNull

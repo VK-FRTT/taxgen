@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons.platformextension
+package fi.vm.yti.taxgen.commons.ext.kotlin
 
 inline fun <reified T : Any> Throwable.rootExceptionOfClass(): T? {
     var exception: Throwable = this
