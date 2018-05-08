@@ -16,24 +16,22 @@ class YclServiceCodeList(
         val codesUrl: String
     )
 
+    class InitFailException : RuntimeException()
+
     private val codeListUrls = resolveCodeListUrls(yclCodeListConfig.uri)
 
-    override fun codeListData(): String? {
-        return withCodeListUrls {
-            it.codeListData
-        }
+    override fun codeListData(): String {
+        return codeListUrls.codeListData
     }
 
-    override fun codesData(): String? {
-        return withCodeListUrls {
-            fetch(it.codesUrl)
-        }
+    override fun codesData(): String {
+        return fetch(codeListUrls.codesUrl)
     }
 
-    private fun resolveCodeListUrls(codeListUri: String): CodeListUrls? {
-        val codeListData = fetch(codeListUri) ?: return null
-        val codeListJson = jacksonObjectMapper().readTree(codeListData) ?: return null
-        val codesUrl = codeListJson.nonBlankTextOrNullAt("/codesUrl") ?: return null
+    private fun resolveCodeListUrls(codeListUri: String): CodeListUrls {
+        val codeListData = fetch(codeListUri)
+        val codeListJson = jacksonObjectMapper().readTree(codeListData) ?: throw InitFailException()
+        val codesUrl = codeListJson.nonBlankTextOrNullAt("/codesUrl") ?: throw InitFailException()
 
         return CodeListUrls(
             codeListData = codeListData,
@@ -41,15 +39,7 @@ class YclServiceCodeList(
         )
     }
 
-    private fun withCodeListUrls(action: (CodeListUrls) -> String?): String? {
-        if (codeListUrls != null) {
-            return action(codeListUrls)
-        }
-
-        return null
-    }
-
-    private fun fetch(url: String): String? {
+    private fun fetch(url: String): String {
         val httpClient = OkHttpClient().newBuilder()
             .followRedirects(true)
             .followSslRedirects(true)
@@ -62,12 +52,12 @@ class YclServiceCodeList(
 
         val response = httpClient.newCall(request).execute()
 
-        if (response.isSuccessful) {
-            return response.body().use {
-                it!!.string()
-            }
+        if (!response.isSuccessful) {
+            throw InitFailException()
         }
 
-        return null
+        return response.body().use {
+            it!!.string()
+        }
     }
 }
