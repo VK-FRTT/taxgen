@@ -18,9 +18,6 @@ dependencies {
     shadowed libs.kotlinStdLib
     shadowed libs.kotlinReflect
     shadowed libs.joptSimple
-    shadowed libs.okHttp3
-    shadowed libs.jacksonKotlin
-    shadowed libs.googleGuava
 
     shadowed(project(':yti-taxgen-commons'))
     shadowed(project(':yti-taxgen-data-point-meta-model'))

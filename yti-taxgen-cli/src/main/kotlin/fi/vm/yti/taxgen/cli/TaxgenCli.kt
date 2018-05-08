@@ -1,14 +1,11 @@
 package fi.vm.yti.taxgen.cli
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.cli.yclsourcebundler.toSourceBundle
-import fi.vm.yti.taxgen.cli.yclsourceconfig.YclSourceConfig
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.YclSourceBundle
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceSourceBundle
 import java.io.BufferedWriter
 import java.io.Closeable
-import java.io.File
 import java.io.OutputStreamWriter
 import java.io.PrintStream
 import java.io.PrintWriter
@@ -33,21 +30,37 @@ class TaxgenCli(
     }
 
     fun execute(args: Array<String>): Int {
-        return unlessHaltOrFail {
-            val detectedOptions = definedOptions.detectOptionsFromArgs(args, outWriter, errWriter)
+        return withExceptionHarness {
+            val detectedOptions = definedOptions.detectOptionsFromArgs(args)
 
-            if (detectedOptions.cmdBundleSources != null) {
-                val sourceBundle = resolveSources(detectedOptions)
-                //writeSourceBundle(sourceBundle, detectedOptions)
+            if (detectedOptions.cmdShowHelp) {
+                definedOptions.printHelp(outWriter)
+                halt(TAXGEN_CLI_SUCCESS)
+            }
+
+            detectedOptions.ensureSingleOperation()
+            detectedOptions.ensureSingleSource()
+            detectedOptions.ensureSingleTarget()
+
+            if (detectedOptions.cmdBundleYclSource) {
+                val sourceBundle = resolveYclSourceBundle(detectedOptions)
+            }
+
+            if (detectedOptions.cmdGenerateYclTaxonomy) {
             }
         }
     }
 
-    private fun unlessHaltOrFail(steps: () -> Unit): Int {
+    private fun withExceptionHarness(steps: () -> Unit): Int {
         return try {
             steps()
             TAXGEN_CLI_SUCCESS
         } catch (exception: HaltException) {
+            if (exception.errorMessage != null) {
+                errStream.println("yti-taxgen: ${exception.errorMessage}")
+                errStream.println()
+            }
+
             exception.exitCode
         } catch (exception: Throwable) {
             exception.printStackTrace(errStream)
@@ -56,18 +69,19 @@ class TaxgenCli(
         }
     }
 
-    private fun readYclSourceConfig(yclSourceConfigFile: File): YclSourceConfig {
-        return jacksonObjectMapper().apply {
-            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        }.readValue(yclSourceConfigFile)
-    }
-
-    private fun resolveSources(detectedOptions: DetectedOptions): YclSourceBundle {
-        if (detectedOptions.yclSourceConfig != null) {
-            val yclSourceConfig = readYclSourceConfig(detectedOptions.yclSourceConfig.toFile())
-            return yclSourceConfig.toSourceBundle()
+    private fun resolveYclSourceBundle(detectedOptions: DetectedOptions): SourceBundle {
+        if (detectedOptions.sourceConfig != null) {
+            return YclServiceSourceBundle(detectedOptions.sourceConfig)
         }
 
-        halt(1)
+        if (detectedOptions.sourceBundleFolder != null) {
+            return FolderSourceBundle(detectedOptions.sourceBundleFolder)
+        }
+
+        //if (detectedOptions.sourceBundleZip != null) {
+        //    return ZipSourceBundle(detectedOptions.sourceBundleZip)
+        //}
+
+        thisShouldNeverHappen("No suitable YCL taxonomy source")
     }
 }

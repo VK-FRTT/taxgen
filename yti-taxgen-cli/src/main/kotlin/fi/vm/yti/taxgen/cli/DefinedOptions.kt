@@ -13,10 +13,10 @@ class DefinedOptions {
     private val optionParser = OptionParser()
 
     private val cmdShowHelp: OptionSpec<Void>
-    private val cmdGenerateTaxonomy: OptionSpec<Void>
-    private val cmdBundleSources: OptionSpec<Void>
+    private val cmdGenerateYclTaxonomy: OptionSpec<Void>
+    private val cmdBundleYclSource: OptionSpec<Void>
 
-    private val sourceYclConfig: OptionSpec<Path>
+    private val sourceConfig: OptionSpec<Path>
     private val sourceBundleFolder: OptionSpec<Path>
     private val sourceBundleZip: OptionSpec<Path>
 
@@ -26,26 +26,26 @@ class DefinedOptions {
     init {
         cmdShowHelp = optionParser
             .accepts(
-                "cmdShowHelp",
-                "show this cmdShowHelp message"
+                "help",
+                "show this help message"
             ).forHelp()
 
-        cmdGenerateTaxonomy = optionParser
+        cmdGenerateYclTaxonomy = optionParser
             .accepts(
-                "generate-taxonomy",
-                "generate taxonomy"
+                "generate-ycl-taxonomy",
+                "generate taxonomy from YTI Codelist sources"
             )
 
-        cmdBundleSources = optionParser
+        cmdBundleYclSource = optionParser
             .accepts(
-                "bundle-sources",
-                "bundle taxonomy sources"
+                "bundle-ycl-source",
+                "bundle YTI Codelist taxonomy sources"
             )
 
-        sourceYclConfig = optionParser
+        sourceConfig = optionParser
             .accepts(
-                "source-ycl-config",
-                "load sources from YTI Codelist service, given configuration file contains linking details"
+                "source-config",
+                "configuration file describing taxonomy sources"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
@@ -53,7 +53,7 @@ class DefinedOptions {
         sourceBundleFolder = optionParser
             .accepts(
                 "source-bundle-folder",
-                "load bundled taxonomy sources from a folder"
+                "load bundled taxonomy sources from folder"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.DIRECTORY_EXISTING))
@@ -61,7 +61,7 @@ class DefinedOptions {
         sourceBundleZip = optionParser
             .accepts(
                 "source-bundle-zip",
-                "load bundled taxonomy sources from a zip file"
+                "load bundled taxonomy sources from zip file"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
@@ -69,7 +69,7 @@ class DefinedOptions {
         targetFolder = optionParser
             .accepts(
                 "target-folder",
-                "store results to a folder"
+                "store operation results to folder"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
@@ -77,71 +77,48 @@ class DefinedOptions {
         targetZip = optionParser
             .accepts(
                 "target-zip",
-                "store results to a zip file"
+                "store operation results as zip file"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.WRITABLE))
     }
 
-    fun detectOptionsFromArgs(args: Array<String>, out: PrintWriter, err: PrintWriter): DetectedOptions {
+    fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {
         return try {
-            val detectedOptions = doDetectOptions(args)
-            if (detectedOptions.cmdShowHelp) {
-                optionParser.printHelpOn(out)
-                halt(TAXGEN_CLI_SUCCESS)
-            }
-
-            detectedOptions
+            doDetectOptions(args)
         } catch (exception: OptionException) {
             val cause = exception.cause
 
             if (cause is ValueConversionException) {
-                printError(
-                    err,
-                    "Option ${exception.options().first()}: ${cause.message}"
-                )
+                haltWithError("Option ${exception.options().first()}: ${cause.message}")
             } else {
-                printErrorWithUsageHint(
-                    err,
-                    exception.message
-                )
+                haltWithError(exception.message)
             }
-
-            halt(TAXGEN_CLI_FAIL)
-        } catch (exception: NoOptionsDetectedException) {
-            printErrorWithUsageHint(
-                err,
-                "No options given"
-            )
-
-            halt(TAXGEN_CLI_FAIL)
         }
+    }
+
+    fun printHelp(outWriter: PrintWriter) {
+        optionParser.printHelpOn(outWriter)
     }
 
     private fun doDetectOptions(args: Array<String>): DetectedOptions {
         val optionSet = optionParser.parse(*args)
 
-        if (!optionSet.hasOptions()) throw NoOptionsDetectedException()
+        if (!optionSet.hasOptions()) {
+            haltWithError("No options given (-h will show valid options)")
+        }
 
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
-            cmdGenerateTaxonomy = optionSet.has(this.cmdGenerateTaxonomy),
-            cmdBundleSources = optionSet.has(this.cmdBundleSources),
+            cmdGenerateYclTaxonomy = optionSet.has(this.cmdGenerateYclTaxonomy),
+            cmdBundleYclSource = optionSet.has(this.cmdBundleYclSource),
 
-            yclSourceConfig = optionSet.valueOf(this.sourceYclConfig),
+            sourceConfig = optionSet.valueOf(this.sourceConfig),
             sourceBundleFolder = optionSet.valueOf(this.sourceBundleFolder),
             sourceBundleZip = optionSet.valueOf(this.sourceBundleZip),
 
             targetFolder = optionSet.valueOf(this.targetFolder),
             targetZip = optionSet.valueOf(this.targetZip)
         )
-    }
-
-    private fun printError(err: PrintWriter, message: String?) {
-        err.println("yti-taxgen: $message")
-    }
-
-    private fun printErrorWithUsageHint(err: PrintWriter, message: String?) {
-        printError(err, "$message  (-h will show valid options)")
     }
 }
