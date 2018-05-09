@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folderwriter
 
+import java.nio.file.Files
 import java.nio.file.Path
 import java.util.LinkedList
 
@@ -44,6 +45,6 @@ class PathStack(
     }
 
     private fun createFileSystemPath() {
-        if (createFileSystemPaths) currentPath().toFile().mkdirs()
+        if (createFileSystemPaths) Files.createDirectories(currentPath())
     }
 }

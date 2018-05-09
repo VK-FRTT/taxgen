@@ -80,7 +80,7 @@ class DefinedOptions {
                 "store operation results as zip file"
             )
             .withOptionalArg()
-            .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.WRITABLE))
+            .withValuesConvertedBy(PathConverter(PathProperties.NOT_EXISTING))
     }
 
     fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {

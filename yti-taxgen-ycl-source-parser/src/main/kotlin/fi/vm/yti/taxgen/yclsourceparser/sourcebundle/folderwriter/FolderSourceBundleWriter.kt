@@ -5,7 +5,10 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnit
+import java.nio.charset.Charset
+import java.nio.file.Files
 import java.nio.file.Path
+
 
 class FolderSourceBundleWriter(
     private val rootPath: Path,
@@ -15,7 +18,8 @@ class FolderSourceBundleWriter(
     override fun write() {
         val pathStack = PathStack(
             rootPath = rootPath,
-            createFileSystemPaths = true)
+            createFileSystemPaths = true
+        )
 
         writeFile(pathStack, "bundleInfo.json", sourceBundle.bundleInfo().toJsonString())
         writeTaxonomyUnits(pathStack, sourceBundle.taxonomyUnits())
@@ -50,7 +54,12 @@ class FolderSourceBundleWriter(
     }
 
     private fun writeFile(pathStack: PathStack, filename: String, content: String) {
-        pathStack.resolvePath(filename).toFile().writeText(content)
+        Files.newBufferedWriter(
+            pathStack.resolvePath(filename),
+            Charset.forName("UTF-8")
+        ).use { writer ->
+            writer.write(content)
+        }
     }
 
     override fun close() {

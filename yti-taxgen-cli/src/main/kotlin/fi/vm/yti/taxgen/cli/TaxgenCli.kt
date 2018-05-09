@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folderwriter.FolderSourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceSourceBundle
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zipwriter.ZipSourceBundleWriter
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -46,9 +47,12 @@ class TaxgenCli(
 
             if (detectedOptions.cmdBundleYclSource) {
                 outWriter.println("Bundling YCL sources...")
-                val sourceBundle = resolveYclSourceBundle(detectedOptions)
-                val sourceBundleWriter = resolveYclSourceBundleWriter(detectedOptions, sourceBundle)
-                sourceBundleWriter.write()
+
+                resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
+                    resolveYclSourceBundleWriter(detectedOptions, sourceBundle).use { sourceBundleWriter ->
+                        sourceBundleWriter.write()
+                    }
+                }
             }
 
             if (detectedOptions.cmdGenerateYclTaxonomy) {
@@ -99,9 +103,9 @@ class TaxgenCli(
             return FolderSourceBundleWriter(detectedOptions.targetFolder, sourceBundle)
         }
 
-        //if (detectedOptions.sourceBundleZip != null) {
-        //    return ZipSourceBundle(detectedOptions.sourceBundleZip)
-        //}
+        if (detectedOptions.targetZip != null) {
+            return ZipSourceBundleWriter(detectedOptions.targetZip, sourceBundle)
+        }
 
         thisShouldNeverHappen("No suitable YCL source bundle target")
     }

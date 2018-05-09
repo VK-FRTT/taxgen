@@ -8,3 +8,9 @@ fun Any.getPropertyValue(propertyName: String): Any? {
 
     return property.getter.call(this)
 }
+
+fun <T : Any> T?.whenNotNull(block: (T) -> Unit) {
+    if (this != null){
+        block(this)
+    }
+}
