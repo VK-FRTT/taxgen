@@ -7,9 +7,12 @@ class PathStack(
     private val rootPath: Path,
     private val createFileSystemPaths: Boolean = false
 ) {
-
     private val elementStack = LinkedList<String>()
     private var pathCache: Path? = null
+
+    init {
+        createFileSystemPath()
+    }
 
     fun pushSubfolderWithIndex(subfolderName: String, index: Int) {
         elementStack.push("${subfolderName}_$index")

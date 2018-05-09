@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.yclsourceparser.jacksonextension
+package fi.vm.yti.taxgen.yclsourceparser.ext.jackson
 
 import com.fasterxml.jackson.databind.JsonNode
 

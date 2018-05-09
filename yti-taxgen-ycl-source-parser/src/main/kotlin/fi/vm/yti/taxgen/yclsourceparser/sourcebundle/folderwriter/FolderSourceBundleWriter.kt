@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folderwriter
 
+import fi.vm.yti.taxgen.yclsourceparser.ext.kotlin.toJsonString
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
@@ -12,9 +13,11 @@ class FolderSourceBundleWriter(
 ) : SourceBundleWriter {
 
     override fun write() {
-        val pathStack = PathStack(rootPath)
+        val pathStack = PathStack(
+            rootPath = rootPath,
+            createFileSystemPaths = true)
 
-        //writeFile(pathStack, "meta.json", sourceBundle.metaData().asJson())
+        writeFile(pathStack, "bundleInfo.json", sourceBundle.bundleInfo().toJsonString())
         writeTaxonomyUnits(pathStack, sourceBundle.taxonomyUnits())
     }
 
@@ -24,9 +27,8 @@ class FolderSourceBundleWriter(
     ) {
         taxonomyUnits.withIndex().forEach { (unitIndex, unit) ->
             pathStack.pushSubfolderWithIndex("taxonomyunit", unitIndex)
-            ensurePathExists(pathStack)
 
-            //writeFile(pathStack, "owner.json", unit.owner().asJson())
+            writeFile(pathStack, "owner.json", unit.owner().toJsonString())
             writeCodeLists(pathStack, unit.codeLists())
 
             pathStack.pop()
@@ -39,17 +41,12 @@ class FolderSourceBundleWriter(
     ) {
         codeLists.withIndex().forEach { (listIndex, list) ->
             pathStack.pushSubfolderWithIndex("codelist", listIndex)
-            ensurePathExists(pathStack)
 
             writeFile(pathStack, "codelist.json", list.codeListData())
             writeFile(pathStack, "codes.json", list.codesData())
 
             pathStack.pop()
         }
-    }
-
-    private fun ensurePathExists(pathStack: PathStack) {
-        pathStack.currentPath().toFile().mkdirs()
     }
 
     private fun writeFile(pathStack: PathStack, filename: String, content: String) {
