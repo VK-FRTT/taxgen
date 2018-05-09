@@ -15,13 +15,19 @@ class PathStack(
         createFileSystemPath()
     }
 
-    fun pushSubfolderWithIndex(subfolderName: String, index: Int) {
+    fun withIndexedSubfolder(subfolderName: String, index: Int, block: () -> Unit ) {
+        pushSubfolderWithIndex(subfolderName, index)
+        block()
+        pop()
+    }
+
+    private fun pushSubfolderWithIndex(subfolderName: String, index: Int) {
         elementStack.push("${subfolderName}_$index")
         resetCache()
         createFileSystemPath()
     }
 
-    fun pop() {
+    private fun pop() {
         elementStack.pop()
         resetCache()
     }

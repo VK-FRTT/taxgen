@@ -10,7 +10,7 @@ fun Any.getPropertyValue(propertyName: String): Any? {
 }
 
 fun <T : Any> T?.whenNotNull(block: (T) -> Unit) {
-    if (this != null){
+    if (this != null) {
         block(this)
     }
 }

@@ -22,6 +22,7 @@ class DefinedOptions {
 
     private val targetFolder: OptionSpec<Path>
     private val targetZip: OptionSpec<Path>
+    private val targetForceOverwrite: OptionSpec<Void>
 
     init {
         cmdShowHelp = optionParser
@@ -80,7 +81,13 @@ class DefinedOptions {
                 "store operation results as zip file"
             )
             .withOptionalArg()
-            .withValuesConvertedBy(PathConverter(PathProperties.NOT_EXISTING))
+            .withValuesConvertedBy(PathConverter())
+
+        targetForceOverwrite = optionParser
+            .accepts(
+                "target-force-overwrite",
+                "silently overwrites the possibly existing target file(s)"
+            )
     }
 
     fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {
@@ -118,7 +125,8 @@ class DefinedOptions {
             sourceBundleZip = optionSet.valueOf(this.sourceBundleZip),
 
             targetFolder = optionSet.valueOf(this.targetFolder),
-            targetZip = optionSet.valueOf(this.targetZip)
+            targetZip = optionSet.valueOf(this.targetZip),
+            targetForceOverwrite = optionSet.has(this.targetForceOverwrite)
         )
     }
 }

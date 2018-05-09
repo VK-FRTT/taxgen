@@ -12,7 +12,8 @@ data class DetectedOptions(
     val sourceBundleZip: Path?,
 
     val targetFolder: Path?,
-    val targetZip: Path?
+    val targetZip: Path?,
+    val targetForceOverwrite: Boolean
 ) {
 
     fun ensureSingleOperation() {

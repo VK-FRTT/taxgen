@@ -100,11 +100,17 @@ class TaxgenCli(
     ): SourceBundleWriter {
 
         if (detectedOptions.targetFolder != null) {
-            return FolderSourceBundleWriter(detectedOptions.targetFolder, sourceBundle)
+            return FolderSourceBundleWriter(
+                detectedOptions.targetFolder,
+                sourceBundle,
+                detectedOptions.targetForceOverwrite)
         }
 
         if (detectedOptions.targetZip != null) {
-            return ZipSourceBundleWriter(detectedOptions.targetZip, sourceBundle)
+            return ZipSourceBundleWriter(
+                detectedOptions.targetZip,
+                sourceBundle,
+                detectedOptions.targetForceOverwrite)
         }
 
         thisShouldNeverHappen("No suitable YCL source bundle target")
