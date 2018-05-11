@@ -8,7 +8,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 class YclServiceCodeList(
-    private val yclCodeListConfig: YclCodeListConfig
+    private val yclCodeListConfig: YclCodeListConfig,
+    private val httpClient: OkHttpClient
 ) : CodeList {
 
     private var resolvedUrlsCache: ResolvedUrls? = null
@@ -25,16 +26,15 @@ class YclServiceCodeList(
 
     override fun codes(): String {
         val urls = resolvedUrls()
-        return fetch(urls.codesUrl)
+        return httpGetJsonData(urls.codesUrl)
     }
-
 
     private fun resolvedUrls(): ResolvedUrls {
         return resolvedUrlsCache ?: resolveUrls().also { resolvedUrlsCache = it }
     }
 
     private fun resolveUrls(): ResolvedUrls {
-        val codeListData = fetch(yclCodeListConfig.uri)
+        val codeListData = httpGetJsonData(yclCodeListConfig.uri)
         val codeListJson = FileOps.lenientObjectMapper().readTree(codeListData) ?: throw InitFailException()
         val codesUrl = codeListJson.nonBlankTextOrNullAt("/codesUrl") ?: throw InitFailException()
 
@@ -44,13 +44,9 @@ class YclServiceCodeList(
         )
     }
 
-    private fun fetch(url: String): String {
-        val httpClient = OkHttpClient().newBuilder()
-            .followRedirects(true)
-            .followSslRedirects(true)
-            .build()
-
+    private fun httpGetJsonData(url: String): String {
         val request = Request.Builder()
+            .get()
             .url(url)
             .header("Accept", "application/json")
             .build()

@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers
 
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.*
+import java.util.LinkedList
 
 class PathStack(
     private val baseFolderPath: Path,
