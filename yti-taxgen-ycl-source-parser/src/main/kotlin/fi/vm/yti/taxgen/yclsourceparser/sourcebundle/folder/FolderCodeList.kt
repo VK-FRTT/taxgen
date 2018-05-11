@@ -1,14 +1,18 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder
 
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
+import java.nio.file.Path
 
-class FolderCodeList() : CodeList {
+class FolderCodeList(
+    private val codeListPath: Path
+) : CodeList {
 
-    override fun codeListData(): String {
-        return ""
+    override fun codeList(): String {
+        return FileOps.readTextFile(codeListPath, "codelist.json")
     }
 
-    override fun codesData(): String {
-        return ""
+    override fun codes(): String {
+        return FileOps.readTextFile(codeListPath, "codes.json")
     }
 }

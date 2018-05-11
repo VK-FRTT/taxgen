@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 
 interface CodeList {
-    fun codeListData(): String
-    fun codesData(): String
+
+    fun codeList(): String
+    fun codes(): String
 }

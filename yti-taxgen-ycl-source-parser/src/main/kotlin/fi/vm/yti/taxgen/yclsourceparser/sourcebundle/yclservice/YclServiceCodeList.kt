@@ -1,39 +1,44 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.yclsourceparser.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.YclCodeListConfig
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
 class YclServiceCodeList(
-    yclCodeListConfig: YclCodeListConfig
+    private val yclCodeListConfig: YclCodeListConfig
 ) : CodeList {
 
-    data class CodeListUrls(
+    private var resolvedUrlsCache: ResolvedUrls? = null
+
+    data class ResolvedUrls(
         val codeListData: String,
         val codesUrl: String
     )
 
-    class InitFailException : RuntimeException()
-
-    private val codeListUrls = resolveCodeListUrls(yclCodeListConfig.uri)
-
-    override fun codeListData(): String {
-        return codeListUrls.codeListData
+    override fun codeList(): String {
+        val urls = resolvedUrls()
+        return urls.codeListData
     }
 
-    override fun codesData(): String {
-        return fetch(codeListUrls.codesUrl)
+    override fun codes(): String {
+        val urls = resolvedUrls()
+        return fetch(urls.codesUrl)
     }
 
-    private fun resolveCodeListUrls(codeListUri: String): CodeListUrls {
-        val codeListData = fetch(codeListUri)
-        val codeListJson = jacksonObjectMapper().readTree(codeListData) ?: throw InitFailException()
+
+    private fun resolvedUrls(): ResolvedUrls {
+        return resolvedUrlsCache ?: resolveUrls().also { resolvedUrlsCache = it }
+    }
+
+    private fun resolveUrls(): ResolvedUrls {
+        val codeListData = fetch(yclCodeListConfig.uri)
+        val codeListJson = FileOps.lenientObjectMapper().readTree(codeListData) ?: throw InitFailException()
         val codesUrl = codeListJson.nonBlankTextOrNullAt("/codesUrl") ?: throw InitFailException()
 
-        return CodeListUrls(
+        return ResolvedUrls(
             codeListData = codeListData,
             codesUrl = codesUrl
         )
@@ -60,4 +65,6 @@ class YclServiceCodeList(
             it!!.string()
         }
     }
+
+    class InitFailException : RuntimeException()
 }

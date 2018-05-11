@@ -1,8 +1,8 @@
-package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zipwriter
+package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip
 
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folderwriter.FolderSourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
 import java.io.Closeable
 import java.net.URI
 import java.nio.file.FileSystem
@@ -56,7 +56,7 @@ class ZipSourceBundleWriter(
 
     private fun createBundleWriter(folderPath: Path): FolderSourceBundleWriter {
         return FolderSourceBundleWriter(
-            folderPath = folderPath,
+            baseFolderPath = folderPath,
             sourceBundle = sourceBundle,
             forceOverwrite = false
         ).also { bundleWriterResource = it }

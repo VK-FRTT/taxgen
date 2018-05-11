@@ -4,9 +4,9 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folderwriter.FolderSourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceSourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zipwriter.ZipSourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundleWriter
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -103,14 +103,16 @@ class TaxgenCli(
             return FolderSourceBundleWriter(
                 detectedOptions.targetFolder,
                 sourceBundle,
-                detectedOptions.targetForceOverwrite)
+                detectedOptions.targetForceOverwrite
+            )
         }
 
         if (detectedOptions.targetZip != null) {
             return ZipSourceBundleWriter(
                 detectedOptions.targetZip,
                 sourceBundle,
-                detectedOptions.targetForceOverwrite)
+                detectedOptions.targetForceOverwrite
+            )
         }
 
         thisShouldNeverHappen("No suitable YCL source bundle target")

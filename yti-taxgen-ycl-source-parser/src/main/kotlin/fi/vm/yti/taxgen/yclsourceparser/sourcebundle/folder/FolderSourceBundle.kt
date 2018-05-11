@@ -1,25 +1,23 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder
 
+
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.BundleInfo
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnit
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
 import java.nio.file.Path
-import java.time.Instant
 
-class FolderSourceBundle(sourceBundleFolder: Path) :
-    SourceBundle {
+class FolderSourceBundle(
+    private val baseFolderPath: Path
+) : SourceBundle {
 
-    private val sourceBundleInfo = BundleInfo(
-        sourceBundleType = "FolderSourceBundle",
-        createdAt = Instant.now().toString()
-    )
-
-    override fun bundleInfo(): BundleInfo = sourceBundleInfo
-
-    override fun taxonomyUnits(): Iterator<TaxonomyUnit> {
-        return FolderTaxonomyUnitIterator()
+    override fun bundleDescriptor(): String {
+        return FileOps.readTextFile(baseFolderPath, "bundle.json")
     }
 
-    override fun close() {
+    override fun taxonomyUnits(): List<TaxonomyUnit> {
+        val taxonomyUnitPaths = FileOps.listSubFoldersMatching(baseFolderPath, "taxonomyunit_*")
+        return taxonomyUnitPaths.map { FolderTaxonomyUnit(it) }
     }
+
+    override fun close() {}
 }

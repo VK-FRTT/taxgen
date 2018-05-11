@@ -3,16 +3,18 @@
   "schemaVersion": 1,
   "taxonomyUnits": [
     {
-      "owner": {
-        "namespace": "www.ytixbrltest.fi",
-        "namespacePrefix": "ytixt",
-        "officialLocation": "www.ytixbrltest.fi",
-        "copyrightText": "Copyright www.ytixbrltest.fi 2018",
-        "supportedLanguages": ["en"]
-      },
+      "namespace": "www.ytixbrltest.fi",
+      "namespacePrefix": "ytixt",
+      "officialLocation": "www.ytixbrltest.fi",
+      "copyrightText": "Copyright www.ytixbrltest.fi 2018",
+      "supportedLanguages": ["en"],
       "codeLists": [
         {
           "uri": "http://uri.suomi.fi/codelist/yti-xbrl/XBRL1?env=dev"
+        },
+
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/XBRL-Test-1?env=dev"
         }
       ]
     }
