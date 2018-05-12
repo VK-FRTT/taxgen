@@ -6,8 +6,10 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
 import java.nio.file.Path
 
 class FolderSourceBundle(
-    private val baseFolderPath: Path
+    baseFolderPath: Path
 ) : SourceBundle {
+
+    private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
 
     override fun bundleDescriptor(): String {
         return FileOps.readTextFile(baseFolderPath, "bundle.json")

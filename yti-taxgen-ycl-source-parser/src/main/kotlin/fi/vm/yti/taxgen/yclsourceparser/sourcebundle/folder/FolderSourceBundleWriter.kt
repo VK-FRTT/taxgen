@@ -9,10 +9,12 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.PathStack
 import java.nio.file.Path
 
 class FolderSourceBundleWriter(
-    private val baseFolderPath: Path,
+    baseFolderPath: Path,
     private val sourceBundle: SourceBundle,
     private val forceOverwrite: Boolean
 ) : SourceBundleWriter {
+
+    private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
 
     override fun write() {
         val pathStack = createPathStack()

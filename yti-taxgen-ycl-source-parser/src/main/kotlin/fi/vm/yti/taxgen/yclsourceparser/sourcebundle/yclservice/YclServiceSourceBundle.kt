@@ -14,9 +14,14 @@ class YclServiceSourceBundle(
     sourceConfigFilePath: Path
 ) : SourceBundle {
 
-    private val yclSourceConfig = FileOps.readJsonFileAsObject<YclSourceConfig>(sourceConfigFilePath)
+    private val sourceConfigFilePath = sourceConfigFilePath.toAbsolutePath().normalize()
+    private val yclSourceConfig = readSourceConfig()
     private val bundleDescriptor = initBundleDescriptor()
     private val httpClient = createHttpClient()
+
+    private fun readSourceConfig(): YclSourceConfig {
+        return FileOps.readJsonFileAsObject(sourceConfigFilePath)
+    }
 
     private fun initBundleDescriptor(): String {
         val descriptor = BundleDescriptor(

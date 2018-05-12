@@ -11,16 +11,18 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class ZipSourceBundleWriter(
-    private val targetZipPath: Path,
+    targetZipPath: Path,
     private val sourceBundle: SourceBundle,
     private val forceOverwrite: Boolean
 ) : SourceBundleWriter {
 
-    var zipFsResource: Closeable? = null
-    var bundleWriterResource: Closeable? = null
+    private val targetZipPath = targetZipPath.toAbsolutePath().normalize()
+    private var zipFsResource: Closeable? = null
+    private var bundleWriterResource: Closeable? = null
 
     override fun write() {
         deleteTargetFileIfAllowed()
+        ensureTargetFoldersExist()
 
         val zipFs = createTargetZipFileSystem()
         val rootPath = rootPathWithinZip(zipFs)
@@ -39,6 +41,10 @@ class ZipSourceBundleWriter(
 
     private fun deleteTargetFileIfAllowed() {
         if (forceOverwrite) Files.deleteIfExists(targetZipPath)
+    }
+
+    private fun ensureTargetFoldersExist() {
+        Files.createDirectories(targetZipPath.parent)
     }
 
     private fun createTargetZipFileSystem(): FileSystem {
