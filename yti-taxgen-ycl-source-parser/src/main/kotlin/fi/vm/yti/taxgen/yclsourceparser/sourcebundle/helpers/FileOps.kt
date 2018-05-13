@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.nio.charset.StandardCharsets
+import java.nio.file.DirectoryStream
+import java.nio.file.FileSystem
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -24,9 +27,22 @@ object FileOps {
 
     fun lenientObjectMapper(): ObjectMapper = lenientObjectMapper
 
-    fun listSubFoldersMatching(folderPath: Path, glob: String): List<Path> {
-        val dirStream = Files.newDirectoryStream(folderPath, glob)
-        return dirStream.use { it.toList() }
+    fun listSubFoldersMatching(parentFolderPath: Path, subFolderGlob: String): List<Path> {
+        val adaptedSubFolderGlob = adaptSubFolderGlobToFileSystem(subFolderGlob, parentFolderPath.fileSystem)
+
+        val directoryStream = createDirectoryStream(parentFolderPath, adaptedSubFolderGlob)
+
+        return directoryStream.use { it.filter { path -> Files.isDirectory(path) } }
+    }
+
+    private fun adaptSubFolderGlobToFileSystem(subFolderGlob: String, targetFileSystem: FileSystem): String {
+        return when (targetFileSystem.provider().scheme) {
+            "jar" -> "$subFolderGlob/"
+            "file" -> subFolderGlob
+            else -> {
+                thisShouldNeverHappen("Unsupported filesystem kind")
+            }
+        }
     }
 
     inline fun <reified T : Any> readJsonFileAsObject(filePath: Path): T {
@@ -51,6 +67,12 @@ object FileOps {
         writer.use {
             it.write(content)
         }
+    }
+
+    fun createDirectoryStream(directory: Path, glob: String): DirectoryStream<Path> {
+        require(Files.isDirectory(directory)) { "Given path $directory is not a directory" }
+
+        return Files.newDirectoryStream(directory, glob)
     }
 
     fun createBufferedReader(filePath: Path): BufferedReader {

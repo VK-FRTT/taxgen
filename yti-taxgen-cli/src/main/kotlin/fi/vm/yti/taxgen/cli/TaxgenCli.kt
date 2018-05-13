@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceSourceBundle
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundleWriter
 import java.io.BufferedWriter
 import java.io.Closeable
@@ -87,9 +88,9 @@ class TaxgenCli(
             return FolderSourceBundle(detectedOptions.sourceBundleFolder)
         }
 
-        //if (detectedOptions.sourceBundleZip != null) {
-        //    return ZipSourceBundle(detectedOptions.sourceBundleZip)
-        //}
+        if (detectedOptions.sourceBundleZip != null) {
+            return ZipSourceBundle(detectedOptions.sourceBundleZip)
+        }
 
         thisShouldNeverHappen("No suitable YCL taxonomy source")
     }

@@ -3,7 +3,6 @@ package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
-import java.io.Closeable
 import java.net.URI
 import java.nio.file.FileSystem
 import java.nio.file.FileSystems
@@ -17,54 +16,45 @@ class ZipSourceBundleWriter(
 ) : SourceBundleWriter {
 
     private val targetZipPath = targetZipPath.toAbsolutePath().normalize()
-    private var zipFsResource: Closeable? = null
-    private var bundleWriterResource: Closeable? = null
+    private val zipFileSystem = createTargetZipFileSystem()
+    private val bundleWriter = createBundleWriter()
 
     override fun write() {
-        deleteTargetFileIfAllowed()
-        ensureTargetFoldersExist()
-
-        val zipFs = createTargetZipFileSystem()
-        val rootPath = rootPathWithinZip(zipFs)
-        val bundleWriter = createBundleWriter(rootPath)
-
         bundleWriter.write()
     }
 
     override fun close() {
-        zipFsResource?.close()
-        zipFsResource = null
+        zipFileSystem.close()
+        bundleWriter.close()
+    }
 
-        bundleWriterResource?.close()
-        bundleWriterResource = null
+    private fun createTargetZipFileSystem(): FileSystem {
+        deleteTargetFileIfAllowed()
+        ensureTargetFoldersExist()
+
+        return FileSystems.newFileSystem(
+            targetZipUri(),
+            zipOptions()
+        )
     }
 
     private fun deleteTargetFileIfAllowed() {
         if (forceOverwrite) Files.deleteIfExists(targetZipPath)
     }
 
-    private fun ensureTargetFoldersExist() {
-        Files.createDirectories(targetZipPath.parent)
-    }
-
-    private fun createTargetZipFileSystem(): FileSystem {
-        return FileSystems.newFileSystem(
-            targetZipUri(),
-            zipOptions()
-        ).also { zipFsResource = it }
-    }
+    private fun ensureTargetFoldersExist() = Files.createDirectories(targetZipPath.parent)
 
     private fun targetZipUri() = URI.create("jar:file:$targetZipPath")
 
     private fun zipOptions() = mapOf("create" to "true")
 
-    private fun rootPathWithinZip(zipFs: FileSystem) = zipFs.getPath("/")
-
-    private fun createBundleWriter(folderPath: Path): FolderSourceBundleWriter {
+    private fun createBundleWriter(): SourceBundleWriter {
         return FolderSourceBundleWriter(
-            baseFolderPath = folderPath,
+            baseFolderPath = rootPathWithinZip(),
             sourceBundle = sourceBundle,
             forceOverwrite = false
-        ).also { bundleWriterResource = it }
+        )
     }
+
+    private fun rootPathWithinZip() = zipFileSystem.getPath("/")
 }
