@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.BundleDescriptor
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnit
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.YclSourceConfig
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.SourceConfig
 import okhttp3.OkHttpClient
 import java.nio.file.Path
 import java.time.Instant
@@ -19,7 +19,7 @@ class YclServiceSourceBundle(
     private val bundleDescriptor = initBundleDescriptor()
     private val httpClient = createHttpClient()
 
-    private fun readSourceConfig(): YclSourceConfig {
+    private fun readSourceConfig(): SourceConfig {
         return FileOps.readJsonFileAsObject(sourceConfigFilePath)
     }
 
