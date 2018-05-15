@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.yclsourceparser.YclSourceParser
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
@@ -43,11 +44,12 @@ class TaxgenCli(
             }
 
             detectedOptions.ensureSingleOperation()
-            detectedOptions.ensureSingleSource()
-            detectedOptions.ensureSingleTarget()
 
             if (detectedOptions.cmdBundleYclSource) {
-                outWriter.println("Bundling YCL sources...")
+                outWriter.println("Bundling XBRL Taxonomy sources from YTI Codelist service...")
+
+                detectedOptions.ensureSingleSource()
+                detectedOptions.ensureSingleTarget()
 
                 resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
                     resolveYclSourceBundleWriter(detectedOptions, sourceBundle).use { sourceBundleWriter ->
@@ -57,6 +59,17 @@ class TaxgenCli(
             }
 
             if (detectedOptions.cmdGenerateYclTaxonomy) {
+                outWriter.println("Generating XBRL Taxonomy from YTI Codelist service sources...")
+
+                detectedOptions.ensureSingleSource()
+                //detectedOptions.ensureSingleTarget()
+
+                resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
+
+                val parser = YclSourceParser()
+                parser.parse(sourceBundle)
+
+                }
             }
         }
     }

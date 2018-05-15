@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.JacksonObjectMapper.lenientObjectMapper
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.nio.charset.StandardCharsets
@@ -17,15 +18,6 @@ import java.nio.file.StandardOpenOption
 object FileOps {
 
     private val fileCharset = StandardCharsets.UTF_8
-    private val lenientObjectMapper = createLenientObjectMapper()
-
-    private fun createLenientObjectMapper(): ObjectMapper {
-        val mapper = jacksonObjectMapper()
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        return mapper
-    }
-
-    fun lenientObjectMapper(): ObjectMapper = lenientObjectMapper
 
     fun listSubFoldersMatching(parentFolderPath: Path, subFolderGlob: String): List<Path> {
         val adaptedSubFolderGlob = adaptSubFolderGlobToFileSystem(subFolderGlob, parentFolderPath.fileSystem)

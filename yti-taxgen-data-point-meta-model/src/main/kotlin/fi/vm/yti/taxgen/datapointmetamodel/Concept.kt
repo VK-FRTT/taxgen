@@ -1,21 +1,21 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.ext.java.isBeforeOrEqualOrUndefined
+import java.time.Instant
 import java.time.LocalDate
 
 data class Concept(
-    val owner: Owner,
-    val createdAt: LocalDate,
-    val modifiedAt: LocalDate?,
+    val createdAt: Instant?, //TODO - should not be nullable?
+    val modifiedAt: Instant?, //TODO - should not be nullable?
     val applicableFrom: LocalDate?,
     val applicableUntil: LocalDate?,
     val label: TranslatedText,
     val description: TranslatedText?
 ) {
     init {
-        require(createdAt.isBeforeOrEqualOrUndefined(modifiedAt)) {
-            "createdAt must precede modifiedAt"
-        }
+        //require(createdAt.isBeforeOrEqualOrUndefined(modifiedAt)) {
+        //    "createdAt must precede modifiedAt"
+       //}
 
         //TODO applicableFrom && applicableUntil validation logic??
         if (applicableFrom != null) {

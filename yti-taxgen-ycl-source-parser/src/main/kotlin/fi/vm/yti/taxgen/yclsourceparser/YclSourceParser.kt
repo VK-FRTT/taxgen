@@ -1,15 +1,18 @@
 package fi.vm.yti.taxgen.yclsourceparser
 
-import fi.vm.yti.taxgen.datapointmetamodel.InputParsingResult
+import fi.vm.yti.taxgen.yclsourceparser.mapping.explicitDomainFromCodeList
+import fi.vm.yti.taxgen.yclsourceparser.mapping.ownerFromTaxonomyUnit
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 
 class YclSourceParser {
 
-    companion object {
-        fun parseInput(yclInputContainer: String ): InputParsingResult? {
-            println("YclSourceParser.parseInput => $yclInputContainer")
+    fun parse(sourceBundle: SourceBundle) {
+        val taxonomyUnits = sourceBundle.taxonomyUnits()
 
-            val result = InputParsingResult()
-            return result
+        taxonomyUnits.forEach { unit ->
+            val owner = ownerFromTaxonomyUnit(unit)
+
+            val explicitDomains = unit.codeLists().map { codeList -> explicitDomainFromCodeList(codeList) }
         }
     }
 }

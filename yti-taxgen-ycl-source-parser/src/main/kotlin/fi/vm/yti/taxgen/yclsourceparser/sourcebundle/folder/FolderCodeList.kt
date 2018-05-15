@@ -8,7 +8,7 @@ class FolderCodeList(
     private val codeListPath: Path
 ) : CodeList {
 
-    override fun codeList(): String {
+    override fun codeScheme(): String {
         return FileOps.readTextFile(codeListPath, "codelist.json")
     }
 

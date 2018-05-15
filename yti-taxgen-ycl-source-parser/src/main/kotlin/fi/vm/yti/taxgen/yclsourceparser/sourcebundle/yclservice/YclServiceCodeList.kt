@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
 import fi.vm.yti.taxgen.yclsourceparser.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.JacksonObjectMapper
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.CodeListConfig
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -19,7 +20,7 @@ class YclServiceCodeList(
         val codesUrl: String
     )
 
-    override fun codeList(): String {
+    override fun codeScheme(): String {
         val urls = resolvedUrls()
         return urls.codeListData
     }
@@ -35,7 +36,7 @@ class YclServiceCodeList(
 
     private fun resolveUrls(): ResolvedUrls {
         val codeListData = httpGetJsonData(codeListConfig.uri)
-        val codeListJson = FileOps.lenientObjectMapper().readTree(codeListData) ?: throw InitFailException()
+        val codeListJson = JacksonObjectMapper.lenientObjectMapper().readTree(codeListData) ?: throw InitFailException()
         val codesUrl = codeListJson.nonBlankTextOrNullAt("/codesUrl") ?: throw InitFailException()
 
         return ResolvedUrls(

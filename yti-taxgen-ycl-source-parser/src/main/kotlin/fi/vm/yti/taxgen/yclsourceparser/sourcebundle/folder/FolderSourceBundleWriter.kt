@@ -46,7 +46,7 @@ class FolderSourceBundleWriter(
 
             pathStack.withIndexPostfixSubfolder("codelist", listIndex) {
 
-                FileOps.writeTextFile(list.codeList(), pathStack, "codelist.json", forceOverwrite)
+                FileOps.writeTextFile(list.codeScheme(), pathStack, "codelist.json", forceOverwrite)
                 FileOps.writeTextFile(list.codes(), pathStack, "codes.json", forceOverwrite)
             }
         }
