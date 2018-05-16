@@ -12,7 +12,8 @@ class FolderCodeList(
         return FileOps.readTextFile(codeListPath, "codelist.json")
     }
 
-    override fun codes(): String {
-        return FileOps.readTextFile(codeListPath, "codes.json")
+    override fun codesPages(): Iterator<String> {
+        //return FileOps.readTextFile(codeListPath, "codes.json")
+        return emptyList<String>().iterator() //TODO
     }
 }

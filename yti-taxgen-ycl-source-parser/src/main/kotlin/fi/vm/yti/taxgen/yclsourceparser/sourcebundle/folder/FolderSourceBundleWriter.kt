@@ -47,7 +47,10 @@ class FolderSourceBundleWriter(
             pathStack.withIndexPostfixSubfolder("codelist", listIndex) {
 
                 FileOps.writeTextFile(list.codeList(), pathStack, "codelist.json", forceOverwrite)
-                FileOps.writeTextFile(list.codes(), pathStack, "codes.json", forceOverwrite)
+
+                list.codesPages().withIndex().forEach { (index, fragment) ->
+                    FileOps.writeTextFile(fragment, pathStack, "codespage_$index.json", forceOverwrite)
+                }
             }
         }
     }
