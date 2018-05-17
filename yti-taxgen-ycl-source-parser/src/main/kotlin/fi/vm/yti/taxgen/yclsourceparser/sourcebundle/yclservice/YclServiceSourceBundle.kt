@@ -36,6 +36,5 @@ class YclServiceSourceBundle(
     }
 
     override fun close() {
-
     }
 }

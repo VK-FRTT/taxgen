@@ -13,7 +13,6 @@ class FolderCodeList(
     }
 
     override fun codesPages(): Iterator<String> {
-        //return FileOps.readTextFile(codeListPath, "codes.json")
-        return emptyList<String>().iterator() //TODO
+        return FolderPagedResourceIterator(codeListPath, "codespage_*.json")
     }
 }

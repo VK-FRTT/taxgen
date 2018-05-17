@@ -27,16 +27,11 @@ class YclPagedResourceRetriever(
     }
 
     private fun resolveNextPageUrl(response: String) {
-        val codeListJson =
+        val responseJson =
             FileOps.lenientObjectMapper().readTree(response) ?: throw YclServiceCodeList.InitFailException()
 
-        val nextPageUrl = codeListJson.nonBlankTextOrNullAt("/meta/nextPage")
-
-        if (nextPageUrl != null) {
-            check(this.nextPageUrl != nextPageUrl) { "Service returned identical next page url" }
-            this.nextPageUrl = nextPageUrl
-        } else {
-            this.nextPageUrl = null
-        }
+        val nextPageUrl = responseJson.nonBlankTextOrNullAt("/meta/nextPage")
+        check(this.nextPageUrl != nextPageUrl) { "Service returned identical next page url" }
+        this.nextPageUrl = nextPageUrl
     }
 }

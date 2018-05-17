@@ -5,6 +5,7 @@ dependencies {
     implementation libs.kotlinReflect
     implementation libs.okHttp3
     implementation libs.jacksonKotlin
+    implementation libs.jacksonJsr310
     implementation libs.googleGuava
 
     implementation(project(':yti-taxgen-commons'))

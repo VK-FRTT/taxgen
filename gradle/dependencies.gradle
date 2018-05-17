@@ -3,6 +3,7 @@ ext {
             kotlin:         "1.2.31",
             joptSimple:     "5.0.4",
             jacksonKotlin:  "2.8.11.1",
+            jacksonJsr310:  "2.8.11",
             okhttp:         "3.10.0",
             googleGuava:    "25.0-jre",
 
@@ -17,6 +18,7 @@ ext {
 
             joptSimple:             "net.sf.jopt-simple:jopt-simple:$versions.joptSimple",
             jacksonKotlin:          "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jacksonKotlin",
+            jacksonJsr310:          "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$versions.jacksonJsr310",
             okHttp3:                "com.squareup.okhttp3:okhttp:$versions.okhttp",
             googleGuava:            "com.google.guava:guava:$versions.googleGuava",
 
