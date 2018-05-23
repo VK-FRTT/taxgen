@@ -17,12 +17,12 @@ class YclServiceCodeList(
         val codesUrl: String
     )
 
-    override fun codeList(): String {
+    override fun codeListData(): String {
         val urls = resolvedUrls()
         return urls.codeListData
     }
 
-    override fun codesPages(): Iterator<String> {
+    override fun codePagesData(): Iterator<String> {
         val urls = resolvedUrls()
         return YclPagedResourceRetriever(urls.codesUrl)
     }

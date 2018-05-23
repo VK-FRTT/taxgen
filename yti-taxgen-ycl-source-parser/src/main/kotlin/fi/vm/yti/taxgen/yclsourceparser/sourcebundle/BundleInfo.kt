@@ -1,5 +1,5 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 
-data class BundleDescriptor(
+data class BundleInfo(
     val createdAt: String
 )

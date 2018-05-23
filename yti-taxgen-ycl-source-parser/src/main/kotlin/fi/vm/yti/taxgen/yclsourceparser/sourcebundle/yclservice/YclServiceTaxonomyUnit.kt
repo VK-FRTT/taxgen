@@ -3,15 +3,15 @@ package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
 import fi.vm.yti.taxgen.yclsourceparser.ext.kotlin.toJsonString
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnit
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnitDescriptor
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnitInfo
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.TaxonomyUnitConfig
 
 class YclServiceTaxonomyUnit(
     private val taxonomyUnitConfig: TaxonomyUnitConfig
 ) : TaxonomyUnit {
 
-    override fun taxonomyUnitDescriptor(): String {
-        val descriptor = TaxonomyUnitDescriptor(
+    override fun taxonomyUnitInfoData(): String {
+        val info = TaxonomyUnitInfo(
             namespace = taxonomyUnitConfig.namespace,
             namespacePrefix = taxonomyUnitConfig.namespacePrefix,
             officialLocation = taxonomyUnitConfig.officialLocation,
@@ -19,7 +19,7 @@ class YclServiceTaxonomyUnit(
             supportedLanguages = taxonomyUnitConfig.supportedLanguages
         )
 
-        return descriptor.toJsonString()
+        return info.toJsonString()
     }
 
     override fun codeLists(): List<CodeList> {

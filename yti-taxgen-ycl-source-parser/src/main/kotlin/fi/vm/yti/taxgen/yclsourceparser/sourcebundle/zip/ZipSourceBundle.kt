@@ -16,7 +16,7 @@ class ZipSourceBundle(
     private val zipFileSystem = createSourceZipFileSystem()
     private val sourceBundle = createSourceBundle()
 
-    override fun bundleDescriptor(): String = sourceBundle.bundleDescriptor()
+    override fun bundleInfoData(): String = sourceBundle.bundleInfoData()
 
     override fun taxonomyUnits(): List<TaxonomyUnit> = sourceBundle.taxonomyUnits()
 
