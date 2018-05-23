@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-internal class FolderSourceBundleTest {
+internal class FolderSourceBundle_UnitTest {
 
     @Nested
-    @DisplayName("when reading bundle contents from filesystem")
-    inner class ReadFromFilesystem {
+    @DisplayName("when reading bundle contents from reference folder layout")
+    inner class ReadFromReference {
 
         private val objectMapper = jacksonObjectMapper()
         private lateinit var bundle: FolderSourceBundle
@@ -31,7 +31,7 @@ internal class FolderSourceBundleTest {
 
             assertThat(infoJson.isObject).isTrue()
             assertThat(infoJson.get("marker") as Any).isNotNull()
-            assertThat(infoJson.get("marker").textValue()).isEqualTo("folder_bundle")
+            assertThat(infoJson.get("marker").textValue()).isEqualTo("fsb_reference_content")
         }
 
         @Test
@@ -91,7 +91,7 @@ internal class FolderSourceBundleTest {
         }
 
         @Test
-        fun `Should provide codesPages @ FolderSourceBundle # taxonomyUnits # codeLists`() {
+        fun `Should provide codePages @ FolderSourceBundle # taxonomyUnits # codeLists`() {
             val codesPages = bundle.taxonomyUnits()[0].codeLists()[0].codePagesData().asSequence().toList()
             assertThat(codesPages.size).isEqualTo(12)
 
