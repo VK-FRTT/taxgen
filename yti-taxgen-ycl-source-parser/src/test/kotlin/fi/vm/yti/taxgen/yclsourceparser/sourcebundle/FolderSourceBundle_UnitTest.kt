@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -12,10 +13,11 @@ import java.nio.file.Paths
 internal class FolderSourceBundle_UnitTest {
 
     @Nested
-    @DisplayName("when reading bundle contents from reference folder layout")
+    @DisplayName("when bundle contents are read from reference folder content")
     inner class ReadFromReference {
 
         private val objectMapper = jacksonObjectMapper()
+
         private lateinit var bundle: FolderSourceBundle
 
         @BeforeEach
@@ -25,8 +27,13 @@ internal class FolderSourceBundle_UnitTest {
             bundle = FolderSourceBundle(resourcePath)
         }
 
+        @AfterEach
+        fun teardown() {
+            bundle.close()
+        }
+
         @Test
-        fun `Should provide bundleinfo @ FolderSourceBundle`() {
+        fun `Should have bundleinfo @ root`() {
             val infoJson = objectMapper.readTree(bundle.bundleInfoData())
 
             assertThat(infoJson.isObject).isTrue()
@@ -35,7 +42,7 @@ internal class FolderSourceBundle_UnitTest {
         }
 
         @Test
-        fun `Should provide taxonomyUnits @ FolderSourceBundle`() {
+        fun `Should have taxonomyunits @ root # taxonomyunit`() {
             val taxonomyUnits = bundle.taxonomyUnits()
             assertThat(taxonomyUnits.size).isEqualTo(12)
 
@@ -63,7 +70,7 @@ internal class FolderSourceBundle_UnitTest {
         }
 
         @Test
-        fun `Should provide codeLists @ FolderSourceBundle # taxonomyUnits`() {
+        fun `Should have codelists @ root # taxonomyunit # codelist`() {
             val codeLists = bundle.taxonomyUnits()[0].codeLists()
             assertThat(codeLists.size).isEqualTo(12)
 
@@ -91,7 +98,7 @@ internal class FolderSourceBundle_UnitTest {
         }
 
         @Test
-        fun `Should provide codePages @ FolderSourceBundle # taxonomyUnits # codeLists`() {
+        fun `Should have codepages @ root # taxonomyunit # codelist`() {
             val codesPages = bundle.taxonomyUnits()[0].codeLists()[0].codePagesData().asSequence().toList()
             assertThat(codesPages.size).isEqualTo(12)
 
