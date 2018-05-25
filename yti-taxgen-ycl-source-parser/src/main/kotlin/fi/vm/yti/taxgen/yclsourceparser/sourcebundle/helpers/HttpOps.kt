@@ -30,6 +30,7 @@ object HttpOps : Closeable {
 
     override fun close() {
         httpClient.whenNotNull { it.dispatcher().executorService().shutdown() }
+        httpClient = null
     }
 
     private fun httpClient(): OkHttpClient {
@@ -41,5 +42,11 @@ object HttpOps : Closeable {
             .followRedirects(true)
             .followSslRedirects(true)
             .build()
+    }
+
+    fun useHttpClient(httpClient: OkHttpClient) {
+        close()
+
+        this.httpClient = httpClient
     }
 }
