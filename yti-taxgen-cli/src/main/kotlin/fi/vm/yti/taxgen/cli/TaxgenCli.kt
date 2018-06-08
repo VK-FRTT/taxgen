@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceSourceBundle
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.YclSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundleWriter
 import java.io.BufferedWriter
@@ -81,7 +81,7 @@ class TaxgenCli(
 
     private fun resolveYclSourceBundle(detectedOptions: DetectedOptions): SourceBundle {
         if (detectedOptions.sourceConfig != null) {
-            return YclServiceSourceBundle(detectedOptions.sourceConfig)
+            return YclSourceBundle(detectedOptions.sourceConfig)
         }
 
         if (detectedOptions.sourceBundleFolder != null) {

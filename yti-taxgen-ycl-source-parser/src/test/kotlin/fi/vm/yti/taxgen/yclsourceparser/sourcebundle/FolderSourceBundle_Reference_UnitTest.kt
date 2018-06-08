@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.nio.file.Paths
 
-
 @DisplayName("when folder source bundle reads reference folder structure")
 internal class FolderSourceBundle_Reference_UnitTest : SourceBundle_UnitTestBase() {
 

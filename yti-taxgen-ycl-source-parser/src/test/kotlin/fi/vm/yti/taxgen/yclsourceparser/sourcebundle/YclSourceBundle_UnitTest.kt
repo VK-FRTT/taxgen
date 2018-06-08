@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.HttpOps
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceSourceBundle
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.YclSourceBundle
 import io.specto.hoverfly.junit.core.Hoverfly
 import io.specto.hoverfly.junit.core.SimulationSource
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.response
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import java.nio.file.Paths
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-
 
 @DisplayName("when bundle contents are read from simulated YCL service")
 @ExtendWith(HoverflyExtension::class)
@@ -43,7 +42,7 @@ internal class YclSourceBundle_UnitTest(private val hoverfly: Hoverfly) : Source
                 classLoader.getResource("yclsourcebundle_unittest/ycl_source_config.json").toURI()
             val resourcePath = Paths.get(resourceUri)
 
-            sourceBundle = YclServiceSourceBundle(resourcePath)
+            sourceBundle = YclSourceBundle(resourcePath)
         }
 
         @AfterEach
@@ -182,7 +181,6 @@ internal class YclSourceBundle_UnitTest(private val hoverfly: Hoverfly) : Source
 
         hoverfly.simulate(simulationSource)
     }
-
 
     private fun StubServiceBuilder.redirectGet(
         requestPath: String,

@@ -1,12 +1,12 @@
-package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
+package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl
 
 import fi.vm.yti.taxgen.yclsourceparser.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.HttpOps
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.CodeListConfig
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.config.CodeListConfig
 
-class YclServiceCodeList(
+class YclCodeList(
     private val codeListConfig: CodeListConfig
 ) : CodeList {
 

@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config
+package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.config
 
 data class TaxonomyUnitConfig(
     val namespace: String,

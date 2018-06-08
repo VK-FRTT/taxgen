@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
+package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl
 
 import fi.vm.yti.taxgen.yclsourceparser.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
@@ -28,7 +28,7 @@ class YclPagedResourceRetriever(
 
     private fun resolveNextPageUrl(response: String) {
         val responseJson =
-            FileOps.lenientObjectMapper().readTree(response) ?: throw YclServiceCodeList.InitFailException()
+            FileOps.lenientObjectMapper().readTree(response) ?: throw YclCodeList.InitFailException()
 
         val nextPageUrl = responseJson.nonBlankTextOrNullAt("/meta/nextPage")
         check(this.nextPageUrl != nextPageUrl) { "Service returned identical next page url" }

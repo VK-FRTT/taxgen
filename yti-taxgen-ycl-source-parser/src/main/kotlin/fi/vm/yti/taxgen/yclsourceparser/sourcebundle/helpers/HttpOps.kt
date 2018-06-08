@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers
 
 import fi.vm.yti.taxgen.commons.ext.kotlin.whenNotNull
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.YclServiceCodeList
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.YclCodeList
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.Closeable
@@ -20,7 +20,7 @@ object HttpOps : Closeable {
         val response = httpClient().newCall(request).execute()
 
         if (!response.isSuccessful) {
-            throw YclServiceCodeList.InitFailException()
+            throw YclCodeList.InitFailException()
         }
 
         return response.body().use {

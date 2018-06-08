@@ -1,15 +1,15 @@
-package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice
+package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl
 
 import fi.vm.yti.taxgen.yclsourceparser.ext.kotlin.toJsonString
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.BundleInfo
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.TaxonomyUnit
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.FileOps
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.yclservice.config.SourceConfig
+import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.config.SourceConfig
 import java.nio.file.Path
 import java.time.Instant
 
-class YclServiceSourceBundle(
+class YclSourceBundle(
     sourceConfigFilePath: Path
 ) : SourceBundle {
 
@@ -32,7 +32,7 @@ class YclServiceSourceBundle(
     override fun bundleInfoData(): String = bundleInfo
 
     override fun taxonomyUnits(): List<TaxonomyUnit> {
-        return yclSourceConfig.taxonomyUnits.map { YclServiceTaxonomyUnit(it) }
+        return yclSourceConfig.taxonomyUnits.map { YclTaxonomyUnit(it) }
     }
 
     override fun close() {
