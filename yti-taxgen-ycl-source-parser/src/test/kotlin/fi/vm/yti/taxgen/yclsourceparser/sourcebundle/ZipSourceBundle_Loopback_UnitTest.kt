@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundleWriter
 import org.assertj.core.api.Assertions.assertThat
@@ -12,10 +11,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Comparator
 
-@DisplayName("When bundle contents are written to zip file and then read back")
-internal class ZipSourceBundle_Loopback_UnitTest {
+@DisplayName("When bundle contents are written to zip file and then read from the zip")
+internal class ZipSourceBundle_Loopback_UnitTest : SourceBundle_UnitTestBase() {
 
-    private val objectMapper = jacksonObjectMapper()
     private lateinit var targetFolderPath: Path
     private lateinit var zipSourceBundle: ZipSourceBundle
 
@@ -25,7 +23,12 @@ internal class ZipSourceBundle_Loopback_UnitTest {
         val targetZipPath = targetFolderPath.resolve("loopback.zip")
 
         val sourceBundle = FixedSourceBundle()
-        ZipSourceBundleWriter(targetZipPath, sourceBundle, false).use {
+
+        ZipSourceBundleWriter(
+            targetZipPath = targetZipPath,
+            sourceBundle = sourceBundle,
+            forceOverwrite = false
+        ).use {
             it.write()
         }
 
@@ -54,13 +57,11 @@ internal class ZipSourceBundle_Loopback_UnitTest {
     @Test
     fun `Should have taxonomyunits @ root # taxonomyunit`() {
         val taxonomyUnits = zipSourceBundle.taxonomyUnits()
-        assertThat(taxonomyUnits.size).isEqualTo(2)
-
-        val markers = taxonomyUnits.map {
-            val infoJson = objectMapper.readTree(it.taxonomyUnitInfoData())
-            assertThat(infoJson.isObject).isTrue()
-            infoJson.get("marker").textValue()
-        }
+        val markers =
+            extractMarkerValuesFromJsonData(
+                taxonomyUnits,
+                { it -> (it as TaxonomyUnit).taxonomyUnitInfoData() }
+            )
 
         assertThat(markers).containsExactly(
             "fixed_taxonomyunit_0",
@@ -71,14 +72,10 @@ internal class ZipSourceBundle_Loopback_UnitTest {
     @Test
     fun `Should have codelists @ root # taxonomyunit # codelist`() {
         val codeLists = zipSourceBundle.taxonomyUnits()[0].codeLists()
-        assertThat(codeLists.size).isEqualTo(2)
-
-        val markers = codeLists.map {
-            val infoJson = objectMapper.readTree(it.codeListData())
-            assertThat(infoJson.isObject).isTrue()
-
-            infoJson.get("marker").textValue()
-        }
+        val markers = extractMarkerValuesFromJsonData(
+            codeLists,
+            { it -> (it as CodeList).codeListData() }
+        )
 
         assertThat(markers).containsExactly(
             "fixed_codelist_0",
@@ -89,14 +86,10 @@ internal class ZipSourceBundle_Loopback_UnitTest {
     @Test
     fun `Should have codepages @ root # taxonomyunit # codelist`() {
         val codesPages = zipSourceBundle.taxonomyUnits()[0].codeLists()[0].codePagesData().asSequence().toList()
-        assertThat(codesPages.size).isEqualTo(2)
-
-        val markers = codesPages.map {
-            val infoJson = objectMapper.readTree(it)
-            assertThat(infoJson.isObject).isTrue()
-
-            infoJson.get("marker").textValue()
-        }
+        val markers = extractMarkerValuesFromJsonData(
+            codesPages,
+            { it -> it as String }
+        )
 
         assertThat(markers).containsExactly(
             "fixed_codepage_0",

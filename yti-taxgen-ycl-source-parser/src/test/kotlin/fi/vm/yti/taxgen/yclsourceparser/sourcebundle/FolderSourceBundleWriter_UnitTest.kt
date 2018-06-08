@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -12,21 +11,26 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Comparator
 
-internal class FolderSourceBundleWriter_UnitTest {
+@DisplayName("when bundle contents are written to folder")
+internal class FolderSourceBundleWriter_UnitTest : SourceBundle_UnitTestBase() {
 
     @Nested
-    @DisplayName("when bundle contents are written to blank folder")
-    inner class WriteToFilesystem {
+    @DisplayName("which is empty")
+    inner class EmptyTargetFolder {
 
-        private val objectMapper = jacksonObjectMapper()
         private lateinit var targetFolderPath: Path
 
         @BeforeEach
         fun init() {
-            targetFolderPath = Files.createTempDirectory("foldersourcebundlewriter_unittest")
+            targetFolderPath = Files.createTempDirectory("foldersourcebundlewriter_blank_unittest")
 
             val sourceBundle = FixedSourceBundle()
-            FolderSourceBundleWriter(targetFolderPath, sourceBundle, false).use {
+
+            FolderSourceBundleWriter(
+                baseFolderPath = targetFolderPath,
+                sourceBundle = sourceBundle,
+                forceOverwrite = false
+            ).use {
                 it.write()
             }
         }
