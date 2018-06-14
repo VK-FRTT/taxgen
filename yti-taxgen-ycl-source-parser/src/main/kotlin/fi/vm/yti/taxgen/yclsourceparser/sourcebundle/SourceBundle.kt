@@ -4,6 +4,6 @@ import java.io.Closeable
 
 interface SourceBundle : Closeable {
 
-    fun bundleDescriptor(): String
+    fun bundleInfoData(): String
     fun taxonomyUnits(): List<TaxonomyUnit>
 }

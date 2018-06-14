@@ -5,6 +5,7 @@ dependencies {
     implementation libs.kotlinReflect
     implementation libs.okHttp3
     implementation libs.jacksonKotlin
+    implementation libs.jacksonJsr310
     implementation libs.googleGuava
 
     implementation(project(':yti-taxgen-commons'))
@@ -13,6 +14,8 @@ dependencies {
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams
     testCompile libs.assertjCore
+    testCompile libs.hoverflyJavaJunit5
+    testCompile(project(':yti-taxgen-test-commons'))
 
     testRuntimeOnly libs.junitJupiterEngine
 }

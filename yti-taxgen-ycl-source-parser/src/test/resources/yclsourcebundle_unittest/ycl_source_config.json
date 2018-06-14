@@ -1,0 +1,24 @@
+{
+  "type": "YclSourceConfig",
+  "schemaVersion": 1,
+  "taxonomyUnits": [
+    {
+      "namespace": "ycl_sb_unittest_namespace",
+      "namespacePrefix": "ycl_sb_unittest_namespacePrefix",
+      "officialLocation": "ycl_sb_unittest_officialLocation",
+      "copyrightText": "ycl_sb_unittest_copyrightText",
+      "supportedLanguages": [
+        "en",
+        "fi"
+      ],
+      "codeLists": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero"
+        },
+        {
+          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_one"
+        }
+      ]
+    }
+  ]
+}

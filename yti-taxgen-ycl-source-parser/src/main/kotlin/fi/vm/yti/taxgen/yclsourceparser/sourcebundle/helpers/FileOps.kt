@@ -37,6 +37,11 @@ object FileOps {
         }
     }
 
+    fun listFilesMatching(parentFolderPath: Path, filenameGlob: String): List<Path> {
+        val directoryStream = createDirectoryStream(parentFolderPath, filenameGlob)
+        return directoryStream.use { it.filter { path -> Files.isRegularFile(path) } }
+    }
+
     inline fun <reified T : Any> readJsonFileAsObject(filePath: Path): T {
         val mapper = lenientObjectMapper()
         val reader: BufferedReader = createBufferedReader(filePath)
@@ -45,6 +50,10 @@ object FileOps {
 
     fun readTextFile(path: Path, filename: String): String {
         val filePath = path.resolve(filename)
+        return readTextFile(filePath)
+    }
+
+    fun readTextFile(filePath: Path): String {
         val reader = createBufferedReader(filePath)
 
         return reader.use {

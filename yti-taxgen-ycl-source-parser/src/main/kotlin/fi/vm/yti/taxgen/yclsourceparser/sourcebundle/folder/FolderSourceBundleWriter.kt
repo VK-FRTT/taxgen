@@ -19,7 +19,7 @@ class FolderSourceBundleWriter(
     override fun write() {
         val pathStack = createPathStack()
 
-        FileOps.writeTextFile(sourceBundle.bundleDescriptor(), pathStack, "bundle.json", forceOverwrite)
+        FileOps.writeTextFile(sourceBundle.bundleInfoData(), pathStack, "bundle_info.json", forceOverwrite)
         writeTaxonomyUnits(sourceBundle.taxonomyUnits(), pathStack)
     }
 
@@ -35,7 +35,7 @@ class FolderSourceBundleWriter(
 
             pathStack.withIndexPostfixSubfolder("taxonomyunit", unitIndex) {
 
-                FileOps.writeTextFile(unit.taxonomyUnitDescriptor(), pathStack, "taxonomyunit.json", forceOverwrite)
+                FileOps.writeTextFile(unit.taxonomyUnitInfoData(), pathStack, "taxonomyunit_info.json", forceOverwrite)
                 writeCodeLists(unit.codeLists(), pathStack)
             }
         }
@@ -46,8 +46,11 @@ class FolderSourceBundleWriter(
 
             pathStack.withIndexPostfixSubfolder("codelist", listIndex) {
 
-                FileOps.writeTextFile(list.codeScheme(), pathStack, "codelist.json", forceOverwrite)
-                FileOps.writeTextFile(list.codes(), pathStack, "codes.json", forceOverwrite)
+                FileOps.writeTextFile(list.codeListData(), pathStack, "codelist.json", forceOverwrite)
+
+                list.codePagesData().withIndex().forEach { (index, fragment) ->
+                    FileOps.writeTextFile(fragment, pathStack, "codepage_$index.json", forceOverwrite)
+                }
             }
         }
     }

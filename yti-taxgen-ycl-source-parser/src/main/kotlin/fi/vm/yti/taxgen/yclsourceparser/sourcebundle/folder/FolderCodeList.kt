@@ -8,11 +8,11 @@ class FolderCodeList(
     private val codeListPath: Path
 ) : CodeList {
 
-    override fun codeScheme(): String {
+    override fun codeListData(): String {
         return FileOps.readTextFile(codeListPath, "codelist.json")
     }
 
-    override fun codes(): String {
-        return FileOps.readTextFile(codeListPath, "codes.json")
+    override fun codePagesData(): Iterator<String> {
+        return FolderPagedResourceIterator(codeListPath, "codepage_*.json")
     }
 }

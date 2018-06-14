@@ -2,15 +2,15 @@ package fi.vm.yti.taxgen.yclsourceparser.mapping
 
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
-import fi.vm.yti.taxgen.yclsourceparser.model.Code
+import fi.vm.yti.taxgen.yclsourceparser.model.YclCode
 
-fun conceptFromCode(code: Code): Concept {
+fun conceptFromYclCode(yclCode: YclCode): Concept {
     return Concept(
-        createdAt = code.modified,
-        modifiedAt = code.modified,
-        applicableFrom = code.startDate,
-        applicableUntil = code.endDate,
-        label = TranslatedText(code.prefLabel!!),
-        description = TranslatedText(code.description!!)
+        createdAt = yclCode.modified,
+        modifiedAt = yclCode.modified,
+        applicableFrom = yclCode.startDate,
+        applicableUntil = yclCode.endDate,
+        label = TranslatedText(yclCode.prefLabel!!),
+        description = TranslatedText(yclCode.description!!)
     )
 }

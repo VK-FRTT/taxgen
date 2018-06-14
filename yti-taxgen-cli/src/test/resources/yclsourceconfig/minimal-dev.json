@@ -10,11 +10,7 @@
       "supportedLanguages": ["en"],
       "codeLists": [
         {
-          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/XBRL1?env=dev"
-        },
-
-        {
-          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/XBRL-Test-1?env=dev"
+          "uri": "http://uri.suomi.fi/codelist/test/icd-10?env=dev"
         }
       ]
     }
