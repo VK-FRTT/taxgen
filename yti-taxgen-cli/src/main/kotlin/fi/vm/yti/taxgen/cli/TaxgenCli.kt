@@ -68,7 +68,6 @@ class TaxgenCli(
 
                 val parser = YclSourceParser()
                 parser.parse(sourceBundle)
-
                 }
             }
         }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.time.Instant
 import java.time.LocalDate
 
 internal class ConceptTest {
@@ -22,11 +23,10 @@ internal class ConceptTest {
     @DisplayName("PropertyOptionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "owner,             required",
         "label,             required",
         "description,       optional",
         "createdAt,         required",
-        "modifiedAt,        optional",
+        "modifiedAt,        required",
         "applicableFrom,    optional",
         "applicableUntil,   optional"
     )
@@ -41,11 +41,11 @@ internal class ConceptTest {
     inner class PropertyValidation {
 
         @Test
-        fun `createdAt should precede modifiedAt`() {
+        fun `createdAt must precede modifiedAt`() {
             val attributes = Factory.attributesFor<Concept>(
                 overrides = mapOf(
-                    "createdAt" to LocalDate.of(2018, 1, 20),
-                    "modifiedAt" to LocalDate.of(2018, 1, 19)
+                    "createdAt" to Instant.parse("2018-03-20T10:20:30.40Z"),
+                    "modifiedAt" to Instant.parse("2018-03-19T10:20:30.40Z")
                 )
             )
 
@@ -60,8 +60,8 @@ internal class ConceptTest {
         fun `createdAt may be equal with modifiedAt`() {
             val attributes = Factory.attributesFor<Concept>(
                 overrides = mapOf(
-                    "createdAt" to LocalDate.of(2018, 1, 20),
-                    "modifiedAt" to LocalDate.of(2018, 1, 20)
+                    "createdAt" to Instant.parse("2018-03-20T10:20:30.40Z"),
+                    "modifiedAt" to Instant.parse("2018-03-20T10:20:30.40Z")
                 )
             )
 

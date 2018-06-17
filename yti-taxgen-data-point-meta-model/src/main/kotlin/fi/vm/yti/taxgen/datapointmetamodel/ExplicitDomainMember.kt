@@ -4,7 +4,8 @@ import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
 
 data class ExplicitDomainMember(
     val concept: Concept,
-    val memberCode: String
+    val memberCode: String,
+    val defaultMember: Boolean
 ) {
 
     init {

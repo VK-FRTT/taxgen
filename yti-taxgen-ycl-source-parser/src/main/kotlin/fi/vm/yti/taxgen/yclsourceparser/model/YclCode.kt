@@ -2,11 +2,12 @@ package fi.vm.yti.taxgen.yclsourceparser.model
 
 import java.time.Instant
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 data class YclCode(
     val id: UUID?,
 
+    val created: Instant?,
     val modified: Instant?,
 
     val codeValue: String?,

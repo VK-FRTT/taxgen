@@ -19,7 +19,8 @@ internal class ExplicitDomainMemberTest {
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
         "concept,           required",
-        "memberCode,        required"
+        "memberCode,        required",
+        "defaultMember,     required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {
         propertyOptionalityTemplate<ExplicitDomainMember>(

@@ -6,8 +6,8 @@ import fi.vm.yti.taxgen.yclsourceparser.model.YclCode
 
 fun conceptFromYclCode(yclCode: YclCode): Concept {
     return Concept(
-        createdAt = yclCode.modified,
-        modifiedAt = yclCode.modified,
+        createdAt = yclCode.created!!, //TODO - report errors if mandatory fields are missing in YCL data
+        modifiedAt = yclCode.modified!!,
         applicableFrom = yclCode.startDate,
         applicableUntil = yclCode.endDate,
         label = TranslatedText(yclCode.prefLabel!!),

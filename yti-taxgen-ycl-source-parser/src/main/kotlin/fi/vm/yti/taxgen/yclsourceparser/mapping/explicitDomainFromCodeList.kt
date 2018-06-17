@@ -27,7 +27,6 @@ fun explicitDomainFromCodeList(codeList: CodeList): ExplicitDomain {
             }
             .toList()
 
-
     return ExplicitDomain(
         concept = concept,
         domainCode = domainCode,

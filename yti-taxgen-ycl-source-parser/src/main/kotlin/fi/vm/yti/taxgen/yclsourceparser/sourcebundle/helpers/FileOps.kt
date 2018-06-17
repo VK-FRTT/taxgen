@@ -1,8 +1,5 @@
 package fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.JacksonObjectMapper.lenientObjectMapper

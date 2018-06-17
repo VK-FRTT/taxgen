@@ -17,5 +17,9 @@ data class ExplicitDomain(
             minLength = 1,
             maxLength = 10000
         )
+
+        //TODO members validation
+        // - Each Code must be unique
+        // - Single default member must exist
     }
 }

@@ -9,6 +9,7 @@ fun explicitDomainMemberFromYclCode(yclCode: YclCode): ExplicitDomainMember {
 
     return ExplicitDomainMember(
         concept = concept,
-        memberCode = memberCode
+        memberCode = memberCode,
+        defaultMember = true
     )
 }

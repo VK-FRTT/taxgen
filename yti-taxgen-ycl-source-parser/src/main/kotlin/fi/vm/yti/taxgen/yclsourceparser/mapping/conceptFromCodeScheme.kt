@@ -6,8 +6,8 @@ import fi.vm.yti.taxgen.yclsourceparser.model.YclCodeScheme
 
 fun conceptFromYclCodeScheme(yclCodeScheme: YclCodeScheme): Concept {
     return Concept(
-        createdAt = yclCodeScheme.modified,
-        modifiedAt = yclCodeScheme.modified,
+        createdAt = yclCodeScheme.created!!,
+        modifiedAt = yclCodeScheme.modified!!,
         applicableFrom = yclCodeScheme.startDate,
         applicableUntil = yclCodeScheme.endDate,
         label = TranslatedText(yclCodeScheme.prefLabel!!),

@@ -20,8 +20,7 @@ internal class ExplicitDomainTest {
     @CsvSource(
         "concept,               required",
         "domainCode,            required",
-        "members,               required",
-        "defaultMemberIndex,    required"
+        "members,               required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {
         propertyOptionalityTemplate<ExplicitDomain>(

@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.DataDefinition
 import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.dynamicAttribute
+import java.time.Instant
 import java.time.LocalDate
 
 fun dataPointMetaModelTestData(): Set<DataDefinition> {
@@ -36,9 +37,8 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Concept::class,
             attributes = mapOf(
-                "owner" to dynamicAttribute { it.instantiate<Owner>() },
-                "createdAt" to LocalDate.of(2018, 1, 20),
-                "modifiedAt" to LocalDate.of(2018, 2, 20),
+                "createdAt" to Instant.parse("2018-03-20T10:20:30.40Z"),
+                "modifiedAt" to Instant.parse("2018-03-22T10:20:30.40Z"),
                 "applicableFrom" to LocalDate.of(2018, 3, 20),
                 "applicableUntil" to LocalDate.of(2018, 4, 20),
                 "label" to dynamicAttribute { it.instantiate<TranslatedText>() },
@@ -52,7 +52,8 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
             kClass = ExplicitDomainMember::class,
             attributes = mapOf(
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "memberCode" to "exp_mc"
+                "memberCode" to "exp_mc",
+                "defaultMember" to true
             )
         )
     )
@@ -63,8 +64,7 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
             attributes = mapOf(
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "exp_dc",
-                "members" to dynamicAttribute { listOf(it.instantiate<ExplicitDomainMember>()) },
-                "defaultMemberIndex" to 0
+                "members" to dynamicAttribute { listOf(it.instantiate<ExplicitDomainMember>()) }
             )
         )
     )
