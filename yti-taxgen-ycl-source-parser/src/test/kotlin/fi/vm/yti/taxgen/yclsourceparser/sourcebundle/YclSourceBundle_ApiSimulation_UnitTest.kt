@@ -18,13 +18,12 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.nio.file.Paths
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @DisplayName("when bundle contents are read from simulated YCL service")
 @ExtendWith(HoverflyExtension::class)
-internal class YclSourceBundle_UnitTest(private val hoverfly: Hoverfly) : SourceBundle_UnitTestBase() {
+internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hoverfly) : SourceBundle_UnitTestBase() {
 
     @Nested
     @DisplayName("which provides successful responses")
@@ -35,14 +34,37 @@ internal class YclSourceBundle_UnitTest(private val hoverfly: Hoverfly) : Source
         @BeforeEach
         fun init() {
             hoverflyCustomiseHttpClientTrust()
-            hoverflySimulateValidCodelists()
+            hoverflyConfigureSimulation()
 
-            val classLoader = Thread.currentThread().contextClassLoader
-            val resourceUri =
-                classLoader.getResource("yclsourcebundle_unittest/ycl_source_config.json").toURI()
-            val resourcePath = Paths.get(resourceUri)
+            val yclSourceConfig =
+                    """
+                    {
+                      "type": "YclSourceConfig",
+                      "schemaVersion": 1,
+                      "taxonomyUnits": [
+                        {
+                          "namespace": "ycl_sb_unittest_namespace",
+                          "namespacePrefix": "ycl_sb_unittest_namespacePrefix",
+                          "officialLocation": "ycl_sb_unittest_officialLocation",
+                          "copyrightText": "ycl_sb_unittest_copyrightText",
+                          "supportedLanguages": [
+                            "en",
+                            "fi"
+                          ],
+                          "codeLists": [
+                            {
+                              "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero"
+                            },
+                            {
+                              "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_one"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                    """.trimIndent()
 
-            sourceBundle = YclSourceBundle(resourcePath)
+            sourceBundle = YclSourceBundle(sourceConfigData = yclSourceConfig)
         }
 
         @AfterEach
@@ -119,7 +141,7 @@ internal class YclSourceBundle_UnitTest(private val hoverfly: Hoverfly) : Source
         HttpOps.useHttpClient(okHttpClient)
     }
 
-    private fun hoverflySimulateValidCodelists() {
+    private fun hoverflyConfigureSimulation() {
         val simulationSource = SimulationSource.dsl(
             service("uri.suomi.fi")
                 .redirectGet(

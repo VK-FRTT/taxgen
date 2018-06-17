@@ -66,8 +66,8 @@ class TaxgenCli(
 
                 resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
 
-                val parser = YclSourceParser()
-                parser.parse(sourceBundle)
+                    val parser = YclSourceParser()
+                    parser.parse(sourceBundle)
                 }
             }
         }
@@ -93,7 +93,9 @@ class TaxgenCli(
 
     private fun resolveYclSourceBundle(detectedOptions: DetectedOptions): SourceBundle {
         if (detectedOptions.sourceConfig != null) {
-            return YclSourceBundle(detectedOptions.sourceConfig)
+            return YclSourceBundle(
+                sourceConfigFilePath = detectedOptions.sourceConfig
+            )
         }
 
         if (detectedOptions.sourceBundleFolder != null) {
