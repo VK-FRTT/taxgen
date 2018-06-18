@@ -10,7 +10,8 @@ data class YclCodeScheme(
     val created: Instant?,
     val modified: Instant?,
 
-    val codeValue: String?,
+    private val codeValue: String?,
+    private val defaultCode: YclDefaultCode,
 
     val startDate: LocalDate?,
     val endDate: LocalDate?,
@@ -18,4 +19,13 @@ data class YclCodeScheme(
     val prefLabel: MutableMap<String, String>,
     val definition: MutableMap<String, String>,
     val description: MutableMap<String, String>
-)
+){
+
+    fun dpmDomainCode(): String {
+        return codeValue!!
+    }
+
+    fun dpmDefaultMemberCode(): String {
+        return defaultCode.codeValue!!
+    }
+}

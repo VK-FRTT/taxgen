@@ -12,10 +12,12 @@ fun explicitDomainFromCodeList(codeList: CodeList): ExplicitDomain {
 
     val yclCodeScheme: YclCodeScheme = mapper.readValue(codeList.codeListData())
     val concept = conceptFromYclCodeScheme(yclCodeScheme)
-    val domainCode = domainCodeFromYclCodeScheme(yclCodeScheme)
+    val domainCode = yclCodeScheme.dpmDomainCode()
+    val defaultMemberCode = yclCodeScheme.dpmDefaultMemberCode()
 
     val explicitDomainMembers =
-        codeList.codePagesData()
+        codeList
+            .codePagesData()
             .asSequence()
             .map { codePageData ->
                 val yclCodesCollection: YclCodesCollection = mapper.readValue(codePageData)
@@ -23,7 +25,7 @@ fun explicitDomainFromCodeList(codeList: CodeList): ExplicitDomain {
             }
             .flatten()
             .map { yclCode ->
-                explicitDomainMemberFromYclCode(yclCode)
+                yclCode.dpmExplicitDomainMemberWithDefaultness(defaultMemberCode)
             }
             .toList()
 

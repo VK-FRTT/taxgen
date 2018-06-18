@@ -20,6 +20,6 @@ data class ExplicitDomain(
 
         //TODO members validation
         // - Each Code must be unique
-        // - Single default member must exist
+        // - Only SINGLE default member exists
     }
 }

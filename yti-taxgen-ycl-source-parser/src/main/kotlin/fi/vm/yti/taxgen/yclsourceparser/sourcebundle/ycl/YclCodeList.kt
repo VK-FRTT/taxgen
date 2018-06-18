@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.CodeList
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.HttpOps
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.helpers.JacksonObjectMapper
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.config.CodeListConfig
+import okhttp3.HttpUrl
 
 class YclCodeList(
     private val codeListConfig: CodeListConfig
@@ -13,13 +14,13 @@ class YclCodeList(
     private var resolvedUrlsCache: ResolvedUrls? = null
 
     data class ResolvedUrls(
-        val codeListData: String,
+        val codeListUrl: String,
         val codesUrl: String
     )
 
     override fun codeListData(): String {
         val urls = resolvedUrls()
-        return urls.codeListData
+        return HttpOps.getJsonData(urls.codeListUrl)
     }
 
     override fun codePagesData(): Iterator<String> {
@@ -32,12 +33,16 @@ class YclCodeList(
     }
 
     private fun resolveUrls(): ResolvedUrls {
-        val codeListData = HttpOps.getJsonData(codeListConfig.uri)
-        val codeListJson = JacksonObjectMapper.lenientObjectMapper().readTree(codeListData) ?: throw InitFailException()
-        val codesUrl = codeListJson.nonBlankTextOrNullAt("/codesUrl") ?: throw InitFailException()
+        val uriResolveResultData = HttpOps.getJsonData(codeListConfig.uri)
+        val uriResolveResultJson = JacksonObjectMapper.lenientObjectMapper().readTree(uriResolveResultData) ?: throw InitFailException()
+
+        val codeListBaseUrl = uriResolveResultJson.nonBlankTextOrNullAt("/url") ?: throw InitFailException()
+        val codeListUrl = HttpUrl.parse(codeListBaseUrl)!!.newBuilder().addQueryParameter("expand", "code").build().toString()
+
+        val codesUrl = uriResolveResultJson.nonBlankTextOrNullAt("/codesUrl") ?: throw InitFailException()
 
         return ResolvedUrls(
-            codeListData = codeListData,
+            codeListUrl = codeListUrl,
             codesUrl = codesUrl
         )
     }

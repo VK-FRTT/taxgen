@@ -144,6 +144,7 @@ internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hove
     private fun hoverflyConfigureSimulation() {
         val simulationSource = SimulationSource.dsl(
             service("uri.suomi.fi")
+                //URI redirects to YCL service
                 .redirectGet(
                     requestPath = "/codelist/ytitaxgenfixtures/minimal_zero",
                     toTarget = "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero"
@@ -154,12 +155,13 @@ internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hove
                 ),
 
             service("koodistot.suomi.fi")
+                //YCL service responses for redirected URI
                 .respondGetWithJson(
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
                     responseJson = """
                         {
-                            "codesUrl":"http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/codes/",
-                            "marker": "simulated_codelist_0"
+                            "url":"http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero",
+                            "codesUrl":"http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/codes/"
                         }
                         """.trimIndent()
                 )
@@ -168,12 +170,35 @@ internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hove
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_one",
                     responseJson = """
                         {
-                            "codesUrl":"http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_one/codes/",
+                            "url":"http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_one",
+                            "codesUrl":"http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_one/codes/"
+                        }
+                        """.trimIndent()
+                )
+
+                //YCL service responses for expanded CodeScheme
+                .respondGetWithJson(
+                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
+                    queryParams = listOf(Pair("expand", "code")),
+                    responseJson = """
+                        {
+                            "marker": "simulated_codelist_0"
+                        }
+                        """.trimIndent()
+                )
+
+                .respondGetWithJson(
+                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_one",
+                    queryParams = listOf(Pair("expand", "code")),
+                    responseJson = """
+                        {
                             "marker": "simulated_codelist_1"
                         }
                         """.trimIndent()
                 )
 
+
+                //YCL service responses for Code pages
                 .respondGetWithJson(
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/codes/",
                     queryParams = listOf(Pair("pageSize", "1000")),

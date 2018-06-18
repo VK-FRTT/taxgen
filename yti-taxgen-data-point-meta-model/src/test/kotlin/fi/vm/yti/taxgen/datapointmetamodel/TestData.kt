@@ -69,15 +69,5 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         )
     )
 
-    definitions.add(
-        DataDefinition(
-            kClass = TypedDomain::class,
-            attributes = mapOf(
-                "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "domainCode" to "typ_dc"
-            )
-        )
-    )
-
     return definitions
 }

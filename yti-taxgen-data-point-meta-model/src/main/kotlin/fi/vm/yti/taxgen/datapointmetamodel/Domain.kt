@@ -11,7 +11,7 @@ interface Domain {
             instance = this,
             property = "domainCode",
             minLength = 2,
-            maxLength = 10
+            maxLength = 50
         )
     }
 }
