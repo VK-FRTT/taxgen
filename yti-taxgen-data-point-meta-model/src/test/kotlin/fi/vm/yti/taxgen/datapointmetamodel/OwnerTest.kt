@@ -18,10 +18,11 @@ internal class OwnerTest {
     @DisplayName("PropertyOptionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
+        "name,                  required",
         "namespace,             required",
-        "namespacePrefix,       required",
-        "officialLocation,      required",
-        "copyrightText,         required",
+        "prefix,                required",
+        "location,              required",
+        "copyright,             required",
         "supportedLanguages,    required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {
@@ -34,12 +35,14 @@ internal class OwnerTest {
     @DisplayName("PropertyLengthValidation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
+        "name,                  minLength,      10",
+        "name,                  maxLength,      100",
         "namespace,             minLength,      10",
         "namespace,             maxLength,      100",
-        "namespacePrefix,       minLength,      2",
-        "namespacePrefix,       maxLength,      10",
-        "officialLocation,      minLength,      10",
-        "officialLocation,      maxLength,      100",
+        "prefix,                minLength,      2",
+        "prefix,                maxLength,      10",
+        "location,              minLength,      10",
+        "location,              maxLength,      100",
         "supportedLanguages,    minLength,      1",
         "supportedLanguages,    maxLength,      50"
     )

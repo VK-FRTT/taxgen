@@ -22,7 +22,7 @@ dependencies {
     shadowed(project(':yti-taxgen-commons'))
     shadowed(project(':yti-taxgen-data-point-meta-model'))
     shadowed(project(':yti-taxgen-ycl-source-parser'))
-    shadowed(project(':yti-taxgen-fixta-generator'))
+    shadowed(project(':yti-taxgen-dpm-db-writer'))
 
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams

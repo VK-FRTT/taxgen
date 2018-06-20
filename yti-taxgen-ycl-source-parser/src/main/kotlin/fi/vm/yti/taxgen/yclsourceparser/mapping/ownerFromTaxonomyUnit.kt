@@ -11,10 +11,11 @@ fun ownerFromTaxonomyUnit(unit: TaxonomyUnit): Owner {
     val taxonomyUnitInfo: TaxonomyUnitInfo = mapper.readValue(unit.taxonomyUnitInfoData())
 
     return Owner(
+        name = taxonomyUnitInfo.name,
         namespace = taxonomyUnitInfo.namespace,
-        namespacePrefix = taxonomyUnitInfo.namespacePrefix,
-        officialLocation = taxonomyUnitInfo.officialLocation,
-        copyrightText = taxonomyUnitInfo.copyrightText,
+        prefix = taxonomyUnitInfo.prefix,
+        location = taxonomyUnitInfo.location,
+        copyright = taxonomyUnitInfo.copyright,
         supportedLanguages = taxonomyUnitInfo.supportedLanguages
     )
 }

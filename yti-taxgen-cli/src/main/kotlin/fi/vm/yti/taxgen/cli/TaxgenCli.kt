@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
 import fi.vm.yti.taxgen.yclsourceparser.YclSourceParser
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
 import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
@@ -43,13 +44,14 @@ class TaxgenCli(
                 halt(TAXGEN_CLI_SUCCESS)
             }
 
-            detectedOptions.ensureSingleOperation()
+            detectedOptions.ensureSingleCommandGiven()
 
-            if (detectedOptions.cmdBundleYclSource) {
-                outWriter.println("Bundling XBRL Taxonomy sources from YTI Codelist service...")
+            if (detectedOptions.cmdBundleYclSourcesToFolder != null ||
+                detectedOptions.cmdBundleYclSourcesToZip != null
+            ) {
+                outWriter.println("Bundling YTI Codelist based XBRL Taxonomy sources...")
 
-                detectedOptions.ensureSingleSource()
-                detectedOptions.ensureSingleTarget()
+                detectedOptions.ensureSingleSourceGiven()
 
                 resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
                     resolveYclSourceBundleWriter(detectedOptions, sourceBundle).use { sourceBundleWriter ->
@@ -58,16 +60,20 @@ class TaxgenCli(
                 }
             }
 
-            if (detectedOptions.cmdGenerateYclTaxonomy) {
-                outWriter.println("Generating XBRL Taxonomy from YTI Codelist service sources...")
+            if (detectedOptions.cmdWriteDpmDb != null) {
+                outWriter.println("Writing DPM DB from YTI Codelist based XBRL Taxonomy sources...")
 
-                detectedOptions.ensureSingleSource()
-                //detectedOptions.ensureSingleTarget()
+                detectedOptions.ensureSingleSourceGiven()
 
                 resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
 
                     val parser = YclSourceParser()
                     parser.parse(sourceBundle)
+
+                    val writer = DpmDbWriter(
+                        detectedOptions.cmdWriteDpmDb,
+                        detectedOptions.forceOverwrite)
+                    writer.writedb()
                 }
             }
         }
@@ -114,19 +120,19 @@ class TaxgenCli(
         sourceBundle: SourceBundle
     ): SourceBundleWriter {
 
-        if (detectedOptions.targetFolder != null) {
+        if (detectedOptions.cmdBundleYclSourcesToFolder != null) {
             return FolderSourceBundleWriter(
-                detectedOptions.targetFolder,
+                detectedOptions.cmdBundleYclSourcesToFolder,
                 sourceBundle,
-                detectedOptions.targetForceOverwrite
+                detectedOptions.forceOverwrite
             )
         }
 
-        if (detectedOptions.targetZip != null) {
+        if (detectedOptions.cmdBundleYclSourcesToZip != null) {
             return ZipSourceBundleWriter(
-                detectedOptions.targetZip,
+                detectedOptions.cmdBundleYclSourcesToZip,
                 sourceBundle,
-                detectedOptions.targetForceOverwrite
+                detectedOptions.forceOverwrite
             )
         }
 

@@ -17,7 +17,7 @@ data class YclCode(
 
     private val prefLabel: Map<String, String>?,
     private val description: Map<String, String>?
-    ) {
+) {
 
     fun dpmExplicitDomainMemberWithDefaultness(defaultMemberCode: String): ExplicitDomainMember {
 

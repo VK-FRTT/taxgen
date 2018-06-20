@@ -13,16 +13,15 @@ class DefinedOptions {
     private val optionParser = OptionParser()
 
     private val cmdShowHelp: OptionSpec<Void>
-    private val cmdGenerateYclTaxonomy: OptionSpec<Void>
-    private val cmdBundleYclSource: OptionSpec<Void>
+    private val cmdWriteDpmDb: OptionSpec<Path>
+    private val cmdBundleYclSourcesToFolder: OptionSpec<Path>
+    private val cmdBundleYclSourcesToZip: OptionSpec<Path>
 
     private val sourceConfig: OptionSpec<Path>
     private val sourceBundleFolder: OptionSpec<Path>
     private val sourceBundleZip: OptionSpec<Path>
 
-    private val targetFolder: OptionSpec<Path>
-    private val targetZip: OptionSpec<Path>
-    private val targetForceOverwrite: OptionSpec<Void>
+    private val forceOverwrite: OptionSpec<Void>
 
     init {
         cmdShowHelp = optionParser
@@ -31,17 +30,29 @@ class DefinedOptions {
                 "show this help message"
             ).forHelp()
 
-        cmdGenerateYclTaxonomy = optionParser
+        cmdWriteDpmDb = optionParser
             .accepts(
-                "generate-ycl-taxonomy",
-                "generate taxonomy from YTI Codelist sources"
+                "write-dpm-db",
+                "outputs taxonomy information as DPM DB"
             )
+            .withOptionalArg()
+            .withValuesConvertedBy(PathConverter())
 
-        cmdBundleYclSource = optionParser
+        cmdBundleYclSourcesToFolder = optionParser
             .accepts(
-                "bundle-ycl-source",
-                "bundle YTI Codelist taxonomy sources"
+                "bundle-ycl-sources-to-folder",
+                "bundle YTI Codelist taxonomy sources to folder"
             )
+            .withOptionalArg()
+            .withValuesConvertedBy(PathConverter())
+
+        cmdBundleYclSourcesToZip = optionParser
+            .accepts(
+                "bundle-ycl-sources-to-zip",
+                "bundle YTI Codelist taxonomy sources to zip file"
+            )
+            .withOptionalArg()
+            .withValuesConvertedBy(PathConverter())
 
         sourceConfig = optionParser
             .accepts(
@@ -67,25 +78,9 @@ class DefinedOptions {
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
 
-        targetFolder = optionParser
+        forceOverwrite = optionParser
             .accepts(
-                "target-folder",
-                "store operation results to folder"
-            )
-            .withOptionalArg()
-            .withValuesConvertedBy(PathConverter())
-
-        targetZip = optionParser
-            .accepts(
-                "target-zip",
-                "store operation results as zip file"
-            )
-            .withOptionalArg()
-            .withValuesConvertedBy(PathConverter())
-
-        targetForceOverwrite = optionParser
-            .accepts(
-                "target-force-overwrite",
+                "force-overwrite",
                 "silently overwrites the possibly existing target file(s)"
             )
     }
@@ -117,16 +112,15 @@ class DefinedOptions {
 
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
-            cmdGenerateYclTaxonomy = optionSet.has(this.cmdGenerateYclTaxonomy),
-            cmdBundleYclSource = optionSet.has(this.cmdBundleYclSource),
+            cmdWriteDpmDb = optionSet.valueOf(this.cmdWriteDpmDb),
+            cmdBundleYclSourcesToFolder = optionSet.valueOf(this.cmdBundleYclSourcesToFolder),
+            cmdBundleYclSourcesToZip = optionSet.valueOf(this.cmdBundleYclSourcesToZip),
+
+            forceOverwrite = optionSet.has(this.forceOverwrite),
 
             sourceConfig = optionSet.valueOf(this.sourceConfig),
             sourceBundleFolder = optionSet.valueOf(this.sourceBundleFolder),
-            sourceBundleZip = optionSet.valueOf(this.sourceBundleZip),
-
-            targetFolder = optionSet.valueOf(this.targetFolder),
-            targetZip = optionSet.valueOf(this.targetZip),
-            targetForceOverwrite = optionSet.has(this.targetForceOverwrite)
+            sourceBundleZip = optionSet.valueOf(this.sourceBundleZip)
         )
     }
 }

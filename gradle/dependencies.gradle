@@ -1,14 +1,15 @@
 ext {
     versions = [
-            kotlin:         "1.2.31",
-            joptSimple:     "5.0.4",
-            jacksonKotlin:  "2.8.11.1",
-            jacksonJsr310:  "2.8.11",
-            okhttp:         "3.10.0",
-            googleGuava:    "25.0-jre",
-
-            jupiter:        "5.1.0",
-            assertj:        "3.9.0",
+            kotlin:             "1.2.31",
+            joptSimple:         "5.0.4",
+            jacksonKotlin:      "2.8.11.1",
+            jacksonJsr310:      "2.8.11",
+            okhttp:             "3.10.0",
+            googleGuava:        "25.0-jre",
+            xerialSqliteJdbc:   "3.21.0.1",
+            jetbrainsExposed:   "0.10.3",
+            jupiter:            "5.1.0",
+            assertj:            "3.9.0",
             hoverflyJavaJunit5: "0.10.3"
     ]
 
@@ -22,6 +23,8 @@ ext {
             jacksonJsr310:          "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$versions.jacksonJsr310",
             okHttp3:                "com.squareup.okhttp3:okhttp:$versions.okhttp",
             googleGuava:            "com.google.guava:guava:$versions.googleGuava",
+            xerialSqliteJdbc:       "org.xerial:sqlite-jdbc:$versions.xerialSqliteJdbc",
+            jetbrainsExposed:       "org.jetbrains.exposed:exposed:$versions.jetbrainsExposed",
 
             kotlinTest:             "org.jetbrains.kotlin:kotlin-test:$versions.kotlin",
             kotlinTestJunit:        "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin",
@@ -34,4 +37,3 @@ ext {
             hoverflyJavaJunit5:     "io.specto:hoverfly-java-junit5:$versions.hoverflyJavaJunit5"
     ]
 }
-

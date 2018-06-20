@@ -19,7 +19,7 @@ data class YclCodeScheme(
     val prefLabel: MutableMap<String, String>,
     val definition: MutableMap<String, String>,
     val description: MutableMap<String, String>
-){
+) {
 
     fun dpmDomainCode(): String {
         return codeValue!!

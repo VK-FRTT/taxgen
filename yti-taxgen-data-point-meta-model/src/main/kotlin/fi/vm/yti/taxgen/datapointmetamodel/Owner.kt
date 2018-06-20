@@ -3,14 +3,22 @@ package fi.vm.yti.taxgen.datapointmetamodel
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
 
 data class Owner(
+    val name: String,
     val namespace: String,
-    val namespacePrefix: String,
-    val officialLocation: String,
-    val copyrightText: String,
+    val prefix: String,
+    val location: String,
+    val copyright: String,
     val supportedLanguages: List<String>
 ) {
 
     init {
+        validateProperty(
+            instance = this,
+            property = "name",
+            minLength = 10,
+            maxLength = 100
+        )
+
         validateProperty(
             instance = this,
             property = "namespace",
@@ -20,14 +28,14 @@ data class Owner(
 
         validateProperty(
             instance = this,
-            property = "namespacePrefix",
+            property = "prefix",
             minLength = 2,
             maxLength = 10
         )
 
         validateProperty(
             instance = this,
-            property = "officialLocation",
+            property = "location",
             minLength = 10,
             maxLength = 100
         )

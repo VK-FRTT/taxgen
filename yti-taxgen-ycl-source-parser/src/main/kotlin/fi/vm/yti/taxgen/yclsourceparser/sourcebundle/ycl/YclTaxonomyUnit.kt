@@ -12,10 +12,11 @@ class YclTaxonomyUnit(
 
     override fun taxonomyUnitInfoData(): String {
         val info = TaxonomyUnitInfo(
+            name = taxonomyUnitConfig.name,
             namespace = taxonomyUnitConfig.namespace,
-            namespacePrefix = taxonomyUnitConfig.namespacePrefix,
-            officialLocation = taxonomyUnitConfig.officialLocation,
-            copyrightText = taxonomyUnitConfig.copyrightText,
+            prefix = taxonomyUnitConfig.prefix,
+            location = taxonomyUnitConfig.location,
+            copyright = taxonomyUnitConfig.copyright,
             supportedLanguages = taxonomyUnitConfig.supportedLanguages
         )
 

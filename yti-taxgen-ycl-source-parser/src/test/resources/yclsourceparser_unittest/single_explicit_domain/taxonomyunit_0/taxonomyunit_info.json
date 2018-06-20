@@ -1,7 +1,10 @@
 {
+  "name": "SED Reference",
   "namespace": "some.namespace.fi",
-  "namespacePrefix": "some",
-  "officialLocation": "some.location.fi",
-  "copyrightText": "copyright",
-  "supportedLanguages": ["EN"]
+  "prefix": "some",
+  "location": "some.location.fi",
+  "copyright": "copyright",
+  "supportedLanguages": [
+    "EN"
+  ]
 }

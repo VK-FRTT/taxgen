@@ -31,6 +31,9 @@ allprojects { subproj ->
         //mavenLocal()
         mavenCentral()
         jcenter()
+        maven {
+            url  "https://dl.bintray.com/kotlin/exposed"
+        }
     }
 
 	tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {

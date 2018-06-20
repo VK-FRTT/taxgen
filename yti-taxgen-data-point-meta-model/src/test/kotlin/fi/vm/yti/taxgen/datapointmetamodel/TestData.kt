@@ -24,10 +24,11 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Owner::class,
             attributes = mapOf(
+                "name" to "name_value",
                 "namespace" to "namespace_value",
-                "namespacePrefix" to "ns_prefix",
-                "officialLocation" to "official_location",
-                "copyrightText" to "Lorem ipsum",
+                "prefix" to "ns_prefix",
+                "location" to "official_location",
+                "copyright" to "Lorem ipsum",
                 "supportedLanguages" to listOf("fi", "en")
             )
         )

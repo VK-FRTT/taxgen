@@ -7,13 +7,12 @@ YTI XBRL Taxonomy Generator is a tool for generating XBRL taxonomy files from gi
 In a high level the Taxonomy Generator:
 1. Accepts financial data models as source (input).
 2. Parses financial data model from its source format and maps model contents to Taxonomy Generator's internal data model.
-3. Analyzes financial data model (from TaxGen internal model) and renders a XBRL taxonomy from it.
-4. Produces XBRL taxonomy package containing taxonomy files.
+3. Maps financial data model (from TaxGen internal model) to requested output format.
 
 
-### 1.1 Data model source format
+### 1.1 Data model input source format
 Currently Taxonomy Generator supports YTI Codelist -service based source data format (YCL-source).
-In practice YCL-source consists from CodeList and Code entities with related extensions.
+In practice YCL-source consists from CodeScheme and Code entities with related extensions.
 
 In future Taxonomy Generator might also support YTI Data Model -service based source data format (YDM-source).
 However, details how financial data models are mapped to YTI Data Model are still open.
@@ -27,13 +26,12 @@ Especially [DPM formal model document](http://www.eba.europa.eu/documents/10180/
 is useful as it explains DPM artifacts in terms of UML diagrams. 
 
 
-### 1.3 XBRL taxonomy generation
-Currently Taxonomy Generator is able to produce XBRL Taxonomy in Finnish taxonomy architecture,
-which in turn is based on EXTA.
+### 1.3 Model output
+Currently Taxonomy Generator is able to produce DPM database in SQLite format.
 
 
 ## 2. Modularization
-Taxonomy Generator is modularized to somewhat isolated modules with clear responsibilities.
+Taxonomy Generator is modularized to isolated modules.
 
 
 ### 2.1 `yti-taxgen-commons`
@@ -49,6 +47,7 @@ Taxonomy Generator is modularized to somewhat isolated modules with clear respon
 ### 2.3 `yti-taxgen-data-point-meta-model`
 - Taxonomy Generator's internal data model: Data Point Meta Model
 - In practice this module implements concepts and entities used in Data Point Modeling.
+- Implements also DPM level data validations.
 
 
 ### 2.4 `yti-taxgen-ycl-source-parser`
@@ -56,8 +55,8 @@ Taxonomy Generator is modularized to somewhat isolated modules with clear respon
 - Parses YTI Codelist data and maps its contents to Data Point Meta Model.
 
 
-### 2.5 `yti-taxgen-fixta-generator`
-- Produces Finnish taxonomy architecture based XBRL Taxonomy from Data Point Meta Model data.
+### 2.5 `yti-taxgen-dpm-db-writer`
+- Produces DPM database in SQLite format from Data Point Meta Model data.
 
 
 ### 2.6 `yti-taxgen-cli`

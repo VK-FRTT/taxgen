@@ -37,16 +37,17 @@ internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hove
             hoverflyConfigureSimulation()
 
             val yclSourceConfig =
-                    """
+                """
                     {
                       "type": "YclSourceConfig",
                       "schemaVersion": 1,
                       "taxonomyUnits": [
                         {
-                          "namespace": "ycl_sb_unittest_namespace",
-                          "namespacePrefix": "ycl_sb_unittest_namespacePrefix",
-                          "officialLocation": "ycl_sb_unittest_officialLocation",
-                          "copyrightText": "ycl_sb_unittest_copyrightText",
+                          "name": "the name",
+                          "namespace": "the namespace",
+                          "prefix": "the prefix",
+                          "location": "the location",
+                          "copyright": "the copyright",
                           "supportedLanguages": [
                             "en",
                             "fi"
@@ -91,10 +92,11 @@ internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hove
             )
 
             assertThat(infoJson.isObject).isTrue()
-            assertThat(infoJson.get("namespace").textValue()).isEqualTo("ycl_sb_unittest_namespace")
-            assertThat(infoJson.get("namespacePrefix").textValue()).isEqualTo("ycl_sb_unittest_namespacePrefix")
-            assertThat(infoJson.get("officialLocation").textValue()).isEqualTo("ycl_sb_unittest_officialLocation")
-            assertThat(infoJson.get("copyrightText").textValue()).isEqualTo("ycl_sb_unittest_copyrightText")
+            assertThat(infoJson.get("name").textValue()).isEqualTo("the name")
+            assertThat(infoJson.get("namespace").textValue()).isEqualTo("the namespace")
+            assertThat(infoJson.get("prefix").textValue()).isEqualTo("the prefix")
+            assertThat(infoJson.get("location").textValue()).isEqualTo("the location")
+            assertThat(infoJson.get("copyright").textValue()).isEqualTo("the copyright")
             assertThat(infoJson.get("supportedLanguages").isArray).isTrue()
             assertThat(infoJson.get("supportedLanguages")[0].textValue()).isEqualTo("en")
             assertThat(infoJson.get("supportedLanguages")[1].textValue()).isEqualTo("fi")
@@ -196,7 +198,6 @@ internal class YclSourceBundle_ApiSimulation_UnitTest(private val hoverfly: Hove
                         }
                         """.trimIndent()
                 )
-
 
                 //YCL service responses for Code pages
                 .respondGetWithJson(
