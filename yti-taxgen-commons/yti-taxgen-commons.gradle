@@ -4,6 +4,8 @@ description = 'Common utilities of YTI Taxonomy Generator'
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
+    implementation libs.jacksonKotlin
+    implementation libs.jacksonJsr310
 
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams

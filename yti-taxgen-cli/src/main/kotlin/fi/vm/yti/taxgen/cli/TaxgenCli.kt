@@ -2,14 +2,14 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
-import fi.vm.yti.taxgen.yclsourceparser.YclSourceParser
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.SourceBundleWriter
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.folder.FolderSourceBundleWriter
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.ycl.YclSourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundle
-import fi.vm.yti.taxgen.yclsourceparser.sourcebundle.zip.ZipSourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceprovider.SourceBundle
+import fi.vm.yti.taxgen.yclsourceprovider.SourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceprovider.folder.FolderSourceBundle
+import fi.vm.yti.taxgen.yclsourceprovider.folder.FolderSourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceprovider.ycl.YclSourceBundle
+import fi.vm.yti.taxgen.yclsourceprovider.zip.ZipSourceBundle
+import fi.vm.yti.taxgen.yclsourceprovider.zip.ZipSourceBundleWriter
+import fi.vm.yti.taxgen.ycltodpmmapper.YclSourceParser
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -72,7 +72,8 @@ class TaxgenCli(
 
                     val writer = DpmDbWriter(
                         detectedOptions.cmdWriteDpmDb,
-                        detectedOptions.forceOverwrite)
+                        detectedOptions.forceOverwrite
+                    )
                     writer.writedb()
                 }
             }

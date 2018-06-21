@@ -1,0 +1,20 @@
+description = 'Consumes YTI Codelist (YCL) based information and maps it to Data Point Meta Model'
+
+dependencies {
+    implementation libs.kotlinStdLib
+    implementation libs.kotlinReflect
+    implementation libs.jacksonKotlin
+    implementation libs.jacksonJsr310
+
+    implementation(project(':yti-taxgen-commons'))
+    implementation(project(':yti-taxgen-data-point-meta-model'))
+    implementation(project(':yti-taxgen-ycl-source-provider'))
+
+    testCompile libs.junitJupiterApi
+    testCompile libs.junitJupiterParams
+    testCompile libs.assertjCore
+    testCompile(project(':yti-taxgen-test-commons'))
+
+    testRuntimeOnly libs.junitJupiterEngine
+}
+
