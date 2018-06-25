@@ -32,7 +32,7 @@ class DefinedOptions {
 
         cmdWriteDpmDb = optionParser
             .accepts(
-                "write-dpm-db",
+                "capture-dpm-db",
                 "outputs taxonomy information as DPM DB"
             )
             .withOptionalArg()

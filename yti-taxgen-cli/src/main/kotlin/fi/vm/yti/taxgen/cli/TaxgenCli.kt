@@ -2,13 +2,13 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
-import fi.vm.yti.taxgen.yclsourceprovider.SourceBundle
-import fi.vm.yti.taxgen.yclsourceprovider.SourceBundleWriter
-import fi.vm.yti.taxgen.yclsourceprovider.folder.FolderSourceBundle
-import fi.vm.yti.taxgen.yclsourceprovider.folder.FolderSourceBundleWriter
-import fi.vm.yti.taxgen.yclsourceprovider.ycl.YclSourceBundle
-import fi.vm.yti.taxgen.yclsourceprovider.zip.ZipSourceBundle
-import fi.vm.yti.taxgen.yclsourceprovider.zip.ZipSourceBundleWriter
+import fi.vm.yti.taxgen.yclsourceprovider.YclSource
+import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
+import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
+import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureAdapter
+import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureRecorder
+import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileAdapter
+import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileRecorder
 import fi.vm.yti.taxgen.ycltodpmmapper.YclSourceParser
 import java.io.BufferedWriter
 import java.io.Closeable
@@ -55,7 +55,7 @@ class TaxgenCli(
 
                 resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
                     resolveYclSourceBundleWriter(detectedOptions, sourceBundle).use { sourceBundleWriter ->
-                        sourceBundleWriter.write()
+                        sourceBundleWriter.capture()
                     }
                 }
             }
@@ -98,19 +98,19 @@ class TaxgenCli(
         }
     }
 
-    private fun resolveYclSourceBundle(detectedOptions: DetectedOptions): SourceBundle {
+    private fun resolveYclSourceBundle(detectedOptions: DetectedOptions): YclSource {
         if (detectedOptions.sourceConfig != null) {
-            return YclSourceBundle(
-                sourceConfigFilePath = detectedOptions.sourceConfig
+            return YclSourceApiAdapter(
+                configFilePath = detectedOptions.sourceConfig
             )
         }
 
         if (detectedOptions.sourceBundleFolder != null) {
-            return FolderSourceBundle(detectedOptions.sourceBundleFolder)
+            return YclSourceFolderStructureAdapter(detectedOptions.sourceBundleFolder)
         }
 
         if (detectedOptions.sourceBundleZip != null) {
-            return ZipSourceBundle(detectedOptions.sourceBundleZip)
+            return YclSourceZipFileAdapter(detectedOptions.sourceBundleZip)
         }
 
         thisShouldNeverHappen("No suitable YCL taxonomy source")
@@ -118,21 +118,21 @@ class TaxgenCli(
 
     private fun resolveYclSourceBundleWriter(
         detectedOptions: DetectedOptions,
-        sourceBundle: SourceBundle
-    ): SourceBundleWriter {
+        yclSource: YclSource
+    ): YclSourceRecorder {
 
         if (detectedOptions.cmdBundleYclSourcesToFolder != null) {
-            return FolderSourceBundleWriter(
+            return YclSourceFolderStructureRecorder(
                 detectedOptions.cmdBundleYclSourcesToFolder,
-                sourceBundle,
+                yclSource,
                 detectedOptions.forceOverwrite
             )
         }
 
         if (detectedOptions.cmdBundleYclSourcesToZip != null) {
-            return ZipSourceBundleWriter(
+            return YclSourceZipFileRecorder(
                 detectedOptions.cmdBundleYclSourcesToZip,
-                sourceBundle,
+                yclSource,
                 detectedOptions.forceOverwrite
             )
         }

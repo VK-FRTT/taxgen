@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
-import fi.vm.yti.taxgen.yclsourceprovider.folder.FolderSourceBundle
+import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureAdapter
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -10,7 +10,7 @@ import java.nio.file.Paths
 @DisplayName("When YCL sources are parsed")
 internal class YclSourceParser_UnitTest {
 
-    private lateinit var sourceBundle: FolderSourceBundle
+    private lateinit var yclSource: YclSourceFolderStructureAdapter
 
     @BeforeEach
     fun init() {
@@ -18,7 +18,7 @@ internal class YclSourceParser_UnitTest {
 
     @AfterEach
     fun teardown() {
-        sourceBundle.close()
+        yclSource.close()
     }
 
     @Test
@@ -26,7 +26,7 @@ internal class YclSourceParser_UnitTest {
         loadSourceBundle("single_explicit_domain")
 
         val parser = YclSourceParser()
-        parser.parse(sourceBundle)
+        parser.parse(yclSource)
     }
 
     private fun loadSourceBundle(bundleName: String) {
@@ -34,6 +34,6 @@ internal class YclSourceParser_UnitTest {
         val resourceUri = classLoader.getResource("yclsourceparser_unittest/$bundleName").toURI()
         val resourcePath = Paths.get(resourceUri)
 
-        sourceBundle = FolderSourceBundle(resourcePath)
+        yclSource = YclSourceFolderStructureAdapter(resourcePath)
     }
 }
