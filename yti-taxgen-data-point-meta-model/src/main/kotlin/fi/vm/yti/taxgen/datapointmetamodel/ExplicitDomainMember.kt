@@ -13,7 +13,7 @@ data class ExplicitDomainMember(
             instance = this,
             property = "memberCode",
             minLength = 2,
-            maxLength = 10
+            maxLength = 50
         )
     }
 }

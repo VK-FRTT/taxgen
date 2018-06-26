@@ -8,10 +8,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.sql.Connection
 
-class DpmDbWriter(
+class DpmDbProducer(
     targetDbPath: Path,
     private val forceOverwrite: Boolean
-) : Closeable {
+) {
     private val targetDbPath = targetDbPath.toAbsolutePath().normalize()
     private val database = initializeTargetDatabase()
 
@@ -20,9 +20,6 @@ class DpmDbWriter(
         ensureTargetFileDoesNotExist()
 
         return connectDatabase().also { Tables.create() }
-    }
-
-    override fun close() {
     }
 
     fun writedb() {

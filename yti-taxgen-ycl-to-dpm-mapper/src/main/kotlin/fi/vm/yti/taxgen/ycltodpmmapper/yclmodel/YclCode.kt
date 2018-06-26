@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.ycltodpmmapper.model
+package fi.vm.yti.taxgen.ycltodpmmapper.yclmodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomainMember
@@ -14,6 +14,8 @@ data class YclCode(
 
     private val startDate: LocalDate?,
     private val endDate: LocalDate?,
+
+    private val order: Integer?,
 
     private val prefLabel: Map<String, String>?,
     private val description: Map<String, String>?

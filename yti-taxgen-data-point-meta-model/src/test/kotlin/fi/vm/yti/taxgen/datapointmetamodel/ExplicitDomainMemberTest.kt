@@ -33,7 +33,7 @@ internal class ExplicitDomainMemberTest {
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
         "memberCode,            minLength,      2",
-        "memberCode,            maxLength,      10"
+        "memberCode,            maxLength,      50"
     )
     fun testPropertyLengthValidation(testedProperty: String, validationType: String, expectedLimit: Int) {
         propertyLengthValidationTemplate<ExplicitDomainMember>(testedProperty, validationType, expectedLimit)

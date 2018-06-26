@@ -73,7 +73,7 @@ fun assertExceptionIsDataValidationFailedException(
 ) {
     if (exception == null) {
         failTestCase(
-            "$expectedFailingProperty: Expected exception for but none received",
+            "$expectedFailingProperty: Expected Data Validation Exception but none received",
             exception
         )
     }

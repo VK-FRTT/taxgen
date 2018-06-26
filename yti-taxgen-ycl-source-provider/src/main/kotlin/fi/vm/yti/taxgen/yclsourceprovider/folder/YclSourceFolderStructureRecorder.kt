@@ -31,12 +31,17 @@ class YclSourceFolderStructureRecorder(
     }
 
     private fun captureDpmDictionarySources(yclDpmDictionarySources: List<DpmDictionarySource>, pathStack: PathStack) {
-        yclDpmDictionarySources.withIndex().forEach { (dictionaryIndex, unit) ->
+        yclDpmDictionarySources.withIndex().forEach { (dictionaryIndex, dictionarySource) ->
 
             pathStack.withIndexPostfixSubfolder("dpmdictionary", dictionaryIndex) {
 
-                FileOps.writeTextFile(unit.dpmOwnerInfoData(), pathStack, "dpm_owner_info.json", forceOverwrite)
-                captureCodelistSources(unit.yclCodelistSources(), pathStack)
+                FileOps.writeTextFile(
+                    dictionarySource.dpmOwnerInfoData(),
+                    pathStack,
+                    "dpm_owner_info.json",
+                    forceOverwrite
+                )
+                captureCodelistSources(dictionarySource.yclCodelistSources(), pathStack)
             }
         }
     }

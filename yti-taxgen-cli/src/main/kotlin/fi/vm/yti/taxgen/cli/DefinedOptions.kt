@@ -13,13 +13,13 @@ class DefinedOptions {
     private val optionParser = OptionParser()
 
     private val cmdShowHelp: OptionSpec<Void>
-    private val cmdWriteDpmDb: OptionSpec<Path>
-    private val cmdBundleYclSourcesToFolder: OptionSpec<Path>
-    private val cmdBundleYclSourcesToZip: OptionSpec<Path>
+    private val cmdProduceDpmDb: OptionSpec<Path>
+    private val cmdCaptureYclSourcesToFolder: OptionSpec<Path>
+    private val cmdCaptureYclSourcesToZip: OptionSpec<Path>
 
-    private val sourceConfig: OptionSpec<Path>
-    private val sourceBundleFolder: OptionSpec<Path>
-    private val sourceBundleZip: OptionSpec<Path>
+    private val sourceConfigFile: OptionSpec<Path>
+    private val sourceFolder: OptionSpec<Path>
+    private val sourceZipFile: OptionSpec<Path>
 
     private val forceOverwrite: OptionSpec<Void>
 
@@ -30,50 +30,50 @@ class DefinedOptions {
                 "show this help message"
             ).forHelp()
 
-        cmdWriteDpmDb = optionParser
+        cmdProduceDpmDb = optionParser
             .accepts(
-                "capture-dpm-db",
-                "outputs taxonomy information as DPM DB"
+                "produce-dpm-db",
+                "produce DPM DB from given sources"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
 
-        cmdBundleYclSourcesToFolder = optionParser
+        cmdCaptureYclSourcesToFolder = optionParser
             .accepts(
-                "bundle-ycl-sources-to-folder",
-                "bundle YTI Codelist taxonomy sources to folder"
+                "capture-ycl-sources-to-folder",
+                "capture YTI Codelist based sources to folder"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
 
-        cmdBundleYclSourcesToZip = optionParser
+        cmdCaptureYclSourcesToZip = optionParser
             .accepts(
-                "bundle-ycl-sources-to-zip",
-                "bundle YTI Codelist taxonomy sources to zip file"
+                "capture-ycl-sources-to-zip",
+                "capture YTI Codelist based sources to zip file"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
 
-        sourceConfig = optionParser
+        sourceConfigFile = optionParser
             .accepts(
                 "source-config",
-                "configuration file describing taxonomy sources"
+                "configuration file linking to sources on YTI Reference Data -service"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
 
-        sourceBundleFolder = optionParser
+        sourceFolder = optionParser
             .accepts(
-                "source-bundle-folder",
-                "load bundled taxonomy sources from folder"
+                "source-folder",
+                "load source data from folder"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.DIRECTORY_EXISTING))
 
-        sourceBundleZip = optionParser
+        sourceZipFile = optionParser
             .accepts(
-                "source-bundle-zip",
-                "load bundled taxonomy sources from zip file"
+                "source-zip",
+                "load source data from zip file"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
@@ -112,15 +112,15 @@ class DefinedOptions {
 
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
-            cmdWriteDpmDb = optionSet.valueOf(this.cmdWriteDpmDb),
-            cmdBundleYclSourcesToFolder = optionSet.valueOf(this.cmdBundleYclSourcesToFolder),
-            cmdBundleYclSourcesToZip = optionSet.valueOf(this.cmdBundleYclSourcesToZip),
+            cmdProduceDpmDb = optionSet.valueOf(this.cmdProduceDpmDb),
+            cmdCaptureYclSourcesToFolder = optionSet.valueOf(this.cmdCaptureYclSourcesToFolder),
+            cmdCaptureYclSourcesToZip = optionSet.valueOf(this.cmdCaptureYclSourcesToZip),
 
             forceOverwrite = optionSet.has(this.forceOverwrite),
 
-            sourceConfig = optionSet.valueOf(this.sourceConfig),
-            sourceBundleFolder = optionSet.valueOf(this.sourceBundleFolder),
-            sourceBundleZip = optionSet.valueOf(this.sourceBundleZip)
+            sourceConfigFile = optionSet.valueOf(this.sourceConfigFile),
+            sourceFolder = optionSet.valueOf(this.sourceFolder),
+            sourceZipFile = optionSet.valueOf(this.sourceZipFile)
         )
     }
 }

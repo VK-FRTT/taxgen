@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
+import fi.vm.yti.taxgen.dpmdbwriter.DpmDbProducer
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
@@ -9,7 +9,7 @@ import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureRecorder
 import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileRecorder
-import fi.vm.yti.taxgen.ycltodpmmapper.YclSourceParser
+import fi.vm.yti.taxgen.ycltodpmmapper.YclToDpmMapper
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -46,36 +46,35 @@ class TaxgenCli(
 
             detectedOptions.ensureSingleCommandGiven()
 
-            if (detectedOptions.cmdBundleYclSourcesToFolder != null ||
-                detectedOptions.cmdBundleYclSourcesToZip != null
+            if (detectedOptions.cmdCaptureYclSourcesToFolder != null ||
+                detectedOptions.cmdCaptureYclSourcesToZip != null
             ) {
-                outWriter.println("Bundling YTI Codelist based XBRL Taxonomy sources...")
+                outWriter.println("Capturing YTI Codelist based sources...")
 
                 detectedOptions.ensureSingleSourceGiven()
 
-                resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
-                    resolveYclSourceBundleWriter(detectedOptions, sourceBundle).use { sourceBundleWriter ->
-                        sourceBundleWriter.capture()
+                resolveYclSource(detectedOptions).use { yclSource ->
+                    resolveYclSourceRecorder(detectedOptions, yclSource).use { yclSourceRecorder ->
+                        yclSourceRecorder.capture()
                     }
                 }
             }
 
-            if (detectedOptions.cmdWriteDpmDb != null) {
-                outWriter.println("Writing DPM DB from YTI Codelist based XBRL Taxonomy sources...")
+            if (detectedOptions.cmdProduceDpmDb != null) {
+                outWriter.println("Producing DPM database from YTI Codelist based sources...")
 
                 detectedOptions.ensureSingleSourceGiven()
 
-                resolveYclSourceBundle(detectedOptions).use { sourceBundle ->
-
-                    val parser = YclSourceParser()
-                    parser.parse(sourceBundle)
-
-                    val writer = DpmDbWriter(
-                        detectedOptions.cmdWriteDpmDb,
-                        detectedOptions.forceOverwrite
-                    )
-                    writer.writedb()
+                val dpmDictionaries = resolveYclSource(detectedOptions).use { yclSource ->
+                    YclToDpmMapper().dpmDictionariesFromYclSource(yclSource)
                 }
+
+                val dbProducer = DpmDbProducer(
+                    targetDbPath = detectedOptions.cmdProduceDpmDb,
+                    forceOverwrite = detectedOptions.forceOverwrite
+                )
+
+                dbProducer.writedb()
             }
         }
     }
@@ -98,45 +97,49 @@ class TaxgenCli(
         }
     }
 
-    private fun resolveYclSourceBundle(detectedOptions: DetectedOptions): YclSource {
-        if (detectedOptions.sourceConfig != null) {
+    private fun resolveYclSource(detectedOptions: DetectedOptions): YclSource {
+        if (detectedOptions.sourceConfigFile != null) {
             return YclSourceApiAdapter(
-                configFilePath = detectedOptions.sourceConfig
+                configFilePath = detectedOptions.sourceConfigFile
             )
         }
 
-        if (detectedOptions.sourceBundleFolder != null) {
-            return YclSourceFolderStructureAdapter(detectedOptions.sourceBundleFolder)
+        if (detectedOptions.sourceFolder != null) {
+            return YclSourceFolderStructureAdapter(
+                baseFolderPath = detectedOptions.sourceFolder
+            )
         }
 
-        if (detectedOptions.sourceBundleZip != null) {
-            return YclSourceZipFileAdapter(detectedOptions.sourceBundleZip)
+        if (detectedOptions.sourceZipFile != null) {
+            return YclSourceZipFileAdapter(
+                sourceZipPath = detectedOptions.sourceZipFile
+            )
         }
 
-        thisShouldNeverHappen("No suitable YCL taxonomy source")
+        thisShouldNeverHappen("No suitable source given")
     }
 
-    private fun resolveYclSourceBundleWriter(
+    private fun resolveYclSourceRecorder(
         detectedOptions: DetectedOptions,
         yclSource: YclSource
     ): YclSourceRecorder {
 
-        if (detectedOptions.cmdBundleYclSourcesToFolder != null) {
+        if (detectedOptions.cmdCaptureYclSourcesToFolder != null) {
             return YclSourceFolderStructureRecorder(
-                detectedOptions.cmdBundleYclSourcesToFolder,
-                yclSource,
-                detectedOptions.forceOverwrite
+                baseFolderPath = detectedOptions.cmdCaptureYclSourcesToFolder,
+                yclSource = yclSource,
+                forceOverwrite = detectedOptions.forceOverwrite
             )
         }
 
-        if (detectedOptions.cmdBundleYclSourcesToZip != null) {
+        if (detectedOptions.cmdCaptureYclSourcesToZip != null) {
             return YclSourceZipFileRecorder(
-                detectedOptions.cmdBundleYclSourcesToZip,
-                yclSource,
-                detectedOptions.forceOverwrite
+                targetZipPath = detectedOptions.cmdCaptureYclSourcesToZip,
+                yclSource = yclSource,
+                forceOverwrite = detectedOptions.forceOverwrite
             )
         }
 
-        thisShouldNeverHappen("No suitable YCL source bundle target")
+        thisShouldNeverHappen("No suitable source recorder given")
     }
 }

@@ -35,13 +35,13 @@ internal class OwnerTest {
     @DisplayName("PropertyLengthValidation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "name,                  minLength,      10",
+        "name,                  minLength,      2",
         "name,                  maxLength,      100",
-        "namespace,             minLength,      10",
+        "namespace,             minLength,      2",
         "namespace,             maxLength,      100",
         "prefix,                minLength,      2",
-        "prefix,                maxLength,      10",
-        "location,              minLength,      10",
+        "prefix,                maxLength,      50",
+        "location,              minLength,      2",
         "location,              maxLength,      100",
         "supportedLanguages,    minLength,      1",
         "supportedLanguages,    maxLength,      50"

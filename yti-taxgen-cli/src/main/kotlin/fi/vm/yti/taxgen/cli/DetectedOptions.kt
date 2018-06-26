@@ -5,38 +5,38 @@ import java.nio.file.Path
 data class DetectedOptions(
     val cmdShowHelp: Boolean,
 
-    val cmdWriteDpmDb: Path?,
-    val cmdBundleYclSourcesToFolder: Path?,
-    val cmdBundleYclSourcesToZip: Path?,
+    val cmdProduceDpmDb: Path?,
+    val cmdCaptureYclSourcesToFolder: Path?,
+    val cmdCaptureYclSourcesToZip: Path?,
 
     val forceOverwrite: Boolean,
 
-    val sourceConfig: Path?,
-    val sourceBundleFolder: Path?,
-    val sourceBundleZip: Path?
+    val sourceConfigFile: Path?,
+    val sourceFolder: Path?,
+    val sourceZipFile: Path?
 ) {
 
     fun ensureSingleCommandGiven() {
         val targetOptionCount = listOf<Any?>(
-            cmdWriteDpmDb,
-            cmdBundleYclSourcesToFolder,
-            cmdBundleYclSourcesToZip
+            cmdProduceDpmDb,
+            cmdCaptureYclSourcesToFolder,
+            cmdCaptureYclSourcesToZip
         ).count { it != null }
 
         if (targetOptionCount != 1) {
-            haltWithError("single taxonomy operation must be given")
+            haltWithError("single command must be given")
         }
     }
 
     fun ensureSingleSourceGiven() {
         val sourceOptionCount = listOf<Any?>(
-            sourceConfig,
-            sourceBundleFolder,
-            sourceBundleZip
+            sourceConfigFile,
+            sourceFolder,
+            sourceZipFile
         ).count { it != null }
 
         if (sourceOptionCount != 1) {
-            haltWithError("single taxonomy source must be given")
+            haltWithError("single source must be given")
         }
     }
 }
