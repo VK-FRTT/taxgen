@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
+import joptsimple.BuiltinHelpFormatter
+import joptsimple.OptionDescriptor
 import joptsimple.OptionException
 import joptsimple.OptionParser
 import joptsimple.OptionSpec
@@ -8,6 +10,7 @@ import joptsimple.util.PathConverter
 import joptsimple.util.PathProperties
 import java.io.PrintWriter
 import java.nio.file.Path
+import java.util.LinkedHashSet
 
 class DefinedOptions {
     private val optionParser = OptionParser()
@@ -54,6 +57,12 @@ class DefinedOptions {
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
 
+        forceOverwrite = optionParser
+            .accepts(
+                "force-overwrite",
+                "silently overwrites the possibly existing target file(s)"
+            )
+
         sourceConfigFile = optionParser
             .accepts(
                 "source-config",
@@ -77,12 +86,6 @@ class DefinedOptions {
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
-
-        forceOverwrite = optionParser
-            .accepts(
-                "force-overwrite",
-                "silently overwrites the possibly existing target file(s)"
-            )
     }
 
     fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {
@@ -100,6 +103,7 @@ class DefinedOptions {
     }
 
     fun printHelp(outWriter: PrintWriter) {
+        optionParser.formatHelpWith(FixedOrderHelpFormatter())
         optionParser.printHelpOn(outWriter)
     }
 
@@ -122,5 +126,14 @@ class DefinedOptions {
             sourceFolder = optionSet.valueOf(this.sourceFolder),
             sourceZipFile = optionSet.valueOf(this.sourceZipFile)
         )
+    }
+
+    private class FixedOrderHelpFormatter :
+        BuiltinHelpFormatter(120, 4) {
+
+        override fun format(options: Map<String, OptionDescriptor>): String {
+            addRows(LinkedHashSet(options.values))
+            return formattedHelpOutput()
+        }
     }
 }
