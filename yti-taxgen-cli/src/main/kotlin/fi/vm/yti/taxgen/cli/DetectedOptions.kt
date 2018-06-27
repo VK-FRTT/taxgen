@@ -24,7 +24,7 @@ data class DetectedOptions(
         ).count { it != null }
 
         if (targetOptionCount != 1) {
-            haltWithError("single command must be given")
+            haltWithError("Single command with proper argument must be given")
         }
     }
 
@@ -36,7 +36,7 @@ data class DetectedOptions(
         ).count { it != null }
 
         if (sourceOptionCount != 1) {
-            haltWithError("single source must be given")
+            haltWithError("Single source with proper argument must be given")
         }
     }
 }
