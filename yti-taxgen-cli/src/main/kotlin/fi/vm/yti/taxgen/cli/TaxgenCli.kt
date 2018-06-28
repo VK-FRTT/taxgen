@@ -24,8 +24,8 @@ class TaxgenCli(
     private val definedOptions: DefinedOptions
 ) : Closeable {
 
-    private val outWriter = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)))
-    private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)))
+    private val outWriter = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)), true)
+    private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
     override fun close() {
         outWriter.close()
@@ -49,32 +49,29 @@ class TaxgenCli(
             if (detectedOptions.cmdCaptureYclSourcesToFolder != null ||
                 detectedOptions.cmdCaptureYclSourcesToZip != null
             ) {
-                outWriter.println("Capturing YTI Codelist based sources...")
-
                 detectedOptions.ensureSingleSourceGiven()
 
                 resolveYclSource(detectedOptions).use { yclSource ->
                     resolveYclSourceRecorder(detectedOptions, yclSource).use { yclSourceRecorder ->
+
+                        outWriter.println("Capturing YTI Codelist based sources...")
                         yclSourceRecorder.capture()
                     }
                 }
             }
 
             if (detectedOptions.cmdProduceDpmDb != null) {
-                outWriter.println("Producing DPM database from YTI Codelist based sources...")
-
                 detectedOptions.ensureSingleSourceGiven()
 
-                val dpmDictionaries = resolveYclSource(detectedOptions).use { yclSource ->
-                    YclToDpmMapper().dpmDictionariesFromYclSource(yclSource)
+                resolveYclSource(detectedOptions).use { yclSource ->
+                    val dbProducer = resolveDpmDbProducer(detectedOptions)
+
+                    outWriter.println("Producing DPM database from YTI Codelist based sources...")
+
+                    val dpmDictionaries = YclToDpmMapper().dpmDictionariesFromYclSource(yclSource)
+
+                    dbProducer.writedb()
                 }
-
-                val dbProducer = DpmDbProducer(
-                    targetDbPath = detectedOptions.cmdProduceDpmDb,
-                    forceOverwrite = detectedOptions.forceOverwrite
-                )
-
-                dbProducer.writedb()
             }
         }
     }
@@ -141,5 +138,14 @@ class TaxgenCli(
         }
 
         thisShouldNeverHappen("No suitable source recorder given")
+    }
+
+    private fun resolveDpmDbProducer(
+        detectedOptions: DetectedOptions
+    ): DpmDbProducer {
+        return DpmDbProducer(
+            targetDbPath = detectedOptions.cmdProduceDpmDb!!,
+            forceOverwrite = detectedOptions.forceOverwrite
+        )
     }
 }

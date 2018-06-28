@@ -136,7 +136,7 @@ internal class TaxgenCli_Options_UnitTest {
             val (status, outText, errText) = executeCli(args)
 
             assertThat(errText).isBlank()
-            assertThat(outText).isBlank()
+            assertThat(outText).containsSubsequence("Producing DPM database")
 
             assertThat(targetDbPath).exists().isRegularFile()
 
@@ -158,7 +158,7 @@ internal class TaxgenCli_Options_UnitTest {
             val (status, outText, errText) = executeCli(args)
 
             assertThat(errText).isBlank()
-            assertThat(outText).isBlank()
+            assertThat(outText).containsSubsequence("Producing DPM database")
 
             assertThat(targetDbPath).exists().isRegularFile()
 
