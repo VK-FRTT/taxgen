@@ -50,7 +50,7 @@ internal class TaxgenCli_Options_UnitTest {
     }
 
     @Test
-    fun `Status constants should have standard values `() {
+    fun `Should use common exit code values`() {
         assertThat(TAXGEN_CLI_SUCCESS).isEqualTo(0)
         assertThat(TAXGEN_CLI_FAIL).isEqualTo(1)
     }
