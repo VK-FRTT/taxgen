@@ -1,12 +1,12 @@
 package fi.vm.yti.taxgen.yclsourceprovider.zip
 
+import fi.vm.yti.taxgen.commons.TargetPathChecks
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
 import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureRecorder
 import java.net.URI
 import java.nio.file.FileSystem
 import java.nio.file.FileSystems
-import java.nio.file.Files
 import java.nio.file.Path
 
 class YclSourceZipFileRecorder(
@@ -29,20 +29,15 @@ class YclSourceZipFileRecorder(
     }
 
     private fun createTargetZipFileSystem(): FileSystem {
-        deleteTargetFileIfAllowed()
-        ensureTargetFoldersExist()
+        TargetPathChecks.deleteConflictingTargetFileIfAllowed(targetZipPath, forceOverwrite)
+        TargetPathChecks.failIfTargetFileExists(targetZipPath)
+        TargetPathChecks.createIntermediateFolders(targetZipPath)
 
         return FileSystems.newFileSystem(
             targetZipUri(),
             zipOptions()
         )
     }
-
-    private fun deleteTargetFileIfAllowed() {
-        if (forceOverwrite) Files.deleteIfExists(targetZipPath)
-    }
-
-    private fun ensureTargetFoldersExist() = Files.createDirectories(targetZipPath.parent)
 
     private fun targetZipUri() = URI.create("jar:file:$targetZipPath")
 

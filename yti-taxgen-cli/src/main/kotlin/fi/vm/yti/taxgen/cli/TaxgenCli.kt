@@ -54,7 +54,7 @@ class TaxgenCli(
                 resolveYclSource(detectedOptions).use { yclSource ->
                     resolveYclSourceRecorder(detectedOptions, yclSource).use { yclSourceRecorder ->
 
-                        outWriter.println("Capturing YTI Codelist based sources...")
+                        outWriter.println("Capturing YTI Codelist sources...")
                         yclSourceRecorder.capture()
                     }
                 }
@@ -66,11 +66,13 @@ class TaxgenCli(
                 resolveYclSource(detectedOptions).use { yclSource ->
                     val dbProducer = resolveDpmDbProducer(detectedOptions)
 
-                    outWriter.println("Producing DPM database from YTI Codelist based sources...")
+                    outWriter.println("Producing DPM database from YTI Codelist sources...")
 
                     val dpmDictionaries = YclToDpmMapper().dpmDictionariesFromYclSource(yclSource)
 
-                    dbProducer.writedb()
+                    dpmDictionaries.forEach {
+                        dbProducer.writedb(it)
+                    }
                 }
             }
         }
