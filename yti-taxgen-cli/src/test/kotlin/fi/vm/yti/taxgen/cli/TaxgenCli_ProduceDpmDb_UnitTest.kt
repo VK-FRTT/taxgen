@@ -9,7 +9,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 @DisplayName("Command ´--produce-dpm-db´")
-internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase() {
+internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
+    primaryCommand = "--produce-dpm-db"
+) {
 
     private lateinit var targetDbPath: Path
 

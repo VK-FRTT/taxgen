@@ -5,7 +5,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("Command ´--help´")
-internal class TaxgenCli_Help_UnitTest : TaxgenCli_UnitTestBase() {
+internal class TaxgenCli_Help_UnitTest : TaxgenCli_UnitTestBase(
+    primaryCommand = "--help"
+) {
 
     @Test
     fun `Should list available command line options`() {

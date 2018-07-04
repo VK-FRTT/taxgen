@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import java.io.ByteArrayOutputStream
@@ -10,7 +11,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.Comparator
 
-open class TaxgenCli_UnitTestBase {
+open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
     protected lateinit var workFolderPath: Path
 
     private lateinit var charset: Charset
@@ -44,6 +45,10 @@ open class TaxgenCli_UnitTestBase {
     }
 
     protected fun executeCli(args: Array<String>): ExecuteResult {
+        if (primaryCommand != null) {
+            assertThat(args).contains(primaryCommand)
+        }
+
         val status = cli.execute(args)
 
         return ExecuteResult(
