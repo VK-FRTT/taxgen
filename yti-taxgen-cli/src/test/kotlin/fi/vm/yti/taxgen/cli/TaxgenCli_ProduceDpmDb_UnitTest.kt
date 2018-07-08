@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.testcommons.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -17,16 +16,16 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
     @BeforeEach
     fun init() {
-        targetDbPath = workFolderPath.resolve("dpm.db")
+        targetDbPath = tempFolder.resolve("dpm.db")
     }
 
     @Test
     fun `Should produce database from YCL source capture`() {
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString(),
+            "$targetDbPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -45,10 +44,10 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString(),
+            "$targetDbPath",
             "--force-overwrite",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -66,7 +65,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val args = arrayOf(
             "--produce-dpm-db",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -85,9 +84,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString(),
+            "$targetDbPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -104,9 +103,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     fun `Should fail when given target database path points to folder`() {
         val args = arrayOf(
             "--produce-dpm-db",
-            workFolderPath.toString(),
+            "${tempFolder.path()}",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -121,7 +120,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString()
+            "$targetDbPath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -139,7 +138,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString(),
+            "$targetDbPath",
             "--source-folder"
         )
 
@@ -158,9 +157,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString(),
+            "$targetDbPath",
             "--source-folder",
-            workFolderPath.resolve("non_existing_folder").toString()
+            "${tempFolder.resolve("non_existing_folder")}"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -178,11 +177,11 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
             "--produce-dpm-db",
-            targetDbPath.toString(),
+            "$targetDbPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString(),
+            "$yclSourceCapturePath",
             "--source-config",
-            TestFixtures.yclSourceConfigPath("single_comprehensive_tree").toString()
+            "$yclSsourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)

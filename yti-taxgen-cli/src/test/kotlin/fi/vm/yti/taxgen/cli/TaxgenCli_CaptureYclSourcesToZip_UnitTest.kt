@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.testcommons.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -17,16 +16,16 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
     @BeforeEach
     fun init() {
-        targetZipPath = workFolderPath.resolve("sources.zip")
+        targetZipPath = tempFolder.resolve("target.zip")
     }
 
     @Test
     fun `Should capture YCL sources to zip file`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString(),
+            "$targetZipPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -45,10 +44,10 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString(),
+            "$targetZipPath",
             "--force-overwrite",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -66,7 +65,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -85,9 +84,9 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString(),
+            "$targetZipPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -104,9 +103,9 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     fun `Should fail when given target zip file path points to folder`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            workFolderPath.toString(),
+            "${tempFolder.path()}",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -121,7 +120,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString()
+            "$targetZipPath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -139,7 +138,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString(),
+            "$targetZipPath",
             "--source-folder"
         )
 
@@ -158,9 +157,9 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString(),
+            "$targetZipPath",
             "--source-folder",
-            workFolderPath.resolve("non_existing_folder").toString()
+            "${tempFolder.resolve("non_existing_folder")}"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -178,11 +177,11 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
-            targetZipPath.toString(),
+            "$targetZipPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString(),
+            "$yclSourceCapturePath",
             "--source-config",
-            TestFixtures.yclSourceConfigPath("single_comprehensive_tree").toString()
+            "$yclSsourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)

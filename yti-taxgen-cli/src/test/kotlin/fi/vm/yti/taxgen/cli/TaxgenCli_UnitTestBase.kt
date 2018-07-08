@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.testcommons.TempFolder
+import fi.vm.yti.taxgen.testcommons.TestFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -7,12 +9,12 @@ import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import java.nio.file.Path
-import java.util.Comparator
 
 open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
-    protected lateinit var workFolderPath: Path
+    protected lateinit var tempFolder: TempFolder
+    protected lateinit var yclSourceCapturePath: Path
+    protected lateinit var yclSsourceConfigPath: Path
 
     private lateinit var charset: Charset
     private lateinit var outCollector: PrintStreamCollector
@@ -22,7 +24,17 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
 
     @BeforeEach
     fun baseInit() {
-        workFolderPath = Files.createTempDirectory("taxgen_cli")
+        tempFolder = TempFolder("taxgen_cli")
+
+        yclSourceCapturePath = tempFolder.copyFolderRecursivelyUnderSubfolder(
+            TestFixture.yclSourceCapturePath("single_comprehensive_tree"),
+            "source_capture"
+        )
+
+        yclSsourceConfigPath = tempFolder.copyFileToSubfolder(
+            TestFixture.yclSourceConfigPath("single_comprehensive_tree"),
+            "source_config"
+        )
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)
@@ -38,10 +50,7 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
 
     @AfterEach
     fun baseTeardown() {
-        Files
-            .walk(workFolderPath)
-            .sorted(Comparator.reverseOrder())
-            .forEach { Files.deleteIfExists(it) }
+        tempFolder.close()
     }
 
     protected fun executeCli(args: Array<String>): ExecuteResult {

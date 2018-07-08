@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.testcommons.TestFixtures
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -12,13 +11,12 @@ import java.nio.file.Path
 internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTestBase(
     primaryCommand = "--capture-ycl-sources-to-folder"
 ) {
-
     private lateinit var targetFolderPath: Path
     private lateinit var targetFolderInfoFilePath: Path
 
     @BeforeEach
     fun init() {
-        targetFolderPath = workFolderPath.resolve("ycl_sources")
+        targetFolderPath = tempFolder.resolve("ycl_sources")
         targetFolderInfoFilePath = targetFolderPath.resolve("source_info.json")
     }
 
@@ -26,9 +24,9 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     fun `Should capture YCL sources to folder`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString(),
+            "$targetFolderPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -49,10 +47,10 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString(),
+            "$targetFolderPath",
             "--force-overwrite",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -71,7 +69,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -91,9 +89,9 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString(),
+            "$targetFolderPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -109,14 +107,14 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
     @Test
     fun `Should fail when given target folder path points to file`() {
-        val workFolderFilePath = workFolderPath.resolve("file.txt")
+        val workFolderFilePath = tempFolder.resolve("file.txt")
         Files.write(workFolderFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
             workFolderFilePath.toString(),
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString()
+            "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -131,7 +129,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString()
+            "$targetFolderPath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -149,7 +147,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString(),
+            "$targetFolderPath",
             "--source-folder"
         )
 
@@ -168,9 +166,9 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString(),
+            "$targetFolderPath",
             "--source-folder",
-            workFolderPath.resolve("non_existing_folder").toString()
+            "${tempFolder.resolve("non_existing_folder")}"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -188,11 +186,11 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
-            targetFolderPath.toString(),
+            "$targetFolderPath",
             "--source-folder",
-            TestFixtures.yclSourceCapturePath("single_comprehensive_tree").toString(),
+            "$yclSourceCapturePath",
             "--source-config",
-            TestFixtures.yclSourceConfigPath("single_comprehensive_tree").toString()
+            "$yclSsourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)

@@ -25,6 +25,8 @@ dependencies {
     shadowed(project(':yti-taxgen-ycl-to-dpm-mapper'))
     shadowed(project(':yti-taxgen-dpm-db-writer'))
 
+    testCompile libs.kotlinStdLib
+    testCompile libs.kotlinStdLib
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams
     testCompile libs.assertjCore
