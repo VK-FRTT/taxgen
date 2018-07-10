@@ -15,7 +15,7 @@ data class YclCode(
     private val startDate: LocalDate?,
     private val endDate: LocalDate?,
 
-    private val order: Integer?,
+    private val order: Int?,
 
     private val prefLabel: Map<String, String>?,
     private val description: Map<String, String>?
