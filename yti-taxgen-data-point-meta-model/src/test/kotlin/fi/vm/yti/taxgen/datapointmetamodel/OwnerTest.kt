@@ -23,7 +23,7 @@ internal class OwnerTest {
         "prefix,                required",
         "location,              required",
         "copyright,             required",
-        "supportedLanguages,    required"
+        "languages,             required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {
         propertyOptionalityTemplate<Owner>(
@@ -43,8 +43,8 @@ internal class OwnerTest {
         "prefix,                maxLength,      50",
         "location,              minLength,      2",
         "location,              maxLength,      100",
-        "supportedLanguages,    minLength,      1",
-        "supportedLanguages,    maxLength,      50"
+        "languages,             minLength,      1",
+        "languages,             maxLength,      50"
     )
     fun testPropertyLengthValidation(testedProperty: String, validationType: String, expectedLimit: Int) {
         propertyLengthValidationTemplate<Owner>(testedProperty, validationType, expectedLimit)

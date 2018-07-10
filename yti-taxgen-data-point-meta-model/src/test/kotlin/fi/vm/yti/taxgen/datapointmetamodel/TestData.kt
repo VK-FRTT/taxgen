@@ -29,7 +29,7 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
                 "prefix" to "ns_prefix",
                 "location" to "official_location",
                 "copyright" to "Lorem ipsum",
-                "supportedLanguages" to listOf("fi", "en")
+                "languages" to listOf("fi", "en")
             )
         )
     )

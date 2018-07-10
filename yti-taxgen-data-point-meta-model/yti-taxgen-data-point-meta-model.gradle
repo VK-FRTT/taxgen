@@ -3,6 +3,8 @@ description = 'Data Point Meta Model implementation for YTI XBRL Taxonomy Genera
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
+    implementation libs.jacksonKotlin
+    implementation libs.jacksonJsr310
     implementation(project(':yti-taxgen-commons'))
 
     testCompile libs.junitJupiterApi

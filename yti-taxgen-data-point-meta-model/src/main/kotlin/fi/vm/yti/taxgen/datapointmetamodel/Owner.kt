@@ -8,7 +8,7 @@ data class Owner(
     val prefix: String,
     val location: String,
     val copyright: String,
-    val supportedLanguages: List<String>
+    val languages: List<String>
 ) {
 
     init {
@@ -42,7 +42,7 @@ data class Owner(
 
         validateProperty(
             instance = this,
-            property = "supportedLanguages",
+            property = "languages",
             minLength = 1,
             maxLength = 50
         )

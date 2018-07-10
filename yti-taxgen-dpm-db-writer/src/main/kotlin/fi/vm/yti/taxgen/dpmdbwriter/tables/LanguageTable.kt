@@ -19,8 +19,8 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - None
  */
 object LanguageTable : IntIdTable("mLanguage", "LanguageID") {
-    val languageName = text("LanguageName").nullable()
-    val englishName = text("EnglishName").nullable()
-    val isoCode = text("IsoCode").nullable()
-    val conceptID = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+    val languageNameCol = text("LanguageName").nullable()
+    val englishNameCol = text("EnglishName").nullable()
+    val isoCodeCol = text("IsoCode").nullable()
+    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 }

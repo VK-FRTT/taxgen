@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmdbwriter.DpmDbProducer
+import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
@@ -69,10 +69,7 @@ class TaxgenCli(
                     outWriter.println("Producing DPM database from YTI Codelist sources...")
 
                     val dpmDictionaries = YclToDpmMapper().dpmDictionariesFromYclSource(yclSource)
-
-                    dpmDictionaries.forEach {
-                        dbProducer.writedb(it)
-                    }
+                    dbProducer.writeDpmDictionaries(dpmDictionaries)
                 }
             }
         }
@@ -144,8 +141,8 @@ class TaxgenCli(
 
     private fun resolveDpmDbProducer(
         detectedOptions: DetectedOptions
-    ): DpmDbProducer {
-        return DpmDbProducer(
+    ): DpmDbWriter {
+        return DpmDbWriter(
             targetDbPath = detectedOptions.cmdProduceDpmDb!!,
             forceOverwrite = detectedOptions.forceOverwrite
         )

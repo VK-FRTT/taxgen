@@ -3,6 +3,8 @@ package fi.vm.yti.taxgen.dpmdbwriter.tables
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
+const val CONCEPT_TYPE_LANGUAGE = "Language" //TODO - check & document
+
 /**
  * Reference DDL (from BR-AG Data Modeler):
  * CREATE TABLE `mConcept` (
@@ -31,17 +33,17 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - `AxisOrdinate`
  * - `Module`
  *
- * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U):
+ * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
 object ConceptTable : IntIdTable("mConcept", "ConceptID") {
-    val conceptType = text("ConceptType").nullable()
+    val conceptTypeCol = text("ConceptType").nullable()
 
-    val owner = reference("OwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
+    val ownerIdCol = reference("OwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
 
-    val creationDate = date("CreationDate").nullable()
-    val modificationDate = date("ModificationDate").nullable()
+    val creationDateCol = date("CreationDate").nullable()
+    val modificationDateCol = date("ModificationDate").nullable()
 
-    val fromDate = date("FromDate").nullable()
-    val toDate = date("ToDate").nullable()
+    val fromDateCol = date("FromDate").nullable()
+    val toDateCol = date("ToDate").nullable()
 }

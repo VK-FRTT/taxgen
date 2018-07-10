@@ -3,6 +3,8 @@ package fi.vm.yti.taxgen.dpmdbwriter.tables
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
+const val CONCEPT_TRANSLATION_ROLE_LABEL = "label"
+
 /**
  * Reference DDL (from BR-AG Data Modeler):
  * CREATE TABLE `mConceptTranslation` (
@@ -18,14 +20,14 @@ import org.jetbrains.exposed.sql.Table
  * Role reference values (from BR-AG Data Modeler):
  * - `label`
  *
- * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U):
+ * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - T4U defines additional column: OwnerID(INTEGER)
  * - T4U does not define column: Role(TEXT)
  */
 object ConceptTranslationTable : Table("mConceptTranslation") {
-    val conceptID = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
-    val languageID = reference("LanguageID", LanguageTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
+    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
+    val languageIdCol = reference("LanguageID", LanguageTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
 
-    val text = text("Text").nullable()
-    val role = text("Role").nullable().primaryKey()
+    val textCol = text("Text").nullable()
+    val roleCol = text("Role").nullable().primaryKey()
 }
