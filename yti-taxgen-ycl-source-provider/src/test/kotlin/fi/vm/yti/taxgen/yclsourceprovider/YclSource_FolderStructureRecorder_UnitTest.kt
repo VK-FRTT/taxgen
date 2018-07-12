@@ -50,15 +50,15 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         @Test
-        fun `Should have owner info @ root # dpmdictionary`() {
+        fun `Should have owner config @ root # dpmdictionary`() {
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_0/dpm_owner_info.json",
-                expectedMarker = "fixed_dpm_owner_info_0"
+                expectedMarker = "fixed_dpm_owner_config_0"
             )
 
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_1/dpm_owner_info.json",
-                expectedMarker = "fixed_dpm_owner_info_1"
+                expectedMarker = "fixed_dpm_owner_config_1"
             )
         }
 

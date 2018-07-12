@@ -10,10 +10,8 @@
         "prefix": "sct_prefix",
         "location": "SingleComprehensiveTree_Location",
         "copyright": "SingleComprehensiveTree_Copyright",
-        "supportedLanguages": [
-          "en",
-          "fi"
-        ]
+        "languages": ["en", "fi", "sv"],
+        "defaultLanguage": "en"
       },
       "sourceCodelists": [
         {

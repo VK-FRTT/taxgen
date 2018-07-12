@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-internal class ExplicitDomainMemberTest {
+internal class MemberTest {
 
     @BeforeEach
     fun init() {
@@ -23,7 +23,7 @@ internal class ExplicitDomainMemberTest {
         "defaultMember,     required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {
-        propertyOptionalityTemplate<ExplicitDomainMember>(
+        propertyOptionalityTemplate<Member>(
             testedProperty,
             expectedOptionality
         )
@@ -36,6 +36,6 @@ internal class ExplicitDomainMemberTest {
         "memberCode,            maxLength,      50"
     )
     fun testPropertyLengthValidation(testedProperty: String, validationType: String, expectedLimit: Int) {
-        propertyLengthValidationTemplate<ExplicitDomainMember>(testedProperty, validationType, expectedLimit)
+        propertyLengthValidationTemplate<Member>(testedProperty, validationType, expectedLimit)
     }
 }

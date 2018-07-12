@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 interface DpmDictionarySource {
-    fun dpmOwnerInfoData(): String
+    fun dpmOwnerConfigData(): String
     fun yclCodelistSources(): List<YclCodelistSource>
 }

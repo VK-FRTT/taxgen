@@ -29,7 +29,11 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
                 "prefix" to "ns_prefix",
                 "location" to "official_location",
                 "copyright" to "Lorem ipsum",
-                "languages" to listOf("fi", "en")
+                "languages" to listOf(
+                    dynamicAttribute { Language.findByIso6391Code("en") },
+                    dynamicAttribute { Language.findByIso6391Code("fi") }
+                ),
+                "defaultLanguage" to dynamicAttribute { Language.findByIso6391Code("en") }
             )
         )
     )
@@ -43,14 +47,15 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
                 "applicableFrom" to LocalDate.of(2018, 3, 20),
                 "applicableUntil" to LocalDate.of(2018, 4, 20),
                 "label" to dynamicAttribute { it.instantiate<TranslatedText>() },
-                "description" to dynamicAttribute { it.instantiate<TranslatedText>() }
+                "description" to dynamicAttribute { it.instantiate<TranslatedText>() },
+                "owner" to dynamicAttribute { it.instantiate<Owner>() }
             )
         )
     )
 
     definitions.add(
         DataDefinition(
-            kClass = ExplicitDomainMember::class,
+            kClass = Member::class,
             attributes = mapOf(
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCode" to "exp_mc",
@@ -65,7 +70,7 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
             attributes = mapOf(
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "exp_dc",
-                "members" to dynamicAttribute { listOf(it.instantiate<ExplicitDomainMember>()) }
+                "members" to dynamicAttribute { listOf(it.instantiate<Member>()) }
             )
         )
     )

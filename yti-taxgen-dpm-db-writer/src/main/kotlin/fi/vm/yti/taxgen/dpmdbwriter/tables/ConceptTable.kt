@@ -3,7 +3,13 @@ package fi.vm.yti.taxgen.dpmdbwriter.tables
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
-const val CONCEPT_TYPE_LANGUAGE = "Language" //TODO - check & document
+enum class ConceptType(val value: String) {
+    LANGUAGE("Language"),
+    DOMAIN("Domain"),
+    MEMBER("Member"),
+    HIERARCHY("Hierarchy"),
+    HIERARCHY_NODE("HierarchyNode")
+}
 
 /**
  * Reference DDL (from BR-AG Data Modeler):

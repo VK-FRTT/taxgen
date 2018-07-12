@@ -65,7 +65,14 @@ class Factory {
                 "${kClass.simpleName}.<PrimaryConstructor>"
             )
 
-            return primaryConstructor.callBy(arguments)!!
+            return try {
+                primaryConstructor.callBy(arguments)!!
+            } catch (ex: IllegalArgumentException) {
+                throw IllegalArgumentException(
+                    "Instantiating ${kClass.simpleName} with args ${arguments.keys.map { it.name }} failed",
+                    ex
+                )
+            }
         }
 
         private fun primaryConstructorFrom(kClass: KClass<*>): KFunction<*> {

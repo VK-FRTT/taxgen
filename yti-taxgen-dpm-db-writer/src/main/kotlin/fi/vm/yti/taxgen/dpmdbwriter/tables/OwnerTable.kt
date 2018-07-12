@@ -17,18 +17,18 @@ import org.jetbrains.exposed.sql.ReferenceOption
  *   PRIMARY KEY(`OwnerID`),
  *   FOREIGN KEY(`ParentOwnerID`) REFERENCES `mOwner`(`OwnerID`),
  *   FOREIGN KEY(`ConceptID`) REFERENCES `mConcept`(`ConceptID`)
- *   );
+ * );
  *
- * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U):
+ * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
 object OwnerTable : IntIdTable(name = "mOwner", columnName = "OwnerID") {
-    val ownerName = text("OwnerName").nullable()
-    val ownerNamespace = text("OwnerNamespace").nullable()
-    val ownerLocation = text("OwnerLocation").nullable()
-    val ownerPrefix = text("OwnerPrefix").nullable()
-    val ownerCopyright = text("OwnerCopyright").nullable()
+    val ownerNameCol = text("OwnerName").nullable()
+    val ownerNamespaceCol = text("OwnerNamespace").nullable()
+    val ownerLocationCol = text("OwnerLocation").nullable()
+    val ownerPrefixCol = text("OwnerPrefix").nullable()
+    val ownerCopyrightCol = text("OwnerCopyright").nullable()
 
-    val parentOwner = reference("ParentOwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
-    val concept = reference("ConceptID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
+    val parentOwnerIdCol = reference("ParentOwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
+    val conceptIdCol = reference("ConceptID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
 }

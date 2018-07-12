@@ -10,7 +10,7 @@ class DpmDictionarySourceFolderStructureAdapter(
     private val dpmDictionaryRootPath: Path
 ) : DpmDictionarySource {
 
-    override fun dpmOwnerInfoData(): String {
+    override fun dpmOwnerConfigData(): String {
         return FileOps.readTextFile(dpmDictionaryRootPath, "dpm_owner_info.json")
     }
 

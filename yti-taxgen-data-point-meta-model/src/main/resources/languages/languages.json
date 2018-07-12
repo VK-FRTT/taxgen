@@ -1,6 +1,6 @@
 [
   {
-    "ISO_639_1_code": "en",
+    "iso6391Code": "en",
     "label": {
       "en": "English",
       "fi": "englanti",
@@ -8,7 +8,7 @@
     }
   },
   {
-    "ISO_639_1_code": "fi",
+    "iso6391Code": "fi",
     "label": {
       "en": "Finnish",
       "fi": "suomi",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "ISO_639_1_code": "sv",
+    "iso6391Code": "sv",
     "label": {
       "en": "Swedish",
       "fi": "ruotsi",

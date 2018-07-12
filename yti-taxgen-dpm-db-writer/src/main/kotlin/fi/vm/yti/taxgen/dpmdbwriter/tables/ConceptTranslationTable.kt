@@ -3,7 +3,9 @@ package fi.vm.yti.taxgen.dpmdbwriter.tables
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
-const val CONCEPT_TRANSLATION_ROLE_LABEL = "label"
+enum class ConceptTranslationRole(val value: String) {
+    LABEL("label"),
+}
 
 /**
  * Reference DDL (from BR-AG Data Modeler):

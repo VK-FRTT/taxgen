@@ -17,5 +17,5 @@ object JacksonObjectMapper {
         return mapper
     }
 
-    fun lenientObjectMapper(): ObjectMapper = lenientObjectMapper
+    fun lenientObjectMapper(): ObjectMapper = lenientObjectMapper //TODO - minimise usage by passing via ctx
 }

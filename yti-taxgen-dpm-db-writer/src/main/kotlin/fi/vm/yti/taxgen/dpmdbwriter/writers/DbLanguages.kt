@@ -1,10 +1,10 @@
-package fi.vm.yti.taxgen.dpmdbwriter
+package fi.vm.yti.taxgen.dpmdbwriter.writers
 
 import fi.vm.yti.taxgen.datapointmetamodel.Language
-import fi.vm.yti.taxgen.dpmdbwriter.tables.CONCEPT_TRANSLATION_ROLE_LABEL
-import fi.vm.yti.taxgen.dpmdbwriter.tables.CONCEPT_TYPE_LANGUAGE
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTable
+import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTranslationRole
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTranslationTable
+import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptType
 import fi.vm.yti.taxgen.dpmdbwriter.tables.LanguageTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insert
@@ -14,51 +14,55 @@ import org.jetbrains.exposed.sql.update
 
 object DbLanguages {
 
-    fun writeLanguages(languages: List<Language>): Map<Language, EntityID<Int>> {
-        val languageIds = writeLanguageRows(languages)
+    fun writeLanguages(): Map<Language, EntityID<Int>> {
+        val languages = Language.allLanguages()
 
-        writeLanguageLabelRows(languageIds)
+        val languageIds = writeLanguages(languages)
+
+        writeLanguageLabels(languageIds)
 
         return languageIds
     }
 
-    private fun writeLanguageRows(languages: List<Language>): Map<Language, EntityID<Int>> {
+    private fun writeLanguages(languages: Set<Language>): Map<Language, EntityID<Int>> {
         val languageIdsList = transaction {
 
-            languages.map { language ->
-                val languageId = insertLanguage(language)
-                Pair(language, languageId)
-            }
+            languages.map { Pair(it, insertLanguage(it)) }
         }
 
         return languageIdsList.toMap()
     }
 
-    private fun writeLanguageLabelRows(languageIds: Map<Language, EntityID<Int>>) {
+    private fun writeLanguageLabels(languageIds: Map<Language, EntityID<Int>>) {
         transaction {
 
             languageIds.forEach { (language, languageEntityId) ->
 
                 val languageConceptId = insertLanguageConcept()
 
-                language.label.forEach { (labelLanguage, labelText) ->
+                language.label.translations.forEach { (translationLanguage, text) ->
 
                     insertLanguageConceptTranslation(
                         languageConceptId,
-                        languageIds[labelLanguage]!!,
-                        labelText
+                        languageIds[translationLanguage]!!,
+                        text
                     )
                 }
 
-                updateLanguageToReferConcept(languageEntityId, languageConceptId)
+                updateLanguageToReferConcept(
+                    languageEntityId,
+                    languageConceptId
+                )
             }
         }
     }
 
     private fun insertLanguage(language: Language): EntityID<Int> {
+        val nativeLanguageName = language.label.translations[language]
+
         return LanguageTable.insertAndGetId {
-            it[languageNameCol] = language.nativeLabel()
-            it[englishNameCol] = language.englishLabel()
+            it[languageNameCol] = nativeLanguageName
+            it[englishNameCol] = language.label.defaultText()
             it[isoCodeCol] = language.iso6391Code
             it[conceptIdCol] = null
         }
@@ -66,7 +70,7 @@ object DbLanguages {
 
     private fun insertLanguageConcept(): EntityID<Int> {
         return ConceptTable.insertAndGetId {
-            it[conceptTypeCol] = CONCEPT_TYPE_LANGUAGE
+            it[conceptTypeCol] = ConceptType.LANGUAGE.value
             it[ownerIdCol] = null
             it[creationDateCol] = null
             it[modificationDateCol] = null
@@ -84,7 +88,7 @@ object DbLanguages {
             it[conceptIdCol] = conceptId
             it[languageIdCol] = languageId
             it[textCol] = text
-            it[roleCol] = CONCEPT_TRANSLATION_ROLE_LABEL
+            it[roleCol] = ConceptTranslationRole.LABEL.value
         }
     }
 

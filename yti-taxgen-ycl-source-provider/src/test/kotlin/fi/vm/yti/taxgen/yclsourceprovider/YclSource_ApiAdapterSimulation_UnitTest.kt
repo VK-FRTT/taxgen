@@ -1,5 +1,8 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
+import com.fasterxml.jackson.module.kotlin.readValue
+import fi.vm.yti.taxgen.datapointmetamodel.Language
+import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 import io.specto.hoverfly.junit.core.Hoverfly
@@ -50,10 +53,11 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         "prefix": "the prefix",
                         "location": "the location",
                         "copyright": "the copyright",
-                        "supportedLanguages": [
+                        "languages": [
                           "en",
                           "fi"
-                        ]
+                        ],
+                        "defaultLanguage": "en"
                       },
                       "sourceCodelists": [
                         {
@@ -86,23 +90,26 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have owner info @ root # dpmdictionary`() {
+        fun `Should have owner config @ root # dpmdictionary`() {
             val dpmDictionarySources = yclSource.dpmDictionarySources()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
-            val infoJson = objectMapper.readTree(
-                yclSource.dpmDictionarySources()[0].dpmOwnerInfoData()
+            val ownerConfig = objectMapper.readValue<OwnerConfig>(
+                yclSource.dpmDictionarySources()[0].dpmOwnerConfigData()
             )
 
-            assertThat(infoJson.isObject).isTrue()
-            assertThat(infoJson.get("name").textValue()).isEqualTo("the name")
-            assertThat(infoJson.get("namespace").textValue()).isEqualTo("the namespace")
-            assertThat(infoJson.get("prefix").textValue()).isEqualTo("the prefix")
-            assertThat(infoJson.get("location").textValue()).isEqualTo("the location")
-            assertThat(infoJson.get("copyright").textValue()).isEqualTo("the copyright")
-            assertThat(infoJson.get("supportedLanguages").isArray).isTrue()
-            assertThat(infoJson.get("supportedLanguages")[0].textValue()).isEqualTo("en")
-            assertThat(infoJson.get("supportedLanguages")[1].textValue()).isEqualTo("fi")
+            assertThat(ownerConfig.name).isEqualTo("the name")
+            assertThat(ownerConfig.namespace).isEqualTo("the namespace")
+            assertThat(ownerConfig.prefix).isEqualTo("the prefix")
+            assertThat(ownerConfig.location).isEqualTo("the location")
+            assertThat(ownerConfig.copyright).isEqualTo("the copyright")
+            assertThat(ownerConfig.languages[0]).isEqualTo("en")
+            assertThat(ownerConfig.languages[1]).isEqualTo("fi")
+            assertThat(ownerConfig.defaultLanguage).isEqualTo("en")
+
+            val owner = ownerConfig.toOwner()
+            assertThat(owner.languages[0]).isEqualTo(Language.findByIso6391Code("en"))
+            assertThat(owner.defaultLanguage).isEqualTo(Language.findByIso6391Code("en"))
         }
 
         @Test

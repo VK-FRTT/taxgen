@@ -3,13 +3,18 @@ package fi.vm.yti.taxgen.datapointmetamodel
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
 
 data class ExplicitDomain(
-    override val concept: Concept,
-    override val domainCode: String,
-    val members: List<ExplicitDomainMember>
-) : Domain {
+    val concept: Concept,
+    val domainCode: String,
+    val members: List<Member>
+) {
 
     init {
-        domainValidation()
+        validateProperty(
+            instance = this,
+            property = "domainCode",
+            minLength = 2,
+            maxLength = 50
+        )
 
         validateProperty(
             instance = this,

@@ -7,7 +7,7 @@ class DpmDictionarySourceApiAdapter(
     private val config: DpmDictionarySourceApiAdapterConfig
 ) : DpmDictionarySource {
 
-    override fun dpmOwnerInfoData(): String {
+    override fun dpmOwnerConfigData(): String {
         return config.ownerInfoData()
     }
 

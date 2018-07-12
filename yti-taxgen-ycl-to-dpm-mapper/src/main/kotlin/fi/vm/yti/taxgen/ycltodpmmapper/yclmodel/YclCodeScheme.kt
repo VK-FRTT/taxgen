@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.ycltodpmmapper.yclmodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
-import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
+import fi.vm.yti.taxgen.ycltodpmmapper.DpmMappingContext
+import fi.vm.yti.taxgen.ycltodpmmapper.mappers.TranslatedTextMapper
 import java.time.Instant
 import java.time.LocalDate
-import java.util.UUID
 
 data class YclCodeScheme(
     private val created: Instant?,
@@ -22,21 +22,22 @@ data class YclCodeScheme(
 ) {
 
     fun dpmDomainCode(): String {
-        return codeValue!!
+        return codeValue!! //TODO - proper error message
     }
 
     fun dpmDefaultMemberCode(): String {
-        return defaultCode.codeValue!!
+        return defaultCode.codeValue!! //TODO - proper error message
     }
 
-    fun dpmConcept(): Concept {
+    fun mapToDpmConcept(mappingContext: DpmMappingContext): Concept {
         return Concept(
-            createdAt = created!!,
-            modifiedAt = modified!!,
+            createdAt = created!!, //TODO - proper error message
+            modifiedAt = modified!!, //TODO - proper error message
             applicableFrom = startDate,
             applicableUntil = endDate,
-            label = TranslatedText(prefLabel),
-            description = TranslatedText(description)
+            label = TranslatedTextMapper.fromYclLangText(prefLabel),
+            description = TranslatedTextMapper.fromYclLangText(description),
+            owner = mappingContext.owner
         )
     }
 }

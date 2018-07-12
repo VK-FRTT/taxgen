@@ -7,7 +7,7 @@ class FixedYclSource : YclSource {
 }
 
 class FixedDpmDictionarySource(private val index: Int) : DpmDictionarySource {
-    override fun dpmOwnerInfoData() = """{"marker": "fixed_dpm_owner_info_$index"}"""
+    override fun dpmOwnerConfigData() = """{"marker": "fixed_dpm_owner_config_$index"}"""
     override fun yclCodelistSources() = listOf(FixedYclCodelistSource(0), FixedYclCodelistSource(1))
 }
 

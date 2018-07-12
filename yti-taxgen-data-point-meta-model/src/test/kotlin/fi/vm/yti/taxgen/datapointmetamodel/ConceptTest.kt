@@ -24,11 +24,12 @@ internal class ConceptTest {
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
         "label,             required",
-        "description,       optional",
+        "description,       required",
         "createdAt,         required",
         "modifiedAt,        required",
         "applicableFrom,    optional",
-        "applicableUntil,   optional"
+        "applicableUntil,   optional",
+        "owner,             required"
     )
     fun testPropertyOptionality(testedProperty: String, expectedOptionality: String) {
         propertyOptionalityTemplate<Concept>(

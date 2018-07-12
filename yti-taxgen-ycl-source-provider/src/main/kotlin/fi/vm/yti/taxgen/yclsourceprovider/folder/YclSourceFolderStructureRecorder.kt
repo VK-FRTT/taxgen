@@ -36,7 +36,7 @@ class YclSourceFolderStructureRecorder(
             pathStack.withIndexPostfixSubfolder("dpmdictionary", dictionaryIndex) {
 
                 FileOps.writeTextFile(
-                    dictionarySource.dpmOwnerInfoData(),
+                    dictionarySource.dpmOwnerConfigData(),
                     pathStack,
                     "dpm_owner_info.json",
                     forceOverwrite

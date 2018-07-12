@@ -8,7 +8,8 @@ data class Owner(
     val prefix: String,
     val location: String,
     val copyright: String,
-    val languages: List<String>
+    val languages: List<Language>,
+    val defaultLanguage: Language
 ) {
 
     init {

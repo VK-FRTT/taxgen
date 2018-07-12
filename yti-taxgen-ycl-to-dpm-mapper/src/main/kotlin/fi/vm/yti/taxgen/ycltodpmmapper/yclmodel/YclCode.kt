@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.ycltodpmmapper.yclmodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
-import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomainMember
-import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
+import fi.vm.yti.taxgen.datapointmetamodel.Member
+import fi.vm.yti.taxgen.ycltodpmmapper.DpmMappingContext
+import fi.vm.yti.taxgen.ycltodpmmapper.mappers.TranslatedTextMapper
 import java.time.Instant
 import java.time.LocalDate
 
@@ -21,20 +22,21 @@ data class YclCode(
     private val description: Map<String, String>?
 ) {
 
-    fun dpmExplicitDomainMemberWithDefaultness(defaultMemberCode: String): ExplicitDomainMember {
+    fun mapToDpmMember(mappingContext: DpmMappingContext, defaultMemberCode: String): Member {
 
         val concept = Concept(
-            createdAt = created!!, //TODO - report errors if mandatory fields are missing in YCL data
-            modifiedAt = modified!!,
+            createdAt = created!!, //TODO - proper error message
+            modifiedAt = modified!!, //TODO - proper error message
             applicableFrom = startDate,
             applicableUntil = endDate,
-            label = TranslatedText(prefLabel!!),
-            description = TranslatedText(description!!)
+            label = TranslatedTextMapper.fromYclLangText(prefLabel),
+            description = TranslatedTextMapper.fromYclLangText(description),
+            owner = mappingContext.owner
         )
 
-        val memberCode = codeValue!!
+        val memberCode = codeValue!! //TODO - proper error message
 
-        return ExplicitDomainMember(
+        return Member(
             concept = concept,
             memberCode = memberCode,
             defaultMember = (memberCode == defaultMemberCode)

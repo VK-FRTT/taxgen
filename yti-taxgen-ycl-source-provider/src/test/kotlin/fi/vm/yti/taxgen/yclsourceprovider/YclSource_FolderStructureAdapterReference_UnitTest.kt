@@ -37,12 +37,12 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have owner info @ root # dpmdictionary`() {
+    fun `Should have owner config @ root # dpmdictionary`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         val markers =
             extractMarkerValuesFromJsonData(
                 dpmDictionarySources,
-                { it -> (it as DpmDictionarySource).dpmOwnerInfoData() }
+                { it -> (it as DpmDictionarySource).dpmOwnerConfigData() }
             )
 
         assertThat(markers).containsExactly(

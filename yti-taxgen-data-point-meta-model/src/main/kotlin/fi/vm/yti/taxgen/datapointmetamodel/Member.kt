@@ -2,14 +2,16 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
 
-interface Domain {
-    val concept: Concept
-    val domainCode: String
+data class Member(
+    val concept: Concept,
+    val memberCode: String,
+    val defaultMember: Boolean
+) {
 
-    fun domainValidation() {
+    init {
         validateProperty(
             instance = this,
-            property = "domainCode",
+            property = "memberCode",
             minLength = 2,
             maxLength = 50
         )

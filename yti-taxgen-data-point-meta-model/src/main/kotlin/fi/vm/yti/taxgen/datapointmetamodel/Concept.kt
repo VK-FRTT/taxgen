@@ -11,9 +11,16 @@ data class Concept(
     val applicableFrom: LocalDate?,
     val applicableUntil: LocalDate?,
     val label: TranslatedText,
-    val description: TranslatedText?
+    val description: TranslatedText,
+    val owner: Owner
 ) {
     init {
+        label.defaultLanguage = owner.defaultLanguage
+        description.defaultLanguage = owner.defaultLanguage
+
+        //TODO - Make label accept only those languages which Owner defines
+        //TODO - Then validate that there is label at least with one lang
+
         require(createdAt.isBeforeOrEqual(modifiedAt)) {
             "createdAt must precede modifiedAt"
         }

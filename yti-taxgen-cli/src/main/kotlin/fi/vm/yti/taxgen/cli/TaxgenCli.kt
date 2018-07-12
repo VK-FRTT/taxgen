@@ -68,7 +68,7 @@ class TaxgenCli(
 
                     outWriter.println("Producing DPM database from YTI Codelist sources...")
 
-                    val dpmDictionaries = YclToDpmMapper().dpmDictionariesFromYclSource(yclSource)
+                    val dpmDictionaries = YclToDpmMapper().mapDpmDictionariesFromSource(yclSource)
                     dbProducer.writeDpmDictionaries(dpmDictionaries)
                 }
             }
