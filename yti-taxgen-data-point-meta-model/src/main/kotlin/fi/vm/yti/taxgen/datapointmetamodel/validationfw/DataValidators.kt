@@ -2,15 +2,15 @@ package fi.vm.yti.taxgen.datapointmetamodel.validationfw
 
 import fi.vm.yti.taxgen.commons.ext.kotlin.getPropertyValue
 
-class DataValidationException(override var message: String) : Exception(message)
-class DataValidationConfigurationError(override var message: String) : Error(message)
+class DataValidationException(override var message: String) : Exception(message) //TODO - not needed
+class DataValidationConfigurationError(override var message: String) : Error(message) //TODO - not needed
 
 fun validateProperty(
     instance: Any,
     property: String,
     minLength: Int? = null,
     maxLength: Int? = null
-) {
+): List<String> {
     val value = instance.getPropertyValue(property)
     val messages = mutableListOf<String>()
 
@@ -22,9 +22,7 @@ fun validateProperty(
         doValidate("maxLength", property, value, maxLength, messages)
     }
 
-    if (!messages.isEmpty()) {
-        throw DataValidationException("[${messages.joinToString()}]")
-    }
+    return messages
 }
 
 private fun doValidate(
@@ -42,7 +40,7 @@ private fun doValidate(
                 }
             }
 
-            is List<*> -> {
+            is Collection<*> -> {
                 if (value.size < limit) {
                     messages.add("$propertyName: $validatorType $limit")
                 }
@@ -60,7 +58,7 @@ private fun doValidate(
                 }
             }
 
-            is List<*> -> {
+            is Collection<*> -> {
                 if (value.size > limit) {
                     messages.add("$propertyName: $validatorType $limit")
                 }
@@ -72,6 +70,8 @@ private fun doValidate(
 }
 
 private fun unsupportedDataTypeForValidator(validatorType: String, propertyName: String, value: Any) {
-    throw DataValidationConfigurationError("$validatorType validator: Unsupported data type ${value::class.simpleName} " +
-            "in property $propertyName for " )
+    throw DataValidationConfigurationError(
+        "$validatorType validator: Unsupported data type ${value::class.simpleName} " +
+            "in property $propertyName for "
+    )
 }

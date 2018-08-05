@@ -5,8 +5,9 @@ import fi.vm.yti.taxgen.yclsourceprovider.helpers.FileOps
 import java.nio.file.Path
 
 class YclCodelistSourceFolderStructureAdapter(
+    index: Int,
     private val codeListPath: Path
-) : YclCodelistSource {
+) : YclCodelistSource(index) {
 
     override fun yclCodeschemeData(): String {
         return FileOps.readTextFile(codeListPath, "ycl_codescheme.json")

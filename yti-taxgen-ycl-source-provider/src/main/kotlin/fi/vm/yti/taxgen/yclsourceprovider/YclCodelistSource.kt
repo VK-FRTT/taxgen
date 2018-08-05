@@ -1,7 +1,15 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
-interface YclCodelistSource {
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
 
-    fun yclCodeschemeData(): String
-    fun yclCodePagesData(): Iterator<String>
+abstract class YclCodelistSource(
+    private val index: Int
+) : DiagnosticTopicProvider {
+
+    override fun topicType(): String = "Codelist"
+    override fun topicName(): String = ""
+    override fun topicIdentifier(): String = "#$index"
+
+    abstract fun yclCodeschemeData(): String
+    abstract fun yclCodePagesData(): Iterator<String>
 }

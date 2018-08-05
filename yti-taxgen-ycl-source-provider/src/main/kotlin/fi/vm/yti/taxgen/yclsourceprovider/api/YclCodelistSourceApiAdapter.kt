@@ -7,8 +7,9 @@ import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 import okhttp3.HttpUrl
 
 class YclCodelistSourceApiAdapter(
+    index: Int,
     private val config: YclCodelistSourceApiAdapterConfig
-) : YclCodelistSource {
+) : YclCodelistSource(index) {
 
     private var resolvedUrlsCache: ResolvedUrls? = null
 

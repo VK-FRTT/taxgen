@@ -1,6 +1,11 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.commons.FailException
+import fi.vm.yti.taxgen.commons.HaltException
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.commons.throwHalt
 import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
@@ -17,9 +22,12 @@ import java.io.PrintStream
 import java.io.PrintWriter
 import java.nio.charset.Charset
 
+const val TAXGEN_CLI_SUCCESS = 0
+const val TAXGEN_CLI_FAIL = 1
+
 class TaxgenCli(
-    private val outStream: PrintStream,
-    private val errStream: PrintStream,
+    outStream: PrintStream,
+    errStream: PrintStream,
     charset: Charset,
     private val definedOptions: DefinedOptions
 ) : Closeable {
@@ -27,12 +35,12 @@ class TaxgenCli(
     private val outWriter = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)), true)
     private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
+    private val dtp = DiagnosticTextPrinter(outWriter)
+    private val diagnostic = Diagnostic(dtp)
+
     override fun close() {
         outWriter.close()
         errWriter.close()
-
-        outStream.flush()
-        errStream.flush()
     }
 
     fun execute(args: Array<String>): Int {
@@ -41,7 +49,7 @@ class TaxgenCli(
 
             if (detectedOptions.cmdShowHelp) {
                 definedOptions.printHelp(outWriter)
-                halt(TAXGEN_CLI_SUCCESS)
+                throwHalt()
             }
 
             detectedOptions.ensureSingleCommandGiven()
@@ -53,25 +61,38 @@ class TaxgenCli(
 
                 resolveYclSource(detectedOptions).use { yclSource ->
                     resolveYclSourceRecorder(detectedOptions, yclSource).use { yclSourceRecorder ->
-
-                        outWriter.println("Capturing YTI Codelist sources...")
+                        diagnostic.info("Capturing YTI Codelist sources..")
                         yclSourceRecorder.capture()
                     }
                 }
+
+                throwHalt()
             }
 
-            if (detectedOptions.cmdProduceDpmDb != null) {
+            if (detectedOptions.cmdCompileDpmDb != null) {
                 detectedOptions.ensureSingleSourceGiven()
 
                 resolveYclSource(detectedOptions).use { yclSource ->
-                    val dbProducer = resolveDpmDbProducer(detectedOptions)
+                    val dbWriter = resolveDpmDbWriter(detectedOptions)
 
-                    outWriter.println("Producing DPM database from YTI Codelist sources...")
+                    diagnostic.info("Compiling DPM database from YTI Codelist sources")
 
-                    val dpmDictionaries = YclToDpmMapper().mapDpmDictionariesFromSource(yclSource)
-                    dbProducer.writeDpmDictionaries(dpmDictionaries)
+                    diagnostic.info("Mapping YTI Codelists to DPM model..")
+                    val dpmDictionaries = YclToDpmMapper().getDpmDictionariesFromSource(diagnostic, yclSource)
+
+                    if (diagnostic.counters()[Severity.ERROR] != 0) {
+                        diagnostic.info("Mapping failed due content errors")
+                        throwHalt()
+                    }
+
+                    diagnostic.info("Mapping done")
+                    diagnostic.info("Writing DPM database..")
+                    dbWriter.writeDpmDictionaries(dpmDictionaries)
+                    diagnostic.info("DPM database written: ${dbWriter.targetDbPath}")
                 }
             }
+
+            throwHalt()
         }
     }
 
@@ -80,15 +101,17 @@ class TaxgenCli(
             steps()
             TAXGEN_CLI_SUCCESS
         } catch (exception: HaltException) {
-            if (exception.errorMessage != null) {
-                errStream.println("yti-taxgen: ${exception.errorMessage}")
-                errStream.println()
-            }
+            TAXGEN_CLI_SUCCESS
+        } catch (exception: FailException) {
+            errWriter.println("yti-taxgen: ${exception.errorMessage}")
+            errWriter.println()
 
-            exception.exitCode
+            TAXGEN_CLI_FAIL
         } catch (exception: Throwable) {
-            exception.printStackTrace(errStream)
-            errStream.println()
+            errWriter.println("yti-taxgen:")
+            exception.printStackTrace(errWriter)
+            errWriter.println()
+
             TAXGEN_CLI_FAIL
         }
     }
@@ -96,7 +119,7 @@ class TaxgenCli(
     private fun resolveYclSource(detectedOptions: DetectedOptions): YclSource {
         if (detectedOptions.sourceConfigFile != null) {
             return YclSourceApiAdapter(
-                configFilePath = detectedOptions.sourceConfigFile
+                configPath = detectedOptions.sourceConfigFile
             )
         }
 
@@ -139,11 +162,11 @@ class TaxgenCli(
         thisShouldNeverHappen("No suitable source recorder given")
     }
 
-    private fun resolveDpmDbProducer(
+    private fun resolveDpmDbWriter(
         detectedOptions: DetectedOptions
     ): DpmDbWriter {
         return DpmDbWriter(
-            targetDbPath = detectedOptions.cmdProduceDpmDb!!,
+            targetDbPath = detectedOptions.cmdCompileDpmDb!!,
             forceOverwrite = detectedOptions.forceOverwrite
         )
     }

@@ -2,13 +2,16 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.JacksonObjectMapper
+import fi.vm.yti.taxgen.commons.datavalidation.Validatable
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
 
 data class Language private constructor(
     val iso6391Code: String,
     val label: TranslatedText
-) {
-    init {
+) : Validatable {
+
+    override fun validate(validationErrors: ValidationErrors) {
         validateProperty(
             instance = this,
             property = "iso6391Code",
@@ -52,13 +55,13 @@ data class Language private constructor(
         private fun resolveAllLanguages(): Set<Language> {
             val configs = loadConfigs()
 
-            val languagesWithConfigs = initLanguages(configs)
+            val languages = initLanguages(configs)
 
-            val defaultLabelLanguage = selectDefaultLabelLanguage(languagesWithConfigs.keys)
+            val defaultLabelLanguage = selectDefaultLabelLanguage(languages.keys)
 
-            setupLabels(languagesWithConfigs, defaultLabelLanguage)
+            configureLanguageLabels(languages, defaultLabelLanguage)
 
-            return languagesWithConfigs.keys
+            return languages.keys
         }
 
         private fun loadConfigs(): List<LanguageConfig> {
@@ -68,29 +71,29 @@ data class Language private constructor(
         }
 
         private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> {
-            val languagesWithConfigs = configs
+            val languages = configs
                 .sortedBy { it.iso6391Code }
-                .map { Pair(emptyLanguage(it.iso6391Code), it) }
+                .map { Pair(initLanguage(it.iso6391Code), it) }
                 .toMap()
 
-            return languagesWithConfigs
+            return languages
         }
 
-        private fun setupLabels(
-            languagesWithConfigs: Map<Language, LanguageConfig>,
+        private fun configureLanguageLabels(
+            languages: Map<Language, LanguageConfig>,
             defaultLabelLanguage: Language
         ) {
-            val languages = languagesWithConfigs.keys
+            val languageSet = languages.keys
 
-            languagesWithConfigs.forEach { (language, config) ->
-                val translations = createTranslations(config, languages)
+            languages.forEach { (language, config) ->
+                val translations = resolveTranslations(config, languageSet)
 
                 (language.label.translations as MutableMap).putAll(translations)
                 language.label.defaultLanguage = defaultLabelLanguage
             }
         }
 
-        private fun createTranslations(
+        private fun resolveTranslations(
             config: LanguageConfig,
             languages: Set<Language>
         ): Map<Language, String> {
@@ -106,7 +109,7 @@ data class Language private constructor(
             return translations
         }
 
-        private fun emptyLanguage(iso6391Code: String) = Language(iso6391Code, TranslatedText(mutableMapOf()))
+        private fun initLanguage(iso6391Code: String) = Language(iso6391Code, TranslatedText(mutableMapOf()))
 
         private fun selectDefaultLabelLanguage(languages: Set<Language>): Language {
             return languages.find { it.iso6391Code == "en" }!! //TODO - handle config error of missing language

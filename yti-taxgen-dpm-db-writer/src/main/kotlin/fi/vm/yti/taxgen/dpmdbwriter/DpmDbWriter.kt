@@ -15,7 +15,7 @@ class DpmDbWriter(
     targetDbPath: Path,
     private val forceOverwrite: Boolean
 ) {
-    private val targetDbPath = targetDbPath.toAbsolutePath().normalize()
+    val targetDbPath: Path = targetDbPath.toAbsolutePath().normalize()
     private val database = initializeTargetDatabase()
     private val languageIds = DbLanguages.writeLanguages()
 

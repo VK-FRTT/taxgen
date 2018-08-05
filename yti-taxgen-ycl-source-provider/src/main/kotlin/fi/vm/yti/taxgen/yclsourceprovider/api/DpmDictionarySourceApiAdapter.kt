@@ -4,14 +4,15 @@ import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
 
 class DpmDictionarySourceApiAdapter(
+    index: Int,
     private val config: DpmDictionarySourceApiAdapterConfig
-) : DpmDictionarySource {
+) : DpmDictionarySource(index) {
 
     override fun dpmOwnerConfigData(): String {
         return config.ownerInfoData()
     }
 
     override fun yclCodelistSources(): List<YclCodelistSource> {
-        return config.codelistConfigs.map { YclCodelistSourceApiAdapter(it) }
+        return config.codelistConfigs.mapIndexed { index, config -> YclCodelistSourceApiAdapter(index, config) }
     }
 }

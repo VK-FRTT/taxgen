@@ -18,6 +18,7 @@ dependencies {
     shadowed libs.kotlinStdLib
     shadowed libs.kotlinReflect
     shadowed libs.joptSimple
+    shadowed libs.slf4jNop
 
     shadowed(project(':yti-taxgen-commons'))
     shadowed(project(':yti-taxgen-data-point-meta-model'))

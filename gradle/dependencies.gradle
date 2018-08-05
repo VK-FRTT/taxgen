@@ -8,6 +8,7 @@ ext {
             googleGuava:        "25.0-jre",
             xerialSqliteJdbc:   "3.21.0.1",
             jetbrainsExposed:   "0.10.3",
+            slf4jNop:           "1.7.25",
             jupiter:            "5.1.0",
             assertj:            "3.9.0",
             hoverflyJavaJunit5: "0.10.3"
@@ -25,6 +26,7 @@ ext {
             googleGuava:            "com.google.guava:guava:$versions.googleGuava",
             xerialSqliteJdbc:       "org.xerial:sqlite-jdbc:$versions.xerialSqliteJdbc",
             jetbrainsExposed:       "org.jetbrains.exposed:exposed:$versions.jetbrainsExposed",
+            slf4jNop:               "org.slf4j:slf4j-nop:$versions.slf4jNop",
 
             kotlinTest:             "org.jetbrains.kotlin:kotlin-test:$versions.kotlin",
             kotlinTestJunit:        "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin",

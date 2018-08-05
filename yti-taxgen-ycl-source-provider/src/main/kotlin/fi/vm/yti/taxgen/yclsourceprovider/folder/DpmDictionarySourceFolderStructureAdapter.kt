@@ -7,8 +7,9 @@ import fi.vm.yti.taxgen.yclsourceprovider.helpers.SortOps
 import java.nio.file.Path
 
 class DpmDictionarySourceFolderStructureAdapter(
+    index: Int,
     private val dpmDictionaryRootPath: Path
-) : DpmDictionarySource {
+) : DpmDictionarySource(index) {
 
     override fun dpmOwnerConfigData(): String {
         return FileOps.readTextFile(dpmDictionaryRootPath, "dpm_owner_info.json")
@@ -18,6 +19,6 @@ class DpmDictionarySourceFolderStructureAdapter(
         val paths = FileOps.listSubFoldersMatching(dpmDictionaryRootPath, "codelist_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
 
-        return sortedPaths.map { YclCodelistSourceFolderStructureAdapter(it) }
+        return sortedPaths.mapIndexed { index, path -> YclCodelistSourceFolderStructureAdapter(index, path) }
     }
 }

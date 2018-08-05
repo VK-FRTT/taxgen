@@ -8,9 +8,11 @@ import java.nio.file.Path
 
 class YclSourceFolderStructureAdapter(
     baseFolderPath: Path
-) : YclSource {
+) : YclSource() {
 
     private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
+
+    override fun topicIdentifier(): String = baseFolderPath.toString()
 
     override fun sourceInfoData(): String {
         return FileOps.readTextFile(baseFolderPath, "source_info.json")
@@ -20,7 +22,7 @@ class YclSourceFolderStructureAdapter(
         val paths = FileOps.listSubFoldersMatching(baseFolderPath, "dpmdictionary_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
 
-        return sortedPaths.map { DpmDictionarySourceFolderStructureAdapter(it) }
+        return sortedPaths.mapIndexed { index, path -> DpmDictionarySourceFolderStructureAdapter(index, path) }
     }
 
     override fun close() {}

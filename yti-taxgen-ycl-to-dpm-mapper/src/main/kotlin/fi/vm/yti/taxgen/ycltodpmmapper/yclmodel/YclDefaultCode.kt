@@ -1,5 +1,5 @@
 package fi.vm.yti.taxgen.ycltodpmmapper.yclmodel
 
-data class YclDefaultCode(
+internal data class YclDefaultCode(
     val codeValue: String?
 )

@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
+import fi.vm.yti.taxgen.commons.datavalidation.Validatable
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.ext.java.isBeforeOrEqual
 import fi.vm.yti.taxgen.commons.ext.java.isBeforeOrEqualOrUndefined
 import java.time.Instant
@@ -13,13 +15,20 @@ data class Concept(
     val label: TranslatedText,
     val description: TranslatedText,
     val owner: Owner
-) {
+) : Validatable {
+    companion object {} //ktlint-disable no-empty-class-body
+
     init {
         label.defaultLanguage = owner.defaultLanguage
         description.defaultLanguage = owner.defaultLanguage
+    }
 
-        //TODO - Make label accept only those languages which Owner defines
-        //TODO - Then validate that there is label at least with one lang
+    override fun validate(validationErrors: ValidationErrors) {
+
+        //TODO - validate timestamps not Instant.EPOCH,
+
+        //TODO - validateData label having only those languages which Owner defines
+        //TODO - Then validateData that there is label at least with one lang
 
         require(createdAt.isBeforeOrEqual(modifiedAt)) {
             "createdAt must precede modifiedAt"

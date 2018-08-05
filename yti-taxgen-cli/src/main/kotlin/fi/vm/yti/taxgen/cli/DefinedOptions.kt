@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.commons.throwFail
 import joptsimple.BuiltinHelpFormatter
 import joptsimple.OptionDescriptor
 import joptsimple.OptionException
@@ -16,7 +17,7 @@ class DefinedOptions {
     private val optionParser = OptionParser()
 
     private val cmdShowHelp: OptionSpec<Void>
-    private val cmdProduceDpmDb: OptionSpec<Path>
+    private val cmdCompileDpmDb: OptionSpec<Path>
     private val cmdCaptureYclSourcesToFolder: OptionSpec<Path>
     private val cmdCaptureYclSourcesToZip: OptionSpec<Path>
 
@@ -33,10 +34,10 @@ class DefinedOptions {
                 "show this help message"
             ).forHelp()
 
-        cmdProduceDpmDb = optionParser
+        cmdCompileDpmDb = optionParser
             .accepts(
-                "produce-dpm-db",
-                "produce DPM DB from given sources"
+                "compile-dpm-db",
+                "compile DPM DB from given sources"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
@@ -95,9 +96,9 @@ class DefinedOptions {
             val cause = exception.cause
 
             if (cause is ValueConversionException) {
-                haltWithError("Option ${exception.options().first()}: ${cause.message}")
+                throwFail("Option ${exception.options().first()}: ${cause.message}")
             } else {
-                haltWithError(exception.message)
+                throwFail("${exception.message}")
             }
         }
     }
@@ -111,12 +112,12 @@ class DefinedOptions {
         val optionSet = optionParser.parse(*args)
 
         if (!optionSet.hasOptions()) {
-            haltWithError("No options given (-h will show valid options)")
+            throwFail("No options given (-h will show valid options)")
         }
 
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
-            cmdProduceDpmDb = optionSet.valueOf(this.cmdProduceDpmDb),
+            cmdCompileDpmDb = optionSet.valueOf(this.cmdCompileDpmDb),
             cmdCaptureYclSourcesToFolder = optionSet.valueOf(this.cmdCaptureYclSourcesToFolder),
             cmdCaptureYclSourcesToZip = optionSet.valueOf(this.cmdCaptureYclSourcesToZip),
 

@@ -1,11 +1,12 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.commons.throwFail
 import java.nio.file.Path
 
 data class DetectedOptions(
     val cmdShowHelp: Boolean,
 
-    val cmdProduceDpmDb: Path?,
+    val cmdCompileDpmDb: Path?,
     val cmdCaptureYclSourcesToFolder: Path?,
     val cmdCaptureYclSourcesToZip: Path?,
 
@@ -18,13 +19,13 @@ data class DetectedOptions(
 
     fun ensureSingleCommandGiven() {
         val targetOptionCount = listOf<Any?>(
-            cmdProduceDpmDb,
+            cmdCompileDpmDb,
             cmdCaptureYclSourcesToFolder,
             cmdCaptureYclSourcesToZip
         ).count { it != null }
 
         if (targetOptionCount != 1) {
-            haltWithError("Single command with proper argument must be given")
+            throwFail("Single command with proper argument must be given")
         }
     }
 
@@ -36,7 +37,7 @@ data class DetectedOptions(
         ).count { it != null }
 
         if (sourceOptionCount != 1) {
-            haltWithError("Single source with proper argument must be given")
+            throwFail("Single source with proper argument must be given")
         }
     }
 }

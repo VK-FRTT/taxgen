@@ -10,11 +10,13 @@ import java.nio.file.Path
 
 class YclSourceZipFileAdapter(
     sourceZipPath: Path
-) : YclSource {
+) : YclSource() {
 
     private val sourceZipPath = sourceZipPath.toAbsolutePath().normalize()
     private val zipFileSystem = createSourceZipFileSystem()
     private val folderStructureAdapter = createFolderStructureAdapter()
+
+    override fun topicIdentifier(): String = sourceZipPath.toString()
 
     override fun sourceInfoData(): String = folderStructureAdapter.sourceInfoData()
 

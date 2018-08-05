@@ -1,6 +1,9 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
+import fi.vm.yti.taxgen.commons.datavalidation.Validatable
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.validateLength
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
 
 data class Owner(
     val name: String,
@@ -8,42 +11,53 @@ data class Owner(
     val prefix: String,
     val location: String,
     val copyright: String,
-    val languages: List<Language>,
+    val languages: Set<Language>,
     val defaultLanguage: Language
-) {
+) : Validatable {
 
-    init {
-        validateProperty(
+    companion object : DiagnosticTopicProvider {
+        override fun topicType(): String = "Owner"
+        override fun topicName(): String = ""
+        override fun topicIdentifier(): String = ""
+    }
+
+    override fun validate(validationErrors: ValidationErrors) {
+        validateLength(
+            validationErrors = validationErrors,
             instance = this,
-            property = "name",
+            property = Owner::name,
+            minLength = 60,
+            maxLength = 100
+        )
+
+        validateLength(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Owner::namespace,
             minLength = 2,
             maxLength = 100
         )
 
-        validateProperty(
+        validateLength(
+            validationErrors = validationErrors,
             instance = this,
-            property = "namespace",
-            minLength = 2,
-            maxLength = 100
-        )
-
-        validateProperty(
-            instance = this,
-            property = "prefix",
+            property = Owner::prefix,
             minLength = 2,
             maxLength = 50
         )
 
-        validateProperty(
+        validateLength(
+            validationErrors = validationErrors,
             instance = this,
-            property = "location",
+            property = Owner::location,
             minLength = 2,
             maxLength = 100
         )
 
-        validateProperty(
+        validateLength(
+            validationErrors = validationErrors,
             instance = this,
-            property = "languages",
+            property = Owner::languages,
             minLength = 1,
             maxLength = 50
         )
