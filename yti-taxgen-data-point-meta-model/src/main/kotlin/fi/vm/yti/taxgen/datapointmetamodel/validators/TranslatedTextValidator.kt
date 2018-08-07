@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
 import kotlin.reflect.KProperty1
 
+@Suppress("FINAL_UPPER_BOUND")
 fun <I : Validatable, P : TranslatedText> validateTranslatedText(
     validationErrors: ValidationErrors,
     instance: I,

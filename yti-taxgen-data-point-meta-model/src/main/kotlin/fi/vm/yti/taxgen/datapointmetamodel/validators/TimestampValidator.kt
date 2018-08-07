@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import java.time.Instant
 import kotlin.reflect.KProperty1
 
+@Suppress("FINAL_UPPER_BOUND")
 fun <I : Validatable, P : Instant> validateInstantLegalTimestamp(
     validationErrors: ValidationErrors,
     instance: I,
