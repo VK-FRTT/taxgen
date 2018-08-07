@@ -1,19 +1,20 @@
 package fi.vm.yti.taxgen.testcommons
 
 import fi.vm.yti.taxgen.commons.ext.kotlin.chainToString
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import org.assertj.core.api.Assertions
 
-fun assertExceptionIsNull(exception: Throwable?) {
+fun shouldBeNullException(exception: Throwable?) {
     if (exception == null) return
 
-    failTestCase(
-        "Expected no exception, but received ${exception.chainToString()}",
-        exception
+    assertFail(
+        message = "Unexpected exception with chain: ${exception.chainToString()}",
+        cause = exception
     )
 }
 
-fun failTestCase(description: String, cause: Throwable? = null): Nothing {
-    Assertions.fail(description, cause)
+fun assertFail(message: String, cause: Throwable? = null): Nothing {
+    Assertions.fail(message, cause)
 
-    throw RuntimeException("Unreachable, but needed to keep Kotlin compiler NullSafety analyzer happy")
+    thisShouldNeverHappen("Unreachable, but needed to keep Kotlin compiler happy")
 }

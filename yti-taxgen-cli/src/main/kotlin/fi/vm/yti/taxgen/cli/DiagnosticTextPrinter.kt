@@ -38,8 +38,9 @@ class DiagnosticTextPrinter(
     }
 
     override fun validationErrors(validationErrors: ValidationErrors) {
-        printNestedLine("VALIDATION ERROR")
-        //TODO
+        validationErrors.errorsInSimpleFormat().forEach {
+            message(ERROR, it)
+        }
     }
 
     private fun printTopic(topic: TopicInfo) {

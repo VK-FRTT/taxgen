@@ -4,22 +4,30 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.JacksonObjectMapper
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTranslatedText
 
-data class Language private constructor(
+class Language constructor(
     val iso6391Code: String,
     val label: TranslatedText
 ) : Validatable {
 
     override fun validate(validationErrors: ValidationErrors) {
-        validateProperty(
+        validateLength(
+            validationErrors = validationErrors,
             instance = this,
-            property = "iso6391Code",
+            property = Language::iso6391Code,
             minLength = 2,
             maxLength = 2
         )
 
-        //TODO - validate label text not blank
+        validateTranslatedText(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Language::label,
+            minTranslationLength = 5,
+            minLangCount = 1
+        )
     }
 
     override fun hashCode(): Int {

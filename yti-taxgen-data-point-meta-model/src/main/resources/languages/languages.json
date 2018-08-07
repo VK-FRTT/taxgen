@@ -1,5 +1,35 @@
 [
   {
+    "iso6391Code": "bg",
+    "label": {
+      "en": "Bulgarian"
+    }
+  },
+  {
+    "iso6391Code": "hr",
+    "label": {
+      "en": "Croatian"
+    }
+  },
+  {
+    "iso6391Code": "cs",
+    "label": {
+      "en": "Czech"
+    }
+  },
+  {
+    "iso6391Code": "da",
+    "label": {
+      "en": "Danish"
+    }
+  },
+  {
+    "iso6391Code": "nl",
+    "label": {
+      "en": "Dutch"
+    }
+  },
+  {
     "iso6391Code": "en",
     "label": {
       "en": "English",
@@ -8,11 +38,107 @@
     }
   },
   {
+    "iso6391Code": "et",
+    "label": {
+      "en": "Estonian"
+    }
+  },
+  {
     "iso6391Code": "fi",
     "label": {
       "en": "Finnish",
       "fi": "suomi",
       "sv": "finska"
+    }
+  },
+  {
+    "iso6391Code": "fr",
+    "label": {
+      "en": "French"
+    }
+  },
+  {
+    "iso6391Code": "de",
+    "label": {
+      "en": "German"
+    }
+  },
+  {
+    "iso6391Code": "el",
+    "label": {
+      "en": "Greek"
+    }
+  },
+  {
+    "iso6391Code": "hu",
+    "label": {
+      "en": "Hungarian"
+    }
+  },
+  {
+    "iso6391Code": "ga",
+    "label": {
+      "en": "Irish"
+    }
+  },
+  {
+    "iso6391Code": "it",
+    "label": {
+      "en": "Italian"
+    }
+  },
+  {
+    "iso6391Code": "lv",
+    "label": {
+      "en": "Latvian"
+    }
+  },
+  {
+    "iso6391Code": "lt",
+    "label": {
+      "en": "Lithuanian"
+    }
+  },
+  {
+    "iso6391Code": "mt",
+    "label": {
+      "en": "Maltese"
+    }
+  },
+  {
+    "iso6391Code": "pl",
+    "label": {
+      "en": "Polish"
+    }
+  },
+  {
+    "iso6391Code": "pt",
+    "label": {
+      "en": "Portuguese"
+    }
+  },
+  {
+    "iso6391Code": "ro",
+    "label": {
+      "en": "Romanian"
+    }
+  },
+  {
+    "iso6391Code": "sk",
+    "label": {
+      "en": "Slovak"
+    }
+  },
+  {
+    "iso6391Code": "sl",
+    "label": {
+      "en": "Slovenian"
+    }
+  },
+  {
+    "iso6391Code": "es",
+    "label": {
+      "en": "Spanish"
     }
   },
   {

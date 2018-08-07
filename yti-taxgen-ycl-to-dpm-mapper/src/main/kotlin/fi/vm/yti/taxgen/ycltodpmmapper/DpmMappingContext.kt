@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.JacksonObjectMapper
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
 import fi.vm.yti.taxgen.datapointmetamodel.Language
@@ -49,7 +49,7 @@ internal class DpmMappingContext private constructor(
 
         val ret = block()
 
-        val validationErrors = ValidationErrors()
+        val validationErrors = ValidationErrorCollector()
         ret.validate(validationErrors)
 
         if (validationErrors.any()) {

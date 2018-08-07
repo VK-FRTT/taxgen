@@ -20,7 +20,7 @@ object HttpOps : Closeable {
         val response = httpClient().newCall(request).execute()
 
         if (!response.isSuccessful) {
-            throw YclCodelistSourceApiAdapter.InitFailException()
+            throw YclCodelistSourceApiAdapter.InitFailException() //TODO
         }
 
         return response.body().use {

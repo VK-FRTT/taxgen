@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.datapointmetamodel.testdataframework
+package fi.vm.yti.taxgen.datapointmetamodel.datafactory
 
 class DynamicAttributeContext {
 

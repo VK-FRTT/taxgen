@@ -1,20 +1,30 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.DataDefinition
-import fi.vm.yti.taxgen.datapointmetamodel.testdataframework.dynamicAttribute
+import fi.vm.yti.taxgen.datapointmetamodel.datafactory.DataDefinition
+import fi.vm.yti.taxgen.datapointmetamodel.datafactory.dynamicAttribute
 import java.time.Instant
 import java.time.LocalDate
 
-fun dataPointMetaModelTestData(): Set<DataDefinition> {
+fun dpmTestData(): Set<DataDefinition> {
     var definitions = HashSet<DataDefinition>()
+
+    definitions.add(
+        DataDefinition(
+            kClass = Language::class,
+            attributes = mapOf(
+                "iso6391Code" to "en",
+                "label" to dynamicAttribute { it.instantiate<TranslatedText>() }
+            )
+        )
+    )
 
     definitions.add(
         DataDefinition(
             kClass = TranslatedText::class,
             attributes = mapOf(
                 "translations" to mapOf(
-                    "fi" to "foo",
-                    "en" to "bar"
+                    Language.findByIso6391Code("en") to "Something in english",
+                    Language.findByIso6391Code("fi") to "Jotakin suomeksi"
                 )
             )
         )
@@ -29,10 +39,12 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
                 "prefix" to "ns_prefix",
                 "location" to "official_location",
                 "copyright" to "Lorem ipsum",
-                "languages" to listOf(
-                    dynamicAttribute { Language.findByIso6391Code("en") },
-                    dynamicAttribute { Language.findByIso6391Code("fi") }
-                ),
+                "languages" to dynamicAttribute {
+                    setOf(
+                        Language.findByIso6391Code("en"),
+                        Language.findByIso6391Code("fi")
+                    )
+                },
                 "defaultLanguage" to dynamicAttribute { Language.findByIso6391Code("en") }
             )
         )
@@ -71,6 +83,17 @@ fun dataPointMetaModelTestData(): Set<DataDefinition> {
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "exp_dc",
                 "members" to dynamicAttribute { listOf(it.instantiate<Member>()) }
+            )
+        )
+    )
+
+
+    definitions.add(
+        DataDefinition(
+            kClass = DpmDictionary::class,
+            attributes = mapOf(
+                "owner" to dynamicAttribute { it.instantiate<Owner>() },
+                "explicitDomains" to dynamicAttribute { listOf(it.instantiate<ExplicitDomain>()) }
             )
         )
     )

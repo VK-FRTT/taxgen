@@ -35,7 +35,7 @@ class YclCodelistSourceApiAdapter(
     private fun resolveUrls(): ResolvedUrls {
         val uriResolutionData = HttpOps.getJsonData(config.uri)
         val uriResolutionJson =
-            JacksonObjectMapper.lenientObjectMapper().readTree(uriResolutionData) ?: throw InitFailException()
+            JacksonObjectMapper.lenientObjectMapper().readTree(uriResolutionData) ?: throw InitFailException() //TODO
 
         val codeListBaseUrl = uriResolutionJson.nonBlankTextOrNullAt("/url") ?: throw InitFailException()
         val codeListUrl =

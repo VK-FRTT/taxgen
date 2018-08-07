@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.datapointmetamodel.validationfw.validateProperty
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Member(
     val concept: Concept,
@@ -11,9 +11,13 @@ data class Member(
 ) : Validatable {
 
     override fun validate(validationErrors: ValidationErrors) {
-        validateProperty(
+
+        concept.validate(validationErrors)
+
+        validateLength(
+            validationErrors = validationErrors,
             instance = this,
-            property = "memberCode",
+            property = Member::memberCode,
             minLength = 2,
             maxLength = 50
         )

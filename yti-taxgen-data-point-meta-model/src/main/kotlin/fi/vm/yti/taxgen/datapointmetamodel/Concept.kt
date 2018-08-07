@@ -2,8 +2,9 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.commons.ext.java.isBeforeOrEqual
-import fi.vm.yti.taxgen.commons.ext.java.isBeforeOrEqualOrUndefined
+import fi.vm.yti.taxgen.commons.datavalidation.customValidate
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateInstantLegalTimestamp
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTranslatedText
 import java.time.Instant
 import java.time.LocalDate
 
@@ -25,24 +26,49 @@ data class Concept(
 
     override fun validate(validationErrors: ValidationErrors) {
 
-        //TODO - validate timestamps not Instant.EPOCH,
+        validateInstantLegalTimestamp(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Concept::createdAt
+        )
 
-        //TODO - validateData label having only those languages which Owner defines
-        //TODO - Then validateData that there is label at least with one lang
+        validateInstantLegalTimestamp(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Concept::modifiedAt
+        )
 
-        require(createdAt.isBeforeOrEqual(modifiedAt)) {
-            "createdAt must precede modifiedAt"
-        }
+        customValidate(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Concept::modifiedAt,
+            failIf = { modifiedAt.isBefore(createdAt) },
+            failMsg = { "is earlier than ${Concept::createdAt.name}" }
+        )
 
-        //TODO applicableFrom && applicableUntil validation logic??
-        if (applicableFrom != null) {
-            require(applicableFrom.isBeforeOrEqualOrUndefined(applicableUntil)) {
-                "applicableFrom must precede applicableUntil"
-            }
-        }
+        customValidate(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Concept::applicableUntil,
+            failIf = { (applicableUntil != null) && (applicableFrom != null) && applicableUntil.isBefore(applicableFrom) },
+            failMsg = { "is earlier than ${Concept::applicableFrom.name}" }
+        )
 
-        require(!label.translations.isEmpty()) {
-            "label must contain at least one translation"
-        }
+        validateTranslatedText(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Concept::label,
+            minTranslationLength = 5,
+            minLangCount = 1,
+            acceptedLanguages = owner.languages
+        )
+
+        validateTranslatedText(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Concept::description,
+            minTranslationLength = 5,
+            acceptedLanguages = owner.languages
+        )
     }
 }

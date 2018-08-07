@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.datapointmetamodel.testdataframework
+package fi.vm.yti.taxgen.datapointmetamodel.datafactory
 
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
@@ -16,7 +16,7 @@ class Factory {
 
         fun definitionFor(kClass: KClass<*>): DataDefinition {
             return this.definitions.find { it.kClass == kClass }
-                    ?: throw NoSuchElementException("No test data definition found for: ${kClass.simpleName}")
+                ?: throw NoSuchElementException("No test data definition found for: ${kClass.simpleName}")
         }
     }
 
@@ -44,13 +44,13 @@ class Factory {
 
             definedAttributes.forEach { (key, value) ->
                 outgoingAttributes[key] =
-                        if (overrideAttributes?.containsKey(key) == true) {
-                            overrideAttributes[key]
-                        } else if (value is DynamicAttributeDefinition) {
-                            value.valueMaker.invoke(this.dynamicAttributeContext)
-                        } else {
-                            value
-                        }
+                    if (overrideAttributes?.containsKey(key) == true) {
+                        overrideAttributes[key]
+                    } else if (value is DynamicAttributeDefinition) {
+                        value.valueMaker.invoke(this.dynamicAttributeContext)
+                    } else {
+                        value
+                    }
             }
 
             return outgoingAttributes
@@ -77,7 +77,7 @@ class Factory {
 
         private fun primaryConstructorFrom(kClass: KClass<*>): KFunction<*> {
             return kClass.primaryConstructor
-                    ?: throw UnsupportedOperationException("No primary constructor for ${kClass.qualifiedName}")
+                ?: throw UnsupportedOperationException("No primary constructor for ${kClass.qualifiedName}")
         }
 
         private fun mapAttributesToFunctionParams(
@@ -95,9 +95,9 @@ class Factory {
 
             require(surplusAttributes.isEmpty() && missingAttributes.isEmpty()) {
                 "Provided attributes and function params do not match. " +
-                        "Function: $functionName, " +
-                        "Surplus attributes: $surplusAttributes, " +
-                        "Missing attributes: $missingAttributes"
+                    "Function: $functionName, " +
+                    "Surplus attributes: $surplusAttributes, " +
+                    "Missing attributes: $missingAttributes"
             }
 
             return parameters
@@ -122,12 +122,25 @@ class Factory {
             if (attributes == null) {
                 return Builder.instantiate(
                     kClass,
-                    Builder.attributesFor(kClass, null)) as T
+                    Builder.attributesFor(kClass, null)
+                ) as T
             }
 
             return Builder.instantiate(
                 kClass,
-                attributes) as T
+                attributes
+            ) as T
+        }
+
+
+        inline fun <reified T : Any> instantiateWithOverrides(vararg overrides: Pair<String, Any?>): T {
+            val kClass = T::class
+            val attributes = Builder.attributesFor(kClass, overrides.toMap())
+
+            return Builder.instantiate(
+                kClass,
+                attributes
+            ) as T
         }
     }
 }

@@ -1,8 +1,10 @@
-package fi.vm.yti.taxgen.commons.datavalidation
+package fi.vm.yti.taxgen.datapointmetamodel.validators
 
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import kotlin.reflect.KProperty1
 
-fun <T : Validatable, P : Any> validateLength(
+fun <T : Any, P : Any> validateLength(
     validationErrors: ValidationErrors,
     instance: T,
     property: KProperty1<T, P>,
@@ -19,7 +21,7 @@ fun <T : Validatable, P : Any> validateLength(
     }
 }
 
-private fun <T : Validatable, P : Any> minLength(
+private fun <T : Any, P : Any> minLength(
     validationErrors: ValidationErrors,
     instance: T,
     property: KProperty1<T, P>,
@@ -40,11 +42,16 @@ private fun <T : Validatable, P : Any> minLength(
             }
         }
 
-        else -> unsupportedValidationDataType("minLength", value, instance, property)
+        else -> unsupportedTargetDataType(
+            "minLength",
+            value,
+            instance,
+            property
+        )
     }
 }
 
-private fun <T : Validatable, P : Any> maxLength(
+private fun <T : Any, P : Any> maxLength(
     validationErrors: ValidationErrors,
     instance: T,
     property: KProperty1<T, P>,
@@ -65,6 +72,22 @@ private fun <T : Validatable, P : Any> maxLength(
             }
         }
 
-        else -> unsupportedValidationDataType("maxLength", value, instance, property)
+        else -> unsupportedTargetDataType(
+            "maxLength",
+            value,
+            instance,
+            property
+        )
     }
+}
+
+private fun <T : Any, P : Any> unsupportedTargetDataType(
+    validatorName: String,
+    value: P,
+    instance: T,
+    property: KProperty1<T, P>
+) {
+    thisShouldNeverHappen(
+        "$validatorName: Unsupported data type ${value::class.simpleName} for ${instance.javaClass.simpleName}::${property.name}"
+    )
 }

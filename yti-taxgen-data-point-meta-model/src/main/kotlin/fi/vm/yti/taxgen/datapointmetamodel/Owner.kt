@@ -2,8 +2,9 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.commons.datavalidation.validateLength
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableElementsUnique
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Owner(
     val name: String,
@@ -22,11 +23,12 @@ data class Owner(
     }
 
     override fun validate(validationErrors: ValidationErrors) {
+
         validateLength(
             validationErrors = validationErrors,
             instance = this,
             property = Owner::name,
-            minLength = 60,
+            minLength = 2,
             maxLength = 100
         )
 
@@ -57,9 +59,24 @@ data class Owner(
         validateLength(
             validationErrors = validationErrors,
             instance = this,
+            property = Owner::copyright,
+            minLength = 2,
+            maxLength = 1000
+        )
+
+        validateLength(
+            validationErrors = validationErrors,
+            instance = this,
             property = Owner::languages,
             minLength = 1,
-            maxLength = 50
+            maxLength = 10
+        )
+
+        validateIterableElementsUnique(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Owner::languages,
+            keySelector = { it.iso6391Code }
         )
     }
 }
