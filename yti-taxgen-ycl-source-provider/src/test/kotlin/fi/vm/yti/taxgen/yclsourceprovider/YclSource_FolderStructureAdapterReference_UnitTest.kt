@@ -6,19 +6,21 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 import java.nio.file.Paths
 
 @DisplayName("when ycl sources are read from reference folder structure")
 internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_UnitTestBase() {
 
     private lateinit var yclSource: YclSource
+    private lateinit var resourcePath: Path
 
     @BeforeEach
     fun init() {
         val classLoader = Thread.currentThread().contextClassLoader
         val resourceUri =
             classLoader.getResource("folder_structure_adapter_reference").toURI()
-        val resourcePath = Paths.get(resourceUri)
+        resourcePath = Paths.get(resourceUri)
         yclSource = YclSourceFolderStructureAdapter(resourcePath)
     }
 
@@ -34,6 +36,13 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
         assertThat(infoJson.isObject).isTrue()
         assertThat(infoJson.get("marker") as Any).isNotNull()
         assertThat(infoJson.get("marker").textValue()).isEqualTo("folder_structure_adapter_reference/source_info")
+    }
+
+    @Test
+    fun `Should have diagnostic topic info about yclsource @ root`() {
+        assertThat(yclSource.topicType()).isEqualTo("YCL Source")
+        assertThat(yclSource.topicName()).isEqualTo("")
+        assertThat(yclSource.topicIdentifier()).isEqualTo(resourcePath.toString())
     }
 
     @Test
@@ -62,6 +71,17 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
+    fun `Should have diagnostic topic info about dpmdictionary @ root # dpmdictionary`() {
+        val dpmDictionarySources = yclSource.dpmDictionarySources()
+        assertThat(dpmDictionarySources.size).isEqualTo(12)
+
+        assertThat(dpmDictionarySources[0].topicType()).isEqualTo("DPM Dictionary")
+        assertThat(dpmDictionarySources[0].topicName()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].topicIdentifier()).isEqualTo("#0")
+        assertThat(dpmDictionarySources[11].topicIdentifier()).isEqualTo("#11")
+    }
+
+    @Test
     fun `Should have codelists @ root # dpmdictionary # codelist`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
@@ -84,6 +104,17 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
             "dpmdictionary_0/codelist_10/ycl_codescheme",
             "dpmdictionary_0/codelist_11/ycl_codescheme"
         )
+    }
+
+    @Test
+    fun `Should have diagnostic topic info about codelist @ root # dpmdictionary # codelist`() {
+        val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
+        assertThat(codeLists.size).isEqualTo(12)
+
+        assertThat(codeLists[0].topicType()).isEqualTo("Codelist")
+        assertThat(codeLists[0].topicName()).isEqualTo("")
+        assertThat(codeLists[0].topicIdentifier()).isEqualTo("#0")
+        assertThat(codeLists[11].topicIdentifier()).isEqualTo("#11")
     }
 
     @Test

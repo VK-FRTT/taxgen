@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.testcommons
 import java.io.Closeable
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 
 class TempFolder(discriminator: String) : Closeable {
 
@@ -59,5 +60,11 @@ class TempFolder(discriminator: String) : Closeable {
         Files.copy(sourceFilePath, targetFilePath)
 
         return targetFilePath
+    }
+
+    fun createFileWithContent(filename: String, content: String): Path {
+        val filepath = rootPath.resolve(filename)
+        Files.write(filepath, content.toByteArray(), StandardOpenOption.CREATE_NEW)
+        return filepath
     }
 }

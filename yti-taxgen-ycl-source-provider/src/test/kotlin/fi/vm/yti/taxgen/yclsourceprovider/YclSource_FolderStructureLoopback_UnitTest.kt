@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
+import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureRecorder
 import org.assertj.core.api.Assertions.assertThat
@@ -7,39 +8,32 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.Comparator
 
 @DisplayName("When ycl sources are recorded to folder and then read back")
 internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBase() {
 
-    private lateinit var targetFolderPath: Path
+    private lateinit var tempFolder: TempFolder
     private lateinit var yclSource: YclSource
 
     @BeforeEach
     fun init() {
-        targetFolderPath = Files.createTempDirectory("folder_structure_loopback")
+        tempFolder = TempFolder("yclsource_folder_structure_loopback")
 
         YclSourceFolderStructureRecorder(
-            baseFolderPath = targetFolderPath,
+            baseFolderPath = tempFolder.path(),
             yclSource = FixedYclSource(),
             forceOverwrite = false
         ).use {
             it.capture()
         }
 
-        yclSource = YclSourceFolderStructureAdapter(targetFolderPath)
+        yclSource = YclSourceFolderStructureAdapter(tempFolder.path())
     }
 
     @AfterEach
     fun teardown() {
         yclSource.close()
-
-        Files
-            .walk(targetFolderPath)
-            .sorted(Comparator.reverseOrder())
-            .forEach { Files.deleteIfExists(it) }
+        tempFolder.close()
     }
 
     @Test

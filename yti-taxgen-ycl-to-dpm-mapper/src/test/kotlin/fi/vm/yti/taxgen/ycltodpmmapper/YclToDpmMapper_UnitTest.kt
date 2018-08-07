@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
@@ -14,20 +16,29 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
-@DisplayName("When YCL sources are mapped to DPM model")
+@DisplayName("Mapping YCL sources to DPM model")
 internal class YclToDpmMapper_UnitTest {
 
     private lateinit var yclSource: YclSource
     private val yclToDpmMapper = YclToDpmMapper()
+    private val diagnosticCapture = DiagnosticCapture()
+    private val diagnostic = Diagnostic(diagnosticCapture)
 
     @AfterEach
     fun teardown() {
         yclSource.close()
     }
 
+    fun performMapping(): List<DpmDictionary> {
+        return yclToDpmMapper.getDpmDictionariesFromSource(
+            diagnostic = diagnostic,
+            yclSource = yclSource
+        )
+    }
+
     @Nested
-    @DisplayName("and single comprehensive YCL source is used")
-    inner class SingleSourceElements {
+    @DisplayName("from single comprehensive source")
+    inner class SingleComprehensiveSource {
 
         private lateinit var en: Language
         private lateinit var fi: Language
@@ -44,34 +55,34 @@ internal class YclToDpmMapper_UnitTest {
 
         @Test
         fun `Mapping result should have 1 DPM Dictionary`() {
-            val dpmDictionaries = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)
+            val dpmDictionaries = performMapping()
 
             assertThat(dpmDictionaries.size).isEqualTo(1)
         }
 
         @Test
         fun `DPM Dictionary should have correct Owner`() {
-            val owner = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].owner
+            val owner = performMapping()[0].owner
 
             assertThat(owner.name).isEqualTo("SingleComprehensiveTree_Name")
             assertThat(owner.namespace).isEqualTo("SingleComprehensiveTree_Namespace")
             assertThat(owner.prefix).isEqualTo("sct_prefix")
             assertThat(owner.location).isEqualTo("SingleComprehensiveTree_Location")
             assertThat(owner.copyright).isEqualTo("SingleComprehensiveTree_Copyright")
-            assertThat(owner.languages).isEqualTo(listOf(en, fi, sv))
+            assertThat(owner.languages).isEqualTo(hashSetOf(en, fi, sv))
             assertThat(owner.defaultLanguage).isEqualTo(en)
         }
 
         @Test
         fun `DPM Dictionary should have 1 Explicit Domain`() {
-            val dpmDictionary = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0]
+            val dpmDictionary = performMapping()[0]
 
             assertThat(dpmDictionary.explicitDomains.size).isEqualTo(1)
         }
 
         @Test
         fun `Explicit Domain should have correct Concept`() {
-            val concept = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].concept
+            val concept = performMapping()[0].explicitDomains[0].concept
 
             assertThat(concept.createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.664Z"))
             assertThat(concept.modifiedAt).isEqualTo(Instant.parse("2018-06-26T14:54:37.664Z"))
@@ -93,21 +104,21 @@ internal class YclToDpmMapper_UnitTest {
 
         @Test
         fun `Explicit Domain should have correct DomainCode`() {
-            val domainCode = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].domainCode
+            val domainCode = performMapping()[0].explicitDomains[0].domainCode
 
             assertThat(domainCode).isEqualTo("tf_comprehensive_codelist")
         }
 
         @Test
         fun `Explicit Domain should have 3 Members`() {
-            val members = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].members
+            val members = performMapping()[0].explicitDomains[0].members
 
             assertThat(members.size).isEqualTo(3)
         }
 
         @Test
         fun `1st Member should have correct Concept, MemberCode and DefaultCode values`() {
-            val member = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].members[0]
+            val member = performMapping()[0].explicitDomains[0].members[0]
 
             member.concept.apply {
                 assertThat(createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.689Z"))
@@ -136,7 +147,7 @@ internal class YclToDpmMapper_UnitTest {
 
         @Test
         fun `2nd Member should have correct Concept, MemberCode and DefaultCode values`() {
-            val member = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].members[1]
+            val member = performMapping()[0].explicitDomains[0].members[1]
 
             member.concept.apply {
                 assertThat(createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.706Z"))
@@ -164,7 +175,7 @@ internal class YclToDpmMapper_UnitTest {
 
         @Test
         fun `3rd Member should have correct Concept, MemberCode and DefaultCode values`() {
-            val member = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].members[2]
+            val member = performMapping()[0].explicitDomains[0].members[2]
 
             member.concept.apply {
                 assertThat(createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.723Z"))
@@ -191,10 +202,10 @@ internal class YclToDpmMapper_UnitTest {
         }
     }
 
-    @Nested
-    @DisplayName("and source has three DPM dictionaries")
     @Disabled
-    inner class ThreeDpmDictionaries {
+    @Nested
+    @DisplayName("from three DpmDictionaries source")
+    inner class ThreeDpmDictionariesSource {
 
         @BeforeEach
         fun init() {
@@ -203,33 +214,33 @@ internal class YclToDpmMapper_UnitTest {
 
         @Test
         fun `Mapping result should have 3 DPM Dictionaries`() {
-            val dpmDictionaries = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)
+            val dpmDictionaries = performMapping()
             assertThat(dpmDictionaries.size).isEqualTo(3)
         }
 
         @Test
         fun `1st DPM Dictionary should have correct Owner`() {
-            val owner = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].owner
+            val owner = performMapping()[0].owner
             assertThat(owner.name).isEqualTo("ThreeDpmDictionaries_0_Name")
         }
 
         @Test
         fun `2nd DPM Dictionary should have correct Owner`() {
-            val owner = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[1].owner
+            val owner = performMapping()[1].owner
             assertThat(owner.name).isEqualTo("ThreeDpmDictionaries_1_Name")
         }
 
         @Test
         fun `3rd DPM Dictionary should have correct Owner`() {
-            val owner = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[2].owner
+            val owner = performMapping()[2].owner
             assertThat(owner.name).isEqualTo("ThreeDpmDictionaries_2_Name")
         }
     }
 
-    @Nested
-    @DisplayName("and source has disordered codepages")
     @Disabled
-    inner class ThreeYclCodePages {
+    @Nested
+    @DisplayName("from disordered codepages source")
+    inner class DisorderedCodepagesSource {
 
         @BeforeEach
         fun init() {
@@ -238,19 +249,79 @@ internal class YclToDpmMapper_UnitTest {
 
         @Test
         fun `Dictionary should have correct Owner`() {
-            val owner = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].owner
+            val owner = performMapping()[0].owner
             assertThat(owner.name).isEqualTo("DisorderedYclCodepages_Name")
         }
 
         @Test
         fun `Explicit Domain should have 6 Members`() {
-            val members = yclToDpmMapper.mapDpmDictionariesFromSource(yclSource)[0].explicitDomains[0].members
+            val members = performMapping()[0].explicitDomains[0].members
 
             assertThat(members.size).isEqualTo(6)
         }
 
         @Test
         fun `Members should be in correct order`() {
+        }
+    }
+
+    @Disabled
+    @Nested
+    @DisplayName("from invalid owner data source")
+    inner class InvalidOwnerDataSource {
+
+        @Test
+        fun `Broken Owner Info JSON should cause mapping error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/owner_info_json_broken")
+            performMapping()
+        }
+
+        @Test
+        fun `Missing Owner name should cause validation error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/owner_name_missing")
+            performMapping()
+        }
+
+        @Test
+        fun `Unsupported Owner language should cause mapping error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/owner_language_unsupported")
+            performMapping()
+        }
+
+        @Test
+        fun `Empty Owner name should cause data validation error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/owner_name_empty")
+            performMapping()
+        }
+    }
+
+    @Disabled
+    @Nested
+    @DisplayName("with invalid YCL CodeScheme data source")
+    inner class InvalidYclCodeSchemeDataSource {
+
+        @Test
+        fun `Broken CodeScheme JSON should cause mapping error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/codescheme_json_broken")
+            performMapping()
+        }
+
+        @Test
+        fun `Missing default code should cause data validation error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/codescheme_missing_default_code")
+            performMapping()
+        }
+    }
+
+    @Disabled
+    @Nested
+    @DisplayName("with invalid YCL CodesPage data source")
+    inner class InvalidYclCodesPageDataSource {
+
+        @Test
+        fun `Broken CodesPage JSON should cause mapping error`() {
+            yclSource = createYclSourceFromTestFixture("invalid/")
+            performMapping()
         }
     }
 

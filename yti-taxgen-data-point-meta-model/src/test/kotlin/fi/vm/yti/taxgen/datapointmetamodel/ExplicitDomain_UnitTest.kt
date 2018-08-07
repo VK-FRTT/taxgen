@@ -58,7 +58,6 @@ internal class ExplicitDomain_UnitTest :
         )
     }
 
-
     @Nested
     inner class ConceptProp {
 
@@ -75,7 +74,6 @@ internal class ExplicitDomain_UnitTest :
                 .containsExactly("Concept.label: has too few translations (minimum 1)")
         }
     }
-
 
     @Nested
     inner class MembersProp {
@@ -141,4 +139,3 @@ internal class ExplicitDomain_UnitTest :
         }
     }
 }
-

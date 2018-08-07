@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-@DisplayName("Command ´--produce-dpm-db´")
+@DisplayName("Command ´--compile-dpm-db´")
 internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
-    primaryCommand = "--produce-dpm-db"
+    primaryCommand = "--compile-dpm-db"
 ) {
 
     private lateinit var targetDbPath: Path
@@ -22,7 +22,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should produce database from YCL source capture`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$yclSourceCapturePath"
@@ -31,7 +31,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Producing DPM database")
+        assertThat(outText).containsSubsequence("Compiling DPM database")
 
         assertThat(targetDbPath).exists().isRegularFile()
 
@@ -43,7 +43,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath",
             "--force-overwrite",
             "--source-folder",
@@ -53,7 +53,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Producing DPM database")
+        assertThat(outText).containsSubsequence("Compiling DPM database")
 
         assertThat(targetDbPath).exists().isRegularFile()
 
@@ -63,7 +63,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when target database filename is not given`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "--source-folder",
             "$yclSourceCapturePath"
         )
@@ -83,7 +83,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$yclSourceCapturePath"
@@ -102,7 +102,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when given target database path points to folder`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "${tempFolder.path()}",
             "--source-folder",
             "$yclSourceCapturePath"
@@ -119,7 +119,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath"
         )
 
@@ -137,7 +137,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder"
         )
@@ -156,7 +156,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "${tempFolder.resolve("non_existing_folder")}"
@@ -176,7 +176,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$yclSourceCapturePath",

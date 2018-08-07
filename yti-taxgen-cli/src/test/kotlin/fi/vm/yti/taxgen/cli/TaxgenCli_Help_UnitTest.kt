@@ -18,7 +18,7 @@ internal class TaxgenCli_Help_UnitTest : TaxgenCli_UnitTestBase(
 
         assertThat(outText).containsSubsequence(
             "--help",
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "--capture-ycl-sources-to-folder",
             "--capture-ycl-sources-to-zip",
             "--force-overwrite",

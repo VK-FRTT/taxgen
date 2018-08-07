@@ -35,7 +35,6 @@ internal class Concept_UnitTest :
         )
     }
 
-
     @Nested
     inner class CreatedAtProp {
 
@@ -88,7 +87,6 @@ internal class Concept_UnitTest :
             assertThat(validationErrors).isEmpty()
         }
     }
-
 
     @Nested
     inner class ApplicableUntilProp {
@@ -171,7 +169,6 @@ internal class Concept_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly("Concept.label: has too few translations (minimum 1)")
         }
-
 
         @Test
         fun `label should error with 4 characters long translation`() {

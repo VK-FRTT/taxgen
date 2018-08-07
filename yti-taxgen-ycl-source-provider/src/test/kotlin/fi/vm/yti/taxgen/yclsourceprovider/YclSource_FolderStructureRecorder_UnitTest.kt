@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
+import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureRecorder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -8,8 +9,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
-import java.nio.file.Path
-import java.util.Comparator
 
 @DisplayName("when ycl sources are recorded to folder structure")
 internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBase() {
@@ -18,14 +17,14 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
     @DisplayName("which is empty")
     inner class EmptyTargetFolder {
 
-        private lateinit var targetFolderPath: Path
+        private lateinit var tempFolder: TempFolder
 
         @BeforeEach
         fun init() {
-            targetFolderPath = Files.createTempDirectory("folder_structure_recorder_blank")
+            tempFolder = TempFolder("yclsource_folder_structure_recorder_blank")
 
             YclSourceFolderStructureRecorder(
-                baseFolderPath = targetFolderPath,
+                baseFolderPath = tempFolder.path(),
                 yclSource = FixedYclSource(),
                 forceOverwrite = false
             ).use {
@@ -35,10 +34,7 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
 
         @AfterEach
         fun teardown() {
-            Files
-                .walk(targetFolderPath)
-                .sorted(Comparator.reverseOrder())
-                .forEach { Files.deleteIfExists(it) }
+            tempFolder.close()
         }
 
         @Test
@@ -89,7 +85,7 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         private fun assertTargetFolderHavingJsonFile(expectedFile: String, expectedMarker: String) {
-            val expectedFilePath = targetFolderPath.resolve(expectedFile)
+            val expectedFilePath = tempFolder.resolve(expectedFile)
             assertThat(Files.isRegularFile(expectedFilePath)).isTrue()
 
             val json = objectMapper.readTree(expectedFilePath.toFile())

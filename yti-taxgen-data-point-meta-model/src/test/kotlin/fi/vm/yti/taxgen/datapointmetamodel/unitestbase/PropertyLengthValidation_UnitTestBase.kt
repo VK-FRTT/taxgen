@@ -60,7 +60,6 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     valid.validate(validCollector)
     assertThat(validCollector.errorsInSimpleFormat()).isEmpty()
 
-
     //Invalid value
     val invalidAttributes = Factory.Builder.attributesFor(kClass, mapOf(propertyName to invalidValue))
     val invalid = Factory.Builder.instantiate(kClass, invalidAttributes) as Validatable
@@ -71,7 +70,6 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     val message = messageComposer(invalid.javaClass.simpleName)
     assertThat(invalidCollector.errorsInSimpleFormat()).containsOnlyOnce(message)
 }
-
 
 private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringValueForProperty(
     propertyName: String,

@@ -89,4 +89,15 @@ internal class Owner_UnitTest :
             ).containsExactlyInAnyOrderElementsOf(listOf("fi", "sv"))
         }
     }
+
+    @Nested
+    inner class CompanionObject {
+
+        @Test
+        fun `companion should provide diagnostic topic info about owner`() {
+            assertThat(Owner.Companion.topicType()).isEqualTo("Owner")
+            assertThat(Owner.Companion.topicName()).isEqualTo("")
+            assertThat(Owner.Companion.topicIdentifier()).isEqualTo("")
+        }
+    }
 }

@@ -87,7 +87,6 @@ fun dpmTestData(): Set<DataDefinition> {
         )
     )
 
-
     definitions.add(
         DataDefinition(
             kClass = DpmDictionary::class,

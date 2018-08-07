@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
+import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 import io.specto.hoverfly.junit.core.Hoverfly
@@ -21,12 +21,16 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.nio.file.Path
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @DisplayName("when ycl sources are read from simulated YCL API")
 @ExtendWith(HoverflyExtension::class)
 internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hoverfly) : YclSource_UnitTestBase() {
+
+    private lateinit var tempFolder: TempFolder
+    private lateinit var configFilePath: Path
 
     @Nested
     @DisplayName("providing successful responses")
@@ -36,6 +40,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
         @BeforeEach
         fun init() {
+            tempFolder = TempFolder("yclsource_apiadapter_unittest")
+
             hoverflyCustomiseHttpClientTrust()
             hoverflyConfigureSimulation()
 
@@ -48,11 +54,11 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                   "dpmDictionaries": [
                     {
                       "owner": {
-                        "name": "the name",
-                        "namespace": "the namespace",
-                        "prefix": "the prefix",
-                        "location": "the location",
-                        "copyright": "the copyright",
+                        "name": "OwnerName",
+                        "namespace": "OwnerNamespace",
+                        "prefix": "OwnerPrefix",
+                        "location": "OwnerLocation",
+                        "copyright": "OwnerCopyright",
                         "languages": [
                           "en",
                           "fi"
@@ -72,12 +78,14 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 }
                 """.trimIndent()
 
-            yclSource = YclSourceApiAdapter(configData = yclSourceConfig)
+            configFilePath = tempFolder.createFileWithContent("ycl_source_config.json", yclSourceConfig)
+            yclSource = YclSourceApiAdapter(configFilePath)
         }
 
         @AfterEach
         fun teardown() {
             yclSource.close()
+            tempFolder.close()
         }
 
         @Test
@@ -90,6 +98,13 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
+        fun `Should have diagnostic topic info about yclsource @ root`() {
+            assertThat(yclSource.topicType()).isEqualTo("YCL Source")
+            assertThat(yclSource.topicName()).isEqualTo("")
+            assertThat(yclSource.topicIdentifier()).isEqualTo(configFilePath.toString())
+        }
+
+        @Test
         fun `Should have owner config @ root # dpmdictionary`() {
             val dpmDictionarySources = yclSource.dpmDictionarySources()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
@@ -98,18 +113,24 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 yclSource.dpmDictionarySources()[0].dpmOwnerConfigData()
             )
 
-            assertThat(ownerConfig.name).isEqualTo("the name")
-            assertThat(ownerConfig.namespace).isEqualTo("the namespace")
-            assertThat(ownerConfig.prefix).isEqualTo("the prefix")
-            assertThat(ownerConfig.location).isEqualTo("the location")
-            assertThat(ownerConfig.copyright).isEqualTo("the copyright")
-            assertThat(ownerConfig.languages[0]).isEqualTo("en")
-            assertThat(ownerConfig.languages[1]).isEqualTo("fi")
+            assertThat(ownerConfig.name).isEqualTo("OwnerName")
+            assertThat(ownerConfig.namespace).isEqualTo("OwnerNamespace")
+            assertThat(ownerConfig.prefix).isEqualTo("OwnerPrefix")
+            assertThat(ownerConfig.location).isEqualTo("OwnerLocation")
+            assertThat(ownerConfig.copyright).isEqualTo("OwnerCopyright")
+            assertThat(ownerConfig.languages!![0]).isEqualTo("en")
+            assertThat(ownerConfig.languages!![1]).isEqualTo("fi")
             assertThat(ownerConfig.defaultLanguage).isEqualTo("en")
+        }
 
-            val owner = ownerConfig.toOwner()
-            assertThat(owner.languages[0]).isEqualTo(Language.findByIso6391Code("en"))
-            assertThat(owner.defaultLanguage).isEqualTo(Language.findByIso6391Code("en"))
+        @Test
+        fun `Should have diagnostic topic info about dpmdictionary @ root # dpmdictionary`() {
+            val dpmDictionarySources = yclSource.dpmDictionarySources()
+            assertThat(dpmDictionarySources.size).isEqualTo(1)
+
+            assertThat(dpmDictionarySources[0].topicType()).isEqualTo("DPM Dictionary")
+            assertThat(dpmDictionarySources[0].topicName()).isEqualTo("")
+            assertThat(dpmDictionarySources[0].topicIdentifier()).isEqualTo("#0")
         }
 
         @Test
@@ -125,6 +146,16 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 "simulated_codelist_0",
                 "simulated_codelist_1"
             )
+        }
+
+        @Test
+        fun `Should have diagnostic topic info about codelist @ root # dpmdictionary # codelist`() {
+            val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
+            assertThat(codeLists.size).isEqualTo(2)
+
+            assertThat(codeLists[0].topicType()).isEqualTo("Codelist")
+            assertThat(codeLists[0].topicName()).isEqualTo("")
+            assertThat(codeLists[0].topicIdentifier()).isEqualTo("#0")
         }
 
         @Test

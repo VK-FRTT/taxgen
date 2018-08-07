@@ -31,7 +31,7 @@ internal class TaxgenCli_Common_UnitTest : TaxgenCli_UnitTestBase(
     @Test
     fun `Should fail when multiple commands with valid arguments are given`() {
         val args = arrayOf(
-            "--produce-dpm-db",
+            "--compile-dpm-db",
             "${tempFolder.resolve("output_dpm.db")}",
             "--capture-ycl-sources-to-folder",
             "${tempFolder.resolve("output_ycl_capture")}"
