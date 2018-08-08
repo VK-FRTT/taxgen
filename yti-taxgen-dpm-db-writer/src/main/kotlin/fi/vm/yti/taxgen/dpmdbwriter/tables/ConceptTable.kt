@@ -47,9 +47,9 @@ object ConceptTable : IntIdTable("mConcept", "ConceptID") {
 
     val ownerIdCol = reference("OwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
 
-    val creationDateCol = date("CreationDate").nullable()
-    val modificationDateCol = date("ModificationDate").nullable()
+    val creationDateCol = sqliteDateTime("CreationDate").nullable()
+    val modificationDateCol = sqliteDateTime("ModificationDate").nullable()
 
-    val fromDateCol = date("FromDate").nullable()
-    val toDateCol = date("ToDate").nullable()
+    val fromDateCol = sqliteDate("FromDate").nullable()
+    val toDateCol = sqliteDate("ToDate").nullable()
 }

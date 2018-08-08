@@ -2,6 +2,8 @@ package fi.vm.yti.taxgen.dpmdbwriter.writers
 
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.dpmdbwriter.DbWriteContext
+import fi.vm.yti.taxgen.dpmdbwriter.ext.java.toJodaDateTime
+import fi.vm.yti.taxgen.dpmdbwriter.ext.java.toJodaDateTimeOrNull
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTranslationRole
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTranslationTable
@@ -9,7 +11,6 @@ import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptType
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.joda.time.DateTime
 
 object DbConcepts {
 
@@ -28,6 +29,7 @@ object DbConcepts {
         writeContext.ownerLanguageIds().forEach { (language, languageId) ->
             val labelText = concept.label.translations[language]
 
+            //TODO - Should null labels be inserted to DB ?
             insertConceptTranslation(
                 conceptId,
                 languageId,
@@ -48,24 +50,11 @@ object DbConcepts {
         return ConceptTable.insertAndGetId {
             it[conceptTypeCol] = conceptType.value
             it[ownerIdCol] = ownerId
-            it[creationDateCol] =
-                instantToJodaDateTime(concept.createdAt)
-            it[modificationDateCol] =
-                instantToJodaDateTime(concept.modifiedAt)
-            it[fromDateCol] =
-                localDateToJodaDateTime(concept.applicableFrom)
-            it[toDateCol] =
-                localDateToJodaDateTime(concept.applicableUntil)
+            it[creationDateCol] = concept.createdAt.toJodaDateTime()
+            it[modificationDateCol] = concept.modifiedAt.toJodaDateTime()
+            it[fromDateCol] = concept.applicableFrom.toJodaDateTimeOrNull()
+            it[toDateCol] = concept.applicableUntil.toJodaDateTimeOrNull()
         }
-    }
-
-    private fun instantToJodaDateTime(instant: java.time.Instant): org.joda.time.DateTime {
-        return DateTime(instant.toEpochMilli())
-    }
-
-    private fun localDateToJodaDateTime(localDate: java.time.LocalDate?): org.joda.time.DateTime? {
-        localDate ?: return null
-        return DateTime(localDate.toEpochDay())
     }
 
     private fun insertConceptTranslation(
