@@ -161,22 +161,26 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `label should accept 1 translations`() {
-            attributeOverrides(
-                "label" to TranslatedText(emptyMap())
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors).containsExactly("Concept.label: has too few translations (minimum 1)")
-        }
-
-        @Test
-        fun `label should error with 4 characters long translation`() {
+        fun `label should succeed with 1 translation`() {
             attributeOverrides(
                 "label" to TranslatedText(
                     mapOf(
-                        language("fi") to "1234",
-                        language("en") to "1234"
+                        language("fi") to "Jotain"
+                    )
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).isEmpty()
+        }
+
+        @Test
+        fun `label should error with 1 characters long translation`() {
+            attributeOverrides(
+                "label" to TranslatedText(
+                    mapOf(
+                        language("fi") to "1",
+                        language("en") to "1"
                     )
                 )
             )
@@ -186,9 +190,9 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `label should accept 5 characters long translation`() {
+        fun `label should accept 2 characters long translation`() {
             attributeOverrides(
-                "label" to TranslatedText(mapOf(language("en") to "12345"))
+                "label" to TranslatedText(mapOf(language("en") to "12"))
             )
 
             instantiateAndValidate()
@@ -214,12 +218,12 @@ internal class Concept_UnitTest :
     @Nested
     inner class Description {
         @Test
-        fun `description should error with 4 characters long translation`() {
+        fun `description should error with 1 characters long translation`() {
             attributeOverrides(
                 "description" to TranslatedText(
                     mapOf(
-                        language("fi") to "1234",
-                        language("en") to "1234"
+                        language("fi") to "1",
+                        language("en") to "1"
                     )
                 )
             )
@@ -229,9 +233,9 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `description should accept 5 characters long translation`() {
+        fun `description should accept 2 characters long translation`() {
             attributeOverrides(
-                "description" to TranslatedText(mapOf(language("en") to "12345"))
+                "description" to TranslatedText(mapOf(language("en") to "12"))
             )
 
             instantiateAndValidate()

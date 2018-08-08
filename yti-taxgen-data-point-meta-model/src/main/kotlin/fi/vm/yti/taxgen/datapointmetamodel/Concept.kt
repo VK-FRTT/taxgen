@@ -58,7 +58,7 @@ data class Concept(
             validationErrors = validationErrors,
             instance = this,
             property = Concept::label,
-            minTranslationLength = 5,
+            minTranslationLength = 2,
             minLangCount = 1,
             acceptedLanguages = owner.languages
         )
@@ -67,7 +67,7 @@ data class Concept(
             validationErrors = validationErrors,
             instance = this,
             property = Concept::description,
-            minTranslationLength = 5,
+            minTranslationLength = 2,
             acceptedLanguages = owner.languages
         )
     }
