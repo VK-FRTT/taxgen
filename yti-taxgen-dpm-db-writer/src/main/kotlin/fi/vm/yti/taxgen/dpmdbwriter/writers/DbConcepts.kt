@@ -1,6 +1,8 @@
 package fi.vm.yti.taxgen.dpmdbwriter.writers
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
+import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.dpmdbwriter.DbWriteContext
 import fi.vm.yti.taxgen.dpmdbwriter.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.dpmdbwriter.ext.java.toJodaDateTimeOrNull
@@ -26,15 +28,13 @@ object DbConcepts {
             writeContext.ownerId
         )
 
-        writeContext.ownerLanguageIds().forEach { (language, languageId) ->
-            val labelText = concept.label.translations[language]
-
-            //TODO - Should null labels be inserted to DB ?
+        concept.label.translations.forEach { (language, text) ->
             insertConceptTranslation(
+                writeContext,
                 conceptId,
-                languageId,
                 ConceptTranslationRole.LABEL,
-                labelText
+                language,
+                text
             )
         }
 
@@ -58,11 +58,14 @@ object DbConcepts {
     }
 
     private fun insertConceptTranslation(
+        writeContext: DbWriteContext,
         conceptId: EntityID<Int>,
-        languageId: EntityID<Int>,
         role: ConceptTranslationRole,
-        text: String?
+        language: Language,
+        text: String
     ) {
+        val languageId =
+            writeContext.languageIds[language] ?: thisShouldNeverHappen("Language without DB mapping: $language")
 
         ConceptTranslationTable.insert {
             it[conceptIdCol] = conceptId

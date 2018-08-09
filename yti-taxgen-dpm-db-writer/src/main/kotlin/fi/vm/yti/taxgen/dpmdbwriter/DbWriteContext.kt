@@ -8,8 +8,4 @@ data class DbWriteContext(
     val owner: Owner,
     val ownerId: EntityID<Int>,
     val languageIds: Map<Language, EntityID<Int>>
-) {
-    private var ownerLanguageIds = owner.languages.map { Pair(it, languageIds[it]!!) }.toMap()
-
-    fun ownerLanguageIds() = ownerLanguageIds
-}
+)

@@ -18,14 +18,16 @@ internal class DpmMappingContext private constructor(
     companion object {
 
         internal fun createRootContext(diagnostic: Diagnostic): DpmMappingContext {
+            val langEn = Language.findByIso6391Code("en")!!
+
             val rootOwner = Owner(
                 name = "root",
                 namespace = "",
                 prefix = "",
                 location = "",
                 copyright = "",
-                languages = Language.allLanguages(),
-                defaultLanguage = Language.findByIso6391Code("en")!!
+                languages = setOf(langEn),
+                defaultLanguage = langEn
             )
 
             return DpmMappingContext(
