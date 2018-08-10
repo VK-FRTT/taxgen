@@ -63,6 +63,24 @@ internal class DpmMappingContext private constructor(
         return ret
     }
 
+    fun <R : Validatable> extractList(topicProvider: DiagnosticTopicProvider, block: () -> List<R>): List<R> {
+        diagnostic.topicEnter(topicProvider)
+
+        val ret = block()
+
+        val validationErrors = ValidationErrorCollector()
+
+        ret.forEach { it.validate(validationErrors) }
+
+        if (validationErrors.any()) {
+            diagnostic.validationErrors(validationErrors)
+        }
+
+        diagnostic.topicExit()
+
+        return ret
+    }
+
     internal inline fun <reified T : Any> deserializeJson(jsonContent: String): T {
         return objectMapper.readValue(jsonContent) //TODO - handle mallformed JSON
     }

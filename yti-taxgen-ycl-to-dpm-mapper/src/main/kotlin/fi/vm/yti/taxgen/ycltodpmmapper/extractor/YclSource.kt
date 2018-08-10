@@ -8,9 +8,9 @@ internal fun YclSource.extractDpmDictionaries(
     ctx: DpmMappingContext
 ): List<DpmDictionary> {
 
-    //return ctx.extract(this) { //TODO
-    return dpmDictionarySources().map { dictionarySource ->
-        dictionarySource.extractDpmDictionary(ctx)
+    return ctx.extractList(this) {
+        dpmDictionarySources().map { dictionarySource ->
+            dictionarySource.extractDpmDictionary(ctx)
+        }
     }
-    //}
 }

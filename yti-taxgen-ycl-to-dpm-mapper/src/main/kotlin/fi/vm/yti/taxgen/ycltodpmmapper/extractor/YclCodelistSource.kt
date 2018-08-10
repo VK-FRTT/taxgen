@@ -61,7 +61,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
     return ctx.extract(this) {
 
         val domainDetails = extractDomainDetails()
-        ctx.diagnostic.tryUpdateTopicName(domainDetails.domainCode)
+        ctx.diagnostic.updateCurrentTopicName(domainDetails.domainCode)
 
         val members = extractMembers(domainDetails.defaultMemberCode)
 

@@ -25,14 +25,14 @@ class DiagnosticTextPrinter(
         level = topicStack.size
     }
 
-    override fun topTopicNameUpdated(topicStack: List<TopicInfo>, originalTopic: TopicInfo) {
+    override fun topmostTopicNameUpdate(topicStack: List<TopicInfo>, originalTopic: TopicInfo) {
         val topic = topicStack.first()
         printTopic(topic)
     }
 
     override fun message(severity: Severity, message: String) {
         when (severity) {
-            FATAL, ERROR -> printNestedLine("$severity: $message")
+            FATAL, ERROR -> printNestedLine("  $severity: $message")
             else -> printNestedLine(message)
         }
     }

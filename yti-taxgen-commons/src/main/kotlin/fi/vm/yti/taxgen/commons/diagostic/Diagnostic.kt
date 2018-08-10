@@ -30,7 +30,7 @@ class Diagnostic(
         consumer.topicExit(topicStack, retiredTopic)
     }
 
-    fun tryUpdateTopicName(name: String?) {
+    fun updateCurrentTopicName(name: String?) {
         if (name == null) {
             return
         }
@@ -40,7 +40,7 @@ class Diagnostic(
         if (originalTopic != null) {
             val newTopic = originalTopic.copy(name = name)
             topicStack[0] = newTopic
-            consumer.topTopicNameUpdated(topicStack, originalTopic)
+            consumer.topmostTopicNameUpdate(topicStack, originalTopic)
         }
     }
 

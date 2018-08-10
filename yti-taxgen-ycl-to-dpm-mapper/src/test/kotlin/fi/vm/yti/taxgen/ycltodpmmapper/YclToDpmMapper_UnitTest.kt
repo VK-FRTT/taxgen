@@ -19,10 +19,11 @@ import java.time.Instant
 @DisplayName("Mapping YCL sources to DPM model")
 internal class YclToDpmMapper_UnitTest {
 
-    private lateinit var yclSource: YclSource
     private val yclToDpmMapper = YclToDpmMapper()
-    private val diagnosticCapture = DiagnosticCapture()
-    private val diagnostic = Diagnostic(diagnosticCapture)
+
+    private lateinit var yclSource: YclSource
+    private lateinit var diagnosticCaptor: DiagnosticCaptorSimple
+    private lateinit var diagnostic: Diagnostic
 
     @AfterEach
     fun teardown() {
@@ -30,6 +31,9 @@ internal class YclToDpmMapper_UnitTest {
     }
 
     fun performMapping(): List<DpmDictionary> {
+        diagnosticCaptor = DiagnosticCaptorSimple()
+        diagnostic = Diagnostic(diagnosticCaptor)
+
         return yclToDpmMapper.getDpmDictionariesFromSource(
             diagnostic = diagnostic,
             yclSource = yclSource
@@ -199,6 +203,30 @@ internal class YclToDpmMapper_UnitTest {
             assertThat(member.memberCode).isEqualTo("tf_cmpr_cl_code2")
 
             assertThat(member.defaultMember).isFalse()
+        }
+
+        @Test
+        fun `Should produce correct diagnostic topics`() {
+            performMapping()
+            assertThat(diagnosticCaptor.events).containsExactly(
+                "ENTER [YCL Source]",
+                "ENTER [DPM Dictionary]",
+                "ENTER [Owner]",
+                "UPDATE [Owner] ORIGINAL [Owner]",
+                "EXIT [DPM Dictionary] RETIRED [Owner]",
+                "UPDATE [DPM Dictionary] ORIGINAL [DPM Dictionary]",
+                "ENTER [Codelist]",
+                "UPDATE [Codelist] ORIGINAL [Codelist]",
+                "ENTER [YCL Code]",
+                "EXIT [Codelist] RETIRED [YCL Code]",
+                "ENTER [YCL Code]",
+                "EXIT [Codelist] RETIRED [YCL Code]",
+                "ENTER [YCL Code]",
+                "EXIT [Codelist] RETIRED [YCL Code]",
+                "EXIT [DPM Dictionary] RETIRED [Codelist]",
+                "EXIT [YCL Source] RETIRED [DPM Dictionary]",
+                "EXIT [] RETIRED [YCL Source]"
+            )
         }
     }
 
