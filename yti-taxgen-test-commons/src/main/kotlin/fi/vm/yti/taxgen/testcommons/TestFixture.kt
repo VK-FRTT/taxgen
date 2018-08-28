@@ -28,20 +28,25 @@ object TestFixture {
     }
 
     fun yclSourceCapturePath(fixtureName: String): Path {
-        val capturePath = fixtureSource.fixturePath("ycl_source_capture", fixtureName)
-
-        capturePath ?: thisShouldNeverHappen("Could not resolve YCL source capture fixture $fixtureName")
-        if (!Files.exists(capturePath)) thisShouldNeverHappen("Resolved YCL source capture fixture $capturePath does not exist")
-
-        return capturePath
+        val path = fixtureSource.fixturePath("ycl_source_capture", fixtureName)
+        ensurePathExists(path, "YCL source capture", fixtureName)
+        return path!!
     }
 
     fun yclSourceConfigPath(fixtureName: String): Path {
-        val configPath = fixtureSource.fixturePath("ycl_source_config", "$fixtureName.json")
+        val path = fixtureSource.fixturePath("ycl_source_config", "$fixtureName.json")
+        ensurePathExists(path, "YCL source config", fixtureName)
+        return path!!
+    }
 
-        configPath ?: thisShouldNeverHappen("Could not resolve YCL config fixture $fixtureName")
-        if (!Files.exists(configPath)) thisShouldNeverHappen("Resolved YCL source capture fixture $configPath does not exist")
+    fun dpmLanguageConfigPath(fixtureName: String): Path {
+        val path = fixtureSource.fixturePath("dpm_language_config", "$fixtureName.json")
+        ensurePathExists(path, "DPM language config", fixtureName)
+        return path!!
+    }
 
-        return configPath
+    private fun ensurePathExists(path: Path?, fixtureType: String, fixtureName: String) {
+        if (path == null) thisShouldNeverHappen("$fixtureType: Could not resolve fixture $fixtureName")
+        if (!Files.exists(path)) thisShouldNeverHappen("$fixtureType: Resolved fixture $path does not exist")
     }
 }

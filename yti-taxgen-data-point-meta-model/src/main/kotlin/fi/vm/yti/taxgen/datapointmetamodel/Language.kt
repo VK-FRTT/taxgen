@@ -1,11 +1,15 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
+import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.JacksonObjectMapper
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.throwFail
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTranslatedText
+import java.net.URL
+import java.nio.file.Path
 
 class Language constructor(
     val iso6391Code: String,
@@ -52,16 +56,24 @@ class Language constructor(
 
     companion object {
 
-        private val allLanguages = resolveAllLanguages()
+        data class LanguageConfig(
 
-        fun allLanguages() = allLanguages
+            val iso6391Code: String,
+            val label: Map<String, String>
+        )
+
+        private val languages = loadLanguages()
+
+        fun languages() = languages
 
         fun findByIso6391Code(iso6391Code: String): Language? {
-            return allLanguages.find { it.iso6391Code == iso6391Code }
+            return languages.find { it.iso6391Code == iso6391Code }
         }
 
-        private fun resolveAllLanguages(): Set<Language> {
-            val configs = loadConfigs()
+        internal fun loadLanguages(languageConfigPath: Path? = null): Set<Language> {
+            val configUrl = resolveConfigUrl(languageConfigPath)
+
+            val configs = loadLanguageConfigs(configUrl)
 
             val languages = initLanguages(configs)
 
@@ -72,20 +84,27 @@ class Language constructor(
             return languages.keys
         }
 
-        private fun loadConfigs(): List<LanguageConfig> {
-            val contextClassLoader = Thread.currentThread().contextClassLoader
-            val langConfigUrl = contextClassLoader.getResource("languages/languages.json")
-            return JacksonObjectMapper.lenientObjectMapper().readValue(langConfigUrl)
+        private fun resolveConfigUrl(languageConfigPath: Path?): URL =
+            if (languageConfigPath == null) {
+                val contextClassLoader = Thread.currentThread().contextClassLoader
+                contextClassLoader.getResource("languages/languages.json")
+            } else {
+                languageConfigPath.toUri().toURL()
+            }
+
+        private fun loadLanguageConfigs(configUrl: URL): List<LanguageConfig> {
+            try {
+                return JacksonObjectMapper.lenientObjectMapper().readValue(configUrl)
+            } catch (e: JsonProcessingException) {
+                throwFail("Language configuration loading failed: ${e.message}")
+            }
         }
 
-        private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> {
-            val languages = configs
+        private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> =
+            configs
                 .sortedBy { it.iso6391Code }
                 .map { Pair(initLanguage(it.iso6391Code), it) }
                 .toMap()
-
-            return languages
-        }
 
         private fun configureLanguageLabels(
             languages: Map<Language, LanguageConfig>,
@@ -94,33 +113,23 @@ class Language constructor(
             val languageSet = languages.keys
 
             languages.forEach { (language, config) ->
-                val translations = resolveTranslations(config, languageSet)
+
+                val translations = config.label.map { (langCode, text) ->
+                    val translationLanguage = languageSet.find { it.iso6391Code == langCode }
+                        ?: throwFail("Language configuration missing language '$langCode' used for label '$text'")
+
+                    Pair(translationLanguage, text)
+                }.toMap()
 
                 (language.label.translations as MutableMap).putAll(translations)
                 language.label.defaultLanguage = defaultLabelLanguage
             }
         }
 
-        private fun resolveTranslations(
-            config: LanguageConfig,
-            languages: Set<Language>
-        ): Map<Language, String> {
-            //TODO - handle config error of missing target language
-
-            val translations = config.label
-                .map { (code, text) ->
-                    val translationLanguage = languages.find { it.iso6391Code == code }!!
-
-                    Pair(translationLanguage, text)
-                }.toMap()
-
-            return translations
-        }
-
         private fun initLanguage(iso6391Code: String) = Language(iso6391Code, TranslatedText(mutableMapOf()))
 
-        private fun selectDefaultLabelLanguage(languages: Set<Language>): Language {
-            return languages.find { it.iso6391Code == "en" }!! //TODO - handle config error of missing language
-        }
+        private fun selectDefaultLabelLanguage(languages: Set<Language>): Language =
+            languages.find { it.iso6391Code == "en" }
+                ?: throwFail("Language configuration missing mandatory default language 'en'")
     }
 }

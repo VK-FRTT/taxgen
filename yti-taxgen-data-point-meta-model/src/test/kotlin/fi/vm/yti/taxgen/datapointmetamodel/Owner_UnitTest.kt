@@ -61,7 +61,7 @@ internal class Owner_UnitTest :
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
                 if (property.name == "languages") {
-                    Language.allLanguages().take(length).toSet()
+                    Language.languages().take(length).toSet()
                 } else {
                     null
                 }

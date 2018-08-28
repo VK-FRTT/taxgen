@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.commons
 
 class HaltException : RuntimeException()
-class FailException(val errorMessage: String) : RuntimeException()
+class FailException(message: String) : RuntimeException(message)
 
 fun throwHalt(): Nothing {
     throw HaltException()

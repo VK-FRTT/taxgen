@@ -1,0 +1,16 @@
+[
+  {
+    "iso6391Code": "fi",
+    "label": {
+      "fi": "suomi",
+      "sv": "finska"
+    }
+  },
+  {
+    "iso6391Code": "sv",
+    "label": {
+      "fi": "ruotsi",
+      "sv": "svenska"
+    }
+  }
+]

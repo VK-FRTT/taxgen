@@ -103,7 +103,7 @@ class TaxgenCli(
         } catch (exception: HaltException) {
             TAXGEN_CLI_SUCCESS
         } catch (exception: FailException) {
-            errWriter.println("yti-taxgen: ${exception.errorMessage}")
+            errWriter.println("yti-taxgen: ${exception.message}")
             errWriter.println()
 
             TAXGEN_CLI_FAIL

@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.update
 object DbLanguages {
 
     fun writeLanguages(): Map<Language, EntityID<Int>> {
-        val languages = Language.allLanguages()
+        val languages = Language.languages()
 
         val languageIds = writeLanguages(languages)
 
