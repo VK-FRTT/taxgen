@@ -181,7 +181,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
             "--source-folder",
             "$yclSourceCapturePath",
             "--source-config",
-            "$yclSsourceConfigPath"
+            "$yclSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)

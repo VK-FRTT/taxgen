@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.testcommons.TestFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -190,7 +191,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
             "--source-folder",
             "$yclSourceCapturePath",
             "--source-config",
-            "$yclSsourceConfigPath"
+            "$yclSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)

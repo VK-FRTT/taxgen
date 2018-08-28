@@ -14,7 +14,7 @@ import java.nio.file.Path
 open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
     protected lateinit var yclSourceCapturePath: Path
-    protected lateinit var yclSsourceConfigPath: Path
+    protected lateinit var yclSourceConfigPath: Path
 
     private lateinit var charset: Charset
     private lateinit var outCollector: PrintStreamCollector
@@ -31,7 +31,7 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
             "source_capture"
         )
 
-        yclSsourceConfigPath = tempFolder.copyFileToSubfolder(
+        yclSourceConfigPath = tempFolder.copyFileToSubfolder(
             TestFixture.yclSourceConfigPath("single_comprehensive_tree"),
             "source_config"
         )
