@@ -12,8 +12,8 @@ internal class LocalJarFixtureSource(jarUri: URI) : FixtureSource {
         emptyMap<String, String>()
     )
 
-    override fun fixturePath(fixtureType: String, fixtureName: String): Path {
-        return jarZipFs.getPath("test_fixtures/$fixtureType/$fixtureName")
+    override fun fixturePath(fixtureTypeFolder: String, fixtureName: String): Path {
+        return jarZipFs.getPath("test_fixtures/$fixtureTypeFolder/$fixtureName")
     }
 
     companion object {

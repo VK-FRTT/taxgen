@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.testcommons.TestFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

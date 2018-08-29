@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceprovider.helpers
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.commons.JacksonObjectMapper.lenientObjectMapper
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import java.io.BufferedReader
 import java.io.BufferedWriter
@@ -40,9 +40,8 @@ object FileOps {
     }
 
     inline fun <reified T : Any> readJsonFileAsObject(filePath: Path): T {
-        val mapper = lenientObjectMapper()
         val reader: BufferedReader = createBufferedReader(filePath)
-        return reader.use { mapper.readValue(it) }
+        return reader.use { JsonOps.lenientObjectMapper.readValue(it) }
     }
 
     fun readTextFile(path: Path, filename: String): String {

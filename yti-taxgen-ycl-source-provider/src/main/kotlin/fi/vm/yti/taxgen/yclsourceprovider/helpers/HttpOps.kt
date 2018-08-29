@@ -1,7 +1,8 @@
 package fi.vm.yti.taxgen.yclsourceprovider.helpers
 
-import fi.vm.yti.taxgen.commons.ext.kotlin.whenNotNull
-import fi.vm.yti.taxgen.yclsourceprovider.api.YclCodelistSourceApiAdapter
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.Closeable
@@ -10,26 +11,38 @@ object HttpOps : Closeable {
 
     private var httpClient: OkHttpClient? = null
 
-    fun getJsonData(url: String): String {
+    fun fetchJsonData(
+        url: HttpUrl,
+        diagnostic: Diagnostic
+    ): String {
+
         val request = Request.Builder()
             .get()
             .url(url)
             .header("Accept", "application/json")
             .build()
 
-        val response = httpClient().newCall(request).execute()
+        val response = try {
+            httpClient().newCall(request).execute()
+        } catch (e: java.net.UnknownHostException) {
+            diagnostic.fatal("Could not determine the server IP address")
+        } catch (e: java.net.ConnectException) {
+            diagnostic.fatal("Could not connect the server")
+        }
 
         if (!response.isSuccessful) {
-            throw YclCodelistSourceApiAdapter.InitFailException() //TODO
+            diagnostic.fatal("JSON content fetch failed: HTTP ${response.code()} (${response.message()})")
         }
 
         return response.body().use {
-            it!!.string()
+            it ?: thisShouldNeverHappen("HTTP response body missing")
+
+            it.string()
         }
     }
 
     override fun close() {
-        httpClient.whenNotNull { it.dispatcher().executorService().shutdown() }
+        httpClient?.let { it.dispatcher().executorService().shutdown() }
         httpClient = null
     }
 
@@ -44,7 +57,7 @@ object HttpOps : Closeable {
             .build()
     }
 
-    fun useHttpClient(httpClient: OkHttpClient) {
+    fun useCustomHttpClient(httpClient: OkHttpClient) {
         close()
 
         this.httpClient = httpClient

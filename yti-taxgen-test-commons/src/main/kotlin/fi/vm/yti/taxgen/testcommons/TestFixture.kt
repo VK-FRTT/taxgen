@@ -10,6 +10,12 @@ import java.nio.file.Path
 
 object TestFixture {
 
+    enum class Type(val folderName: String) {
+        YCL_SOURCE_CAPTURE("ycl_source_capture"),
+        YCL_SOURCE_CONFIG("ycl_source_config"),
+        DPM_LANGUAGE_CONFIG("dpm_language_config")
+    }
+
     private val fixtureSource = createFixtureSource()
 
     private fun createFixtureSource(): FixtureSource {
@@ -27,26 +33,15 @@ object TestFixture {
         return javaClass.getResource(selfResourceName)
     }
 
-    fun yclSourceCapturePath(fixtureName: String): Path {
-        val path = fixtureSource.fixturePath("ycl_source_capture", fixtureName)
-        ensurePathExists(path, "YCL source capture", fixtureName)
-        return path!!
-    }
+    fun pathOf(fixtureType: Type, fixtureName: String): Path {
+        val path = fixtureSource.fixturePath(
+            fixtureType.folderName,
+            fixtureName
+        )
 
-    fun yclSourceConfigPath(fixtureName: String): Path {
-        val path = fixtureSource.fixturePath("ycl_source_config", "$fixtureName.json")
-        ensurePathExists(path, "YCL source config", fixtureName)
-        return path!!
-    }
-
-    fun dpmLanguageConfigPath(fixtureName: String): Path {
-        val path = fixtureSource.fixturePath("dpm_language_config", "$fixtureName.json")
-        ensurePathExists(path, "DPM language config", fixtureName)
-        return path!!
-    }
-
-    private fun ensurePathExists(path: Path?, fixtureType: String, fixtureName: String) {
-        if (path == null) thisShouldNeverHappen("$fixtureType: Could not resolve fixture $fixtureName")
+        path ?: thisShouldNeverHappen("$fixtureType: Could not resolve fixture $fixtureName")
         if (!Files.exists(path)) thisShouldNeverHappen("$fixtureType: Resolved fixture $path does not exist")
+
+        return path
     }
 }

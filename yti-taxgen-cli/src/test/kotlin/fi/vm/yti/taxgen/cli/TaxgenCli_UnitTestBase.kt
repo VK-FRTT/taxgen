@@ -1,7 +1,10 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.TestFixture
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CAPTURE
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CONFIG
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -9,12 +12,11 @@ import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-import java.nio.file.Path
 
 open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
-    protected lateinit var yclSourceCapturePath: Path
-    protected lateinit var yclSourceConfigPath: Path
+    protected lateinit var yclSourceCapturePath: String
+    protected lateinit var yclSourceConfigPath: String
 
     private lateinit var charset: Charset
     private lateinit var outCollector: PrintStreamCollector
@@ -26,15 +28,8 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        yclSourceCapturePath = tempFolder.copyFolderRecursivelyUnderSubfolder(
-            TestFixture.yclSourceCapturePath("single_comprehensive_tree"),
-            "source_capture"
-        )
-
-        yclSourceConfigPath = tempFolder.copyFileToSubfolder(
-            TestFixture.yclSourceConfigPath("single_comprehensive_tree"),
-            "source_config"
-        )
+        yclSourceCapturePath = tempTestFixture(YCL_SOURCE_CAPTURE, "single_comprehensive_tree")
+        yclSourceConfigPath = tempTestFixture(YCL_SOURCE_CONFIG, "single_comprehensive_tree.json")
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)
@@ -53,6 +48,29 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
         tempFolder.close()
     }
 
+    protected fun tempTestFixture(
+        fixtureType: TestFixture.Type,
+        fixtureName: String
+    ): String {
+
+        val fixturePath = TestFixture.pathOf(fixtureType, fixtureName)
+
+        return when (fixtureType) {
+
+            YCL_SOURCE_CAPTURE -> tempFolder.copyFolderRecursivelyUnderSubfolder(
+                fixturePath,
+                fixtureType.folderName
+            ).toString()
+
+            YCL_SOURCE_CONFIG -> tempFolder.copyFileToSubfolder(
+                fixturePath,
+                fixtureType.folderName
+            ).toString()
+
+            else -> thisShouldNeverHappen("Unsupported fixture type")
+        }
+    }
+
     protected fun executeCli(args: Array<String>): ExecuteResult {
         if (primaryCommand != null) {
             assertThat(args).contains(primaryCommand)
@@ -60,11 +78,16 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
 
         val status = cli.execute(args)
 
-        return ExecuteResult(
+        val result = ExecuteResult(
             status,
             outCollector.grabText(),
             errCollector.grabText()
         )
+
+        //println("OUT >>>\n${result.outText}\n<<< OUT")
+        //println("ERR >>>\n${result.errText}\n<<< ERR")
+
+        return result
     }
 
     private class PrintStreamCollector(val charset: Charset) {

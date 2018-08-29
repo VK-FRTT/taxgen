@@ -13,7 +13,7 @@
         "languages": ["en", "fi", "sv"],
         "defaultLanguage": "en"
       },
-      "sourceCodelists": [
+      "codelists": [
         {
           "uri": "http://uri.suomi.fi/codelist/yti-xbrl/tf_comprehensive_codelist?env=dev"
         }

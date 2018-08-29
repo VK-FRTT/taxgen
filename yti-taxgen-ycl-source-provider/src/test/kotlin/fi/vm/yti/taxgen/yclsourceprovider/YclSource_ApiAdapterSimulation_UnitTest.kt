@@ -1,7 +1,10 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
+import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
@@ -32,6 +35,9 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
     private lateinit var tempFolder: TempFolder
     private lateinit var configFilePath: Path
 
+    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
+    private lateinit var diagnostic: Diagnostic
+
     @Nested
     @DisplayName("providing successful responses")
     inner class SuccessResponses {
@@ -41,6 +47,9 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         @BeforeEach
         fun init() {
             tempFolder = TempFolder("yclsource_apiadapter_unittest")
+
+            diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
+            diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
 
             hoverflyCustomiseHttpClientTrust()
             hoverflyConfigureSimulation()
@@ -65,7 +74,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         ],
                         "defaultLanguage": "en"
                       },
-                      "sourceCodelists": [
+                      "codelists": [
                         {
                           "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero"
                         },
@@ -79,7 +88,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 """.trimIndent()
 
             configFilePath = tempFolder.createFileWithContent("ycl_source_config.json", yclSourceConfig)
-            yclSource = YclSourceApiAdapter(configFilePath)
+            yclSource = YclSourceApiAdapter(configFilePath, diagnostic)
         }
 
         @AfterEach
@@ -172,6 +181,17 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 "simulated_codepage_0",
                 "simulated_codepage_1"
             )
+
+            assertThat(diagnosticConsumerCaptor.events).containsExactly(
+                "ENTER [Configuration file]",
+                "EXIT [] RETIRED [Configuration file]",
+                "ENTER [URI Resolution]",
+                "EXIT [] RETIRED [URI Resolution]",
+                "ENTER [Codes Page Load]",
+                "EXIT [] RETIRED [Codes Page Load]",
+                "ENTER [Codes Page Load]",
+                "EXIT [] RETIRED [Codes Page Load]"
+            )
         }
     }
 
@@ -182,7 +202,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             .sslSocketFactory(sslConfigurer.sslContext.socketFactory, sslConfigurer.trustManager)
             .build()
 
-        HttpOps.useHttpClient(okHttpClient)
+        HttpOps.useCustomHttpClient(okHttpClient)
     }
 
     private fun hoverflyConfigureSimulation() {

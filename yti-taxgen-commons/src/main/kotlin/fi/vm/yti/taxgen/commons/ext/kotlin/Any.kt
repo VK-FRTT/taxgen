@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.commons.ext.kotlin
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlin.reflect.full.memberProperties
 
 fun Any.getPropertyValue(propertyName: String): Any? {
@@ -8,14 +7,4 @@ fun Any.getPropertyValue(propertyName: String): Any? {
         ?: throw IllegalArgumentException("Unknown property $propertyName for class ${this::class.simpleName}")
 
     return property.getter.call(this)
-}
-
-fun <T : Any> T?.whenNotNull(block: (T) -> Unit) {
-    if (this != null) {
-        block(this)
-    }
-}
-
-fun Any.toJsonString(): String {
-    return jacksonObjectMapper().writeValueAsString(this)
 }

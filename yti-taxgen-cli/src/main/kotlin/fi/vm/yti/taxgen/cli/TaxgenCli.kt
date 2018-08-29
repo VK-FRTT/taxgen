@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.commons.HaltException
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
@@ -36,7 +36,7 @@ class TaxgenCli(
     private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
     private val dtp = DiagnosticTextPrinter(outWriter)
-    private val diagnostic = Diagnostic(dtp)
+    private val diagnostic = DiagnosticBridge(dtp)
 
     override fun close() {
         outWriter.close()
@@ -119,7 +119,8 @@ class TaxgenCli(
     private fun resolveYclSource(detectedOptions: DetectedOptions): YclSource {
         if (detectedOptions.sourceConfigFile != null) {
             return YclSourceApiAdapter(
-                configPath = detectedOptions.sourceConfigFile
+                configPath = detectedOptions.sourceConfigFile,
+                diagnostic = diagnostic
             )
         }
 

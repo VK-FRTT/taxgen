@@ -1,8 +1,6 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.commons.JacksonObjectMapper
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
@@ -12,8 +10,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.Owner
 
 internal class DpmMappingContext private constructor(
     val diagnostic: Diagnostic,
-    val owner: Owner,
-    private val objectMapper: ObjectMapper
+    val owner: Owner
 ) {
     companion object {
 
@@ -32,8 +29,7 @@ internal class DpmMappingContext private constructor(
 
             return DpmMappingContext(
                 diagnostic = diagnostic,
-                owner = rootOwner,
-                objectMapper = JacksonObjectMapper.lenientObjectMapper()
+                owner = rootOwner
             )
         }
     }
@@ -41,8 +37,7 @@ internal class DpmMappingContext private constructor(
     internal fun cloneWithOwner(owner: Owner): DpmMappingContext {
         return DpmMappingContext(
             diagnostic = this.diagnostic,
-            owner = owner,
-            objectMapper = this.objectMapper
+            owner = owner
         )
     }
 
@@ -82,6 +77,6 @@ internal class DpmMappingContext private constructor(
     }
 
     internal inline fun <reified T : Any> deserializeJson(jsonContent: String): T {
-        return objectMapper.readValue(jsonContent) //TODO - handle mallformed JSON
+        return JsonOps.readValue(jsonContent, diagnostic)
     }
 }

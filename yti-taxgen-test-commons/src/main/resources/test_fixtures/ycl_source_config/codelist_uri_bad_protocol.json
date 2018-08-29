@@ -1,0 +1,23 @@
+{
+  "type": "YclSourceConfig",
+  "configSchemaVersion": "1",
+
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "codelist_uri_bad_protocol",
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
+        "languages": ["en", "fi", "sv"],
+        "defaultLanguage": "en"
+      },
+      "codelists": [
+        {
+          "uri": "htp://uri.suomi.fi/codelist/yti-xbrl/non_existing_source_code_list"
+        }
+      ]
+    }
+  ]
+}

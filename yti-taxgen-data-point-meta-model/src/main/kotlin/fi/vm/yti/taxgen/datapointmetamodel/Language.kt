@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.commons.JacksonObjectMapper
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.throwFail
@@ -94,7 +94,7 @@ class Language constructor(
 
         private fun loadLanguageConfigs(configUrl: URL): List<LanguageConfig> {
             try {
-                return JacksonObjectMapper.lenientObjectMapper().readValue(configUrl)
+                return JsonOps.lenientObjectMapper.readValue(configUrl)
             } catch (e: JsonProcessingException) {
                 throwFail("Language configuration loading failed: ${e.message}")
             }

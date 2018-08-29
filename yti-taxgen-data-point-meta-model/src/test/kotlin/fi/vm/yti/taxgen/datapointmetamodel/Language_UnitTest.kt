@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
 import fi.vm.yti.taxgen.testcommons.TestFixture
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.DPM_LANGUAGE_CONFIG
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.DisplayName
@@ -110,7 +111,7 @@ internal class Language_UnitTest :
 
         @Test
         fun `loading language configuration without default language should fail`() {
-            val languageConfigPath: Path = TestFixture.dpmLanguageConfigPath("missing_default_language_en")
+            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "default_language_en_missing.json")
 
             val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
 
@@ -121,7 +122,7 @@ internal class Language_UnitTest :
 
         @Test
         fun `loading language configuration with unsupported translation language should fail`() {
-            val languageConfigPath: Path = TestFixture.dpmLanguageConfigPath("unsupported_label_translation_language")
+            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
             val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
@@ -131,7 +132,7 @@ internal class Language_UnitTest :
 
         @Test
         fun `loading language configuration with broken JSON syntax should fail`() {
-            val languageConfigPath: Path = TestFixture.dpmLanguageConfigPath("broken_json")
+            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
             val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)

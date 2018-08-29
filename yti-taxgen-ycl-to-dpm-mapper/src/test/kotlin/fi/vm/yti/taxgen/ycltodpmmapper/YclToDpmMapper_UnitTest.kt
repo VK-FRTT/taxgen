@@ -1,9 +1,12 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Language
+import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
 import fi.vm.yti.taxgen.testcommons.TestFixture
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CAPTURE
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureAdapter
 import org.assertj.core.api.Assertions.assertThat
@@ -22,7 +25,7 @@ internal class YclToDpmMapper_UnitTest {
     private val yclToDpmMapper = YclToDpmMapper()
 
     private lateinit var yclSource: YclSource
-    private lateinit var diagnosticCaptor: DiagnosticCaptorSimple
+    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
     private lateinit var diagnostic: Diagnostic
 
     @AfterEach
@@ -31,8 +34,8 @@ internal class YclToDpmMapper_UnitTest {
     }
 
     fun performMapping(): List<DpmDictionary> {
-        diagnosticCaptor = DiagnosticCaptorSimple()
-        diagnostic = Diagnostic(diagnosticCaptor)
+        diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
+        diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
 
         return yclToDpmMapper.getDpmDictionariesFromSource(
             diagnostic = diagnostic,
@@ -208,7 +211,7 @@ internal class YclToDpmMapper_UnitTest {
         @Test
         fun `Should produce correct diagnostic topics`() {
             performMapping()
-            assertThat(diagnosticCaptor.events).containsExactly(
+            assertThat(diagnosticConsumerCaptor.events).containsExactly(
                 "ENTER [YCL Source]",
                 "ENTER [DPM Dictionary]",
                 "ENTER [Owner]",
@@ -354,7 +357,7 @@ internal class YclToDpmMapper_UnitTest {
     }
 
     private fun createYclSourceFromTestFixture(fixtureName: String): YclSource {
-        val fixturePath = TestFixture.yclSourceCapturePath(fixtureName)
+        val fixturePath = TestFixture.pathOf(YCL_SOURCE_CAPTURE, fixtureName)
         return YclSourceFolderStructureAdapter(fixturePath)
     }
 }

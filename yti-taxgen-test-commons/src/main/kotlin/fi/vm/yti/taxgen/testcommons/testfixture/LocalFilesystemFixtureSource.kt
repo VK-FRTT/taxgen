@@ -6,8 +6,9 @@ import java.nio.file.Paths
 
 internal class LocalFilesystemFixtureSource : FixtureSource {
 
-    override fun fixturePath(fixtureType: String, fixtureName: String): Path? {
-        val fixtureResource = contextClassLoader().getResource("test_fixtures/$fixtureType/$fixtureName") ?: return null
+    override fun fixturePath(fixtureTypeFolder: String, fixtureName: String): Path? {
+        val fixtureResource =
+            contextClassLoader().getResource("test_fixtures/$fixtureTypeFolder/$fixtureName") ?: return null
 
         val fixtureUri = fixtureResource.toURI()
 

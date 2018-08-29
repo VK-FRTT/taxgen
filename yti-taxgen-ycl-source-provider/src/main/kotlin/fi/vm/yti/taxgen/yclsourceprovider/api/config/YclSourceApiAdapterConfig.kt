@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.yclsourceprovider.api
+package fi.vm.yti.taxgen.yclsourceprovider.api.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

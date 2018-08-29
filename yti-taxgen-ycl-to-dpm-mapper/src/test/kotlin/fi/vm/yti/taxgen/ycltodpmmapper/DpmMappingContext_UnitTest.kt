@@ -6,7 +6,9 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
+import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,15 +22,15 @@ class DpmMappingContext_UnitTest {
         override fun topicIdentifier() = "identifier-$discriminator"
     }
 
-    private lateinit var diagnosticCaptor: DiagnosticCaptorDetailed
+    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptor
     private lateinit var diagnostic: Diagnostic
     private lateinit var extractValue: Validatable
     private lateinit var extractValue2: Validatable
 
     @BeforeEach
     fun init() {
-        diagnosticCaptor = DiagnosticCaptorDetailed()
-        diagnostic = Diagnostic(diagnosticCaptor)
+        diagnosticConsumerCaptor = DiagnosticConsumerCaptor()
+        diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
         extractValue = mock(Validatable::class.java)
         extractValue2 = mock(Validatable::class.java)
     }
@@ -44,7 +46,7 @@ class DpmMappingContext_UnitTest {
         verify(extractRetValue, times(1)).validate(any())
         verifyNoMoreInteractions(extractRetValue)
 
-        assertThat(diagnosticCaptor.events).containsExactly(
+        assertThat(diagnosticConsumerCaptor.events).containsExactly(
             "ENTER [TOPIC{type-A,name-A,identifier-A}]",
             "EXIT [] RETIRED [TOPIC{type-A,name-A,identifier-A}]"
         )
@@ -63,7 +65,7 @@ class DpmMappingContext_UnitTest {
         verify(extractRetValue, times(2)).validate(any())
         verifyNoMoreInteractions(extractRetValue)
 
-        assertThat(diagnosticCaptor.events).containsExactly(
+        assertThat(diagnosticConsumerCaptor.events).containsExactly(
             "ENTER [TOPIC{type-A,name-A,identifier-A}]",
             "ENTER [TOPIC{type-B,name-B,identifier-B}, TOPIC{type-A,name-A,identifier-A}]",
             "EXIT [TOPIC{type-A,name-A,identifier-A}] RETIRED [TOPIC{type-B,name-B,identifier-B}]",
@@ -87,7 +89,7 @@ class DpmMappingContext_UnitTest {
         verify(extractRetValue, times(2)).validate(any())
         verifyNoMoreInteractions(extractRetValue)
 
-        assertThat(diagnosticCaptor.events).containsExactly(
+        assertThat(diagnosticConsumerCaptor.events).containsExactly(
             "ENTER [TOPIC{type-A,name-A,identifier-A}]",
             "UPDATE [TOPIC{type-A,updated-name-A,identifier-A}] ORIGINAL [TOPIC{type-A,name-A,identifier-A}]",
             "ENTER [TOPIC{type-B,name-B,identifier-B}, TOPIC{type-A,updated-name-A,identifier-A}]",
@@ -113,7 +115,7 @@ class DpmMappingContext_UnitTest {
         verify(extractRetValue[1], times(1)).validate(any())
         verifyNoMoreInteractions(extractRetValue[1])
 
-        assertThat(diagnosticCaptor.events).containsExactly(
+        assertThat(diagnosticConsumerCaptor.events).containsExactly(
             "ENTER [TOPIC{type-A,name-A,identifier-A}]",
             "EXIT [] RETIRED [TOPIC{type-A,name-A,identifier-A}]"
         )
@@ -137,7 +139,7 @@ class DpmMappingContext_UnitTest {
         verify(extractRetValue[1], times(2)).validate(any())
         verifyNoMoreInteractions(extractRetValue[1])
 
-        assertThat(diagnosticCaptor.events).containsExactly(
+        assertThat(diagnosticConsumerCaptor.events).containsExactly(
             "ENTER [TOPIC{type-A,name-A,identifier-A}]",
             "ENTER [TOPIC{type-B,name-B,identifier-B}, TOPIC{type-A,name-A,identifier-A}]",
             "EXIT [TOPIC{type-A,name-A,identifier-A}] RETIRED [TOPIC{type-B,name-B,identifier-B}]",
