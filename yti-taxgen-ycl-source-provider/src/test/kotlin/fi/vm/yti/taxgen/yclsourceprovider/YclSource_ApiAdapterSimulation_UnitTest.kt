@@ -1,10 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
-import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
@@ -35,9 +32,6 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
     private lateinit var tempFolder: TempFolder
     private lateinit var configFilePath: Path
 
-    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
-    private lateinit var diagnostic: Diagnostic
-
     @Nested
     @DisplayName("providing successful responses")
     inner class SuccessResponses {
@@ -47,9 +41,6 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         @BeforeEach
         fun init() {
             tempFolder = TempFolder("yclsource_apiadapter_unittest")
-
-            diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
-            diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
 
             hoverflyCustomiseHttpClientTrust()
             hoverflyConfigureSimulation()
@@ -108,8 +99,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
         @Test
         fun `Should have diagnostic topic info about yclsource @ root`() {
-            assertThat(yclSource.topicType()).isEqualTo("YCL Source")
-            assertThat(yclSource.topicName()).isEqualTo("")
+            assertThat(yclSource.topicType()).isEqualTo("Reading YCL Sources")
+            assertThat(yclSource.topicName()).isEqualTo("YTI Reference Data service")
             assertThat(yclSource.topicIdentifier()).isEqualTo(configFilePath.toString())
         }
 

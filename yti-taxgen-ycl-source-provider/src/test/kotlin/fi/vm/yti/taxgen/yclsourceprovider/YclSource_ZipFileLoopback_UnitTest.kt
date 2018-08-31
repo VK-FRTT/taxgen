@@ -24,10 +24,10 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
 
         YclSourceZipFileRecorder(
             targetZipPath = targetZipPath,
-            yclSource = FixedYclSource(),
-            forceOverwrite = false
+            forceOverwrite = false,
+            diagnostic = diagnostic
         ).use {
-            it.capture()
+            it.captureSources(FixedYclSource())
         }
 
         yclSource = YclSourceZipFileAdapter(targetZipPath)
@@ -50,8 +50,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
 
     @Test
     fun `Should have diagnostic topic info about yclsource @ root`() {
-        assertThat(yclSource.topicType()).isEqualTo("YCL Source")
-        assertThat(yclSource.topicName()).isEqualTo("")
+        assertThat(yclSource.topicType()).isEqualTo("Reading YCL Sources")
+        assertThat(yclSource.topicName()).isEqualTo("ZIP file")
         assertThat(yclSource.topicIdentifier()).isEqualTo(targetZipPath.toString())
     }
 

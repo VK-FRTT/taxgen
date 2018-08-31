@@ -1,6 +1,10 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 class FixedYclSource : YclSource() {
+
+    override fun topicName() = "FixedYclSource"
+    override fun topicIdentifier() = ""
+
     override fun sourceInfoData() = """{"marker": "fixed_source_info"}"""
     override fun dpmDictionarySources() = listOf(FixedDpmDictionarySource(0), FixedDpmDictionarySource(1))
     override fun close() {}

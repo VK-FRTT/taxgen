@@ -40,8 +40,8 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
 
     @Test
     fun `Should have diagnostic topic info about yclsource @ root`() {
-        assertThat(yclSource.topicType()).isEqualTo("YCL Source")
-        assertThat(yclSource.topicName()).isEqualTo("")
+        assertThat(yclSource.topicType()).isEqualTo("Reading YCL Sources")
+        assertThat(yclSource.topicName()).isEqualTo("folder")
         assertThat(yclSource.topicIdentifier()).isEqualTo(resourcePath.toString())
     }
 

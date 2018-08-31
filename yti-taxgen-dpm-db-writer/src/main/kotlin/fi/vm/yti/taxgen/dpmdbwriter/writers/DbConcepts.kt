@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.dpmdbwriter.writers
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.Language
-import fi.vm.yti.taxgen.dpmdbwriter.DbWriteContext
+import fi.vm.yti.taxgen.dpmdbwriter.DpmDictionaryWriteContext
 import fi.vm.yti.taxgen.dpmdbwriter.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.dpmdbwriter.ext.java.toJodaDateTimeOrNull
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTable
@@ -17,7 +17,7 @@ import org.jetbrains.exposed.sql.insertAndGetId
 object DbConcepts {
 
     fun writeConceptAndTranslations(
-        writeContext: DbWriteContext,
+        writeContext: DpmDictionaryWriteContext,
         concept: Concept,
         conceptType: ConceptType
     ): EntityID<Int> {
@@ -58,7 +58,7 @@ object DbConcepts {
     }
 
     private fun insertConceptTranslation(
-        writeContext: DbWriteContext,
+        writeContext: DpmDictionaryWriteContext,
         conceptId: EntityID<Int>,
         role: ConceptTranslationRole,
         language: Language,

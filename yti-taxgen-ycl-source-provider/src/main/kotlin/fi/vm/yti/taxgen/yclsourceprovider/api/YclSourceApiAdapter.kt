@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopic
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.api.config.YclSourceApiAdapterConfig
-import fi.vm.yti.taxgen.yclsourceprovider.helpers.FileOps
+import fi.vm.yti.taxgen.commons.FileOps
 import java.nio.file.Path
 import java.time.Instant
 
@@ -26,6 +26,7 @@ class YclSourceApiAdapter(
         val configMap: Map<String, Any>
     )
 
+    override fun topicName(): String = "YTI Reference Data service"
     override fun topicIdentifier(): String = configFilePath.toString()
 
     override fun sourceInfoData(): String = sourceInfoData

@@ -5,9 +5,7 @@ import java.io.Closeable
 
 abstract class YclSource : Closeable, DiagnosticTopicProvider {
 
-    override fun topicType(): String = "YCL Source"
-    override fun topicName(): String = ""
-    override fun topicIdentifier(): String = ""
+    override fun topicType(): String = "Reading YCL Sources"
 
     abstract fun sourceInfoData(): String
     abstract fun dpmDictionarySources(): List<DpmDictionarySource>

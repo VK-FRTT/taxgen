@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.dpmdbwriter.writers
 
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Member
-import fi.vm.yti.taxgen.dpmdbwriter.DbWriteContext
+import fi.vm.yti.taxgen.dpmdbwriter.DpmDictionaryWriteContext
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptType
 import fi.vm.yti.taxgen.dpmdbwriter.tables.DomainTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.MemberTable
@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbDomains {
     fun writeExplicitDomainAndMembers(
-        writeContext: DbWriteContext,
+        writeContext: DpmDictionaryWriteContext,
         domain: ExplicitDomain
     ) {
 
@@ -49,7 +49,7 @@ object DbDomains {
     }
 
     private fun insertExplicitDomain(
-        writeContext: DbWriteContext,
+        writeContext: DpmDictionaryWriteContext,
         domain: ExplicitDomain,
         domainConceptId: EntityID<Int>
     ): EntityID<Int> {
@@ -69,7 +69,7 @@ object DbDomains {
     }
 
     private fun insertMember(
-        writeContext: DbWriteContext,
+        writeContext: DpmDictionaryWriteContext,
         domain: ExplicitDomain,
         domainId: EntityID<Int>,
         member: Member,

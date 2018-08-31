@@ -24,4 +24,24 @@ interface Diagnostic {
 
         return ret
     }
+
+    fun <R> withinTopic(
+        topicType: String = "",
+        topicName: String = "",
+        topicIdentifier: String = "",
+        block: () -> R
+    ): R {
+        val topic = DiagnosticTopic(
+            type = topicType,
+            name = topicName,
+            identifier = topicIdentifier
+        )
+        topicEnter(topic)
+
+        val ret = block()
+
+        topicExit()
+
+        return ret
+    }
 }

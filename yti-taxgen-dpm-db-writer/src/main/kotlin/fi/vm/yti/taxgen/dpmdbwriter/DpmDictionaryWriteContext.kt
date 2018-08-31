@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
 import org.jetbrains.exposed.dao.EntityID
 
-data class DbWriteContext(
+data class DpmDictionaryWriteContext(
     val owner: Owner,
     val ownerId: EntityID<Int>,
     val languageIds: Map<Language, EntityID<Int>>

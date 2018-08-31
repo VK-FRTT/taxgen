@@ -5,13 +5,22 @@ import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.ycltodpmmapper.extractor.extractDpmDictionaries
 
-class YclToDpmMapper {
+class YclToDpmMapper(
+    val diagnostic: Diagnostic
+) {
 
     fun getDpmDictionariesFromSource(
-        diagnostic: Diagnostic,
         yclSource: YclSource
     ): List<DpmDictionary> {
-        val ctx = DpmMappingContext.createRootContext(diagnostic)
-        return yclSource.extractDpmDictionaries(ctx)
+
+        return diagnostic.withinTopic(
+            topicType = "Processing",
+            topicName = "YCL Source data to DPM model"
+        ) {
+
+            val ctx = DpmMappingContext.createRootContext(diagnostic)
+
+            yclSource.extractDpmDictionaries(ctx)
+        }
     }
 }

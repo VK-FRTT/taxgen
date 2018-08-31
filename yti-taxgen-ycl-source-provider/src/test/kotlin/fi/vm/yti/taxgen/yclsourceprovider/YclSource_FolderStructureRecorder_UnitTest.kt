@@ -25,10 +25,10 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
 
             YclSourceFolderStructureRecorder(
                 baseFolderPath = tempFolder.path(),
-                yclSource = FixedYclSource(),
-                forceOverwrite = false
+                forceOverwrite = false,
+                diagnostic = diagnostic
             ).use {
-                it.capture()
+                it.captureSources(FixedYclSource())
             }
         }
 

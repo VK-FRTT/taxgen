@@ -1,8 +1,11 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
 import java.io.Closeable
 
-interface YclSourceRecorder : Closeable {
+interface YclSourceRecorder : Closeable, DiagnosticTopicProvider {
 
-    fun capture()
+    override fun topicType(): String = "Writing YCL Sources"
+
+    fun captureSources(yclSource: YclSource)
 }

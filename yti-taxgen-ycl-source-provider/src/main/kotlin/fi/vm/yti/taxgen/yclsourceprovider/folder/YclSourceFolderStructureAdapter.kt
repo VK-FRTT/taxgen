@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.yclsourceprovider.folder
 
+import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
-import fi.vm.yti.taxgen.yclsourceprovider.helpers.FileOps
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.SortOps
 import java.nio.file.Path
 
@@ -12,6 +12,7 @@ class YclSourceFolderStructureAdapter(
 
     private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
 
+    override fun topicName(): String = "folder"
     override fun topicIdentifier(): String = baseFolderPath.toString()
 
     override fun sourceInfoData(): String {

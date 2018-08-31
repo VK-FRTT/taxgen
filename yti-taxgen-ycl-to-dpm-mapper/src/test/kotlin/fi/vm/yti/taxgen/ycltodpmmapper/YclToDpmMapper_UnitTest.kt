@@ -22,11 +22,11 @@ import java.time.Instant
 @DisplayName("Mapping YCL sources to DPM model")
 internal class YclToDpmMapper_UnitTest {
 
-    private val yclToDpmMapper = YclToDpmMapper()
-
-    private lateinit var yclSource: YclSource
     private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
     private lateinit var diagnostic: Diagnostic
+
+    private lateinit var yclSource: YclSource
+    private lateinit var yclToDpmMapper: YclToDpmMapper
 
     @AfterEach
     fun teardown() {
@@ -37,8 +37,9 @@ internal class YclToDpmMapper_UnitTest {
         diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
         diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
 
+        yclToDpmMapper = YclToDpmMapper(diagnostic)
+
         return yclToDpmMapper.getDpmDictionariesFromSource(
-            diagnostic = diagnostic,
             yclSource = yclSource
         )
     }
@@ -212,7 +213,8 @@ internal class YclToDpmMapper_UnitTest {
         fun `Should produce correct diagnostic topics`() {
             performMapping()
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
-                "ENTER [YCL Source]",
+                "ENTER [Processing]",
+                "ENTER [Reading YCL Sources]",
                 "ENTER [DPM Dictionary]",
                 "ENTER [Owner]",
                 "UPDATE [Owner] ORIGINAL [Owner]",
@@ -227,8 +229,9 @@ internal class YclToDpmMapper_UnitTest {
                 "ENTER [YCL Code]",
                 "EXIT [Codelist] RETIRED [YCL Code]",
                 "EXIT [DPM Dictionary] RETIRED [Codelist]",
-                "EXIT [YCL Source] RETIRED [DPM Dictionary]",
-                "EXIT [] RETIRED [YCL Source]"
+                "EXIT [Reading YCL Sources] RETIRED [DPM Dictionary]",
+                "EXIT [Processing] RETIRED [Reading YCL Sources]",
+                "EXIT [] RETIRED [Processing]"
             )
         }
     }

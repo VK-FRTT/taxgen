@@ -21,7 +21,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     }
 
     @Test
-    fun `Should capture YCL sources to folder`() {
+    fun `Should capture YCL sources to folder from existing capture`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
             "$targetFolderPath",
@@ -31,8 +31,40 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: folder",
+            "Capturing: OK"
+        )
+
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Capturing YTI Codelist sources")
+
+        assertThat(targetFolderPath).exists().isDirectory()
+        assertThat(targetFolderInfoFilePath).exists().isRegularFile()
+
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+    }
+
+    @Test
+    fun `Should capture YCL sources to folder from YCL source config`() {
+        val args = arrayOf(
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
+            "--source-config",
+            "$yclSourceConfigPath"
+        )
+
+        val (status, outText, errText) = executeCli(args)
+
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: YTI Reference Data service",
+            "Capturing: OK"
+        )
+
+        assertThat(errText).isBlank()
 
         assertThat(targetFolderPath).exists().isDirectory()
         assertThat(targetFolderInfoFilePath).exists().isRegularFile()
@@ -55,8 +87,14 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: folder",
+            "Capturing: OK"
+        )
+
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Capturing YTI Codelist sources")
 
         assertThat(targetFolderPath).exists().isDirectory()
         assertThat(targetFolderInfoFilePath).exists().isRegularFile()
@@ -74,16 +112,18 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single command with proper argument must be given"
         )
-        assertThat(outText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
     @Test
-    fun `Should fail when target folder contains conflicting file`() {
+    fun `Should report error when target folder contains conflicting file`() {
         Files.createDirectories(targetFolderInfoFilePath.parent)
         Files.write(targetFolderInfoFilePath, "Existing file".toByteArray())
 
@@ -96,17 +136,23 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isNotBlank() //TODO - proper error message & its verification
-        assertThat(outText).containsSubsequence("Capturing YTI Codelist sources")
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: folder",
+            "FATAL: Target file 'ycl_sources/source_info.json' already exists"
+        )
+
+        assertThat(errText).isBlank()
 
         assertThat(targetFolderPath).exists().isDirectory()
         assertThat(targetFolderInfoFilePath).exists().isRegularFile()
 
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should fail when given target folder path points to file`() {
+    fun `Should report error when given target folder path points to existing file`() {
         val workFolderFilePath = tempFolder.resolve("file.txt")
         Files.write(workFolderFilePath, "Existing file".toByteArray())
 
@@ -119,10 +165,15 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isNotBlank() //TODO - proper error message & its verification
-        assertThat(outText).containsSubsequence("Capturing YTI Codelist sources")
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "FATAL: Could not create filesystem path",
+            "(already exists)"
+        )
 
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        assertThat(errText).isBlank()
+
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
@@ -134,12 +185,15 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources"
+        )
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single source with proper argument must be given"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -153,12 +207,13 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Option source-folder requires an argument"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -173,12 +228,13 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Option source-folder: Directory", "does not exist"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -195,12 +251,15 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources"
+        )
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single source with proper argument must be given"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 }

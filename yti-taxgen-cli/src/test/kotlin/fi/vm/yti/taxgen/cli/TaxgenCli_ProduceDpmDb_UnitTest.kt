@@ -34,8 +34,8 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         assertThat(errText).isBlank()
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "DPM database written"
+            "Compiling: DPM database",
+            "Compiling: OK"
         )
 
         assertThat(targetDbPath).exists().isRegularFile()
@@ -58,8 +58,12 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Compiling: DPM database",
+            "Compiling: OK"
+        )
+
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Compiling DPM database")
 
         assertThat(targetDbPath).exists().isRegularFile()
 
@@ -76,16 +80,18 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single command with proper argument must be given"
         )
-        assertThat(outText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
     @Test
-    fun `Should fail when target database file already exists`() {
+    fun `Should report error when target database file already exists`() {
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
@@ -97,12 +103,16 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isNotBlank() //TODO - proper error message & its verification
-        assertThat(outText).isBlank()
+        assertThat(outText).containsSubsequence(
+            "Compiling: DPM database",
+            "FATAL: Target file '$targetDbPath' already exists"
+        )
+
+        assertThat(errText).isBlank()
 
         assertThat(targetDbPath).exists().isRegularFile()
 
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
@@ -116,10 +126,14 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isNotBlank() //TODO - proper error message & its verification
-        assertThat(outText).isBlank()
+        assertThat(outText).containsSubsequence(
+            "Compiling: DPM database",
+            "FATAL: Target file '${tempFolder.path()}' already exists"
+        )
 
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        assertThat(errText).isBlank()
+
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
@@ -131,12 +145,15 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Compiling: DPM database"
+        )
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single source with proper argument must be given"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -150,12 +167,13 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Option source-folder requires an argument"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -170,12 +188,13 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Option source-folder: Directory", "does not exist"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -192,12 +211,15 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Compiling: DPM database"
+        )
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single source with proper argument must be given"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -229,11 +251,16 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isBlank()
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "DPM database written"
+            "Compiling: DPM database",
+            "Processing: YCL Source data to DPM model",
+            "Reading YCL Sources: YTI Reference Data service",
+            "Configuration file: (single_comprehensive_tree.json)",
+            "Configuration file: OK",
+            "Compiling: OK"
         )
+
+        assertThat(errText).isBlank()
 
         assertThat(targetDbPath).exists().isRegularFile()
         //TODO - Verify targetDb content too
@@ -242,7 +269,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     }
 
     @Test
-    fun `Should fail when source config file is broken JSON`() {
+    fun `Should report error when source config file is broken JSON`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
@@ -253,14 +280,15 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "Mapping YTI Codelists",
-            "YCL Source",
-            "Configuration file (ycl_source_config_broken_json.json)",
+            "Compiling: DPM database",
+            "Processing: YCL Source data to DPM model",
+            "Reading YCL Sources: YTI Reference Data service",
+            "Configuration file: (ycl_source_config_broken_json.json)",
             "FATAL: Processing JSON content failed: "
         )
 
         assertThat(errText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
@@ -285,7 +313,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
     }
 
     @Test
-    fun `Should fail when source config links to non existing YCL code list`() {
+    fun `Should report error when source config links to non existing YCL code list`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
@@ -303,11 +331,12 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         )
 
         assertThat(errText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should fail when source config links to unresolvable YCL host name`() {
+    fun `Should report error when source config links to unresolvable YCL host name`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
@@ -325,11 +354,12 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         )
 
         assertThat(errText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should fail when source config has URI with broken protocol`() {
+    fun `Should report error when source config has URI with broken protocol`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
@@ -347,11 +377,12 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         )
 
         assertThat(errText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should fail when source config links to non responsive YCL host IP`() {
+    fun `Should report error when source config links to non responsive YCL host IP`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
@@ -369,6 +400,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         )
 
         assertThat(errText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 }

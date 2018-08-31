@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
-import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.TopicInfo
 import java.io.PrintWriter
 
@@ -21,7 +20,7 @@ class DiagnosticTextPrinter(
     }
 
     override fun topicExit(topicStack: List<TopicInfo>, retiredTopic: TopicInfo) {
-        printNestedLine("${retiredTopic.type} done")
+        printNestedLine("${retiredTopic.type}: OK")
         level = topicStack.size
     }
 
@@ -31,10 +30,7 @@ class DiagnosticTextPrinter(
     }
 
     override fun message(severity: Severity, message: String) {
-        when (severity) {
-            FATAL, ERROR -> printNestedLine("  $severity: $message")
-            else -> printNestedLine(message)
-        }
+        printNestedLine("  $severity: $message")
     }
 
     override fun validationErrors(validationErrors: ValidationErrors) {
@@ -44,10 +40,9 @@ class DiagnosticTextPrinter(
     }
 
     private fun printTopic(topic: TopicInfo) {
-        val line =
-            (topic.type) +
-                (if (topic.identifier.isNotBlank()) " (${topic.identifier})" else "") +
-                (if (topic.name.isNotBlank()) " \"${topic.name}\"" else "")
+        val line = "${topic.type}: " +
+            (if (topic.name.isNotBlank()) "${topic.name} " else "") +
+            (if (topic.identifier.isNotBlank()) "(${topic.identifier})" else "")
 
         printNestedLine(line)
     }

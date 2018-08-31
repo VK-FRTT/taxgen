@@ -20,7 +20,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     }
 
     @Test
-    fun `Should capture YCL sources to zip file`() {
+    fun `Should capture YCL sources to zip file from existing capture`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
             "$targetZipPath",
@@ -30,8 +30,40 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: ZIP file",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: folder",
+            "Capturing: OK"
+        )
+
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Capturing YTI Codelist sources")
+        assertThat(targetZipPath).exists().isRegularFile()
+
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+    }
+
+    @Test
+    fun `Should capture YCL sources to zip file from YCL source config`() {
+        val args = arrayOf(
+            "--capture-ycl-sources-to-zip",
+            "$targetZipPath",
+            "--source-config",
+            "$yclSourceConfigPath"
+        )
+
+        val (status, outText, errText) = executeCli(args)
+
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: ZIP file",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: YTI Reference Data service",
+            "Capturing: OK"
+        )
+
+        assertThat(errText).isBlank()
 
         assertThat(targetZipPath).exists().isRegularFile()
 
@@ -52,8 +84,14 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: folder",
+            "Reading YCL Sources: folder",
+            "Capturing: OK"
+        )
+
         assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence("Capturing YTI Codelist sources")
 
         assertThat(targetZipPath).exists().isRegularFile()
 
@@ -70,16 +108,18 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single command with proper argument must be given"
         )
-        assertThat(outText).isBlank()
+
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
     @Test
-    fun `Should fail when target zip file already exists`() {
+    fun `Should report error when target zip file already exists`() {
         Files.write(targetZipPath, "Existing file".toByteArray())
 
         val args = arrayOf(
@@ -91,16 +131,21 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isNotBlank() //TODO - proper error message & its verification
-        assertThat(outText).isBlank()
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: ZIP file",
+            "FATAL: Target file '$targetZipPath' already exists"
+        )
+
+        assertThat(errText).isBlank()
 
         assertThat(targetZipPath).exists().isRegularFile()
 
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should fail when given target zip file path points to folder`() {
+    fun `Should report error when given target zip file path points to folder`() {
         val args = arrayOf(
             "--capture-ycl-sources-to-zip",
             "${tempFolder.path()}",
@@ -110,10 +155,15 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isNotBlank() //TODO - proper error message & its verification
-        assertThat(outText).isBlank()
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources",
+            "Writing YCL Sources: ZIP file",
+            "FATAL: Target file '${tempFolder.path()}' already exists"
+        )
 
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        assertThat(errText).isBlank()
+
+        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
@@ -125,12 +175,15 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources"
+        )
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single source with proper argument must be given"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -144,12 +197,13 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Option source-folder requires an argument"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -164,12 +218,13 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).isBlank()
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Option source-folder: Directory", "does not exist"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 
@@ -186,12 +241,15 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(outText).containsSubsequence(
+            "Capturing: YTI Codelist sources"
+        )
+
         assertThat(errText).containsSubsequence(
             "yti-taxgen:",
             "Single source with proper argument must be given"
         )
 
-        assertThat(outText).isBlank()
         assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
     }
 }

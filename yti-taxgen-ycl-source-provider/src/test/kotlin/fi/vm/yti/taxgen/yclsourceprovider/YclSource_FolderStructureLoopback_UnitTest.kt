@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBase() {
 
     private lateinit var tempFolder: TempFolder
+
     private lateinit var yclSource: YclSource
 
     @BeforeEach
@@ -21,10 +22,10 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
 
         YclSourceFolderStructureRecorder(
             baseFolderPath = tempFolder.path(),
-            yclSource = FixedYclSource(),
-            forceOverwrite = false
+            forceOverwrite = false,
+            diagnostic = diagnostic
         ).use {
-            it.capture()
+            it.captureSources(FixedYclSource())
         }
 
         yclSource = YclSourceFolderStructureAdapter(tempFolder.path())

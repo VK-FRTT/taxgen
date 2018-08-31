@@ -1,52 +1,62 @@
 package fi.vm.yti.taxgen.dpmdbwriter
 
-import fi.vm.yti.taxgen.commons.TargetPathChecks
+import fi.vm.yti.taxgen.commons.FileOps
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
+import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.dpmdbwriter.tables.Tables
 import fi.vm.yti.taxgen.dpmdbwriter.writers.DbDomains
 import fi.vm.yti.taxgen.dpmdbwriter.writers.DbLanguages
 import fi.vm.yti.taxgen.dpmdbwriter.writers.DbOwners
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.nio.file.Path
 import java.sql.Connection
 
 class DpmDbWriter(
-    targetDbPath: Path,
-    private val forceOverwrite: Boolean
+    rawTargetDbPath: Path,
+    forceOverwrite: Boolean,
+    private val diagnostic: Diagnostic
 ) {
-    val targetDbPath: Path = targetDbPath.toAbsolutePath().normalize()
-    private val database = initializeTargetDatabase()
-    private val languageIds = DbLanguages.writeLanguages()
+    private val targetDbPath: Path = rawTargetDbPath.toAbsolutePath().normalize()
 
-    private fun initializeTargetDatabase(): Database {
-        TargetPathChecks.deleteConflictingTargetFileIfAllowed(targetDbPath, forceOverwrite)
-        TargetPathChecks.failIfTargetFileExists(targetDbPath)
-        TargetPathChecks.createIntermediateFolders(targetDbPath)
+    init {
+        FileOps.deleteConflictingTargetFileIfAllowed(targetDbPath, forceOverwrite)
+        FileOps.failIfTargetFileExists(targetDbPath, diagnostic)
+        FileOps.createIntermediateFolders(targetDbPath)
+    }
 
-        val db = connectDatabase()
-        Tables.create()
-        return db
+    fun writeDpmDb(dpmDictionaries: List<DpmDictionary>) {
+        diagnostic.withinTopic(
+            topicType = "Writing",
+            topicName = "DPM Database",
+            topicIdentifier = targetDbPath.toString()
+        ) {
+            connectDatabase()
+            Tables.create()
+            val languageIds = DbLanguages.writeLanguages()
+
+            dpmDictionaries.forEach {
+                writeDpmDictionary(it, languageIds)
+            }
+        }
     }
 
     private fun targetSqliteDbUrl() = "jdbc:sqlite:$targetDbPath"
 
-    private fun connectDatabase(): Database {
-        val db = Database.connect(targetSqliteDbUrl(), "org.sqlite.JDBC")
+    private fun connectDatabase() {
+        Database.connect(targetSqliteDbUrl(), "org.sqlite.JDBC")
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
-        return db
     }
 
-    fun writeDpmDictionaries(dpmDictionaries: List<DpmDictionary>) {
-        dpmDictionaries.forEach {
-            writeDpmDictionary(it)
-        }
-    }
-
-    private fun writeDpmDictionary(dpmDictionary: DpmDictionary) {
+    private fun writeDpmDictionary(
+        dpmDictionary: DpmDictionary,
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
         val ownerId = DbOwners.writeOwner(dpmDictionary.owner)
 
-        val writeContext = DbWriteContext(
+        val writeContext = DpmDictionaryWriteContext(
             dpmDictionary.owner,
             ownerId,
             languageIds

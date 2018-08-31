@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceprovider.folder
 
+import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
-import fi.vm.yti.taxgen.yclsourceprovider.helpers.FileOps
 import java.nio.file.Path
 
 class YclCodelistSourceFolderStructureAdapter(

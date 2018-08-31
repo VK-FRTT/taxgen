@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.yclsourceprovider.folder
 
+import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
-import fi.vm.yti.taxgen.yclsourceprovider.helpers.FileOps
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.SortOps
 import java.nio.file.Path
 

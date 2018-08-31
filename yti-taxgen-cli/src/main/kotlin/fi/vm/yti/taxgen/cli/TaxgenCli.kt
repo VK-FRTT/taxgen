@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.commons.HaltException
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
@@ -36,7 +37,7 @@ class TaxgenCli(
     private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
     private val dtp = DiagnosticTextPrinter(outWriter)
-    private val diagnostic = DiagnosticBridge(dtp)
+    private val diagnostic: Diagnostic = DiagnosticBridge(dtp)
 
     override fun close() {
         outWriter.close()
@@ -57,42 +58,12 @@ class TaxgenCli(
             if (detectedOptions.cmdCaptureYclSourcesToFolder != null ||
                 detectedOptions.cmdCaptureYclSourcesToZip != null
             ) {
-                detectedOptions.ensureSingleSourceGiven()
-
-                resolveYclSource(detectedOptions).use { yclSource ->
-                    resolveYclSourceRecorder(detectedOptions, yclSource).use { yclSourceRecorder ->
-                        diagnostic.info("Capturing YTI Codelist sources..")
-                        yclSourceRecorder.capture()
-                    }
-                }
-
-                throwHalt()
+                captureYclSources(detectedOptions)
             }
 
             if (detectedOptions.cmdCompileDpmDb != null) {
-                detectedOptions.ensureSingleSourceGiven()
-
-                resolveYclSource(detectedOptions).use { yclSource ->
-                    val dbWriter = resolveDpmDbWriter(detectedOptions)
-
-                    diagnostic.info("Compiling DPM database from YTI Codelist sources")
-
-                    diagnostic.info("Mapping YTI Codelists to DPM model..")
-                    val dpmDictionaries = YclToDpmMapper().getDpmDictionariesFromSource(diagnostic, yclSource)
-
-                    if (diagnostic.counters()[Severity.ERROR] != 0) {
-                        diagnostic.info("Mapping failed due content errors")
-                        throwHalt()
-                    }
-
-                    diagnostic.info("Mapping done")
-                    diagnostic.info("Writing DPM database..")
-                    dbWriter.writeDpmDictionaries(dpmDictionaries)
-                    diagnostic.info("DPM database written: ${dbWriter.targetDbPath}")
-                }
+                compileDpmDb(detectedOptions)
             }
-
-            throwHalt()
         }
     }
 
@@ -113,6 +84,48 @@ class TaxgenCli(
             errWriter.println()
 
             TAXGEN_CLI_FAIL
+        }
+    }
+
+    private fun compileDpmDb(detectedOptions: DetectedOptions) {
+        diagnostic.withinTopic(
+            topicType = "Compiling",
+            topicName = "DPM database"
+        ) {
+            detectedOptions.ensureSingleSourceGiven()
+
+            resolveYclSource(detectedOptions).use { yclSource ->
+                val dbWriter = resolveDpmDbWriter(detectedOptions)
+                val dpmMapper = YclToDpmMapper(diagnostic)
+
+                val dpmDictionaries = dpmMapper.getDpmDictionariesFromSource(yclSource)
+
+                if (diagnostic.counters()[Severity.ERROR] != 0) {
+                    diagnostic.info("Mapping failed due content errors")
+                    throwHalt()
+                }
+
+                dbWriter.writeDpmDb(dpmDictionaries)
+            }
+        }
+    }
+
+    private fun captureYclSources(detectedOptions: DetectedOptions) {
+        diagnostic.withinTopic(
+            topicType = "Capturing",
+            topicName = "YTI Codelist sources"
+        ) {
+            detectedOptions.ensureSingleSourceGiven()
+
+            resolveYclSource(detectedOptions).use { yclSource ->
+                resolveYclSourceRecorder(detectedOptions).use { yclSourceRecorder ->
+                    yclSourceRecorder.captureSources(yclSource)
+                }
+            }
+
+            if (diagnostic.counters()[Severity.ERROR] != 0) {
+                diagnostic.info("Capturing failed")
+            }
         }
     }
 
@@ -140,23 +153,22 @@ class TaxgenCli(
     }
 
     private fun resolveYclSourceRecorder(
-        detectedOptions: DetectedOptions,
-        yclSource: YclSource
+        detectedOptions: DetectedOptions
     ): YclSourceRecorder {
 
         if (detectedOptions.cmdCaptureYclSourcesToFolder != null) {
             return YclSourceFolderStructureRecorder(
                 baseFolderPath = detectedOptions.cmdCaptureYclSourcesToFolder,
-                yclSource = yclSource,
-                forceOverwrite = detectedOptions.forceOverwrite
+                forceOverwrite = detectedOptions.forceOverwrite,
+                diagnostic = diagnostic
             )
         }
 
         if (detectedOptions.cmdCaptureYclSourcesToZip != null) {
             return YclSourceZipFileRecorder(
                 targetZipPath = detectedOptions.cmdCaptureYclSourcesToZip,
-                yclSource = yclSource,
-                forceOverwrite = detectedOptions.forceOverwrite
+                forceOverwrite = detectedOptions.forceOverwrite,
+                diagnostic = diagnostic
             )
         }
 
@@ -167,8 +179,9 @@ class TaxgenCli(
         detectedOptions: DetectedOptions
     ): DpmDbWriter {
         return DpmDbWriter(
-            targetDbPath = detectedOptions.cmdCompileDpmDb!!,
-            forceOverwrite = detectedOptions.forceOverwrite
+            rawTargetDbPath = detectedOptions.cmdCompileDpmDb!!,
+            forceOverwrite = detectedOptions.forceOverwrite,
+            diagnostic = diagnostic
         )
     }
 }
