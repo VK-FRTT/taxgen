@@ -12,6 +12,8 @@ dependencies {
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams
     testCompile libs.assertjCore
+    testCompile(project(':yti-taxgen-commons'))
+    testCompile(project(':yti-taxgen-test-commons'))
 
     testRuntimeOnly libs.junitJupiterEngine
 }
