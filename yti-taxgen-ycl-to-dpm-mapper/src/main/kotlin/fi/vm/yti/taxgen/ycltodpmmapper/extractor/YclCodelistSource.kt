@@ -38,7 +38,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
     }
 
     fun extractMembers(defaultMemberCode: String?): List<Member> {
-        val yclCodes = yclCodePagesData().asSequence()
+        val yclCodes = yclCodePagesData()
             .map { data ->
                 val codesCollection = JsonOps.readValue<YclCodesCollection>(data, ctx.diagnostic)
                 codesCollection.results ?: ctx.diagnostic.fatal("Missing YCL Codes")

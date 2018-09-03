@@ -20,5 +20,5 @@ class FixedYclCodelistSource(private val index: Int) : YclCodelistSource(index) 
     override fun yclCodePagesData() = listOf(
         """{"marker": "fixed_codepage_0"}""",
         """{"marker": "fixed_codepage_1"}"""
-    ).iterator()
+    ).iterator().asSequence()
 }

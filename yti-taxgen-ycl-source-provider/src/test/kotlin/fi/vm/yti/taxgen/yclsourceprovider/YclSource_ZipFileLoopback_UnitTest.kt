@@ -108,7 +108,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     @Test
     fun `Should have codepages @ root # dpmdictionary # codelist`() {
         val codesPages =
-            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().asSequence().toList()
+            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers = extractMarkerValuesFromJsonData(
             codesPages,
             { it -> it as String }

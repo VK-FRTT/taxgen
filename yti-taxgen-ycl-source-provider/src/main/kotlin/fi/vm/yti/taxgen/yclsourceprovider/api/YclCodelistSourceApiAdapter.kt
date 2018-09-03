@@ -25,12 +25,12 @@ class YclCodelistSourceApiAdapter(
         return HttpOps.fetchJsonData(contentUrls.codeListUrl, diagnostic)
     }
 
-    override fun yclCodePagesData(): Iterator<String> {
+    override fun yclCodePagesData(): Sequence<String> {
         return YclPaginationAwareResourceIterator(
             contentUrls.codesUrl,
             diagnostic,
             "Codes Page"
-        )
+        ).asSequence()
     }
 
     private fun resolveContentUrlsFromUri(): ContentUrls {

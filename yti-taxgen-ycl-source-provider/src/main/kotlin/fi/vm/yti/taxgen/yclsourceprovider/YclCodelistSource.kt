@@ -11,5 +11,5 @@ abstract class YclCodelistSource(
     override fun contextRef(): String = "#$index"
 
     abstract fun yclCodeschemeData(): String
-    abstract fun yclCodePagesData(): Iterator<String> //TODO - refactor as sequence
+    abstract fun yclCodePagesData(): Sequence<String>
 }

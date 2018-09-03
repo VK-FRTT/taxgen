@@ -120,7 +120,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     @Test
     fun `Should have codepages @ root # dpmdictionary # codelist`() {
         val codesPages =
-            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().asSequence().toList()
+            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers =
             extractMarkerValuesFromJsonData(
                 codesPages,

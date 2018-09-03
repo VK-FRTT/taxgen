@@ -13,7 +13,7 @@ class YclCodelistSourceFolderStructureAdapter(
         return FileOps.readTextFile(codeListPath, "ycl_codescheme.json")
     }
 
-    override fun yclCodePagesData(): Iterator<String> {
-        return NumberedFilesIterator(codeListPath, "ycl_codepage_*.json")
+    override fun yclCodePagesData(): Sequence<String> {
+        return NumberedFilesIterator(codeListPath, "ycl_codepage_*.json").asSequence()
     }
 }
