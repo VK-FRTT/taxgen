@@ -28,10 +28,10 @@ class DpmDbWriter(
     }
 
     fun writeDpmDb(dpmDictionaries: List<DpmDictionary>) {
-        diagnostic.withinTopic(
-            topicType = "Writing",
-            topicName = "DPM Database",
-            topicIdentifier = targetDbPath.toString()
+        diagnostic.withContext(
+            contextType = "Writing",
+            contextName = "DPM Database",
+            contextRef = targetDbPath.toString()
         ) {
             connectDatabase()
             Tables.create()

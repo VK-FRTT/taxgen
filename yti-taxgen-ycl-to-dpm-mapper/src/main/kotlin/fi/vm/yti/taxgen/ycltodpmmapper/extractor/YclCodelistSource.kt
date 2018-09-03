@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.ycltodpmmapper.extractor
 
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Member
@@ -15,7 +16,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
     data class DomainDetails(val concept: Concept, val domainCode: String?, val defaultMemberCode: String?)
 
     fun extractDomainDetails(): DomainDetails {
-        val codeScheme = ctx.deserializeJson<YclCodeScheme>(yclCodeschemeData())
+        val codeScheme = JsonOps.readValue<YclCodeScheme>(yclCodeschemeData(), ctx.diagnostic)
 
         return DomainDetails(
             concept = Concept.fromYclCodeScheme(codeScheme, ctx.owner),
@@ -39,8 +40,8 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
     fun extractMembers(defaultMemberCode: String?): List<Member> {
         val yclCodes = yclCodePagesData().asSequence()
             .map { data ->
-                ctx.deserializeJson<YclCodesCollection>(data).results
-                    ?: ctx.diagnostic.fatal("Missing YCL Codes")
+                val codesCollection = JsonOps.readValue<YclCodesCollection>(data, ctx.diagnostic)
+                codesCollection.results ?: ctx.diagnostic.fatal("Missing YCL Codes")
             }
             .flatten()
             .toList()
@@ -61,7 +62,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
     return ctx.extract(this) {
 
         val domainDetails = extractDomainDetails()
-        ctx.diagnostic.updateCurrentTopicName(domainDetails.domainCode)
+        ctx.diagnostic.updateCurrentContextName(domainDetails.domainCode)
 
         val members = extractMembers(domainDetails.defaultMemberCode)
 

@@ -88,9 +88,9 @@ class TaxgenCli(
     }
 
     private fun compileDpmDb(detectedOptions: DetectedOptions) {
-        diagnostic.withinTopic(
-            topicType = "Compiling",
-            topicName = "DPM database"
+        diagnostic.withContext(
+            contextType = "Compiling",
+            contextName = "DPM database"
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
@@ -111,9 +111,9 @@ class TaxgenCli(
     }
 
     private fun captureYclSources(detectedOptions: DetectedOptions) {
-        diagnostic.withinTopic(
-            topicType = "Capturing",
-            topicName = "YTI Codelist sources"
+        diagnostic.withContext(
+            contextType = "Capturing",
+            contextName = "YTI Codelist sources"
         ) {
             detectedOptions.ensureSingleSourceGiven()
 

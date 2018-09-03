@@ -12,8 +12,8 @@ class YclSourceFolderStructureAdapter(
 
     private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
 
-    override fun topicName(): String = "folder"
-    override fun topicIdentifier(): String = baseFolderPath.toString()
+    override fun contextName(): String = "folder"
+    override fun contextRef(): String = baseFolderPath.toString()
 
     override fun sourceInfoData(): String {
         return FileOps.readTextFile(baseFolderPath, "source_info.json")

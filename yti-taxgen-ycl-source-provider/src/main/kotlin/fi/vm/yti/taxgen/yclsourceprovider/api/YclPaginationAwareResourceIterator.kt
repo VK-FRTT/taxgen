@@ -1,10 +1,9 @@
 package fi.vm.yti.taxgen.yclsourceprovider.api
 
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopic
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
-import fi.vm.yti.taxgen.commons.JsonOps
 import okhttp3.HttpUrl
 
 class YclPaginationAwareResourceIterator(
@@ -20,12 +19,10 @@ class YclPaginationAwareResourceIterator(
         val url = nextPageUrl
 
         if (url != null) {
-            val topic = DiagnosticTopic(
-                type = "$resourceKind Load",
-                identifier = "#$index"
-            )
-
-            diagnostic.withinTopic(topic) {
+            diagnostic.withContext(
+                contextType = "$resourceKind Load",
+                contextRef = "#$index"
+            ) {
                 val resource = HttpOps.fetchJsonData(url, diagnostic)
                 resolveNextPageUrl(resource)
                 index++

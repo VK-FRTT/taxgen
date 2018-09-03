@@ -1,15 +1,15 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 
 abstract class YclCodelistSource(
     private val index: Int
-) : DiagnosticTopicProvider {
+) : DiagnosticContextProvider {
 
-    override fun topicType(): String = "Codelist"
-    override fun topicName(): String = ""
-    override fun topicIdentifier(): String = "#$index"
+    override fun contextType(): String = "Codelist"
+    override fun contextName(): String = ""
+    override fun contextRef(): String = "#$index"
 
     abstract fun yclCodeschemeData(): String
-    abstract fun yclCodePagesData(): Iterator<String>
+    abstract fun yclCodePagesData(): Iterator<String> //TODO - refactor as sequence
 }

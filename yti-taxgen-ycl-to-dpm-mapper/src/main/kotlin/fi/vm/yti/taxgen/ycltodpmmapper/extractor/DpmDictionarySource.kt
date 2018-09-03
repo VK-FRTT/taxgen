@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.ycltodpmmapper.extractor
 
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
 import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
@@ -12,9 +13,9 @@ internal fun DpmDictionarySource.extractDpmDictionary(
 
     fun extractDpmOwner(): Owner {
         return ctx.extract(Owner.Companion) {
-            val ownerConfig = ctx.deserializeJson<OwnerConfig>(dpmOwnerConfigData())
+            val ownerConfig = JsonOps.readValue<OwnerConfig>(dpmOwnerConfigData(), ctx.diagnostic)
 
-            ctx.diagnostic.updateCurrentTopicName(ownerConfig.name)
+            ctx.diagnostic.updateCurrentContextName(ownerConfig.name)
 
             val owner = Owner.fromConfig(ownerConfig, ctx.diagnostic)
             owner
@@ -23,7 +24,7 @@ internal fun DpmDictionarySource.extractDpmDictionary(
 
     return ctx.extract(this) {
         val ownerSpecificCtx = ctx.cloneWithOwner(extractDpmOwner())
-        ctx.diagnostic.updateCurrentTopicName(ownerSpecificCtx.owner.name)
+        ctx.diagnostic.updateCurrentContextName(ownerSpecificCtx.owner.name)
 
         val explicitDomains = yclCodelistSources().map { codelistSource ->
             codelistSource.extractDpmExplicitDomain(ownerSpecificCtx)

@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -16,10 +16,10 @@ import org.mockito.Mockito.mock
 
 class DpmMappingContext_UnitTest {
 
-    class FixedDiagnosticTopicProvider(private val discriminator: String) : DiagnosticTopicProvider {
-        override fun topicType() = "type-$discriminator"
-        override fun topicName() = "name-$discriminator"
-        override fun topicIdentifier() = "identifier-$discriminator"
+    class FixedDiagnosticContextProvider(private val discriminator: String) : DiagnosticContextProvider {
+        override fun contextType() = "type-$discriminator"
+        override fun contextName() = "name-$discriminator"
+        override fun contextRef() = "ref-$discriminator"
     }
 
     private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptor
@@ -39,7 +39,7 @@ class DpmMappingContext_UnitTest {
     fun `Single extract reports proper diagnostic events`() {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
-        val extractRetValue = ctx.extract(FixedDiagnosticTopicProvider("A")) {
+        val extractRetValue = ctx.extract(FixedDiagnosticContextProvider("A")) {
             extractValue
         }
 
@@ -47,8 +47,8 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticConsumerCaptor.events).containsExactly(
-            "ENTER [TOPIC{type-A,name-A,identifier-A}]",
-            "EXIT [] RETIRED [TOPIC{type-A,name-A,identifier-A}]"
+            "ENTER [CTX{type-A,name-A,ref-A}]",
+            "EXIT [] RETIRED [CTX{type-A,name-A,ref-A}]"
         )
     }
 
@@ -56,8 +56,8 @@ class DpmMappingContext_UnitTest {
     fun `Nested extracts report proper diagnostic events`() {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
-        val extractRetValue = ctx.extract(FixedDiagnosticTopicProvider("A")) {
-            ctx.extract(FixedDiagnosticTopicProvider("B")) {
+        val extractRetValue = ctx.extract(FixedDiagnosticContextProvider("A")) {
+            ctx.extract(FixedDiagnosticContextProvider("B")) {
                 extractValue
             }
         }
@@ -66,22 +66,22 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticConsumerCaptor.events).containsExactly(
-            "ENTER [TOPIC{type-A,name-A,identifier-A}]",
-            "ENTER [TOPIC{type-B,name-B,identifier-B}, TOPIC{type-A,name-A,identifier-A}]",
-            "EXIT [TOPIC{type-A,name-A,identifier-A}] RETIRED [TOPIC{type-B,name-B,identifier-B}]",
-            "EXIT [] RETIRED [TOPIC{type-A,name-A,identifier-A}]"
+            "ENTER [CTX{type-A,name-A,ref-A}]",
+            "ENTER [CTX{type-B,name-B,ref-B}, CTX{type-A,name-A,ref-A}]",
+            "EXIT [CTX{type-A,name-A,ref-A}] RETIRED [CTX{type-B,name-B,ref-B}]",
+            "EXIT [] RETIRED [CTX{type-A,name-A,ref-A}]"
         )
     }
 
     @Test
-    fun `Nested extracts with diagnostic topic name updates report proper diagnostic events`() {
+    fun `Nested extracts with diagnostic context name updates report proper diagnostic events`() {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
-        val extractRetValue = ctx.extract(FixedDiagnosticTopicProvider("A")) {
-            ctx.diagnostic.updateCurrentTopicName("updated-name-A")
+        val extractRetValue = ctx.extract(FixedDiagnosticContextProvider("A")) {
+            ctx.diagnostic.updateCurrentContextName("updated-name-A")
 
-            ctx.extract(FixedDiagnosticTopicProvider("B")) {
-                ctx.diagnostic.updateCurrentTopicName("updated-name-B")
+            ctx.extract(FixedDiagnosticContextProvider("B")) {
+                ctx.diagnostic.updateCurrentContextName("updated-name-B")
                 extractValue
             }
         }
@@ -90,12 +90,12 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticConsumerCaptor.events).containsExactly(
-            "ENTER [TOPIC{type-A,name-A,identifier-A}]",
-            "UPDATE [TOPIC{type-A,updated-name-A,identifier-A}] ORIGINAL [TOPIC{type-A,name-A,identifier-A}]",
-            "ENTER [TOPIC{type-B,name-B,identifier-B}, TOPIC{type-A,updated-name-A,identifier-A}]",
-            "UPDATE [TOPIC{type-B,updated-name-B,identifier-B}, TOPIC{type-A,updated-name-A,identifier-A}] ORIGINAL [TOPIC{type-B,name-B,identifier-B}]",
-            "EXIT [TOPIC{type-A,updated-name-A,identifier-A}] RETIRED [TOPIC{type-B,updated-name-B,identifier-B}]",
-            "EXIT [] RETIRED [TOPIC{type-A,updated-name-A,identifier-A}]"
+            "ENTER [CTX{type-A,name-A,ref-A}]",
+            "UPDATE [CTX{type-A,updated-name-A,ref-A}] ORIGINAL [CTX{type-A,name-A,ref-A}]",
+            "ENTER [CTX{type-B,name-B,ref-B}, CTX{type-A,updated-name-A,ref-A}]",
+            "UPDATE [CTX{type-B,updated-name-B,ref-B}, CTX{type-A,updated-name-A,ref-A}] ORIGINAL [CTX{type-B,name-B,ref-B}]",
+            "EXIT [CTX{type-A,updated-name-A,ref-A}] RETIRED [CTX{type-B,updated-name-B,ref-B}]",
+            "EXIT [] RETIRED [CTX{type-A,updated-name-A,ref-A}]"
         )
     }
 
@@ -103,7 +103,7 @@ class DpmMappingContext_UnitTest {
     fun `Single extractList reports proper diagnostic events`() {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
-        val extractRetValue = ctx.extractList(FixedDiagnosticTopicProvider("A")) {
+        val extractRetValue = ctx.extractList(FixedDiagnosticContextProvider("A")) {
             listOf(extractValue, extractValue2)
         }
 
@@ -116,8 +116,8 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue[1])
 
         assertThat(diagnosticConsumerCaptor.events).containsExactly(
-            "ENTER [TOPIC{type-A,name-A,identifier-A}]",
-            "EXIT [] RETIRED [TOPIC{type-A,name-A,identifier-A}]"
+            "ENTER [CTX{type-A,name-A,ref-A}]",
+            "EXIT [] RETIRED [CTX{type-A,name-A,ref-A}]"
         )
     }
 
@@ -125,8 +125,8 @@ class DpmMappingContext_UnitTest {
     fun `Nested extractList reports proper diagnostic events`() {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
-        val extractRetValue = ctx.extractList(FixedDiagnosticTopicProvider("A")) {
-            ctx.extractList(FixedDiagnosticTopicProvider("B")) {
+        val extractRetValue = ctx.extractList(FixedDiagnosticContextProvider("A")) {
+            ctx.extractList(FixedDiagnosticContextProvider("B")) {
                 listOf(extractValue, extractValue2)
             }
         }
@@ -140,10 +140,10 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue[1])
 
         assertThat(diagnosticConsumerCaptor.events).containsExactly(
-            "ENTER [TOPIC{type-A,name-A,identifier-A}]",
-            "ENTER [TOPIC{type-B,name-B,identifier-B}, TOPIC{type-A,name-A,identifier-A}]",
-            "EXIT [TOPIC{type-A,name-A,identifier-A}] RETIRED [TOPIC{type-B,name-B,identifier-B}]",
-            "EXIT [] RETIRED [TOPIC{type-A,name-A,identifier-A}]"
+            "ENTER [CTX{type-A,name-A,ref-A}]",
+            "ENTER [CTX{type-B,name-B,ref-B}, CTX{type-A,name-A,ref-A}]",
+            "EXIT [CTX{type-A,name-A,ref-A}] RETIRED [CTX{type-B,name-B,ref-B}]",
+            "EXIT [] RETIRED [CTX{type-A,name-A,ref-A}]"
         )
     }
 }

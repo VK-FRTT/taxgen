@@ -49,10 +49,10 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have diagnostic topic info about yclsource @ root`() {
-        assertThat(yclSource.topicType()).isEqualTo("Reading YCL Sources")
-        assertThat(yclSource.topicName()).isEqualTo("ZIP file")
-        assertThat(yclSource.topicIdentifier()).isEqualTo(targetZipPath.toString())
+    fun `Should have diagnostic context info about yclsource @ root`() {
+        assertThat(yclSource.contextType()).isEqualTo("Reading YCL Sources")
+        assertThat(yclSource.contextName()).isEqualTo("ZIP file")
+        assertThat(yclSource.contextRef()).isEqualTo(targetZipPath.toString())
     }
 
     @Test
@@ -71,13 +71,13 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have diagnostic topic info about dpmdictionary @ root # dpmdictionary`() {
+    fun `Should have diagnostic context info about dpmdictionary @ root # dpmdictionary`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         assertThat(dpmDictionarySources.size).isEqualTo(2)
 
-        assertThat(dpmDictionarySources[0].topicType()).isEqualTo("DPM Dictionary")
-        assertThat(dpmDictionarySources[0].topicName()).isEqualTo("")
-        assertThat(dpmDictionarySources[0].topicIdentifier()).isEqualTo("#0")
+        assertThat(dpmDictionarySources[0].contextType()).isEqualTo("DPM Dictionary")
+        assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
     }
 
     @Test
@@ -95,14 +95,14 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have diagnostic topic info about codelist @ root # dpmdictionary # codelist`() {
+    fun `Should have diagnostic context info about codelist @ root # dpmdictionary # codelist`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         assertThat(codeLists.size).isEqualTo(2)
 
-        assertThat(codeLists[0].topicType()).isEqualTo("Codelist")
-        assertThat(codeLists[0].topicName()).isEqualTo("")
-        assertThat(codeLists[0].topicIdentifier()).isEqualTo("#0")
-        assertThat(codeLists[1].topicIdentifier()).isEqualTo("#1")
+        assertThat(codeLists[0].contextType()).isEqualTo("Codelist")
+        assertThat(codeLists[0].contextName()).isEqualTo("")
+        assertThat(codeLists[0].contextRef()).isEqualTo("#0")
+        assertThat(codeLists[1].contextRef()).isEqualTo("#1")
     }
 
     @Test

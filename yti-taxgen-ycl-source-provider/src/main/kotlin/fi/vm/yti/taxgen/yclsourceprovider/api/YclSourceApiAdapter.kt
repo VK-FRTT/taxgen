@@ -1,12 +1,11 @@
 package fi.vm.yti.taxgen.yclsourceprovider.api
 
+import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopic
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.api.config.YclSourceApiAdapterConfig
-import fi.vm.yti.taxgen.commons.FileOps
 import java.nio.file.Path
 import java.time.Instant
 
@@ -26,8 +25,8 @@ class YclSourceApiAdapter(
         val configMap: Map<String, Any>
     )
 
-    override fun topicName(): String = "YTI Reference Data service"
-    override fun topicIdentifier(): String = configFilePath.toString()
+    override fun contextName(): String = "YTI Reference Data service"
+    override fun contextRef(): String = configFilePath.toString()
 
     override fun sourceInfoData(): String = sourceInfoData
 
@@ -45,12 +44,10 @@ class YclSourceApiAdapter(
     }
 
     private fun loadConfig(): LoadedConfig {
-        val topic = DiagnosticTopic(
-            type = "Configuration file",
-            identifier = configFilePath.fileName.toString()
-        )
-
-        return diagnostic.withinTopic(topic) {
+        return diagnostic.withContext(
+            contextType = "Configuration file",
+            contextRef = configFilePath.fileName.toString()
+        ) {
             val configData = FileOps.readTextFile(configFilePath)
 
             LoadedConfig(

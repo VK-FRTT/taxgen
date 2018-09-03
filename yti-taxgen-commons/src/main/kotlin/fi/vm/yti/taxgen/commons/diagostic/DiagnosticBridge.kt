@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
 import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.Severity.INFO
@@ -9,38 +10,57 @@ import fi.vm.yti.taxgen.commons.throwHalt
 import java.util.LinkedList
 
 class DiagnosticBridge(
-    val consumer: DiagnosticConsumer
+    private val consumer: DiagnosticConsumer
 ) : Diagnostic {
-    private val topicStack = LinkedList<TopicInfo>()
+    private val contextStack = LinkedList<ContextInfo>()
     private val counters = Severity.values().map { it -> Pair(it, 0) }.toMap().toMutableMap()
 
-    override fun topicEnter(topicProvider: DiagnosticTopicProvider) {
-        val topic = TopicInfo(
-            type = topicProvider.topicType(),
-            name = topicProvider.topicName(),
-            identifier = topicProvider.topicIdentifier()
+    override fun <R> withContext(
+        diagnosticContext: DiagnosticContextProvider,
+        block: () -> R
+    ): R {
+        return withContext(
+            diagnosticContext.contextType(),
+            diagnosticContext.contextName(),
+            diagnosticContext.contextRef(),
+            block
+        )
+    }
+
+    override fun <R> withContext(
+        contextType: String,
+        contextName: String,
+        contextRef: String,
+        block: () -> R
+    ): R {
+        val info = ContextInfo(
+            type = contextType,
+            name = contextName,
+            ref = contextRef
         )
 
-        topicStack.push(topic)
-        consumer.topicEnter(topicStack)
+        contextStack.push(info)
+        consumer.contextEnter(contextStack)
+
+        val ret = block()
+
+        val retired = contextStack.pop()
+        consumer.contextExit(contextStack, retired)
+
+        return ret
     }
 
-    override fun topicExit() {
-        val retiredTopic = topicStack.pop()
-        consumer.topicExit(topicStack, retiredTopic)
-    }
-
-    override fun updateCurrentTopicName(name: String?) {
+    override fun updateCurrentContextName(name: String?) {
         if (name == null) {
             return
         }
 
-        val originalTopic = topicStack.peekFirst()
+        val original = contextStack.peekFirst()
 
-        if (originalTopic != null) {
-            val newTopic = originalTopic.copy(name = name)
-            topicStack[0] = newTopic
-            consumer.topmostTopicNameUpdate(topicStack, originalTopic)
+        if (original != null) {
+            val updated = original.copy(name = name)
+            contextStack[0] = updated
+            consumer.topContextNameChange(contextStack, original)
         }
     }
 

@@ -4,9 +4,15 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 
 interface DiagnosticConsumer {
 
-    fun topicEnter(topicStack: List<TopicInfo>)
-    fun topicExit(topicStack: List<TopicInfo>, retiredTopic: TopicInfo)
-    fun topmostTopicNameUpdate(topicStack: List<TopicInfo>, originalTopic: TopicInfo)
+    data class ContextInfo(
+        val type: String,
+        val name: String,
+        val ref: String
+    )
+
+    fun contextEnter(contextStack: List<ContextInfo>)
+    fun contextExit(contextStack: List<ContextInfo>, retiredContext: ContextInfo)
+    fun topContextNameChange(contextStack: List<ContextInfo>, originalContext: ContextInfo)
 
     fun message(severity: Severity, message: String)
     fun validationErrors(validationErrors: ValidationErrors)

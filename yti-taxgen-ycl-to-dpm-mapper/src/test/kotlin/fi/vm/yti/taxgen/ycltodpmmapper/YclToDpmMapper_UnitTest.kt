@@ -210,7 +210,7 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `Should produce correct diagnostic topics`() {
+        fun `Should produce correct diagnostic context events`() {
             performMapping()
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
                 "ENTER [Processing]",

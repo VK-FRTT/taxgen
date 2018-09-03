@@ -1,10 +1,9 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
-import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
 
@@ -41,42 +40,33 @@ internal class DpmMappingContext private constructor(
         )
     }
 
-    fun <R : Validatable> extract(topicProvider: DiagnosticTopicProvider, block: () -> R): R {
-        diagnostic.topicEnter(topicProvider)
+    fun <R : Validatable> extract(diagnosticContext: DiagnosticContextProvider, block: () -> R): R {
+        return diagnostic.withContext(diagnosticContext) {
+            val result = block()
 
-        val ret = block()
+            val validationErrors = ValidationErrorCollector()
+            result.validate(validationErrors)
 
-        val validationErrors = ValidationErrorCollector()
-        ret.validate(validationErrors)
+            if (validationErrors.any()) {
+                diagnostic.validationErrors(validationErrors)
+            }
 
-        if (validationErrors.any()) {
-            diagnostic.validationErrors(validationErrors)
+            result
         }
-
-        diagnostic.topicExit()
-
-        return ret
     }
 
-    fun <R : Validatable> extractList(topicProvider: DiagnosticTopicProvider, block: () -> List<R>): List<R> {
-        diagnostic.topicEnter(topicProvider)
+    fun <R : Validatable> extractList(diagnosticContext: DiagnosticContextProvider, block: () -> List<R>): List<R> {
+        return diagnostic.withContext(diagnosticContext) {
+            val result = block()
 
-        val ret = block()
+            val validationErrors = ValidationErrorCollector()
+            result.forEach { it.validate(validationErrors) }
 
-        val validationErrors = ValidationErrorCollector()
+            if (validationErrors.any()) {
+                diagnostic.validationErrors(validationErrors)
+            }
 
-        ret.forEach { it.validate(validationErrors) }
-
-        if (validationErrors.any()) {
-            diagnostic.validationErrors(validationErrors)
+            result
         }
-
-        diagnostic.topicExit()
-
-        return ret
-    }
-
-    internal inline fun <reified T : Any> deserializeJson(jsonContent: String): T {
-        return JsonOps.readValue(jsonContent, diagnostic)
     }
 }

@@ -2,23 +2,23 @@ package fi.vm.yti.taxgen.testcommons
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity
-import fi.vm.yti.taxgen.commons.diagostic.TopicInfo
 
 class DiagnosticConsumerCaptorSimple : DiagnosticConsumer {
 
     val events = mutableListOf<String>()
 
-    override fun topicEnter(topicStack: List<TopicInfo>) {
-        events.add("ENTER [${topicStack.firstOrNull()?.type ?: ""}]")
+    override fun contextEnter(contextStack: List<ContextInfo>) {
+        events.add("ENTER [${contextStack.firstOrNull()?.type ?: ""}]")
     }
 
-    override fun topicExit(topicStack: List<TopicInfo>, retiredTopic: TopicInfo) {
-        events.add("EXIT [${topicStack.firstOrNull()?.type ?: ""}] RETIRED [${retiredTopic.type}]")
+    override fun contextExit(contextStack: List<ContextInfo>, retiredContext: ContextInfo) {
+        events.add("EXIT [${contextStack.firstOrNull()?.type ?: ""}] RETIRED [${retiredContext.type}]")
     }
 
-    override fun topmostTopicNameUpdate(topicStack: List<TopicInfo>, originalTopic: TopicInfo) {
-        events.add("UPDATE [${topicStack.firstOrNull()?.type ?: ""}] ORIGINAL [${originalTopic.type}]")
+    override fun topContextNameChange(contextStack: List<ContextInfo>, originalContext: ContextInfo) {
+        events.add("UPDATE [${contextStack.firstOrNull()?.type ?: ""}] ORIGINAL [${originalContext.type}]")
     }
 
     override fun message(severity: Severity, message: String) {

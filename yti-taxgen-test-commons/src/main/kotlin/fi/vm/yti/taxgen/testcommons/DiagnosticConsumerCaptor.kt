@@ -2,26 +2,30 @@ package fi.vm.yti.taxgen.testcommons
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity
-import fi.vm.yti.taxgen.commons.diagostic.TopicInfo
 
 class DiagnosticConsumerCaptor : DiagnosticConsumer {
     val events = mutableListOf<String>()
 
-    fun topicToString(topic: TopicInfo): String = "TOPIC{${topic.type},${topic.name},${topic.identifier}}"
+    private fun contextToString(context: ContextInfo): String = "CTX{${context.type},${context.name},${context.ref}}"
 
-    override fun topicEnter(topicStack: List<TopicInfo>) {
-        events.add("ENTER [${topicStack.joinToString { topicToString(it) }}]")
+    override fun contextEnter(contextStack: List<ContextInfo>) {
+        events.add("ENTER [${contextStack.joinToString { contextToString(it) }}]")
     }
 
-    override fun topicExit(topicStack: List<TopicInfo>, retiredTopic: TopicInfo) {
-        events.add("EXIT [${topicStack.joinToString { topicToString(it) }}] RETIRED [${topicToString(retiredTopic)}]")
-    }
-
-    override fun topmostTopicNameUpdate(topicStack: List<TopicInfo>, originalTopic: TopicInfo) {
+    override fun contextExit(contextStack: List<ContextInfo>, retiredContext: ContextInfo) {
         events.add(
-            "UPDATE [${topicStack.joinToString { topicToString(it) }}] ORIGINAL [${topicToString(
-                originalTopic
+            "EXIT [${contextStack.joinToString { contextToString(it) }}] RETIRED [${contextToString(
+                retiredContext
+            )}]"
+        )
+    }
+
+    override fun topContextNameChange(contextStack: List<ContextInfo>, originalContext: ContextInfo) {
+        events.add(
+            "UPDATE [${contextStack.joinToString { contextToString(it) }}] ORIGINAL [${contextToString(
+                originalContext
             )}]"
         )
     }

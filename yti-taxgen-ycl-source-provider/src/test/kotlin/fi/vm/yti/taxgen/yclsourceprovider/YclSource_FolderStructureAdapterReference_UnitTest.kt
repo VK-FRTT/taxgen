@@ -39,10 +39,10 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic topic info about yclsource @ root`() {
-        assertThat(yclSource.topicType()).isEqualTo("Reading YCL Sources")
-        assertThat(yclSource.topicName()).isEqualTo("folder")
-        assertThat(yclSource.topicIdentifier()).isEqualTo(resourcePath.toString())
+    fun `Should have diagnostic context info about yclsource @ root`() {
+        assertThat(yclSource.contextType()).isEqualTo("Reading YCL Sources")
+        assertThat(yclSource.contextName()).isEqualTo("folder")
+        assertThat(yclSource.contextRef()).isEqualTo(resourcePath.toString())
     }
 
     @Test
@@ -71,14 +71,14 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic topic info about dpmdictionary @ root # dpmdictionary`() {
+    fun `Should have diagnostic context info about dpmdictionary @ root # dpmdictionary`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         assertThat(dpmDictionarySources.size).isEqualTo(12)
 
-        assertThat(dpmDictionarySources[0].topicType()).isEqualTo("DPM Dictionary")
-        assertThat(dpmDictionarySources[0].topicName()).isEqualTo("")
-        assertThat(dpmDictionarySources[0].topicIdentifier()).isEqualTo("#0")
-        assertThat(dpmDictionarySources[11].topicIdentifier()).isEqualTo("#11")
+        assertThat(dpmDictionarySources[0].contextType()).isEqualTo("DPM Dictionary")
+        assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
+        assertThat(dpmDictionarySources[11].contextRef()).isEqualTo("#11")
     }
 
     @Test
@@ -107,14 +107,14 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic topic info about codelist @ root # dpmdictionary # codelist`() {
+    fun `Should have diagnostic context info about codelist @ root # dpmdictionary # codelist`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         assertThat(codeLists.size).isEqualTo(12)
 
-        assertThat(codeLists[0].topicType()).isEqualTo("Codelist")
-        assertThat(codeLists[0].topicName()).isEqualTo("")
-        assertThat(codeLists[0].topicIdentifier()).isEqualTo("#0")
-        assertThat(codeLists[11].topicIdentifier()).isEqualTo("#11")
+        assertThat(codeLists[0].contextType()).isEqualTo("Codelist")
+        assertThat(codeLists[0].contextName()).isEqualTo("")
+        assertThat(codeLists[0].contextRef()).isEqualTo("#0")
+        assertThat(codeLists[11].contextRef()).isEqualTo("#11")
     }
 
     @Test

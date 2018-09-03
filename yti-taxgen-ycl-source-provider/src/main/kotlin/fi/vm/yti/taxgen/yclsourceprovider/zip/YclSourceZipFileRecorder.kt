@@ -20,11 +20,11 @@ class YclSourceZipFileRecorder(
     private var zipFileSystem: FileSystem? = null
     private var folderStructureRecorder: YclSourceRecorder? = null
 
-    override fun topicName(): String = "ZIP file"
-    override fun topicIdentifier(): String = targetZipPath.toString()
+    override fun contextName(): String = "ZIP file"
+    override fun contextRef(): String = targetZipPath.toString()
 
     override fun captureSources(yclSource: YclSource) {
-        diagnostic.withinTopic(this) {
+        diagnostic.withContext(this) {
             val fs = createTargetZipFileSystem().also { zipFileSystem = it }
             val baseFolderPath = fs.getPath("/")
             val recorder = createFolderStructureRecorder(baseFolderPath).also { folderStructureRecorder = it }

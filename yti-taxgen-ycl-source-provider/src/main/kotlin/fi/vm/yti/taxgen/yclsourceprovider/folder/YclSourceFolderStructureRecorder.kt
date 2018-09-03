@@ -17,8 +17,8 @@ class YclSourceFolderStructureRecorder(
 
     private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
 
-    override fun topicName(): String = "folder"
-    override fun topicIdentifier(): String = baseFolderPath.toString()
+    override fun contextName(): String = "folder"
+    override fun contextRef(): String = baseFolderPath.toString()
 
     override fun captureSources(yclSource: YclSource) {
         val pathStack = PathStack(
@@ -27,7 +27,7 @@ class YclSourceFolderStructureRecorder(
             diagnostic = diagnostic
         )
 
-        diagnostic.withinTopic(this) {
+        diagnostic.withContext(this) {
             doCaptureYclSources(yclSource, pathStack)
         }
     }
@@ -36,7 +36,7 @@ class YclSourceFolderStructureRecorder(
         yclSource: YclSource,
         pathStack: PathStack
     ) {
-        diagnostic.withinTopic(yclSource) {
+        diagnostic.withContext(yclSource) {
 
             FileOps.writeTextFile(
                 yclSource.sourceInfoData(),
@@ -59,7 +59,7 @@ class YclSourceFolderStructureRecorder(
     ) {
         yclDpmDictionarySources.withIndex().forEach { (dictionaryIndex, dictionarySource) ->
 
-            diagnostic.withinTopic(dictionarySource) {
+            diagnostic.withContext(dictionarySource) {
 
                 pathStack.withIndexPostfixSubfolder("dpmdictionary", dictionaryIndex) {
 
@@ -82,7 +82,7 @@ class YclSourceFolderStructureRecorder(
     private fun captureCodelistSources(codelistSources: List<YclCodelistSource>, pathStack: PathStack) {
         codelistSources.withIndex().forEach { (listIndex, codelistSource) ->
 
-            diagnostic.withinTopic(codelistSource) {
+            diagnostic.withContext(codelistSource) {
 
                 pathStack.withIndexPostfixSubfolder("codelist", listIndex) {
 

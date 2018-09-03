@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticTopicProvider
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableElementsUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
@@ -16,10 +16,10 @@ data class Owner(
     val defaultLanguage: Language
 ) : Validatable {
 
-    companion object : DiagnosticTopicProvider {
-        override fun topicType(): String = "Owner"
-        override fun topicName(): String = ""
-        override fun topicIdentifier(): String = ""
+    companion object : DiagnosticContextProvider {
+        override fun contextType(): String = "Owner"
+        override fun contextName(): String = ""
+        override fun contextRef(): String = ""
     }
 
     override fun validate(validationErrors: ValidationErrors) {

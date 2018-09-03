@@ -2,9 +2,9 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
-import fi.vm.yti.taxgen.commons.diagostic.TopicInfo
 import java.io.PrintWriter
 
 class DiagnosticTextPrinter(
@@ -13,20 +13,26 @@ class DiagnosticTextPrinter(
 
     private var level = 0
 
-    override fun topicEnter(topicStack: List<TopicInfo>) {
-        level = topicStack.size
-        val topic = topicStack.first()
-        printTopic(topic)
+    override fun contextEnter(contextStack: List<DiagnosticConsumer.ContextInfo>) {
+        level = contextStack.size
+        val context = contextStack.first()
+        printContext(context)
     }
 
-    override fun topicExit(topicStack: List<TopicInfo>, retiredTopic: TopicInfo) {
-        printNestedLine("${retiredTopic.type}: OK")
-        level = topicStack.size
+    override fun contextExit(
+        contextStack: List<DiagnosticConsumer.ContextInfo>,
+        retiredContext: DiagnosticConsumer.ContextInfo
+    ) {
+        printNestedLine("${retiredContext.type}: OK")
+        level = contextStack.size
     }
 
-    override fun topmostTopicNameUpdate(topicStack: List<TopicInfo>, originalTopic: TopicInfo) {
-        val topic = topicStack.first()
-        printTopic(topic)
+    override fun topContextNameChange(
+        contextStack: List<DiagnosticConsumer.ContextInfo>,
+        originalContext: DiagnosticConsumer.ContextInfo
+    ) {
+        val context = contextStack.first()
+        printContext(context)
     }
 
     override fun message(severity: Severity, message: String) {
@@ -39,10 +45,10 @@ class DiagnosticTextPrinter(
         }
     }
 
-    private fun printTopic(topic: TopicInfo) {
-        val line = "${topic.type}: " +
-            (if (topic.name.isNotBlank()) "${topic.name} " else "") +
-            (if (topic.identifier.isNotBlank()) "(${topic.identifier})" else "")
+    private fun printContext(context: ContextInfo) {
+        val line = "${context.type}: " +
+            (if (context.name.isNotBlank()) "${context.name} " else "") +
+            (if (context.ref.isNotBlank()) "(${context.ref})" else "")
 
         printNestedLine(line)
     }
