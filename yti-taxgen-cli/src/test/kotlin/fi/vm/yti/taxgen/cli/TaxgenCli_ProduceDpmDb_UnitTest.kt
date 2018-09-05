@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CONFIG
+import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.sql.DriverManager
 
 @DisplayName("Command ´--compile-dpm-db´")
 internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
@@ -39,7 +41,10 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         )
 
         assertThat(targetDbPath).exists().isRegularFile()
-        //TODO - Verify targetDb content too
+
+        assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
+            "SingleComprehensiveTree_Name"
+        )
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
@@ -263,7 +268,10 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         assertThat(errText).isBlank()
 
         assertThat(targetDbPath).exists().isRegularFile()
-        //TODO - Verify targetDb content too
+
+        assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
+            "SingleComprehensiveTree_Name"
+        )
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
@@ -402,5 +410,18 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         assertThat(errText).isBlank()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+    }
+
+    private fun fetchDpmOwnersFromTargetDb(): List<String> {
+        val dbConnection = DriverManager.getConnection("jdbc:sqlite:$targetDbPath")
+        val rows = dbConnection.createStatement().executeQuery(
+            """
+                SELECT
+                    mOwner.OwnerName
+                FROM mOwner
+                """
+        ).toStringList()
+
+        return rows
     }
 }
