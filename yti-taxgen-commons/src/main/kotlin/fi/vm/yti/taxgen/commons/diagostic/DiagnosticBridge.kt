@@ -28,7 +28,7 @@ class DiagnosticBridge(
     }
 
     override fun <R> withContext(
-        contextType: String,
+        contextType: DiagnosticContextType,
         contextName: String,
         contextRef: String,
         block: () -> R

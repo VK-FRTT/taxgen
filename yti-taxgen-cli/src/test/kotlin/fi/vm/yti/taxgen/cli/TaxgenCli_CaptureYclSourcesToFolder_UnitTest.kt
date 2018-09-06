@@ -32,10 +32,10 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: folder",
-            "Capturing: OK"
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: folder",
+            "YCL Sources: folder",
+            "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -58,10 +58,10 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: YTI Reference Data service",
-            "Capturing: OK"
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: folder",
+            "YCL Sources: YTI Reference Data service",
+            "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -88,10 +88,10 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: folder",
-            "Capturing: OK"
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: folder",
+            "YCL Sources: folder",
+            "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -137,9 +137,9 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: folder",
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: folder",
+            "YCL Sources: folder",
             "FATAL: Target file 'ycl_sources/source_info.json' already exists"
         )
 
@@ -166,7 +166,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
+            "Capturing YTI Codelist sources",
             "FATAL: Could not create filesystem path",
             "(already exists)"
         )
@@ -186,7 +186,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources"
+            "Capturing YTI Codelist sources"
         )
 
         assertThat(errText).containsSubsequence(
@@ -252,7 +252,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources"
+            "Capturing YTI Codelist sources"
         )
 
         assertThat(errText).containsSubsequence(

@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.ycltodpmmapper.yclmodel
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import java.time.Instant
 import java.time.LocalDate
 
@@ -19,7 +20,7 @@ internal data class YclCode(
     val description: Map<String, String>?
 ) : DiagnosticContextProvider {
 
-    override fun contextType(): String = "YCL Code"
+    override fun contextType(): DiagnosticContextType = DiagnosticContextType.YclCode
     override fun contextName(): String = prefLabel?.get("en") ?: ""
     override fun contextRef(): String = codeValue ?: ""
 }

@@ -23,7 +23,7 @@ class DiagnosticTextPrinter(
         contextStack: List<DiagnosticConsumer.ContextInfo>,
         retiredContext: DiagnosticConsumer.ContextInfo
     ) {
-        printNestedLine("${retiredContext.type}: OK")
+        printNestedLine("${retiredContext.type.displayName}: OK")
         level = contextStack.size
     }
 
@@ -46,9 +46,12 @@ class DiagnosticTextPrinter(
     }
 
     private fun printContext(context: ContextInfo) {
-        val line = "${context.type}: " +
+        val remainder =
             (if (context.name.isNotBlank()) "${context.name} " else "") +
             (if (context.ref.isNotBlank()) "(${context.ref})" else "")
+
+        val line = "${context.type.displayName}" +
+            (if (remainder.isNotBlank()) ": $remainder" else "")
 
         printNestedLine(line)
     }

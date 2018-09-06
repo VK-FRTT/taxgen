@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
@@ -89,8 +90,7 @@ class TaxgenCli(
 
     private fun compileDpmDb(detectedOptions: DetectedOptions) {
         diagnostic.withContext(
-            contextType = "Compiling",
-            contextName = "DPM database"
+            contextType = DiagnosticContextType.CmdCompileDpmDb
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
@@ -112,8 +112,7 @@ class TaxgenCli(
 
     private fun captureYclSources(detectedOptions: DetectedOptions) {
         diagnostic.withContext(
-            contextType = "Capturing",
-            contextName = "YTI Codelist sources"
+            contextType = DiagnosticContextType.CmdCaptureYclSources
         ) {
             detectedOptions.ensureSingleSourceGiven()
 

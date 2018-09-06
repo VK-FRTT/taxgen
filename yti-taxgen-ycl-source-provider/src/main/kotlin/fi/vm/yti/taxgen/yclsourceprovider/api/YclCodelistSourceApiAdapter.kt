@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.yclsourceprovider.api
 
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextAt
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
 import fi.vm.yti.taxgen.yclsourceprovider.api.config.YclCodelistSourceApiAdapterConfig
@@ -29,13 +30,13 @@ class YclCodelistSourceApiAdapter(
         return YclPaginationAwareResourceIterator(
             contentUrls.codesUrl,
             diagnostic,
-            "Codes Page"
+            DiagnosticContextType.YclCodesPage
         ).asSequence()
     }
 
     private fun resolveContentUrlsFromUri(): ContentUrls {
         return diagnostic.withContext(
-            contextType = "URI Resolution",
+            contextType = DiagnosticContextType.InitUriResolution,
             contextRef = config.uri
         ) {
             val uri = HttpUrl.parse(config.uri) ?: diagnostic.fatal("Malformed URI")

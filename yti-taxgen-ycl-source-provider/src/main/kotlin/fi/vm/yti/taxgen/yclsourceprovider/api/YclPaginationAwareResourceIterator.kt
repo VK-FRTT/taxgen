@@ -2,14 +2,15 @@ package fi.vm.yti.taxgen.yclsourceprovider.api
 
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 import okhttp3.HttpUrl
 
 class YclPaginationAwareResourceIterator(
     url: HttpUrl,
-    val diagnostic: Diagnostic,
-    val resourceKind: String
+    private val diagnostic: Diagnostic,
+    private val diagnosticContextType: DiagnosticContextType
 ) : AbstractIterator<String>() {
 
     private var nextPageUrl: HttpUrl? = composeInitialPagedUrl(url)
@@ -20,7 +21,7 @@ class YclPaginationAwareResourceIterator(
 
         if (url != null) {
             diagnostic.withContext(
-                contextType = "$resourceKind Load",
+                contextType = diagnosticContextType,
                 contextRef = "#$index"
             ) {
                 val resource = HttpOps.fetchJsonData(url, diagnostic)

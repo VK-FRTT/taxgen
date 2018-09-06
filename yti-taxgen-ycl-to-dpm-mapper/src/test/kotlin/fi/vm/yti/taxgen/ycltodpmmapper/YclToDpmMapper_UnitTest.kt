@@ -213,25 +213,25 @@ internal class YclToDpmMapper_UnitTest {
         fun `Should produce correct diagnostic context events`() {
             performMapping()
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
-                "ENTER [Processing]",
-                "ENTER [Reading YCL Sources]",
-                "ENTER [DPM Dictionary]",
-                "ENTER [Owner]",
-                "UPDATE [Owner] ORIGINAL [Owner]",
-                "EXIT [DPM Dictionary] RETIRED [Owner]",
-                "UPDATE [DPM Dictionary] ORIGINAL [DPM Dictionary]",
-                "ENTER [Codelist]",
-                "UPDATE [Codelist] ORIGINAL [Codelist]",
-                "ENTER [YCL Code]",
-                "EXIT [Codelist] RETIRED [YCL Code]",
-                "ENTER [YCL Code]",
-                "EXIT [Codelist] RETIRED [YCL Code]",
-                "ENTER [YCL Code]",
-                "EXIT [Codelist] RETIRED [YCL Code]",
-                "EXIT [DPM Dictionary] RETIRED [Codelist]",
-                "EXIT [Reading YCL Sources] RETIRED [DPM Dictionary]",
-                "EXIT [Processing] RETIRED [Reading YCL Sources]",
-                "EXIT [] RETIRED [Processing]"
+                "ENTER [ActivityMapYclToDpm]",
+                "ENTER [YclSource]",
+                "ENTER [DpmDictionary]",
+                "ENTER [DpmOwner]",
+                "UPDATE [DpmOwner] ORIGINAL [DpmOwner]",
+                "EXIT [DpmDictionary] RETIRED [DpmOwner]",
+                "UPDATE [DpmDictionary] ORIGINAL [DpmDictionary]",
+                "ENTER [YclCodelist]",
+                "UPDATE [YclCodelist] ORIGINAL [YclCodelist]",
+                "ENTER [YclCode]",
+                "EXIT [YclCodelist] RETIRED [YclCode]",
+                "ENTER [YclCode]",
+                "EXIT [YclCodelist] RETIRED [YclCode]",
+                "ENTER [YclCode]",
+                "EXIT [YclCodelist] RETIRED [YclCode]",
+                "EXIT [DpmDictionary] RETIRED [YclCodelist]",
+                "EXIT [YclSource] RETIRED [DpmDictionary]",
+                "EXIT [ActivityMapYclToDpm] RETIRED [YclSource]",
+                "EXIT [] RETIRED [ActivityMapYclToDpm]"
             )
         }
     }

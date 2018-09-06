@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.dpmdbwriter
 
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.dpmdbwriter.tables.Tables
@@ -29,8 +30,7 @@ class DpmDbWriter(
 
     fun writeDpmDb(dpmDictionaries: List<DpmDictionary>) {
         diagnostic.withContext(
-            contextType = "Writing",
-            contextName = "DPM Database",
+            contextType = DiagnosticContextType.ActivityWriteDpmDb,
             contextRef = targetDbPath.toString()
         ) {
             connectDatabase()

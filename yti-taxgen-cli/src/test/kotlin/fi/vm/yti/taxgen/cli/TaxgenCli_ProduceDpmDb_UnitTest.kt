@@ -36,8 +36,8 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
 
         assertThat(errText).isBlank()
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database",
-            "Compiling: OK"
+            "Compiling DPM database",
+            "Compiling DPM database: OK"
         )
 
         assertThat(targetDbPath).exists().isRegularFile()
@@ -64,8 +64,8 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database",
-            "Compiling: OK"
+            "Compiling DPM database",
+            "Compiling DPM database: OK"
         )
 
         assertThat(errText).isBlank()
@@ -109,7 +109,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database",
+            "Compiling DPM database",
             "FATAL: Target file '$targetDbPath' already exists"
         )
 
@@ -132,7 +132,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database",
+            "Compiling DPM database",
             "FATAL: Target file '${tempFolder.path()}' already exists"
         )
 
@@ -151,7 +151,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database"
+            "Compiling DPM database"
         )
 
         assertThat(errText).containsSubsequence(
@@ -217,7 +217,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database"
+            "Compiling DPM database"
         )
 
         assertThat(errText).containsSubsequence(
@@ -257,12 +257,12 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database",
-            "Processing: YCL Source data to DPM model",
-            "Reading YCL Sources: YTI Reference Data service",
+            "Compiling DPM database",
+            "Processing YCL sources: YCL Source data to DPM model",
+            "YCL Sources: YTI Reference Data service",
             "Configuration file: (single_comprehensive_tree.json)",
             "Configuration file: OK",
-            "Compiling: OK"
+            "Compiling DPM database: OK"
         )
 
         assertThat(errText).isBlank()
@@ -288,9 +288,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling: DPM database",
-            "Processing: YCL Source data to DPM model",
-            "Reading YCL Sources: YTI Reference Data service",
+            "Compiling DPM database",
+            "Processing YCL sources: YCL Source data to DPM model",
+            "YCL Sources: YTI Reference Data service",
             "Configuration file: (ycl_source_config_broken_json.json)",
             "FATAL: Processing JSON content failed: "
         )
@@ -332,9 +332,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "DPM Dictionary", "codelist_uri_unknown_codelist",
+            "DPM dictionary", "codelist_uri_unknown_codelist",
             "Codelist",
-            "URI Resolution",
+            "URI resolution",
             "FATAL: JSON content fetch failed: HTTP 404 (Not Found)"
         )
 
@@ -355,9 +355,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "DPM Dictionary", "codelist_uri_unresolvable_host",
+            "DPM dictionary", "codelist_uri_unresolvable_host",
             "Codelist",
-            "URI Resolution",
+            "URI resolution",
             "FATAL: Could not determine the server IP address"
         )
 
@@ -378,9 +378,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "DPM Dictionary", "codelist_uri_bad_protocol",
+            "DPM dictionary", "codelist_uri_bad_protocol",
             "Codelist",
-            "URI Resolution",
+            "URI resolution",
             "FATAL: Malformed URI"
         )
 
@@ -401,9 +401,9 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "DPM Dictionary", "codelist_uri_non_responsive_host_ip",
+            "DPM dictionary", "codelist_uri_non_responsive_host_ip",
             "Codelist",
-            "URI Resolution",
+            "URI resolution",
             "FATAL: Could not connect the server"
         )
 

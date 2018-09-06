@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmdbwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
@@ -8,7 +9,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
 import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
-import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptor
+import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.ext.java.columnConfigToString
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
@@ -27,6 +28,9 @@ import java.time.LocalDate
 class DpmDbWriter_UnitTest {
     private lateinit var tempFolder: TempFolder
 
+    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
+    private lateinit var diagnostic: Diagnostic
+
     private lateinit var dbConnection: Connection
 
     @BeforeEach
@@ -35,8 +39,8 @@ class DpmDbWriter_UnitTest {
 
         val dbPath = tempFolder.resolve("dpm.db")
 
-        val diagnosticConsumerCaptor = DiagnosticConsumerCaptor()
-        val diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
+        diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
+        diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
 
         val dbWriter = DpmDbWriter(
             dbPath,
@@ -377,5 +381,18 @@ class DpmDbWriter_UnitTest {
                 )
             )
         return dictionaries
+    }
+
+    @Nested
+    @DisplayName("diagnostic events")
+    inner class DiagnosticEvents {
+
+        @Test
+        fun `should contain proper context events`() {
+            assertThat(diagnosticConsumerCaptor.events).containsExactly(
+                "ENTER [ActivityWriteDpmDb]",
+                "EXIT [] RETIRED [ActivityWriteDpmDb]"
+            )
+        }
     }
 }

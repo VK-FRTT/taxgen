@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileRecorder
@@ -50,7 +51,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
 
     @Test
     fun `Should have diagnostic context info about yclsource @ root`() {
-        assertThat(yclSource.contextType()).isEqualTo("Reading YCL Sources")
+        assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
         assertThat(yclSource.contextName()).isEqualTo("ZIP file")
         assertThat(yclSource.contextRef()).isEqualTo(targetZipPath.toString())
     }
@@ -75,7 +76,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         assertThat(dpmDictionarySources.size).isEqualTo(2)
 
-        assertThat(dpmDictionarySources[0].contextType()).isEqualTo("DPM Dictionary")
+        assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
         assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
         assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
     }
@@ -99,7 +100,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         assertThat(codeLists.size).isEqualTo(2)
 
-        assertThat(codeLists[0].contextType()).isEqualTo("Codelist")
+        assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
         assertThat(codeLists[0].contextName()).isEqualTo("")
         assertThat(codeLists[0].contextRef()).isEqualTo("#0")
         assertThat(codeLists[1].contextRef()).isEqualTo("#1")

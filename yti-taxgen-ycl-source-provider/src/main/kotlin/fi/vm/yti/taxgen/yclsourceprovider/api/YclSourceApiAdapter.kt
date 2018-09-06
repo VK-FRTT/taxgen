@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.yclsourceprovider.api
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.api.config.YclSourceApiAdapterConfig
@@ -45,7 +46,7 @@ class YclSourceApiAdapter(
 
     private fun loadConfig(): LoadedConfig {
         return diagnostic.withContext(
-            contextType = "Configuration file",
+            contextType = DiagnosticContextType.InitConfigurationFile,
             contextRef = configFilePath.fileName.toString()
         ) {
             val configData = FileOps.readTextFile(configFilePath)

@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
@@ -95,7 +96,7 @@ internal class Owner_UnitTest :
 
         @Test
         fun `companion should provide diagnostic context info about owner`() {
-            assertThat(Owner.Companion.contextType()).isEqualTo("Owner")
+            assertThat(Owner.Companion.contextType()).isEqualTo(DiagnosticContextType.DpmOwner)
             assertThat(Owner.Companion.contextName()).isEqualTo("")
             assertThat(Owner.Companion.contextRef()).isEqualTo("")
         }

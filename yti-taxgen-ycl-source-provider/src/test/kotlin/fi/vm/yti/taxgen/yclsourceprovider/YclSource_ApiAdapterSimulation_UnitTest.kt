@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
@@ -99,7 +100,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
         @Test
         fun `Should have diagnostic context info about yclsource @ root`() {
-            assertThat(yclSource.contextType()).isEqualTo("Reading YCL Sources")
+            assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
             assertThat(yclSource.contextName()).isEqualTo("YTI Reference Data service")
             assertThat(yclSource.contextRef()).isEqualTo(configFilePath.toString())
         }
@@ -128,7 +129,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             val dpmDictionarySources = yclSource.dpmDictionarySources()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
-            assertThat(dpmDictionarySources[0].contextType()).isEqualTo("DPM Dictionary")
+            assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
             assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
             assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
         }
@@ -153,7 +154,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
             assertThat(codeLists.size).isEqualTo(2)
 
-            assertThat(codeLists[0].contextType()).isEqualTo("Codelist")
+            assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
             assertThat(codeLists[0].contextName()).isEqualTo("")
             assertThat(codeLists[0].contextRef()).isEqualTo("#0")
         }
@@ -174,14 +175,14 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             )
 
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
-                "ENTER [Configuration file]",
-                "EXIT [] RETIRED [Configuration file]",
-                "ENTER [URI Resolution]",
-                "EXIT [] RETIRED [URI Resolution]",
-                "ENTER [Codes Page Load]",
-                "EXIT [] RETIRED [Codes Page Load]",
-                "ENTER [Codes Page Load]",
-                "EXIT [] RETIRED [Codes Page Load]"
+                "ENTER [InitConfigurationFile]",
+                "EXIT [] RETIRED [InitConfigurationFile]",
+                "ENTER [InitUriResolution]",
+                "EXIT [] RETIRED [InitUriResolution]",
+                "ENTER [YclCodesPage]",
+                "EXIT [] RETIRED [YclCodesPage]",
+                "ENTER [YclCodesPage]",
+                "EXIT [] RETIRED [YclCodesPage]"
             )
         }
     }

@@ -31,11 +31,11 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: ZIP file",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: folder",
-            "Capturing: OK"
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: ZIP file",
+            "Writing YCL sources: folder",
+            "YCL Sources: folder",
+            "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -56,11 +56,11 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: ZIP file",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: YTI Reference Data service",
-            "Capturing: OK"
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: ZIP file",
+            "Writing YCL sources: folder",
+            "YCL Sources: YTI Reference Data service",
+            "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -85,10 +85,10 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: folder",
-            "Reading YCL Sources: folder",
-            "Capturing: OK"
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: folder",
+            "YCL Sources: folder",
+            "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -132,8 +132,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: ZIP file",
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: ZIP file",
             "FATAL: Target file '$targetZipPath' already exists"
         )
 
@@ -156,8 +156,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources",
-            "Writing YCL Sources: ZIP file",
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: ZIP file",
             "FATAL: Target file '${tempFolder.path()}' already exists"
         )
 
@@ -176,7 +176,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources"
+            "Capturing YTI Codelist sources"
         )
 
         assertThat(errText).containsSubsequence(
@@ -242,7 +242,7 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing: YTI Codelist sources"
+            "Capturing YTI Codelist sources"
         )
 
         assertThat(errText).containsSubsequence(

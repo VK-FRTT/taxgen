@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 interface DiagnosticConsumer {
 
     data class ContextInfo(
-        val type: String,
+        val type: DiagnosticContextType,
         val name: String,
         val ref: String
     )

@@ -10,7 +10,7 @@ interface Diagnostic {
     ): R
 
     fun <R> withContext(
-        contextType: String,
+        contextType: DiagnosticContextType,
         contextName: String = "",
         contextRef: String = "",
         block: () -> R

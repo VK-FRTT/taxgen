@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.ycltodpmmapper.extractor.extractDpmDictionaries
@@ -14,7 +15,7 @@ class YclToDpmMapper(
     ): List<DpmDictionary> {
 
         return diagnostic.withContext(
-            contextType = "Processing",
+            contextType = DiagnosticContextType.ActivityMapYclToDpm,
             contextName = "YCL Source data to DPM model"
         ) {
 
