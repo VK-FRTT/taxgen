@@ -6,7 +6,8 @@ import fi.vm.yti.taxgen.yclsourceprovider.config.YclCodelistSourceConfig
 @Suppress("MemberVisibilityCanBePrivate")
 data class YclCodelistSourceConfigInput(
     val uri: String?,
-    val domainCode: String?
+    val domainCode: String?,
+    val memberCodePrefix: String?
 ) {
     fun toValidConfig(diagnostic: Diagnostic): YclCodelistSourceConfig {
         validateValueNotNull(this::uri, diagnostic)
@@ -14,7 +15,8 @@ data class YclCodelistSourceConfigInput(
 
         return YclCodelistSourceConfig(
             uri = uri!!,
-            domainCode = domainCode!!
+            domainCode = domainCode!!,
+            memberCodePrefix = memberCodePrefix
         )
     }
 }

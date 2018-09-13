@@ -45,7 +45,7 @@ internal class YclToDpmMapper_UnitTest {
     }
 
     @Nested
-    @DisplayName("from single comprehensive source")
+    @DisplayName("when source provides comprehensively YCL source values")
     inner class SingleComprehensiveSource {
 
         private lateinit var en: Language
@@ -55,6 +55,7 @@ internal class YclToDpmMapper_UnitTest {
         @BeforeEach
         fun init() {
             yclSource = createYclSourceFromTestFixture("single_comprehensive_tree")
+            //codelist_comprehensive
 
             en = Language.findByIso6391Code("en")!!
             fi = Language.findByIso6391Code("fi")!!
@@ -62,14 +63,14 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `Mapping result should have 1 DPM Dictionary`() {
+        fun `should produce 1 DPM Dictionary`() {
             val dpmDictionaries = performMapping()
 
             assertThat(dpmDictionaries.size).isEqualTo(1)
         }
 
         @Test
-        fun `DPM Dictionary should have correct Owner`() {
+        fun `should produce DPM Dictionary with correct Owner`() {
             val owner = performMapping()[0].owner
 
             assertThat(owner.name).isEqualTo("SingleComprehensiveTree_Name")
@@ -82,14 +83,14 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `DPM Dictionary should have 1 Explicit Domain`() {
+        fun `should produce DPM Dictionary with 1 Explicit Domain`() {
             val dpmDictionary = performMapping()[0]
 
             assertThat(dpmDictionary.explicitDomains.size).isEqualTo(1)
         }
 
         @Test
-        fun `Explicit Domain should have correct Concept`() {
+        fun `should produce Explicit Domain with correct Concept`() {
             val concept = performMapping()[0].explicitDomains[0].concept
 
             assertThat(concept.createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.664Z"))
@@ -111,21 +112,21 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `Explicit Domain should have correct DomainCode`() {
+        fun `should produce Explicit Domain with correct DomainCode`() {
             val domainCode = performMapping()[0].explicitDomains[0].domainCode
 
             assertThat(domainCode).isEqualTo("tf_dc_override")
         }
 
         @Test
-        fun `Explicit Domain should have 3 Members`() {
+        fun `should produce Explicit Domain with 3 Members`() {
             val members = performMapping()[0].explicitDomains[0].members
 
             assertThat(members.size).isEqualTo(3)
         }
 
         @Test
-        fun `1st Member should have correct Concept, MemberCode and DefaultCode values`() {
+        fun `should produce 1st Member with correct Concept, MemberCode and DefaultCode values`() {
             val member = performMapping()[0].explicitDomains[0].members[0]
 
             member.concept.apply {
@@ -154,7 +155,7 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `2nd Member should have correct Concept, MemberCode and DefaultCode values`() {
+        fun `should produce 2nd Member with correct Concept, MemberCode and DefaultCode values`() {
             val member = performMapping()[0].explicitDomains[0].members[1]
 
             member.concept.apply {
@@ -182,7 +183,7 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `3rd Member should have correct Concept, MemberCode and DefaultCode values`() {
+        fun `should produce 3rd Member with correct Concept, MemberCode and DefaultCode values`() {
             val member = performMapping()[0].explicitDomains[0].members[2]
 
             member.concept.apply {
@@ -210,7 +211,7 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `Should produce correct diagnostic context events`() {
+        fun `should produce correct diagnostic context events`() {
             performMapping()
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
                 "ENTER [ActivityMapYclToDpm]",
@@ -236,14 +237,34 @@ internal class YclToDpmMapper_UnitTest {
         }
     }
 
+    @Nested
+    @DisplayName("when source defines memberCodePrefix")
+    inner class MemberCodePrefixSource {
+
+        @BeforeEach
+        fun init() {
+            yclSource = createYclSourceFromTestFixture("codelist_minimal_member_code_prefix")
+        }
+
+        @Test
+        fun `should produce Member with prefixed MemberCode`() {
+            val member = performMapping()[0].explicitDomains[0].members[0]
+
+            assertThat(member.memberCode).startsWith("mc_prefix_")
+            assertThat(member.memberCode).endsWith("code_0")
+
+            assertThat(member.memberCode).isEqualTo("mc_prefix_code_0")
+        }
+    }
+
     @Disabled
     @Nested
-    @DisplayName("from three DpmDictionaries source")
+    @DisplayName("when source defines 3 Dpm Dictionaries")
     inner class ThreeDpmDictionariesSource {
 
         @BeforeEach
         fun init() {
-            yclSource = createYclSourceFromTestFixture("three_dpm_dictionaries")
+            yclSource = createYclSourceFromTestFixture("dpm_dictionaries_3")
         }
 
         @Test
@@ -273,12 +294,12 @@ internal class YclToDpmMapper_UnitTest {
 
     @Disabled
     @Nested
-    @DisplayName("from disordered codepages source")
+    @DisplayName("when source provides disordered codepages")
     inner class DisorderedCodepagesSource {
 
         @BeforeEach
         fun init() {
-            yclSource = createYclSourceFromTestFixture("disordered_ycl_codepages")
+            yclSource = createYclSourceFromTestFixture("ycl_codepages_disordered")
         }
 
         @Test

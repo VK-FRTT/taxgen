@@ -1,0 +1,5 @@
+{
+  "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_minimal?env=dev",
+  "domainCode": "domain_code",
+  "memberCodePrefix": "mc_prefix_"
+}
