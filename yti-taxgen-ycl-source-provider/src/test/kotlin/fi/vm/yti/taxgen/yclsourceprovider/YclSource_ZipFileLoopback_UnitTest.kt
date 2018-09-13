@@ -41,12 +41,12 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have source info at root`() {
-        val infoJson = objectMapper.readTree(yclSource.sourceInfoData())
+    fun `Should have source config at root`() {
+        val configJson = objectMapper.readTree(yclSource.sourceConfigData())
 
-        assertThat(infoJson.isObject).isTrue()
-        assertThat(infoJson.get("marker") as Any).isNotNull()
-        assertThat(infoJson.get("marker").textValue()).isEqualTo("fixed_source_info")
+        assertThat(configJson.isObject).isTrue()
+        assertThat(configJson.get("marker") as Any).isNotNull()
+        assertThat(configJson.get("marker").textValue()).isEqualTo("fixed_source_config")
     }
 
     @Test
@@ -79,6 +79,21 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
         assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
         assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
+    }
+
+    @Test
+    fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+        val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                codeLists,
+                { it -> (it as YclCodelistSource).yclCodelistSourceConfigData() }
+            )
+
+        assertThat(markers).containsExactly(
+            "fixed_codelist_source_config_0",
+            "fixed_codelist_source_config_1"
+        )
     }
 
     @Test

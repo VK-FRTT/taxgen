@@ -8,6 +8,6 @@ abstract class YclSource : Closeable, DiagnosticContextProvider {
 
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.YclSource
 
-    abstract fun sourceInfoData(): String
+    abstract fun sourceConfigData(): String
     abstract fun dpmDictionarySources(): List<DpmDictionarySource>
 }

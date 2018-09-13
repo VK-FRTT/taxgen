@@ -19,7 +19,7 @@ class YclSourceZipFileAdapter(
     override fun contextName(): String = "ZIP file"
     override fun contextRef(): String = sourceZipPath.toString()
 
-    override fun sourceInfoData(): String = folderStructureAdapter.sourceInfoData()
+    override fun sourceConfigData(): String = folderStructureAdapter.sourceConfigData()
 
     override fun dpmDictionarySources(): List<DpmDictionarySource> = folderStructureAdapter.dpmDictionarySources()
 

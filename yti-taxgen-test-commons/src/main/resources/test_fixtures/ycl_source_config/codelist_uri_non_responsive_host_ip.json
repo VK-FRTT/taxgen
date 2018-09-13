@@ -1,7 +1,4 @@
 {
-  "type": "YclSourceConfig",
-  "configSchemaVersion": "1",
-
   "dpmDictionaries": [
     {
       "owner": {
@@ -15,7 +12,8 @@
       },
       "codelists": [
         {
-          "uri": "http://127.0.0.1/codelist/yti-xbrl/tf_comprehensive_codelist"
+          "uri": "http://127.0.0.1/codelist/yti-xbrl/tf_comprehensive_codelist",
+          "domainCode": "domain_code_override"
         }
       ]
     }

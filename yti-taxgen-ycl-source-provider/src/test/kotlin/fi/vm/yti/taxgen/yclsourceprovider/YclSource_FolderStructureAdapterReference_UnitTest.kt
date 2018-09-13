@@ -31,12 +31,12 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have source info at root`() {
-        val infoJson = objectMapper.readTree(yclSource.sourceInfoData())
+    fun `Should have source config at root`() {
+        val configJson = objectMapper.readTree(yclSource.sourceConfigData())
 
-        assertThat(infoJson.isObject).isTrue()
-        assertThat(infoJson.get("marker") as Any).isNotNull()
-        assertThat(infoJson.get("marker").textValue()).isEqualTo("folder_structure_adapter_reference/source_info")
+        assertThat(configJson.isObject).isTrue()
+        assertThat(configJson.get("marker") as Any).isNotNull()
+        assertThat(configJson.get("marker").textValue()).isEqualTo("folder_structure_adapter_reference/meta/source_config")
     }
 
     @Test
@@ -80,6 +80,31 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
         assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
         assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
         assertThat(dpmDictionarySources[11].contextRef()).isEqualTo("#11")
+    }
+
+    @Test
+    fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+        val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                codeLists,
+                { it -> (it as YclCodelistSource).yclCodelistSourceConfigData() }
+            )
+
+        assertThat(markers).containsExactly(
+            "dpmdictionary_0/codelist_0/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_1/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_2/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_3/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_4/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_5/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_6/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_7/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_8/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_9/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_10/ycl_codelist_source_config",
+            "dpmdictionary_0/codelist_11/ycl_codelist_source_config"
+        )
     }
 
     @Test

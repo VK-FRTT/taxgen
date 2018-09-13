@@ -12,12 +12,12 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
     primaryCommand = "--capture-ycl-sources-to-folder"
 ) {
     private lateinit var targetFolderPath: Path
-    private lateinit var targetFolderInfoFilePath: Path
+    private lateinit var targetFolderMetaConfigFilePath: Path
 
     @BeforeEach
     fun init() {
         targetFolderPath = tempFolder.resolve("ycl_sources")
-        targetFolderInfoFilePath = targetFolderPath.resolve("source_info.json")
+        targetFolderMetaConfigFilePath = targetFolderPath.resolve("meta/source_config.json")
     }
 
     @Test
@@ -41,7 +41,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         assertThat(errText).isBlank()
 
         assertThat(targetFolderPath).exists().isDirectory()
-        assertThat(targetFolderInfoFilePath).exists().isRegularFile()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
@@ -67,15 +67,15 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         assertThat(errText).isBlank()
 
         assertThat(targetFolderPath).exists().isDirectory()
-        assertThat(targetFolderInfoFilePath).exists().isRegularFile()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
     fun `Should overwrite existing files in target folder when force option is given`() {
-        Files.createDirectories(targetFolderInfoFilePath.parent)
-        Files.write(targetFolderInfoFilePath, "Existing file".toByteArray())
+        Files.createDirectories(targetFolderMetaConfigFilePath.parent)
+        Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
@@ -87,6 +87,8 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(errText).isBlank()
+
         assertThat(outText).containsSubsequence(
             "Capturing YTI Codelist sources",
             "Writing YCL sources: folder",
@@ -97,7 +99,7 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
         assertThat(errText).isBlank()
 
         assertThat(targetFolderPath).exists().isDirectory()
-        assertThat(targetFolderInfoFilePath).exists().isRegularFile()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
@@ -124,8 +126,8 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
     @Test
     fun `Should report error when target folder contains conflicting file`() {
-        Files.createDirectories(targetFolderInfoFilePath.parent)
-        Files.write(targetFolderInfoFilePath, "Existing file".toByteArray())
+        Files.createDirectories(targetFolderMetaConfigFilePath.parent)
+        Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--capture-ycl-sources-to-folder",
@@ -136,17 +138,17 @@ internal class TaxgenCli_CaptureYclSourcesToFolder_UnitTest : TaxgenCli_UnitTest
 
         val (status, outText, errText) = executeCli(args)
 
+        assertThat(errText).isBlank()
+
         assertThat(outText).containsSubsequence(
             "Capturing YTI Codelist sources",
             "Writing YCL sources: folder",
             "YCL Sources: folder",
-            "FATAL: Target file 'ycl_sources/source_info.json' already exists"
+            "FATAL: Target file 'ycl_sources/meta/source_config.json' already exists"
         )
 
-        assertThat(errText).isBlank()
-
         assertThat(targetFolderPath).exists().isDirectory()
-        assertThat(targetFolderInfoFilePath).exists().isRegularFile()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }

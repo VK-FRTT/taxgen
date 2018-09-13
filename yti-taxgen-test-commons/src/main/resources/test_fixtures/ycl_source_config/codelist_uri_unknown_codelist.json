@@ -1,7 +1,4 @@
 {
-  "type": "YclSourceConfig",
-  "configSchemaVersion": "1",
-
   "dpmDictionaries": [
     {
       "owner": {
@@ -15,7 +12,8 @@
       },
       "codelists": [
         {
-          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/unknown_codelist"
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/unknown_codelist",
+          "domainCode": "domain_code_override"
         }
       ]
     }

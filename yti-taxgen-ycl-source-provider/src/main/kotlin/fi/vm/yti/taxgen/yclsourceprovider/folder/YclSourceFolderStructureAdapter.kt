@@ -15,8 +15,8 @@ class YclSourceFolderStructureAdapter(
     override fun contextName(): String = "folder"
     override fun contextRef(): String = baseFolderPath.toString()
 
-    override fun sourceInfoData(): String {
-        return FileOps.readTextFile(baseFolderPath, "source_info.json")
+    override fun sourceConfigData(): String {
+        return FileOps.readTextFile(baseFolderPath.resolve("meta"), "source_config.json")
     }
 
     override fun dpmDictionarySources(): List<DpmDictionarySource> {

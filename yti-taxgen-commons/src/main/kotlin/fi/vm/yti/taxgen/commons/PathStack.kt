@@ -17,19 +17,24 @@ class PathStack(
         createFileSystemPath(baseFolderPath)
     }
 
-    fun withIndexPostfixSubfolder(subfolderName: String, index: Int, block: () -> Unit) {
-        pushSubfolderWithIndex(subfolderName, index)
+    fun withSubfolder(subfolderName: String, block: () -> Unit) {
+        enterSubfolder(subfolderName)
         block()
-        popSubfolder()
+        exitSubfolder()
     }
 
-    private fun pushSubfolderWithIndex(subfolderName: String, index: Int) {
-        subFolderStack.push("${subfolderName}_$index")
+    fun withIndexPostfixSubfolder(subfolderName: String, index: Int, block: () -> Unit) {
+        enterSubfolder("${subfolderName}_$index")
+        block()
+        exitSubfolder()
+    }
 
+    private fun enterSubfolder(subfolderName: String) {
+        subFolderStack.push(subfolderName)
         createFileSystemPath(combineFilesystemPath())
     }
 
-    private fun popSubfolder() {
+    private fun exitSubfolder() {
         subFolderStack.pop()
     }
 

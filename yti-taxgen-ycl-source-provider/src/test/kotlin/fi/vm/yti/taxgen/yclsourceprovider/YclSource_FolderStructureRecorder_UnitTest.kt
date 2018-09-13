@@ -38,10 +38,10 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         @Test
-        fun `Should have source info at root`() {
+        fun `Should have source config at root`() {
             assertTargetFolderHavingJsonFile(
-                expectedFile = "source_info.json",
-                expectedMarker = "fixed_source_info"
+                expectedFile = "meta/source_config.json",
+                expectedMarker = "fixed_source_config"
             )
         }
 
@@ -55,6 +55,19 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_1/dpm_owner_info.json",
                 expectedMarker = "fixed_dpm_owner_config_1"
+            )
+        }
+
+        @Test
+        fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+            assertTargetFolderHavingJsonFile(
+                expectedFile = "dpmdictionary_0/codelist_0/ycl_codelist_source_config.json",
+                expectedMarker = "fixed_codelist_source_config_0"
+            )
+
+            assertTargetFolderHavingJsonFile(
+                expectedFile = "dpmdictionary_0/codelist_1/ycl_codelist_source_config.json",
+                expectedMarker = "fixed_codelist_source_config_1"
             )
         }
 

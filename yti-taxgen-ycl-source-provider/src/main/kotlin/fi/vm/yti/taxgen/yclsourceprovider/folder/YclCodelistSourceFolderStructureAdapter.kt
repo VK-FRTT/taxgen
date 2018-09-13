@@ -9,6 +9,10 @@ class YclCodelistSourceFolderStructureAdapter(
     private val codeListPath: Path
 ) : YclCodelistSource(index) {
 
+    override fun yclCodelistSourceConfigData(): String {
+        return FileOps.readTextFile(codeListPath, "ycl_codelist_source_config.json")
+    }
+
     override fun yclCodeschemeData(): String {
         return FileOps.readTextFile(codeListPath, "ycl_codescheme.json")
     }

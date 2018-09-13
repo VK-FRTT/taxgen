@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.yclsourceprovider
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
+import fi.vm.yti.taxgen.yclsourceprovider.config.OwnerConfig
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
@@ -15,7 +15,6 @@ import io.specto.hoverfly.junit.dsl.StubServiceBuilder
 import io.specto.hoverfly.junit5.HoverflyExtension
 import okhttp3.OkHttpClient
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.byLessThan
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -23,8 +22,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.nio.file.Path
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 @DisplayName("when ycl sources are read from simulated YCL API")
 @ExtendWith(HoverflyExtension::class)
@@ -49,9 +46,6 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             val yclSourceConfig =
                 """
                 {
-                  "type": "YclSourceConfig",
-                  "configSchemaVersion": "1",
-
                   "dpmDictionaries": [
                     {
                       "owner": {
@@ -68,10 +62,12 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                       },
                       "codelists": [
                         {
-                          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero"
+                          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero",
+                          "domainCode": "m_zero_override"
                         },
                         {
-                          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_one"
+                          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_one",
+                          "domainCode": "m_one_override"
                         }
                       ]
                     }
@@ -90,12 +86,12 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have source info at root`() {
-            val infoJson = objectMapper.readTree(yclSource.sourceInfoData())
-            assertThat(infoJson.isObject).isTrue()
+        fun `Should have source config at root`() {
+            val configJson = objectMapper.readTree(yclSource.sourceConfigData())
+            assertThat(configJson.isObject).isTrue()
 
-            val createdAt = Instant.parse(infoJson.get("createdAt").textValue())
-            assertThat(createdAt).isCloseTo(Instant.now(), byLessThan(30, ChronoUnit.SECONDS))
+            assertThat(configJson.at("/dpmDictionaries/0/owner/name").asText()).isEqualTo("OwnerName")
+            assertThat(configJson.at("/dpmDictionaries/0/codelists/0/domainCode").asText()).isEqualTo("m_zero_override")
         }
 
         @Test
@@ -119,8 +115,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             assertThat(ownerConfig.prefix).isEqualTo("OwnerPrefix")
             assertThat(ownerConfig.location).isEqualTo("OwnerLocation")
             assertThat(ownerConfig.copyright).isEqualTo("OwnerCopyright")
-            assertThat(ownerConfig.languages!![0]).isEqualTo("en")
-            assertThat(ownerConfig.languages!![1]).isEqualTo("fi")
+            assertThat(ownerConfig.languages[0]).isEqualTo("en")
+            assertThat(ownerConfig.languages[1]).isEqualTo("fi")
             assertThat(ownerConfig.defaultLanguage).isEqualTo("en")
         }
 
@@ -132,6 +128,19 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
             assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
             assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
+        }
+
+        @Test
+        fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+            val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
+
+            val configJson0 = objectMapper.readTree(codeLists[0].yclCodelistSourceConfigData())
+            assertThat(configJson0.isObject).isTrue()
+            assertThat(configJson0.get("domainCode").textValue()).isEqualTo("m_zero_override")
+
+            val configJson1 = objectMapper.readTree(codeLists[1].yclCodelistSourceConfigData())
+            assertThat(configJson1.isObject).isTrue()
+            assertThat(configJson1.get("domainCode").textValue()).isEqualTo("m_one_override")
         }
 
         @Test
@@ -175,8 +184,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             )
 
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
-                "ENTER [InitConfigurationFile]",
-                "EXIT [] RETIRED [InitConfigurationFile]",
+                "ENTER [InitConfiguration]",
+                "EXIT [] RETIRED [InitConfiguration]",
                 "ENTER [InitUriResolution]",
                 "EXIT [] RETIRED [InitUriResolution]",
                 "ENTER [YclCodesPage]",

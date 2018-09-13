@@ -1,11 +1,8 @@
 {
-  "type": "YclSourceConfig",
-  "configSchemaVersion": "1"
-
   "dpmDictionaries": [
     {
       "owner": {
-        "name": "broken_ycl_source_config_json",
+        "name": "broken_ycl_source_config_json"
         "namespace": "namespace",
         "prefix": "prefix",
         "location": "location",
@@ -15,7 +12,8 @@
       },
       "codelists": [
         {
-          "uri": "http://uri.suomi.fi"
+          "uri": "http://uri.suomi.fi",
+          "domainCode": "domain_code_override"
         }
       ]
     }

@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 
 open class YclSource_UnitTestBase {
@@ -18,6 +19,13 @@ open class YclSource_UnitTestBase {
     fun baseInit() {
         diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
         diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
+    }
+
+    @AfterEach
+    fun baseTeardown() {
+        diagnosticConsumerCaptor.events.forEach {
+            println(it)
+        }
     }
 
     protected fun extractMarkerValuesFromJsonData(

@@ -8,7 +8,7 @@ enum class DiagnosticContextType(val displayName: String) {
     ActivityMapYclToDpm("Processing YCL sources"),
     ActivityWriteDpmDb("Writing DPM database"),
 
-    InitConfigurationFile("Configuration file"),
+    InitConfiguration("Configuration file"),
     InitUriResolution("URI resolution"),
 
     DpmOwner("Owner"),

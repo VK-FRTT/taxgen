@@ -114,7 +114,7 @@ internal class YclToDpmMapper_UnitTest {
         fun `Explicit Domain should have correct DomainCode`() {
             val domainCode = performMapping()[0].explicitDomains[0].domainCode
 
-            assertThat(domainCode).isEqualTo("tf_comprehensive_codelist")
+            assertThat(domainCode).isEqualTo("tf_dc_override")
         }
 
         @Test

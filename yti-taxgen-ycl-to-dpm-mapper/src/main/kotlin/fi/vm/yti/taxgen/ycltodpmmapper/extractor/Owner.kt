@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.ycltodpmmapper.extractor
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
-import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
+import fi.vm.yti.taxgen.yclsourceprovider.config.OwnerConfig
 
 internal fun Owner.Companion.fromConfig(
     ownerConfig: OwnerConfig,
@@ -19,12 +19,12 @@ internal fun Owner.Companion.fromConfig(
     }
 
     return Owner(
-        name = ownerConfig.name ?: "",
-        namespace = ownerConfig.namespace ?: "",
-        prefix = ownerConfig.prefix ?: "",
-        location = ownerConfig.location ?: "",
-        copyright = ownerConfig.copyright ?: "",
-        languages = ownerConfig.languages?.map { findLanguage(it) }?.toSet() ?: emptySet(),
-        defaultLanguage = findLanguage(ownerConfig.defaultLanguage!!)
+        name = ownerConfig.name,
+        namespace = ownerConfig.namespace,
+        prefix = ownerConfig.prefix,
+        location = ownerConfig.location,
+        copyright = ownerConfig.copyright,
+        languages = ownerConfig.languages.map { findLanguage(it) }.toSet(),
+        defaultLanguage = findLanguage(ownerConfig.defaultLanguage)
     )
 }

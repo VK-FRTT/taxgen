@@ -3,8 +3,8 @@ package fi.vm.yti.taxgen.ycltodpmmapper.extractor
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
-import fi.vm.yti.taxgen.datapointmetamodel.OwnerConfig
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
+import fi.vm.yti.taxgen.yclsourceprovider.config.OwnerConfig
 import fi.vm.yti.taxgen.ycltodpmmapper.DpmMappingContext
 
 internal fun DpmDictionarySource.extractDpmDictionary(

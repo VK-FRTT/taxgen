@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
+import fi.vm.yti.taxgen.yclsourceprovider.config.input.YclCodelistSourceConfigInput
 import fi.vm.yti.taxgen.ycltodpmmapper.DpmMappingContext
 import fi.vm.yti.taxgen.ycltodpmmapper.yclmodel.YclCodeScheme
 import fi.vm.yti.taxgen.ycltodpmmapper.yclmodel.YclCodesCollection
@@ -13,14 +14,18 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
     ctx: DpmMappingContext
 ): ExplicitDomain {
 
-    data class DomainDetails(val concept: Concept, val domainCode: String?, val defaultMemberCode: String?)
+    data class DomainDetails(val domainCode: String, val concept: Concept, val defaultMemberCode: String?)
 
     fun extractDomainDetails(): DomainDetails {
+
+        val codelistConfigInput =
+            JsonOps.readValue<YclCodelistSourceConfigInput>(yclCodelistSourceConfigData(), ctx.diagnostic)
+        val codelistConfig = codelistConfigInput.toValidConfig(ctx.diagnostic)
         val codeScheme = JsonOps.readValue<YclCodeScheme>(yclCodeschemeData(), ctx.diagnostic)
 
         return DomainDetails(
+            domainCode = codelistConfig.domainCode,
             concept = Concept.fromYclCodeScheme(codeScheme, ctx.owner),
-            domainCode = codeScheme.codeValue,
             defaultMemberCode = codeScheme.defaultCode?.codeValue
         )
     }
@@ -68,7 +73,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
 
         ExplicitDomain(
             concept = domainDetails.concept,
-            domainCode = domainDetails.domainCode ?: "",
+            domainCode = domainDetails.domainCode,
             members = members
         )
     }

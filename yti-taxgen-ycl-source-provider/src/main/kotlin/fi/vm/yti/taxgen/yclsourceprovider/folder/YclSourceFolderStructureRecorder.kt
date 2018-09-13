@@ -1,13 +1,16 @@
 package fi.vm.yti.taxgen.yclsourceprovider.folder
 
 import fi.vm.yti.taxgen.commons.FileOps
+import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.PathStack
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.yclsourceprovider.CaptureInfo
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
 import java.nio.file.Path
+import java.time.Instant
 
 class YclSourceFolderStructureRecorder(
     baseFolderPath: Path,
@@ -38,13 +41,24 @@ class YclSourceFolderStructureRecorder(
     ) {
         diagnostic.withContext(yclSource) {
 
-            FileOps.writeTextFile(
-                yclSource.sourceInfoData(),
-                pathStack,
-                "source_info.json",
-                forceOverwrite,
-                diagnostic
-            )
+            pathStack.withSubfolder("meta") {
+
+                FileOps.writeTextFile(
+                    captureInfoData(),
+                    pathStack,
+                    "capture_info.json",
+                    forceOverwrite,
+                    diagnostic
+                )
+
+                FileOps.writeTextFile(
+                    yclSource.sourceConfigData(),
+                    pathStack,
+                    "source_config.json",
+                    forceOverwrite,
+                    diagnostic
+                )
+            }
 
             captureDpmDictionarySources(
                 yclSource.dpmDictionarySources(),
@@ -87,6 +101,14 @@ class YclSourceFolderStructureRecorder(
                 pathStack.withIndexPostfixSubfolder("codelist", listIndex) {
 
                     FileOps.writeTextFile(
+                        codelistSource.yclCodelistSourceConfigData(),
+                        pathStack,
+                        "ycl_codelist_source_config.json",
+                        forceOverwrite,
+                        diagnostic
+                    )
+
+                    FileOps.writeTextFile(
                         codelistSource.yclCodeschemeData(),
                         pathStack,
                         "ycl_codescheme.json",
@@ -109,4 +131,12 @@ class YclSourceFolderStructureRecorder(
     }
 
     override fun close() {}
+
+    private fun captureInfoData(): String {
+        val info = CaptureInfo(
+            createdAt = Instant.now().toString()
+        )
+
+        return JsonOps.writeAsJsonString(info)
+    }
 }

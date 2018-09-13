@@ -6,9 +6,9 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
-import fi.vm.yti.taxgen.yclsourceprovider.api.config.YclSourceApiAdapterConfig
+import fi.vm.yti.taxgen.yclsourceprovider.config.YclSourceConfig
+import fi.vm.yti.taxgen.yclsourceprovider.config.input.YclSourceConfigInput
 import java.nio.file.Path
-import java.time.Instant
 
 class YclSourceApiAdapter(
     configPath: Path,
@@ -18,21 +18,19 @@ class YclSourceApiAdapter(
     private val configFilePath = configPath.toAbsolutePath().normalize()
 
     private val loadedConfig: LoadedConfig by lazy(this::loadConfig)
-    private val sourceInfoData: String by lazy(this::composeSourceInfo)
 
     private data class LoadedConfig(
         val configData: String,
-        val configObjects: YclSourceApiAdapterConfig,
-        val configMap: Map<String, Any>
+        val config: YclSourceConfig
     )
 
     override fun contextName(): String = "YTI Reference Data service"
     override fun contextRef(): String = configFilePath.toString()
 
-    override fun sourceInfoData(): String = sourceInfoData
+    override fun sourceConfigData(): String = loadedConfig.configData
 
     override fun dpmDictionarySources(): List<DpmDictionarySource> {
-        return loadedConfig.configObjects.dpmDictionaryConfigs.mapIndexed { index, config ->
+        return loadedConfig.config.dpmDictionaries.mapIndexed { index, config ->
             DpmDictionarySourceApiAdapter(
                 index,
                 config,
@@ -46,25 +44,19 @@ class YclSourceApiAdapter(
 
     private fun loadConfig(): LoadedConfig {
         return diagnostic.withContext(
-            contextType = DiagnosticContextType.InitConfigurationFile,
+            contextType = DiagnosticContextType.InitConfiguration,
             contextRef = configFilePath.fileName.toString()
         ) {
-            val configData = FileOps.readTextFile(configFilePath)
+            val configInputData = FileOps.readTextFile(configFilePath)
+
+            val configInput = JsonOps.readValue<YclSourceConfigInput>(configInputData, diagnostic)
+
+            val config = configInput.toValidConfig(diagnostic)
 
             LoadedConfig(
-                configData = configData,
-                configObjects = JsonOps.readValue(configData, diagnostic),
-                configMap = JsonOps.readValue(configData, diagnostic)
+                configData = configInputData,
+                config = config
             )
         }
-    }
-
-    private fun composeSourceInfo(): String {
-        val info = ApiAdapterSourceInfo(
-            createdAt = Instant.now().toString(),
-            sourceConfig = loadedConfig.configMap
-        )
-
-        return JsonOps.writeAsJsonString(info)
     }
 }

@@ -5,13 +5,13 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextAt
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
-import fi.vm.yti.taxgen.yclsourceprovider.api.config.YclCodelistSourceApiAdapterConfig
+import fi.vm.yti.taxgen.yclsourceprovider.config.YclCodelistSourceConfig
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 import okhttp3.HttpUrl
 
 class YclCodelistSourceApiAdapter(
     index: Int,
-    private val config: YclCodelistSourceApiAdapterConfig,
+    private val config: YclCodelistSourceConfig,
     private val diagnostic: Diagnostic
 ) : YclCodelistSource(index) {
 
@@ -21,6 +21,8 @@ class YclCodelistSourceApiAdapter(
         val codeListUrl: HttpUrl,
         val codesUrl: HttpUrl
     )
+
+    override fun yclCodelistSourceConfigData(): String = JsonOps.writeAsJsonString(config)
 
     override fun yclCodeschemeData(): String {
         return HttpOps.fetchJsonData(contentUrls.codeListUrl, diagnostic)

@@ -11,6 +11,7 @@ abstract class YclCodelistSource(
     override fun contextName(): String = ""
     override fun contextRef(): String = "#$index"
 
+    abstract fun yclCodelistSourceConfigData(): String
     abstract fun yclCodeschemeData(): String
     abstract fun yclCodePagesData(): Sequence<String>
 }
