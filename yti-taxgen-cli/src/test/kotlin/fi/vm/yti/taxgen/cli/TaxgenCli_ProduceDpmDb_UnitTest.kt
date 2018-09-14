@@ -43,7 +43,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         assertThat(targetDbPath).exists().isRegularFile()
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
-            "SingleComprehensiveTree_Name"
+            "ComprehensiveName"
         )
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
@@ -260,7 +260,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
             "Compiling DPM database",
             "Processing YCL sources: YCL Source data to DPM model",
             "YCL Sources: YTI Reference Data service",
-            "Configuration file: (single_comprehensive_tree.json)",
+            "Configuration file: (codelist_comprehensive.json)",
             "Configuration file: OK",
             "Compiling DPM database: OK"
         )
@@ -270,7 +270,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         assertThat(targetDbPath).exists().isRegularFile()
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
-            "SingleComprehensiveTree_Name"
+            "ComprehensiveName"
         )
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)

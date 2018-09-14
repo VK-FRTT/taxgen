@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.Instant
 
 @DisplayName("Mapping YCL sources to DPM model")
 internal class YclToDpmMapper_UnitTest {
@@ -54,7 +53,7 @@ internal class YclToDpmMapper_UnitTest {
 
         @BeforeEach
         fun init() {
-            yclSource = createYclSourceFromTestFixture("single_comprehensive_tree")
+            yclSource = createYclSourceFromTestFixture("codelist_comprehensive")
             //codelist_comprehensive
 
             en = Language.findByIso6391Code("en")!!
@@ -73,11 +72,11 @@ internal class YclToDpmMapper_UnitTest {
         fun `should produce DPM Dictionary with correct Owner`() {
             val owner = performMapping()[0].owner
 
-            assertThat(owner.name).isEqualTo("SingleComprehensiveTree_Name")
-            assertThat(owner.namespace).isEqualTo("SingleComprehensiveTree_Namespace")
-            assertThat(owner.prefix).isEqualTo("sct_prefix")
-            assertThat(owner.location).isEqualTo("SingleComprehensiveTree_Location")
-            assertThat(owner.copyright).isEqualTo("SingleComprehensiveTree_Copyright")
+            assertThat(owner.name).isEqualTo("ComprehensiveName")
+            assertThat(owner.namespace).isEqualTo("ComprehensiveNamespace")
+            assertThat(owner.prefix).isEqualTo("ComprehensivePrefix")
+            assertThat(owner.location).isEqualTo("ComprehensiveLocation")
+            assertThat(owner.copyright).isEqualTo("ComprehensiveCopyright")
             assertThat(owner.languages).isEqualTo(hashSetOf(en, fi, sv))
             assertThat(owner.defaultLanguage).isEqualTo(en)
         }
@@ -93,21 +92,21 @@ internal class YclToDpmMapper_UnitTest {
         fun `should produce Explicit Domain with correct Concept`() {
             val concept = performMapping()[0].explicitDomains[0].concept
 
-            assertThat(concept.createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.664Z"))
-            assertThat(concept.modifiedAt).isEqualTo(Instant.parse("2018-06-26T14:54:37.664Z"))
+            assertThat(concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
+            assertThat(concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
             assertThat(concept.applicableFrom).isNull()
             assertThat(concept.applicableUntil).isNull()
 
             assertThat(concept.label.translations).containsOnly(
-                entry(en, "Test fixture: Comprehensive codelist #en"),
-                entry(fi, "Test fixture: Comprehensive codelist #fi")
+                entry(en, "Test Fixture: Codelist Comprehensive #en"),
+                entry(fi, "Test Fixture: Codelist Comprehensive #fi")
             )
 
             assertThat(concept.description).isNotNull()
             assertThat(concept.description.translations).containsOnly(
-                entry(en, "Comprehensive description #en"),
-                entry(fi, "Comprehensive description #fi")
+                entry(en, "Description #en"),
+                entry(fi, "Description #fi")
             )
         }
 
@@ -130,15 +129,15 @@ internal class YclToDpmMapper_UnitTest {
             val member = performMapping()[0].explicitDomains[0].members[0]
 
             member.concept.apply {
-                assertThat(createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.689Z"))
-                assertThat(modifiedAt).isEqualTo(Instant.parse("2018-06-26T14:54:37.689Z"))
+                assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
                 assertThat(applicableFrom).isNull()
                 assertThat(applicableUntil).isNull()
 
                 assertThat(label.translations).containsOnly(
-                    entry(en, "Comprehensive code 0 #en"),
-                    entry(fi, "Comprehensive code 0 #fi")
+                    entry(en, "Code 0 #en"),
+                    entry(fi, "Code 0 #fi")
                 )
 
                 assertThat(description).isNotNull()
@@ -149,7 +148,7 @@ internal class YclToDpmMapper_UnitTest {
                 )
             }
 
-            assertThat(member.memberCode).isEqualTo("tf_cmpr_cl_code0")
+            assertThat(member.memberCode).isEqualTo("code_0")
 
             assertThat(member.defaultMember).isFalse()
         }
@@ -159,15 +158,15 @@ internal class YclToDpmMapper_UnitTest {
             val member = performMapping()[0].explicitDomains[0].members[1]
 
             member.concept.apply {
-                assertThat(createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.706Z"))
-                assertThat(modifiedAt).isEqualTo(Instant.parse("2018-06-26T14:54:37.706Z"))
+                assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
                 assertThat(applicableFrom).isNull()
                 assertThat(applicableUntil).isNull()
 
                 assertThat(label.translations).containsOnly(
-                    entry(en, "Comprehensive code 1 #en"),
-                    entry(fi, "Comprehensive code 1 #fi")
+                    entry(en, "Code 1 #en"),
+                    entry(fi, "Code 1 #fi")
                 )
 
                 assertThat(description).isNotNull()
@@ -177,7 +176,7 @@ internal class YclToDpmMapper_UnitTest {
                 )
             }
 
-            assertThat(member.memberCode).isEqualTo("tf_cmpr_cl_code1")
+            assertThat(member.memberCode).isEqualTo("code_1")
 
             assertThat(member.defaultMember).isTrue()
         }
@@ -187,15 +186,15 @@ internal class YclToDpmMapper_UnitTest {
             val member = performMapping()[0].explicitDomains[0].members[2]
 
             member.concept.apply {
-                assertThat(createdAt).isEqualTo(Instant.parse("2018-06-26T14:53:37.723Z"))
-                assertThat(modifiedAt).isEqualTo(Instant.parse("2018-06-26T14:54:37.723Z"))
+                assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
                 assertThat(applicableFrom).isNull()
                 assertThat(applicableUntil).isNull()
 
                 assertThat(label.translations).containsOnly(
-                    entry(en, "Comprehensive code 2 #en"),
-                    entry(fi, "Comprehensive code 2 #fi")
+                    entry(en, "Code 2 #en"),
+                    entry(fi, "Code 2 #fi")
                 )
 
                 assertThat(description).isNotNull()
@@ -205,7 +204,7 @@ internal class YclToDpmMapper_UnitTest {
                 )
             }
 
-            assertThat(member.memberCode).isEqualTo("tf_cmpr_cl_code2")
+            assertThat(member.memberCode).isEqualTo("code_2")
 
             assertThat(member.defaultMember).isFalse()
         }

@@ -28,8 +28,8 @@ open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        yclSourceCapturePath = tempTestFixture(YCL_SOURCE_CAPTURE, "single_comprehensive_tree")
-        yclSourceConfigPath = tempTestFixture(YCL_SOURCE_CONFIG, "single_comprehensive_tree.json")
+        yclSourceCapturePath = tempTestFixture(YCL_SOURCE_CAPTURE, "codelist_comprehensive")
+        yclSourceConfigPath = tempTestFixture(YCL_SOURCE_CONFIG, "codelist_comprehensive.json")
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)

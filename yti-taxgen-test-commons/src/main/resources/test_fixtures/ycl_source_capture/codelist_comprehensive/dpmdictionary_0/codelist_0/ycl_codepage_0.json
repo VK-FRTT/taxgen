@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 3,
+    "totalResults": 3
+  },
+  "results": [
+    {
+      "id": "f12ea67e-b638-488c-814b-6153821c1c38",
+      "codeValue": "code_0",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_0",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_0",
+      "status": "DRAFT",
+      "order": 1,
+      "hierarchyLevel": 1,
+      "created": "2018-09-14T07:39:31.031Z",
+      "modified": "2018-09-14T07:39:31.031Z",
+      "prefLabel": {
+        "fi": "Code 0 #fi",
+        "en": "Code 0 #en"
+      },
+      "description": {
+        "fi": "Code 0 description #fi",
+        "en": "Code 0 description #en"
+      },
+      "definition": {
+        "fi": "Code 0 definition #fi",
+        "en": "Code 0 definition #en"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+      },
+      "shortName": "Code 0 short name #noloc",
+      "externalReferences": [],
+      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_0/extensions/",
+      "extensions": [],
+      "conceptUriInVocabularies": ""
+    },
+    {
+      "id": "c2705bec-0e39-46f0-8305-43bf07d8fd83",
+      "codeValue": "code_1",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_1",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1",
+      "status": "DRAFT",
+      "order": 2,
+      "hierarchyLevel": 1,
+      "created": "2018-09-14T07:39:31.265Z",
+      "modified": "2018-09-14T07:39:31.265Z",
+      "prefLabel": {
+        "fi": "Code 1 #fi",
+        "en": "Code 1 #en"
+      },
+      "description": {
+        "fi": "Code 1 description #fi",
+        "en": "Code 1 description #en"
+      },
+      "definition": {
+        "fi": "Code 1 definition #fi",
+        "en": "Code 1 definition #en"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+      },
+      "shortName": "Code 1 short name #noloc",
+      "externalReferences": [],
+      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1/extensions/",
+      "extensions": [],
+      "conceptUriInVocabularies": ""
+    },
+    {
+      "id": "6c2b098a-7f06-47d7-bbc3-a6bed2cb7c7c",
+      "codeValue": "code_2",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_2",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_2",
+      "status": "DRAFT",
+      "order": 3,
+      "hierarchyLevel": 1,
+      "created": "2018-09-14T07:39:31.495Z",
+      "modified": "2018-09-14T07:39:31.495Z",
+      "prefLabel": {
+        "fi": "Code 2 #fi",
+        "en": "Code 2 #en"
+      },
+      "description": {
+        "fi": "Code 2 description #fi",
+        "en": "Code 2 description #en"
+      },
+      "definition": {
+        "fi": "Code 2 definition #fi",
+        "en": "Code 2 definition #en"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+      },
+      "shortName": "Code 2 short name #noloc",
+      "externalReferences": [],
+      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_2/extensions/",
+      "extensions": [],
+      "conceptUriInVocabularies": ""
+    }
+  ]
+}

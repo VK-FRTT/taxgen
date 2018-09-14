@@ -1,0 +1,13 @@
+{
+  "name": "ComprehensiveName",
+  "namespace": "ComprehensiveNamespace",
+  "prefix": "ComprehensivePrefix",
+  "location": "ComprehensiveLocation",
+  "copyright": "ComprehensiveCopyright",
+  "languages": [
+    "en",
+    "fi",
+    "sv"
+  ],
+  "defaultLanguage": "en"
+}
