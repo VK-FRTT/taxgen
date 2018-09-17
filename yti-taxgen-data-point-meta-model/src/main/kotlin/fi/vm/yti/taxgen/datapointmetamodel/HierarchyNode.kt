@@ -39,7 +39,15 @@ data class HierarchyNode(
             failIf = {
                 !VALID_UNARY_OPERATORS.contains(unaryOperator)
             },
-            failMsg = { "unsupported sign (unary operator) '$unaryOperator'" }
+            failMsg = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
         )
+    }
+
+    fun allChildNodes(): List<HierarchyNode>? {
+        if (childNodes == null) return listOf(this)
+
+        return childNodes.mapNotNull {
+            it.allChildNodes()
+        }.flatten().toMutableList().also { it.add(0, this) }
     }
 }

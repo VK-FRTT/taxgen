@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.datapointmetamodel.unitestbase
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
+import fi.vm.yti.taxgen.datapointmetamodel.HierarchyNode
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
@@ -64,6 +65,17 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             domainCode = domainCode,
             members = listOf(Factory.instantiate()),
             hierarchies = listOf()
+        )
+    }
+
+    protected fun hierarchyNode(member: Member, vararg children: HierarchyNode): HierarchyNode {
+        return HierarchyNode(
+            concept = Factory.instantiate(),
+            abstract = false,
+            comparisonOperator = "=",
+            unaryOperator = "+",
+            member = member,
+            childNodes = children.toList()
         )
     }
 }

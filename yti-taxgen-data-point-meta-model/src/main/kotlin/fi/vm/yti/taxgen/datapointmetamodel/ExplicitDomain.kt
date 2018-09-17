@@ -10,7 +10,7 @@ data class ExplicitDomain(
     val concept: Concept,
     val domainCode: String,
     val members: List<Member>,
-    val hierarchies: List<Hierarchy>
+    val hierarchies: List<Hierarchy> //TODO - validate that HierarchyNode.members are found from list of members (via referential equality)
 ) : Validatable {
 
     override fun validate(validationErrors: ValidationErrors) {

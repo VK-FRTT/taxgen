@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.customValidate
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Hierarchy(
@@ -22,12 +23,23 @@ data class Hierarchy(
             maxLength = 50
         )
 
-        validateLength(
+        customValidate(
             validationErrors = validationErrors,
             instance = this,
             property = Hierarchy::rootNodes,
-            minLength = 1,
-            maxLength = 10000
+            failIf = {
+                val duplicates =
+                    allNodes().map { it.member.memberCode }.groupingBy { it }.eachCount().filter { it.value > 1 }.keys
+                it["duplicates"] = duplicates
+                duplicates.any()
+            },
+            failMsg = { "contains duplicate members ${it["duplicates"]}" }
         )
+    }
+
+    private fun allNodes(): List<HierarchyNode> {
+        return rootNodes.mapNotNull {
+            it.allChildNodes()
+        }.flatten()
     }
 }

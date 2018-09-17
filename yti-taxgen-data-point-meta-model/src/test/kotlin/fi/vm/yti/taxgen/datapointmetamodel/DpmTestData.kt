@@ -98,5 +98,30 @@ fun dpmTestData(): Set<DataDefinition> {
         )
     )
 
+    definitions.add(
+        DataDefinition(
+            kClass = Hierarchy::class,
+            attributes = mapOf(
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "hierarchyCode" to "hier_code",
+                "rootNodes" to listOf<HierarchyNode>()
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = HierarchyNode::class,
+            attributes = mapOf(
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "abstract" to false,
+                "comparisonOperator" to "=",
+                "unaryOperator" to "+",
+                "member" to dynamicAttribute { it.instantiate<Member>() },
+                "childNodes" to listOf<HierarchyNode>()
+            )
+        )
+    )
+
     return definitions
 }
