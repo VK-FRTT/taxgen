@@ -30,5 +30,5 @@ object OwnerTable : IntIdTable(name = "mOwner", columnName = "OwnerID") {
     val ownerCopyrightCol = text("OwnerCopyright").nullable()
 
     val parentOwnerIdCol = reference("ParentOwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
-    val conceptIdCol = reference("ConceptID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
+    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 }

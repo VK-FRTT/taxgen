@@ -31,5 +31,5 @@ object DomainTable : IntIdTable(name = "mDomain", columnName = "DomainID") {
     val domainXBRLCodeCol = text("DomainXBRLCode").nullable()
     val dataTypeCol = text("DataType").nullable()
     val isTypedDomainCol = bool("IsTypedDomain").nullable()
-    val conceptIdCol = reference("ConceptID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
+    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 }

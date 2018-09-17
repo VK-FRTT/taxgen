@@ -5,8 +5,8 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
-import fi.vm.yti.taxgen.datapointmetamodel.dpmTestData
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
+import fi.vm.yti.taxgen.datapointmetamodel.dpmTestData
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import kotlin.reflect.KClass
@@ -40,7 +40,10 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         val attributes = Factory.Builder.attributesFor(kClass, attributeOverrides)
 
         val collector = ValidationErrorCollector()
+
+        @Suppress("UNCHECKED_CAST")
         instance = Factory.Builder.instantiate(kClass, attributes) as T
+
         instance!!.validate(collector)
         validationErrors = collector.errorsInSimpleFormat()
     }
@@ -59,7 +62,8 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         return ExplicitDomain(
             concept = Factory.instantiate(),
             domainCode = domainCode,
-            members = listOf(Factory.instantiate())
+            members = listOf(Factory.instantiate()),
+            hierarchies = listOf()
         )
     }
 }

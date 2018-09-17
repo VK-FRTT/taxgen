@@ -83,7 +83,8 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
         ExplicitDomain(
             concept = domainDetails.concept,
             domainCode = domainDetails.codelistSourceConfig.domainCode,
-            members = members
+            members = members,
+            hierarchies = listOf()
         )
     }
 }

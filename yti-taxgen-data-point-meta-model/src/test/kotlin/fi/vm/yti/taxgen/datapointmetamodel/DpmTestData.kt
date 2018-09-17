@@ -82,7 +82,8 @@ fun dpmTestData(): Set<DataDefinition> {
             attributes = mapOf(
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "exp_dc",
-                "members" to dynamicAttribute { listOf(it.instantiate<Member>()) }
+                "members" to dynamicAttribute { listOf(it.instantiate<Member>()) },
+                "hierarchies" to dynamicAttribute { listOf<Hierarchy>() }
             )
         )
     )

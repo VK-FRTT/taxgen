@@ -9,7 +9,8 @@ import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 data class ExplicitDomain(
     val concept: Concept,
     val domainCode: String,
-    val members: List<Member>
+    val members: List<Member>,
+    val hierarchies: List<Hierarchy>
 ) : Validatable {
 
     override fun validate(validationErrors: ValidationErrors) {
@@ -49,6 +50,13 @@ data class ExplicitDomain(
                 count != 1
             },
             failMsg = { "has ${it["count"]} default members (should have 1)" }
+        )
+
+        validateIterableElementsUnique(
+            validationErrors = validationErrors,
+            instance = this,
+            property = ExplicitDomain::hierarchies,
+            keySelector = { it.hierarchyCode }
         )
     }
 }

@@ -12,7 +12,9 @@ object Tables {
                 LanguageTable,
                 OwnerTable,
                 DomainTable,
-                MemberTable
+                MemberTable,
+                HierarchyTable,
+                HierarchyNodeTable
             )
         }
     }

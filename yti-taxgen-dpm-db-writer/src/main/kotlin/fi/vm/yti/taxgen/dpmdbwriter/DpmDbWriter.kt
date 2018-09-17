@@ -7,6 +7,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.dpmdbwriter.tables.Tables
 import fi.vm.yti.taxgen.dpmdbwriter.writers.DbDomains
+import fi.vm.yti.taxgen.dpmdbwriter.writers.DbHierarchies
 import fi.vm.yti.taxgen.dpmdbwriter.writers.DbLanguages
 import fi.vm.yti.taxgen.dpmdbwriter.writers.DbOwners
 import org.jetbrains.exposed.dao.EntityID
@@ -64,10 +65,19 @@ class DpmDbWriter(
 
         dpmDictionary.explicitDomains.forEach { explicitDomain ->
 
-            DbDomains.writeExplicitDomainAndMembers(
+            val (domainId, memberIds) = DbDomains.writeExplicitDomainAndMembers(
                 writeContext,
                 explicitDomain
             )
+
+            explicitDomain.hierarchies.forEach { hierarchy ->
+                DbHierarchies.writeHierarchyAndAndNodes(
+                    writeContext,
+                    hierarchy,
+                    domainId,
+                    memberIds
+                )
+            }
         }
     }
 }

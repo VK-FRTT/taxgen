@@ -43,6 +43,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         assertThat(targetDbPath).exists().isRegularFile()
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
+            "Owner Name In DB",
             "ComprehensiveName"
         )
 
@@ -270,6 +271,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         assertThat(targetDbPath).exists().isRegularFile()
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
+            "Owner Name In DB",
             "ComprehensiveName"
         )
 
@@ -417,7 +419,7 @@ internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
         val rows = dbConnection.createStatement().executeQuery(
             """
                 SELECT
-                    mOwner.OwnerName
+                    mOwner.OwnerName AS 'Owner Name In DB'
                 FROM mOwner
                 """
         ).toStringList()

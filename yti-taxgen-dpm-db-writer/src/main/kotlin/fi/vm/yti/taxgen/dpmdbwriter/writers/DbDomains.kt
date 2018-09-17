@@ -9,14 +9,15 @@ import fi.vm.yti.taxgen.dpmdbwriter.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.IdentityHashMap
 
 object DbDomains {
     fun writeExplicitDomainAndMembers(
         writeContext: DpmDictionaryWriteContext,
         domain: ExplicitDomain
-    ) {
+    ): Pair<EntityID<Int>, IdentityHashMap<Member, EntityID<Int>>> {
 
-        transaction {
+        val ret = transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
                 writeContext,
                 domain.concept,
@@ -29,6 +30,8 @@ object DbDomains {
                 domainConceptId
             )
 
+            val memberIds = IdentityHashMap<Member, EntityID<Int>>(1000)
+
             domain.members.forEach { member ->
 
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
@@ -37,15 +40,21 @@ object DbDomains {
                     ConceptType.MEMBER
                 )
 
-                insertMember(
+                val memberId = insertMember(
                     writeContext,
                     domain,
                     domainId,
                     member,
                     memberConceptId
                 )
+
+                memberIds[member] = memberId
             }
+
+            Pair(domainId, memberIds)
         }
+
+        return ret
     }
 
     private fun insertExplicitDomain(
@@ -74,10 +83,10 @@ object DbDomains {
         domainId: EntityID<Int>,
         member: Member,
         memberConceptId: EntityID<Int>
-    ) {
+    ): EntityID<Int> {
         val memberXbrlCode = "${writeContext.owner.prefix}_${domain.domainCode}:${member.memberCode}"
 
-        MemberTable.insertAndGetId {
+        val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = member.memberCode
             it[memberLabelCol] = member.concept.label.defaultText()
             it[memberXBRLCodeCol] = memberXbrlCode
@@ -85,5 +94,7 @@ object DbDomains {
             it[conceptIdCol] = memberConceptId
             it[domainIdCol] = domainId
         }
+
+        return memberId
     }
 }
