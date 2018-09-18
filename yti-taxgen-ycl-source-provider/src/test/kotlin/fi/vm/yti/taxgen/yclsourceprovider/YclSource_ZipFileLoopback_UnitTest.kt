@@ -66,8 +66,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
             )
 
         assertThat(markers).containsExactly(
-            "fixed_dpm_owner_config_0",
-            "fixed_dpm_owner_config_1"
+            "fixed_dpm_owner_config_d0",
+            "fixed_dpm_owner_config_d1"
         )
     }
 
@@ -91,8 +91,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
             )
 
         assertThat(markers).containsExactly(
-            "fixed_codelist_source_config_0",
-            "fixed_codelist_source_config_1"
+            "fixed_codelist_source_config_d0_c0",
+            "fixed_codelist_source_config_d0_c1"
         )
     }
 
@@ -105,8 +105,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         )
 
         assertThat(markers).containsExactly(
-            "fixed_codescheme_0",
-            "fixed_codescheme_1"
+            "fixed_codescheme_d0_c0",
+            "fixed_codescheme_d0_c1"
         )
     }
 
@@ -131,8 +131,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         )
 
         assertThat(markers).containsExactly(
-            "fixed_codepage_0",
-            "fixed_codepage_1"
+            "fixed_codepage_d0_c0_p0",
+            "fixed_codepage_d0_c0_p1"
         )
     }
 
@@ -147,8 +147,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
             )
 
         assertThat(markers).containsExactly(
-            "fixed_codepage_0",
-            "fixed_codepage_1"
+            "fixed_codepage_d0_c0_p0",
+            "fixed_codepage_d0_c0_p1"
         )
     }
 
@@ -174,8 +174,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
             )
 
         assertThat(markers).containsExactly(
-            "fixed_extension_member_0_0",
-            "fixed_extension_member_0_1"
+            "fixed_extension_member_d0_c0_e0_p0",
+            "fixed_extension_member_d0_c0_e0_p1"
         )
     }
 }
