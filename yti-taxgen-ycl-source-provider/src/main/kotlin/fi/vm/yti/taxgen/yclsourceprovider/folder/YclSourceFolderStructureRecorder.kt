@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.commons.PathStack
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.yclsourceprovider.CaptureInfo
 import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
+import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistExtensionSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
 import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
@@ -93,7 +94,10 @@ class YclSourceFolderStructureRecorder(
         }
     }
 
-    private fun captureCodelistSources(codelistSources: List<YclCodelistSource>, pathStack: PathStack) {
+    private fun captureCodelistSources(
+        codelistSources: List<YclCodelistSource>,
+        pathStack: PathStack
+    ) {
         codelistSources.withIndex().forEach { (listIndex, codelistSource) ->
 
             diagnostic.withContext(codelistSource) {
@@ -109,7 +113,7 @@ class YclSourceFolderStructureRecorder(
                     )
 
                     FileOps.writeTextFile(
-                        codelistSource.yclCodeschemeData(),
+                        codelistSource.yclCodeSchemeData(),
                         pathStack,
                         "ycl_codescheme.json",
                         forceOverwrite,
@@ -121,6 +125,43 @@ class YclSourceFolderStructureRecorder(
                             pageData,
                             pathStack,
                             "ycl_codepage_$index.json",
+                            forceOverwrite,
+                            diagnostic
+                        )
+                    }
+
+                    captureCodelistExtensionSources(
+                        codelistSource.yclCodelistExtensionSources(),
+                        pathStack
+                    )
+                }
+            }
+        }
+    }
+
+    private fun captureCodelistExtensionSources(
+        codelistExtensionSources: List<YclCodelistExtensionSource>,
+        pathStack: PathStack
+    ) {
+        codelistExtensionSources.withIndex().forEach { (listIndex, codelistExtensionSource) ->
+
+            diagnostic.withContext(codelistExtensionSource) {
+
+                pathStack.withIndexPostfixSubfolder("extension", listIndex) {
+
+                    FileOps.writeTextFile(
+                        codelistExtensionSource.yclExtensionData(),
+                        pathStack,
+                        "ycl_extension.json",
+                        forceOverwrite,
+                        diagnostic
+                    )
+
+                    codelistExtensionSource.yclExtensionMemberPagesData().withIndex().forEach { (index, pageData) ->
+                        FileOps.writeTextFile(
+                            pageData,
+                            pathStack,
+                            "ycl_extension_members_page_$index.json",
                             forceOverwrite,
                             diagnostic
                         )

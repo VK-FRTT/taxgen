@@ -47,7 +47,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have owner config @ root # dpmdictionary`() {
+    fun `Should have owner config {@ root # dpmdictionary}`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -62,7 +62,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+    fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -77,12 +77,12 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have codelists @ root # dpmdictionary # codelist`() {
+    fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
                 codeLists,
-                { it -> (it as YclCodelistSource).yclCodeschemeData() }
+                { it -> (it as YclCodelistSource).yclCodeSchemeData() }
             )
 
         assertThat(markers).containsExactly(
@@ -92,7 +92,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have codepages @ root # dpmdictionary # codelist`() {
+    fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
         val codesPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers =
@@ -104,6 +104,38 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
         assertThat(markers).containsExactly(
             "fixed_codepage_0",
             "fixed_codepage_1"
+        )
+    }
+
+    @Test
+    fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+        val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                extensions,
+                { it -> (it as YclCodelistExtensionSource).yclExtensionData() }
+            )
+
+        assertThat(markers).containsExactly(
+            "fixed_extension_0",
+            "fixed_extension_1"
+        )
+    }
+
+    @Test
+    fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+        val extensionPages =
+            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
+                .toList()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                extensionPages,
+                { it -> it as String }
+            )
+
+        assertThat(markers).containsExactly(
+            "fixed_extension_member_0_0",
+            "fixed_extension_member_0_1"
         )
     }
 }

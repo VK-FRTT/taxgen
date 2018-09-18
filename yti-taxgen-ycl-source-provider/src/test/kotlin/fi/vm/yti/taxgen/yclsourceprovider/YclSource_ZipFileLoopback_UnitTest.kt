@@ -50,14 +50,14 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have diagnostic context info about yclsource @ root`() {
+    fun `Should have diagnostic context info about yclsource {@ root}`() {
         assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
         assertThat(yclSource.contextName()).isEqualTo("ZIP file")
         assertThat(yclSource.contextRef()).isEqualTo(targetZipPath.toString())
     }
 
     @Test
-    fun `Should have owner config @ root # dpmdictionary`() {
+    fun `Should have owner config {@ root # dpmdictionary}`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -72,7 +72,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have diagnostic context info about dpmdictionary @ root # dpmdictionary`() {
+    fun `Should have diagnostic context info about dpmdictionary {@ root # dpmdictionary}`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         assertThat(dpmDictionarySources.size).isEqualTo(2)
 
@@ -82,7 +82,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+    fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -97,11 +97,11 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have codelists @ root # dpmdictionary # codelist`() {
+    fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers = extractMarkerValuesFromJsonData(
             codeLists,
-            { it -> (it as YclCodelistSource).yclCodeschemeData() }
+            { it -> (it as YclCodelistSource).yclCodeSchemeData() }
         )
 
         assertThat(markers).containsExactly(
@@ -111,7 +111,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have diagnostic context info about codelist @ root # dpmdictionary # codelist`() {
+    fun `Should have diagnostic context info about codelist {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         assertThat(codeLists.size).isEqualTo(2)
 
@@ -122,7 +122,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     }
 
     @Test
-    fun `Should have codepages @ root # dpmdictionary # codelist`() {
+    fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
         val codesPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers = extractMarkerValuesFromJsonData(
@@ -133,6 +133,49 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         assertThat(markers).containsExactly(
             "fixed_codepage_0",
             "fixed_codepage_1"
+        )
+    }
+
+    @Test
+    fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+        val codesPages =
+            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                codesPages,
+                { it -> it as String }
+            )
+
+        assertThat(markers).containsExactly(
+            "fixed_codepage_0",
+            "fixed_codepage_1"
+        )
+    }
+
+    @Test
+    fun `Should have diagnostic context info about extension {@ root # dpmdictionary # codelist # extension}`() {
+        val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
+        assertThat(extensions.size).isEqualTo(2)
+
+        assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
+        assertThat(extensions[0].contextName()).isEqualTo("")
+        assertThat(extensions[0].contextRef()).isEqualTo("#0")
+    }
+
+    @Test
+    fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+        val extensionPages =
+            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
+                .toList()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                extensionPages,
+                { it -> it as String }
+            )
+
+        assertThat(markers).containsExactly(
+            "fixed_extension_member_0_0",
+            "fixed_extension_member_0_1"
         )
     }
 }

@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.SortOps
 import java.nio.file.Path
 
-class DpmDictionarySourceFolderStructureAdapter(
+internal class DpmDictionarySourceFolderStructureAdapter(
     index: Int,
     private val dpmDictionaryRootPath: Path
 ) : DpmDictionarySource(index) {

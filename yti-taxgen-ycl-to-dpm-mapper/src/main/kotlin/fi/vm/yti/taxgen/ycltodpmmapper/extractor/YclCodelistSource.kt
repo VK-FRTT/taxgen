@@ -27,7 +27,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
         val codelistConfigInput =
             JsonOps.readValue<YclCodelistSourceConfigInput>(yclCodelistSourceConfigData(), ctx.diagnostic)
 
-        val codeScheme = JsonOps.readValue<YclCodeScheme>(yclCodeschemeData(), ctx.diagnostic)
+        val codeScheme = JsonOps.readValue<YclCodeScheme>(yclCodeSchemeData(), ctx.diagnostic)
 
         return DomainDetails(
             codelistSourceConfig = codelistConfigInput.toValidConfig(ctx.diagnostic),

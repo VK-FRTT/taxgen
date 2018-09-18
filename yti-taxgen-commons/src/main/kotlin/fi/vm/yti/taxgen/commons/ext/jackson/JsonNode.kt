@@ -14,3 +14,14 @@ fun JsonNode.nonBlankTextAt(jsonPtrExpr: String, diagnostic: Diagnostic): String
     val text = nonBlankTextOrNullAt(jsonPtrExpr)
     return text ?: diagnostic.fatal("Malformed JSON: no text at '$jsonPtrExpr'")
 }
+
+fun JsonNode.arrayOrNullAt(jsonPtrExpr: String): JsonNode? {
+    val node = at(jsonPtrExpr) ?: return null
+    if (!node.isArray) return null
+    return node
+}
+
+fun JsonNode.arrayAt(jsonPtrExpr: String, diagnostic: Diagnostic): JsonNode {
+    val node = arrayOrNullAt(jsonPtrExpr)
+    return node ?: diagnostic.fatal("Malformed JSON: no array at '$jsonPtrExpr'")
+}

@@ -12,6 +12,7 @@ abstract class YclCodelistSource(
     override fun contextRef(): String = "#$index"
 
     abstract fun yclCodelistSourceConfigData(): String
-    abstract fun yclCodeschemeData(): String
+    abstract fun yclCodeSchemeData(): String
     abstract fun yclCodePagesData(): Sequence<String>
+    abstract fun yclCodelistExtensionSources(): List<YclCodelistExtensionSource>
 }

@@ -7,7 +7,7 @@ import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 import okhttp3.HttpUrl
 
-class YclPaginationAwareResourceIterator(
+internal class YclPaginationAwareResourceIterator(
     url: HttpUrl,
     private val diagnostic: Diagnostic,
     private val diagnosticContextType: DiagnosticContextType
@@ -45,7 +45,7 @@ class YclPaginationAwareResourceIterator(
         nextPageUrl = if (rawNextPageUrl == null) {
             null
         } else {
-            HttpUrl.parse(rawNextPageUrl) ?: diagnostic.fatal("Malformed code list URL: $rawNextPageUrl")
+            HttpUrl.parse(rawNextPageUrl) ?: diagnostic.fatal("Malformed page URL: $rawNextPageUrl")
         }
     }
 }

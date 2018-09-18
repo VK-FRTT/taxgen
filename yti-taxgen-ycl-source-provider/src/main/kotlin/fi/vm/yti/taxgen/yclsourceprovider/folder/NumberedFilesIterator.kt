@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.SortOps
 import java.nio.file.Path
 
-class NumberedFilesIterator(
+internal class NumberedFilesIterator(
     path: Path,
     filenameGlob: String
 ) : AbstractIterator<String>() {

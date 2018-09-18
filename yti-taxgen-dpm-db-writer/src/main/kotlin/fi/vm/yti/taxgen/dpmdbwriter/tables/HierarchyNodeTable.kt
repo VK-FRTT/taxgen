@@ -68,4 +68,3 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
     //Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
     val pathCol = varchar("Path", 3999).nullable()
 }
-

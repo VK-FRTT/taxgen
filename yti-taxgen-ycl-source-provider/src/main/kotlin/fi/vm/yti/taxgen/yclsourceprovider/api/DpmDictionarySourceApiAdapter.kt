@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.yclsourceprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistSource
 import fi.vm.yti.taxgen.yclsourceprovider.config.DpmDictionarySourceConfig
 
-class DpmDictionarySourceApiAdapter(
+internal class DpmDictionarySourceApiAdapter(
     index: Int,
     private val config: DpmDictionarySourceConfig,
     private val diagnostic: Diagnostic

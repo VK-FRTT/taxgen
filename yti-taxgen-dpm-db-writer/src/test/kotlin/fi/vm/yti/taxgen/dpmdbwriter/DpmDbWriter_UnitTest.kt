@@ -154,7 +154,6 @@ class DpmDbWriter_UnitTest {
             assertThat(meta.columnConfigToString(3)).isEqualTo("Text, TEXT, Nullable, false")
             assertThat(meta.columnConfigToString(4)).isEqualTo("Role, TEXT, NonNullable, false")
 
-
             assertThat(primaryKeysOfVerifiedTable()).containsExactlyInAnyOrder(
                 "ConceptID, 1",
                 "LanguageID, 2",
@@ -644,7 +643,6 @@ class DpmDbWriter_UnitTest {
         }
     }
 
-
     private fun dpmDictionaryFixture(): List<DpmDictionary> {
         fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
@@ -677,7 +675,6 @@ class DpmDbWriter_UnitTest {
             ),
             owner = dpmOwner
         )
-
 
         val members = listOf(
             Member(
@@ -762,7 +759,6 @@ class DpmDbWriter_UnitTest {
             )
         )
 
-
         val dictionaries =
             listOf(
                 DpmDictionary(
@@ -782,5 +778,3 @@ class DpmDbWriter_UnitTest {
         return dictionaries
     }
 }
-
-

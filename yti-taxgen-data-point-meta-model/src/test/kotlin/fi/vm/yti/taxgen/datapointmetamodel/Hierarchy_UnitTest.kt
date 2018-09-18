@@ -51,7 +51,7 @@ internal class Hierarchy_UnitTest :
     inner class RootNodesProp {
 
         @Test
-        fun `rootNodes should error if memberCode (@ node # member) exists multiple times`() {
+        fun `rootNodes should error if memberCode {@ node # member) exists multiple times`() {
             val rootNodes = listOf(
 
                 hierarchyNode(

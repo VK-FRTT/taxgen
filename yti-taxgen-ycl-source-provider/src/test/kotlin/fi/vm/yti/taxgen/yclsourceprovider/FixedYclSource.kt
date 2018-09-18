@@ -17,9 +17,20 @@ class FixedDpmDictionarySource(private val index: Int) : DpmDictionarySource(ind
 
 class FixedYclCodelistSource(private val index: Int) : YclCodelistSource(index) {
     override fun yclCodelistSourceConfigData(): String = """{"marker": "fixed_codelist_source_config_$index"}"""
-    override fun yclCodeschemeData() = """{"marker": "fixed_codescheme_$index"}"""
+    override fun yclCodeSchemeData() = """{"marker": "fixed_codescheme_$index"}"""
     override fun yclCodePagesData() = listOf(
         """{"marker": "fixed_codepage_0"}""",
         """{"marker": "fixed_codepage_1"}"""
+    ).iterator().asSequence()
+
+    override fun yclCodelistExtensionSources() =
+        listOf(FixedYclCodelistExtensionSource(0), FixedYclCodelistExtensionSource(1))
+}
+
+class FixedYclCodelistExtensionSource(private val index: Int) : YclCodelistExtensionSource(index) {
+    override fun yclExtensionData() = """{"marker": "fixed_extension_$index"}"""
+    override fun yclExtensionMemberPagesData() = listOf(
+        """{"marker": "fixed_extension_member_${index}_0"}""",
+        """{"marker": "fixed_extension_member_${index}_1"}"""
     ).iterator().asSequence()
 }

@@ -40,14 +40,14 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about yclsource @ root`() {
+    fun `Should have diagnostic context info about yclsource {@ root}`() {
         assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
         assertThat(yclSource.contextName()).isEqualTo("folder")
         assertThat(yclSource.contextRef()).isEqualTo(resourcePath.toString())
     }
 
     @Test
-    fun `Should have owner config @ root # dpmdictionary`() {
+    fun `Should have owner config {@ root # dpmdictionary}`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -72,7 +72,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about dpmdictionary @ root # dpmdictionary`() {
+    fun `Should have diagnostic context info about dpmdictionary {@ root # dpmdictionary}`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         assertThat(dpmDictionarySources.size).isEqualTo(12)
 
@@ -83,7 +83,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+    fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -108,12 +108,12 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have codelists @ root # dpmdictionary # codelist`() {
+    fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
                 codeLists,
-                { it -> (it as YclCodelistSource).yclCodeschemeData() }
+                { it -> (it as YclCodelistSource).yclCodeSchemeData() }
             )
 
         assertThat(markers).containsExactly(
@@ -133,7 +133,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about codelist @ root # dpmdictionary # codelist`() {
+    fun `Should have diagnostic context info about codelist {@ root # dpmdictionary # codelist}`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         assertThat(codeLists.size).isEqualTo(12)
 
@@ -144,7 +144,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have codepages @ root # dpmdictionary # codelist`() {
+    fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
         val codesPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers =
@@ -166,6 +166,69 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
             "dpmdictionary_0/codelist_0/codepage_9",
             "dpmdictionary_0/codelist_0/codepage_10",
             "dpmdictionary_0/codelist_0/codepage_11"
+        )
+    }
+
+    @Test
+    fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+        val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                extensions,
+                { it -> (it as YclCodelistExtensionSource).yclExtensionData() }
+            )
+
+        assertThat(markers).containsExactly(
+            "dpmdictionary_0/codelist_0/extension_0",
+            "dpmdictionary_0/codelist_0/extension_1",
+            "dpmdictionary_0/codelist_0/extension_2",
+            "dpmdictionary_0/codelist_0/extension_3",
+            "dpmdictionary_0/codelist_0/extension_4",
+            "dpmdictionary_0/codelist_0/extension_5",
+            "dpmdictionary_0/codelist_0/extension_6",
+            "dpmdictionary_0/codelist_0/extension_7",
+            "dpmdictionary_0/codelist_0/extension_8",
+            "dpmdictionary_0/codelist_0/extension_9",
+            "dpmdictionary_0/codelist_0/extension_10",
+            "dpmdictionary_0/codelist_0/extension_11"
+        )
+    }
+
+    @Test
+    fun `Should have diagnostic context info about extension {@ root # dpmdictionary # codelist # extension}`() {
+        val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
+        assertThat(extensions.size).isEqualTo(12)
+
+        assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
+        assertThat(extensions[0].contextName()).isEqualTo("")
+        assertThat(extensions[0].contextRef()).isEqualTo("#0")
+        assertThat(extensions[11].contextRef()).isEqualTo("#11")
+    }
+
+    @Test
+    fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+        val extensionPages =
+            yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
+                .toList()
+        val markers =
+            extractMarkerValuesFromJsonData(
+                extensionPages,
+                { it -> it as String }
+            )
+
+        assertThat(markers).containsExactly(
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_0",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_1",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_2",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_3",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_4",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_5",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_6",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_7",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_8",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_9",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_10",
+            "dpmdictionary_0/codelist_0/extension_0/memberpage_11"
         )
     }
 }

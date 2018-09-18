@@ -46,7 +46,7 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         @Test
-        fun `Should have owner config @ root # dpmdictionary`() {
+        fun `Should have owner config {@ root # dpmdictionary}`() {
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_0/dpm_owner_info.json",
                 expectedMarker = "fixed_dpm_owner_config_0"
@@ -59,7 +59,7 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         @Test
-        fun `Should have codelist source config @ root # dpmdictionary # codelist`() {
+        fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_0/codelist_0/ycl_codelist_source_config.json",
                 expectedMarker = "fixed_codelist_source_config_0"
@@ -72,7 +72,7 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         @Test
-        fun `Should have codelists @ root # dpmdictionary # codelist`() {
+        fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_0/codelist_0/ycl_codescheme.json",
                 expectedMarker = "fixed_codescheme_0"
@@ -85,7 +85,7 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         }
 
         @Test
-        fun `Should have codepages @ root # dpmdictionary # codelist`() {
+        fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_0/codelist_0/ycl_codepage_0.json",
                 expectedMarker = "fixed_codepage_0"
@@ -94,6 +94,32 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
             assertTargetFolderHavingJsonFile(
                 expectedFile = "dpmdictionary_0/codelist_0/ycl_codepage_1.json",
                 expectedMarker = "fixed_codepage_1"
+            )
+        }
+
+        @Test
+        fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+            assertTargetFolderHavingJsonFile(
+                expectedFile = "dpmdictionary_0/codelist_0/extension_0/ycl_extension.json",
+                expectedMarker = "fixed_extension_0"
+            )
+
+            assertTargetFolderHavingJsonFile(
+                expectedFile = "dpmdictionary_0/codelist_0/extension_1/ycl_extension.json",
+                expectedMarker = "fixed_extension_1"
+            )
+        }
+
+        @Test
+        fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+            assertTargetFolderHavingJsonFile(
+                expectedFile = "dpmdictionary_0/codelist_0/extension_0/ycl_extension_members_page_0.json",
+                expectedMarker = "fixed_extension_member_0_0"
+            )
+
+            assertTargetFolderHavingJsonFile(
+                expectedFile = "dpmdictionary_0/codelist_0/extension_0/ycl_extension_members_page_1.json",
+                expectedMarker = "fixed_extension_member_0_1"
             )
         }
 
