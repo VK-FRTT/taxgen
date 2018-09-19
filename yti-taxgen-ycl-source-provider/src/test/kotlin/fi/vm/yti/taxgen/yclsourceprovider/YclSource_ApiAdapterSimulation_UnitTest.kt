@@ -170,8 +170,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 )
 
             assertThat(markers).containsExactly(
-                "simulated_codepage_0",
-                "simulated_codepage_1"
+                "simulated_codes_page_0",
+                "simulated_codes_page_1"
             )
 
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
@@ -273,15 +273,15 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 //YCL service responses for expanded CodeScheme (resolution phase)
                 .respondGetWithJson(
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
-                    queryParams = listOf(Pair("expand", "extensionScheme,propertyType")),
+                    queryParams = listOf(Pair("expand", "extension,propertyType")),
                     responseJson = """
                         {
                           "url": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero",
                           "codesUrl": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/codes/",
-                          "extensionSchemes": [
+                          "extensions": [
                             {
-                              "url": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensionschemes/ext_0",
-                              "extensionsUrl": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensionschemes/ext_0/extensions/"
+                              "url": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0",
+                              "membersUrl": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/"
                             }
                           ]
                         }
@@ -308,7 +308,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                             "meta": {
                                 "nextPage": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/codes/?pageSize=1000&from=1000"
                             },
-                            "marker": "simulated_codepage_0"
+                            "marker": "simulated_codes_page_0"
                         }
                         """.trimIndent()
                 )
@@ -321,14 +321,14 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                             "meta": {
                                 "nextPage": null
                             },
-                            "marker": "simulated_codepage_1"
+                            "marker": "simulated_codes_page_1"
                         }
                         """.trimIndent()
                 )
 
                 //YCL service responses for expanded Extension
                 .respondGetWithJson(
-                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensionschemes/ext_0",
+                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0",
                     queryParams = listOf(Pair("expand", "propertyType")),
                     responseJson = """
                         {
@@ -339,12 +339,12 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
                 //YCL service responses for Extension Member pages
                 .respondGetWithJson(
-                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensionschemes/ext_0/extensions/",
+                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/",
                     queryParams = listOf(Pair("pageSize", "1000")),
                     responseJson = """
                         {
                             "meta": {
-                                "nextPage": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensionschemes/ext_0/extensions/?pageSize=1000&from=1000"
+                                "nextPage": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/?pageSize=1000&from=1000"
                             },
                             "marker": "simulated_extension_memberpage_0"
                         }
@@ -352,7 +352,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 )
 
                 .respondGetWithJson(
-                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensionschemes/ext_0/extensions/",
+                    requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/",
                     queryParams = listOf(Pair("pageSize", "1000"), Pair("from", "1000")),
                     responseJson = """
                         {
