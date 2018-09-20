@@ -20,7 +20,7 @@ internal class YclCodelistSourceFolderStructureAdapter(
     }
 
     override fun yclCodePagesData(): Sequence<String> {
-        return NumberedFilesIterator(codelistPath, "ycl_codepage_*.json").asSequence()
+        return NumberedFilesIterator(codelistPath, "ycl_codes_page_*.json").asSequence()
     }
 
     override fun yclCodelistExtensionSources(): List<YclCodelistExtensionSource> {

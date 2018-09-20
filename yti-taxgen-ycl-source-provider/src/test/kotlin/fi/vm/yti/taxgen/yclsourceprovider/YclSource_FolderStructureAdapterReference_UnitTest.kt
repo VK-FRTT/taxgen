@@ -154,18 +154,18 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
             )
 
         assertThat(markers).containsExactly(
-            "dpmdictionary_0/codelist_0/codepage_0",
-            "dpmdictionary_0/codelist_0/codepage_1",
-            "dpmdictionary_0/codelist_0/codepage_2",
-            "dpmdictionary_0/codelist_0/codepage_3",
-            "dpmdictionary_0/codelist_0/codepage_4",
-            "dpmdictionary_0/codelist_0/codepage_5",
-            "dpmdictionary_0/codelist_0/codepage_6",
-            "dpmdictionary_0/codelist_0/codepage_7",
-            "dpmdictionary_0/codelist_0/codepage_8",
-            "dpmdictionary_0/codelist_0/codepage_9",
-            "dpmdictionary_0/codelist_0/codepage_10",
-            "dpmdictionary_0/codelist_0/codepage_11"
+            "dpmdictionary_0/codelist_0/codes_page_0",
+            "dpmdictionary_0/codelist_0/codes_page_1",
+            "dpmdictionary_0/codelist_0/codes_page_2",
+            "dpmdictionary_0/codelist_0/codes_page_3",
+            "dpmdictionary_0/codelist_0/codes_page_4",
+            "dpmdictionary_0/codelist_0/codes_page_5",
+            "dpmdictionary_0/codelist_0/codes_page_6",
+            "dpmdictionary_0/codelist_0/codes_page_7",
+            "dpmdictionary_0/codelist_0/codes_page_8",
+            "dpmdictionary_0/codelist_0/codes_page_9",
+            "dpmdictionary_0/codelist_0/codes_page_10",
+            "dpmdictionary_0/codelist_0/codes_page_11"
         )
     }
 

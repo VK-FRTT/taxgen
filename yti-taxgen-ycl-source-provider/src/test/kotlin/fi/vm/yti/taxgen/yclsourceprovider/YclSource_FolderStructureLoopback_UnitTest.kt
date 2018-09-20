@@ -102,8 +102,8 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
             )
 
         assertThat(markers).containsExactly(
-            "fixed_codepage_d0_c0_p0",
-            "fixed_codepage_d0_c0_p1"
+            "fixed_codes_page_d0_c0_p0",
+            "fixed_codes_page_d0_c0_p1"
         )
     }
 

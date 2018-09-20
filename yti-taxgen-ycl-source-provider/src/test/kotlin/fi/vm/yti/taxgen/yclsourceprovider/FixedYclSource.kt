@@ -19,8 +19,8 @@ class FixedYclCodelistSource(private val dIndex: Int, private val cIndex: Int) :
     override fun yclCodelistSourceConfigData(): String = """{"marker": "fixed_codelist_source_config_d${dIndex}_c$cIndex"}"""
     override fun yclCodeSchemeData() = """{"marker": "fixed_codescheme_d${dIndex}_c$cIndex"}"""
     override fun yclCodePagesData() = listOf(
-        """{"marker": "fixed_codepage_d${dIndex}_c${cIndex}_p0"}""",
-        """{"marker": "fixed_codepage_d${dIndex}_c${cIndex}_p1"}"""
+        """{"marker": "fixed_codes_page_d${dIndex}_c${cIndex}_p0"}""",
+        """{"marker": "fixed_codes_page_d${dIndex}_c${cIndex}_p1"}"""
     ).iterator().asSequence()
 
     override fun yclCodelistExtensionSources() =

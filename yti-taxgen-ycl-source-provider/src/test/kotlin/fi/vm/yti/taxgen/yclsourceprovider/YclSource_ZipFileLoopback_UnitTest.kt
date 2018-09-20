@@ -131,8 +131,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         )
 
         assertThat(markers).containsExactly(
-            "fixed_codepage_d0_c0_p0",
-            "fixed_codepage_d0_c0_p1"
+            "fixed_codes_page_d0_c0_p0",
+            "fixed_codes_page_d0_c0_p1"
         )
     }
 
@@ -147,8 +147,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
             )
 
         assertThat(markers).containsExactly(
-            "fixed_codepage_d0_c0_p0",
-            "fixed_codepage_d0_c0_p1"
+            "fixed_codes_page_d0_c0_p0",
+            "fixed_codes_page_d0_c0_p1"
         )
     }
 

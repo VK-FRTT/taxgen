@@ -124,7 +124,7 @@ class YclSourceFolderStructureRecorder(
                         FileOps.writeTextFile(
                             pageData,
                             pathStack,
-                            "ycl_codepage_$index.json",
+                            "ycl_codes_page_$index.json",
                             forceOverwrite,
                             diagnostic
                         )

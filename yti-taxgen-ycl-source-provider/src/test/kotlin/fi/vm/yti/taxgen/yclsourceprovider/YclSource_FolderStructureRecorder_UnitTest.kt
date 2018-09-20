@@ -87,13 +87,13 @@ internal class YclSource_FolderStructureRecorder_UnitTest : YclSource_UnitTestBa
         @Test
         fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
             assertTargetFolderHavingJsonFile(
-                expectedFile = "dpmdictionary_0/codelist_0/ycl_codepage_0.json",
-                expectedMarker = "fixed_codepage_d0_c0_p0"
+                expectedFile = "dpmdictionary_0/codelist_0/ycl_codes_page_0.json",
+                expectedMarker = "fixed_codes_page_d0_c0_p0"
             )
 
             assertTargetFolderHavingJsonFile(
-                expectedFile = "dpmdictionary_0/codelist_0/ycl_codepage_1.json",
-                expectedMarker = "fixed_codepage_d0_c0_p1"
+                expectedFile = "dpmdictionary_0/codelist_0/ycl_codes_page_1.json",
+                expectedMarker = "fixed_codes_page_d0_c0_p1"
             )
         }
 
