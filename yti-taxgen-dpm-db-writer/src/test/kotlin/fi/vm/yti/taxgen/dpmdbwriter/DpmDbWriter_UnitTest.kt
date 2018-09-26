@@ -11,6 +11,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
 import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
+import fi.vm.yti.taxgen.datapointmetamodel.dpmElementRef
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTranslationTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.DomainTable
@@ -678,26 +679,31 @@ class DpmDbWriter_UnitTest {
 
         val members = listOf(
             Member(
+                id = "Member-1-Id",
                 concept = concept("Member-1"),
                 memberCode = "Member-1-Code",
                 defaultMember = true
             ),
             Member(
+                id = "Member-2-Id",
                 concept = concept("Member-2"),
                 memberCode = "Member-2-Code",
                 defaultMember = false
             ),
             Member(
+                id = "Member-3-Id",
                 concept = concept("Member-3"),
                 memberCode = "Member-3-Code",
                 defaultMember = false
             ),
             Member(
+                id = "Member-4-Id",
                 concept = concept("Member-4"),
                 memberCode = "Member-4-Code",
                 defaultMember = false
             ),
             Member(
+                id = "Member-5-Id",
                 concept = concept("Member-5"),
                 memberCode = "Member-5-Code",
                 defaultMember = false
@@ -706,45 +712,50 @@ class DpmDbWriter_UnitTest {
 
         val hierarchyNodes = listOf(
             HierarchyNode(
+                id = "HierarchyNode-1-Id",
                 concept = concept("HierarchyNode-1"),
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                member = members[0],
+                memberRef = dpmElementRef<Member>("Member-1-Id"),
                 childNodes = null
             ),
 
             HierarchyNode(
+                id = "HierarchyNode-2-Id",
                 concept = concept("HierarchyNode-2"),
                 abstract = false,
                 comparisonOperator = "=",
                 unaryOperator = "+",
-                member = members[1],
+                memberRef = dpmElementRef<Member>("Member-2-Id"),
                 childNodes = listOf(
                     HierarchyNode(
+                        id = "HierarchyNode-2.1-Id",
                         concept = concept("HierarchyNode-2.1"),
                         abstract = false,
                         comparisonOperator = "=",
                         unaryOperator = "+",
-                        member = members[2],
+                        memberRef = dpmElementRef<Member>("Member-3-Id"),
                         childNodes = listOf(
                             HierarchyNode(
+                                id = "HierarchyNode-2.1.1-Id",
                                 concept = concept("HierarchyNode-2.1.1"),
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
-                                member = members[3],
+                                memberRef = dpmElementRef<Member>("Member-4-Id"),
                                 childNodes = null
                             )
                         )
                     ),
 
                     HierarchyNode(
+                        id = "HierarchyNode-2.2-Id",
                         concept = concept("HierarchyNode-2.2"),
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        member = members[4],
+                        memberRef = dpmElementRef<Member>("Member-5-Id"),
                         childNodes = null
                     )
                 )
@@ -753,6 +764,7 @@ class DpmDbWriter_UnitTest {
 
         val hierarchies = listOf(
             Hierarchy(
+                id = "hierarchy-id-1",
                 concept = concept("Hierarchy"),
                 hierarchyCode = "Hierarchy-Code",
                 rootNodes = hierarchyNodes
@@ -766,6 +778,7 @@ class DpmDbWriter_UnitTest {
 
                     explicitDomains = listOf(
                         ExplicitDomain(
+                            id = "explicitdomain-id-1",
                             concept = concept("ExplicitDomain"),
                             domainCode = "Domain-Code",
                             members = members,

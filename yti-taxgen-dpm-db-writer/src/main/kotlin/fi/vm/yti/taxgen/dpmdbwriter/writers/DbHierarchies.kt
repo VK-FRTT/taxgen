@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmdbwriter.writers
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.datapointmetamodel.DpmElementRef
 import fi.vm.yti.taxgen.datapointmetamodel.Hierarchy
 import fi.vm.yti.taxgen.datapointmetamodel.HierarchyNode
-import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.dpmdbwriter.DpmDictionaryWriteContext
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptType
 import fi.vm.yti.taxgen.dpmdbwriter.tables.HierarchyNodeTable
@@ -12,7 +12,6 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.IdentityHashMap
 import java.util.LinkedList
 
 object DbHierarchies {
@@ -21,7 +20,7 @@ object DbHierarchies {
         writeContext: DpmDictionaryWriteContext,
         hierarchy: Hierarchy,
         domainId: EntityID<Int>,
-        memberIds: IdentityHashMap<Member, EntityID<Int>>
+        memberIds: Map<DpmElementRef, EntityID<Int>>
     ) {
 
         transaction {
@@ -75,7 +74,7 @@ object DbHierarchies {
     ) {
         val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
             writeContext,
-            hierarchyTreeContext.node().concept,
+            hierarchyTreeContext.currentNode().concept,
             ConceptType.HIERARCHY_NODE
         )
 
@@ -85,7 +84,7 @@ object DbHierarchies {
             hierarchyNodeIndex = hierarchyNodeIndex
         )
 
-        hierarchyTreeContext.node().childNodes?.forEachIndexed { childIndex, childNode ->
+        hierarchyTreeContext.currentNode().childNodes?.forEachIndexed { childIndex, childNode ->
             hierarchyTreeContext.withNode(childNode) {
                 writeHierarchyNodeAndChilds(
                     writeContext = writeContext,
@@ -101,7 +100,7 @@ object DbHierarchies {
         hierarchyNodeConceptId: EntityID<Int>,
         hierarchyNodeIndex: Int
     ) {
-        val node = hierarchyTreeContext.node()
+        val node = hierarchyTreeContext.currentNode()
 
         HierarchyNodeTable.insert {
             it[hierarchyIdCol] = hierarchyTreeContext.hierarchyId()
@@ -120,7 +119,7 @@ object DbHierarchies {
 
     private class HierarchyTreeContext(
         private val hierarchyId: EntityID<Int>,
-        private val memberIds: IdentityHashMap<Member, EntityID<Int>>
+        private val memberIds: Map<DpmElementRef, EntityID<Int>>
     ) {
         private val nodeStack = LinkedList<HierarchyNode>()
 
@@ -128,12 +127,12 @@ object DbHierarchies {
             return hierarchyId
         }
 
-        fun node(): HierarchyNode {
+        fun currentNode(): HierarchyNode {
             return nodeStack.peek() ?: thisShouldNeverHappen("Node stack empty")
         }
 
         fun memberId(): EntityID<Int> {
-            return memberIds[node().member] ?: thisShouldNeverHappen("No ID for Member")
+            return memberIds[currentNode().memberRef] ?: thisShouldNeverHappen("No ID for Member")
         }
 
         fun parentMemberId(): EntityID<Int>? {
@@ -141,7 +140,7 @@ object DbHierarchies {
 
             val parentNode = nodeStack[1]
 
-            return memberIds[parentNode.member] ?: thisShouldNeverHappen("No ID for parent Member")
+            return memberIds[parentNode.memberRef] ?: thisShouldNeverHappen("No ID for parent Member")
         }
 
         fun level(): Int {

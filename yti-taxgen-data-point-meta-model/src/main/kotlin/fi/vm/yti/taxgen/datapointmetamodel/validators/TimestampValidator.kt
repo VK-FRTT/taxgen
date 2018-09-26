@@ -16,7 +16,7 @@ fun <I : Validatable, P : Instant> validateInstantLegalTimestamp(
     if (instant == Instant.EPOCH) {
         validationErrors.add(
             instance = instance,
-            property = property,
+            propertyName = property.name,
             message = "is illegal timestamp value"
         )
     }

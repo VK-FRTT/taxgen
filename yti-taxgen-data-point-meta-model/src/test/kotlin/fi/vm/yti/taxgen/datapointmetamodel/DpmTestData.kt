@@ -69,6 +69,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Member::class,
             attributes = mapOf(
+                "id" to "mem_1",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCode" to "exp_mc",
                 "defaultMember" to true
@@ -80,8 +81,9 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = ExplicitDomain::class,
             attributes = mapOf(
+                "id" to "exp_dom_1",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "domainCode" to "exp_dc",
+                "domainCode" to "exp_dom",
                 "members" to dynamicAttribute { listOf(it.instantiate<Member>()) },
                 "hierarchies" to dynamicAttribute { listOf<Hierarchy>() }
             )
@@ -102,6 +104,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Hierarchy::class,
             attributes = mapOf(
+                "id" to "hie_1",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "hierarchyCode" to "hier_code",
                 "rootNodes" to listOf<HierarchyNode>()
@@ -113,11 +116,12 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = HierarchyNode::class,
             attributes = mapOf(
+                "id" to "hie_nod_1",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "abstract" to false,
                 "comparisonOperator" to "=",
                 "unaryOperator" to "+",
-                "member" to dynamicAttribute { it.instantiate<Member>() },
+                "memberRef" to dpmElementRef<Member>("mem_1"),
                 "childNodes" to listOf<HierarchyNode>()
             )
         )

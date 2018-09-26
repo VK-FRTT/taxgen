@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmdbwriter.writers
 
+import fi.vm.yti.taxgen.datapointmetamodel.DpmElementRef
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.dpmdbwriter.DpmDictionaryWriteContext
@@ -9,13 +10,12 @@ import fi.vm.yti.taxgen.dpmdbwriter.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.IdentityHashMap
 
 object DbDomains {
     fun writeExplicitDomainAndMembers(
         writeContext: DpmDictionaryWriteContext,
         domain: ExplicitDomain
-    ): Pair<EntityID<Int>, IdentityHashMap<Member, EntityID<Int>>> {
+    ): Pair<EntityID<Int>, Map<DpmElementRef, EntityID<Int>>> {
 
         val ret = transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
@@ -30,7 +30,7 @@ object DbDomains {
                 domainConceptId
             )
 
-            val memberIds = IdentityHashMap<Member, EntityID<Int>>(1000)
+            val memberIds = mutableMapOf<DpmElementRef, EntityID<Int>>()
 
             domain.members.forEach { member ->
 
@@ -48,7 +48,7 @@ object DbDomains {
                     memberConceptId
                 )
 
-                memberIds[member] = memberId
+                memberIds[member.ref()] = memberId
             }
 
             Pair(domainId, memberIds)

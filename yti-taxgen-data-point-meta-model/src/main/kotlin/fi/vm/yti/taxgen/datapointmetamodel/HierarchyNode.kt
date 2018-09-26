@@ -1,17 +1,17 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.commons.datavalidation.customValidate
+import fi.vm.yti.taxgen.commons.datavalidation.validateCondition
 
 data class HierarchyNode(
-    val concept: Concept,
+    override val id: String,
+    override val concept: Concept,
     val abstract: Boolean,
     val comparisonOperator: String?,
     val unaryOperator: String?,
-    val member: Member,
+    val memberRef: DpmElementRef,
     val childNodes: List<HierarchyNode>?
-) : Validatable {
+) : DpmElement {
 
     companion object {
         val VALID_COMPARISON_OPERATORS = listOf("=", "<=", ">=", null)
@@ -20,34 +20,36 @@ data class HierarchyNode(
 
     override fun validate(validationErrors: ValidationErrors) {
 
-        concept.validate(validationErrors)
+        super.validate(validationErrors)
 
-        customValidate(
+        validateCondition(
             validationErrors = validationErrors,
             instance = this,
             property = HierarchyNode::comparisonOperator,
-            failIf = {
+            condition = {
                 !VALID_COMPARISON_OPERATORS.contains(comparisonOperator)
             },
-            failMsg = { "unsupported arithmetical relationship (comparison operator) '$comparisonOperator'" }
+            failMessage = { "unsupported arithmetical relationship (comparison operator) '$comparisonOperator'" }
         )
 
-        customValidate(
+        validateCondition(
             validationErrors = validationErrors,
             instance = this,
             property = HierarchyNode::unaryOperator,
-            failIf = {
+            condition = {
                 !VALID_UNARY_OPERATORS.contains(unaryOperator)
             },
-            failMsg = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
+            failMessage = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
         )
     }
 
-    fun allChildNodes(): List<HierarchyNode>? {
-        if (childNodes == null) return listOf(this)
-
-        return childNodes.mapNotNull {
-            it.allChildNodes()
-        }.flatten().toMutableList().also { it.add(0, this) }
-    }
+    fun allNodes(): List<HierarchyNode> = mutableListOf(this)
+        .also {
+            if (childNodes != null) {
+                it.addAll(childNodes
+                    .map { it.allNodes() }
+                    .flatten()
+                )
+            }
+        }
 }

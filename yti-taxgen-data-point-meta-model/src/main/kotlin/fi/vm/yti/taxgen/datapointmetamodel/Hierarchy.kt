@@ -1,19 +1,19 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.commons.datavalidation.customValidate
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableKeysUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Hierarchy(
-    val concept: Concept,
+    override val id: String,
+    override val concept: Concept,
     val hierarchyCode: String,
     val rootNodes: List<HierarchyNode>
-) : Validatable {
+) : DpmElement {
 
     override fun validate(validationErrors: ValidationErrors) {
 
-        concept.validate(validationErrors)
+        super.validate(validationErrors)
 
         validateLength(
             validationErrors = validationErrors,
@@ -23,23 +23,28 @@ data class Hierarchy(
             maxLength = 50
         )
 
-        customValidate(
+        validateIterableKeysUnique(
             validationErrors = validationErrors,
             instance = this,
-            property = Hierarchy::rootNodes,
-            failIf = {
-                val duplicates =
-                    allNodes().map { it.member.memberCode }.groupingBy { it }.eachCount().filter { it.value > 1 }.keys
-                it["duplicates"] = duplicates
-                duplicates.any()
-            },
-            failMsg = { "contains duplicate members ${it["duplicates"]}" }
+            iterable = allNodes(),
+            iterablePropertyName = "rootNodes",
+            keySelector = { it.id },
+            errorMessageBuilder = { duplicates -> "id has duplicate values [${duplicates.joinToString { it }}]" }
+        )
+
+        validateIterableKeysUnique(
+            validationErrors = validationErrors,
+            instance = this,
+            iterable = allNodes(),
+            iterablePropertyName = "rootNodes",
+            keySelector = { it.memberRef.id },
+            errorMessageBuilder = { duplicates -> "multiple HierarchyNodes referring same Members [${duplicates.joinToString { it }}]" }
         )
     }
 
-    private fun allNodes(): List<HierarchyNode> {
-        return rootNodes.mapNotNull {
-            it.allChildNodes()
-        }.flatten()
+    fun allNodes(): List<HierarchyNode> {
+        return rootNodes
+            .map { it.allNodes() }
+            .flatten()
     }
 }

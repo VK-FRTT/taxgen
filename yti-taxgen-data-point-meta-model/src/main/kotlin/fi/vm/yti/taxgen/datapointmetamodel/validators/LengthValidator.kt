@@ -32,13 +32,13 @@ private fun <T : Any, P : Any> minLength(
     when (value) {
         is String -> {
             if (value.length < minLength) {
-                validationErrors.add(instance, property, "is too short (minimum $minLength characters)")
+                validationErrors.add(instance, property.name, "is too short (minimum $minLength characters)")
             }
         }
 
         is Collection<*> -> {
             if (value.size < minLength) {
-                validationErrors.add(instance, property, "is too short (minimum $minLength elements)")
+                validationErrors.add(instance, property.name, "is too short (minimum $minLength elements)")
             }
         }
 
@@ -62,13 +62,13 @@ private fun <T : Any, P : Any> maxLength(
     when (value) {
         is String -> {
             if (value.length > maxLength) {
-                validationErrors.add(instance, property, "is too long (maximum $maxLength characters)")
+                validationErrors.add(instance, property.name, "is too long (maximum $maxLength characters)")
             }
         }
 
         is Collection<*> -> {
             if (value.size > maxLength) {
-                validationErrors.add(instance, property, "is too long (maximum $maxLength elements)")
+                validationErrors.add(instance, property.name, "is too long (maximum $maxLength elements)")
             }
         }
 

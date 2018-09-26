@@ -17,6 +17,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
 ): ExplicitDomain {
 
     data class DomainDetails(
+        val id: String,
         val codelistSourceConfig: YclCodelistSourceConfig,
         val concept: Concept,
         val defaultMemberCode: String?
@@ -30,6 +31,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
         val codeScheme = JsonOps.readValue<YclCodeScheme>(yclCodeSchemeData(), ctx.diagnostic)
 
         return DomainDetails(
+            id = codeScheme.id ?: "",
             codelistSourceConfig = codelistConfigInput.toValidConfig(ctx.diagnostic),
             concept = Concept.fromYclCodeScheme(codeScheme, ctx.owner),
             defaultMemberCode = codeScheme.defaultCode?.codeValue
@@ -65,6 +67,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
                 val concept = Concept.fromYclCode(yclCode, ctx.owner)
 
                 Member(
+                    id = yclCode.id ?: "",
                     concept = concept,
                     memberCode = memberCode(domainDetails, yclCode),
                     defaultMember = isDefaultMember(yclCode.codeValue, domainDetails.defaultMemberCode)
@@ -81,6 +84,7 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
         val members = extractMembers(domainDetails)
 
         ExplicitDomain(
+            id = domainDetails.id,
             concept = domainDetails.concept,
             domainCode = domainDetails.codelistSourceConfig.domainCode,
             members = members,

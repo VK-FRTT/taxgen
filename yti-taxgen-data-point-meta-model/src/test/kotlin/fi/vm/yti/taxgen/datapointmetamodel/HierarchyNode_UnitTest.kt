@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
+import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -18,11 +19,12 @@ internal class HierarchyNode_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
+        "id,                    required",
         "concept,               required",
         "abstract,              required",
         "comparisonOperator,    optional",
         "unaryOperator,         optional",
-        "member,                required",
+        "memberRef,             required",
         "childNodes,            optional"
     )
     fun testPropertyOptionality(
@@ -32,6 +34,24 @@ internal class HierarchyNode_UnitTest :
         propertyOptionalityTemplate(
             propertyName = propertyName,
             expectedOptionality = expectedOptionality
+        )
+    }
+
+    @DisplayName("Property length validation")
+    @ParameterizedTest(name = "{0} {1} should be {2}")
+    @CsvSource(
+        "id,                    minLength,      1",
+        "id,                    maxLength,      128"
+    )
+    fun testPropertyLengthValidation(
+        propertyName: String,
+        validationType: String,
+        expectedLimit: Int
+    ) {
+        propertyLengthValidationTemplate(
+            propertyName = propertyName,
+            validationType = validationType,
+            expectedLimit = expectedLimit
         )
     }
 

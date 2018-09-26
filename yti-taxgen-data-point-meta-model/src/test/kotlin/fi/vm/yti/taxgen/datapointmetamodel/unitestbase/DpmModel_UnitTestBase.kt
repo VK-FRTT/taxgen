@@ -2,7 +2,9 @@ package fi.vm.yti.taxgen.datapointmetamodel.unitestbase
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
+import fi.vm.yti.taxgen.datapointmetamodel.DpmElementRef
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
+import fi.vm.yti.taxgen.datapointmetamodel.Hierarchy
 import fi.vm.yti.taxgen.datapointmetamodel.HierarchyNode
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
@@ -51,16 +53,9 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
-    protected fun member(memberCode: String, default: Boolean): Member {
-        return Member(
-            concept = Factory.instantiate(),
-            memberCode = memberCode,
-            defaultMember = default
-        )
-    }
-
     protected fun explicitDomain(domainCode: String): ExplicitDomain {
         return ExplicitDomain(
+            id = "ed_1",
             concept = Factory.instantiate(),
             domainCode = domainCode,
             members = listOf(Factory.instantiate()),
@@ -68,13 +63,32 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         )
     }
 
-    protected fun hierarchyNode(member: Member, vararg children: HierarchyNode): HierarchyNode {
+    protected fun member(id: String, memberCode: String, default: Boolean): Member {
+        return Member(
+            id = id,
+            concept = Factory.instantiate(),
+            memberCode = memberCode,
+            defaultMember = default
+        )
+    }
+
+    protected fun hierarchy(id: String, hierarchyCode: String, vararg roots: HierarchyNode): Hierarchy {
+        return Hierarchy(
+            id = id,
+            concept = Factory.instantiate(),
+            hierarchyCode = hierarchyCode,
+            rootNodes = roots.toList()
+        )
+    }
+
+    protected fun hierarchyNode(id: String, memberRef: DpmElementRef, vararg children: HierarchyNode): HierarchyNode {
         return HierarchyNode(
+            id = id,
             concept = Factory.instantiate(),
             abstract = false,
             comparisonOperator = "=",
             unaryOperator = "+",
-            member = member,
+            memberRef = memberRef,
             childNodes = children.toList()
         )
     }

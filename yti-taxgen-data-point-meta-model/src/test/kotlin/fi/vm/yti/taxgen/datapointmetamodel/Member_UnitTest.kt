@@ -17,6 +17,7 @@ internal class Member_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
+        "id,                required",
         "concept,           required",
         "memberCode,        required",
         "defaultMember,     required"
@@ -34,6 +35,8 @@ internal class Member_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
+        "id,                    minLength,      1",
+        "id,                    maxLength,      128",
         "memberCode,            minLength,      2",
         "memberCode,            maxLength,      50"
     )

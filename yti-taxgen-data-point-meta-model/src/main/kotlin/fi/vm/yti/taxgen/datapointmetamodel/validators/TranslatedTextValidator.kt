@@ -24,7 +24,7 @@ fun <I : Validatable, P : TranslatedText> validateTranslatedText(
         if (shortTranslationLanguages.any()) {
             validationErrors.add(
                 instance = instance,
-                property = property,
+                propertyName = property.name,
                 message = "has too short translations for languages $shortTranslationLanguages"
             )
         }
@@ -34,7 +34,7 @@ fun <I : Validatable, P : TranslatedText> validateTranslatedText(
         if (translatedText.translations.size < minLangCount) {
             validationErrors.add(
                 instance = instance,
-                property = property,
+                propertyName = property.name,
                 message = "has too few translations (minimum $minLangCount)"
             )
         }
@@ -47,7 +47,7 @@ fun <I : Validatable, P : TranslatedText> validateTranslatedText(
         if (surplusLanguages.any()) {
             validationErrors.add(
                 instance = instance,
-                property = property,
+                propertyName = property.name,
                 message = "contains translations with surplus languages ${surplusLanguages.map { it.iso6391Code }.sorted()}"
             )
         }

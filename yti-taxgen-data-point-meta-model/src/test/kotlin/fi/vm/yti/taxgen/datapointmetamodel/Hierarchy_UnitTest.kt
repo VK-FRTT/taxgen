@@ -2,7 +2,9 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
+import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -16,6 +18,7 @@ internal class Hierarchy_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
+        "id,                required",
         "concept,           required",
         "hierarchyCode,     required",
         "rootNodes,         required"
@@ -27,6 +30,24 @@ internal class Hierarchy_UnitTest :
         propertyOptionalityTemplate(
             propertyName = propertyName,
             expectedOptionality = expectedOptionality
+        )
+    }
+
+    @DisplayName("Property length validation")
+    @ParameterizedTest(name = "{0} {1} should be {2}")
+    @CsvSource(
+        "id,                    minLength,      1",
+        "id,                    maxLength,      128"
+    )
+    fun testPropertyLengthValidation(
+        propertyName: String,
+        validationType: String,
+        expectedLimit: Int
+    ) {
+        propertyLengthValidationTemplate(
+            propertyName = propertyName,
+            validationType = validationType,
+            expectedLimit = expectedLimit
         )
     }
 
@@ -51,107 +72,109 @@ internal class Hierarchy_UnitTest :
     inner class RootNodesProp {
 
         @Test
-        fun `rootNodes should error if memberCode {@ node # member) exists multiple times`() {
-            val rootNodes = listOf(
+        fun `rootNodes should have unique ids {within flat root}`() {
+            attributeOverrides(
+                "rootNodes" to listOf(
+                    hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1")),
+                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2")),
+                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_3")),
+                    hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4"))
+                )
+            )
+
+            instantiateAndValidate()
+            Assertions.assertThat(validationErrors)
+                .containsExactly("Hierarchy.rootNodes: id has duplicate values [hn_id_2]")
+        }
+
+        @Test
+        fun `rootNodes should have unique ids {within hierarchy}`() {
+            attributeOverrides(
+                "rootNodes" to listOf(
+
+                    hierarchyNode(
+                        "hn_id_1",
+                        dpmElementRef<Member>("m_id_1")
+                    ),
+
+                    hierarchyNode(
+                        "hn_id_2",
+                        dpmElementRef<Member>("m_id_2"),
+
+                        hierarchyNode(
+                            "hn_id_3",
+                            dpmElementRef<Member>("m_id_3"),
+
+                            hierarchyNode(
+                                "hn_id_4",
+                                dpmElementRef<Member>("m_id_4")
+                            )
+                        )
+                    ),
+
+                    hierarchyNode(
+                        "hn_id_4",
+                        dpmElementRef<Member>("m_id_5")
+                    )
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly("Hierarchy.rootNodes: id has duplicate values [hn_id_4]")
+        }
+    }
+
+    @Test
+    fun `rootNodes should have unique memberRefs {within flat root}`() {
+        attributeOverrides(
+            "rootNodes" to listOf(
+                hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1")),
+                hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2")),
+                hierarchyNode("hn_id_3", dpmElementRef<Member>("m_id_2")),
+                hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4"))
+            )
+        )
+
+        instantiateAndValidate()
+        Assertions.assertThat(validationErrors)
+            .containsExactly("Hierarchy.rootNodes: multiple HierarchyNodes referring same Members [m_id_2]")
+    }
+
+    @Test
+    fun `rootNodes should have unique memberRefs {within hierarchy}`() {
+        attributeOverrides(
+            "rootNodes" to listOf(
 
                 hierarchyNode(
-                    member("m1", true)
+                    "hn_id_1",
+                    dpmElementRef<Member>("m_id_1")
                 ),
 
                 hierarchyNode(
-                    member("m2", false),
+                    "hn_id_2",
+                    dpmElementRef<Member>("m_id_2"),
 
                     hierarchyNode(
-                        member("m3", false),
+                        "hn_id_3",
+                        dpmElementRef<Member>("m_id_3"),
 
                         hierarchyNode(
-                            member("m4", true)
+                            "hn_id_4",
+                            dpmElementRef<Member>("m_id_4")
                         )
                     )
                 ),
 
                 hierarchyNode(
-                    member("m4", false)
+                    "hn_id_5",
+                    dpmElementRef<Member>("m_id_4")
                 )
             )
+        )
 
-            attributeOverrides(
-                "rootNodes" to rootNodes
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: contains duplicate members [m4]")
-        }
-
-        @Test
-        fun `rootNodes should error if single node instance exists multiple times`() {
-            val node4 = hierarchyNode(
-                member("m4", false)
-            )
-
-            val rootNodes = listOf(
-
-                hierarchyNode(
-                    member("m1", true)
-                ),
-
-                hierarchyNode(
-                    member("m2", false),
-
-                    hierarchyNode(
-                        member("m3", true),
-
-                        node4
-                    )
-                ),
-
-                node4
-            )
-
-            attributeOverrides(
-                "rootNodes" to rootNodes
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: contains duplicate members [m4]")
-        }
-
-        @Test
-        fun `rootNodes should error if single member instance exists multiple times`() {
-            val member4 = member("m4", false)
-
-            val rootNodes = listOf(
-
-                hierarchyNode(
-                    member("m1", true)
-                ),
-
-                hierarchyNode(
-                    member("m2", false),
-
-                    hierarchyNode(
-                        member("m3", true),
-
-                        hierarchyNode(
-                            member4
-                        )
-                    )
-                ),
-
-                hierarchyNode(
-                    member4
-                )
-            )
-
-            attributeOverrides(
-                "rootNodes" to rootNodes
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: contains duplicate members [m4]")
-        }
+        instantiateAndValidate()
+        assertThat(validationErrors)
+            .containsExactly("Hierarchy.rootNodes: multiple HierarchyNodes referring same Members [m_id_4]")
     }
 }

@@ -4,6 +4,8 @@ import java.time.Instant
 import java.time.LocalDate
 
 internal data class YclCodeScheme(
+    val id: String?,
+
     val created: Instant?,
     val modified: Instant?,
 
