@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateDpmCodeContent
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Member(
@@ -18,8 +19,13 @@ data class Member(
             validationErrors = validationErrors,
             instance = this,
             property = Member::memberCode,
-            minLength = 2,
+            minLength = 1,
             maxLength = 50
         )
+
+        validateDpmCodeContent(
+            validationErrors = validationErrors,
+            instance = this,
+            property = Member::memberCode)
     }
 }

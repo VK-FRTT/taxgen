@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.datavalidation.validateCondition
-import fi.vm.yti.taxgen.datapointmetamodel.validators.validateInstantLegalTimestamp
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTimestamp
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTranslatedText
 import java.time.Instant
 import java.time.LocalDate
@@ -26,13 +26,13 @@ data class Concept(
 
     override fun validate(validationErrors: ValidationErrors) {
 
-        validateInstantLegalTimestamp(
+        validateTimestamp(
             validationErrors = validationErrors,
             instance = this,
             property = Concept::createdAt
         )
 
-        validateInstantLegalTimestamp(
+        validateTimestamp(
             validationErrors = validationErrors,
             instance = this,
             property = Concept::modifiedAt

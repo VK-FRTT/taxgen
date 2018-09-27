@@ -6,7 +6,7 @@ import java.time.Instant
 import kotlin.reflect.KProperty1
 
 @Suppress("FINAL_UPPER_BOUND")
-fun <I : Validatable, P : Instant> validateInstantLegalTimestamp(
+fun <I : Validatable, P : Instant> validateTimestamp(
     validationErrors: ValidationErrors,
     instance: I,
     property: KProperty1<I, P>

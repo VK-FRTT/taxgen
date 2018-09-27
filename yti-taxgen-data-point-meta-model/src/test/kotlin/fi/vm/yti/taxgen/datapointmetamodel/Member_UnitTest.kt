@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -37,7 +38,7 @@ internal class Member_UnitTest :
     @CsvSource(
         "id,                    minLength,      1",
         "id,                    maxLength,      128",
-        "memberCode,            minLength,      2",
+        "memberCode,            minLength,      1",
         "memberCode,            maxLength,      50"
     )
     fun testPropertyLengthValidation(
@@ -64,8 +65,58 @@ internal class Member_UnitTest :
             )
 
             instantiateAndValidate()
-            Assertions.assertThat(validationErrors)
+            assertThat(validationErrors)
                 .containsExactly("Concept.label: has too few translations (minimum 1)")
+        }
+    }
+
+    @Nested
+    inner class MemberCodeProp {
+
+        @DisplayName("memberCode content validation")
+        @ParameterizedTest(name = "`{0}` should be {1} memberCode")
+        @CsvSource(
+            "a,         valid",
+            "A,         valid",
+            "z,         valid",
+            "Z,         valid",
+            "_,         valid",
+            ":,         valid",
+            "aa,        valid",
+            "aA,        valid",
+            "az,        valid",
+            "aZ,        valid",
+            "a0,        valid",
+            "a1,        valid",
+            "a9,        valid",
+            "a.,        valid",
+            "a-,        valid",
+            "a_,        valid",
+            "a:,        valid",
+            "' ',       invalid",
+            "'a ',      invalid",
+            "1,         invalid",
+            "1a,        invalid",
+            "å,         invalid",
+            "Å,         invalid",
+            "aå,        invalid",
+            "aÅ,        invalid"
+        )
+        fun testPropertyLengthValidation(
+            codeValue: String?,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "memberCode" to codeValue
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("Member.memberCode: is illegal DPM Code")
+                else -> thisShouldNeverHappen("Unsupported expected validity $expectedValidity")
+            }
         }
     }
 }

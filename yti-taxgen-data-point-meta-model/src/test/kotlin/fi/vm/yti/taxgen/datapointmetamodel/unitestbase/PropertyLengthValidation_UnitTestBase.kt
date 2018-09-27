@@ -79,7 +79,7 @@ private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringValueForProperty(
         ?: throw IllegalArgumentException("No property found for name: $propertyName from class: ${kClass.simpleName}")
 
     if (property.returnType.isSubtypeOf(String::class.createType())) {
-        return "*".repeat(length)
+        return "a".repeat(length)
     }
 
     if (property.returnType.isSupertypeOf(emptyList<String>()::class.createType())) {
