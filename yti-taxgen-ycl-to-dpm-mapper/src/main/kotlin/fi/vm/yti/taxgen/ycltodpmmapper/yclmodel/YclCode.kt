@@ -6,23 +6,32 @@ import java.time.Instant
 import java.time.LocalDate
 
 internal data class YclCode(
-    val id: String?,
+    override val id: String?,
+    override val uri: String?,
+    override val codeValue: String?,
 
-    val created: Instant?,
-    val modified: Instant?,
+    override val created: Instant?,
+    override val modified: Instant?,
+    override val startDate: LocalDate?,
+    override val endDate: LocalDate?,
 
-    val codeValue: String?,
-
-    val startDate: LocalDate?,
-    val endDate: LocalDate?,
-
-    val order: Int?,
-
-    val prefLabel: Map<String, String>?,
-    val description: Map<String, String>?
-) : DiagnosticContextProvider {
+    override val prefLabel: Map<String, String>?,
+    override val description: Map<String, String>?
+) : YclEntity(), DiagnosticContextProvider {
 
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.YclCode
-    override fun contextName(): String = prefLabel?.get("en") ?: ""
-    override fun contextRef(): String = codeValue ?: ""
+    override fun contextName(): String = composeContextName()
+    override fun contextRef(): String = composeContextRef()
+
+    fun asMemberCode(memberCodePrefix: String?): String {
+        return "${memberCodePrefix ?: ""}${codeValue ?: ""}"
+    }
+
+    fun isDefaultCode(defaultCode: YclCode?): Boolean {
+        if (defaultCode == null) {
+            return false
+        }
+
+        return identityOrEmpty() == defaultCode.identityOrEmpty()
+    }
 }

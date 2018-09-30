@@ -46,6 +46,7 @@ class DiagnosticTextPrinter(
     }
 
     private fun printContext(context: ContextInfo) {
+        //TODO print contextHeader() + contextDetails()
         val remainder =
             (if (context.name.isNotBlank()) "${context.name} " else "") +
             (if (context.ref.isNotBlank()) "(${context.ref})" else "")

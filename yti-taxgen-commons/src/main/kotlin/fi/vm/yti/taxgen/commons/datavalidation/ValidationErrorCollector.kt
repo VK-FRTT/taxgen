@@ -7,7 +7,10 @@ class ValidationErrorCollector : ValidationErrors {
     override fun <T : Any> add(instance: T, propertyName: String, message: String) {
         val className = instance.javaClass.canonicalName
 
-        errors.getOrPut(className) { mutableMapOf() }.getOrPut(propertyName) { mutableListOf() }.add(message)
+        errors
+            .getOrPut(className) { mutableMapOf() }
+            .getOrPut(propertyName) { mutableListOf() }
+            .add(message)
     }
 
     override fun errorsInSimpleFormat(): List<String> {

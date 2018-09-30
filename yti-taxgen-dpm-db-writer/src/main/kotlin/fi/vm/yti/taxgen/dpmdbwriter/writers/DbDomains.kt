@@ -66,8 +66,8 @@ object DbDomains {
 
         val domainId = DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] = domain.concept.label.defaultText()
-            it[domainDescriptionCol] = domain.concept.description.defaultText()
+            it[domainLabelCol] = domain.concept.label.defaultTranslation()
+            it[domainDescriptionCol] = domain.concept.description.defaultTranslation()
             it[domainXBRLCodeCol] = domainXbrlCode
             it[dataTypeCol] = null
             it[isTypedDomainCol] = false
@@ -88,7 +88,7 @@ object DbDomains {
 
         val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = member.memberCode
-            it[memberLabelCol] = member.concept.label.defaultText()
+            it[memberLabelCol] = member.concept.label.defaultTranslation()
             it[memberXBRLCodeCol] = memberXbrlCode
             it[isDefaultMemberCol] = member.defaultMember
             it[conceptIdCol] = memberConceptId

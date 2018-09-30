@@ -4,40 +4,58 @@ import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import kotlin.reflect.KProperty1
 
-fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateIterableKeysUnique(
+fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateIterablePropertyValuesUnique(
     validationErrors: ValidationErrors,
     instance: I,
     iterableProperty: KProperty1<I, P>,
-    keyProperty: KProperty1<E, K>
+    valueProperty: KProperty1<E, K>
 ) {
     val iterable: P = iterableProperty.getter.call(instance)
-    val duplicates = findDuplicates(iterable, { keyProperty.getter.call(it) })
 
-    if (duplicates.any()) {
-        validationErrors.add(instance, iterableProperty.name, "${keyProperty.name} has duplicate values $duplicates")
-    }
+    validateIterablePropertyValuesUnique(
+        validationErrors,
+        instance,
+        iterableProperty.name,
+        iterable,
+        valueProperty
+    )
 }
 
-fun <I : Validatable, E : Any, K : Any> validateIterableKeysUnique(
+fun <I : Validatable, E : Any, K : Any> validateIterablePropertyValuesUnique(
     validationErrors: ValidationErrors,
     instance: I,
+    instancePropertyName: String,
     iterable: Iterable<E>,
-    iterablePropertyName: String,
-    keySelector: (E) -> K,
-    errorMessageBuilder: (Set<K>) -> String
+    valueProperty: KProperty1<E, K>
 ) {
-    val duplicates = findDuplicates(iterable, keySelector)
+    val duplicateValues = iterable
+        .groupingBy { valueProperty.getter.call(it) }
+        .eachCount()
+        .filter { it.value > 1 }.keys
 
-    if (duplicates.any()) {
-        val message = errorMessageBuilder(duplicates)
-        validationErrors.add(instance, iterablePropertyName, message)
+    duplicateValues.forEach { value ->
+        validationErrors.add(
+            instance,
+            instancePropertyName,
+            "duplicate ${valueProperty.name} value '$value'"
+        )
     }
 }
 
-private fun <E : Any, K : Any> findDuplicates(
+fun <I : Validatable, E : Any, K : Any> validateIterableElementsUnique(
+    validationErrors: ValidationErrors,
+    instance: I,
+    propertyName: String,
     iterable: Iterable<E>,
-    keySelector: (E) -> K
-): Set<K> = iterable
-    .groupingBy(keySelector)
-    .eachCount()
-    .filter { it.value > 1 }.keys
+    keySelector: (E) -> K,
+    message: (E) -> String
+) {
+    iterable
+        .groupBy(keySelector)
+        .filter { (_, elements) -> elements.size > 1 }
+        .forEach { (_, elements) ->
+            elements.forEach { element ->
+                validationErrors.add(instance, propertyName, message(element))
+            }
+        }
+}

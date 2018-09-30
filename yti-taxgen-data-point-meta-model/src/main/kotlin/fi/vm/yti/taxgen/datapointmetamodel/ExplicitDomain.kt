@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.datavalidation.validateCustom
-import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableKeysUnique
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterablePropertyValuesUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class ExplicitDomain(
@@ -33,18 +33,18 @@ data class ExplicitDomain(
             maxLength = 10000
         )
 
-        validateIterableKeysUnique(
+        validateIterablePropertyValuesUnique(
             validationErrors = validationErrors,
             instance = this,
             iterableProperty = ExplicitDomain::members,
-            keyProperty = Member::memberCode
+            valueProperty = Member::memberCode
         )
 
-        validateIterableKeysUnique(
+        validateIterablePropertyValuesUnique(
             validationErrors = validationErrors,
             instance = this,
             iterableProperty = ExplicitDomain::members,
-            keyProperty = Member::id
+            valueProperty = Member::id
         )
 
         validateCustom(
@@ -60,18 +60,18 @@ data class ExplicitDomain(
             }
         )
 
-        validateIterableKeysUnique(
+        validateIterablePropertyValuesUnique(
             validationErrors = validationErrors,
             instance = this,
             iterableProperty = ExplicitDomain::hierarchies,
-            keyProperty = Hierarchy::hierarchyCode
+            valueProperty = Hierarchy::hierarchyCode
         )
 
-        validateIterableKeysUnique(
+        validateIterablePropertyValuesUnique(
             validationErrors = validationErrors,
             instance = this,
             iterableProperty = ExplicitDomain::hierarchies,
-            keyProperty = Hierarchy::id
+            valueProperty = Hierarchy::id
         )
 
         validateCustom(
@@ -82,16 +82,13 @@ data class ExplicitDomain(
                 val domainMemberRefs = members.map { it.ref() }.toSet()
 
                 hierarchies.forEach { hierarchy ->
-                    val externalMemberRefs = hierarchy
+                    hierarchy
                         .allNodes()
-                        .map { it.memberRef }
                         .toSet()
-                        .filterNot { domainMemberRefs.contains(it) }
-
-                    if (externalMemberRefs.any()) {
-                        val ids = externalMemberRefs.joinToString { it.id }
-                        messages.add("Hierarchy ${hierarchy.hierarchyCode} has Members which do not belong to Domain [$ids])")
-                    }
+                        .filterNot { domainMemberRefs.contains(it.memberRef) }
+                        .forEach { node ->
+                            messages.add("member not part of domain '${node.memberRef.diagnosticHandle()}' (hierarchy '${hierarchy.diagnosticHandle()}' / hierachy node '${node.diagnosticHandle()}')")
+                        }
                 }
             }
         )

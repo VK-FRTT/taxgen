@@ -23,8 +23,8 @@ fun dpmTestData(): Set<DataDefinition> {
             kClass = TranslatedText::class,
             attributes = mapOf(
                 "translations" to mapOf(
-                    Language.findByIso6391Code("en") to "Something in english",
-                    Language.findByIso6391Code("fi") to "Jotakin suomeksi"
+                    Language.findByIso6391Code("en") to "Text#en",
+                    Language.findByIso6391Code("fi") to "Text#fi"
                 )
             )
         )
@@ -45,7 +45,7 @@ fun dpmTestData(): Set<DataDefinition> {
                         Language.findByIso6391Code("fi")
                     )
                 },
-                "defaultLanguage" to dynamicAttribute { Language.findByIso6391Code("en") }
+                "defaultLanguage" to dynamicAttribute { Language.findByIso6391Code("fi") }
             )
         )
     )
@@ -121,7 +121,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "abstract" to false,
                 "comparisonOperator" to "=",
                 "unaryOperator" to "+",
-                "memberRef" to dpmElementRef<Member>("mem_1"),
+                "memberRef" to dpmElementRef<Member>("mem_1", "diagnostic_label"),
                 "childNodes" to listOf<HierarchyNode>()
             )
         )

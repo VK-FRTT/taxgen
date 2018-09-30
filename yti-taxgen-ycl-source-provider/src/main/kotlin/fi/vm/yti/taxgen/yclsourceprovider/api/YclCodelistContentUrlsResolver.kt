@@ -29,7 +29,7 @@ internal class YclCodelistContentUrlsResolver(
         return ContentUrls(
             codeSchemeUrl = resolveCodeSchemeContentUrl(codeSchemeJson),
             codesUrl = resolveCodesContentUrl(codeSchemeJson),
-            extensionUrls = resolveExtensionSchemeContentUrls(codeSchemeJson)
+            extensionUrls = resolveExtensionContentUrls(codeSchemeJson)
         )
     }
 
@@ -43,7 +43,7 @@ internal class YclCodelistContentUrlsResolver(
         val expandedUrl = uriResolutionJson
             .httpUrlAt("/url", diagnostic, "code scheme at URI resolution")
             .newBuilder()
-            .addQueryParameter("expand", "extension,propertyType")
+            .addQueryParameter("expand", "extension,propertyType") ///TODO - are expands still needed
             .build()
 
         val data = HttpOps.fetchJsonData(expandedUrl, diagnostic)
@@ -62,16 +62,16 @@ internal class YclCodelistContentUrlsResolver(
         return codeSchemeJson.httpUrlAt("/codesUrl", diagnostic, "codes")
     }
 
-    private fun resolveExtensionSchemeContentUrls(codeSchemeJson: JsonNode): List<ExtensionUrls> {
+    private fun resolveExtensionContentUrls(codeSchemeJson: JsonNode): List<ExtensionUrls> {
         return codeSchemeJson.arrayAt("/extensions", diagnostic).map { item ->
             ExtensionUrls(
                 extensionUrl = item
-                    .httpUrlAt("/url", diagnostic, "extension")
-                    .newBuilder()
-                    .addQueryParameter("expand", "propertyType")
-                    .build(),
+                    .httpUrlAt("/url", diagnostic, "extension"),
                 extensionMembersUrl = item
                     .httpUrlAt("/membersUrl", diagnostic, "extension members")
+                    .newBuilder()
+                    .addQueryParameter("expand", "memberValue,code") //TODO - are expands still needed
+                    .build()
             )
         }
     }

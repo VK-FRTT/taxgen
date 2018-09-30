@@ -2,18 +2,18 @@ package fi.vm.yti.taxgen.commons.datavalidation
 
 import kotlin.reflect.KProperty1
 
-fun <I : Validatable, P : Any?> validateCondition(
+fun <I : Validatable, P : Any?> validateConditionTruthy(
     validationErrors: ValidationErrors,
     instance: I,
     property: KProperty1<I, P>,
     condition: () -> (Boolean),
-    failMessage: () -> (String)
+    message: () -> (String)
 ) {
-    if (condition()) {
+    if (!condition()) {
         validationErrors.add(
             instance = instance,
             propertyName = property.name,
-            message = failMessage()
+            message = message()
         )
     }
 }

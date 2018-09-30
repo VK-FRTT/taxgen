@@ -24,6 +24,7 @@ import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.ext.java.columnConfigToString
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Table
 import org.junit.jupiter.api.AfterEach
@@ -53,10 +54,11 @@ class DpmDbWriter_UnitTest {
     private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
     private lateinit var diagnostic: Diagnostic
 
+    private lateinit var dbWriter: DpmDbWriter
     private lateinit var dbConnection: Connection
 
     @BeforeEach
-    fun init() {
+    fun baseInit() {
         tempFolder = TempFolder("dpmdbwriter")
 
         val dbPath = tempFolder.resolve("dpm.db")
@@ -64,13 +66,11 @@ class DpmDbWriter_UnitTest {
         diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
         diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
 
-        val dbWriter = DpmDbWriter(
+        dbWriter = DpmDbWriter(
             dbPath,
             false,
             diagnostic
         )
-
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
     }
@@ -86,8 +86,13 @@ class DpmDbWriter_UnitTest {
     inner class TableStructure {
         private var verifiedTable: Table? = null
 
+        @BeforeEach
+        fun init() {
+            dbWriter.writeDpmDb(dpmDictionaryFixture())
+        }
+
         @AfterEach
-        fun baseTeardown() {
+        fun teardown() {
             verifiedTable = null
         }
 
@@ -380,6 +385,11 @@ class DpmDbWriter_UnitTest {
     @DisplayName("data content")
     inner class DataContent {
 
+        @BeforeEach
+        fun init() {
+            dbWriter.writeDpmDb(dpmDictionaryFixture())
+        }
+
         @Test
         fun `should have all configured languages`() {
             val rs = dbConnection.createStatement().executeQuery("SELECT IsoCode FROM mLanguage")
@@ -635,6 +645,11 @@ class DpmDbWriter_UnitTest {
     @DisplayName("diagnostic events")
     inner class DiagnosticEvents {
 
+        @BeforeEach
+        fun init() {
+            dbWriter.writeDpmDb(dpmDictionaryFixture())
+        }
+
         @Test
         fun `should contain proper context events`() {
             assertThat(diagnosticConsumerCaptor.events).containsExactly(
@@ -644,7 +659,29 @@ class DpmDbWriter_UnitTest {
         }
     }
 
-    private fun dpmDictionaryFixture(): List<DpmDictionary> {
+    @Nested
+    @DisplayName("database constraints")
+    inner class DatabaseConstraints {
+
+        @Test
+        fun `should detect when multiple HirarchyNodes refer same Mamber`() {
+            val dpmDictionaries = dpmDictionaryFixture(FixtureVariety.HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF)
+
+            val thrown = Assertions.catchThrowable { dbWriter.writeDpmDb(dpmDictionaries) }
+
+            assertThat(thrown)
+                .isInstanceOf(org.jetbrains.exposed.exceptions.ExposedSQLException::class.java)
+                .hasMessageContaining("A PRIMARY KEY constraint failed")
+                .hasMessageContaining("mHierarchyNode.HierarchyID, mHierarchyNode.MemberID")
+        }
+    }
+
+    enum class FixtureVariety {
+        NONE,
+        HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF,
+    }
+
+    private fun dpmDictionaryFixture(variety: FixtureVariety = FixtureVariety.NONE): List<DpmDictionary> {
         fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
         val dpmOwner = Owner(
@@ -710,14 +747,14 @@ class DpmDbWriter_UnitTest {
             )
         )
 
-        val hierarchyNodes = listOf(
+        val hierarchyNodes = mutableListOf(
             HierarchyNode(
                 id = "HierarchyNode-1-Id",
                 concept = concept("HierarchyNode-1"),
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                memberRef = dpmElementRef<Member>("Member-1-Id"),
+                memberRef = dpmElementRef<Member>("Member-1-Id", "DiagnosticLabel"),
                 childNodes = null
             ),
 
@@ -727,7 +764,7 @@ class DpmDbWriter_UnitTest {
                 abstract = false,
                 comparisonOperator = "=",
                 unaryOperator = "+",
-                memberRef = dpmElementRef<Member>("Member-2-Id"),
+                memberRef = dpmElementRef<Member>("Member-2-Id", "DiagnosticLabel"),
                 childNodes = listOf(
                     HierarchyNode(
                         id = "HierarchyNode-2.1-Id",
@@ -735,7 +772,7 @@ class DpmDbWriter_UnitTest {
                         abstract = false,
                         comparisonOperator = "=",
                         unaryOperator = "+",
-                        memberRef = dpmElementRef<Member>("Member-3-Id"),
+                        memberRef = dpmElementRef<Member>("Member-3-Id", "DiagnosticLabel"),
                         childNodes = listOf(
                             HierarchyNode(
                                 id = "HierarchyNode-2.1.1-Id",
@@ -743,7 +780,7 @@ class DpmDbWriter_UnitTest {
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
-                                memberRef = dpmElementRef<Member>("Member-4-Id"),
+                                memberRef = dpmElementRef<Member>("Member-4-Id", "DiagnosticLabel"),
                                 childNodes = null
                             )
                         )
@@ -755,12 +792,26 @@ class DpmDbWriter_UnitTest {
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        memberRef = dpmElementRef<Member>("Member-5-Id"),
+                        memberRef = dpmElementRef<Member>("Member-5-Id", "DiagnosticLabel"),
                         childNodes = null
                     )
                 )
             )
         )
+
+        if (variety == FixtureVariety.HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF) {
+            hierarchyNodes.add(
+                HierarchyNode(
+                    id = "HierarchyNode-DuplicateMemberRef-Id",
+                    concept = concept("HierarchyNode-DuplicateMemberRef"),
+                    abstract = false,
+                    comparisonOperator = null,
+                    unaryOperator = null,
+                    memberRef = dpmElementRef<Member>("Member-1-Id", "DiagnosticLabel"),
+                    childNodes = null
+                )
+            )
+        }
 
         val hierarchies = listOf(
             Hierarchy(

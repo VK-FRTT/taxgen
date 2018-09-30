@@ -1,7 +1,8 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableKeysUnique
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableElementsUnique
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterablePropertyValuesUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Hierarchy(
@@ -23,22 +24,21 @@ data class Hierarchy(
             maxLength = 50
         )
 
-        validateIterableKeysUnique(
+        validateIterablePropertyValuesUnique(
             validationErrors = validationErrors,
             instance = this,
+            instancePropertyName = "rootNodes",
             iterable = allNodes(),
-            iterablePropertyName = "rootNodes",
-            keySelector = { it.id },
-            errorMessageBuilder = { duplicates -> "id has duplicate values [${duplicates.joinToString { it }}]" }
+            valueProperty = HierarchyNode::id
         )
 
-        validateIterableKeysUnique(
+        validateIterableElementsUnique(
             validationErrors = validationErrors,
             instance = this,
+            propertyName = "rootNodes",
             iterable = allNodes(),
-            iterablePropertyName = "rootNodes",
             keySelector = { it.memberRef.id },
-            errorMessageBuilder = { duplicates -> "multiple HierarchyNodes referring same Members [${duplicates.joinToString { it }}]" }
+            message = { duplicateNode -> "duplicate member reference '${duplicateNode.memberRef.diagnosticHandle()}' (from '${duplicateNode.diagnosticHandle()}')" }
         )
     }
 

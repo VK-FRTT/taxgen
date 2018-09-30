@@ -94,7 +94,7 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.members: id has duplicate values [m_id_2]")
+                .containsExactly("ExplicitDomain.members: duplicate id value 'm_id_2'")
         }
 
         @Test
@@ -110,7 +110,7 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.members: memberCode has duplicate values [m_code_2]")
+                .containsExactly("ExplicitDomain.members: duplicate memberCode value 'm_code_2'")
         }
 
         @Test
@@ -174,7 +174,7 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.hierarchies: id has duplicate values [h_id_2]")
+                .containsExactly("ExplicitDomain.hierarchies: duplicate id value 'h_id_2'")
         }
 
         @Test
@@ -190,7 +190,7 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.hierarchies: hierarchyCode has duplicate values [h_code_2]")
+                .containsExactly("ExplicitDomain.hierarchies: duplicate hierarchyCode value 'h_code_2'")
         }
     }
 
@@ -208,15 +208,15 @@ internal class ExplicitDomain_UnitTest :
                     "h_code_1",
                     hierarchyNode(
                         "hn_id_1_1",
-                        dpmElementRef<Member>("m_id_1"),
+                        dpmElementRef<Member>("m_id_1", "diagnostic_label"),
 
                         hierarchyNode(
                             "hn_id_1_2",
-                            dpmElementRef<Member>("m_id_2"),
+                            dpmElementRef<Member>("m_id_2", "diagnostic_label"),
 
                             hierarchyNode(
                                 "hn_id_1_3",
-                                dpmElementRef<Member>("m_id_3")
+                                dpmElementRef<Member>("m_id_3", "diagnostic_label")
                             )
                         )
                     )
@@ -227,19 +227,19 @@ internal class ExplicitDomain_UnitTest :
                     "h_code_2",
                     hierarchyNode(
                         "hn_id_2_1",
-                        dpmElementRef<Member>("m_id_1"),
+                        dpmElementRef<Member>("m_id_1", "diagnostic_label"),
 
                         hierarchyNode(
                             "hn_id_2_2",
-                            dpmElementRef<Member>("m_id_2"),
+                            dpmElementRef<Member>("m_id_2", "diagnostic_label"),
 
                             hierarchyNode(
                                 "hn_id_2_3",
-                                dpmElementRef<Member>("m_id_4"),
+                                dpmElementRef<Member>("m_id_4", "diagnostic_label"),
 
                                 hierarchyNode(
                                     "hn_id_2_4",
-                                    dpmElementRef<Member>("m_id_5")
+                                    dpmElementRef<Member>("m_id_5", "diagnostic_label")
                                 )
                             )
                         )
@@ -251,8 +251,9 @@ internal class ExplicitDomain_UnitTest :
         instantiateAndValidate()
         Assertions.assertThat(validationErrors)
             .containsExactly(
-                "ExplicitDomain.hierarchies: Hierarchy h_code_1 has Members which do not belong to Domain [m_id_3])",
-                "ExplicitDomain.hierarchies: Hierarchy h_code_2 has Members which do not belong to Domain [m_id_4, m_id_5])"
+                "ExplicitDomain.hierarchies: member not part of domain 'diagnostic_label [m_id_3]' (hierarchy 'Text#fi [h_id_1]' / hierachy node 'Text#fi [hn_id_1_3]')",
+                "ExplicitDomain.hierarchies: member not part of domain 'diagnostic_label [m_id_4]' (hierarchy 'Text#fi [h_id_2]' / hierachy node 'Text#fi [hn_id_2_3]')",
+                "ExplicitDomain.hierarchies: member not part of domain 'diagnostic_label [m_id_5]' (hierarchy 'Text#fi [h_id_2]' / hierachy node 'Text#fi [hn_id_2_4]')"
             )
     }
 }

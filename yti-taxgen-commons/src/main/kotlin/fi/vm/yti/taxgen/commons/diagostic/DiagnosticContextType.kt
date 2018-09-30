@@ -17,7 +17,8 @@ enum class DiagnosticContextType(val displayName: String) {
     YclSource("YCL Sources"),
     YclCodelist("Codelist"),
     YclCodesPage("Codes Page"),
-    YclCode("YCL Code"),
+    YclCode("Code"),
     YclCodelistExtension("Codelist Extension"),
-    YclCodelistExtensionMembersPage("Codelist Extension Members Page")
+    YclCodelistExtensionMembersPage("Codelist Extension Members Page"),
+    YclExtensionMember("Extension Member")
 }

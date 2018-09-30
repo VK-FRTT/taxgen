@@ -3,11 +3,22 @@ package fi.vm.yti.taxgen.datapointmetamodel
 data class TranslatedText(
     val translations: Map<Language, String>
 ) {
-    companion object {} //ktlint-disable no-empty-class-body
+    companion object {
+        fun none() = TranslatedText(translations = emptyMap())
+    }
 
     internal lateinit var defaultLanguage: Language
 
-    fun defaultText(): String? {
+    fun defaultTranslation(): String? {
         return translations[defaultLanguage]
+    }
+
+    fun anyTranslation(): Pair<Language, String>? {
+
+        translations.entries.forEach {
+            return it.toPair()
+        }
+
+        return null
     }
 }

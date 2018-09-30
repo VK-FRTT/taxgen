@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableKeysUnique
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterablePropertyValuesUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class DpmDictionary(
@@ -20,11 +20,11 @@ data class DpmDictionary(
             maxLength = 10000
         )
 
-        validateIterableKeysUnique(
+        validateIterablePropertyValuesUnique(
             validationErrors = validationErrors,
             instance = this,
             iterableProperty = DpmDictionary::explicitDomains,
-            keyProperty = ExplicitDomain::domainCode
+            valueProperty = ExplicitDomain::domainCode
         )
     }
 }

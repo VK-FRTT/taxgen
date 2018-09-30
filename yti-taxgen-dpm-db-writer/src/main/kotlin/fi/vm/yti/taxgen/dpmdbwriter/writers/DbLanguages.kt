@@ -62,7 +62,7 @@ object DbLanguages {
 
         return LanguageTable.insertAndGetId {
             it[languageNameCol] = nativeLanguageName
-            it[englishNameCol] = language.label.defaultText()
+            it[englishNameCol] = language.label.defaultTranslation()
             it[isoCodeCol] = language.iso6391Code
             it[conceptIdCol] = null
         }

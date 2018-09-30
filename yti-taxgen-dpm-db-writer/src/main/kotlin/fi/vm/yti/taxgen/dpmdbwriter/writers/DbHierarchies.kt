@@ -58,8 +58,8 @@ object DbHierarchies {
 
         val hierarchyId = HierarchyTable.insertAndGetId {
             it[hierarchyCodeCol] = hierarchy.hierarchyCode
-            it[hierarchyLabelCol] = hierarchy.concept.label.defaultText()
-            it[hierarchyDescriptionCol] = hierarchy.concept.description.defaultText()
+            it[hierarchyLabelCol] = hierarchy.concept.label.defaultTranslation()
+            it[hierarchyDescriptionCol] = hierarchy.concept.description.defaultTranslation()
             it[domainIdCol] = domainId
             it[conceptIdCol] = hierarchyConceptId
         }
@@ -111,7 +111,7 @@ object DbHierarchies {
             it[orderCol] = hierarchyNodeIndex + 1
             it[levelCol] = hierarchyTreeContext.level()
             it[parentMemberID] = hierarchyTreeContext.parentMemberId()?.value
-            it[hierarchyNodeLabel] = node.concept.label.defaultText()
+            it[hierarchyNodeLabel] = node.concept.label.defaultTranslation()
             it[conceptIdCol] = hierarchyNodeConceptId
             it[pathCol] = hierarchyTreeContext.path()
         }

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-import fi.vm.yti.taxgen.commons.datavalidation.validateCondition
+import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 
 data class HierarchyNode(
     override val id: String,
@@ -22,24 +22,29 @@ data class HierarchyNode(
 
         super.validate(validationErrors)
 
-        validateCondition(
+        validateConditionTruthy(
             validationErrors = validationErrors,
             instance = this,
             property = HierarchyNode::comparisonOperator,
-            condition = {
-                !VALID_COMPARISON_OPERATORS.contains(comparisonOperator)
-            },
-            failMessage = { "unsupported arithmetical relationship (comparison operator) '$comparisonOperator'" }
+            condition = { VALID_COMPARISON_OPERATORS.contains(comparisonOperator) },
+            message = { "unsupported arithmetical relationship (comparison operator) '$comparisonOperator'" }
         )
 
-        validateCondition(
+        validateConditionTruthy(
             validationErrors = validationErrors,
             instance = this,
             property = HierarchyNode::unaryOperator,
-            condition = {
-                !VALID_UNARY_OPERATORS.contains(unaryOperator)
-            },
-            failMessage = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
+            condition = { VALID_UNARY_OPERATORS.contains(unaryOperator) },
+            message = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
+        )
+
+        //TODO: Validate memberRef ?
+        validateConditionTruthy(
+            validationErrors = validationErrors,
+            instance = this,
+            property = HierarchyNode::memberRef,
+            condition = { memberRef.id.isNotEmpty() && memberRef.id.isNotBlank() },
+            message = { "empty or blank ID" }
         )
     }
 

@@ -29,14 +29,36 @@ interface DpmElement : Validatable {
     fun ref(): DpmElementRef {
         return DpmElementRef(
             id = id,
-            type = type
+            type = type,
+            diagnosticLabel = concept.diagnosticLabel()
+        )
+    }
+
+    fun diagnosticHandle(): String {
+        return formatDiagnosticHandle(
+            id = id,
+            type = type,
+            diagnosticLabel = concept.diagnosticLabel()
         )
     }
 
     companion object {
         fun typeName(kClass: KClass<*>): String {
             require(kClass.isSubclassOf(DpmElement::class), { "Expecting a DpmElement based class" })
-            return kClass.simpleName ?: thisShouldNeverHappen("Anonymous DpmElement")
+            val name = kClass.simpleName ?: thisShouldNeverHappen("Anonymous DpmElement")
+            return "$name" //TODO make names in diagnostic as "DPM Member"?
+        }
+
+        fun formatDiagnosticHandle(
+            id: String,
+            type: String,
+            diagnosticLabel: String
+        ): String {
+            return if (diagnosticLabel.isNotEmpty()) {
+                "$type: $diagnosticLabel [$id]"
+            } else {
+                "$type: [$id]"
+            }
         }
     }
 }

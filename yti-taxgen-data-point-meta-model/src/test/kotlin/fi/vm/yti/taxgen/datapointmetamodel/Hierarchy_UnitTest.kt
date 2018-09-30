@@ -75,16 +75,16 @@ internal class Hierarchy_UnitTest :
         fun `rootNodes should have unique ids {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
-                    hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1")),
-                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2")),
-                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_3")),
-                    hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4"))
+                    hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1", "diagnostic_label")),
+                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2", "diagnostic_label")),
+                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_3", "diagnostic_label")),
+                    hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4", "diagnostic_label"))
                 )
             )
 
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: id has duplicate values [hn_id_2]")
+                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_id_2'")
         }
 
         @Test
@@ -94,87 +94,93 @@ internal class Hierarchy_UnitTest :
 
                     hierarchyNode(
                         "hn_id_1",
-                        dpmElementRef<Member>("m_id_1")
+                        dpmElementRef<Member>("m_id_1", "diagnostic_label")
                     ),
 
                     hierarchyNode(
                         "hn_id_2",
-                        dpmElementRef<Member>("m_id_2"),
+                        dpmElementRef<Member>("m_id_2", "diagnostic_label"),
 
                         hierarchyNode(
                             "hn_id_3",
-                            dpmElementRef<Member>("m_id_3"),
+                            dpmElementRef<Member>("m_id_3", "diagnostic_label"),
 
                             hierarchyNode(
                                 "hn_id_4",
-                                dpmElementRef<Member>("m_id_4")
+                                dpmElementRef<Member>("m_id_4", "diagnostic_label")
                             )
                         )
                     ),
 
                     hierarchyNode(
                         "hn_id_4",
-                        dpmElementRef<Member>("m_id_5")
+                        dpmElementRef<Member>("m_id_5", "diagnostic_label")
                     )
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: id has duplicate values [hn_id_4]")
+                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_id_4'")
         }
-    }
 
-    @Test
-    fun `rootNodes should have unique memberRefs {within flat root}`() {
-        attributeOverrides(
-            "rootNodes" to listOf(
-                hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1")),
-                hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2")),
-                hierarchyNode("hn_id_3", dpmElementRef<Member>("m_id_2")),
-                hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4"))
-            )
-        )
-
-        instantiateAndValidate()
-        Assertions.assertThat(validationErrors)
-            .containsExactly("Hierarchy.rootNodes: multiple HierarchyNodes referring same Members [m_id_2]")
-    }
-
-    @Test
-    fun `rootNodes should have unique memberRefs {within hierarchy}`() {
-        attributeOverrides(
-            "rootNodes" to listOf(
-
-                hierarchyNode(
-                    "hn_id_1",
-                    dpmElementRef<Member>("m_id_1")
-                ),
-
-                hierarchyNode(
-                    "hn_id_2",
-                    dpmElementRef<Member>("m_id_2"),
-
-                    hierarchyNode(
-                        "hn_id_3",
-                        dpmElementRef<Member>("m_id_3"),
-
-                        hierarchyNode(
-                            "hn_id_4",
-                            dpmElementRef<Member>("m_id_4")
-                        )
-                    )
-                ),
-
-                hierarchyNode(
-                    "hn_id_5",
-                    dpmElementRef<Member>("m_id_4")
+        @Test
+        fun `rootNodes should have unique memberRefs {within flat root}`() {
+            attributeOverrides(
+                "rootNodes" to listOf(
+                    hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1", "diagnostic_label")),
+                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2", "diagnostic_label")),
+                    hierarchyNode("hn_id_3", dpmElementRef<Member>("m_id_2", "diagnostic_label")),
+                    hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4", "diagnostic_label"))
                 )
             )
-        )
 
-        instantiateAndValidate()
-        assertThat(validationErrors)
-            .containsExactly("Hierarchy.rootNodes: multiple HierarchyNodes referring same Members [m_id_4]")
+            instantiateAndValidate()
+            Assertions.assertThat(validationErrors)
+                .containsExactly(
+                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_2]' (from 'Text#fi [hn_id_2]')",
+                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_2]' (from 'Text#fi [hn_id_3]')"
+                )
+        }
+
+        @Test
+        fun `rootNodes should have unique memberRefs {within hierarchy}`() {
+            attributeOverrides(
+                "rootNodes" to listOf(
+
+                    hierarchyNode(
+                        "hn_id_1",
+                        dpmElementRef<Member>("m_id_1", "diagnostic_label")
+                    ),
+
+                    hierarchyNode(
+                        "hn_id_2",
+                        dpmElementRef<Member>("m_id_2", "diagnostic_label"),
+
+                        hierarchyNode(
+                            "hn_id_3",
+                            dpmElementRef<Member>("m_id_3", "diagnostic_label"),
+
+                            hierarchyNode(
+                                "hn_id_4",
+                                dpmElementRef<Member>("m_id_4", "diagnostic_label")
+                            )
+                        )
+                    ),
+
+                    hierarchyNode(
+                        "hn_id_5",
+                        dpmElementRef<Member>("m_id_4", "diagnostic_label")
+                    )
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly(
+                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_4]' (from 'Text#fi [hn_id_4]')",
+                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_4]' (from 'Text#fi [hn_id_5]')"
+                )
+        }
     }
 }

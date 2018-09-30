@@ -10,25 +10,11 @@ import fi.vm.yti.taxgen.ycltodpmmapper.DpmMappingContext
 internal fun DpmDictionarySource.extractDpmDictionary(
     ctx: DpmMappingContext
 ): DpmDictionary {
-
-    fun extractDpmOwner(): Owner {
-        return ctx.extract(Owner.Companion) {
-            val ownerConfig = JsonOps.readValue<OwnerConfig>(dpmOwnerConfigData(), ctx.diagnostic)
-
-            ctx.diagnostic.updateCurrentContextName(ownerConfig.name)
-
-            val owner = Owner.fromConfig(ownerConfig, ctx.diagnostic)
-            owner
-        }
-    }
-
     return ctx.extract(this) {
-        val ownerSpecificCtx = ctx.cloneWithOwner(extractDpmOwner())
+        val ownerSpecificCtx = ctx.cloneWithOwner(extractDpmOwner(dpmOwnerConfigData(), ctx))
         ctx.diagnostic.updateCurrentContextName(ownerSpecificCtx.owner.name)
 
-        val explicitDomains = yclCodelistSources().map { codelistSource ->
-            codelistSource.extractDpmExplicitDomain(ownerSpecificCtx)
-        }
+        val explicitDomains = yclCodelistSources().map { it.extractDpmExplicitDomain(ownerSpecificCtx) }
 
         val dpmDictionary = DpmDictionary(
             owner = ownerSpecificCtx.owner,
@@ -36,5 +22,16 @@ internal fun DpmDictionarySource.extractDpmDictionary(
         )
 
         dpmDictionary
+    }
+}
+
+private fun extractDpmOwner(dpmOwnerConfigData: String, ctx: DpmMappingContext): Owner {
+    return ctx.extract(Owner.Companion) {
+        val ownerConfig = JsonOps.readValue<OwnerConfig>(dpmOwnerConfigData, ctx.diagnostic)
+
+        ctx.diagnostic.updateCurrentContextName(ownerConfig.name)
+
+        val owner = Owner.fromConfig(ownerConfig, ctx.diagnostic)
+        owner
     }
 }

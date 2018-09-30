@@ -40,12 +40,12 @@ internal class DpmMappingContext private constructor(
         )
     }
 
-    fun <R : Validatable> extract(diagnosticContext: DiagnosticContextProvider, block: () -> R): R {
+    fun <R : Validatable?> extract(diagnosticContext: DiagnosticContextProvider, block: () -> R): R {
         return diagnostic.withContext(diagnosticContext) {
             val result = block()
 
             val validationErrors = ValidationErrorCollector()
-            result.validate(validationErrors)
+            result?.validate(validationErrors)
 
             if (validationErrors.any()) {
                 diagnostic.validationErrors(validationErrors)
