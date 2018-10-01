@@ -1,22 +1,23 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateDpmCodeContent
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Member(
     override val id: String,
+    override val uri: String,
     override val concept: Concept,
     val memberCode: String,
     val defaultMember: Boolean
 ) : DpmElement {
 
-    override fun validate(validationErrors: ValidationErrors) {
+    override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationErrors)
+        super.validate(validationResults)
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Member::memberCode,
             minLength = 1,
@@ -24,8 +25,9 @@ data class Member(
         )
 
         validateDpmCodeContent(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
-            property = Member::memberCode)
+            property = Member::memberCode
+        )
     }
 }

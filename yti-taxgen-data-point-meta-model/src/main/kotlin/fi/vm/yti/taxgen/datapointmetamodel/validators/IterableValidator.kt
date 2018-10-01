@@ -1,11 +1,11 @@
 package fi.vm.yti.taxgen.datapointmetamodel.validators
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
 fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateIterablePropertyValuesUnique(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: I,
     iterableProperty: KProperty1<I, P>,
     valueProperty: KProperty1<E, K>
@@ -13,7 +13,7 @@ fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateIterablePropert
     val iterable: P = iterableProperty.getter.call(instance)
 
     validateIterablePropertyValuesUnique(
-        validationErrors,
+        validationResults,
         instance,
         iterableProperty.name,
         iterable,
@@ -22,7 +22,7 @@ fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateIterablePropert
 }
 
 fun <I : Validatable, E : Any, K : Any> validateIterablePropertyValuesUnique(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: I,
     instancePropertyName: String,
     iterable: Iterable<E>,
@@ -34,7 +34,7 @@ fun <I : Validatable, E : Any, K : Any> validateIterablePropertyValuesUnique(
         .filter { it.value > 1 }.keys
 
     duplicateValues.forEach { value ->
-        validationErrors.add(
+        validationResults.addError(
             instance,
             instancePropertyName,
             "duplicate ${valueProperty.name} value '$value'"
@@ -43,7 +43,7 @@ fun <I : Validatable, E : Any, K : Any> validateIterablePropertyValuesUnique(
 }
 
 fun <I : Validatable, E : Any, K : Any> validateIterableElementsUnique(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: I,
     propertyName: String,
     iterable: Iterable<E>,
@@ -55,7 +55,7 @@ fun <I : Validatable, E : Any, K : Any> validateIterableElementsUnique(
         .filter { (_, elements) -> elements.size > 1 }
         .forEach { (_, elements) ->
             elements.forEach { element ->
-                validationErrors.add(instance, propertyName, message(element))
+                validationResults.addError(instance, propertyName, message(element))
             }
         }
 }

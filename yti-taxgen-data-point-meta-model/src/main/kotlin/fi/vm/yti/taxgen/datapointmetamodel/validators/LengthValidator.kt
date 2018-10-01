@@ -1,11 +1,11 @@
 package fi.vm.yti.taxgen.datapointmetamodel.validators
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import kotlin.reflect.KProperty1
 
 fun <T : Any, P : Any> validateLength(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: T,
     property: KProperty1<T, P>,
     minLength: Int? = null,
@@ -13,16 +13,16 @@ fun <T : Any, P : Any> validateLength(
 ) {
 
     if (minLength != null) {
-        minLength(validationErrors, instance, property, minLength)
+        minLength(validationResults, instance, property, minLength)
     }
 
     if (maxLength != null) {
-        maxLength(validationErrors, instance, property, maxLength)
+        maxLength(validationResults, instance, property, maxLength)
     }
 }
 
 private fun <T : Any, P : Any> minLength(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: T,
     property: KProperty1<T, P>,
     minLength: Int
@@ -32,13 +32,13 @@ private fun <T : Any, P : Any> minLength(
     when (value) {
         is String -> {
             if (value.length < minLength) {
-                validationErrors.add(instance, property.name, "is too short (minimum $minLength characters)")
+                validationResults.addError(instance, property.name, "is too short (minimum $minLength characters)")
             }
         }
 
         is Collection<*> -> {
             if (value.size < minLength) {
-                validationErrors.add(instance, property.name, "is too short (minimum $minLength elements)")
+                validationResults.addError(instance, property.name, "is too short (minimum $minLength elements)")
             }
         }
 
@@ -52,7 +52,7 @@ private fun <T : Any, P : Any> minLength(
 }
 
 private fun <T : Any, P : Any> maxLength(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: T,
     property: KProperty1<T, P>,
     maxLength: Int
@@ -62,13 +62,13 @@ private fun <T : Any, P : Any> maxLength(
     when (value) {
         is String -> {
             if (value.length > maxLength) {
-                validationErrors.add(instance, property.name, "is too long (maximum $maxLength characters)")
+                validationResults.addError(instance, property.name, "is too long (maximum $maxLength characters)")
             }
         }
 
         is Collection<*> -> {
             if (value.size > maxLength) {
-                validationErrors.add(instance, property.name, "is too long (maximum $maxLength elements)")
+                validationResults.addError(instance, property.name, "is too long (maximum $maxLength elements)")
             }
         }
 

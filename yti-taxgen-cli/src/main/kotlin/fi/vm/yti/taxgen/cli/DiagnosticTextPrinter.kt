@@ -1,10 +1,9 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer.ContextInfo
+import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity
-import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
+import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
 import java.io.PrintWriter
 
 class DiagnosticTextPrinter(
@@ -12,52 +11,72 @@ class DiagnosticTextPrinter(
 ) : DiagnosticConsumer {
 
     private var level = 0
+    private var lineHeader: String = ""
 
-    override fun contextEnter(contextStack: List<DiagnosticConsumer.ContextInfo>) {
-        level = contextStack.size
+    override fun contextEnter(contextStack: List<ContextInfo>) {
+        level = levelFromStack(contextStack)
+
         val context = contextStack.first()
-        printContext(context)
+        lineHeader = context.contextHeader()
+        printLine(context.contextDetails())
     }
 
     override fun contextExit(
-        contextStack: List<DiagnosticConsumer.ContextInfo>,
-        retiredContext: DiagnosticConsumer.ContextInfo
+        contextStack: List<ContextInfo>,
+        retiredContext: ContextInfo
     ) {
-        printNestedLine("${retiredContext.type.displayName}: OK")
-        level = contextStack.size
+        printLine("OK")
+
+        lineHeader = contextStack.firstOrNull()?.contextHeader() ?: ""
+        level = levelFromStack(contextStack)
     }
 
-    override fun topContextNameChange(
-        contextStack: List<DiagnosticConsumer.ContextInfo>,
-        originalContext: DiagnosticConsumer.ContextInfo
+    override fun topContextDetailsChange(
+        contextStack: List<ContextInfo>,
+        originalContext: ContextInfo
     ) {
-        val context = contextStack.first()
-        printContext(context)
+        printLine(contextStack.first().contextDetails())
     }
 
     override fun message(severity: Severity, message: String) {
-        printNestedLine("  $severity: $message")
+        printLine("$severity: $message")
     }
 
-    override fun validationErrors(validationErrors: ValidationErrors) {
-        validationErrors.errorsInSimpleFormat().forEach {
-            message(ERROR, it)
+    override fun validationResults(validationResults: List<ValidationResultInfo>) {
+        validationResults.forEach {
+            message(Severity.ERROR, it.message)
         }
     }
 
-    private fun printContext(context: ContextInfo) {
-        //TODO print contextHeader() + contextDetails()
-        val remainder =
-            (if (context.name.isNotBlank()) "${context.name} " else "") +
-            (if (context.ref.isNotBlank()) "(${context.ref})" else "")
+    private fun levelFromStack(contextStack: List<ContextInfo>) = (contextStack.size - 1).coerceAtLeast(0)
 
-        val line = "${context.type.displayName}" +
-            (if (remainder.isNotBlank()) ": $remainder" else "")
-
-        printNestedLine(line)
+    private fun printLine(message: String) {
+        printWriter.println("${"   ".repeat(level)}$lineHeader $message")
     }
 
-    private fun printNestedLine(message: String) {
-        printWriter.println("  ".repeat(level) + message)
+    private fun ContextInfo.contextHeader(): String {
+        return if (type.recurring) {
+            "${type.displayName} #$index:"
+        } else {
+            "${type.displayName}:"
+        }
+    }
+
+    private fun ContextInfo.contextDetails(): String {
+        val separatorValue = " "
+        var separator = ""
+        var details = ""
+
+        if (name.isNotBlank()) {
+            separator = separatorValue
+            details += "$name"
+        }
+
+        if (ref.isNotBlank()) {
+            details += separator
+            details += "($ref)"
+        }
+
+        return details
     }
 }

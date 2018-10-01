@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.throwFail
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTranslatedText
@@ -16,9 +16,9 @@ class Language constructor(
     val label: TranslatedText
 ) : Validatable {
 
-    override fun validate(validationErrors: ValidationErrors) { //TODO  - is this really called?
+    override fun validate(validationResults: ValidationResults) { //TODO  - is this really called?
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Language::iso6391Code,
             minLength = 2,
@@ -26,7 +26,7 @@ class Language constructor(
         )
 
         validateTranslatedText(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Language::label,
             minTranslationLength = 5,

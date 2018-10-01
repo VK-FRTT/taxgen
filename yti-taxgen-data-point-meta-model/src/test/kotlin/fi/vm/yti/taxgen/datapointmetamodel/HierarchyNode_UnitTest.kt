@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -67,7 +66,7 @@ internal class HierarchyNode_UnitTest :
             )
 
             instantiateAndValidate()
-            Assertions.assertThat(validationErrors)
+            assertThat(validationErrors)
                 .containsExactly("Concept.label: has too few translations (minimum 1)")
         }
     }

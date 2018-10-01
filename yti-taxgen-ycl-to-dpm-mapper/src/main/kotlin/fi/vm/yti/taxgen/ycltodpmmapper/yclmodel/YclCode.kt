@@ -32,6 +32,6 @@ internal data class YclCode(
             return false
         }
 
-        return identityOrEmpty() == defaultCode.identityOrEmpty()
+        return idOrEmpty() == defaultCode.idOrEmpty()
     }
 }

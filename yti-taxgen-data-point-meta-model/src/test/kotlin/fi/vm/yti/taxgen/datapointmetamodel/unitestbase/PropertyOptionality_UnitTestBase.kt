@@ -8,7 +8,8 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import fi.vm.yti.taxgen.testcommons.assertFail
 import fi.vm.yti.taxgen.testcommons.shouldBeNullException
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 
 internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
     propertyName: String,
@@ -19,7 +20,7 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyOptionalityTempl
     val instance = Factory.Builder.instantiate(kClass, defaultAttributes)
     val propertyValue = instance.getPropertyValue(propertyName)
 
-    Assertions.assertThat(propertyValue)
+    assertThat(propertyValue)
         .isNotNull()
         .isEqualTo(defaultAttributes[propertyName])
 
@@ -29,7 +30,7 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyOptionalityTempl
         overrideAttributes = mapOf(propertyName to null)
     )
 
-    val exception = Assertions.catchThrowable {
+    val exception = catchThrowable {
         Factory.Builder.instantiate(kClass, attributes)
     }
 

@@ -21,7 +21,8 @@ internal fun YclCodelistExtensionSource.tryExtractDpmHierarchy(
         val rootNodes = collectHierarchyRootNodes(extensionMembers, ctx)
 
         Hierarchy(
-            id = extension.identityOrEmpty(),
+            id = extension.idOrEmpty(),
+            uri = extension.uriOrEmpty(),
             concept = extension.dpmConcept(ctx.owner),
             hierarchyCode = extension.codeValueOrEmpty(),
             rootNodes = rootNodes
@@ -100,7 +101,8 @@ private fun hierarchyNode(
 ): HierarchyNode {
     return ctx.extract(extensionMember) {
         HierarchyNode(
-            id = extensionMember.identityOrEmpty(),
+            id = extensionMember.idOrEmpty(),
+            uri = extensionMember.uriOrEmpty(),
             concept = extensionMember.dpmConcept(ctx.owner),
             abstract = false,
             comparisonOperator = extensionMember.comparisonOpOrNull(),

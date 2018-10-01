@@ -1,23 +1,24 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterableElementsUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterablePropertyValuesUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class Hierarchy(
     override val id: String,
+    override val uri: String,
     override val concept: Concept,
     val hierarchyCode: String,
     val rootNodes: List<HierarchyNode>
 ) : DpmElement {
 
-    override fun validate(validationErrors: ValidationErrors) {
+    override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationErrors)
+        super.validate(validationResults)
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Hierarchy::hierarchyCode,
             minLength = 2,
@@ -25,7 +26,7 @@ data class Hierarchy(
         )
 
         validateIterablePropertyValuesUnique(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             instancePropertyName = "rootNodes",
             iterable = allNodes(),
@@ -33,12 +34,15 @@ data class Hierarchy(
         )
 
         validateIterableElementsUnique(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             propertyName = "rootNodes",
             iterable = allNodes(),
             keySelector = { it.memberRef.id },
-            message = { duplicateNode -> "duplicate member reference '${duplicateNode.memberRef.diagnosticHandle()}' (from '${duplicateNode.diagnosticHandle()}')" }
+            message = { duplicateNode ->
+                "DPM Hierarchy contains multiple times same DPM Member. " +
+                    "${duplicateNode.memberRef.diagnosticTag()} in ${duplicateNode.ref().diagnosticTag()}"
+            }
         )
     }
 

@@ -1,7 +1,5 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
-
 interface Diagnostic {
 
     fun <R> withContext(
@@ -21,7 +19,8 @@ interface Diagnostic {
     fun fatal(message: String): Nothing
     fun error(message: String)
     fun info(message: String)
-    fun validationErrors(validationErrors: ValidationErrors)
+
+    fun validationResults(validationResults: List<ValidationResultInfo>)
 
     fun counters(): Map<Severity, Int>
 }

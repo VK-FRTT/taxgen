@@ -48,9 +48,9 @@ internal data class YclExtensionMember(
 
     fun memberRef(): DpmElementRef { //TODO - test code reference null case
         return if (code != null) {
-            dpmElementRef<Member>(code.identityOrEmpty(), code.diagnosticLabel())
+            dpmElementRef<Member>(code.idOrEmpty(), code.uriOrEmpty(), code.composeContextName())
         } else {
-            dpmElementRef<Member>("", "${diagnosticLabel()} missing Code reference")
+            dpmElementRef<Member>("", "", "${composeContextName()}: No Code reference")
         }
     }
 

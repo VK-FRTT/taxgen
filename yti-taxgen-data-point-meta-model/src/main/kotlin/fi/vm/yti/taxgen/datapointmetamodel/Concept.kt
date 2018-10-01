@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTimestamp
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateTranslatedText
@@ -24,22 +24,22 @@ data class Concept(
         description.defaultLanguage = owner.defaultLanguage
     }
 
-    override fun validate(validationErrors: ValidationErrors) {
+    override fun validate(validationResults: ValidationResults) {
 
         validateTimestamp(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Concept::createdAt
         )
 
         validateTimestamp(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Concept::modifiedAt
         )
 
         validateConditionTruthy(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Concept::modifiedAt,
             condition = { !modifiedAt.isBefore(createdAt) },
@@ -47,7 +47,7 @@ data class Concept(
         )
 
         validateConditionTruthy(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Concept::applicableUntil,
             condition = condition@{
@@ -60,7 +60,7 @@ data class Concept(
         )
 
         validateTranslatedText(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Concept::label,
             minTranslationLength = 2,
@@ -69,7 +69,7 @@ data class Concept(
         )
 
         validateTranslatedText(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Concept::description,
             minTranslationLength = 2,
@@ -78,11 +78,11 @@ data class Concept(
     }
 
     fun diagnosticLabel(): String {
-        val defaultLabel = label.defaultTranslation()
-        if (defaultLabel != null && defaultLabel.isNotBlank()) return defaultLabel
+        val defaultTranslation = label.defaultTranslation()
+        if (defaultTranslation != null && defaultTranslation.isNotBlank()) return defaultTranslation
 
-        val anyLablel = label.anyTranslation() //TODO - anyTranslation => anyNonEmptyTranslation
-        if (anyLablel != null && anyLablel.second.isNotBlank()) return "${anyLablel.second} (${anyLablel.first.iso6391Code})"
+        val anyTranslation = label.anyNonBlankTranslation()
+        if (anyTranslation != null) return anyTranslation
 
         return ""
     }

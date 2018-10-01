@@ -1,11 +1,11 @@
 package fi.vm.yti.taxgen.testcommons
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity
+import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
 
-class DiagnosticConsumerCaptorSimple : DiagnosticConsumer {
+class DiagnosticCollectorSimple : DiagnosticConsumer {
 
     val events = mutableListOf<String>()
 
@@ -17,7 +17,7 @@ class DiagnosticConsumerCaptorSimple : DiagnosticConsumer {
         events.add("EXIT [${contextStack.firstOrNull()?.type ?: ""}] RETIRED [${retiredContext.type}]")
     }
 
-    override fun topContextNameChange(contextStack: List<ContextInfo>, originalContext: ContextInfo) {
+    override fun topContextDetailsChange(contextStack: List<ContextInfo>, originalContext: ContextInfo) {
         events.add("UPDATE [${contextStack.firstOrNull()?.type ?: ""}] ORIGINAL [${originalContext.type}]")
     }
 
@@ -25,7 +25,9 @@ class DiagnosticConsumerCaptorSimple : DiagnosticConsumer {
         events.add("MESSAGE [$severity] MESSAGE [$message]")
     }
 
-    override fun validationErrors(validationErrors: ValidationErrors) {
-        events.add("VALIDATION [${validationErrors.errorsInSimpleFormat()}]")
+    override fun validationResults(validationResults: List<ValidationResultInfo>) {
+        validationResults.forEach {
+            events.add("VALIDATION [${it.className.substringAfterLast(".")}.${it.propertyName}: ${it.message}]")
+        }
     }
 }

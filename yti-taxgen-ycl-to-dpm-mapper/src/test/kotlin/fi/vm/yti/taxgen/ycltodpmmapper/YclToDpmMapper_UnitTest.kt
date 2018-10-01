@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
 import fi.vm.yti.taxgen.datapointmetamodel.Language
-import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CAPTURE
 import fi.vm.yti.taxgen.yclsourceprovider.YclSource
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 @DisplayName("Mapping YCL sources to DPM model")
 internal class YclToDpmMapper_UnitTest {
 
-    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
+    private lateinit var diagnosticCollector: DiagnosticCollectorSimple
     private lateinit var diagnostic: Diagnostic
 
     private lateinit var yclSource: YclSource
@@ -33,8 +33,8 @@ internal class YclToDpmMapper_UnitTest {
     }
 
     fun performMapping(): List<DpmDictionary> {
-        diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
-        diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
+        diagnosticCollector = DiagnosticCollectorSimple()
+        diagnostic = DiagnosticBridge(diagnosticCollector)
 
         yclToDpmMapper = YclToDpmMapper(diagnostic)
 
@@ -212,7 +212,7 @@ internal class YclToDpmMapper_UnitTest {
         @Test
         fun `should produce correct diagnostic context events`() {
             performMapping()
-            assertThat(diagnosticConsumerCaptor.events).containsExactly(
+            assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [ActivityMapYclToDpm]",
                 "ENTER [YclSource]",
                 "ENTER [DpmDictionary]",

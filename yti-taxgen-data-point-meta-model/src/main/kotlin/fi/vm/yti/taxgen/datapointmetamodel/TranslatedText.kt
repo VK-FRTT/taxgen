@@ -13,12 +13,7 @@ data class TranslatedText(
         return translations[defaultLanguage]
     }
 
-    fun anyTranslation(): Pair<Language, String>? {
-
-        translations.entries.forEach {
-            return it.toPair()
-        }
-
-        return null
+    fun anyNonBlankTranslation(): String? {
+        return translations.entries.firstOrNull { it.value.isNotBlank() }?.value
     }
 }

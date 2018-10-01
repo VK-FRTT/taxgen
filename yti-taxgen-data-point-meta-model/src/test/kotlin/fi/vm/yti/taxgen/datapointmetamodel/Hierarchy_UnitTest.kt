@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.datapointmetamodel.unitestbase.propertyOptionalityTemplate
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -75,16 +74,16 @@ internal class Hierarchy_UnitTest :
         fun `rootNodes should have unique ids {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
-                    hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1", "diagnostic_label")),
-                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2", "diagnostic_label")),
-                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_3", "diagnostic_label")),
-                    hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4", "diagnostic_label"))
+                    hierarchyNode("hn_1", refTo<Member>("m_1")),
+                    hierarchyNode("hn_2", refTo<Member>("m_2")),
+                    hierarchyNode("hn_2", refTo<Member>("m_3")),
+                    hierarchyNode("hn_4", refTo<Member>("m_4"))
                 )
             )
 
             instantiateAndValidate()
-            Assertions.assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_id_2'")
+            assertThat(validationErrors)
+                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_2_id'")
         }
 
         @Test
@@ -93,53 +92,53 @@ internal class Hierarchy_UnitTest :
                 "rootNodes" to listOf(
 
                     hierarchyNode(
-                        "hn_id_1",
-                        dpmElementRef<Member>("m_id_1", "diagnostic_label")
+                        "hn_1",
+                        refTo<Member>("m_1")
                     ),
 
                     hierarchyNode(
-                        "hn_id_2",
-                        dpmElementRef<Member>("m_id_2", "diagnostic_label"),
+                        "hn_2",
+                        refTo<Member>("m_2"),
 
                         hierarchyNode(
-                            "hn_id_3",
-                            dpmElementRef<Member>("m_id_3", "diagnostic_label"),
+                            "hn_3",
+                            refTo<Member>("m_3"),
 
                             hierarchyNode(
-                                "hn_id_4",
-                                dpmElementRef<Member>("m_id_4", "diagnostic_label")
+                                "hn_4",
+                                refTo<Member>("m_4")
                             )
                         )
                     ),
 
                     hierarchyNode(
-                        "hn_id_4",
-                        dpmElementRef<Member>("m_id_5", "diagnostic_label")
+                        "hn_4",
+                        refTo<Member>("m_5")
                     )
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_id_4'")
+                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_4_id'")
         }
 
         @Test
         fun `rootNodes should have unique memberRefs {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
-                    hierarchyNode("hn_id_1", dpmElementRef<Member>("m_id_1", "diagnostic_label")),
-                    hierarchyNode("hn_id_2", dpmElementRef<Member>("m_id_2", "diagnostic_label")),
-                    hierarchyNode("hn_id_3", dpmElementRef<Member>("m_id_2", "diagnostic_label")),
-                    hierarchyNode("hn_id_4", dpmElementRef<Member>("m_id_4", "diagnostic_label"))
+                    hierarchyNode("hn_1", refTo<Member>("m_1")),
+                    hierarchyNode("hn_2", refTo<Member>("m_2")),
+                    hierarchyNode("hn_3", refTo<Member>("m_2")),
+                    hierarchyNode("hn_4", refTo<Member>("m_4"))
                 )
             )
 
             instantiateAndValidate()
-            Assertions.assertThat(validationErrors)
+            assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_2]' (from 'Text#fi [hn_id_2]')",
-                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_2]' (from 'Text#fi [hn_id_3]')"
+                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_2_diagnostic_label (m_2_uri) in (DPM HierarchyNode) Text#fi (hn_2_uri)",
+                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_2_diagnostic_label (m_2_uri) in (DPM HierarchyNode) Text#fi (hn_3_uri)"
                 )
         }
 
@@ -149,28 +148,28 @@ internal class Hierarchy_UnitTest :
                 "rootNodes" to listOf(
 
                     hierarchyNode(
-                        "hn_id_1",
-                        dpmElementRef<Member>("m_id_1", "diagnostic_label")
+                        "hn_1",
+                        refTo<Member>("m_1")
                     ),
 
                     hierarchyNode(
-                        "hn_id_2",
-                        dpmElementRef<Member>("m_id_2", "diagnostic_label"),
+                        "hn_2",
+                        refTo<Member>("m_2"),
 
                         hierarchyNode(
-                            "hn_id_3",
-                            dpmElementRef<Member>("m_id_3", "diagnostic_label"),
+                            "hn_3",
+                            refTo<Member>("m_3"),
 
                             hierarchyNode(
-                                "hn_id_4",
-                                dpmElementRef<Member>("m_id_4", "diagnostic_label")
+                                "hn_4",
+                                refTo<Member>("m_4")
                             )
                         )
                     ),
 
                     hierarchyNode(
-                        "hn_id_5",
-                        dpmElementRef<Member>("m_id_4", "diagnostic_label")
+                        "hn_5",
+                        refTo<Member>("m_4")
                     )
                 )
             )
@@ -178,8 +177,8 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_4]' (from 'Text#fi [hn_id_4]')",
-                    "Hierarchy.rootNodes: duplicate member reference 'diagnostic_label [m_id_4]' (from 'Text#fi [hn_id_5]')"
+                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_4_diagnostic_label (m_4_uri) in (DPM HierarchyNode) Text#fi (hn_4_uri)",
+                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_4_diagnostic_label (m_4_uri) in (DPM HierarchyNode) Text#fi (hn_5_uri)"
                 )
         }
     }

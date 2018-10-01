@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.ycltodpmmapper
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.datapointmetamodel.Language
@@ -42,31 +42,27 @@ internal class DpmMappingContext private constructor(
 
     fun <R : Validatable?> extract(diagnosticContext: DiagnosticContextProvider, block: () -> R): R {
         return diagnostic.withContext(diagnosticContext) {
-            val result = block()
+            val extractResult = block()
 
-            val validationErrors = ValidationErrorCollector()
-            result?.validate(validationErrors)
+            val collector = ValidationCollector()
+            extractResult?.validate(collector)
 
-            if (validationErrors.any()) {
-                diagnostic.validationErrors(validationErrors)
-            }
+            diagnostic.validationResults(collector.compileResults())
 
-            result
+            extractResult
         }
     }
 
     fun <R : Validatable> extractList(diagnosticContext: DiagnosticContextProvider, block: () -> List<R>): List<R> {
         return diagnostic.withContext(diagnosticContext) {
-            val result = block()
+            val extractResult = block()
 
-            val validationErrors = ValidationErrorCollector()
-            result.forEach { it.validate(validationErrors) }
+            val collector = ValidationCollector()
+            extractResult.forEach { it.validate(collector) }
 
-            if (validationErrors.any()) {
-                diagnostic.validationErrors(validationErrors)
-            }
+            diagnostic.validationResults(collector.compileResults())
 
-            result
+            extractResult
         }
     }
 }

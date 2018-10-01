@@ -1,18 +1,18 @@
 package fi.vm.yti.taxgen.datapointmetamodel.validators
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
 fun <I : Validatable> validateDpmCodeContent(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: I,
     property: KProperty1<I, String>
 ) {
     val name: String = property.getter.call(instance)
 
     if (!isValidCodeName(name))
-        validationErrors.add(
+        validationResults.addError(
             instance = instance,
             propertyName = property.name,
             message = "is illegal DPM Code"

@@ -3,14 +3,14 @@ package fi.vm.yti.taxgen.commons.datavalidation
 import kotlin.reflect.KProperty1
 
 fun <I : Validatable, P : Any?> validateConditionTruthy(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: I,
     property: KProperty1<I, P>,
     condition: () -> (Boolean),
     message: () -> (String)
 ) {
     if (!condition()) {
-        validationErrors.add(
+        validationResults.addError(
             instance = instance,
             propertyName = property.name,
             message = message()
@@ -19,7 +19,7 @@ fun <I : Validatable, P : Any?> validateConditionTruthy(
 }
 
 fun <I : Validatable> validateCustom(
-    validationErrors: ValidationErrors,
+    validationResults: ValidationResults,
     instance: I,
     propertyName: String,
     validate: (MutableList<String>) -> Unit
@@ -29,7 +29,7 @@ fun <I : Validatable> validateCustom(
     validate(messages)
 
     messages.forEach { message ->
-        validationErrors.add(
+        validationResults.addError(
             instance = instance,
             propertyName = propertyName,
             message = message

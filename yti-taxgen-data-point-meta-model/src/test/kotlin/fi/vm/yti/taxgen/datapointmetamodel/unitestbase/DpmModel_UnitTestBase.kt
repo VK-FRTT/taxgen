@@ -1,7 +1,8 @@
 package fi.vm.yti.taxgen.datapointmetamodel.unitestbase
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
+import fi.vm.yti.taxgen.datapointmetamodel.DpmElement
 import fi.vm.yti.taxgen.datapointmetamodel.DpmElementRef
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Hierarchy
@@ -9,6 +10,7 @@ import fi.vm.yti.taxgen.datapointmetamodel.HierarchyNode
 import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
+import fi.vm.yti.taxgen.datapointmetamodel.dpmElementRef
 import fi.vm.yti.taxgen.datapointmetamodel.dpmTestData
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -42,48 +44,56 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
         val attributes = Factory.Builder.attributesFor(kClass, attributeOverrides)
 
-        val collector = ValidationErrorCollector()
+        val collector = ValidationCollector()
 
         @Suppress("UNCHECKED_CAST")
         instance = Factory.Builder.instantiate(kClass, attributes) as T
 
         instance!!.validate(collector)
-        validationErrors = collector.errorsInSimpleFormat()
+        validationErrors = collector.compileResultsToSimpleStrings()
     }
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
-    protected fun explicitDomain(domainCode: String): ExplicitDomain {
+    protected fun explicitDomain(baseId: String): ExplicitDomain {
         return ExplicitDomain(
-            id = "ed_1",
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            domainCode = "${baseId}_code",
             concept = Factory.instantiate(),
-            domainCode = domainCode,
             members = listOf(Factory.instantiate()),
             hierarchies = listOf()
         )
     }
 
-    protected fun member(id: String, memberCode: String, default: Boolean): Member {
+    protected fun member(baseId: String, default: Boolean): Member {
         return Member(
-            id = id,
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            memberCode = "${baseId}_code",
             concept = Factory.instantiate(),
-            memberCode = memberCode,
             defaultMember = default
         )
     }
 
-    protected fun hierarchy(id: String, hierarchyCode: String, vararg roots: HierarchyNode): Hierarchy {
+    protected fun hierarchy(baseId: String, vararg roots: HierarchyNode): Hierarchy {
         return Hierarchy(
-            id = id,
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            hierarchyCode = "${baseId}_code",
             concept = Factory.instantiate(),
-            hierarchyCode = hierarchyCode,
             rootNodes = roots.toList()
         )
     }
 
-    protected fun hierarchyNode(id: String, memberRef: DpmElementRef, vararg children: HierarchyNode): HierarchyNode {
+    protected fun hierarchyNode(
+        baseId: String,
+        memberRef: DpmElementRef,
+        vararg children: HierarchyNode
+    ): HierarchyNode {
         return HierarchyNode(
-            id = id,
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
             concept = Factory.instantiate(),
             abstract = false,
             comparisonOperator = "=",
@@ -92,4 +102,7 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             childNodes = children.toList()
         )
     }
+
+    inline fun <reified T : DpmElement> refTo(baseId: String) =
+        dpmElementRef<T>("${baseId}_id", "${baseId}_uri", "${baseId}_diagnostic_label")
 }

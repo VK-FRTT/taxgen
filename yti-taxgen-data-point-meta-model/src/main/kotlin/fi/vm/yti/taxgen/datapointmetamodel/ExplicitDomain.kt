@@ -1,24 +1,25 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateCustom
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterablePropertyValuesUnique
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
 
 data class ExplicitDomain(
     override val id: String,
+    override val uri: String,
     override val concept: Concept,
     val domainCode: String,
     val members: List<Member>,
     val hierarchies: List<Hierarchy>
 ) : DpmElement {
 
-    override fun validate(validationErrors: ValidationErrors) {
+    override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationErrors)
+        super.validate(validationResults)
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = ExplicitDomain::domainCode,
             minLength = 2,
@@ -26,7 +27,7 @@ data class ExplicitDomain(
         )
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = ExplicitDomain::members,
             minLength = 1,
@@ -34,21 +35,21 @@ data class ExplicitDomain(
         )
 
         validateIterablePropertyValuesUnique(
-            validationErrors = validationErrors,
-            instance = this,
-            iterableProperty = ExplicitDomain::members,
-            valueProperty = Member::memberCode
-        )
-
-        validateIterablePropertyValuesUnique(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             iterableProperty = ExplicitDomain::members,
             valueProperty = Member::id
         )
 
+        validateIterablePropertyValuesUnique(
+            validationResults = validationResults,
+            instance = this,
+            iterableProperty = ExplicitDomain::members,
+            valueProperty = Member::memberCode
+        )
+
         validateCustom(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             propertyName = "members",
             validate = { messages ->
@@ -61,21 +62,21 @@ data class ExplicitDomain(
         )
 
         validateIterablePropertyValuesUnique(
-            validationErrors = validationErrors,
-            instance = this,
-            iterableProperty = ExplicitDomain::hierarchies,
-            valueProperty = Hierarchy::hierarchyCode
-        )
-
-        validateIterablePropertyValuesUnique(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             iterableProperty = ExplicitDomain::hierarchies,
             valueProperty = Hierarchy::id
         )
 
+        validateIterablePropertyValuesUnique(
+            validationResults = validationResults,
+            instance = this,
+            iterableProperty = ExplicitDomain::hierarchies,
+            valueProperty = Hierarchy::hierarchyCode
+        )
+
         validateCustom(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             propertyName = "hierarchies",
             validate = { messages ->
@@ -87,7 +88,10 @@ data class ExplicitDomain(
                         .toSet()
                         .filterNot { domainMemberRefs.contains(it.memberRef) }
                         .forEach { node ->
-                            messages.add("member not part of domain '${node.memberRef.diagnosticHandle()}' (hierarchy '${hierarchy.diagnosticHandle()}' / hierachy node '${node.diagnosticHandle()}')")
+                            messages.add(
+                                "DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. " +
+                                    "${node.memberRef.diagnosticTag()} in ${node.ref().diagnosticTag()} at ${hierarchy.ref().diagnosticTag()}"
+                            )
                         }
                 }
             }

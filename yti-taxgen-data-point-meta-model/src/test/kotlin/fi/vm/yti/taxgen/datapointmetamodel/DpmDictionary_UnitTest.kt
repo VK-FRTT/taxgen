@@ -46,7 +46,7 @@ internal class DpmDictionary_UnitTest :
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
                 if (property.name == "explicitDomains") {
-                    List(length) { index -> explicitDomain("ex-domain-$index") }
+                    List(length) { index -> explicitDomain("$index") }
                 } else {
                     null
                 }
@@ -55,26 +55,26 @@ internal class DpmDictionary_UnitTest :
     }
 
     @Nested
-    inner class PropertyValidation {
+    inner class ExplicitDomainsProp {
 
-        @Nested
-        inner class ExplicitDomainsProp {
+        @Test
+        fun `explicitDomains should have unique ids and domainCodes`() {
 
-            @Test
-            fun `explicitDomains should have unique domainCodes`() {
-                attributeOverrides(
-                    "explicitDomains" to listOf(
-                        explicitDomain("domain-1"),
-                        explicitDomain("duplicateDomain"),
-                        explicitDomain("duplicateDomain"),
-                        explicitDomain("domain-42")
-                    )
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    explicitDomain("d_1"),
+                    explicitDomain("d_2"),
+                    explicitDomain("d_2"),
+                    explicitDomain("d_4")
                 )
+            )
 
-                instantiateAndValidate()
-                Assertions.assertThat(validationErrors)
-                    .containsExactly("DpmDictionary.explicitDomains: duplicate domainCode value 'duplicateDomain'")
-            }
+            instantiateAndValidate()
+            Assertions.assertThat(validationErrors)
+                .containsExactly(
+                    "DpmDictionary.explicitDomains: duplicate domainCode value 'd_2_code'",
+                    "DpmDictionary.explicitDomains: duplicate id value 'd_2_id'"
+                )
         }
     }
 }

@@ -1,24 +1,25 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
-enum class DiagnosticContextType(val displayName: String) {
-    CmdCompileDpmDb("Compiling DPM database"),
-    CmdCaptureYclSources("Capturing YTI Codelist sources"),
+enum class DiagnosticContextType(val recurring: Boolean, val displayName: String) {
+    CmdCompileDpmDb(false, "Compiling DPM database"),
+    CmdCaptureYclSources(false, "Capturing YTI Codelist sources"),
 
-    ActivityRecordYclSources("Writing YCL sources"),
-    ActivityMapYclToDpm("Processing YCL sources"),
-    ActivityWriteDpmDb("Writing DPM database"),
+    ActivityRecordYclSources(false, "Writing YCL sources"),
+    ActivityMapYclToDpm(false, "Processing YCL sources"),
+    ActivityWriteDpmDb(false, "Writing DPM database"),
 
-    InitConfiguration("Configuration file"),
-    InitUriResolution("URI resolution"),
+    InitConfiguration(false, "Configuration file"),
+    InitUriResolution(false, "URI resolution"),
 
-    DpmOwner("Owner"),
-    DpmDictionary("DPM dictionary"),
+    YclSource(false, "YCL Sources"),
 
-    YclSource("YCL Sources"),
-    YclCodelist("Codelist"),
-    YclCodesPage("Codes Page"),
-    YclCode("Code"),
-    YclCodelistExtension("Codelist Extension"),
-    YclCodelistExtensionMembersPage("Codelist Extension Members Page"),
-    YclExtensionMember("Extension Member")
+    DpmOwner(true, "Owner"),
+    DpmDictionary(true, "DPM dictionary"),
+
+    YclCodelist(true, "Codelist"),
+    YclCodesPage(true, "Codes Page"),
+    YclCode(true, "Code"),
+    YclCodelistExtension(true, "Codelist Extension"),
+    YclCodelistExtensionMembersPage(true, "Codelist Extension Members Page"),
+    YclExtensionMember(true, "Extension Member")
 }

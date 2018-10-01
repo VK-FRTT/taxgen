@@ -2,8 +2,10 @@ package fi.vm.yti.taxgen.dpmdbwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.Concept
 import fi.vm.yti.taxgen.datapointmetamodel.DpmDictionary
+import fi.vm.yti.taxgen.datapointmetamodel.DpmElement
 import fi.vm.yti.taxgen.datapointmetamodel.ExplicitDomain
 import fi.vm.yti.taxgen.datapointmetamodel.Hierarchy
 import fi.vm.yti.taxgen.datapointmetamodel.HierarchyNode
@@ -11,7 +13,6 @@ import fi.vm.yti.taxgen.datapointmetamodel.Language
 import fi.vm.yti.taxgen.datapointmetamodel.Member
 import fi.vm.yti.taxgen.datapointmetamodel.Owner
 import fi.vm.yti.taxgen.datapointmetamodel.TranslatedText
-import fi.vm.yti.taxgen.datapointmetamodel.dpmElementRef
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.ConceptTranslationTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.DomainTable
@@ -20,12 +21,12 @@ import fi.vm.yti.taxgen.dpmdbwriter.tables.HierarchyTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.LanguageTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.MemberTable
 import fi.vm.yti.taxgen.dpmdbwriter.tables.OwnerTable
-import fi.vm.yti.taxgen.testcommons.DiagnosticConsumerCaptorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.ext.java.columnConfigToString
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.jetbrains.exposed.sql.Table
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -51,7 +52,7 @@ import java.time.LocalDate
 class DpmDbWriter_UnitTest {
     private lateinit var tempFolder: TempFolder
 
-    private lateinit var diagnosticConsumerCaptor: DiagnosticConsumerCaptorSimple
+    private lateinit var diagnosticCollector: DiagnosticCollectorSimple
     private lateinit var diagnostic: Diagnostic
 
     private lateinit var dbWriter: DpmDbWriter
@@ -63,8 +64,8 @@ class DpmDbWriter_UnitTest {
 
         val dbPath = tempFolder.resolve("dpm.db")
 
-        diagnosticConsumerCaptor = DiagnosticConsumerCaptorSimple()
-        diagnostic = DiagnosticBridge(diagnosticConsumerCaptor)
+        diagnosticCollector = DiagnosticCollectorSimple()
+        diagnostic = DiagnosticBridge(diagnosticCollector)
 
         dbWriter = DpmDbWriter(
             dbPath,
@@ -652,7 +653,7 @@ class DpmDbWriter_UnitTest {
 
         @Test
         fun `should contain proper context events`() {
-            assertThat(diagnosticConsumerCaptor.events).containsExactly(
+            assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [ActivityWriteDpmDb]",
                 "EXIT [] RETIRED [ActivityWriteDpmDb]"
             )
@@ -667,7 +668,7 @@ class DpmDbWriter_UnitTest {
         fun `should detect when multiple HirarchyNodes refer same Mamber`() {
             val dpmDictionaries = dpmDictionaryFixture(FixtureVariety.HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF)
 
-            val thrown = Assertions.catchThrowable { dbWriter.writeDpmDb(dpmDictionaries) }
+            val thrown = catchThrowable { dbWriter.writeDpmDb(dpmDictionaries) }
 
             assertThat(thrown)
                 .isInstanceOf(org.jetbrains.exposed.exceptions.ExposedSQLException::class.java)
@@ -717,30 +718,35 @@ class DpmDbWriter_UnitTest {
         val members = listOf(
             Member(
                 id = "Member-1-Id",
+                uri = "Member-1-Uri",
                 concept = concept("Member-1"),
                 memberCode = "Member-1-Code",
                 defaultMember = true
             ),
             Member(
                 id = "Member-2-Id",
+                uri = "Member-2-Uri",
                 concept = concept("Member-2"),
                 memberCode = "Member-2-Code",
                 defaultMember = false
             ),
             Member(
                 id = "Member-3-Id",
+                uri = "Member-3-Uri",
                 concept = concept("Member-3"),
                 memberCode = "Member-3-Code",
                 defaultMember = false
             ),
             Member(
                 id = "Member-4-Id",
+                uri = "Member-4-Uri",
                 concept = concept("Member-4"),
                 memberCode = "Member-4-Code",
                 defaultMember = false
             ),
             Member(
                 id = "Member-5-Id",
+                uri = "Member-5-Uri",
                 concept = concept("Member-5"),
                 memberCode = "Member-5-Code",
                 defaultMember = false
@@ -750,37 +756,41 @@ class DpmDbWriter_UnitTest {
         val hierarchyNodes = mutableListOf(
             HierarchyNode(
                 id = "HierarchyNode-1-Id",
+                uri = "HierarchyNode-1-Uri",
                 concept = concept("HierarchyNode-1"),
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                memberRef = dpmElementRef<Member>("Member-1-Id", "DiagnosticLabel"),
+                memberRef = dpmElementRefForId(members, "Member-1-Id"),
                 childNodes = null
             ),
 
             HierarchyNode(
                 id = "HierarchyNode-2-Id",
+                uri = "HierarchyNode-2-Uri",
                 concept = concept("HierarchyNode-2"),
                 abstract = false,
                 comparisonOperator = "=",
                 unaryOperator = "+",
-                memberRef = dpmElementRef<Member>("Member-2-Id", "DiagnosticLabel"),
+                memberRef = dpmElementRefForId(members, "Member-2-Id"),
                 childNodes = listOf(
                     HierarchyNode(
                         id = "HierarchyNode-2.1-Id",
+                        uri = "HierarchyNode-2.1-Uri",
                         concept = concept("HierarchyNode-2.1"),
                         abstract = false,
                         comparisonOperator = "=",
                         unaryOperator = "+",
-                        memberRef = dpmElementRef<Member>("Member-3-Id", "DiagnosticLabel"),
+                        memberRef = dpmElementRefForId(members, "Member-3-Id"),
                         childNodes = listOf(
                             HierarchyNode(
                                 id = "HierarchyNode-2.1.1-Id",
+                                uri = "HierarchyNode-2.1.1-Uri",
                                 concept = concept("HierarchyNode-2.1.1"),
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
-                                memberRef = dpmElementRef<Member>("Member-4-Id", "DiagnosticLabel"),
+                                memberRef = dpmElementRefForId(members, "Member-4-Id"),
                                 childNodes = null
                             )
                         )
@@ -788,11 +798,12 @@ class DpmDbWriter_UnitTest {
 
                     HierarchyNode(
                         id = "HierarchyNode-2.2-Id",
+                        uri = "HierarchyNode-2.2-Uri",
                         concept = concept("HierarchyNode-2.2"),
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        memberRef = dpmElementRef<Member>("Member-5-Id", "DiagnosticLabel"),
+                        memberRef = dpmElementRefForId(members, "Member-5-Id"),
                         childNodes = null
                     )
                 )
@@ -803,11 +814,12 @@ class DpmDbWriter_UnitTest {
             hierarchyNodes.add(
                 HierarchyNode(
                     id = "HierarchyNode-DuplicateMemberRef-Id",
+                    uri = "HierarchyNode-DuplicateMemberRef-Uri",
                     concept = concept("HierarchyNode-DuplicateMemberRef"),
                     abstract = false,
                     comparisonOperator = null,
                     unaryOperator = null,
-                    memberRef = dpmElementRef<Member>("Member-1-Id", "DiagnosticLabel"),
+                    memberRef = dpmElementRefForId(members, "Member-1-Id"),
                     childNodes = null
                 )
             )
@@ -815,7 +827,8 @@ class DpmDbWriter_UnitTest {
 
         val hierarchies = listOf(
             Hierarchy(
-                id = "hierarchy-id-1",
+                id = "Hierarchy-1-Id",
+                uri = "Hierarchy-1-Uri",
                 concept = concept("Hierarchy"),
                 hierarchyCode = "Hierarchy-Code",
                 rootNodes = hierarchyNodes
@@ -829,7 +842,8 @@ class DpmDbWriter_UnitTest {
 
                     explicitDomains = listOf(
                         ExplicitDomain(
-                            id = "explicitdomain-id-1",
+                            id = "ExplicitDomain-1-Id",
+                            uri = "ExplicitDomain-1-Uri",
                             concept = concept("ExplicitDomain"),
                             domainCode = "Domain-Code",
                             members = members,
@@ -841,4 +855,7 @@ class DpmDbWriter_UnitTest {
 
         return dictionaries
     }
+
+    private inline fun <reified T : DpmElement> dpmElementRefForId(elements: List<T>, id: String) =
+        elements.firstOrNull { it.id == id }?.ref() ?: thisShouldNeverHappen("No element for given id: $id")
 }

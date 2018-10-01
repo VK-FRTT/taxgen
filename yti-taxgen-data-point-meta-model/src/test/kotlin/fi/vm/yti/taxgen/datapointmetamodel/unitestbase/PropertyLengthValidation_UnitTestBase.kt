@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel.unitestbase
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrorCollector
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.datapointmetamodel.datafactory.Factory
 import org.assertj.core.api.Assertions.assertThat
@@ -56,19 +56,19 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     val validAttributes = Factory.Builder.attributesFor(kClass, mapOf(propertyName to validValue))
     val valid = Factory.Builder.instantiate(kClass, validAttributes) as Validatable
 
-    val validCollector = ValidationErrorCollector()
+    val validCollector = ValidationCollector()
     valid.validate(validCollector)
-    assertThat(validCollector.errorsInSimpleFormat()).isEmpty()
+    assertThat(validCollector.compileResultsToSimpleStrings()).isEmpty()
 
     //Invalid value
     val invalidAttributes = Factory.Builder.attributesFor(kClass, mapOf(propertyName to invalidValue))
     val invalid = Factory.Builder.instantiate(kClass, invalidAttributes) as Validatable
 
-    val invalidCollector = ValidationErrorCollector()
+    val invalidCollector = ValidationCollector()
     invalid.validate(invalidCollector)
 
     val message = messageComposer(invalid.javaClass.simpleName)
-    assertThat(invalidCollector.errorsInSimpleFormat()).containsOnlyOnce(message)
+    assertThat(invalidCollector.compileResultsToSimpleStrings()).containsOnlyOnce(message)
 }
 
 private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringValueForProperty(

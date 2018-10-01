@@ -30,19 +30,16 @@ abstract class YclEntity {
         //TODO extend URI with env=foo param
     }
 
-    fun identityOrEmpty(): String {
+    fun idOrEmpty(): String {
         return id ?: ""
+    }
+
+    fun uriOrEmpty(): String {
+        return uri ?: ""
     }
 
     fun codeValueOrEmpty(): String {
         return codeValue ?: ""
-    }
-
-    fun diagnosticLabel(): String {
-        val contextName = composeContextName()
-        if (contextName.isNotEmpty()) return contextName
-
-        return composeContextRef()
     }
 
     open fun dpmConcept(owner: Owner): Concept {

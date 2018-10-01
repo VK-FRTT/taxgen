@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 
 data class HierarchyNode(
     override val id: String,
+    override val uri: String,
     override val concept: Concept,
     val abstract: Boolean,
     val comparisonOperator: String?,
@@ -18,12 +19,12 @@ data class HierarchyNode(
         val VALID_UNARY_OPERATORS = listOf("+", "-", null)
     }
 
-    override fun validate(validationErrors: ValidationErrors) {
+    override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationErrors)
+        super.validate(validationResults)
 
         validateConditionTruthy(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = HierarchyNode::comparisonOperator,
             condition = { VALID_COMPARISON_OPERATORS.contains(comparisonOperator) },
@@ -31,7 +32,7 @@ data class HierarchyNode(
         )
 
         validateConditionTruthy(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = HierarchyNode::unaryOperator,
             condition = { VALID_UNARY_OPERATORS.contains(unaryOperator) },
@@ -40,7 +41,7 @@ data class HierarchyNode(
 
         //TODO: Validate memberRef ?
         validateConditionTruthy(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = HierarchyNode::memberRef,
             condition = { memberRef.id.isNotEmpty() && memberRef.id.isNotBlank() },

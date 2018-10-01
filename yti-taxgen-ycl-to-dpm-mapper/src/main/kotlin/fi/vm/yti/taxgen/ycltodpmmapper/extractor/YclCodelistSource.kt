@@ -24,7 +24,8 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
         val hierarchies = extractHierarchies(ctx)
 
         ExplicitDomain(
-            id = codeScheme.identityOrEmpty(),
+            id = codeScheme.idOrEmpty(),
+            uri = codeScheme.uriOrEmpty(),
             concept = codeScheme.dpmConcept(ctx.owner),
             domainCode = codelistConfig.domainCode,
             members = members,
@@ -58,7 +59,8 @@ private fun YclCodelistSource.extractMembers(
         .map { yclCode ->
             ctx.extract(yclCode) {
                 Member(
-                    id = yclCode.identityOrEmpty(),
+                    id = yclCode.idOrEmpty(),
+                    uri = yclCode.uriOrEmpty(),
                     concept = yclCode.dpmConcept(ctx.owner),
                     memberCode = yclCode.asMemberCode(codelistConfig.memberCodePrefix),
                     defaultMember = yclCode.isDefaultCode(codeScheme.defaultCode)

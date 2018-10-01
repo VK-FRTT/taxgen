@@ -174,7 +174,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 "simulated_codes_page_1"
             )
 
-            assertThat(diagnosticConsumerCaptor.events).containsExactly(
+            assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [InitConfiguration]",
                 "EXIT [] RETIRED [InitConfiguration]",
                 "ENTER [InitUriResolution]",
@@ -226,7 +226,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 "simulated_extension_memberpage_1"
             )
 
-            assertThat(diagnosticConsumerCaptor.events).containsExactly(
+            assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [InitConfiguration]",
                 "EXIT [] RETIRED [InitConfiguration]",
                 "ENTER [InitUriResolution]",

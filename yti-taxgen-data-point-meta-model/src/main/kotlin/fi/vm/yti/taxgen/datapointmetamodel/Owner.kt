@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationErrors
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateIterablePropertyValuesUnique
@@ -23,10 +23,10 @@ data class Owner(
         override fun contextRef(): String = ""
     }
 
-    override fun validate(validationErrors: ValidationErrors) {
+    override fun validate(validationResults: ValidationResults) {
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Owner::name,
             minLength = 2,
@@ -34,7 +34,7 @@ data class Owner(
         )
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Owner::namespace,
             minLength = 2,
@@ -42,7 +42,7 @@ data class Owner(
         )
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Owner::prefix,
             minLength = 2,
@@ -50,7 +50,7 @@ data class Owner(
         )
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Owner::location,
             minLength = 2,
@@ -58,7 +58,7 @@ data class Owner(
         )
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Owner::copyright,
             minLength = 2,
@@ -66,7 +66,7 @@ data class Owner(
         )
 
         validateLength(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             property = Owner::languages,
             minLength = 1,
@@ -74,7 +74,7 @@ data class Owner(
         )
 
         validateIterablePropertyValuesUnique(
-            validationErrors = validationErrors,
+            validationResults = validationResults,
             instance = this,
             iterableProperty = Owner::languages,
             valueProperty = Language::iso6391Code
