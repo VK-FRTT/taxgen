@@ -10,13 +10,15 @@ class FixedYclSource : YclSource() {
     override fun close() {}
 }
 
-class FixedDpmDictionarySource(private val dIndex: Int) : DpmDictionarySource(dIndex) {
+class FixedDpmDictionarySource(private val dIndex: Int) : DpmDictionarySource {
     override fun dpmOwnerConfigData() = """{"marker": "fixed_dpm_owner_config_d$dIndex"}"""
     override fun yclCodelistSources() = listOf(FixedYclCodelistSource(dIndex, 0), FixedYclCodelistSource(dIndex, 1))
 }
 
-class FixedYclCodelistSource(private val dIndex: Int, private val cIndex: Int) : YclCodelistSource(cIndex) {
-    override fun yclCodelistSourceConfigData(): String = """{"marker": "fixed_codelist_source_config_d${dIndex}_c$cIndex"}"""
+class FixedYclCodelistSource(private val dIndex: Int, private val cIndex: Int) : YclCodelistSource {
+    override fun yclCodelistSourceConfigData(): String =
+        """{"marker": "fixed_codelist_source_config_d${dIndex}_c$cIndex"}"""
+
     override fun yclCodeSchemeData() = """{"marker": "fixed_codescheme_d${dIndex}_c$cIndex"}"""
     override fun yclCodePagesData() = listOf(
         """{"marker": "fixed_codes_page_d${dIndex}_c${cIndex}_p0"}""",
@@ -27,7 +29,8 @@ class FixedYclCodelistSource(private val dIndex: Int, private val cIndex: Int) :
         listOf(FixedYclCodelistExtensionSource(dIndex, cIndex, 0), FixedYclCodelistExtensionSource(dIndex, cIndex, 1))
 }
 
-class FixedYclCodelistExtensionSource(private val dIndex: Int, private val cIndex: Int, private val eIndex: Int) : YclCodelistExtensionSource(eIndex) {
+class FixedYclCodelistExtensionSource(private val dIndex: Int, private val cIndex: Int, private val eIndex: Int) :
+    YclCodelistExtensionSource {
     override fun yclExtensionData() = """{"marker": "fixed_extension_d${dIndex}_c${cIndex}_e$eIndex"}"""
     override fun yclExtensionMemberPagesData() = listOf(
         """{"marker": "fixed_extension_member_d${dIndex}_c${cIndex}_e${eIndex}_p0"}""",

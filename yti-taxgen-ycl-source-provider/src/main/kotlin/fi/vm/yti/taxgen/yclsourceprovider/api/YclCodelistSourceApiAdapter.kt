@@ -9,10 +9,9 @@ import fi.vm.yti.taxgen.yclsourceprovider.config.YclCodelistSourceConfig
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 
 internal class YclCodelistSourceApiAdapter(
-    index: Int,
     private val config: YclCodelistSourceConfig,
     private val diagnostic: Diagnostic
-) : YclCodelistSource(index) {
+) : YclCodelistSource {
 
     private val contentUrls: ContentUrls by lazy(this::resolveContentUrls)
 
@@ -31,9 +30,8 @@ internal class YclCodelistSourceApiAdapter(
     }
 
     override fun yclCodelistExtensionSources(): List<YclCodelistExtensionSource> {
-        return contentUrls.extensionUrls.mapIndexed { index, extensionUrls ->
+        return contentUrls.extensionUrls.map { extensionUrls ->
             YclCodelistExtensionSourceApiAdapter(
-                index,
                 extensionUrls,
                 diagnostic
             )

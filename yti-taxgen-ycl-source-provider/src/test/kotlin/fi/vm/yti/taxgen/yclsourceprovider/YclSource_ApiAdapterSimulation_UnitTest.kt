@@ -123,7 +123,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
             assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
             assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
-            assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
+            assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("")
         }
 
         @Test
@@ -156,7 +156,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
             assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
             assertThat(codeLists[0].contextName()).isEqualTo("")
-            assertThat(codeLists[0].contextRef()).isEqualTo("#0")
+            assertThat(codeLists[0].contextRef()).isEqualTo("")
         }
 
         @Test
@@ -207,7 +207,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
             assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
             assertThat(extensions[0].contextName()).isEqualTo("")
-            assertThat(extensions[0].contextRef()).isEqualTo("#0")
+            assertThat(extensions[0].contextRef()).isEqualTo("")
         }
 
         @Test
@@ -329,7 +329,6 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 //YCL service responses for expanded Extension
                 .respondGetWithJson(
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0",
-                    queryParams = listOf(Pair("expand", "propertyType")),
                     responseJson = """
                         {
                             "marker": "simulated_extension_0"
@@ -340,7 +339,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 //YCL service responses for Extension Member pages
                 .respondGetWithJson(
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/",
-                    queryParams = listOf(Pair("pageSize", "1000")),
+                    queryParams = listOf(Pair("pageSize", "1000"), Pair("expand", "memberValue,code")),
                     responseJson = """
                         {
                             "meta": {

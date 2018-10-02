@@ -78,7 +78,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
 
         assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
         assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
-        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
+        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("")
     }
 
     @Test
@@ -117,8 +117,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
 
         assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
         assertThat(codeLists[0].contextName()).isEqualTo("")
-        assertThat(codeLists[0].contextRef()).isEqualTo("#0")
-        assertThat(codeLists[1].contextRef()).isEqualTo("#1")
+        assertThat(codeLists[0].contextRef()).isEqualTo("")
+        assertThat(codeLists[1].contextRef()).isEqualTo("")
     }
 
     @Test
@@ -159,7 +159,7 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
 
         assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
         assertThat(extensions[0].contextName()).isEqualTo("")
-        assertThat(extensions[0].contextRef()).isEqualTo("#0")
+        assertThat(extensions[0].contextRef()).isEqualTo("")
     }
 
     @Test

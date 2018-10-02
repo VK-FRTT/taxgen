@@ -22,8 +22,7 @@ class YclSourceFolderStructureAdapter(
     override fun dpmDictionarySources(): List<DpmDictionarySource> {
         val paths = FileOps.listSubFoldersMatching(baseFolderPath, "dpmdictionary_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
-
-        return sortedPaths.mapIndexed { index, path -> DpmDictionarySourceFolderStructureAdapter(index, path) }
+        return sortedPaths.map { path -> DpmDictionarySourceFolderStructureAdapter(path) }
     }
 
     override fun close() {}

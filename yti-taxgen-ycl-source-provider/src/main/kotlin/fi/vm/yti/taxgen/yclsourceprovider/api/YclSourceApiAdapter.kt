@@ -30,9 +30,8 @@ class YclSourceApiAdapter(
     override fun sourceConfigData(): String = loadedConfig.configData
 
     override fun dpmDictionarySources(): List<DpmDictionarySource> {
-        return loadedConfig.config.dpmDictionaries.mapIndexed { index, config ->
+        return loadedConfig.config.dpmDictionaries.map { config ->
             DpmDictionarySourceApiAdapter(
-                index,
                 config,
                 diagnostic
             )

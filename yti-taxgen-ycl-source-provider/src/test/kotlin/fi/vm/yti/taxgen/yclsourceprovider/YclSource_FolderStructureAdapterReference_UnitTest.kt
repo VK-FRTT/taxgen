@@ -78,8 +78,8 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
 
         assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
         assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
-        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("#0")
-        assertThat(dpmDictionarySources[11].contextRef()).isEqualTo("#11")
+        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("")
+        assertThat(dpmDictionarySources[11].contextRef()).isEqualTo("")
     }
 
     @Test
@@ -139,8 +139,8 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
 
         assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
         assertThat(codeLists[0].contextName()).isEqualTo("")
-        assertThat(codeLists[0].contextRef()).isEqualTo("#0")
-        assertThat(codeLists[11].contextRef()).isEqualTo("#11")
+        assertThat(codeLists[0].contextRef()).isEqualTo("")
+        assertThat(codeLists[11].contextRef()).isEqualTo("")
     }
 
     @Test
@@ -201,8 +201,8 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
 
         assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
         assertThat(extensions[0].contextName()).isEqualTo("")
-        assertThat(extensions[0].contextRef()).isEqualTo("#0")
-        assertThat(extensions[11].contextRef()).isEqualTo("#11")
+        assertThat(extensions[0].contextRef()).isEqualTo("")
+        assertThat(extensions[11].contextRef()).isEqualTo("")
     }
 
     @Test

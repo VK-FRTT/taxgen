@@ -6,10 +6,9 @@ import fi.vm.yti.taxgen.yclsourceprovider.YclCodelistExtensionSource
 import fi.vm.yti.taxgen.yclsourceprovider.helpers.HttpOps
 
 internal class YclCodelistExtensionSourceApiAdapter(
-    index: Int,
     private val extensionUrls: ExtensionUrls,
     private val diagnostic: Diagnostic
-) : YclCodelistExtensionSource(index) {
+) : YclCodelistExtensionSource {
 
     override fun yclExtensionData(): String {
         return HttpOps.fetchJsonData(extensionUrls.extensionUrl, diagnostic)

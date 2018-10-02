@@ -3,14 +3,12 @@ package fi.vm.yti.taxgen.yclsourceprovider
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 
-abstract class YclCodelistExtensionSource(
-    private val index: Int
-) : DiagnosticContextProvider {
+interface YclCodelistExtensionSource : DiagnosticContextProvider {
 
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.YclCodelistExtension
     override fun contextName(): String = ""
-    override fun contextRef(): String = "#$index"
+    override fun contextRef(): String = ""
 
-    abstract fun yclExtensionData(): String
-    abstract fun yclExtensionMemberPagesData(): Sequence<String>
+    fun yclExtensionData(): String
+    fun yclExtensionMemberPagesData(): Sequence<String>
 }
