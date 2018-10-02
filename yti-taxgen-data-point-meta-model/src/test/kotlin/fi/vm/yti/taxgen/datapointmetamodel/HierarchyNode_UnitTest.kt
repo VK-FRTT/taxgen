@@ -145,4 +145,36 @@ internal class HierarchyNode_UnitTest :
             }
         }
     }
+
+    @Nested
+    inner class MemberRefProp {
+
+        @DisplayName("id validation")
+        @ParameterizedTest(name = "id `{0}` should be {1} member ref")
+        @CsvSource(
+            "1,         valid",
+            "'',        invalid",
+            "' ',       invalid"
+        )
+        fun `memberRef should error if 'id' is invalid`(
+            id: String,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "memberRef" to dpmElementRef<Member>(
+                    id = id,
+                    uri = "uri_value",
+                    diagnosticLabel = "label_value"
+                    )
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.memberRef: empty or blank id")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
+        }
+    }
 }

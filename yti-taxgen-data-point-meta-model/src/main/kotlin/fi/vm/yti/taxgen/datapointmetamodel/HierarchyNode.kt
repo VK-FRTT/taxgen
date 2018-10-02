@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.datapointmetamodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
+import fi.vm.yti.taxgen.datapointmetamodel.validators.validateDpmElementRef
 
 data class HierarchyNode(
     override val id: String,
@@ -39,13 +40,10 @@ data class HierarchyNode(
             message = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
         )
 
-        //TODO: Validate memberRef ?
-        validateConditionTruthy(
+        validateDpmElementRef(
             validationResults = validationResults,
             instance = this,
-            property = HierarchyNode::memberRef,
-            condition = { memberRef.id.isNotEmpty() && memberRef.id.isNotBlank() },
-            message = { "empty or blank ID" }
+            property = HierarchyNode::memberRef
         )
     }
 
