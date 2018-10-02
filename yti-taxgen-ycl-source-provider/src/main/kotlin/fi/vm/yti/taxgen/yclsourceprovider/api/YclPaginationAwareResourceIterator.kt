@@ -14,7 +14,6 @@ internal class YclPaginationAwareResourceIterator(
 ) : AbstractIterator<String>() {
 
     private var nextPageUrl: HttpUrl? = composeInitialPagedUrl(url)
-    private var index: Int = 0
 
     override fun computeNext() {
         val url = nextPageUrl
@@ -22,11 +21,10 @@ internal class YclPaginationAwareResourceIterator(
         if (url != null) {
             diagnostic.withContext(
                 contextType = diagnosticContextType,
-                contextRef = "#$index"
+                contextIdentifier = ""
             ) {
                 val resource = HttpOps.fetchJsonData(url, diagnostic)
                 resolveNextPageUrl(resource)
-                index++
                 setNext(resource)
             }
         } else {

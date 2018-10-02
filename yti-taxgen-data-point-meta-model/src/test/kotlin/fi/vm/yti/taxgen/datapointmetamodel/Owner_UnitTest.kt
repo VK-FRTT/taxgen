@@ -97,8 +97,8 @@ internal class Owner_UnitTest :
         @Test
         fun `companion should provide diagnostic context info about owner`() {
             assertThat(Owner.Companion.contextType()).isEqualTo(DiagnosticContextType.DpmOwner)
-            assertThat(Owner.Companion.contextName()).isEqualTo("")
-            assertThat(Owner.Companion.contextRef()).isEqualTo("")
+            assertThat(Owner.Companion.contextLabel()).isEqualTo("")
+            assertThat(Owner.Companion.contextIdentifier()).isEqualTo("")
         }
     }
 }

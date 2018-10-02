@@ -2,8 +2,8 @@ package fi.vm.yti.taxgen.yclsourceprovider
 
 class FixedYclSource : YclSource() {
 
-    override fun contextName() = "FixedYclSource"
-    override fun contextRef() = ""
+    override fun contextLabel() = "FixedYclSource"
+    override fun contextIdentifier() = ""
 
     override fun sourceConfigData() = """{"marker": "fixed_source_config"}"""
     override fun dpmDictionarySources() = listOf(FixedDpmDictionarySource(0), FixedDpmDictionarySource(1))

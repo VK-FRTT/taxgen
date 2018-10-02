@@ -19,8 +19,8 @@ data class Owner(
 
     companion object : DiagnosticContextProvider {
         override fun contextType(): DiagnosticContextType = DiagnosticContextType.DpmOwner
-        override fun contextName(): String = ""
-        override fun contextRef(): String = ""
+        override fun contextLabel(): String = ""
+        override fun contextIdentifier(): String = ""
     }
 
     override fun validate(validationResults: ValidationResults) {

@@ -20,8 +20,8 @@ internal data class YclCode(
 ) : YclEntity(), DiagnosticContextProvider {
 
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.YclCode
-    override fun contextName(): String = composeContextName()
-    override fun contextRef(): String = composeContextRef()
+    override fun contextLabel(): String = diagnosticLabel()
+    override fun contextIdentifier(): String = diagnosticIdentifier()
 
     fun asMemberCode(memberCodePrefix: String?): String {
         return "${memberCodePrefix ?: ""}${codeValue ?: ""}"

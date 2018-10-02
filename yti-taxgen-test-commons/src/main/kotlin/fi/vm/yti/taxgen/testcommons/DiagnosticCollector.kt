@@ -8,7 +8,8 @@ import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
 class DiagnosticCollector : DiagnosticConsumer {
     val events = mutableListOf<String>()
 
-    private fun contextToString(context: ContextInfo): String = "CTX{${context.type},${context.name},${context.ref}}"
+    private fun contextToString(context: ContextInfo): String =
+        "CTX{${context.type},${context.label},${context.identifier}}"
 
     override fun contextEnter(contextStack: List<ContextInfo>) {
         events.add("ENTER [${contextStack.joinToString { contextToString(it) }}]")

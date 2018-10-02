@@ -93,8 +93,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         @Test
         fun `Should have diagnostic context info about yclsource {@ root}`() {
             assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
-            assertThat(yclSource.contextName()).isEqualTo("YTI Reference Data service")
-            assertThat(yclSource.contextRef()).isEqualTo(configFilePath.toString())
+            assertThat(yclSource.contextLabel()).isEqualTo("YTI Reference Data service")
+            assertThat(yclSource.contextIdentifier()).isEqualTo(configFilePath.toString())
         }
 
         @Test
@@ -122,8 +122,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
             assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
-            assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
-            assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("")
+            assertThat(dpmDictionarySources[0].contextLabel()).isEqualTo("")
+            assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
         }
 
         @Test
@@ -155,8 +155,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             assertThat(codeLists.size).isEqualTo(1)
 
             assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
-            assertThat(codeLists[0].contextName()).isEqualTo("")
-            assertThat(codeLists[0].contextRef()).isEqualTo("")
+            assertThat(codeLists[0].contextLabel()).isEqualTo("")
+            assertThat(codeLists[0].contextIdentifier()).isEqualTo("")
         }
 
         @Test
@@ -206,8 +206,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             assertThat(extensions.size).isEqualTo(1)
 
             assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
-            assertThat(extensions[0].contextName()).isEqualTo("")
-            assertThat(extensions[0].contextRef()).isEqualTo("")
+            assertThat(extensions[0].contextLabel()).isEqualTo("")
+            assertThat(extensions[0].contextIdentifier()).isEqualTo("")
         }
 
         @Test

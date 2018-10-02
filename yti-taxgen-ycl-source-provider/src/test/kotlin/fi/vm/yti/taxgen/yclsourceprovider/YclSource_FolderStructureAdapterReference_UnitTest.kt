@@ -42,8 +42,8 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     @Test
     fun `Should have diagnostic context info about yclsource {@ root}`() {
         assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
-        assertThat(yclSource.contextName()).isEqualTo("folder")
-        assertThat(yclSource.contextRef()).isEqualTo(resourcePath.toString())
+        assertThat(yclSource.contextLabel()).isEqualTo("folder")
+        assertThat(yclSource.contextIdentifier()).isEqualTo(resourcePath.toString())
     }
 
     @Test
@@ -77,9 +77,9 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
         assertThat(dpmDictionarySources.size).isEqualTo(12)
 
         assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
-        assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
-        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("")
-        assertThat(dpmDictionarySources[11].contextRef()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].contextLabel()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
+        assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
     }
 
     @Test
@@ -138,9 +138,9 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
         assertThat(codeLists.size).isEqualTo(12)
 
         assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
-        assertThat(codeLists[0].contextName()).isEqualTo("")
-        assertThat(codeLists[0].contextRef()).isEqualTo("")
-        assertThat(codeLists[11].contextRef()).isEqualTo("")
+        assertThat(codeLists[0].contextLabel()).isEqualTo("")
+        assertThat(codeLists[0].contextIdentifier()).isEqualTo("")
+        assertThat(codeLists[11].contextIdentifier()).isEqualTo("")
     }
 
     @Test
@@ -200,9 +200,9 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
         assertThat(extensions.size).isEqualTo(12)
 
         assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
-        assertThat(extensions[0].contextName()).isEqualTo("")
-        assertThat(extensions[0].contextRef()).isEqualTo("")
-        assertThat(extensions[11].contextRef()).isEqualTo("")
+        assertThat(extensions[0].contextLabel()).isEqualTo("")
+        assertThat(extensions[0].contextIdentifier()).isEqualTo("")
+        assertThat(extensions[11].contextIdentifier()).isEqualTo("")
     }
 
     @Test

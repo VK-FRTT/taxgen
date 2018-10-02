@@ -44,7 +44,7 @@ class DiagnosticTextPrinter(
 
     override fun validationResults(validationResults: List<ValidationResultInfo>) {
         validationResults.forEach {
-            message(Severity.ERROR, it.message)
+            message(Severity.ERROR, "${it.propertyName} ${it.message}")
         }
     }
 
@@ -67,14 +67,14 @@ class DiagnosticTextPrinter(
         var separator = ""
         var details = ""
 
-        if (name.isNotBlank()) {
+        if (label.isNotBlank()) {
             separator = separatorValue
-            details += "$name"
+            details += "$label"
         }
 
-        if (ref.isNotBlank()) {
+        if (identifier.isNotBlank()) {
             details += separator
-            details += "($ref)"
+            details += "($identifier)"
         }
 
         return details

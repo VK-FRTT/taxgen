@@ -17,7 +17,9 @@ internal fun YclCodelistSource.extractDpmExplicitDomain(
 
         val codelistConfig = extractCodelistSourceConfig(ctx)
 
-        ctx.diagnostic.updateCurrentContextName(codelistConfig.domainCode) //TODO codelistConfig.uri to REF
+        ctx.diagnostic.updateCurrentContextDetails(
+            identifier = codelistConfig.domainCode
+        )
 
         val codeScheme = extractCodeScheme(ctx)
         val members = extractMembers(ctx, codelistConfig, codeScheme)

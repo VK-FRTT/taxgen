@@ -6,8 +6,8 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 interface YclCodelistExtensionSource : DiagnosticContextProvider {
 
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.YclCodelistExtension
-    override fun contextName(): String = ""
-    override fun contextRef(): String = ""
+    override fun contextLabel(): String = ""
+    override fun contextIdentifier(): String = ""
 
     fun yclExtensionData(): String
     fun yclExtensionMemberPagesData(): Sequence<String>

@@ -16,8 +16,8 @@ class YclSourceZipFileAdapter(
     private val zipFileSystem = createSourceZipFileSystem()
     private val folderStructureAdapter = createFolderStructureAdapter()
 
-    override fun contextName(): String = "ZIP file"
-    override fun contextRef(): String = sourceZipPath.toString()
+    override fun contextLabel(): String = "ZIP file"
+    override fun contextIdentifier(): String = sourceZipPath.toString()
 
     override fun sourceConfigData(): String = folderStructureAdapter.sourceConfigData()
 

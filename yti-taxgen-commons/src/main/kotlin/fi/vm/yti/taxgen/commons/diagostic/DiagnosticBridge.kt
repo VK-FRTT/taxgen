@@ -20,16 +20,16 @@ class DiagnosticBridge(
     ): R {
         return withContext(
             diagnosticContext.contextType(),
-            diagnosticContext.contextName(),
-            diagnosticContext.contextRef(),
+            diagnosticContext.contextLabel(),
+            diagnosticContext.contextIdentifier(),
             block
         )
     }
 
     override fun <R> withContext(
         contextType: DiagnosticContextType,
-        contextName: String,
-        contextRef: String,
+        contextLabel: String,
+        contextIdentifier: String,
         block: () -> R
     ): R {
         val index = previousRetiredContext?.let { if (it.type == contextType) it.index + 1 else null } ?: 0
@@ -37,8 +37,8 @@ class DiagnosticBridge(
         val info = ContextInfo(
             type = contextType,
             index = index,
-            name = contextName,
-            ref = contextRef
+            label = contextLabel,
+            identifier = contextIdentifier
         )
 
         contextStack.push(info)
@@ -53,15 +53,18 @@ class DiagnosticBridge(
         return ret
     }
 
-    override fun updateCurrentContextName(name: String?) { //TODO - update both name & ref
-        if (name == null) {
-            return
-        }
-
+    override fun updateCurrentContextDetails(label: String?, identifier: String?) {
         val original = contextStack.peekFirst()
 
         if (original != null) {
-            val updated = original.copy(name = name)
+            val assignableLabel = label ?: original.label
+            val assignableIdentifier = identifier ?: original.identifier
+
+            val updated = original.copy(
+                label = assignableLabel,
+                identifier = assignableIdentifier
+            )
+
             contextStack[0] = updated
             consumer.topContextDetailsChange(contextStack, original)
         }

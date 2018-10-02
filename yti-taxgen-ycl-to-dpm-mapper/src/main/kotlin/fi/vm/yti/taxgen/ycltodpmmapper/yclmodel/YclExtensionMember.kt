@@ -25,9 +25,9 @@ internal data class YclExtensionMember(
     val memberValues: List<YclMemberValue>?,
     val relatedMember: YclExtensionMember?
 ) : YclEntity(), DiagnosticContextProvider {
-    override fun contextType() = DiagnosticContextType.YclExtensionMember //TODO
-    override fun contextName() = composeContextName() //TODO
-    override fun contextRef() = composeContextRef() //TODO
+    override fun contextType() = DiagnosticContextType.YclExtensionMember
+    override fun contextLabel() = diagnosticLabel()
+    override fun contextIdentifier() = diagnosticIdentifier()
 
     fun isRootMember() = relatedMember == null
 
@@ -48,9 +48,9 @@ internal data class YclExtensionMember(
 
     fun memberRef(): DpmElementRef { //TODO - test code reference null case
         return if (code != null) {
-            dpmElementRef<Member>(code.idOrEmpty(), code.uriOrEmpty(), code.composeContextName())
+            dpmElementRef<Member>(code.idOrEmpty(), code.uriOrEmpty(), code.diagnosticLabel())
         } else {
-            dpmElementRef<Member>("", "", "${composeContextName()}: No Code reference")
+            dpmElementRef<Member>("", "", "${diagnosticLabel()}: No Code reference")
         }
     }
 

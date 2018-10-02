@@ -15,7 +15,10 @@ internal fun YclCodelistExtensionSource.tryExtractDpmHierarchy(
     return ctx.extract(this) {
 
         val extension = extractSupportedExtension(ctx) ?: return@extract null //TODO - test unsupported extension case
-        ctx.diagnostic.updateCurrentContextName(extension.composeContextName())
+
+        ctx.diagnostic.updateCurrentContextDetails(
+            label = extension.diagnosticLabel()
+        )
 
         val extensionMembers = extractExtensionMembers(ctx)
         val rootNodes = collectHierarchyRootNodes(extensionMembers, ctx)
@@ -35,7 +38,7 @@ private fun YclCodelistExtensionSource.extractSupportedExtension(
 ): YclExtension? {
     val extension = JsonOps.readValue<YclExtension>(yclExtensionData(), ctx.diagnostic)
 
-    return when (extension?.propertyType?.uri) {
+    return when (extension.propertyType?.uri) {
         "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy" -> extension
         "http://uri.suomi.fi/datamodel/ns/code#calculationHierarchy" -> extension
         else -> null

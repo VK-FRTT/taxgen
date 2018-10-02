@@ -41,7 +41,7 @@ internal class YclCodelistSourceApiAdapter(
     private fun resolveContentUrls(): ContentUrls {
         return diagnostic.withContext(
             contextType = DiagnosticContextType.InitUriResolution,
-            contextRef = config.uri
+            contextIdentifier = config.uri
         ) {
             YclCodelistContentUrlsResolver(diagnostic).resolveContentUrlsFromUri(config.uri)
         }

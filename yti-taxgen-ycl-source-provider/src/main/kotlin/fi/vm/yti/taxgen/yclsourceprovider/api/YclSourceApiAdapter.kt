@@ -24,8 +24,8 @@ class YclSourceApiAdapter(
         val config: YclSourceConfig
     )
 
-    override fun contextName(): String = "YTI Reference Data service"
-    override fun contextRef(): String = configFilePath.toString()
+    override fun contextLabel(): String = "YTI Reference Data service"
+    override fun contextIdentifier(): String = configFilePath.toString()
 
     override fun sourceConfigData(): String = loadedConfig.configData
 
@@ -44,7 +44,7 @@ class YclSourceApiAdapter(
     private fun loadConfig(): LoadedConfig {
         return diagnostic.withContext(
             contextType = DiagnosticContextType.InitConfiguration,
-            contextRef = configFilePath.fileName.toString()
+            contextIdentifier = configFilePath.fileName.toString()
         ) {
             val configInputData = FileOps.readTextFile(configFilePath)
 

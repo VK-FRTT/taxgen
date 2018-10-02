@@ -52,8 +52,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
     @Test
     fun `Should have diagnostic context info about yclsource {@ root}`() {
         assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
-        assertThat(yclSource.contextName()).isEqualTo("ZIP file")
-        assertThat(yclSource.contextRef()).isEqualTo(targetZipPath.toString())
+        assertThat(yclSource.contextLabel()).isEqualTo("ZIP file")
+        assertThat(yclSource.contextIdentifier()).isEqualTo(targetZipPath.toString())
     }
 
     @Test
@@ -77,8 +77,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         assertThat(dpmDictionarySources.size).isEqualTo(2)
 
         assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
-        assertThat(dpmDictionarySources[0].contextName()).isEqualTo("")
-        assertThat(dpmDictionarySources[0].contextRef()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].contextLabel()).isEqualTo("")
+        assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
     }
 
     @Test
@@ -116,9 +116,9 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         assertThat(codeLists.size).isEqualTo(2)
 
         assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelist)
-        assertThat(codeLists[0].contextName()).isEqualTo("")
-        assertThat(codeLists[0].contextRef()).isEqualTo("")
-        assertThat(codeLists[1].contextRef()).isEqualTo("")
+        assertThat(codeLists[0].contextLabel()).isEqualTo("")
+        assertThat(codeLists[0].contextIdentifier()).isEqualTo("")
+        assertThat(codeLists[1].contextIdentifier()).isEqualTo("")
     }
 
     @Test
@@ -158,8 +158,8 @@ internal class YclSource_ZipFileLoopback_UnitTest : YclSource_UnitTestBase() {
         assertThat(extensions.size).isEqualTo(2)
 
         assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.YclCodelistExtension)
-        assertThat(extensions[0].contextName()).isEqualTo("")
-        assertThat(extensions[0].contextRef()).isEqualTo("")
+        assertThat(extensions[0].contextLabel()).isEqualTo("")
+        assertThat(extensions[0].contextIdentifier()).isEqualTo("")
     }
 
     @Test

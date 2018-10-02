@@ -12,7 +12,9 @@ internal fun DpmDictionarySource.extractDpmDictionary(
 ): DpmDictionary {
     return ctx.extract(this) {
         val ownerSpecificCtx = ctx.cloneWithOwner(extractDpmOwner(dpmOwnerConfigData(), ctx))
-        ctx.diagnostic.updateCurrentContextName(ownerSpecificCtx.owner.name)
+        ctx.diagnostic.updateCurrentContextDetails(
+            label = ownerSpecificCtx.owner.name
+        )
 
         val explicitDomains = yclCodelistSources().map { it.extractDpmExplicitDomain(ownerSpecificCtx) }
 
@@ -29,7 +31,9 @@ private fun extractDpmOwner(dpmOwnerConfigData: String, ctx: DpmMappingContext):
     return ctx.extract(Owner.Companion) {
         val ownerConfig = JsonOps.readValue<OwnerConfig>(dpmOwnerConfigData, ctx.diagnostic)
 
-        ctx.diagnostic.updateCurrentContextName(ownerConfig.name)
+        ctx.diagnostic.updateCurrentContextDetails(
+            label = ownerConfig.name
+        )
 
         val owner = Owner.fromConfig(ownerConfig, ctx.diagnostic)
         owner

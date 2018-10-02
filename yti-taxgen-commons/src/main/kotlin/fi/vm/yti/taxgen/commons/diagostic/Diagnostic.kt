@@ -9,12 +9,12 @@ interface Diagnostic {
 
     fun <R> withContext(
         contextType: DiagnosticContextType,
-        contextName: String = "",
-        contextRef: String = "",
+        contextLabel: String = "",
+        contextIdentifier: String = "",
         block: () -> R
     ): R
 
-    fun updateCurrentContextName(name: String?)
+    fun updateCurrentContextDetails(label: String? = null, identifier: String? = null)
 
     fun fatal(message: String): Nothing
     fun error(message: String)

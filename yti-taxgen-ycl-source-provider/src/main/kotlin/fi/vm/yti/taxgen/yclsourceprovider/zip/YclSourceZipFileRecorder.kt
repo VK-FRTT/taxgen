@@ -20,8 +20,8 @@ class YclSourceZipFileRecorder(
     private var zipFileSystem: FileSystem? = null
     private var folderStructureRecorder: YclSourceRecorder? = null
 
-    override fun contextName(): String = "ZIP file"
-    override fun contextRef(): String = targetZipPath.toString()
+    override fun contextLabel(): String = "ZIP file"
+    override fun contextIdentifier(): String = targetZipPath.toString()
 
     override fun captureSources(yclSource: YclSource) {
         diagnostic.withContext(this) {

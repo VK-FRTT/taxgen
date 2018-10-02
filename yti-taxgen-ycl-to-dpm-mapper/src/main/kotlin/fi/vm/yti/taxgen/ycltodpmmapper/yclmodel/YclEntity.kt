@@ -20,14 +20,12 @@ abstract class YclEntity {
     abstract val prefLabel: Map<String, String>?
     abstract val description: Map<String, String>?
 
-    fun composeContextName(): String {
-        return prefLabel?.get("en") ?: "" //TODO
+    fun diagnosticLabel(): String {
+        return prefLabel?.entries?.firstOrNull { it.value.isNotBlank() }?.value ?: ""
     }
 
-    fun composeContextRef(): String {
-        return "$uri"
-        //TODO handle nulls,
-        //TODO extend URI with env=foo param
+    fun diagnosticIdentifier(): String {
+        return uri ?: ""
     }
 
     fun idOrEmpty(): String {

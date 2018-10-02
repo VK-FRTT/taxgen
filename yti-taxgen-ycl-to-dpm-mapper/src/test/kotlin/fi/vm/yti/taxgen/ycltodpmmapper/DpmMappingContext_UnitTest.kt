@@ -22,8 +22,8 @@ class DpmMappingContext_UnitTest {
         private val discriminator: String
     ) : DiagnosticContextProvider {
         override fun contextType() = ctxType
-        override fun contextName() = "name-$discriminator"
-        override fun contextRef() = "ref-$discriminator"
+        override fun contextLabel() = "label-$discriminator"
+        override fun contextIdentifier() = "id-$discriminator"
     }
 
     private lateinit var diagnosticCollector: DiagnosticCollector
@@ -43,9 +43,12 @@ class DpmMappingContext_UnitTest {
     fun `Single extract reports proper diagnostic events`() {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
-        val extractRetValue = ctx.extract(FixedDiagnosticContextProvider(
-            DiagnosticContextType.YclCode,
-            "A")) {
+        val extractRetValue = ctx.extract(
+            FixedDiagnosticContextProvider(
+                DiagnosticContextType.YclCode,
+                "A"
+            )
+        ) {
             extractValue
         }
 
@@ -53,8 +56,8 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,name-A,ref-A}]",
-            "EXIT [] RETIRED [CTX{YclCode,name-A,ref-A}]"
+            "ENTER [CTX{YclCode,label-A,id-A}]",
+            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
         )
     }
 
@@ -72,10 +75,10 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,name-A,ref-A}]",
-            "ENTER [CTX{YclSource,name-B,ref-B}, CTX{YclCode,name-A,ref-A}]",
-            "EXIT [CTX{YclCode,name-A,ref-A}] RETIRED [CTX{YclSource,name-B,ref-B}]",
-            "EXIT [] RETIRED [CTX{YclCode,name-A,ref-A}]"
+            "ENTER [CTX{YclCode,label-A,id-A}]",
+            "ENTER [CTX{YclSource,label-B,id-B}, CTX{YclCode,label-A,id-A}]",
+            "EXIT [CTX{YclCode,label-A,id-A}] RETIRED [CTX{YclSource,label-B,id-B}]",
+            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
         )
     }
 
@@ -84,10 +87,10 @@ class DpmMappingContext_UnitTest {
         val ctx = DpmMappingContext.createRootContext(diagnostic)
 
         val extractRetValue = ctx.extract(FixedDiagnosticContextProvider(DiagnosticContextType.YclCode, "A")) {
-            ctx.diagnostic.updateCurrentContextName("updated-name-A")
+            ctx.diagnostic.updateCurrentContextDetails(label = "updated-label-A")
 
             ctx.extract(FixedDiagnosticContextProvider(DiagnosticContextType.YclSource, "B")) {
-                ctx.diagnostic.updateCurrentContextName("updated-name-B")
+                ctx.diagnostic.updateCurrentContextDetails(label = "updated-label-B")
                 extractValue
             }
         }
@@ -96,12 +99,12 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,name-A,ref-A}]",
-            "UPDATE [CTX{YclCode,updated-name-A,ref-A}] ORIGINAL [CTX{YclCode,name-A,ref-A}]",
-            "ENTER [CTX{YclSource,name-B,ref-B}, CTX{YclCode,updated-name-A,ref-A}]",
-            "UPDATE [CTX{YclSource,updated-name-B,ref-B}, CTX{YclCode,updated-name-A,ref-A}] ORIGINAL [CTX{YclSource,name-B,ref-B}]",
-            "EXIT [CTX{YclCode,updated-name-A,ref-A}] RETIRED [CTX{YclSource,updated-name-B,ref-B}]",
-            "EXIT [] RETIRED [CTX{YclCode,updated-name-A,ref-A}]"
+            "ENTER [CTX{YclCode,label-A,id-A}]",
+            "UPDATE [CTX{YclCode,updated-label-A,id-A}] ORIGINAL [CTX{YclCode,label-A,id-A}]",
+            "ENTER [CTX{YclSource,label-B,id-B}, CTX{YclCode,updated-label-A,id-A}]",
+            "UPDATE [CTX{YclSource,updated-label-B,id-B}, CTX{YclCode,updated-label-A,id-A}] ORIGINAL [CTX{YclSource,label-B,id-B}]",
+            "EXIT [CTX{YclCode,updated-label-A,id-A}] RETIRED [CTX{YclSource,updated-label-B,id-B}]",
+            "EXIT [] RETIRED [CTX{YclCode,updated-label-A,id-A}]"
         )
     }
 
@@ -122,8 +125,8 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue[1])
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,name-A,ref-A}]",
-            "EXIT [] RETIRED [CTX{YclCode,name-A,ref-A}]"
+            "ENTER [CTX{YclCode,label-A,id-A}]",
+            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
         )
     }
 
@@ -146,10 +149,10 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue[1])
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,name-A,ref-A}]",
-            "ENTER [CTX{YclSource,name-B,ref-B}, CTX{YclCode,name-A,ref-A}]",
-            "EXIT [CTX{YclCode,name-A,ref-A}] RETIRED [CTX{YclSource,name-B,ref-B}]",
-            "EXIT [] RETIRED [CTX{YclCode,name-A,ref-A}]"
+            "ENTER [CTX{YclCode,label-A,id-A}]",
+            "ENTER [CTX{YclSource,label-B,id-B}, CTX{YclCode,label-A,id-A}]",
+            "EXIT [CTX{YclCode,label-A,id-A}] RETIRED [CTX{YclSource,label-B,id-B}]",
+            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
         )
     }
 }

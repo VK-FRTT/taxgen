@@ -16,7 +16,7 @@ class YclToDpmMapper(
 
         return diagnostic.withContext(
             contextType = DiagnosticContextType.ActivityMapYclToDpm,
-            contextName = "YCL Source data to DPM model"
+            contextLabel = "YCL Source data to DPM model"
         ) {
 
             val ctx = DpmMappingContext.createRootContext(diagnostic)
