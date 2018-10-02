@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.throwFail
 import fi.vm.yti.taxgen.datapointmetamodel.validators.validateLength
@@ -16,7 +17,7 @@ class Language constructor(
     val label: TranslatedText
 ) : Validatable {
 
-    override fun validate(validationResults: ValidationResults) { //TODO  - is this really called?
+    override fun validate(validationResults: ValidationResults) {
         validateLength(
             validationResults = validationResults,
             instance = this,
@@ -81,7 +82,11 @@ class Language constructor(
 
             configureLanguageLabels(languages, defaultLabelLanguage)
 
-            return languages.keys
+            val plainLanguages = languages.keys
+
+            validateLanguages(plainLanguages)
+
+            return plainLanguages.sortedBy { it.iso6391Code }.toSet()
         }
 
         private fun resolveConfigUrl(languageConfigPath: Path?): URL =
@@ -100,11 +105,17 @@ class Language constructor(
             }
         }
 
-        private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> =
-            configs
-                .sortedBy { it.iso6391Code }
+        private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> {
+            fun initLanguage(iso6391Code: String) = Language(iso6391Code, TranslatedText(mutableMapOf()))
+
+            return configs
                 .map { Pair(initLanguage(it.iso6391Code), it) }
                 .toMap()
+        }
+
+        private fun selectDefaultLabelLanguage(languages: Set<Language>): Language =
+            languages.find { it.iso6391Code == "en" }
+                ?: throwFail("Language configuration missing mandatory default language 'en'")
 
         private fun configureLanguageLabels(
             languages: Map<Language, LanguageConfig>,
@@ -126,10 +137,24 @@ class Language constructor(
             }
         }
 
-        private fun initLanguage(iso6391Code: String) = Language(iso6391Code, TranslatedText(mutableMapOf()))
+        private fun validateLanguages(languages: Set<Language>) {
+            val validationMessages = mutableListOf<String>()
+            val validationCollector = ValidationCollector()
 
-        private fun selectDefaultLabelLanguage(languages: Set<Language>): Language =
-            languages.find { it.iso6391Code == "en" }
-                ?: throwFail("Language configuration missing mandatory default language 'en'")
+            languages.forEachIndexed { index, language ->
+                language.validate(validationCollector)
+
+                validationCollector
+                    .compileResultsToSimpleStrings()
+                    .takeIf { it.any() }
+                    ?.let { validationMessages.add("Language #$index (${language.iso6391Code}): $it") }
+
+                validationCollector.clear()
+            }
+
+            validationMessages
+                .takeIf { it.any() }
+                ?.let { throwFail("Language configuration not valid. $it") }
+        }
     }
 }

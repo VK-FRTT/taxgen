@@ -122,7 +122,8 @@ internal class Language_UnitTest :
 
         @Test
         fun `loading language configuration with unsupported translation language should fail`() {
-            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
+            val languageConfigPath: Path =
+                TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
             val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
@@ -132,12 +133,24 @@ internal class Language_UnitTest :
 
         @Test
         fun `loading language configuration with broken JSON syntax should fail`() {
-            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
+            val languageConfigPath: Path =
+                TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
             val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
                 .isInstanceOf(FailException::class.java)
                 .hasMessageStartingWith("Language configuration loading failed: ")
+        }
+
+        @Test
+        fun `loading language configuration without translations should fail`() {
+            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "language_no_translations.json")
+
+            val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
+
+            assertThat(thrown)
+                .isInstanceOf(FailException::class.java)
+                .hasMessage("Language configuration not valid. [Language #1 (fi): [Language.label: has too few translations (minimum 1)]]")
         }
     }
 }

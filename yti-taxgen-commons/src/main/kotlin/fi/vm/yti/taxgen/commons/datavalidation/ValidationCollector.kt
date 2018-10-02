@@ -32,4 +32,6 @@ class ValidationCollector : ValidationResults {
     fun compileResultsToSimpleStrings(): List<String> {
         return compileResults().map { "${it.className.substringAfterLast(".")}.${it.propertyName}: ${it.message}" }
     }
+
+    fun clear() = results.clear()
 }

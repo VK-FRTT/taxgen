@@ -1,0 +1,14 @@
+[
+  {
+    "iso6391Code": "en",
+    "label": {
+      "en": "English",
+      "fi": "englanti"
+    }
+  },
+  {
+    "iso6391Code": "fi",
+    "label": {
+    }
+  }
+]
