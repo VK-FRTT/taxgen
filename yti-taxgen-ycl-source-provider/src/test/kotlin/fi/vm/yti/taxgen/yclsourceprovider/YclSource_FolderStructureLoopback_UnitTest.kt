@@ -47,7 +47,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have owner config {@ root # dpmdictionary}`() {
+    fun `Should have owner config`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -62,7 +62,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
+    fun `Should have codelist source config`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -77,7 +77,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
+    fun `Should have codelists`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -92,7 +92,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
+    fun `Should have codepages`() {
         val codesPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers =
@@ -108,7 +108,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+    fun `Should have extensions`() {
         val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -123,7 +123,7 @@ internal class YclSource_FolderStructureLoopback_UnitTest : YclSource_UnitTestBa
     }
 
     @Test
-    fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+    fun `Should have extension member pages`() {
         val extensionPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
                 .toList()

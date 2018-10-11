@@ -28,6 +28,8 @@ object HttpOps : Closeable {
             diagnostic.fatal("Could not determine the server IP address")
         } catch (e: java.net.ConnectException) {
             diagnostic.fatal("Could not connect the server")
+        } catch (e: java.net.SocketTimeoutException) {
+            diagnostic.fatal("The server communication timeout")
         }
 
         if (!response.isSuccessful) {

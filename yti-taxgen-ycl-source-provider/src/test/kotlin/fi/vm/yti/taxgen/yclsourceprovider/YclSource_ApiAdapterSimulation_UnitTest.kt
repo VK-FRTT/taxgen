@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.yclsourceprovider
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
@@ -15,70 +16,49 @@ import io.specto.hoverfly.junit.dsl.StubServiceBuilder
 import io.specto.hoverfly.junit5.HoverflyExtension
 import okhttp3.OkHttpClient
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.nio.file.Path
+import java.util.concurrent.TimeUnit
 
-@DisplayName("when ycl sources are read from simulated YCL API")
+@DisplayName("when YCL sources are read from simulated YCL API")
 @ExtendWith(HoverflyExtension::class)
 internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hoverfly) : YclSource_UnitTestBase() {
 
     private lateinit var tempFolder: TempFolder
     private lateinit var configFilePath: Path
+    private lateinit var yclSource: YclSource
+
+    @BeforeEach
+    fun testSuiteInit() {
+        tempFolder = TempFolder("yclsource_apiadapter_unittest")
+
+        useCustomisedHttpClient()
+
+        configFilePath = tempFolder.createFileWithContent("ycl_source_config.json", yclSourceConfig())
+        yclSource = YclSourceApiAdapter(configFilePath, diagnostic)
+    }
+
+    @AfterEach
+    fun testSuiteTeardown() {
+        yclSource.close()
+        tempFolder.close()
+    }
 
     @Nested
     @DisplayName("providing successful responses")
     inner class SuccessResponses {
 
-        private lateinit var yclSource: YclSource
-
         @BeforeEach
         fun init() {
-            tempFolder = TempFolder("yclsource_apiadapter_unittest")
-
-            hoverflyCustomiseHttpClientTrust()
-            hoverflyConfigureSimulation()
-
-            val yclSourceConfig =
-                """
-                {
-                  "dpmDictionaries": [
-                    {
-                      "owner": {
-                        "name": "OwnerName",
-                        "namespace": "OwnerNamespace",
-                        "prefix": "OwnerPrefix",
-                        "location": "OwnerLocation",
-                        "copyright": "OwnerCopyright",
-                        "languages": [
-                          "en",
-                          "fi"
-                        ],
-                        "defaultLanguage": "en"
-                      },
-                      "codelists": [
-                        {
-                          "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero",
-                          "domainCode": "m_zero_override"
-                        }
-                      ]
-                    }
-                  ]
-                }
-                """.trimIndent()
-
-            configFilePath = tempFolder.createFileWithContent("ycl_source_config.json", yclSourceConfig)
-            yclSource = YclSourceApiAdapter(configFilePath, diagnostic)
-        }
-
-        @AfterEach
-        fun teardown() {
-            yclSource.close()
-            tempFolder.close()
+            configureHoverflySimulation()
         }
 
         @Test
@@ -91,14 +71,14 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have diagnostic context info about yclsource {@ root}`() {
+        fun `Should have diagnostic context info about yclsource`() {
             assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
             assertThat(yclSource.contextLabel()).isEqualTo("YTI Reference Data service")
             assertThat(yclSource.contextIdentifier()).isEqualTo(configFilePath.toString())
         }
 
         @Test
-        fun `Should have owner config {@ root # dpmdictionary}`() {
+        fun `Should have owner config`() {
             val dpmDictionarySources = yclSource.dpmDictionarySources()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
@@ -117,7 +97,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have diagnostic context info about dpmdictionary {@ root # dpmdictionary}`() {
+        fun `Should have diagnostic context info about dpmdictionary`() {
             val dpmDictionarySources = yclSource.dpmDictionarySources()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
@@ -127,7 +107,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
+        fun `Should have codelist source config`() {
             val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
 
             val configJson0 = objectMapper.readTree(codeLists[0].yclCodelistSourceConfigData())
@@ -136,7 +116,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
+        fun `Should have codelists`() {
             val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
             val markers =
                 extractMarkerValuesFromJsonData(
@@ -150,7 +130,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have diagnostic context info about codelist {@ root # dpmdictionary # codelist}`() {
+        fun `Should have diagnostic context info about codelist`() {
             val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
             assertThat(codeLists.size).isEqualTo(1)
 
@@ -160,7 +140,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
+        fun `Should have codepages`() {
             val codesPages =
                 yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
             val markers =
@@ -187,7 +167,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+        fun `Should have extensions`() {
             val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
             val markers =
                 extractMarkerValuesFromJsonData(
@@ -201,7 +181,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have diagnostic context info about extension {@ root # dpmdictionary # codelist # extension}`() {
+        fun `Should have diagnostic context info about extension`() {
             val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
             assertThat(extensions.size).isEqualTo(1)
 
@@ -211,7 +191,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         @Test
-        fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+        fun `Should have extension member pages`() {
             val extensionPages =
                 yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
                     .toList()
@@ -239,21 +219,105 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
     }
 
-    private fun hoverflyCustomiseHttpClientTrust() {
+    @Nested
+    @DisplayName("providing errors")
+    inner class ErrorResponses {
+
+        @ParameterizedTest(name = "Should handle communication timeouts during {0} phase")
+        @EnumSource(value = SimulationPhase::class, mode = EnumSource.Mode.MATCH_ANY, names = arrayOf(".*"))
+        fun `Server communication timeouts at`(phase: SimulationPhase) {
+            configureHoverflySimulation(
+                mapOf(
+                    phase to SimulationVariety.DELAY_RESPONSE
+                )
+            )
+
+            val thrown = catchThrowable {
+                val codelistSource = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0]
+
+                codelistSource.yclCodeSchemeData()
+                codelistSource.yclCodePagesData().toList()
+
+                val codelistExtensionSource = codelistSource.yclCodelistExtensionSources()[0]
+
+                codelistExtensionSource.yclExtensionData()
+                codelistExtensionSource.yclExtensionMemberPagesData().toList()
+            }
+
+            assertThat(thrown).isInstanceOf(HaltException::class.java)
+
+            assertThat(diagnosticCollector.events).contains(
+                "MESSAGE [FATAL] MESSAGE [The server communication timeout]"
+            )
+        }
+    }
+
+    private fun useCustomisedHttpClient() {
         val sslConfigurer = hoverfly.sslConfigurer
 
         val okHttpClient = OkHttpClient.Builder()
             .sslSocketFactory(sslConfigurer.sslContext.socketFactory, sslConfigurer.trustManager)
+            .readTimeout(50, TimeUnit.MILLISECONDS)
             .build()
 
         HttpOps.useCustomHttpClient(okHttpClient)
     }
 
-    private fun hoverflyConfigureSimulation() {
+    private fun yclSourceConfig(): String {
+        val config = """
+        {
+          "dpmDictionaries": [
+            {
+              "owner": {
+                "name": "OwnerName",
+                "namespace": "OwnerNamespace",
+                "prefix": "OwnerPrefix",
+                "location": "OwnerLocation",
+                "copyright": "OwnerCopyright",
+                "languages": [
+                  "en",
+                  "fi"
+                ],
+                "defaultLanguage": "en"
+              },
+              "codelists": [
+                {
+                  "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero",
+                  "domainCode": "m_zero_override"
+                }
+              ]
+            }
+          ]
+        }
+        """.trimIndent()
+
+        return config
+    }
+
+    enum class SimulationPhase {
+        URL_RESOLUTION_URI_REDIRECT,
+        URL_RESOLUTION_CODESCHEME,
+        URL_RESOLUTION_CODESCHEME_EXPANDED,
+        CONTENT_CODESCHEME,
+        CONTENT_CODE_PAGE_0,
+        CONTENT_CODE_PAGE_1,
+        CONTENT_EXTENSION,
+        CONTENT_EXTENSION_MEMBER_0,
+        CONTENT_EXTENSION_MEMBER_1
+    }
+
+    enum class SimulationVariety {
+        NONE,
+        DELAY_RESPONSE,
+    }
+
+    private fun configureHoverflySimulation(varietyConf: Map<SimulationPhase, SimulationVariety> = emptyMap()) {
         val simulationSource = SimulationSource.dsl(
             service("uri.suomi.fi")
                 //URI redirects to YCL service
                 .redirectGet(
+                    currentPhase = SimulationPhase.URL_RESOLUTION_URI_REDIRECT,
+                    varietyConf = varietyConf,
                     requestPath = "/codelist/ytitaxgenfixtures/minimal_zero",
                     toTarget = "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero"
                 ),
@@ -261,6 +325,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             service("koodistot.suomi.fi")
                 //YCL service responses for redirected URI
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.URL_RESOLUTION_CODESCHEME,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
                     responseJson = """
                         {
@@ -272,6 +338,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
                 //YCL service responses for expanded CodeScheme (resolution phase)
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.URL_RESOLUTION_CODESCHEME_EXPANDED,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
                     queryParams = listOf(Pair("expand", "extension,propertyType")),
                     responseJson = """
@@ -290,6 +358,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
                 //YCL service responses for expanded CodeScheme
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.CONTENT_CODESCHEME,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
                     queryParams = listOf(Pair("expand", "code")),
                     responseJson = """
@@ -301,6 +371,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
                 //YCL service responses for Code pages
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.CONTENT_CODE_PAGE_0,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/codes/",
                     queryParams = listOf(Pair("pageSize", "1000")),
                     responseJson = """
@@ -314,6 +386,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 )
 
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.CONTENT_CODE_PAGE_1,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/codes/",
                     queryParams = listOf(Pair("pageSize", "1000"), Pair("from", "1000")),
                     responseJson = """
@@ -328,6 +402,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
                 //YCL service responses for expanded Extension
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.CONTENT_EXTENSION,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0",
                     responseJson = """
                         {
@@ -338,6 +414,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
                 //YCL service responses for Extension Member pages
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.CONTENT_EXTENSION_MEMBER_0,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/",
                     queryParams = listOf(Pair("pageSize", "1000"), Pair("expand", "memberValue,code")),
                     responseJson = """
@@ -351,6 +429,8 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 )
 
                 .respondGetWithJson(
+                    currentPhase = SimulationPhase.CONTENT_EXTENSION_MEMBER_1,
+                    varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/",
                     queryParams = listOf(Pair("pageSize", "1000"), Pair("from", "1000")),
                     responseJson = """
@@ -368,21 +448,30 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
     }
 
     private fun StubServiceBuilder.redirectGet(
+        currentPhase: SimulationPhase,
+        varietyConf: Map<SimulationPhase, SimulationVariety>,
         requestPath: String,
         toTarget: String
     ): StubServiceBuilder {
         val requestMatcherBuilder = get(requestPath)
 
-        requestMatcherBuilder.willReturn(
-            response()
-                .status(303)
-                .header("Location", toTarget)
-        )
+        val response = response()
+            .status(303)
+            .header("Location", toTarget)
+
+        if (varietyConf[currentPhase] == SimulationVariety.DELAY_RESPONSE) {
+            response.withDelay(100, TimeUnit.MILLISECONDS)
+        }
+
+        requestMatcherBuilder.willReturn(response)
+
 
         return this
     }
 
     private fun StubServiceBuilder.respondGetWithJson(
+        currentPhase: SimulationPhase,
+        varietyConf: Map<SimulationPhase, SimulationVariety>,
         requestPath: String,
         queryParams: List<Pair<String, String>>? = null,
         responseJson: String
@@ -393,7 +482,13 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             requestMatcherBuilder.queryParam(it.first, it.second)
         }
 
-        requestMatcherBuilder.willReturn(success(responseJson, "application/responseJson"))
+        val response = success(responseJson, "application/responseJson")
+
+        if (varietyConf[currentPhase] == SimulationVariety.DELAY_RESPONSE) {
+            response.withDelay(100, TimeUnit.MILLISECONDS)
+        }
+
+        requestMatcherBuilder.willReturn(response)
 
         return this
     }

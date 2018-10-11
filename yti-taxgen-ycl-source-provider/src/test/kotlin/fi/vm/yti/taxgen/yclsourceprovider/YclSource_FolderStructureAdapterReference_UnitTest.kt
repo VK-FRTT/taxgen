@@ -40,14 +40,14 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about yclsource {@ root}`() {
+    fun `Should have diagnostic context info about yclsource`() {
         assertThat(yclSource.contextType()).isEqualTo(DiagnosticContextType.YclSource)
         assertThat(yclSource.contextLabel()).isEqualTo("folder")
         assertThat(yclSource.contextIdentifier()).isEqualTo(resourcePath.toString())
     }
 
     @Test
-    fun `Should have owner config {@ root # dpmdictionary}`() {
+    fun `Should have owner config`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -72,7 +72,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about dpmdictionary {@ root # dpmdictionary}`() {
+    fun `Should have diagnostic context info about dpmdictionary`() {
         val dpmDictionarySources = yclSource.dpmDictionarySources()
         assertThat(dpmDictionarySources.size).isEqualTo(12)
 
@@ -83,7 +83,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have codelist source config {@ root # dpmdictionary # codelist}`() {
+    fun `Should have codelist source config`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -108,7 +108,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have codelists {@ root # dpmdictionary # codelist}`() {
+    fun `Should have codelists`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -133,7 +133,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about codelist {@ root # dpmdictionary # codelist}`() {
+    fun `Should have diagnostic context info about codelist`() {
         val codeLists = yclSource.dpmDictionarySources()[0].yclCodelistSources()
         assertThat(codeLists.size).isEqualTo(12)
 
@@ -144,7 +144,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have codepages {@ root # dpmdictionary # codelist}`() {
+    fun `Should have codepages`() {
         val codesPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodePagesData().toList()
         val markers =
@@ -170,7 +170,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have extensions {@ root # dpmdictionary # codelist}`() {
+    fun `Should have extensions`() {
         val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
         val markers =
             extractMarkerValuesFromJsonData(
@@ -195,7 +195,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have diagnostic context info about extension {@ root # dpmdictionary # codelist # extension}`() {
+    fun `Should have diagnostic context info about extension`() {
         val extensions = yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()
         assertThat(extensions.size).isEqualTo(12)
 
@@ -206,7 +206,7 @@ internal class YclSource_FolderStructureAdapterReference_UnitTest : YclSource_Un
     }
 
     @Test
-    fun `Should have extension member pages {@ root # dpmdictionary # codelist # extension}`() {
+    fun `Should have extension member pages`() {
         val extensionPages =
             yclSource.dpmDictionarySources()[0].yclCodelistSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
                 .toList()
