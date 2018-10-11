@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("Common command handling")
-internal class TaxgenCli_Common_UnitTest : TaxgenCli_UnitTestBase(
+internal class TaxgenCli_Common_Test : TaxgenCli_TestBase(
     primaryCommand = null
 ) {
 

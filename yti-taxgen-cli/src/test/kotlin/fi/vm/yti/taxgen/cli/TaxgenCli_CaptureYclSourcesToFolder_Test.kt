@@ -7,23 +7,24 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-@DisplayName("Command ´--capture-ycl-sources-to-zip´")
-internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBase(
-    primaryCommand = "--capture-ycl-sources-to-zip"
+@DisplayName("Command ´--capture-ycl-sources-to-folder´")
+internal class TaxgenCli_CaptureYclSourcesToFolder_Test : TaxgenCli_TestBase(
+    primaryCommand = "--capture-ycl-sources-to-folder"
 ) {
-
-    private lateinit var targetZipPath: Path
+    private lateinit var targetFolderPath: Path
+    private lateinit var targetFolderMetaConfigFilePath: Path
 
     @BeforeEach
     fun init() {
-        targetZipPath = tempFolder.resolve("target.zip")
+        targetFolderPath = tempFolder.resolve("ycl_sources")
+        targetFolderMetaConfigFilePath = targetFolderPath.resolve("meta/source_config.json")
     }
 
     @Test
-    fun `Should capture YCL sources to zip file from existing capture`() {
+    fun `Should capture YCL sources to folder from existing capture`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--source-folder",
             "$yclSourceCapturePath"
         )
@@ -32,23 +33,24 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         assertThat(outText).containsSubsequence(
             "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
             "Writing YCL sources: folder",
             "YCL Sources: folder",
             "Capturing YTI Codelist sources: OK"
         )
 
         assertThat(errText).isBlank()
-        assertThat(targetZipPath).exists().isRegularFile()
+
+        assertThat(targetFolderPath).exists().isDirectory()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should capture YCL sources to zip file from YCL source config`() {
+    fun `Should capture YCL sources to folder from YCL source config`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--source-config",
             "$yclSourceConfigPath"
         )
@@ -57,7 +59,6 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         assertThat(outText).containsSubsequence(
             "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
             "Writing YCL sources: folder",
             "YCL Sources: YTI Reference Data service",
             "Capturing YTI Codelist sources: OK"
@@ -65,24 +66,28 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         assertThat(errText).isBlank()
 
-        assertThat(targetZipPath).exists().isRegularFile()
+        assertThat(targetFolderPath).exists().isDirectory()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should overwrite target zip file when force option is given`() {
-        Files.write(targetZipPath, "Existing file".toByteArray())
+    fun `Should overwrite existing files in target folder when force option is given`() {
+        Files.createDirectories(targetFolderMetaConfigFilePath.parent)
+        Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--force-overwrite",
             "--source-folder",
             "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
+
+        assertThat(errText).isBlank()
 
         assertThat(outText).containsSubsequence(
             "Capturing YTI Codelist sources",
@@ -93,15 +98,16 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         assertThat(errText).isBlank()
 
-        assertThat(targetZipPath).exists().isRegularFile()
+        assertThat(targetFolderPath).exists().isDirectory()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should fail when target zip filename is not given`() {
+    fun `Should fail when target folder path is not given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-ycl-sources-to-folder",
             "--source-folder",
             "$yclSourceCapturePath"
         )
@@ -119,36 +125,42 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     }
 
     @Test
-    fun `Should report error when target zip file already exists`() {
-        Files.write(targetZipPath, "Existing file".toByteArray())
+    fun `Should report error when target folder contains conflicting file`() {
+        Files.createDirectories(targetFolderMetaConfigFilePath.parent)
+        Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--source-folder",
             "$yclSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
-        assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
-            "FATAL: Target file '$targetZipPath' already exists"
-        )
-
         assertThat(errText).isBlank()
 
-        assertThat(targetZipPath).exists().isRegularFile()
+        assertThat(outText).containsSubsequence(
+            "Capturing YTI Codelist sources",
+            "Writing YCL sources: folder",
+            "YCL Sources: folder",
+            "FATAL: Target file 'ycl_sources/meta/source_config.json' already exists"
+        )
+
+        assertThat(targetFolderPath).exists().isDirectory()
+        assertThat(targetFolderMetaConfigFilePath).exists().isRegularFile()
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
     }
 
     @Test
-    fun `Should report error when given target zip file path points to folder`() {
+    fun `Should report error when given target folder path points to existing file`() {
+        val workFolderFilePath = tempFolder.resolve("file.txt")
+        Files.write(workFolderFilePath, "Existing file".toByteArray())
+
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "${tempFolder.path()}",
+            "--capture-ycl-sources-to-folder",
+            workFolderFilePath.toString(),
             "--source-folder",
             "$yclSourceCapturePath"
         )
@@ -157,8 +169,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
 
         assertThat(outText).containsSubsequence(
             "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
-            "FATAL: Target file '${tempFolder.path()}' already exists"
+            "FATAL: Could not create filesystem path",
+            "(already exists)"
         )
 
         assertThat(errText).isBlank()
@@ -169,8 +181,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     @Test
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath"
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -190,8 +202,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     @Test
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--source-folder"
         )
 
@@ -210,8 +222,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     @Test
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--source-folder",
             "${tempFolder.resolve("non_existing_folder")}"
         )
@@ -231,8 +243,8 @@ internal class TaxgenCli_CaptureYclSourcesToZip_UnitTest : TaxgenCli_UnitTestBas
     @Test
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
-            "$targetZipPath",
+            "--capture-ycl-sources-to-folder",
+            "$targetFolderPath",
             "--source-folder",
             "$yclSourceCapturePath",
             "--source-config",

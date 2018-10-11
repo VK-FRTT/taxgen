@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("Command ´--help´")
-internal class TaxgenCli_Help_UnitTest : TaxgenCli_UnitTestBase(
+internal class TaxgenCli_Help_Test : TaxgenCli_TestBase(
     primaryCommand = "--help"
 ) {
 

@@ -13,7 +13,7 @@ import java.io.PrintStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
-open class TaxgenCli_UnitTestBase(val primaryCommand: String? = null) {
+open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
     protected lateinit var yclSourceCapturePath: String
     protected lateinit var yclSourceConfigPath: String

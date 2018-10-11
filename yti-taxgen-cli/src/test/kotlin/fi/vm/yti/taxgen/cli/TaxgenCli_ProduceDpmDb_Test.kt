@@ -12,7 +12,7 @@ import java.nio.file.Path
 import java.sql.DriverManager
 
 @DisplayName("Command ´--compile-dpm-db´")
-internal class TaxgenCli_ProduceDpmDb_UnitTest : TaxgenCli_UnitTestBase(
+internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     primaryCommand = "--compile-dpm-db"
 ) {
 
