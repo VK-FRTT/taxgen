@@ -54,7 +54,6 @@ internal class YclToDpmMapper_UnitTest {
         @BeforeEach
         fun init() {
             yclSource = createYclSourceFromTestFixture("codelist_comprehensive")
-            //codelist_comprehensive
 
             en = Language.findByIso6391Code("en")!!
             fi = Language.findByIso6391Code("fi")!!
@@ -111,102 +110,332 @@ internal class YclToDpmMapper_UnitTest {
         }
 
         @Test
-        fun `should produce Explicit Domain with correct DomainCode`() {
-            val domainCode = performMapping()[0].explicitDomains[0].domainCode
+        fun `should produce Explicit Domain with correct identifiers`() {
+            val explicitDomain = performMapping()[0].explicitDomains[0]
 
-            assertThat(domainCode).isEqualTo("tf_dc_override")
+            assertThat(explicitDomain.domainCode).isEqualTo("tf_dc_override")
+            assertThat(explicitDomain.id).isEqualTo("5314a353-5ad4-4c81-8368-70495979e3c4")
+            assertThat(explicitDomain.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive")
+            assertThat(explicitDomain.type).isEqualTo("ExplicitDomain")
         }
 
         @Test
-        fun `should produce Explicit Domain with 3 Members`() {
-            val members = performMapping()[0].explicitDomains[0].members
+        fun `should produce Explicit Domain with 5 Members and 2 hierarchies`() {
+            val explicitDomain = performMapping()[0].explicitDomains[0]
 
-            assertThat(members.size).isEqualTo(3)
+            assertThat(explicitDomain.members.size).isEqualTo(5)
+            assertThat(explicitDomain.hierarchies.size).isEqualTo(2)
         }
 
-        @Test
-        fun `should produce 1st Member with correct Concept, MemberCode and DefaultCode values`() {
-            val member = performMapping()[0].explicitDomains[0].members[0]
+        @Nested
+        @DisplayName("with domain members")
+        inner class DomainMembers {
 
-            member.concept.apply {
-                assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
-                assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+            @Test
+            fun `should produce 1st Member with correct concept, default member status & identifiers`() {
+                val member = performMapping()[0].explicitDomains[0].members[0]
 
-                assertThat(applicableFrom).isNull()
-                assertThat(applicableUntil).isNull()
+                member.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
-                assertThat(label.translations).containsOnly(
-                    entry(en, "Code 0 #en"),
-                    entry(fi, "Code 0 #fi")
-                )
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
 
-                assertThat(description).isNotNull()
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Code 0 #en"),
+                        entry(fi, "Code 0 #fi")
+                    )
 
-                assertThat(description.translations).containsOnly(
-                    entry(en, "Code 0 description #en"),
-                    entry(fi, "Code 0 description #fi")
-                )
+                    assertThat(description.translations).containsOnly(
+                        entry(en, "Code 0 description #en"),
+                        entry(fi, "Code 0 description #fi")
+                    )
+                }
+
+                assertThat(member.memberCode).isEqualTo("code_0")
+                assertThat(member.defaultMember).isFalse()
+
+                assertThat(member.id).isEqualTo("eb81fdea-6c24-4e74-b159-f34a8d9dc476")
+                assertThat(member.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_0")
+                assertThat(member.type).isEqualTo("Member")
             }
 
-            assertThat(member.memberCode).isEqualTo("code_0")
+            @Test
+            fun `should produce 2nd Member with correct concept, default member status & identifiers`() {
+                val member = performMapping()[0].explicitDomains[0].members[1]
 
-            assertThat(member.defaultMember).isFalse()
-        }
+                member.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
-        @Test
-        fun `should produce 2nd Member with correct Concept, MemberCode and DefaultCode values`() {
-            val member = performMapping()[0].explicitDomains[0].members[1]
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
 
-            member.concept.apply {
-                assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
-                assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Code 1 #en"),
+                        entry(fi, "Code 1 #fi")
+                    )
 
-                assertThat(applicableFrom).isNull()
-                assertThat(applicableUntil).isNull()
+                    assertThat(description.translations).containsOnly(
+                        entry(en, "Code 1 description #en"),
+                        entry(fi, "Code 1 description #fi")
+                    )
+                }
 
-                assertThat(label.translations).containsOnly(
-                    entry(en, "Code 1 #en"),
-                    entry(fi, "Code 1 #fi")
-                )
+                assertThat(member.memberCode).isEqualTo("code_1")
+                assertThat(member.defaultMember).isTrue()
 
-                assertThat(description).isNotNull()
-                assertThat(description.translations).containsOnly(
-                    entry(en, "Code 1 description #en"),
-                    entry(fi, "Code 1 description #fi")
-                )
+                assertThat(member.id).isEqualTo("2f13f036-21b9-4855-9457-a869fffd5bb8")
+                assertThat(member.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_1")
+                assertThat(member.type).isEqualTo("Member")
             }
 
-            assertThat(member.memberCode).isEqualTo("code_1")
+            @Test
+            fun `should produce 3rd Member with correct concept, default member status & identifiers`() {
+                val member = performMapping()[0].explicitDomains[0].members[2]
 
-            assertThat(member.defaultMember).isTrue()
+                member.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
+
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Code 2 #en"),
+                        entry(fi, "Code 2 #fi")
+                    )
+
+                    assertThat(description.translations).containsOnly(
+                        entry(en, "Code 2 description #en"),
+                        entry(fi, "Code 2 description #fi")
+                    )
+                }
+
+                assertThat(member.defaultMember).isFalse()
+                assertThat(member.memberCode).isEqualTo("code_2")
+
+                assertThat(member.id).isEqualTo("ea41b4e5-9551-428a-8e3f-45d85b9b326e")
+                assertThat(member.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_2")
+                assertThat(member.type).isEqualTo("Member")
+            }
         }
 
-        @Test
-        fun `should produce 3rd Member with correct Concept, MemberCode and DefaultCode values`() {
-            val member = performMapping()[0].explicitDomains[0].members[2]
+        @Nested
+        @DisplayName("with definition hierarchy")
+        inner class DefinitionHierarchy {
 
-            member.concept.apply {
-                assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
-                assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
-
-                assertThat(applicableFrom).isNull()
-                assertThat(applicableUntil).isNull()
-
-                assertThat(label.translations).containsOnly(
-                    entry(en, "Code 2 #en"),
-                    entry(fi, "Code 2 #fi")
-                )
-
-                assertThat(description).isNotNull()
-                assertThat(description.translations).containsOnly(
-                    entry(en, "Code 2 description #en"),
-                    entry(fi, "Code 2 description #fi")
-                )
+            @Test
+            fun `should produce 'def_hier_0' with total 5 nodes`() {
+                val hierarchy =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "def_hier_0" }
+                assertThat(hierarchy.allNodes().size).isEqualTo(5)
             }
 
-            assertThat(member.memberCode).isEqualTo("code_2")
+            @Test
+            fun `should produce 'def_hier_0' hierarchy with correct structure`() {
+                val rootNodes =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "def_hier_0" }
+                        .rootNodes
 
-            assertThat(member.defaultMember).isFalse()
+                rootNodes[0].apply {
+                    assertThat(memberRef.uri).endsWith("/code/code_0")
+                    assertThat(childNodes!!.size).isEqualTo(1)
+
+                    childNodes!![0].apply {
+                        assertThat(memberRef.uri).endsWith("/code/code_1")
+                        assertThat(childNodes!!.size).isEqualTo(1)
+
+                        childNodes!![0].apply {
+                            assertThat(memberRef.uri).endsWith("/code/code_2")
+                            assertThat(childNodes!!.size).isEqualTo(0)
+                        }
+                    }
+                }
+
+                rootNodes[1].apply {
+                    assertThat(memberRef.uri).endsWith("/code/code_3")
+                    assertThat(childNodes!!.size).isEqualTo(1)
+
+                    childNodes!![0].apply {
+                        assertThat(memberRef.uri).endsWith("/code/code_4")
+                        assertThat(childNodes!!.size).isEqualTo(0)
+                    }
+                }
+            }
+
+            @Test
+            fun `should produce 'def_hier_0' hierarchy with correct 1st Node`() {
+                val node =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "def_hier_0" }.rootNodes[0]
+
+                node.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
+
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Definition member 0 #en"),
+                        entry(fi, "Definition member 0 #fi")
+                    )
+
+                    assertThat(description.translations).isEmpty()
+                }
+
+                assertThat(node.abstract).isFalse()
+                assertThat(node.comparisonOperator).isNull()
+                assertThat(node.unaryOperator).isNull()
+                assertThat(node.memberRef.id).isEqualTo("eb81fdea-6c24-4e74-b159-f34a8d9dc476")
+                assertThat(node.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_0")
+                assertThat(node.memberRef.type).isEqualTo("Member")
+
+                assertThat(node.id).isEqualTo("bafd19a7-4bf0-434a-ad2d-a891f26016d9")
+                assertThat(node.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/bafd19a7-4bf0-434a-ad2d-a891f26016d9")
+                assertThat(node.type).isEqualTo("HierarchyNode")
+            }
+
+            @Test
+            fun `should produce 'def_hier_0' hierarchy with correct 2nd Node`() {
+                val node =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "def_hier_0" }.rootNodes[0].childNodes!![0]
+
+                node.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
+
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Definition member 1 #en"),
+                        entry(fi, "Definition member 1 #fi")
+                    )
+
+                    assertThat(description.translations).isEmpty()
+                }
+
+                assertThat(node.abstract).isFalse()
+                assertThat(node.comparisonOperator).isNull()
+                assertThat(node.unaryOperator).isNull()
+                assertThat(node.memberRef.id).isEqualTo("2f13f036-21b9-4855-9457-a869fffd5bb8")
+                assertThat(node.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_1")
+                assertThat(node.memberRef.type).isEqualTo("Member")
+
+                assertThat(node.id).isEqualTo("50c530d9-06ea-4680-99c4-bd150a8586a7")
+                assertThat(node.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/50c530d9-06ea-4680-99c4-bd150a8586a7")
+                assertThat(node.type).isEqualTo("HierarchyNode")
+            }
+        }
+
+        @Nested
+        @DisplayName("with calculation hierarchy")
+        inner class CalculationHierarchy {
+
+            @Test
+            fun `should produce 'calc_hier_0' with total 5 nodes`() {
+                val hierarchy =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "calc_hier_0" }
+                assertThat(hierarchy.allNodes().size).isEqualTo(5)
+            }
+
+            @Test
+            fun `should produce 'calc_hier_0' hierarchy with correct structure`() {
+                val rootNodes =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "calc_hier_0" }
+                        .rootNodes
+
+                rootNodes[0].apply {
+                    assertThat(memberRef.uri).endsWith("/code/code_0")
+                    assertThat(childNodes!!.size).isEqualTo(1)
+
+                    childNodes!![0].apply {
+                        assertThat(memberRef.uri).endsWith("/code/code_1")
+                        assertThat(childNodes!!.size).isEqualTo(1)
+
+                        childNodes!![0].apply {
+                            assertThat(memberRef.uri).endsWith("/code/code_2")
+                            assertThat(childNodes!!.size).isEqualTo(0)
+                        }
+                    }
+                }
+
+                rootNodes[1].apply {
+                    assertThat(memberRef.uri).endsWith("/code/code_3")
+                    assertThat(childNodes!!.size).isEqualTo(1)
+
+                    childNodes!![0].apply {
+                        assertThat(memberRef.uri).endsWith("/code/code_4")
+                        assertThat(childNodes!!.size).isEqualTo(0)
+                    }
+                }
+            }
+
+            @Test
+            fun `should produce 'calc_hier_0' hierarchy with correct 1st Node`() {
+                val node =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "calc_hier_0" }.rootNodes[0]
+
+                node.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
+
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Calculation member 0 #en"),
+                        entry(fi, "Calculation member 0 #fi")
+                    )
+
+                    assertThat(description.translations).isEmpty()
+                }
+
+                assertThat(node.abstract).isFalse()
+                assertThat(node.comparisonOperator).isEqualTo("=")
+                assertThat(node.unaryOperator).isEqualTo("+")
+                assertThat(node.memberRef.id).isEqualTo("eb81fdea-6c24-4e74-b159-f34a8d9dc476")
+                assertThat(node.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_0")
+                assertThat(node.memberRef.type).isEqualTo("Member")
+
+                assertThat(node.id).isEqualTo("d9f3ab1f-fc31-466f-8085-058673122a86")
+                assertThat(node.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/d9f3ab1f-fc31-466f-8085-058673122a86")
+                assertThat(node.type).isEqualTo("HierarchyNode")
+            }
+
+            @Test
+            fun `should produce 'calc_hier_0' hierarchy with correct 2nd Node`() {
+                val node =
+                    performMapping()[0].explicitDomains[0].hierarchies.first { it.hierarchyCode == "calc_hier_0" }.rootNodes[0].childNodes!![0]
+
+                node.concept.apply {
+                    assertThat(createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                    assertThat(modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+
+                    assertThat(applicableFrom).isNull()
+                    assertThat(applicableUntil).isNull()
+
+                    assertThat(label.translations).containsOnly(
+                        entry(en, "Calculation member 1 #en"),
+                        entry(fi, "Calculation member 1 #fi")
+                    )
+
+                    assertThat(description.translations).isEmpty()
+                }
+
+                assertThat(node.abstract).isFalse()
+                assertThat(node.comparisonOperator).isEqualTo("=")
+                assertThat(node.unaryOperator).isEqualTo("+")
+                assertThat(node.memberRef.id).isEqualTo("2f13f036-21b9-4855-9457-a869fffd5bb8")
+                assertThat(node.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_1")
+                assertThat(node.memberRef.type).isEqualTo("Member")
+
+                assertThat(node.id).isEqualTo("067a9156-b657-4e5c-9bf6-35f7da4a4274")
+                assertThat(node.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/067a9156-b657-4e5c-9bf6-35f7da4a4274")
+                assertThat(node.type).isEqualTo("HierarchyNode")
+            }
         }
 
         @Test
@@ -217,21 +446,51 @@ internal class YclToDpmMapper_UnitTest {
                 "ENTER [YclSource]",
                 "ENTER [DpmDictionary]",
                 "ENTER [DpmOwner]",
-                "UPDATE [DpmOwner] ORIGINAL [DpmOwner]",
-                "EXIT [DpmDictionary] RETIRED [DpmOwner]",
-                "UPDATE [DpmDictionary] ORIGINAL [DpmDictionary]",
+                "UPDATE [DpmOwner]",
+                "EXIT [DpmOwner]",
+                "UPDATE [DpmDictionary]",
                 "ENTER [YclCodelist]",
-                "UPDATE [YclCodelist] ORIGINAL [YclCodelist]",
+                "UPDATE [YclCodelist]",
                 "ENTER [YclCode]",
-                "EXIT [YclCodelist] RETIRED [YclCode]",
+                "EXIT [YclCode]",
                 "ENTER [YclCode]",
-                "EXIT [YclCodelist] RETIRED [YclCode]",
+                "EXIT [YclCode]",
                 "ENTER [YclCode]",
-                "EXIT [YclCodelist] RETIRED [YclCode]",
-                "EXIT [DpmDictionary] RETIRED [YclCodelist]",
-                "EXIT [YclSource] RETIRED [DpmDictionary]",
-                "EXIT [ActivityMapYclToDpm] RETIRED [YclSource]",
-                "EXIT [] RETIRED [ActivityMapYclToDpm]"
+                "EXIT [YclCode]",
+                "ENTER [YclCode]",
+                "EXIT [YclCode]",
+                "ENTER [YclCode]",
+                "EXIT [YclCode]",
+                "ENTER [YclCodelistExtension]",
+                "UPDATE [YclCodelistExtension]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "EXIT [YclCodelistExtension]",
+                "ENTER [YclCodelistExtension]",
+                "UPDATE [YclCodelistExtension]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "ENTER [YclExtensionMember]",
+                "EXIT [YclExtensionMember]",
+                "EXIT [YclCodelistExtension]",
+                "EXIT [YclCodelist]",
+                "EXIT [DpmDictionary]",
+                "EXIT [YclSource]",
+                "EXIT [ActivityMapYclToDpm]"
             )
         }
     }

@@ -156,13 +156,13 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
             assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [InitConfiguration]",
-                "EXIT [] RETIRED [InitConfiguration]",
+                "EXIT [InitConfiguration]",
                 "ENTER [InitUriResolution]",
-                "EXIT [] RETIRED [InitUriResolution]",
+                "EXIT [InitUriResolution]",
                 "ENTER [YclCodesPage]",
-                "EXIT [] RETIRED [YclCodesPage]",
+                "EXIT [YclCodesPage]",
                 "ENTER [YclCodesPage]",
-                "EXIT [] RETIRED [YclCodesPage]"
+                "EXIT [YclCodesPage]"
             )
         }
 
@@ -208,13 +208,13 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
             assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [InitConfiguration]",
-                "EXIT [] RETIRED [InitConfiguration]",
+                "EXIT [InitConfiguration]",
                 "ENTER [InitUriResolution]",
-                "EXIT [] RETIRED [InitUriResolution]",
+                "EXIT [InitUriResolution]",
                 "ENTER [YclCodelistExtensionMembersPage]",
-                "EXIT [] RETIRED [YclCodelistExtensionMembersPage]",
+                "EXIT [YclCodelistExtensionMembersPage]",
                 "ENTER [YclCodelistExtensionMembersPage]",
-                "EXIT [] RETIRED [YclCodelistExtensionMembersPage]"
+                "EXIT [YclCodelistExtensionMembersPage]"
             )
         }
     }
@@ -341,7 +341,7 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                     currentPhase = SimulationPhase.URL_RESOLUTION_CODESCHEME_EXPANDED,
                     varietyConf = varietyConf,
                     requestPath = "/api/codelist/ytitaxgenfixtures_minimal_zero",
-                    queryParams = listOf(Pair("expand", "extension,propertyType")),
+                    queryParams = listOf(Pair("expand", "extension")),
                     responseJson = """
                         {
                           "url": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero",
@@ -464,7 +464,6 @@ internal class YclSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         }
 
         requestMatcherBuilder.willReturn(response)
-
 
         return this
     }

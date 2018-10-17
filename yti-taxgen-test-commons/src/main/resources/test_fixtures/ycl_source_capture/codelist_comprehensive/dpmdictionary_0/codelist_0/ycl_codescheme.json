@@ -1,10 +1,20 @@
 {
-  "id": "1ce5f274-0f1b-4ccb-97cf-88ace18e40ba",
+  "id": "5314a353-5ad4-4c81-8368-70495979e3c4",
   "codeValue": "testfixture_codelist_comprehensive",
   "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive",
   "codesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/",
-  "extensionSchemesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionschemes/",
+  "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/",
+  "extensions": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/calc_hier_0"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/def_hier_0"
+    }
+  ],
   "prefLabel": {
     "fi": "Test Fixture: Codelist Comprehensive #fi",
     "en": "Test Fixture: Codelist Comprehensive #en"
@@ -21,18 +31,18 @@
     "fi": "Changenote #fi",
     "en": "Changenote #en"
   },
-  "created": "2018-09-14T07:39:30.747Z",
-  "modified": "2018-09-14T07:39:30.747Z",
+  "created": "2018-10-17T13:24:01.993Z",
+  "modified": "2018-10-17T13:24:01.993Z",
   "status": "DRAFT",
   "version": "version #noloc",
   "source": "",
   "legalBase": "legalBase #noloc",
   "governancePolicy": "governancePolicy #noloc",
-  "dataClassifications": [
+  "infoDomains": [
     {
       "id": "0c1fcbb8-ebfa-4a94-8fc3-a18134d8e792",
       "codeValue": "P9",
-      "uri": "http://uri.suomi.fi/codelist/jupo/serviceclassification/P9",
+      "uri": "http://uri.suomi.fi/codelist/jupo/serviceclassification/code/P9",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P9",
       "status": "VALID",
       "order": 93,
@@ -49,14 +59,14 @@
       },
       "definition": {},
       "shortName": "",
-      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P9/extensions/"
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P9/members/"
     }
   ],
   "languageCodes": [
     {
       "id": "1cc15c8d-256e-4235-b1cc-071e5b750a08",
       "codeValue": "en",
-      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/en",
+      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
       "status": "VALID",
       "order": 668,
@@ -71,13 +81,13 @@
       "description": {},
       "definition": {},
       "shortName": "",
-      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/extensions/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
       "conceptUriInVocabularies": ""
     },
     {
       "id": "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
       "codeValue": "fi",
-      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/fi",
+      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/fi",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi",
       "status": "VALID",
       "order": 538,
@@ -92,20 +102,20 @@
       "description": {},
       "definition": {},
       "shortName": "",
-      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi/extensions/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi/members/",
       "conceptUriInVocabularies": ""
     }
   ],
   "defaultCode": {
-    "id": "c2705bec-0e39-46f0-8305-43bf07d8fd83",
+    "id": "2f13f036-21b9-4855-9457-a869fffd5bb8",
     "codeValue": "code_1",
-    "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_1",
+    "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_1",
     "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1",
     "status": "DRAFT",
     "order": 2,
     "hierarchyLevel": 1,
-    "created": "2018-09-14T07:39:31.265Z",
-    "modified": "2018-09-14T07:39:31.265Z",
+    "created": "2018-10-17T13:24:02.130Z",
+    "modified": "2018-10-17T13:24:02.130Z",
     "prefLabel": {
       "fi": "Code 1 #fi",
       "en": "Code 1 #en"
@@ -119,7 +129,7 @@
       "en": "Code 1 definition #en"
     },
     "shortName": "Code 1 short name #noloc",
-    "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1/extensions/",
+    "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1/members/",
     "conceptUriInVocabularies": ""
   },
   "conceptUriInVocabularies": "",

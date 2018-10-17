@@ -3,20 +3,20 @@
     "code": 200,
     "pageSize": 1000,
     "from": 0,
-    "resultCount": 3,
-    "totalResults": 3
+    "resultCount": 5,
+    "totalResults": 5
   },
   "results": [
     {
-      "id": "f12ea67e-b638-488c-814b-6153821c1c38",
+      "id": "eb81fdea-6c24-4e74-b159-f34a8d9dc476",
       "codeValue": "code_0",
-      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_0",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_0",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_0",
       "status": "DRAFT",
       "order": 1,
       "hierarchyLevel": 1,
-      "created": "2018-09-14T07:39:31.031Z",
-      "modified": "2018-09-14T07:39:31.031Z",
+      "created": "2018-10-17T13:24:02.097Z",
+      "modified": "2018-10-17T13:24:02.097Z",
       "prefLabel": {
         "fi": "Code 0 #fi",
         "en": "Code 0 #en"
@@ -35,20 +35,29 @@
       },
       "shortName": "Code 0 short name #noloc",
       "externalReferences": [],
-      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_0/extensions/",
-      "extensions": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_0/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/d9f3ab1f-fc31-466f-8085-058673122a86",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/d9f3ab1f-fc31-466f-8085-058673122a86"
+        },
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/bafd19a7-4bf0-434a-ad2d-a891f26016d9",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/bafd19a7-4bf0-434a-ad2d-a891f26016d9"
+        }
+      ],
       "conceptUriInVocabularies": ""
     },
     {
-      "id": "c2705bec-0e39-46f0-8305-43bf07d8fd83",
+      "id": "2f13f036-21b9-4855-9457-a869fffd5bb8",
       "codeValue": "code_1",
-      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_1",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_1",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1",
       "status": "DRAFT",
       "order": 2,
       "hierarchyLevel": 1,
-      "created": "2018-09-14T07:39:31.265Z",
-      "modified": "2018-09-14T07:39:31.265Z",
+      "created": "2018-10-17T13:24:02.130Z",
+      "modified": "2018-10-17T13:24:02.130Z",
       "prefLabel": {
         "fi": "Code 1 #fi",
         "en": "Code 1 #en"
@@ -67,20 +76,29 @@
       },
       "shortName": "Code 1 short name #noloc",
       "externalReferences": [],
-      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1/extensions/",
-      "extensions": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_1/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/50c530d9-06ea-4680-99c4-bd150a8586a7",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/50c530d9-06ea-4680-99c4-bd150a8586a7"
+        },
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/067a9156-b657-4e5c-9bf6-35f7da4a4274",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/067a9156-b657-4e5c-9bf6-35f7da4a4274"
+        }
+      ],
       "conceptUriInVocabularies": ""
     },
     {
-      "id": "6c2b098a-7f06-47d7-bbc3-a6bed2cb7c7c",
+      "id": "ea41b4e5-9551-428a-8e3f-45d85b9b326e",
       "codeValue": "code_2",
-      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code_2",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_2",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_2",
       "status": "DRAFT",
       "order": 3,
       "hierarchyLevel": 1,
-      "created": "2018-09-14T07:39:31.495Z",
-      "modified": "2018-09-14T07:39:31.495Z",
+      "created": "2018-10-17T13:24:02.163Z",
+      "modified": "2018-10-17T13:24:02.163Z",
       "prefLabel": {
         "fi": "Code 2 #fi",
         "en": "Code 2 #en"
@@ -99,8 +117,99 @@
       },
       "shortName": "Code 2 short name #noloc",
       "externalReferences": [],
-      "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_2/extensions/",
-      "extensions": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_2/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/a8629f41-e3e0-4584-af8f-39868b3e2e59",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/a8629f41-e3e0-4584-af8f-39868b3e2e59"
+        },
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/2f4a5e8b-e0d0-4640-91e3-12bbadff5487",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/2f4a5e8b-e0d0-4640-91e3-12bbadff5487"
+        }
+      ],
+      "conceptUriInVocabularies": ""
+    },
+    {
+      "id": "03e639f8-a4a3-49d1-8282-2b9a114e627f",
+      "codeValue": "code_3",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_3",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_3",
+      "status": "DRAFT",
+      "order": 4,
+      "hierarchyLevel": 1,
+      "created": "2018-10-17T13:24:02.196Z",
+      "modified": "2018-10-17T13:24:02.196Z",
+      "prefLabel": {
+        "fi": "Code 3 #fi",
+        "en": "Code 3 #en"
+      },
+      "description": {
+        "fi": "Code 3 description #fi",
+        "en": "Code 3 description #en"
+      },
+      "definition": {
+        "fi": "Code 3 definition #fi",
+        "en": "Code 3 definition #en"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+      },
+      "shortName": "Code 3 short name #noloc",
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_3/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/c0382929-1a40-40dd-8822-010cc35f04e5",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/c0382929-1a40-40dd-8822-010cc35f04e5"
+        },
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/685b0e31-7801-458e-a65d-3d33d0e03e8d",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/685b0e31-7801-458e-a65d-3d33d0e03e8d"
+        }
+      ],
+      "conceptUriInVocabularies": ""
+    },
+    {
+      "id": "7d420e89-6239-4e98-bca5-c4d949cd119e",
+      "codeValue": "code_4",
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/code/code_4",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_4",
+      "status": "DRAFT",
+      "order": 5,
+      "hierarchyLevel": 1,
+      "created": "2018-10-17T13:24:02.229Z",
+      "modified": "2018-10-17T13:24:02.229Z",
+      "prefLabel": {
+        "fi": "Code 4 #fi",
+        "en": "Code 4 #en"
+      },
+      "description": {
+        "fi": "Code 4 description #fi",
+        "en": "Code 4 description #en"
+      },
+      "definition": {
+        "fi": "Code 4 definition #fi",
+        "en": "Code 4 definition #en"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+      },
+      "shortName": "Code 4 short name #noloc",
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/codes/code_4/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/42fb1f4e-d1ec-4eea-af72-15eadd0fed49",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/42fb1f4e-d1ec-4eea-af72-15eadd0fed49"
+        },
+        {
+          "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/48f96daf-8ae6-45b6-9b1b-b2aec12fd5c2",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/48f96daf-8ae6-45b6-9b1b-b2aec12fd5c2"
+        }
+      ],
       "conceptUriInVocabularies": ""
     }
   ]

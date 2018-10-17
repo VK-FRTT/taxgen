@@ -1,0 +1,45 @@
+{
+  "id": "500543de-3906-4d17-a05e-676bf46488a4",
+  "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/def_hier_0",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/def_hier_0/members/",
+  "members": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/50c530d9-06ea-4680-99c4-bd150a8586a7",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/50c530d9-06ea-4680-99c4-bd150a8586a7"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/bafd19a7-4bf0-434a-ad2d-a891f26016d9",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/bafd19a7-4bf0-434a-ad2d-a891f26016d9"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/42fb1f4e-d1ec-4eea-af72-15eadd0fed49",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/42fb1f4e-d1ec-4eea-af72-15eadd0fed49"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/2f4a5e8b-e0d0-4640-91e3-12bbadff5487",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/2f4a5e8b-e0d0-4640-91e3-12bbadff5487"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/def_hier_0/member/c0382929-1a40-40dd-8822-010cc35f04e5",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionsdef_hier_0/members/c0382929-1a40-40dd-8822-010cc35f04e5"
+    }
+  ],
+  "codeValue": "def_hier_0",
+  "status": "DRAFT",
+  "created": "2018-10-17T13:24:02.394Z",
+  "modified": "2018-10-17T13:24:02.394Z",
+  "prefLabel": {
+    "fi": "Definition hierachy 0 #fi",
+    "en": "Definition hierachy 0 #en"
+  },
+  "parentCodeScheme": {
+    "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+  },
+  "codeSchemes": [],
+  "propertyType": {
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri": "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

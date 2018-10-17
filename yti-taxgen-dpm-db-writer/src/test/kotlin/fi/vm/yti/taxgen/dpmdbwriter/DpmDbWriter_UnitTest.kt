@@ -655,7 +655,7 @@ class DpmDbWriter_UnitTest {
         fun `should contain proper context events`() {
             assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [ActivityWriteDpmDb]",
-                "EXIT [] RETIRED [ActivityWriteDpmDb]"
+                "EXIT [ActivityWriteDpmDb]"
             )
         }
     }

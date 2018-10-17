@@ -14,11 +14,11 @@ class DiagnosticCollectorSimple : DiagnosticConsumer {
     }
 
     override fun contextExit(contextStack: List<ContextInfo>, retiredContext: ContextInfo) {
-        events.add("EXIT [${contextStack.firstOrNull()?.type ?: ""}] RETIRED [${retiredContext.type}]")
+        events.add("EXIT [${retiredContext.type}]")
     }
 
     override fun topContextDetailsChange(contextStack: List<ContextInfo>, originalContext: ContextInfo) {
-        events.add("UPDATE [${contextStack.firstOrNull()?.type ?: ""}] ORIGINAL [${originalContext.type}]")
+        events.add("UPDATE [${originalContext.type}]")
     }
 
     override fun message(severity: Severity, message: String) {

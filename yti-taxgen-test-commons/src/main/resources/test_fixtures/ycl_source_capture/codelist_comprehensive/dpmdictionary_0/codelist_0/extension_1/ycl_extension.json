@@ -1,0 +1,45 @@
+{
+  "id": "66aa4c76-7763-4dfc-9c86-36c89e94db86",
+  "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/calc_hier_0",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensions/calc_hier_0/members/",
+  "members": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/a8629f41-e3e0-4584-af8f-39868b3e2e59",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/a8629f41-e3e0-4584-af8f-39868b3e2e59"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/d9f3ab1f-fc31-466f-8085-058673122a86",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/d9f3ab1f-fc31-466f-8085-058673122a86"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/685b0e31-7801-458e-a65d-3d33d0e03e8d",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/685b0e31-7801-458e-a65d-3d33d0e03e8d"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/48f96daf-8ae6-45b6-9b1b-b2aec12fd5c2",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/48f96daf-8ae6-45b6-9b1b-b2aec12fd5c2"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive/extension/calc_hier_0/member/067a9156-b657-4e5c-9bf6-35f7da4a4274",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive/extensionscalc_hier_0/members/067a9156-b657-4e5c-9bf6-35f7da4a4274"
+    }
+  ],
+  "codeValue": "calc_hier_0",
+  "status": "DRAFT",
+  "created": "2018-10-17T13:24:02.326Z",
+  "modified": "2018-10-17T13:24:02.326Z",
+  "prefLabel": {
+    "fi": "Calculation hierachy 0 #fi",
+    "en": "Calculation hierachy 0 #en"
+  },
+  "parentCodeScheme": {
+    "uri": "http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/yti-xbrl/codeschemes/testfixture_codelist_comprehensive"
+  },
+  "codeSchemes": [],
+  "propertyType": {
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/4b1aad3b-d390-44d9-ae07-912b7eeddaf3",
+    "uri": "http://uri.suomi.fi/datamodel/ns/code#calculationHierarchy"
+  }
+}

@@ -39,11 +39,11 @@ internal data class YclExtensionMember(
     }
 
     fun comparisonOpOrNull(): String? {
-        return memberValue("http://uri.suomi.fi/datamodel/ns/code#comparisonOperator")?.value
+        return memberValueOfType("http://uri.suomi.fi/datamodel/ns/code#comparisonOperator")?.value
     }
 
     fun unaryOpOrNull(): String? {
-        return memberValue("http://uri.suomi.fi/datamodel/ns/code#unaryOperator")?.value
+        return memberValueOfType("http://uri.suomi.fi/datamodel/ns/code#unaryOperator")?.value
     }
 
     fun memberRef(): DpmElementRef { //TODO - test code reference null case
@@ -54,7 +54,7 @@ internal data class YclExtensionMember(
         }
     }
 
-    private fun memberValue(valueTypeUri: String): YclMemberValue? {
-        return memberValues?.find { it.valueType?.uri == valueTypeUri }
+    private fun memberValueOfType(typeUri: String): YclMemberValue? {
+        return memberValues?.find { it.valueType?.uri == typeUri }
     }
 }
