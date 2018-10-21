@@ -1,165 +1,215 @@
-## 1. DPM concepts - Mapping from YTI Reference Data -service
+## 1. DPM concepts - Mapping from Yti Reference Data -service
 
 ### 1.1 Metric
 
 #### Structure
 Concept                       | Source
 ----------------------------- | -------------------------------------
-All Metrics                   | Single YTI Codelist associated as `MetricsCodelistUri` in DPM Dictionary Config
+Single Metric                 | Yti Codelist Extension Member + Yti Code (Metric Number)
+Metrics collection            | Single Yti Codelist Extension (associated as `metrics` in DPM Dictionary Config) listing all Metrics
 
-#### DPM attributes
-Attribute                     | Value source                          | Notes
------------------------------ | ------------------------------------- | -------------------------------------
+#### Metric attributes
+Attribute                 | Data type   | Value source                                                          | Notes
+------------------------- | ----------- | --------------------------------------------------------------------- | -------------------------------------
+Domain                    | Association | _Fixed_                                                               | Domain this Member belongs to, fixed association to Explicit Domain with DomainCode `MET`
+MemberCode                | String      | _Computed_                                                            | "${DataTypeIdentifier}${PeriodTypeIdentifier}${MetricNumber}"
+MemberXBRLCode            | String      | _Computed_                                                            | "${Owner.prefix}_met:${MemberCode}
+MemberLabel               | String      | YtiCodelistExtensionMember.prefLabel                                  |
+IsDefaultMember           | Boolean     | _Fixed_                                                               | `NULL` for now 
+Concept                   | Association | YtiCodelistExtensionMember                                            | Timestamps, validity dates, etc
+MetricNumber              | Integer     | YtiCodelistExtensionMember.code.codeValue                             | 
+DataType                  | String      | YtiCodelistExtensionMember.memberValue("dpmDataType")                 | Type of data, enumerated text
+FlowType                  | String      | YtiCodelistExtensionMember.memberValue("dpmFlowType")                 | The time dynamics of the information, enumerated text
+BalanceType               | String      | YtiCodelistExtensionMember.memberValue("dpmBalanceType")              | Balance type, enumerated text
+ReferencedDomainCode      | String      | YtiCodelistExtensionMember.memberValue("dpmReferencedDomainCode")     | Associates metric with Domain, from where to obtain allowed values for this Metric
+ReferencedHierarchyCode   | String      | YtiCodelistExtensionMember.memberValue("dpmReferencedHierarchyCode")  | Associates metric with Hierarchy, from where to obtain allowed values for this Metric
+HierarchyStartingNode     | String      | _Fixed_                                                               | `NULL` for now 
+IsStartingMemberIncluded  | Boolean     | _Fixed_                                                               | `NULL` for now
 
-#### Additional attributes
-Attribute                     | Value source                          | Notes
------------------------------ | ------------------------------------- | -------------------------------------
-
+#### Needed changes to Yti Reference Data -Service
+- New Yti Codelist Extension & PropertyType for it: `dpmMetric`
+- New memberValue PropertyTypes: `dpmDataType`, `dpmFlowType`, `dpmBalanceType`, `dpmReferencedDomainCode`, `dpmReferencedHierarchyCode`
 
 
 
 ### 1.2 Explicit Domain
 
 #### Structure
-Concept                       | Source
------------------------------ | -------------------------------------
-Individual Explict Domain     | YTI Codelist.Code
-All Explict Domains           | Single YTI Codelist associated as `ExplictDomainsCodelistUri` in DPM Dictionary Config
+Concept                             | Source
+----------------------------------- | -------------------------------------
+Single Explict Domain               | Yti Code
+Complete Explict Domains collection | Single Yti Codelist (associated as `explictDomains` in DPM Dictionary Config) listing all Explicit Domains
 
-#### DPM attributes
-Attribute                     | Value source                         | Notes
------------------------------ | ------------------------------------ | --------------------------------------
-DomainCode                    | YTICode.codeValue                    |
-DomainXBRLCode                | _Computed_                           | ${Owner.prefix}_exp:${DomainCode} 
-DomainLabel                   | YTICode.prefLabel                    |
-DomainDescription             | YTICode.description                  |
-DataType                      | _Fixed_                              | `NULL` for Explicit Domains
-IsTypedDomain                 | _Fixed_                              | `FALSE` for Explict Domains
-Concept                       | YTICode                              | Timestamps, validity dates, etc
+#### Explicit Domain attributes
+Attribute                     | Data type   | Value source                         | Notes
+----------------------------- | ----------- | ------------------------------------ | --------------------------------------
+DomainCode                    | String      | YtiCode.codeValue                    |
+DomainXBRLCode                | String      | _Computed_                           | "${Owner.prefix}_exp:${DomainCode}" 
+DomainLabel                   | String      | YtiCode.prefLabel                    |
+DomainDescription             | String      | YtiCode.description                  |
+DataType                      | String      | _Fixed_                              | `NULL` for Explicit Domains
+IsTypedDomain                 | Boolean     | _Fixed_                              | `FALSE` for Explict Domains
+Concept                       | Association | YtiCode                              | Timestamps, validity dates, etc
 
 #### Additional attributes
-Attribute                     | Value source                                                  | Notes
------------------------------ | ------------------------------------------------------------- | -------------------------------------
-MembersCodelistUri            | YTICode.externalReferences("MembersCodelistUri").first()      | Associates all YTI Codes from given YTI Codelist as Members to this Explicit Domain
-HierarchiesCodelistUri        | YTICode.externalReferences("HierarchiesCodelistUri").first()  | Associates all YTI Codelist Extensions from given YTI Codelist as Hierarchies to this Explicit Domain
-HierarchyExtenionUris         | YTICode.externalReferences("HierarchyExtensionUri")           | Associates all given YTI Codelist Extensions as Hierarchies to this Explicit Domain
-MemberCodePrefix              | YTICode.??                                                    | Optional prefix for Member's MemberCodes
+Attribute                     | Data type   | Value source                                                  | Notes
+----------------------------- | ----------- | ------------------------------------------------------------- | -------------------------------------
+MembersCodelistUri            | String      | YtiCode.externalReferences("MembersCodelistUri").first()      | Associates all Yti Codes from given Yti Codelist as Members to this Explicit Domain
+HierarchiesCodelistUri        | String      | YtiCode.externalReferences("HierarchiesCodelistUri").first()  | Associates all Yti Codelist Extensions from given Yti Codelist as Hierarchies to this Explicit Domain
+HierarchyExtenionUris         | String      | YtiCode.externalReferences("HierarchyExtensionUri")           | Associates given Yti Codelist Extensions as Hierarchies to this Explicit Domain
+MemberXBRLCodePrefix          | String      | YtiCode.??                                                    | Optional prefix for Member's MemberCodes
 
-TODO
- - Property types & semantic identifiers for links:
-   - MembersCodelistUri
-   - HierarchiesCodelistUri
-   - HierarchyExtensionUri
-- Value source for MemberCodePrefix
+#### Needed changes to Yti Reference Data -Service
+- New External Reference types: `MembersCodelistUri`, `HierarchiesCodelistUri`, `HierarchyExtensionUri`
+- MemberValue support for Yti Codes or similar storage for: `MemberXBRLCodePrefix`
 
 
 
-### 1.3 DPM Explict Domain Member
+### 1.3 Explict Domain Member
 
 #### Structure mappig
-Concept                          | Source
--------------------------------- | -------------------------------------
-Individual Explict Domain Member | YTI Codelist.Code
-Members for one Explict Domain   | YTI Codelist associated to the Explict Domain via `MembersCodelistUri`
+Concept                                         | Source
+----------------------------------------------- | -------------------------------------
+Single Explict Domain Member                    | Yti Code
+Collection of Members for single Explict Domain | Single Yti Codelist associated to the Explict Domain via `MembersCodelistUri`
 
-#### DPM attributes
-Attribute                     | Value source                          | Notes
------------------------------ | ------------------------------------- | -------------------------------------
-Domain                        | _Association_                         | Domain this Member belongs to. Derived from association.
-MemberCode                    | YTICode.codeValue                     |
-MemberXBRLCode                | _Computed_                            | "${Owner.prefix}_${Domain.DomainCode}:${MemberCode}
-MemberLabel                   | YTICode.prefLabel                     |
-IsDefaultMember               | _Computed_                            | YTICodelist.defaultCode.codevalue == MemberCode
-Concept                       | YTICode                               | Timestamps, validity dates, etc
+#### Explict Domain Member attributes
+Attribute                     | Data type   | Value source                          | Notes
+----------------------------- | ----------- | ------------------------------------- | -------------------------------------
+Domain                        | Association | _Structure_                           | Domain this Member belongs to. Derived from `MembersCodelistUri` association.
+MemberCode                    | String      | YtiCode.codeValue                     |
+MemberXBRLCode                | String      | _Computed_                            | "${Owner.prefix}_${Domain.DomainCode}:${MemberCode}"
+MemberLabel                   | String      | YtiCode.prefLabel                     |
+IsDefaultMember               | _Computed_  |                                       | (YtiCodelist.defaultCode.codevalue == MemberCode)
+Concept                       | Association | YtiCode                               | Timestamps, validity dates, etc
 
 
 
-### 1.4 Hierarchies
+### 1.4 Hierarchy
 
 #### Structure
-Concept                            | Source
----------------------------------- | -------------------------------------
-Individual Hierarchy               | YTI Codelist Extension
-Hierarchies for one Explict Domain | All YTI Codelist Extensions associated to Explict Domain via `HierarchiesCodelistUri` and `HierarchyExtenionUris`. Only Codelist Extensions of Property Type `definitionHierarchy` or `calculationHierarchy` are accepted as Hierarchies
+Concept                                             | Source
+--------------------------------------------------- | -------------------------------------
+Single Hierarchy                                    | Yti Codelist Extension
+Collection of Hierarchies for single Explict Domain | All Yti Codelist Extensions which are associated to Explict Domain via `HierarchiesCodelistUri` or `HierarchyExtenionUris` and which are having PropertyType `definitionHierarchy` or `calculationHierarchy`
 
-#### DPM attributes
-Attribute                    | Source                               | Notes
----------------------------- | ------------------------------------ | ------------------------------------
-Domain                       | _Association_                        | Domain this Hierarchy relates to. Derived from association.
-HierarchyCode                | YTICodelistExtension.codeValue       |
-HierarchyLabel               | YTICodelistExtension.prefLabel       |
-HierarchyDescription         | _Fixed_                              | `NULL` for now
-Concept                      | YTICodelistExtension                 | Timestamps, validity dates, etc
+#### Hierarchy attributes
+Attribute                    | Data type   | Source                               | Notes
+---------------------------- | ----------- | ------------------------------------ | ------------------------------------
+Domain                       | Association | _Structure_                          | Domain this Hierarchy relates to. Derived from `HierarchiesCodelistUri` and `HierarchyExtenionUris` association.
+HierarchyCode                | String      | YtiCodelistExtension.codeValue       |
+HierarchyLabel               | String      | YtiCodelistExtension.prefLabel       |
+HierarchyDescription         | String      | _Fixed_                              | `NULL` for now
+Concept                      | Association | YtiCodelistExtension                 | Timestamps, validity dates, etc
 
 
 
 ### 1.5 Hierarchy Node
 
 #### Structure
-Concept                       | Source
------------------------------ | -------------------------------------
-Individual Hierarchy Node     | YTI Codelist Extension Member
-Nodes for one Hierarchy       | All YTI Codelist Extension Members present in YTI Codelist Extension.
+Concept                                  | Source
+---------------------------------------- | -------------------------------------
+Single Hierarchy Node                    | Yti Codelist Extension Member + Yti Code (Explict Domain Member)
+Collection of Nodes for single Hierarchy | All Yti Codelist Extension Members present in Yti Codelist Extension.
 
-#### DPM attributes
-Attribute             | Value source                                                 | Notes
---------------------- | ------------------------------------------------------------ | -------------------------------------
-Hierarchy             | _Association_                                                | Hierarchy to which this Node belongs. Derived from association
-Member                | YTICodelistExtensionMember.code                              | Member this node represents
-ParentMember          | YTICodelistExtensionMember.parentMember().code               | Indicates the parent node, `NULL` for root level nodes
-IsAbstract            | _Fixed_                                                      | `FALSE` for now
-ComparisonOperator    | YTICodelistExtensionMember.memberValue("ComparisonOperator") |
-UnaryOperator         | YTICodelistExtensionMember.memberValue("UnaryOperator")      |
-Order                 | _Computed_                                                   | From order in which the YTI Codelist Extension Members are present in YTI Codelist Extension
-Level                 | _Computed_                                                   | From hierarchy structure
-Path                  | _Fixed_                                                      | `NULL` for now
+#### Hierarchy Node attributes
+Attribute            | Data type   | Value source                                                 | Notes
+---------------------| ----------- | ------------------------------------------------------------ | -------------------------------------
+Hierarchy            | Association | _Structure_                                                  | Hierarchy to which this Node belongs.
+Member               | Association | YtiCodelistExtensionMember.code                              | Member this node represents
+ParentMember         | String      | YtiCodelistExtensionMember.parentMember().code               | Indicates the parent node, `NULL` for root level nodes
+IsAbstract           | Boolean     | _Fixed_                                                      | `FALSE` for now
+ComparisonOperator   | String      | YtiCodelistExtensionMember.memberValue("ComparisonOperator") |
+UnaryOperator        | String      | YtiCodelistExtensionMember.memberValue("UnaryOperator")      |
+Order                | String      | _Computed_                                                   | Computed from the order of Yti Codelist Extension Members appearance in Yti Codelist Extension
+Level                | String      | _Computed_                                                   | Computed from the hierarchical structure of Yti Codelist Extension Members in Yti Codelist Extension
+Path                 | String      | _Fixed_                                                      | `NULL` for now
+Concept              | Association | YtiCodelistExtensionMember                                   | Timestamps, validity dates, etc
 
 
 
 ### 1.6 Explict Dimension
-#### Mapping
-Concept                          | Source
--------------------------------- | -------------------------------------
 
-#### DPM attributes
-Attribute                    | Value source                         | Notes
----------------------------- | ------------------------------------ | -------------------------------------
+#### Structure
+Concept                               | Source
+------------------------------------- | -------------------------------------
+Single Explict Dimension              | Yti Codelist Extension Member + Yti Code (Explict Domain)
+Complete Explict Dimension collection | Single Yti Codelist Extension (associated as `explictDimensions` in DPM Dictionary Config) listing all Explicit Dimensions
+
+#### Explict Dimension attributes
+Attribute                   | Data type   | Value source                                            | Notes
+----------------------------| ----------- | ------------------------------------------------------- | -------------------------------------
+Domain                      | Association | YtiCodelistExtensionMember.code                         | Explicit Domain from which the allowable values for this Explict Dimension are taken
+DimensionCode               | String      | YtiCodelistExtensionMember.memberValue("DimensionCode") |
+DimensionXBRLCode           | String      | _Computed_                                              | "${Owner.prefix}_dim:${DimensionCode}"
+DimensionLabel              | String      | YtiCodelistExtensionMember.prefLabel                    |
+DimensionDescription        | String      | _Fixed_                                                 | `NULL` for now
+IsTypedDimension            | Boolean     | _Fixed_                                                 | `FALSE` for Explict Dimension
+Concept                     | Association | YtiCodelistExtensionMember                              | Timestamps, validity dates, etc
+
+#### Needed changes to Yti Reference Data -Service
+- New Yti Codelist Extension & PropertyType for it: `dpmDimension`
+- New memberValue PropertyType: `dpmDimensionCode`
 
 
 
 ### 1.7 Typed Domain
 
 #### Structure
-Concept                      | Source
----------------------------- | -------------------------------------
+Concept                             | Source
+----------------------------------- | -------------------------------------
+Single Typed Domain                 | Yti Code
+Complete Typed Domains collection   | Single Yti Codelist (associated as `typedDomains` in DPM Dictionary Config) listing all Typed Domains
 
-#### DPM attributes
-Attribute                    | Value source                         | Notes
----------------------------- | ------------------------------------ | -------------------------------------
+#### Typed Domain attributes
+Attribute                     | Data type   | Value source                         | Notes
+----------------------------- | ----------- | ------------------------------------ | --------------------------------------
+DomainCode                    | String      | YtiCode.codeValue                    |
+DomainXBRLCode                | String      | _Computed_                           | "${Owner.prefix}_typ:${DomainCode}" 
+DomainLabel                   | String      | YtiCode.prefLabel                    |
+DomainDescription             | String      | YtiCode.description                  |
+DataType                      | String      | YtiCode.??                           | 
+IsTypedDomain                 | Boolean     | _Fixed_                              | `TRUE` for Typed Domains
+Concept                       | Association | YtiCode                              | Timestamps, validity dates, etc
+
+#### Needed changes to Yti Reference Data -Service
+- MemberValue support for Yti Codes or similar storage for: `DataType`
 
 
 
 ### 1.8 Typed Dimension
 
 #### Structure
-Concept                      | Source
----------------------------- | -------------------------------------
+Concept                               | Source
+------------------------------------- | -------------------------------------
+Single Typed Dimension                | Yti Codelist Extension Member + Yti Code (Typed Domain)
+Complete Typed Dimension collection   | Single Yti Codelist Extension (associated as `typedDimensions` in DPM Dictionary Config) listing all Typed Dimensions
 
-#### DPM attributes
-Attribute                    | Value source                         | Notes
----------------------------- | ------------------------------------ | -------------------------------------
+#### Explict Dimension attributes
+Attribute                   | Data type   | Value source                                            | Notes
+----------------------------| ----------- | ------------------------------------------------------- | -------------------------------------
+Domain                      | Association | YtiCodelistExtensionMember.code                         | Typed Domain from which the allowable values for this Typed Dimension are taken
+DimensionCode               | String      | YtiCodelistExtensionMember.memberValue("DimensionCode") |
+DimensionXBRLCode           | String      | _Computed_                                              | "${Owner.prefix}_dim:${DimensionCode}"
+DimensionLabel              | String      | YtiCodelistExtensionMember.prefLabel                    |
+DimensionDescription        | String      | _Fixed_                                                 | `NULL` for now
+IsTypedDimension            | Boolean     | _Fixed_                                                 | `TRUE` for Typed Dimension
+Concept                     | Association | YtiCodelistExtensionMember                              | Timestamps, validity dates, etc
 
+#### Needed changes to Yti Reference Data -Service
+- New Yti Codelist Extension & PropertyType for it: `dpmDimension`
+- New memberValue PropertyType: `dpmDimensionCode`
 
 
 ## 2. DPM Dictionary Config
 ```JSON
 {
   "dpmDictionaries": [
-	{
-	  "owner": {
-		"name": "SBR Sample",
-		"namespace": "sbr.example.com",
-		"prefix": "s2br",
+    {
+      "owner": {
+        "name": "SBR Sample",
+        "namespace": "sbr.example.com",
+        "prefix": "s2br",
         "location": "sbr.example.com/aample/location",
         "copyright": "Copyright statement about SBR Sample",
         "languages": [
@@ -168,13 +218,27 @@ Attribute                    | Value source                         | Notes
           "sv"
         ],
         "defaultLanguage": "en"
-	  },
-	  "metricsCodelistUri": "http://uri.example.com/codelist/...",
-	  "explictDomainsCodelistUri": "http://uri.example.com/codelist/...",
-	  "explictDimensionsCodelistUri": "http://uri.example.com/codelist/...",
-	  "typedDomainsCodelistUri": "http://uri.example.com/codelist/...",
-	  "typedDimensionsCodelistUri": "http://uri.example.com/codelist/..."
-	}
+      },
+      "metrics":{
+          "YtiCodelistExtensionUri": "http://uri.example.com/codelist/..."
+      },
+       
+      "explictDomains":{
+          "YtiCodelistUri": "http://uri.example.com/codelist/..."
+      },
+
+      "explictDimensions":{
+          "YtiCodelistExtensionUri": "http://uri.example.com/codelist/..."
+      },
+       
+      "typedDomains":{
+          "YtiCodelistUri": "http://uri.example.com/codelist/..."
+      },
+       
+      "typedDimensions":{
+          "YtiCodelistExtensionUris": "http://uri.example.com/codelist/..."
+      }
+    }
   ]
 }
 ```
