@@ -1,6 +1,6 @@
 ## 1. DPM concepts - Mapping from Yti Reference Data -service
 
-### 1.1 Metric
+### 1 Metric
 
 #### Structure
 Concept                       | Source
@@ -32,13 +32,17 @@ IsStartingMemberIncluded  | Boolean     | _Fixed_                             
 
 
 
-### 1.2 Explicit Domain
+## 2 Explicit Domains, Explicit Dimensions and Hierarchies
+
+![Explicit Domains, Explicit Dimensions and Hierarchies](images/explicit-domains-dimensions-hierarchies.png)
+
+### 2.1 Explicit Domain
 
 #### Structure
 Concept                             | Source
 ----------------------------------- | -------------------------------------
 Single Explict Domain               | Yti Code
-Complete Explict Domains collection | Single Yti Codelist (associated as `explictDomains` in DPM Dictionary Config) listing all Explicit Domains
+Explict Domains collection          | Single Yti Codelist (associated as `explictDomains` in DPM Dictionary Config) listing all Explicit Domains
 
 #### Explicit Domain attributes
 Attribute                     | Data type   | Value source                         | Notes
@@ -65,7 +69,7 @@ MemberXBRLCodePrefix          | String      | YtiCode.??                        
 
 
 
-### 1.3 Explict Domain Member
+### 2.2 Explict Domain Member
 
 #### Structure mappig
 Concept                                         | Source
@@ -85,7 +89,7 @@ Concept                       | Association | YtiCode                           
 
 
 
-### 1.4 Hierarchy
+### 2.3 Hierarchy
 
 #### Structure
 Concept                                             | Source
@@ -104,7 +108,7 @@ Concept                      | Association | YtiCodelistExtension               
 
 
 
-### 1.5 Hierarchy Node
+### 2.4 Hierarchy Node
 
 #### Structure
 Concept                                  | Source
@@ -128,13 +132,13 @@ Concept              | Association | YtiCodelistExtensionMember                 
 
 
 
-### 1.6 Explict Dimension
+### 2.5 Explict Dimension
 
 #### Structure
 Concept                               | Source
 ------------------------------------- | -------------------------------------
 Single Explict Dimension              | Yti Codelist Extension Member + Yti Code (Explict Domain)
-Complete Explict Dimension collection | Single Yti Codelist Extension (associated as `explictDimensions` in DPM Dictionary Config) listing all Explicit Dimensions
+Complete Explict Dimension collection | Single Yti Codelist Extension listing all Explicit Dimensions
 
 #### Explict Dimension attributes
 Attribute                   | Data type   | Value source                                            | Notes
@@ -153,7 +157,9 @@ Concept                     | Association | YtiCodelistExtensionMember          
 
 
 
-### 1.7 Typed Domain
+## 3 Typed Domain
+
+### 3.1 Typed Domain
 
 #### Structure
 Concept                             | Source
@@ -177,7 +183,7 @@ Concept                       | Association | YtiCode                           
 
 
 
-### 1.8 Typed Dimension
+### 3.2 Typed Dimension
 
 #### Structure
 Concept                               | Source
@@ -223,14 +229,10 @@ Concept                     | Association | YtiCodelistExtensionMember          
           "YtiCodelistExtensionUri": "http://uri.example.com/codelist/..."
       },
        
-      "explictDomains":{
+      "explicitDomainsDimensionsHierarchies":{
           "YtiCodelistUri": "http://uri.example.com/codelist/..."
       },
-
-      "explictDimensions":{
-          "YtiCodelistExtensionUri": "http://uri.example.com/codelist/..."
-      },
-       
+     
       "typedDomains":{
           "YtiCodelistUri": "http://uri.example.com/codelist/..."
       },
