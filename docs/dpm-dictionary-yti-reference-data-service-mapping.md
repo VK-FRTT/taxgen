@@ -7,10 +7,13 @@ Mapping is split for clarity to three sections:
 2. DPM "explicit" concepts, like Explicit Dimensions, Explicit Domains and Hierarchies
 3. DPM "typed" concepts, like Typed Dimensions and Typed Domains 
 
+<br>
 
 ## 1 DPM metrics
 
 ![Mapping Metrics to YTI](images/metrics-yti-mapping.png)
+
+<br>
 
 ### 1.1 Metric
 
@@ -42,11 +45,13 @@ IsStartingMemberIncluded  | Boolean     | _Fixed_                             
 - New Yti Codelist Extension & PropertyType for it: `dpmMetric`
 - New memberValue PropertyTypes: `dpmDataType`, `dpmFlowType`, `dpmBalanceType`, `dpmReferencedDomainCode`, `dpmReferencedHierarchyCode`
 
-
+<br>
 
 ## 2 DPM "explicit" concepts
 
 ![Mapping Explicit Dimensions, Explicit Domains and Hierarchies to YTI](images/explicit-dimensions-domains-hierarchies-yti-mapping.png)
+
+<br>
 
 ### 2.1 Explicit Domain
 
@@ -75,7 +80,7 @@ MemberXBRLCodePrefix          | String      | YtiCode -> ??                     
 - New External Reference types: `MembersCodelistUri`, `HierarchiesCodelistUri`, `HierarchyExtensionUri`
 - Yti Code to provide storage for: `MemberXBRLCodePrefix` (with configurable MemberValues support for Yti Codes??)
 
-
+<br>
 
 ### 2.2 Explict Domain Member
 
@@ -95,7 +100,7 @@ MemberLabel                   | String      | YtiCode -> prefLabel              
 IsDefaultMember               | _Computed_  |                                       | (YtiCodelist.defaultCode.codevalue == MemberCode)
 Concept                       | Association | YtiCode                               | Timestamps, validity dates, etc
 
-
+<br>
 
 ### 2.3 Hierarchy
 
@@ -114,7 +119,7 @@ HierarchyLabel               | String      | YtiCodelistExtension -> prefLabel 
 HierarchyDescription         | String      | _Fixed_                              | `NULL` for now
 Concept                      | Association | YtiCodelistExtension                 | Timestamps, validity dates, etc
 
-
+<br>
 
 ### 2.4 Hierarchy Node
 
@@ -138,7 +143,7 @@ Level                | String      | _Computed_                                 
 Path                 | String      | _Fixed_                                                         | `NULL` for now
 Concept              | Association | YtiCodelistExtensionMember                                      | Timestamps, validity dates, etc
 
-
+<br>
 
 ### 2.5 Explict Dimension
 
@@ -163,11 +168,12 @@ Concept                     | Association | YtiCodelistExtensionMember          
 - New Yti Codelist Extension & PropertyType for it: `dpmDimension`
 - New memberValue PropertyType: `dpmDimensionCode`
 
-
+<br>
 
 ## 3 DPM "typed" concepts
 ![Mapping Typed Dimensions and Typed Domains to YTI](images/typed-dimensions-domains-yti-mapping.png)
 
+<br>
 
 ### 3.1 Typed Domain
 
@@ -191,7 +197,7 @@ Concept                       | Association | YtiCode                           
 #### Needed changes to Yti Reference Data -Service
 - Yti Code to provide storage for: `DataType` (with configurable MemberValues support for Yti Codes??)
 
-
+<br>
 
 ### 3.2 Typed Dimension
 
