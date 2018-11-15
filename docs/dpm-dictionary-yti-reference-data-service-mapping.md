@@ -47,9 +47,9 @@ HierarchyStartingNode     | String      | _Fixed_                               
 IsStartingMemberIncluded  | Boolean     | _Fixed_                                                   | `NULL` for now
 
 #### Yti Codelist Extensions
-Extension      | Context        | Label EN             | Label FI
--------------- | -------------- | -------------------- | -------------------------------------
-DpmMetric      | CodeExtension  | DPM Metric           | TODO
+Extension      | Context         | Label EN             | Label FI
+-------------- | --------------- | -------------------- | -------------------------------------
+DpmMetric      | InlineExtension | DPM Metric           | TODO
 
 <br>
 
@@ -91,9 +91,9 @@ MembersAndHierarchies         | Association | YtiCode -> subCodeCodelist        
 MemberXBRLCodePrefix          | String      | YtiCode -> extension(DpmExplicitDomain, DpmMemberXBRLCodePrefix)  | Optional prefix for Explicit Domain's Members XBRL codes
 
 #### Yti Codelist Extensions
-Extension         | Context        | Label EN             | Label FI
------------------ | -------------- | -------------------- | -------------------------------------
-DpmExplicitDomain | CodeExtension  | DPM Explicit Domain  | TODO
+Extension         | Context         | Label EN             | Label FI
+----------------- | --------------- | -------------------- | -------------------------------------
+DpmExplicitDomain | InlineExtension | DPM Explicit Domain  | TODO
 
 <br>
 
@@ -199,9 +199,9 @@ Concept                     | ValueObject | YtiCode                             
 Domain                      | Association | YtiCode -> extension(DpmDimension, DpmDomainReference)      | Explicit Domain from which the allowable values for this Explict Dimension are taken
 
 #### Yti Codelist Extensions
-Extension            | Context        | Label EN             |  Label FI
--------------------- | -------------- | -------------------- | -------------------------------------
-DpmDimension         | CodeExtension  | DPM Dimension        | TODO
+Extension            | Context         | Label EN             |  Label FI
+-------------------- | --------------- | -------------------- | -------------------------------------
+DpmDimension         | InlineExtension | DPM Dimension        | TODO
 
 <br>
 
@@ -236,9 +236,9 @@ IsTypedDomain                 | Boolean     | _Fixed_                           
 Concept                       | ValueObject | YtiCode                                           | Timestamps, validity dates, etc
 
 #### Yti Codelist Extensions
-Extension      | Context        | Label EN             |  Label FI
--------------- | -------------- | -------------------- | -------------------------------------
-DpmTypedDomain | CodeExtension  | DPM Typed Domain     | TODO
+Extension      | Context         | Label EN             |  Label FI
+-------------- | --------------- | -------------------- | -------------------------------------
+DpmTypedDomain | InlineExtension | DPM Typed Domain     | TODO
 
 <br>
 
