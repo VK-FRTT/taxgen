@@ -55,9 +55,9 @@ DpmMetric      | InlineExtension | DPM Metric           | TODO
 
 Extension attribute          | Data type | Label EN              | Label FI  | Allowed values
 ---------------------------- | --------- | --------------------- | --------- | -------------------------------------
-DpmDataType                  | String    | Data type             | TODO      | Enumerated text or blank: monetary, percent, decimal, integer, date, boolean, text, enumeration
-DpmFlowType                  | String    | Flow type             | TODO      | Enumerated text or blank: duration, instant
-DpmBalanceType               | String    | Balance type          | TODO      | Enumerated text or blank: credit, debit
+DpmMetricDataType            | String    | Data type             | TODO      | `Enumeration`, `Boolean`, `Date`, `Integer`, `Monetary`, `Percentage`, `String`, `Decimal`, `Lei`, `Isin`
+DpmFlowType                  | String    | Flow type             | TODO      | `Instant`, `Duration`
+DpmBalanceType               | String    | Balance type          | TODO      | `Credit`, `Debit`
 DpmDomainReference           | String    | Domain reference      | TODO      | DomainCode text or blank, no syntax constraints for now
 DpmHierarchyReference        | String    | Hierarchy reference   | TODO      | HierarchyCode text or blank, no syntax constraints for now
 
@@ -242,9 +242,10 @@ DpmTypedDomain | InlineExtension | DPM Typed Domain     | TODO
 
 <br>
 
-Extension attribute     | Notes             
------------------------ | --------------------------------- 
-DpmDataType             | Reused from DpmMetric extension
+Extension attribute     | Data type | Label EN              | Label FI  | Allowed values
+----------------------- | --------- | --------------------- | --------- | ----------------------
+DpmDomainDataType       | String    | Data type             | TODO      | `Boolean`, `Date`, `Integer`, `Monetary`, `Percentage`, `String`, `Decimal`, `Lei`, `Isin`
+
 
 <br>
 
