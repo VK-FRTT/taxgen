@@ -18,13 +18,13 @@ data class DetectedOptions(
 ) {
 
     fun ensureSingleCommandGiven() {
-        val targetOptionCount = listOf<Any?>(
+        val commandCount = listOf<Any?>(
             cmdCompileDpmDb,
             cmdCaptureYclSourcesToFolder,
             cmdCaptureYclSourcesToZip
         ).count { it != null }
 
-        if (targetOptionCount != 1) {
+        if (commandCount != 1) {
             throwFail("Single command with proper argument must be given")
         }
     }
