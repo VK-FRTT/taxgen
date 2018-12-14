@@ -67,19 +67,6 @@ fun dpmTestData(): Set<DataDefinition> {
 
     definitions.add(
         DataDefinition(
-            kClass = Member::class,
-            attributes = mapOf(
-                "id" to "mem_1",
-                "uri" to "mem_1_uri",
-                "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "memberCode" to "exp_mc",
-                "defaultMember" to true
-            )
-        )
-    )
-
-    definitions.add(
-        DataDefinition(
             kClass = ExplicitDomain::class,
             attributes = mapOf(
                 "id" to "exp_dom_1",
@@ -94,10 +81,13 @@ fun dpmTestData(): Set<DataDefinition> {
 
     definitions.add(
         DataDefinition(
-            kClass = DpmDictionary::class,
+            kClass = Member::class,
             attributes = mapOf(
-                "owner" to dynamicAttribute { it.instantiate<Owner>() },
-                "explicitDomains" to dynamicAttribute { listOf(it.instantiate<ExplicitDomain>()) }
+                "id" to "mem_1",
+                "uri" to "mem_1_uri",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "memberCode" to "exp_mc",
+                "defaultMember" to true
             )
         )
     )
@@ -127,6 +117,85 @@ fun dpmTestData(): Set<DataDefinition> {
                 "unaryOperator" to "+",
                 "memberRef" to dpmElementRef<Member>("mem_1", "uri_1", "diagnostic_label"),
                 "childNodes" to listOf<HierarchyNode>()
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = TypedDomain::class,
+            attributes = mapOf(
+                "id" to "typ_dom_1",
+                "uri" to "typ_dom_1_uri",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "domainCode" to "typ_dom",
+                "dataType" to TypedDomain.DataType.STRING
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = ExplicitDimension::class,
+            attributes = mapOf(
+                "id" to "exp_dim_1",
+                "uri" to "exp_dim_1_uri",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "dimensionCode" to "exp_dim",
+                "domainRef" to dpmElementRef<ExplicitDomain>("exp_dom", "uri_1", "diagnostic_label")
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = ExplicitDimension::class,
+            attributes = mapOf(
+                "id" to "exp_dim_1",
+                "uri" to "exp_dim_1_uri",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "dimensionCode" to "exp_dim",
+                "domainRef" to dpmElementRef<ExplicitDomain>("exp_dom", "uri_1", "diagnostic_label")
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = TypedDimension::class,
+            attributes = mapOf(
+                "id" to "typ_dim_1",
+                "uri" to "typ_dim_1_uri",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "dimensionCode" to "typ_dim",
+                "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom", "uri_1", "diagnostic_label")
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = Metric::class,
+            attributes = mapOf(
+                "id" to "met_1",
+                "uri" to "met_1_uri",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "memberCodeNumber" to 1,
+                "dataType" to Metric.DataType.STRING,
+                "flowType" to Metric.FlowType.DURATION,
+                "balanceType" to Metric.BalanceType.CREDIT,
+                "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom", "uri_1", "diagnostic_label"),
+                "hierarchyRef" to dpmElementRef<Hierarchy>("hie_1", "uri_1", "diagnostic_label")
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
+            kClass = DpmDictionary::class,
+            attributes = mapOf(
+                "owner" to dynamicAttribute { it.instantiate<Owner>() },
+                "explicitDomains" to dynamicAttribute { listOf(it.instantiate<ExplicitDomain>()) }
             )
         )
     )

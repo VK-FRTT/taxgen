@@ -166,67 +166,68 @@ internal class ExplicitDomain_UnitTest :
                     "ExplicitDomain.hierarchies: duplicate id value 'h_2_id'"
                 )
         }
-    }
 
-    @Test
-    fun `hierarchies should refer only Members which are from the Domain itself`() {
 
-        attributeOverrides(
-            "members" to listOf(
-                member("m_1", false),
-                member("m_2", true)
-            ),
+        @Test
+        fun `hierarchies should refer only Members which are from the Domain itself`() {
 
-            "hierarchies" to listOf(
-                hierarchy(
-                    "h_1",
-                    hierarchyNode(
-                        "hn_1",
-                        refTo<Member>("m_1"),
-
-                        hierarchyNode(
-                            "hn_1.2",
-                            refTo<Member>("m_2"),
-
-                            hierarchyNode(
-                                "hn_1.3",
-                                refTo<Member>("m_3") //External
-                            )
-                        )
-                    )
+            attributeOverrides(
+                "members" to listOf(
+                    member("m_1", false),
+                    member("m_2", true)
                 ),
 
-                hierarchy(
-                    "h_2",
-                    hierarchyNode(
-                        "hn_2",
-                        refTo<Member>("m_1"),
-
+                "hierarchies" to listOf(
+                    hierarchy(
+                        "h_1",
                         hierarchyNode(
-                            "hn_2.1",
-                            refTo<Member>("m_2"),
+                            "hn_1",
+                            refTo<Member>("m_1"),
 
                             hierarchyNode(
-                                "hn_2.2",
-                                refTo<Member>("m_4"), //External
+                                "hn_1.2",
+                                refTo<Member>("m_2"),
 
                                 hierarchyNode(
-                                    "hn_2.3",
-                                    refTo<Member>("m_5") //External
+                                    "hn_1.3",
+                                    refTo<Member>("m_3") //External
+                                )
+                            )
+                        )
+                    ),
+
+                    hierarchy(
+                        "h_2",
+                        hierarchyNode(
+                            "hn_2",
+                            refTo<Member>("m_1"),
+
+                            hierarchyNode(
+                                "hn_2.1",
+                                refTo<Member>("m_2"),
+
+                                hierarchyNode(
+                                    "hn_2.2",
+                                    refTo<Member>("m_4"), //External
+
+                                    hierarchyNode(
+                                        "hn_2.3",
+                                        refTo<Member>("m_5") //External
+                                    )
                                 )
                             )
                         )
                     )
                 )
             )
-        )
 
-        instantiateAndValidate()
-        assertThat(validationErrors)
-            .containsExactly(
-                "ExplicitDomain.hierarchies: DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. (DPM Member) m_3_diagnostic_label (m_3_uri) in (DPM HierarchyNode) Text#fi (hn_1.3_uri) at (DPM Hierarchy) Text#fi (h_1_uri)",
-                "ExplicitDomain.hierarchies: DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. (DPM Member) m_4_diagnostic_label (m_4_uri) in (DPM HierarchyNode) Text#fi (hn_2.2_uri) at (DPM Hierarchy) Text#fi (h_2_uri)",
-                "ExplicitDomain.hierarchies: DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. (DPM Member) m_5_diagnostic_label (m_5_uri) in (DPM HierarchyNode) Text#fi (hn_2.3_uri) at (DPM Hierarchy) Text#fi (h_2_uri)"
-            )
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly(
+                    "ExplicitDomain.hierarchies: DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. (DPM Member) m_3_diagnostic_label (m_3_uri) in (DPM HierarchyNode) Text#fi (hn_1.3_uri) at (DPM Hierarchy) Text#fi (h_1_uri)",
+                    "ExplicitDomain.hierarchies: DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. (DPM Member) m_4_diagnostic_label (m_4_uri) in (DPM HierarchyNode) Text#fi (hn_2.2_uri) at (DPM Hierarchy) Text#fi (h_2_uri)",
+                    "ExplicitDomain.hierarchies: DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. (DPM Member) m_5_diagnostic_label (m_5_uri) in (DPM HierarchyNode) Text#fi (hn_2.3_uri) at (DPM Hierarchy) Text#fi (h_2_uri)"
+                )
+        }
     }
 }

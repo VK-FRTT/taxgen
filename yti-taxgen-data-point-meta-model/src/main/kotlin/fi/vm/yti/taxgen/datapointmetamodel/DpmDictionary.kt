@@ -33,5 +33,8 @@ data class DpmDictionary(
             iterableProperty = DpmDictionary::explicitDomains,
             valueProperty = ExplicitDomain::domainCode
         )
+
+        // TODO: Validate that domain codes do not overlap (typed + explicit)
+        // TODO: Validate that dimension codes do not overlap (typed + explicit)
     }
 }

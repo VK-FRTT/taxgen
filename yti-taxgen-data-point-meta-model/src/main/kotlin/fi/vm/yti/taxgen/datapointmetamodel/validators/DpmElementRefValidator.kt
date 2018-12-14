@@ -21,3 +21,20 @@ fun <I : Validatable> validateDpmElementRef(
         message = { "empty or blank id" }
     )
 }
+
+
+fun <I : Validatable> validateOptionalDpmElementRef(
+    validationResults: ValidationResults,
+    instance: I,
+    property: KProperty1<I, DpmElementRef?>
+) {
+    val ref = property.get(instance)
+
+    if (ref != null) {
+        validateDpmElementRef(
+            validationResults = validationResults,
+            instance = instance,
+            property = property as KProperty1<I, DpmElementRef>
+        )
+    }
+}
