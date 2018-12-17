@@ -21,10 +21,10 @@ dependencies {
     shadowed libs.slf4jNop
 
     shadowed(project(':yti-taxgen-commons'))
-    shadowed(project(':yti-taxgen-data-point-meta-model'))
-    shadowed(project(':yti-taxgen-ycl-source-provider'))
-    shadowed(project(':yti-taxgen-ycl-to-dpm-mapper'))
-    shadowed(project(':yti-taxgen-dpm-db-writer'))
+    shadowed(project(':yti-taxgen-dpm-model'))
+    shadowed(project(':yti-taxgen-rds-provider'))
+    shadowed(project(':yti-taxgen-rds-dpm-mapper'))
+    shadowed(project(':yti-taxgen-sqlite-provider'))
 
     testCompile libs.kotlinStdLib
     testCompile libs.kotlinStdLib

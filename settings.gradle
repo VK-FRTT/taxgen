@@ -2,10 +2,10 @@ rootProject.name = "yti-xbrl-taxgen"
 
 include 'yti-taxgen-commons'
 include 'yti-taxgen-test-commons'
-include 'yti-taxgen-data-point-meta-model'
-include 'yti-taxgen-ycl-source-provider'
-include 'yti-taxgen-ycl-to-dpm-mapper'
-include 'yti-taxgen-dpm-db-writer'
+include 'yti-taxgen-dpm-model'
+include 'yti-taxgen-rds-provider'
+include 'yti-taxgen-rds-dpm-mapper'
+include 'yti-taxgen-sqlite-provider'
 include 'yti-taxgen-cli'
 
 

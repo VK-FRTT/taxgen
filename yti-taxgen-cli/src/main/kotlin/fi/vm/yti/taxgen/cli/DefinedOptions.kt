@@ -18,8 +18,8 @@ class DefinedOptions {
 
     private val cmdShowHelp: OptionSpec<Void>
     private val cmdCompileDpmDb: OptionSpec<Path>
-    private val cmdCaptureYclSourcesToFolder: OptionSpec<Path>
-    private val cmdCaptureYclSourcesToZip: OptionSpec<Path>
+    private val cmdCaptureDpmSourcesToFolder: OptionSpec<Path>
+    private val cmdCaptureDpmSourcesToZip: OptionSpec<Path>
 
     private val sourceConfigFile: OptionSpec<Path>
     private val sourceFolder: OptionSpec<Path>
@@ -37,23 +37,23 @@ class DefinedOptions {
         cmdCompileDpmDb = optionParser
             .accepts(
                 "compile-dpm-db",
-                "compile DPM DB from given sources"
+                "compile DPM database from given sources"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
 
-        cmdCaptureYclSourcesToFolder = optionParser
+        cmdCaptureDpmSourcesToFolder = optionParser
             .accepts(
-                "capture-ycl-sources-to-folder",
-                "capture YTI Codelist based sources to folder"
+                "capture-dpm-sources-to-folder",
+                "capture DPM sources to folder"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
 
-        cmdCaptureYclSourcesToZip = optionParser
+        cmdCaptureDpmSourcesToZip = optionParser
             .accepts(
-                "capture-ycl-sources-to-zip",
-                "capture YTI Codelist based sources to zip file"
+                "capture-dpm-sources-to-zip",
+                "capture DPM sources to zip file"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
@@ -67,7 +67,7 @@ class DefinedOptions {
         sourceConfigFile = optionParser
             .accepts(
                 "source-config",
-                "configuration file linking to sources on YTI Reference Data -service"
+                "configuration file linking to sources on Reference Data -service"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
@@ -75,7 +75,7 @@ class DefinedOptions {
         sourceFolder = optionParser
             .accepts(
                 "source-folder",
-                "load source data from folder"
+                "folder where to load sources"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.DIRECTORY_EXISTING))
@@ -83,7 +83,7 @@ class DefinedOptions {
         sourceZipFile = optionParser
             .accepts(
                 "source-zip",
-                "load source data from zip file"
+                "zip file where to load sources"
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
@@ -118,8 +118,8 @@ class DefinedOptions {
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
             cmdCompileDpmDb = optionSet.valueOf(this.cmdCompileDpmDb),
-            cmdCaptureYclSourcesToFolder = optionSet.valueOf(this.cmdCaptureYclSourcesToFolder),
-            cmdCaptureYclSourcesToZip = optionSet.valueOf(this.cmdCaptureYclSourcesToZip),
+            cmdCaptureDpmSourcesToFolder = optionSet.valueOf(this.cmdCaptureDpmSourcesToFolder),
+            cmdCaptureDpmSourcesToZip = optionSet.valueOf(this.cmdCaptureDpmSourcesToZip),
 
             forceOverwrite = optionSet.has(this.forceOverwrite),
 

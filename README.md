@@ -44,22 +44,22 @@ Taxonomy Generator is modularized to isolated modules.
 - Note: Testing related common stuff goes here.
 
 
-### 2.3 `yti-taxgen-data-point-meta-model`
+### 2.3 `yti-taxgen-dpm-model`
 - Taxonomy Generator's internal data model: Data Point Meta Model.
 - In practice this module implements concepts and entities used in Data Point Modeling.
 - Implements also DPM level data validations.
 
 
-### 2.4 `yti-taxgen-ycl-source-provider`
+### 2.4 `yti-taxgen-rds-provider`
 - Adapter for reading YTI Codelist (YCL) based data.
 - Able to provide data from remote YCL service or local filesystem based snapshots.
 
 
-### 2.5 `yti-taxgen-ycl-to-dpm-mapper`
+### 2.5 `yti-taxgen-rds-dpm-mapper`
 - Parses YTI Codelist (YCL) data and maps its contents to Data Point Meta Model.
 
 
-### 2.6 `yti-taxgen-dpm-db-writer`
+### 2.6 `yti-taxgen-sqlite-provider`
 - Produces DPM database in SQLite format from Data Point Meta Model data.
 
 

@@ -7,8 +7,8 @@ data class DetectedOptions(
     val cmdShowHelp: Boolean,
 
     val cmdCompileDpmDb: Path?,
-    val cmdCaptureYclSourcesToFolder: Path?,
-    val cmdCaptureYclSourcesToZip: Path?,
+    val cmdCaptureDpmSourcesToFolder: Path?,
+    val cmdCaptureDpmSourcesToZip: Path?,
 
     val forceOverwrite: Boolean,
 
@@ -20,8 +20,8 @@ data class DetectedOptions(
     fun ensureSingleCommandGiven() {
         val commandCount = listOf<Any?>(
             cmdCompileDpmDb,
-            cmdCaptureYclSourcesToFolder,
-            cmdCaptureYclSourcesToZip
+            cmdCaptureDpmSourcesToFolder,
+            cmdCaptureDpmSourcesToZip
         ).count { it != null }
 
         if (commandCount != 1) {

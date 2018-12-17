@@ -2,24 +2,23 @@ package fi.vm.yti.taxgen.commons.diagostic
 
 enum class DiagnosticContextType(val recurring: Boolean, val displayName: String) {
     CmdCompileDpmDb(false, "Compiling DPM database"),
-    CmdCaptureYclSources(false, "Capturing YTI Codelist sources"),
+    CmdCaptureDpmSources(false, "Capturing DPM sources"),
 
-    ActivityRecordYclSources(false, "Writing YCL sources"),
-    ActivityMapYclToDpm(false, "Processing YCL sources"),
-    ActivityWriteDpmDb(false, "Writing DPM database"),
+    RecordingDpmSource(false, "Writing DPM sources"),
+    MappingRdsToDpm(false, "Processing RDS sources"),
+    WritingSQLiteDpmDb(false, "Writing DPM database"),
 
     InitConfiguration(false, "Configuration file"),
     InitUriResolution(false, "URI resolution"),
 
-    YclSource(false, "YCL Sources"),
-
+    DpmSource(false, "DPM Sources"),
     DpmOwner(true, "Owner"),
     DpmDictionary(true, "DPM dictionary"),
 
-    YclCodelist(true, "Codelist"),
-    YclCodesPage(true, "Codes Page"),
-    YclCode(true, "Code"),
-    YclCodelistExtension(true, "Codelist Extension"),
-    YclCodelistExtensionMembersPage(true, "Codelist Extension Members Page"),
-    YclExtensionMember(true, "Extension Member")
+    RdsCodelist(true, "Codelist"),
+    RdsCodesPage(true, "Codes Page"),
+    RdsCode(true, "Code"),
+    RdsCodelistExtension(true, "Codelist Extension"),
+    RdsCodelistExtensionMembersPage(true, "Codelist Extension Members Page"),
+    RdsExtensionMember(true, "Extension Member")
 }

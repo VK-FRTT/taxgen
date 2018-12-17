@@ -8,15 +8,15 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
-import fi.vm.yti.taxgen.dpmdbwriter.DpmDbWriter
-import fi.vm.yti.taxgen.yclsourceprovider.YclSource
-import fi.vm.yti.taxgen.yclsourceprovider.YclSourceRecorder
-import fi.vm.yti.taxgen.yclsourceprovider.api.YclSourceApiAdapter
-import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureAdapter
-import fi.vm.yti.taxgen.yclsourceprovider.folder.YclSourceFolderStructureRecorder
-import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileAdapter
-import fi.vm.yti.taxgen.yclsourceprovider.zip.YclSourceZipFileRecorder
-import fi.vm.yti.taxgen.ycltodpmmapper.YclToDpmMapper
+import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
+import fi.vm.yti.taxgen.rdsprovider.DpmSource
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
+import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
+import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceFolderAdapter
+import fi.vm.yti.taxgen.rdsprovider.folder.YclSourceFolderStructureRecorder
+import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceZipFileAdapter
+import fi.vm.yti.taxgen.rdsprovider.zip.YclSourceZipFileRecorder
+import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -56,10 +56,10 @@ class TaxgenCli(
 
             detectedOptions.ensureSingleCommandGiven()
 
-            if (detectedOptions.cmdCaptureYclSourcesToFolder != null ||
-                detectedOptions.cmdCaptureYclSourcesToZip != null
+            if (detectedOptions.cmdCaptureDpmSourcesToFolder != null ||
+                detectedOptions.cmdCaptureDpmSourcesToZip != null
             ) {
-                captureYclSources(detectedOptions)
+                captureDpmSources(detectedOptions)
             }
 
             if (detectedOptions.cmdCompileDpmDb != null) {
@@ -94,9 +94,9 @@ class TaxgenCli(
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
-            resolveYclSource(detectedOptions).use { yclSource ->
+            resolveRdsSource(detectedOptions).use { yclSource ->
                 val dbWriter = resolveDpmDbWriter(detectedOptions)
-                val dpmMapper = YclToDpmMapper(diagnostic)
+                val dpmMapper = RdsToDpmMapper(diagnostic)
 
                 val dpmDictionaries = dpmMapper.getDpmDictionariesFromSource(yclSource)
 
@@ -110,14 +110,14 @@ class TaxgenCli(
         }
     }
 
-    private fun captureYclSources(detectedOptions: DetectedOptions) {
+    private fun captureDpmSources(detectedOptions: DetectedOptions) {
         diagnostic.withContext(
-            contextType = DiagnosticContextType.CmdCaptureYclSources
+            contextType = DiagnosticContextType.CmdCaptureDpmSources
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
-            resolveYclSource(detectedOptions).use { yclSource ->
-                resolveYclSourceRecorder(detectedOptions).use { yclSourceRecorder ->
+            resolveRdsSource(detectedOptions).use { yclSource ->
+                resolveRdsSourceRecorder(detectedOptions).use { yclSourceRecorder ->
                     yclSourceRecorder.captureSources(yclSource)
                 }
             }
@@ -128,22 +128,22 @@ class TaxgenCli(
         }
     }
 
-    private fun resolveYclSource(detectedOptions: DetectedOptions): YclSource {
+    private fun resolveRdsSource(detectedOptions: DetectedOptions): DpmSource {
         if (detectedOptions.sourceConfigFile != null) {
-            return YclSourceApiAdapter(
+            return DpmSourceRdsAdapter(
                 configPath = detectedOptions.sourceConfigFile,
                 diagnostic = diagnostic
             )
         }
 
         if (detectedOptions.sourceFolder != null) {
-            return YclSourceFolderStructureAdapter(
+            return DpmSourceFolderAdapter(
                 baseFolderPath = detectedOptions.sourceFolder
             )
         }
 
         if (detectedOptions.sourceZipFile != null) {
-            return YclSourceZipFileAdapter(
+            return DpmSourceZipFileAdapter(
                 sourceZipPath = detectedOptions.sourceZipFile
             )
         }
@@ -151,21 +151,21 @@ class TaxgenCli(
         thisShouldNeverHappen("No suitable source given")
     }
 
-    private fun resolveYclSourceRecorder(
+    private fun resolveRdsSourceRecorder(
         detectedOptions: DetectedOptions
-    ): YclSourceRecorder {
+    ): DpmSourceRecorder {
 
-        if (detectedOptions.cmdCaptureYclSourcesToFolder != null) {
+        if (detectedOptions.cmdCaptureDpmSourcesToFolder != null) {
             return YclSourceFolderStructureRecorder(
-                baseFolderPath = detectedOptions.cmdCaptureYclSourcesToFolder,
+                baseFolderPath = detectedOptions.cmdCaptureDpmSourcesToFolder,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnostic = diagnostic
             )
         }
 
-        if (detectedOptions.cmdCaptureYclSourcesToZip != null) {
+        if (detectedOptions.cmdCaptureDpmSourcesToZip != null) {
             return YclSourceZipFileRecorder(
-                targetZipPath = detectedOptions.cmdCaptureYclSourcesToZip,
+                targetZipPath = detectedOptions.cmdCaptureDpmSourcesToZip,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnostic = diagnostic
             )
