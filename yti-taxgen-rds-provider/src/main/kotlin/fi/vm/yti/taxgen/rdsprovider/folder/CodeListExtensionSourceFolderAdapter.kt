@@ -8,8 +8,8 @@ internal class CodeListExtensionSourceFolderAdapter(
     private val extensionPath: Path
 ) : CodeListExtensionSource {
 
-    override fun extensionData(): String {
-        return FileOps.readTextFile(extensionPath, "extension.json")
+    override fun extensionMetaData(): String {
+        return FileOps.readTextFile(extensionPath, "extension_meta.json")
     }
 
     override fun extensionMemberPagesData(): Sequence<String> {

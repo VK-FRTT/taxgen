@@ -29,8 +29,8 @@ class DpmSourceRdsAdapter(
 
     override fun sourceConfigData(): String = loadedConfig.configData
 
-    override fun dpmDictionarySources(): List<DpmDictionarySource> {
-        return loadedConfig.config.dpmDictionaries.map { config ->
+    override fun dpmDictionarySources(): Sequence<DpmDictionarySource> {
+        return loadedConfig.config.dpmDictionaries.asSequence().map { config ->
             DpmDictionarySourceRdsAdapter(
                 config,
                 diagnostic

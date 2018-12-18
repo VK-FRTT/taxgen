@@ -1,8 +1,10 @@
 package fi.vm.yti.taxgen.rdsprovider.folder
 
 import fi.vm.yti.taxgen.commons.FileOps
+import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
+import java.nio.file.Files
 import java.nio.file.Path
 
 internal class DpmDictionarySourceFolderAdapter(
@@ -14,22 +16,50 @@ internal class DpmDictionarySourceFolderAdapter(
     }
 
     override fun metricsSource(): CodeListSource? {
-        return CodeListSourceFolderAdapter(dpmDictionaryRootPath.resolve("met"))
+        return codeListSourceOrNullForConcept(
+            "met",
+            CodeListBlueprint.metrics()
+        )
     }
 
     override fun explicitDomainsAndHierarchiesSource(): CodeListSource? {
-        return CodeListSourceFolderAdapter(dpmDictionaryRootPath.resolve("exp_dom"))
+        return codeListSourceOrNullForConcept(
+            "exp_dom_hier",
+            CodeListBlueprint.explicitDomainsAndHierarchies()
+        )
     }
 
     override fun explicitDimensionsSource(): CodeListSource? {
-        return CodeListSourceFolderAdapter(dpmDictionaryRootPath.resolve("exp_dim"))
+        return codeListSourceOrNullForConcept(
+            "exp_dim",
+            CodeListBlueprint.explicitDimensions()
+        )
     }
 
     override fun typedDomainsSource(): CodeListSource? {
-        return CodeListSourceFolderAdapter(dpmDictionaryRootPath.resolve("typ_dom"))
+        return codeListSourceOrNullForConcept(
+            "typ_dom",
+            CodeListBlueprint.typedDomains()
+        )
     }
 
     override fun typedDimensionsSource(): CodeListSource? {
-        return CodeListSourceFolderAdapter(dpmDictionaryRootPath.resolve("typ_dim"))
+        return codeListSourceOrNullForConcept(
+            "typ_dim",
+            CodeListBlueprint.typedDimensions()
+        )
+    }
+
+    private fun codeListSourceOrNullForConcept(
+        conceptFolder: String,
+        blueprint: CodeListBlueprint
+    ): CodeListSource? {
+        val path = dpmDictionaryRootPath.resolve(conceptFolder)
+
+        if (!Files.exists(path)) {
+            return null
+        }
+
+        return CodeListSourceFolderAdapter(path, blueprint)
     }
 }

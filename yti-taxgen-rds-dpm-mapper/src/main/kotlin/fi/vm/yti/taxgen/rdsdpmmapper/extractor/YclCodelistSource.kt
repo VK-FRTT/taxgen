@@ -3,10 +3,10 @@ package fi.vm.yti.taxgen.rdsdpmmapper.extractor
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Member
-import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsdpmmapper.DpmMappingContext
 import fi.vm.yti.taxgen.rdsdpmmapper.yclmodel.YclCodeScheme
 import fi.vm.yti.taxgen.rdsdpmmapper.yclmodel.YclCodesCollection
+import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 
 internal fun CodeListSource.extractDpmExplicitDomainWithHierarchies(
     ctx: DpmMappingContext
@@ -32,7 +32,7 @@ internal fun CodeListSource.extractDpmExplicitDomainWithHierarchies(
 }
 
 private fun CodeListSource.extractCodeScheme(ctx: DpmMappingContext): YclCodeScheme {
-    return JsonOps.readValue(codeListData(), ctx.diagnostic)
+    return JsonOps.readValue(codeListMetaData(), ctx.diagnostic)
 }
 
 private fun CodeListSource.extractMembers(

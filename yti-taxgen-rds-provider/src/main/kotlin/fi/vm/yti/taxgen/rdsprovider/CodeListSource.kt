@@ -9,7 +9,8 @@ interface CodeListSource : DiagnosticContextProvider {
     override fun contextLabel(): String = ""
     override fun contextIdentifier(): String = ""
 
-    fun codeListData(): String
+    fun blueprint(): CodeListBlueprint
+    fun codeListMetaData(): String
     fun codePagesData(): Sequence<String>
     fun extensionSources(): Sequence<CodeListExtensionSource>
     fun subCodeListSources(): Sequence<CodeListSource>

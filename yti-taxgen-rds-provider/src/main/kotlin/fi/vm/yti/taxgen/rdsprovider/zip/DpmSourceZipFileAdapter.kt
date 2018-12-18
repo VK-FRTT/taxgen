@@ -21,7 +21,7 @@ class DpmSourceZipFileAdapter(
 
     override fun sourceConfigData(): String = folderStructureAdapter.sourceConfigData()
 
-    override fun dpmDictionarySources(): List<DpmDictionarySource> = folderStructureAdapter.dpmDictionarySources()
+    override fun dpmDictionarySources(): Sequence<DpmDictionarySource> = folderStructureAdapter.dpmDictionarySources()
 
     override fun close() {
         folderStructureAdapter.close()

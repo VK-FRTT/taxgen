@@ -586,7 +586,7 @@ internal class RdsToDpmMapper_UnitTest {
 
         @Test
         fun `Broken Owner Info JSON should cause mapping error`() {
-            dpmSource = createYclSourceFromTestFixture("invalid/owner_info_json_broken")
+            dpmSource = createYclSourceFromTestFixture("invalid/owner_config_json_broken")
             performMapping()
         }
 

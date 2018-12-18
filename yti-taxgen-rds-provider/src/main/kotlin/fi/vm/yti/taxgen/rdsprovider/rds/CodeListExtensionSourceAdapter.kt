@@ -10,7 +10,7 @@ internal class CodeListExtensionSourceAdapter(
     private val diagnostic: Diagnostic
 ) : CodeListExtensionSource {
 
-    override fun extensionData(): String {
+    override fun extensionMetaData(): String {
         return HttpOps.fetchJsonData(extensionUrls.extensionUrl, diagnostic)
     }
 

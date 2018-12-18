@@ -9,5 +9,5 @@ abstract class DpmSource : Closeable, DiagnosticContextProvider {
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.DpmSource
 
     abstract fun sourceConfigData(): String
-    abstract fun dpmDictionarySources(): List<DpmDictionarySource>
+    abstract fun dpmDictionarySources(): Sequence<DpmDictionarySource>
 }

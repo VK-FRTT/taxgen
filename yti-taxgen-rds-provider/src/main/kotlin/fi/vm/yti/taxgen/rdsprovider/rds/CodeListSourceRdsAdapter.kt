@@ -2,8 +2,9 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.rdsprovider.CodeListSource
+import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListExtensionSource
+import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
 internal class CodeListSourceRdsAdapter(
@@ -13,7 +14,11 @@ internal class CodeListSourceRdsAdapter(
 
     private val contentUrls: ContentUrls by lazy(this::resolveContentUrls)
 
-    override fun codeListData(): String {
+    override fun blueprint(): CodeListBlueprint {
+        return CodeListBlueprint.typedDomains()
+    }
+
+    override fun codeListMetaData(): String {
         return HttpOps.fetchJsonData(contentUrls.codeSchemeUrl, diagnostic)
     }
 

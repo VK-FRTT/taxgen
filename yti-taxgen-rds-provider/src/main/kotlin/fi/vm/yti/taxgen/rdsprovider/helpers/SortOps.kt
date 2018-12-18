@@ -5,11 +5,11 @@ import java.nio.file.Path
 object SortOps {
 
     fun folderContentSortedByNumberAwareFilename(paths: List<Path>): List<Path> {
-        ensureSingleParentPath(paths)
+        ensurePathsWithinSingleParent(paths)
         return paths.sortedWith(NumberAwareFilenameComparator.instance())
     }
 
-    private fun ensureSingleParentPath(paths: List<Path>) {
+    private fun ensurePathsWithinSingleParent(paths: List<Path>) {
         if (paths.size <= 1) return
         val firstParent = paths[0].parent.toString()
         check(paths.all { it.parent.toString() == firstParent })

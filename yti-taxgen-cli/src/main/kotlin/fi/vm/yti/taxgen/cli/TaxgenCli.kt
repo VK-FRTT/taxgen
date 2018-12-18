@@ -13,9 +13,9 @@ import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.folder.YclSourceFolderStructureRecorder
+import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
 import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceZipFileAdapter
-import fi.vm.yti.taxgen.rdsprovider.zip.YclSourceZipFileRecorder
+import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceRecorderZipFileAdapter
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
 import java.io.BufferedWriter
 import java.io.Closeable
@@ -156,7 +156,7 @@ class TaxgenCli(
     ): DpmSourceRecorder {
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder != null) {
-            return YclSourceFolderStructureRecorder(
+            return DpmSourceRecorderFolderAdapter(
                 baseFolderPath = detectedOptions.cmdCaptureDpmSourcesToFolder,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnostic = diagnostic
@@ -164,7 +164,7 @@ class TaxgenCli(
         }
 
         if (detectedOptions.cmdCaptureDpmSourcesToZip != null) {
-            return YclSourceZipFileRecorder(
+            return DpmSourceRecorderZipFileAdapter(
                 targetZipPath = detectedOptions.cmdCaptureDpmSourcesToZip,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnostic = diagnostic

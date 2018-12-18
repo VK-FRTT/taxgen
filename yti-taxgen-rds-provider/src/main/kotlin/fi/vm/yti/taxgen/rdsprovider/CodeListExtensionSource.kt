@@ -9,6 +9,6 @@ interface CodeListExtensionSource : DiagnosticContextProvider {
     override fun contextLabel(): String = ""
     override fun contextIdentifier(): String = ""
 
-    fun extensionData(): String
+    fun extensionMetaData(): String
     fun extensionMemberPagesData(): Sequence<String>
 }

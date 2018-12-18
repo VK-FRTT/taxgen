@@ -3,11 +3,11 @@ package fi.vm.yti.taxgen.rdsdpmmapper.extractor
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
-import fi.vm.yti.taxgen.rdsprovider.CodeListExtensionSource
 import fi.vm.yti.taxgen.rdsdpmmapper.DpmMappingContext
 import fi.vm.yti.taxgen.rdsdpmmapper.yclmodel.YclExtension
 import fi.vm.yti.taxgen.rdsdpmmapper.yclmodel.YclExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.yclmodel.YclExtensionMembersCollection
+import fi.vm.yti.taxgen.rdsprovider.CodeListExtensionSource
 
 internal fun CodeListExtensionSource.tryExtractDpmHierarchy(
     ctx: DpmMappingContext
@@ -36,7 +36,7 @@ internal fun CodeListExtensionSource.tryExtractDpmHierarchy(
 private fun CodeListExtensionSource.extractSupportedExtension(
     ctx: DpmMappingContext
 ): YclExtension? {
-    val extension = JsonOps.readValue<YclExtension>(extensionData(), ctx.diagnostic)
+    val extension = JsonOps.readValue<YclExtension>(extensionMetaData(), ctx.diagnostic)
 
     return when (extension.propertyType?.uri) {
         "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy" -> extension

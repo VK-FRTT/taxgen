@@ -19,10 +19,10 @@ class DpmSourceFolderAdapter(
         return FileOps.readTextFile(baseFolderPath.resolve("meta"), "source_config.json")
     }
 
-    override fun dpmDictionarySources(): List<DpmDictionarySource> {
+    override fun dpmDictionarySources(): Sequence<DpmDictionarySource> {
         val paths = FileOps.listSubFoldersMatching(baseFolderPath, "dpm_dictionary_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
-        return sortedPaths.map { path -> DpmDictionarySourceFolderAdapter(path) }
+        return sortedPaths.map { path -> DpmDictionarySourceFolderAdapter(path) }.asSequence()
     }
 
     override fun close() {}
