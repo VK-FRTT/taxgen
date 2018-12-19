@@ -32,7 +32,7 @@ internal class DpmDictionarySourceFolderAdapter(
     override fun explicitDimensionsSource(): CodeListSource? {
         return codeListSourceOrNullForConcept(
             "exp_dim",
-            CodeListBlueprint.explicitDimensions()
+            CodeListBlueprint.explicitOrTypedDimensions()
         )
     }
 
@@ -46,7 +46,7 @@ internal class DpmDictionarySourceFolderAdapter(
     override fun typedDimensionsSource(): CodeListSource? {
         return codeListSourceOrNullForConcept(
             "typ_dim",
-            CodeListBlueprint.typedDimensions()
+            CodeListBlueprint.explicitOrTypedDimensions()
         )
     }
 

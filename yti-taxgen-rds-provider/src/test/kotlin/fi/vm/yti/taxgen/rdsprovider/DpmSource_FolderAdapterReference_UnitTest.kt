@@ -94,7 +94,37 @@ internal class DpmSource_FolderAdapterReference_UnitTest : DpmSource_UnitTestBas
 
     @Nested
     inner class MetricsConcept {
-        //TODO
+
+        @Test
+        fun `Should provide source when concept folder exists in data`() {
+            val metrics = dpmSource
+                .dpmDictionarySources().toList()[0]
+                .metricsSource()
+
+            assertThat(metrics).isNotNull()
+            assertMetricsBlueprint(metrics!!.blueprint())
+        }
+
+        @Test
+        fun `Should not provide source when concept folder does not exist in data`() {
+            val metrics = dpmSource
+                .dpmDictionarySources().toList()[2]
+                .metricsSource()
+
+            assertThat(metrics).isNull()
+        }
+
+        @Test
+        fun `Should have codeList`() {
+            val marker = extractMarkerValueFromJsonData {
+                dpmSource
+                    .dpmDictionarySources().toList()[0]
+                    .metricsSource()!!
+                    .codeListMetaData()
+            }
+
+            assertThat(marker).isEqualTo("dpm_dictionary_0/met/code_list_meta")
+        }
     }
 
     @Nested
@@ -162,13 +192,49 @@ internal class DpmSource_FolderAdapterReference_UnitTest : DpmSource_UnitTestBas
             }
 
             @Test
-            fun `Should not have extensions`() {
+            fun `Should have extensions`() {
+                val extensions = dpmSource
+                    .dpmDictionarySources().toList()[0]
+                    .explicitDomainsAndHierarchiesSource()!!
+                    .extensionSources()
+                val markers =
+                    extractMarkerValuesFromJsonData(extensions)
+                    { it -> (it as CodeListExtensionSource).extensionMetaData() }
+
+                assertThat(markers).containsExactly(
+                    "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta"
+                )
+            }
+
+            @Test
+            fun `Should have diagnostic context info about extension`() {
                 val extensions = dpmSource
                     .dpmDictionarySources().toList()[0]
                     .explicitDomainsAndHierarchiesSource()!!
                     .extensionSources().toList()
 
-                assertThat(extensions).isEmpty()
+                assertThat(extensions.size).isEqualTo(1)
+
+                assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelistExtension)
+                assertThat(extensions[0].contextLabel()).isEqualTo("")
+                assertThat(extensions[0].contextIdentifier()).isEqualTo("")
+            }
+
+            @Test
+            fun `Should have extension members pages`() {
+                val extensionPages = dpmSource
+                    .dpmDictionarySources().toList()[0]
+                    .explicitDomainsAndHierarchiesSource()!!
+                    .extensionSources().first()
+                    .extensionMemberPagesData()
+
+                val markers =
+                    extractMarkerValuesFromJsonData(extensionPages)
+                    { it -> it as String }
+
+                assertThat(markers).containsExactly(
+                    "dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0"
+                )
             }
         }
 
@@ -342,16 +408,106 @@ internal class DpmSource_FolderAdapterReference_UnitTest : DpmSource_UnitTestBas
 
     @Nested
     inner class ExplicitDimensionsConcept {
-        //TODO
+
+        @Test
+        fun `Should provide source when concept folder exists in data`() {
+            val expDim = dpmSource
+                .dpmDictionarySources().toList()[0]
+                .explicitDimensionsSource()
+
+            assertThat(expDim).isNotNull()
+            assertExplictOrTypedDimensionsBlueprint(expDim!!.blueprint())
+        }
+
+        @Test
+        fun `Should not provide source when concept folder does not exist in data`() {
+            val expDim = dpmSource
+                .dpmDictionarySources().toList()[2]
+                .explicitDimensionsSource()
+
+            assertThat(expDim).isNull()
+        }
+
+        @Test
+        fun `Should have codeList`() {
+            val marker = extractMarkerValueFromJsonData {
+                dpmSource
+                    .dpmDictionarySources().toList()[0]
+                    .explicitDimensionsSource()!!
+                    .codeListMetaData()
+            }
+
+            assertThat(marker).isEqualTo("dpm_dictionary_0/exp_dim/code_list_meta")
+        }
     }
 
     @Nested
     inner class TypedDomainsConcept {
-        //TODO
+
+        @Test
+        fun `Should provide source when concept folder exists in data`() {
+            val typDom = dpmSource
+                .dpmDictionarySources().toList()[0]
+                .typedDomainsSource()
+
+            assertThat(typDom).isNotNull()
+            assertTypedDomainBlueprint(typDom!!.blueprint())
+        }
+
+        @Test
+        fun `Should not provide source when concept folder does not exist in data`() {
+            val typDom = dpmSource
+                .dpmDictionarySources().toList()[2]
+                .typedDomainsSource()
+
+            assertThat(typDom).isNull()
+        }
+
+        @Test
+        fun `Should have codeList`() {
+            val marker = extractMarkerValueFromJsonData {
+                dpmSource
+                    .dpmDictionarySources().toList()[0]
+                    .typedDomainsSource()!!
+                    .codeListMetaData()
+            }
+
+            assertThat(marker).isEqualTo("dpm_dictionary_0/typ_dom/code_list_meta")
+        }
     }
 
     @Nested
     inner class TypedDimensionsConcept {
-        //TODO
+
+        @Test
+        fun `Should provide source when concept folder exists in data`() {
+            val typDim = dpmSource
+                .dpmDictionarySources().toList()[0]
+                .typedDimensionsSource()
+
+            assertThat(typDim).isNotNull()
+            assertExplictOrTypedDimensionsBlueprint(typDim!!.blueprint())
+        }
+
+        @Test
+        fun `Should not provide source when concept folder does not exist in data`() {
+            val typDim = dpmSource
+                .dpmDictionarySources().toList()[2]
+                .typedDimensionsSource()
+
+            assertThat(typDim).isNull()
+        }
+
+        @Test
+        fun `Should have codeList`() {
+            val marker = extractMarkerValueFromJsonData {
+                dpmSource
+                    .dpmDictionarySources().toList()[0]
+                    .typedDimensionsSource()!!
+                    .codeListMetaData()
+            }
+
+            assertThat(marker).isEqualTo("dpm_dictionary_0/typ_dim/code_list_meta")
+        }
     }
 }

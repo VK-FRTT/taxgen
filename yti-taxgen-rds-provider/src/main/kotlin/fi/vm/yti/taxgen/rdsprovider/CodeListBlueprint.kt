@@ -21,7 +21,9 @@ data class CodeListBlueprint(
                 {
                 "usesExtensions": true,
                 "usesSubCodeLists": false,
-                "extensionPropertyTypeUris": ["TODO"],
+                "extensionPropertyTypeUris": [
+                    "http://uri.suomi.fi/datamodel/ns/code#dpmMetric"
+                ],
                 "subCodeListBlueprint": null
                 }
                 """.trimIndent()
@@ -32,9 +34,11 @@ data class CodeListBlueprint(
             return fromConfig(
                 """
                 {
-                "usesExtensions": false,
+                "usesExtensions": true,
                 "usesSubCodeLists": true,
-                "extensionPropertyTypeUris": [],
+                "extensionPropertyTypeUris": [
+                    "http://uri.suomi.fi/datamodel/ns/code#dpmExplicitDomain"
+                ],
                 "subCodeListBlueprint": {
                     "usesExtensions": true,
                     "usesSubCodeLists": false,
@@ -49,19 +53,20 @@ data class CodeListBlueprint(
             )
         }
 
-        fun explicitDimensions(): CodeListBlueprint {
+        fun explicitOrTypedDimensions(): CodeListBlueprint {
             return fromConfig(
                 """
                 {
                 "usesExtensions": true,
                 "usesSubCodeLists": false,
-                "extensionPropertyTypeUris": ["TODO"],
+                "extensionPropertyTypeUris": [
+                    "http://uri.suomi.fi/datamodel/ns/code#dpmDimension"
+                ],
                 "subCodeListBlueprint": null
                 }
                 """.trimIndent()
             )
         }
-
 
         fun typedDomains(): CodeListBlueprint {
             return fromConfig(
@@ -69,26 +74,14 @@ data class CodeListBlueprint(
                 {
                 "usesExtensions": true,
                 "usesSubCodeLists": false,
-                "extensionPropertyTypeUris": ["TODO"],
+                "extensionPropertyTypeUris": [
+                "http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain"
+                ],
                 "subCodeListBlueprint": null
                 }
                 """.trimIndent()
             )
         }
-
-        fun typedDimensions(): CodeListBlueprint {
-            return fromConfig(
-                """
-                {
-                "usesExtensions": true,
-                "usesSubCodeLists": false,
-                "extensionPropertyTypeUris": ["TODO"],
-                "subCodeListBlueprint": null
-                }
-                """.trimIndent()
-            )
-        }
-
 
         private fun fromConfig(config: String): CodeListBlueprint {
             try {
