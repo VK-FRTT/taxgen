@@ -39,7 +39,7 @@ class DpmSourceZipFileAdapter(
 
     private fun createFolderStructureAdapter(): DpmSource {
         return DpmSourceFolderAdapter(
-            baseFolderPath = rootPathWithinZip()
+            dpmSourceRootPath = rootPathWithinZip()
         )
     }
 

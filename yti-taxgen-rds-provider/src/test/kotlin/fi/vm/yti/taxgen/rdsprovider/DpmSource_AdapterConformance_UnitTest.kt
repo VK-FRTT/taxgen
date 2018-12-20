@@ -3,6 +3,8 @@ package fi.vm.yti.taxgen.rdsprovider
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceFolderAdapter
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
+import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceRecorderZipFileAdapter
+import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceZipFileAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
@@ -19,12 +21,22 @@ import java.nio.file.Paths
 @DisplayName("Test RDS source adapter conformance")
 internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() {
 
+    data class ExpectedDetails(
+        val dpmSourceContextType: DiagnosticContextType,
+        val dpmSourceContextLabel: String,
+        val dpmSourceContextIdentifier: String
+    )
+
     private var loopbackTempFolder: TempFolder? = null
+    private var zipLoopbackTempFolder: TempFolder? = null
 
     @AfterAll
     fun teardown() {
         loopbackTempFolder.apply { this?.close() }
         loopbackTempFolder = null
+
+        zipLoopbackTempFolder.apply { this?.close() }
+        zipLoopbackTempFolder = null
     }
 
     private fun dpmSourceFolderAdapterToReferenceData(): Pair<DpmSourceFolderAdapter, Path> {
@@ -37,12 +49,19 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
     @TestFactory
     fun `Folder adapter with static reference data`(): List<DynamicNode> {
         val (source, rootPath) = dpmSourceFolderAdapterToReferenceData()
-        return testCaseFactory(source, rootPath)
+
+        val expectedDetails = ExpectedDetails(
+            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextLabel = "folder",
+            dpmSourceContextIdentifier = rootPath.toString()
+        )
+
+        return testCaseFactory(source, expectedDetails)
     }
 
     @TestFactory
     fun `Folder adapter with loopback data`(): List<DynamicNode> {
-        val tempFolder = TempFolder("rds_source_folder_loopback")
+        val tempFolder = TempFolder("conformance_loopback")
         loopbackTempFolder = tempFolder
 
         DpmSourceRecorderFolderAdapter(
@@ -55,19 +74,54 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
         }
 
         val dpmSource = DpmSourceFolderAdapter(tempFolder.path())
-        return testCaseFactory(dpmSource, tempFolder.path())
+
+        val expectedDetails = ExpectedDetails(
+            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextLabel = "folder",
+            dpmSourceContextIdentifier = tempFolder.path().toString()
+        )
+
+        return testCaseFactory(dpmSource, expectedDetails)
     }
 
-    fun testCaseFactory(dpmSource: DpmSource, dpmSourceRootPath: Path): List<DynamicNode> {
+    @TestFactory
+    fun `Folder adapter with zip-loopback data`(): List<DynamicNode> {
+        val tempFolder = TempFolder("conformance_zip_loopback")
+        zipLoopbackTempFolder = tempFolder
+        val targetZipPath = tempFolder.resolve("file.zip")
+
+        DpmSourceRecorderZipFileAdapter(
+            targetZipPath = targetZipPath,
+            forceOverwrite = false,
+            diagnostic = diagnostic
+        ).use {
+            val (source, _) = dpmSourceFolderAdapterToReferenceData()
+            it.captureSources(source)
+        }
+
+        val dpmSource = DpmSourceZipFileAdapter(targetZipPath)
+
+        val expectedDetails = ExpectedDetails(
+            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextLabel = "ZIP file",
+            dpmSourceContextIdentifier = targetZipPath.toString()
+        )
+
+        return testCaseFactory(dpmSource, expectedDetails)
+    }
+
+    private fun testCaseFactory(
+        dpmSource: DpmSource,
+        expectedDetails: ExpectedDetails
+    ): List<DynamicNode> {
         return listOf(
             dynamicContainer(
                 "DpmSourceRoot",
                 listOf(
                     dynamicTest("Should have diagnostic context info about RDS source") {
-                        assertThat(dpmSource.contextType()).isEqualTo(DiagnosticContextType.DpmSource)
-                        assertThat(dpmSource.contextLabel()).isEqualTo("folder")
-                        assertThat(dpmSource.contextIdentifier()).isEqualTo(dpmSourceRootPath.toString())
-
+                        assertThat(dpmSource.contextType()).isEqualTo(expectedDetails.dpmSourceContextType)
+                        assertThat(dpmSource.contextLabel()).isEqualTo(expectedDetails.dpmSourceContextLabel)
+                        assertThat(dpmSource.contextIdentifier()).isEqualTo(expectedDetails.dpmSourceContextIdentifier)
                     },
 
                     dynamicTest("Should have source config") {
