@@ -7,20 +7,20 @@ import fi.vm.yti.taxgen.rdsprovider.helpers.SortOps
 import java.nio.file.Path
 
 class DpmSourceFolderAdapter(
-    baseFolderPath: Path
+    dpmSourceRootPath: Path
 ) : DpmSource() {
 
-    private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
+    private val dpmSourceRootPath = dpmSourceRootPath.toAbsolutePath().normalize()
 
     override fun contextLabel(): String = "folder"
-    override fun contextIdentifier(): String = baseFolderPath.toString()
+    override fun contextIdentifier(): String = dpmSourceRootPath.toString()
 
     override fun sourceConfigData(): String {
-        return FileOps.readTextFile(baseFolderPath.resolve("meta"), "source_config.json")
+        return FileOps.readTextFile(dpmSourceRootPath.resolve("meta"), "source_config.json")
     }
 
     override fun dpmDictionarySources(): Sequence<DpmDictionarySource> {
-        val paths = FileOps.listSubFoldersMatching(baseFolderPath, "dpm_dictionary_*")
+        val paths = FileOps.listSubFoldersMatching(dpmSourceRootPath, "dpm_dictionary_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
         return sortedPaths.map { path -> DpmDictionarySourceFolderAdapter(path) }.asSequence()
     }

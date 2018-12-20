@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.PathStack
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.CaptureInfo
-import fi.vm.yti.taxgen.rdsprovider.CodeListExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
@@ -94,7 +93,7 @@ class DpmSourceRecorderFolderAdapter(
 
                     captureCodeListSource(
                         dictionarySource.explicitDomainsAndHierarchiesSource(),
-                        "exp_dom",
+                        "exp_dom_hier",
                         pathStack
                     )
 
@@ -122,7 +121,7 @@ class DpmSourceRecorderFolderAdapter(
 
     private fun captureCodeListSource(
         codeListSource: CodeListSource?,
-        tag: String,
+        conceptFolderName: String,
         pathStack: PathStack
     ) {
         if (codeListSource == null) {
@@ -131,12 +130,12 @@ class DpmSourceRecorderFolderAdapter(
 
         diagnostic.withContext(codeListSource) {
 
-            pathStack.withSubfolder(tag) {
+            pathStack.withSubfolder(conceptFolderName) {
 
                 FileOps.writeTextFile(
                     codeListSource.codeListMetaData(),
                     pathStack,
-                    "codelist.json",
+                    "code_list_meta.json",
                     forceOverwrite,
                     diagnostic
                 )
@@ -152,12 +151,12 @@ class DpmSourceRecorderFolderAdapter(
                 }
 
                 captureExtensionSources(
-                    codeListSource.extensionSources(),
+                    codeListSource,
                     pathStack
                 )
 
                 captureSubCodeListSources(
-                    codeListSource.subCodeListSources(),
+                    codeListSource,
                     pathStack
                 )
             }
@@ -165,10 +164,14 @@ class DpmSourceRecorderFolderAdapter(
     }
 
     private fun captureExtensionSources(
-        extensionSources: Sequence<CodeListExtensionSource>,
+        codeListSource: CodeListSource,
         pathStack: PathStack
     ) {
-        extensionSources.withIndex().forEach { (listIndex, extensionSource) ->
+        if (!codeListSource.blueprint().usesExtensions) {
+            return
+        }
+
+        codeListSource.extensionSources().withIndex().forEach { (listIndex, extensionSource) ->
 
             diagnostic.withContext(extensionSource) {
 
@@ -177,7 +180,7 @@ class DpmSourceRecorderFolderAdapter(
                     FileOps.writeTextFile(
                         extensionSource.extensionMetaData(),
                         pathStack,
-                        "extension.json",
+                        "extension_meta.json",
                         forceOverwrite,
                         diagnostic
                     )
@@ -197,13 +200,16 @@ class DpmSourceRecorderFolderAdapter(
     }
 
     private fun captureSubCodeListSources(
-        subCodeListSources: Sequence<CodeListSource>,
+        codeListSource: CodeListSource,
         pathStack: PathStack
     ) {
-        subCodeListSources.withIndex().forEach { (listIndex, subCodeListSource) ->
+        if (!codeListSource.blueprint().usesSubCodeLists) {
+            return
+        }
 
+        codeListSource.subCodeListSources().withIndex().forEach { (listIndex, subCodeListSource) ->
             diagnostic.withContext(subCodeListSource) {
-                captureCodeListSource(subCodeListSource, "sub_cl_$listIndex", pathStack)
+                captureCodeListSource(subCodeListSource, "sub_code_list_$listIndex", pathStack)
             }
         }
     }

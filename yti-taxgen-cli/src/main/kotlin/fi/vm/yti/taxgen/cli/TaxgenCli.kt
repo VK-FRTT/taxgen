@@ -138,7 +138,7 @@ class TaxgenCli(
 
         if (detectedOptions.sourceFolder != null) {
             return DpmSourceFolderAdapter(
-                baseFolderPath = detectedOptions.sourceFolder
+                dpmSourceRootPath = detectedOptions.sourceFolder
             )
         }
 
