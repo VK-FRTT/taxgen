@@ -3,10 +3,13 @@ package fi.vm.yti.taxgen.rdsprovider
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceFolderAdapter
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import java.nio.file.Path
+import java.nio.file.Paths
 
 open class DpmSource_UnitTestBase {
 
@@ -26,6 +29,13 @@ open class DpmSource_UnitTestBase {
         diagnosticCollector.events.forEach {
             println(it)
         }
+    }
+
+    protected fun dpmSourceFolderAdapterToReferenceData(): Pair<DpmSourceFolderAdapter, Path> {
+        val classLoader = Thread.currentThread().contextClassLoader
+        val referenceUri = classLoader.getResource("folder_adapter_reference").toURI()
+        val dpmSourceRootPath = Paths.get(referenceUri)
+        return Pair(DpmSourceFolderAdapter(dpmSourceRootPath), dpmSourceRootPath)
     }
 
     protected fun extractMarkerValueFromJsonData(

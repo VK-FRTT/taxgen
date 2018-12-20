@@ -14,8 +14,6 @@ import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.TestInstance
-import java.nio.file.Path
-import java.nio.file.Paths
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Test RDS source adapter conformance")
@@ -37,13 +35,6 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
 
         zipLoopbackTempFolder.apply { this?.close() }
         zipLoopbackTempFolder = null
-    }
-
-    private fun dpmSourceFolderAdapterToReferenceData(): Pair<DpmSourceFolderAdapter, Path> {
-        val classLoader = Thread.currentThread().contextClassLoader
-        val referenceUri = classLoader.getResource("folder_adapter_reference").toURI()
-        val dpmSourceRootPath = Paths.get(referenceUri)
-        return Pair(DpmSourceFolderAdapter(dpmSourceRootPath), dpmSourceRootPath)
     }
 
     @TestFactory
@@ -129,7 +120,7 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
                             dpmSource.sourceConfigData()
                         }
 
-                        assertThat(marker).isEqualTo("folder_adapter_reference/meta/source_config")
+                        assertThat(marker).isEqualTo("meta/source_config")
                     }
                 )
             ),
@@ -157,18 +148,18 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
                             { it -> (it as DpmDictionarySource).dpmOwnerConfigData() }
 
                         assertThat(markers).containsExactly(
-                            "dpm_dictionary_0/owner_config",
-                            "dpm_dictionary_1/owner_config",
-                            "dpm_dictionary_2/owner_config",
-                            "dpm_dictionary_3/owner_config",
-                            "dpm_dictionary_4/owner_config",
-                            "dpm_dictionary_5/owner_config",
-                            "dpm_dictionary_6/owner_config",
-                            "dpm_dictionary_7/owner_config",
-                            "dpm_dictionary_8/owner_config",
-                            "dpm_dictionary_9/owner_config",
-                            "dpm_dictionary_10/owner_config",
-                            "dpm_dictionary_11/owner_config"
+                            "dpm_dictionary_0/dpm_owner_config",
+                            "dpm_dictionary_1/dpm_owner_config",
+                            "dpm_dictionary_2/dpm_owner_config",
+                            "dpm_dictionary_3/dpm_owner_config",
+                            "dpm_dictionary_4/dpm_owner_config",
+                            "dpm_dictionary_5/dpm_owner_config",
+                            "dpm_dictionary_6/dpm_owner_config",
+                            "dpm_dictionary_7/dpm_owner_config",
+                            "dpm_dictionary_8/dpm_owner_config",
+                            "dpm_dictionary_9/dpm_owner_config",
+                            "dpm_dictionary_10/dpm_owner_config",
+                            "dpm_dictionary_11/dpm_owner_config"
                         )
                     }
                 )
