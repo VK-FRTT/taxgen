@@ -3,10 +3,10 @@ package fi.vm.yti.taxgen.rdsprovider
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.testcommons.TempFolder
-import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.rdsprovider.config.OwnerConfig
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
+import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
+import fi.vm.yti.taxgen.testcommons.TempFolder
 import io.specto.hoverfly.junit.core.Hoverfly
 import io.specto.hoverfly.junit.core.SimulationSource
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.response
@@ -19,6 +19,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,9 +29,9 @@ import org.junit.jupiter.params.provider.EnumSource
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 
-@DisplayName("when YCL sources are read from simulated YCL API")
+@DisplayName("when sources are read from simulated RDS API")
 @ExtendWith(HoverflyExtension::class)
-internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hoverfly) : DpmSource_UnitTestBase() {
+internal class DpmSource_RdsAdapterSimulation_UnitTest(private val hoverfly: Hoverfly) : DpmSource_UnitTestBase() {
 
     private lateinit var tempFolder: TempFolder
     private lateinit var configFilePath: Path
@@ -38,11 +39,11 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
 
     @BeforeEach
     fun testSuiteInit() {
-        tempFolder = TempFolder("yclsource_apiadapter_unittest")
+        tempFolder = TempFolder("rds_adapter_simulation")
 
         useCustomisedHttpClient()
 
-        configFilePath = tempFolder.createFileWithContent("ycl_source_config.json", yclSourceConfig())
+        configFilePath = tempFolder.createFileWithContent("dpm_dictionary_config.json", dpmDictionaryConfigContent())
         dpmSource = DpmSourceRdsAdapter(configFilePath, diagnostic)
     }
 
@@ -65,40 +66,38 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         fun `Should have source config at root`() {
             val configJson = objectMapper.readTree(dpmSource.sourceConfigData())
             assertThat(configJson.isObject).isTrue()
-
-            assertThat(configJson.at("/dpmDictionaries/0/owner/name").asText()).isEqualTo("OwnerName")
-            assertThat(configJson.at("/dpmDictionaries/0/codelists/0/domainCode").asText()).isEqualTo("m_zero_override")
+            assertThat(configJson.at("/dpmDictionaries/0/owner/name").asText()).isEqualTo("NameValue")
         }
 
         @Test
-        fun `Should have diagnostic context info about yclsource`() {
+        fun `Should have diagnostic context info about RDS source`() {
             assertThat(dpmSource.contextType()).isEqualTo(DiagnosticContextType.DpmSource)
-            assertThat(dpmSource.contextLabel()).isEqualTo("YTI Reference Data service")
+            assertThat(dpmSource.contextLabel()).isEqualTo("Reference Data service")
             assertThat(dpmSource.contextIdentifier()).isEqualTo(configFilePath.toString())
         }
 
         @Test
         fun `Should have owner config`() {
-            val dpmDictionarySources = dpmSource.dpmDictionarySources()
+            val dpmDictionarySources = dpmSource.dpmDictionarySources().toList()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
             val ownerConfig = objectMapper.readValue<OwnerConfig>(
-                dpmSource.dpmDictionarySources()[0].dpmOwnerConfigData()
+                dpmDictionarySources[0].dpmOwnerConfigData()
             )
 
-            assertThat(ownerConfig.name).isEqualTo("OwnerName")
-            assertThat(ownerConfig.namespace).isEqualTo("OwnerNamespace")
-            assertThat(ownerConfig.prefix).isEqualTo("OwnerPrefix")
-            assertThat(ownerConfig.location).isEqualTo("OwnerLocation")
-            assertThat(ownerConfig.copyright).isEqualTo("OwnerCopyright")
+            assertThat(ownerConfig.name).isEqualTo("NameValue")
+            assertThat(ownerConfig.namespace).isEqualTo("NamespaceValue")
+            assertThat(ownerConfig.prefix).isEqualTo("PrefixValue")
+            assertThat(ownerConfig.location).isEqualTo("LocationValue")
+            assertThat(ownerConfig.copyright).isEqualTo("CopyrightValue")
             assertThat(ownerConfig.languages[0]).isEqualTo("en")
             assertThat(ownerConfig.languages[1]).isEqualTo("fi")
             assertThat(ownerConfig.defaultLanguage).isEqualTo("en")
         }
 
         @Test
-        fun `Should have diagnostic context info about dpmdictionary`() {
-            val dpmDictionarySources = dpmSource.dpmDictionarySources()
+        fun `Should have diagnostic context info about DPM dictionary`() {
+            val dpmDictionarySources = dpmSource.dpmDictionarySources().toList()
             assertThat(dpmDictionarySources.size).isEqualTo(1)
 
             assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
@@ -106,107 +105,121 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
         }
 
-        @Test
-        fun `Should have codelists`() {
-            val codeLists = dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()
-            val markers =
-                extractMarkerValuesFromJsonData(
-                    codeLists,
-                    { it -> (it as CodeListSource).codeListData() }
+        @Nested
+        inner class ExplicitDomainsAndHierarchiesConcept {
+
+            @Test
+            fun `Should have codelist`() {
+                val codeList = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
+                val marker = extractMarkerValueFromJsonData { codeList.codeListMetaData() }
+
+                assertThat(marker).isEqualTo("simulated_codelist_0")
+            }
+
+            @Test
+            fun `Should have diagnostic context`() {
+                val codeList = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
+
+                assertThat(codeList.contextType()).isEqualTo(DiagnosticContextType.RdsCodelist)
+                assertThat(codeList.contextLabel()).isEqualTo("")
+                assertThat(codeList.contextIdentifier()).isEqualTo("")
+            }
+
+            @Test
+            fun `Should have codepages`() {
+                val codesPages = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
+                    .codePagesData()
+
+                val markers = extractMarkerValuesFromJsonData(codesPages)
+                { it -> (it as String) }
+
+                assertThat(markers).containsExactly(
+                    "simulated_codes_page_0",
+                    "simulated_codes_page_1"
                 )
 
-            assertThat(markers).containsExactly(
-                "simulated_codelist_0"
-            )
-        }
-
-        @Test
-        fun `Should have diagnostic context info about codelist`() {
-            val codeLists = dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()
-            assertThat(codeLists.size).isEqualTo(1)
-
-            assertThat(codeLists[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelist)
-            assertThat(codeLists[0].contextLabel()).isEqualTo("")
-            assertThat(codeLists[0].contextIdentifier()).isEqualTo("")
-        }
-
-        @Test
-        fun `Should have codepages`() {
-            val codesPages =
-                dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()[0].yclCodePagesData().toList()
-            val markers =
-                extractMarkerValuesFromJsonData(
-                    codesPages,
-                    { it -> (it as String) }
+                assertThat(diagnosticCollector.events).containsExactly(
+                    "ENTER [InitConfiguration]",
+                    "EXIT [InitConfiguration]",
+                    "ENTER [InitUriResolution]",
+                    "EXIT [InitUriResolution]",
+                    "ENTER [CodesPage]",
+                    "EXIT [CodesPage]",
+                    "ENTER [CodesPage]",
+                    "EXIT [CodesPage]"
                 )
+            }
 
-            assertThat(markers).containsExactly(
-                "simulated_codes_page_0",
-                "simulated_codes_page_1"
-            )
+            @Test
+            fun `Should have extensions`() {
+                val extensions = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
+                    .extensionSources()
 
-            assertThat(diagnosticCollector.events).containsExactly(
-                "ENTER [InitConfiguration]",
-                "EXIT [InitConfiguration]",
-                "ENTER [InitUriResolution]",
-                "EXIT [InitUriResolution]",
-                "ENTER [YclCodesPage]",
-                "EXIT [YclCodesPage]",
-                "ENTER [YclCodesPage]",
-                "EXIT [YclCodesPage]"
-            )
-        }
+                val markers = extractMarkerValuesFromJsonData(extensions)
+                { it -> (it as CodeListExtensionSource).extensionMetaData() }
 
-        @Test
-        fun `Should have extensions`() {
-            val extensions = dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()[0].yclCodelistExtensionSources()
-            val markers =
-                extractMarkerValuesFromJsonData(
-                    extensions,
-                    { it -> (it as CodeListExtensionSource).extensionData() }
+                assertThat(markers).containsExactly(
+                    "simulated_extension_0"
                 )
+            }
 
-            assertThat(markers).containsExactly(
-                "simulated_extension_0"
-            )
-        }
-
-        @Test
-        fun `Should have diagnostic context info about extension`() {
-            val extensions = dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()[0].yclCodelistExtensionSources()
-            assertThat(extensions.size).isEqualTo(1)
-
-            assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelistExtension)
-            assertThat(extensions[0].contextLabel()).isEqualTo("")
-            assertThat(extensions[0].contextIdentifier()).isEqualTo("")
-        }
-
-        @Test
-        fun `Should have extension member pages`() {
-            val extensionPages =
-                dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()[0].yclCodelistExtensionSources()[0].yclExtensionMemberPagesData()
+            @Test
+            fun `Should have diagnostic context info about extension`() {
+                val extensions = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
+                    .extensionSources()
                     .toList()
-            val markers =
-                extractMarkerValuesFromJsonData(
-                    extensionPages,
-                    { it -> it as String }
+
+                assertThat(extensions.size).isEqualTo(1)
+
+                assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelistExtension)
+                assertThat(extensions[0].contextLabel()).isEqualTo("")
+                assertThat(extensions[0].contextIdentifier()).isEqualTo("")
+            }
+
+            @Test
+            fun `Should have extension member pages`() {
+                val extensionMemberPagesData = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
+                    .extensionSources()
+                    .first()
+                    .extensionMemberPagesData()
+
+                val markers = extractMarkerValuesFromJsonData(extensionMemberPagesData)
+                { it -> (it as String) }
+
+                assertThat(markers).containsExactly(
+                    "simulated_extension_members_page_0",
+                    "simulated_extension_members_page_1"
                 )
 
-            assertThat(markers).containsExactly(
-                "simulated_extension_memberpage_0",
-                "simulated_extension_memberpage_1"
-            )
-
-            assertThat(diagnosticCollector.events).containsExactly(
-                "ENTER [InitConfiguration]",
-                "EXIT [InitConfiguration]",
-                "ENTER [InitUriResolution]",
-                "EXIT [InitUriResolution]",
-                "ENTER [YclCodelistExtensionMembersPage]",
-                "EXIT [YclCodelistExtensionMembersPage]",
-                "ENTER [YclCodelistExtensionMembersPage]",
-                "EXIT [YclCodelistExtensionMembersPage]"
-            )
+                assertThat(diagnosticCollector.events).containsExactly(
+                    "ENTER [InitConfiguration]",
+                    "EXIT [InitConfiguration]",
+                    "ENTER [InitUriResolution]",
+                    "EXIT [InitUriResolution]",
+                    "ENTER [YclCodelistExtensionMembersPage]",
+                    "EXIT [YclCodelistExtensionMembersPage]",
+                    "ENTER [YclCodelistExtensionMembersPage]",
+                    "EXIT [YclCodelistExtensionMembersPage]"
+                )
+            }
         }
     }
 
@@ -214,9 +227,15 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
     @DisplayName("providing errors")
     inner class ErrorResponses {
 
-        @ParameterizedTest(name = "Should handle communication timeouts during {0} phase")
-        @EnumSource(value = SimulationPhase::class, mode = EnumSource.Mode.MATCH_ANY, names = arrayOf(".*"))
-        fun `Server communication timeouts at`(phase: SimulationPhase) {
+        @ParameterizedTest(
+            name = "Should handle communication timeouts during {0} phase"
+        )
+        @EnumSource(
+            value = SimulationPhase::class,
+            mode = EnumSource.Mode.MATCH_ANY,
+            names = arrayOf(".*")
+        )
+        fun testServerCommunicationTimeoutsAt(phase: SimulationPhase) {
             configureHoverflySimulation(
                 mapOf(
                     phase to SimulationVariety.DELAY_RESPONSE
@@ -224,15 +243,21 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
             )
 
             val thrown = catchThrowable {
-                val codelistSource = dpmSource.dpmDictionarySources()[0].explicitDomainAndHierarchiesSources()[0]
+                val codeListSource = dpmSource
+                    .dpmDictionarySources()
+                    .first()
+                    .explicitDomainsAndHierarchiesSource()!!
 
-                codelistSource.yclCodeSchemeData()
-                codelistSource.yclCodePagesData().toList()
+                codeListSource.codeListMetaData()
+                codeListSource.codePagesData().toList()
 
-                val codelistExtensionSource = codelistSource.yclCodelistExtensionSources()[0]
+                val extensionSource = codeListSource.extensionSources().first()
+                extensionSource.extensionMetaData()
+                extensionSource.extensionMemberPagesData().toList()
 
-                codelistExtensionSource.yclExtensionData()
-                codelistExtensionSource.yclExtensionMemberPagesData().toList()
+                val subCodeListSource = codeListSource.subCodeListSources().first()
+                subCodeListSource.codeListMetaData()
+                subCodeListSource.codePagesData().toList()
             }
 
             assertThat(thrown).isInstanceOf(HaltException::class.java)
@@ -254,35 +279,43 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         HttpOps.useCustomHttpClient(okHttpClient)
     }
 
-    private fun yclSourceConfig(): String {
-        val config = """
-        {
-          "dpmDictionaries": [
+    private fun dpmDictionaryConfigContent(): String {
+        return """
             {
-              "owner": {
-                "name": "OwnerName",
-                "namespace": "OwnerNamespace",
-                "prefix": "OwnerPrefix",
-                "location": "OwnerLocation",
-                "copyright": "OwnerCopyright",
-                "languages": [
-                  "en",
-                  "fi"
-                ],
-                "defaultLanguage": "en"
-              },
-              "codelists": [
+              "dpmDictionaries": [
                 {
-                  "uri": "http://uri.suomi.fi/codelist/ytitaxgenfixtures/minimal_zero",
-                  "domainCode": "m_zero_override"
+                  "owner": {
+                    "name": "NameValue",
+                    "namespace": "NamespaceValue",
+                    "prefix": "PrefixValue",
+                    "location": "LocationValue",
+                    "copyright": "CopyrightValue",
+                    "languages": [
+                      "en",
+                      "fi",
+                      "sv"
+                    ],
+                    "defaultLanguage": "en"
+                  },
+                  "metrics": {
+                    "uri": null
+                  },
+                  "explicitDomainsAndHierarchies": {
+                    "uri": null
+                  },
+                  "explicitDimensions": {
+                    "uri": null
+                  },
+                  "typedDomains": {
+                    "uri": null
+                  },
+                  "typedDimensions": {
+                    "uri": null
+                  }
                 }
               ]
             }
-          ]
-        }
         """.trimIndent()
-
-        return config
     }
 
     enum class SimulationPhase {
@@ -305,7 +338,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
     private fun configureHoverflySimulation(varietyConf: Map<SimulationPhase, SimulationVariety> = emptyMap()) {
         val simulationSource = SimulationSource.dsl(
             service("uri.suomi.fi")
-                //URI redirects to YCL service
+                //URI redirects to RDS service
                 .redirectGet(
                     currentPhase = SimulationPhase.URL_RESOLUTION_URI_REDIRECT,
                     varietyConf = varietyConf,
@@ -314,7 +347,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                 ),
 
             service("koodistot.suomi.fi")
-                //YCL service responses for redirected URI
+                //RDS service responses for redirected URI
                 .respondGetWithJson(
                     currentPhase = SimulationPhase.URL_RESOLUTION_CODESCHEME,
                     varietyConf = varietyConf,
@@ -327,7 +360,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         """.trimIndent()
                 )
 
-                //YCL service responses for expanded CodeScheme (resolution phase)
+                //RDS service responses for expanded CodeScheme (resolution phase)
                 .respondGetWithJson(
                     currentPhase = SimulationPhase.URL_RESOLUTION_CODESCHEME_EXPANDED,
                     varietyConf = varietyConf,
@@ -347,7 +380,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         """.trimIndent()
                 )
 
-                //YCL service responses for expanded CodeScheme
+                //RDS service responses for expanded CodeScheme
                 .respondGetWithJson(
                     currentPhase = SimulationPhase.CONTENT_CODESCHEME,
                     varietyConf = varietyConf,
@@ -360,7 +393,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         """.trimIndent()
                 )
 
-                //YCL service responses for Code pages
+                //RDS service responses for Code pages
                 .respondGetWithJson(
                     currentPhase = SimulationPhase.CONTENT_CODE_PAGE_0,
                     varietyConf = varietyConf,
@@ -391,7 +424,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         """.trimIndent()
                 )
 
-                //YCL service responses for expanded Extension
+                //RDS service responses for expanded Extension
                 .respondGetWithJson(
                     currentPhase = SimulationPhase.CONTENT_EXTENSION,
                     varietyConf = varietyConf,
@@ -403,7 +436,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                         """.trimIndent()
                 )
 
-                //YCL service responses for Extension Member pages
+                //RDS service responses for Extension Member pages
                 .respondGetWithJson(
                     currentPhase = SimulationPhase.CONTENT_EXTENSION_MEMBER_0,
                     varietyConf = varietyConf,
@@ -414,7 +447,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                             "meta": {
                                 "nextPage": "http://koodistot.suomi.fi/api/codelist/ytitaxgenfixtures_minimal_zero/extensions/ext_0/members/?pageSize=1000&from=1000"
                             },
-                            "marker": "simulated_extension_memberpage_0"
+                            "marker": "simulated_extension_members_page_0"
                         }
                         """.trimIndent()
                 )
@@ -429,7 +462,7 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
                             "meta": {
                                 "nextPage": null
                             },
-                            "marker": "simulated_extension_memberpage_1"
+                            "marker": "simulated_extension_members_page_1"
                         }
                         """.trimIndent()
                 )
@@ -483,3 +516,4 @@ internal class DpmSource_ApiAdapterSimulation_UnitTest(private val hoverfly: Hov
         return this
     }
 }
+
