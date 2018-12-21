@@ -8,14 +8,13 @@ import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceZipFileAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
-import org.junit.jupiter.api.TestInstance
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Test RDS source adapter conformance")
 internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() {
 
@@ -25,16 +24,23 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
         val dpmSourceContextIdentifier: String
     )
 
-    private var loopbackTempFolder: TempFolder? = null
-    private var zipLoopbackTempFolder: TempFolder? = null
+    companion object {
+        lateinit var loopbackTempFolder: TempFolder
+        lateinit var zipLoopbackTempFolder: TempFolder
 
-    @AfterAll
-    fun teardown() {
-        loopbackTempFolder.apply { this?.close() }
-        loopbackTempFolder = null
+        @BeforeAll
+        @JvmStatic
+        fun beforeAll() {
+            loopbackTempFolder = TempFolder("conformance_loopback")
+            zipLoopbackTempFolder = TempFolder("conformance_zip_loopback")
+        }
 
-        zipLoopbackTempFolder.apply { this?.close() }
-        zipLoopbackTempFolder = null
+        @AfterAll
+        @JvmStatic
+        fun afterAll() {
+            loopbackTempFolder.close()
+            zipLoopbackTempFolder.close()
+        }
     }
 
     @TestFactory
@@ -52,11 +58,8 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
 
     @TestFactory
     fun `Folder adapter with loopback data`(): List<DynamicNode> {
-        val tempFolder = TempFolder("conformance_loopback")
-        loopbackTempFolder = tempFolder
-
         DpmSourceRecorderFolderAdapter(
-            baseFolderPath = tempFolder.path(),
+            baseFolderPath = loopbackTempFolder.path(),
             forceOverwrite = false,
             diagnostic = diagnostic
         ).use {
@@ -64,12 +67,12 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
             it.captureSources(source)
         }
 
-        val dpmSource = DpmSourceFolderAdapter(tempFolder.path())
+        val dpmSource = DpmSourceFolderAdapter(loopbackTempFolder.path())
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "folder",
-            dpmSourceContextIdentifier = tempFolder.path().toString()
+            dpmSourceContextIdentifier = loopbackTempFolder.path().toString()
         )
 
         return testCaseFactory(dpmSource, expectedDetails)
@@ -77,9 +80,7 @@ internal class DpmSource_AdapterConformance_UnitTest : DpmSource_UnitTestBase() 
 
     @TestFactory
     fun `Folder adapter with zip-loopback data`(): List<DynamicNode> {
-        val tempFolder = TempFolder("conformance_zip_loopback")
-        zipLoopbackTempFolder = tempFolder
-        val targetZipPath = tempFolder.resolve("file.zip")
+        val targetZipPath = zipLoopbackTempFolder.resolve("file.zip")
 
         DpmSourceRecorderZipFileAdapter(
             targetZipPath = targetZipPath,
