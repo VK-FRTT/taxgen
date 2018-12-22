@@ -15,7 +15,7 @@ internal class CodeListExtensionSourceAdapter(
     }
 
     override fun extensionMemberPagesData(): Sequence<String> {
-        return RdsPaginationAwareResourceIterator(
+        return PaginationAwareCollectionIterator(
             extensionUrls.extensionMembersUrl,
             diagnostic,
             DiagnosticContextType.RdsCodelistExtensionMembersPage

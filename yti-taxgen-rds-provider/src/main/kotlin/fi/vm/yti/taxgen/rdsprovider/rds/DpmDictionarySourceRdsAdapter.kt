@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.config.DpmDictionarySourceConfig
@@ -16,28 +17,51 @@ internal class DpmDictionarySourceRdsAdapter(
     }
 
     override fun metricsSource(): CodeListSource? {
-        return codeListSourceForUri(config.metrics.uri)
+        return codeListSourceOrNullForUri(
+            config.metrics.uri,
+            CodeListBlueprint.metrics()
+        )
     }
 
     override fun explicitDomainsAndHierarchiesSource(): CodeListSource? {
-        return codeListSourceForUri(config.explicitDomainsAndHierarchies.uri)
+        return codeListSourceOrNullForUri(
+            config.explicitDomainsAndHierarchies.uri,
+            CodeListBlueprint.explicitDomainsAndHierarchies()
+        )
     }
 
     override fun explicitDimensionsSource(): CodeListSource? {
-        return codeListSourceForUri(config.explicitDimensions.uri)
+        return codeListSourceOrNullForUri(
+            config.explicitDimensions.uri,
+            CodeListBlueprint.explicitOrTypedDimensions()
+        )
     }
 
     override fun typedDomainsSource(): CodeListSource? {
-        return codeListSourceForUri(config.typedDomains.uri)
+        return codeListSourceOrNullForUri(
+            config.typedDomains.uri,
+            CodeListBlueprint.typedDomains()
+        )
     }
 
     override fun typedDimensionsSource(): CodeListSource? {
-        return codeListSourceForUri(config.typedDimensions.uri)
+        return codeListSourceOrNullForUri(
+            config.typedDimensions.uri,
+            CodeListBlueprint.explicitOrTypedDimensions()
+        )
     }
 
-    private fun codeListSourceForUri(uri: String?): CodeListSource? {
+    private fun codeListSourceOrNullForUri(
+        uri: String?,
+        blueprint: CodeListBlueprint
+    ): CodeListSource? {
         return if (uri != null) {
-            CodeListSourceRdsAdapter(diagnostic, uri)
+            CodeListSourceRdsAdapter(
+                rdsCodeListAddress = uri,
+                rdsCodeListAddressType = CodeListSourceRdsAdapter.AddressType.URI,
+                blueprint = blueprint,
+                diagnostic = diagnostic
+            )
         } else {
             null
         }

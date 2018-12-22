@@ -9,7 +9,7 @@ enum class DiagnosticContextType(val recurring: Boolean, val displayName: String
     WritingSQLiteDpmDb(false, "Writing DPM database"),
 
     InitConfiguration(false, "Configuration file"),
-    InitUriResolution(false, "URI resolution"),
+    InitContentUrls(false, "Content URLs"),
 
     DpmSource(false, "DPM Sources"),
     DpmOwner(true, "Owner"),

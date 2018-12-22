@@ -53,7 +53,7 @@ internal class DpmMappingContext private constructor(
         }
     }
 
-    fun <R : Validatable> extractList(diagnosticContext: DiagnosticContextProvider, block: () -> List<R>): List<R> {
+    fun <R : Validatable> extractList(diagnosticContext: DiagnosticContextProvider, block: () -> Sequence<R>): List<R> {
         return diagnostic.withContext(diagnosticContext) {
             val extractResult = block()
 
@@ -62,7 +62,7 @@ internal class DpmMappingContext private constructor(
 
             diagnostic.validationResults(collector.compileResults())
 
-            extractResult
+            extractResult.toList()
         }
     }
 }
