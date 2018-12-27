@@ -5,26 +5,20 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
 internal class CodeListSourceRdsAdapter(
-    private val rdsCodeListAddress: String,
-    private val rdsCodeListAddressType: AddressType,
+    private val rdsCodeListUri: String,
     private val blueprint: CodeListBlueprint,
     private val diagnostic: Diagnostic
-) : CodeListSource, PaginationAwareCollectionIterator.IterationObserver {
-
-    enum class AddressType {
-        URI,
-        URL
-    }
+) : CodeListSource {
 
     private val contentUrls: ContentUrls by lazy(this::resolveContentUrls)
-    private val subCodeListUrls = mutableListOf<String>()
-    private var subCodeListUrlsReady = false
+    private var subCodeListUris: List<String>? = null
 
     override fun blueprint(): CodeListBlueprint {
         return blueprint
@@ -39,7 +33,7 @@ internal class CodeListSourceRdsAdapter(
             contentUrls.codesUrl,
             diagnostic,
             DiagnosticContextType.RdsCodesPage,
-            this
+            SubCodeListUriExtractor(this)
         ).asSequence()
     }
 
@@ -53,40 +47,53 @@ internal class CodeListSourceRdsAdapter(
     }
 
     override fun subCodeListSources(): Sequence<CodeListSource> {
-        check(subCodeListUrlsReady)
-
-        return subCodeListUrls.asSequence().map {
-            CodeListSourceRdsAdapter(
-                rdsCodeListAddress = it,
-                rdsCodeListAddressType = CodeListSourceRdsAdapter.AddressType.URL,
-                blueprint = blueprint.subCodeListBlueprint!!,
-                diagnostic = diagnostic
-            )
+        if (subCodeListUris == null) {
+            codePagesData().all { true }
         }
+
+        subCodeListUris?.let { uris ->
+            return uris.asSequence().map {
+                CodeListSourceRdsAdapter(
+                    rdsCodeListUri = it,
+                    blueprint = blueprint.subCodeListBlueprint!!,
+                    diagnostic = diagnostic
+                )
+            }
+        }
+
+        thisShouldNeverHappen("subCodeListUris is null")
     }
 
     private fun resolveContentUrls(): ContentUrls {
         return diagnostic.withContext(
             contextType = DiagnosticContextType.InitContentUrls,
-            contextIdentifier = rdsCodeListAddress
+            contextIdentifier = rdsCodeListUri
         ) {
             CodeListContentUrlsResolver(blueprint, diagnostic)
-                .resolveForAddress(
-                    rdsCodeListAddress,
-                    rdsCodeListAddressType
+                .resolveForUri(
+                    rdsCodeListUri
                 )
         }
     }
 
-    override fun iteratedPage(pageJson: JsonNode) {
-        subCodeListUrls.addAll(
-            pageJson.arrayAt("/results", diagnostic).mapNotNull { codeNode ->
-                codeNode.nonBlankTextOrNullAt("/subCodeScheme/url")
-            }
-        )
-    }
+    private class SubCodeListUriExtractor(
+        val parentAdapter: CodeListSourceRdsAdapter
+    ) : PaginationAwareCollectionIterator.IterationObserver {
 
-    override fun iterationDone() {
-        subCodeListUrlsReady = true
+        private val subCodeListUris = mutableListOf<String>()
+
+        override fun iteratedPage(pageJson: JsonNode) {
+            subCodeListUris.addAll(
+                pageJson.arrayAt("/results", parentAdapter.diagnostic).mapNotNull { codeNode ->
+                    codeNode.nonBlankTextOrNullAt("/subCodeScheme/uri")
+                }
+            )
+        }
+
+        override fun iterationDone() {
+            parentAdapter.subCodeListUris = subCodeListUris.distinct()
+        }
     }
 }
+
+

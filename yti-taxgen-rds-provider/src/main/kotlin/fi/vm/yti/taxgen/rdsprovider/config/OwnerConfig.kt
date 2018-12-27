@@ -7,5 +7,6 @@ data class OwnerConfig(
     val location: String,
     val copyright: String,
     val languages: List<String>,
-    val defaultLanguage: String
+    val defaultLanguage: String,
+    val marker: String? //Used only in conformance testing
 )

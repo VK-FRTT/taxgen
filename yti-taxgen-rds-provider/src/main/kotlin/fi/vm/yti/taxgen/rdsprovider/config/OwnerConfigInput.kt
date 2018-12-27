@@ -10,7 +10,8 @@ data class OwnerConfigInput(
     val location: String?,
     val copyright: String?,
     val languages: List<String?>?,
-    val defaultLanguage: String?
+    val defaultLanguage: String?,
+    val marker: String? //Used only in conformance testing
 ) {
 
     fun toConfig(diagnostic: Diagnostic): OwnerConfig {
@@ -21,7 +22,6 @@ data class OwnerConfigInput(
         validateValueNotNull(this::copyright, diagnostic)
         validateValueNotNull(this::languages, diagnostic)
         validateValueNotNull(this::defaultLanguage, diagnostic)
-
         validateListElementsNotNull(this::languages, diagnostic)
 
         @Suppress("UNCHECKED_CAST")
@@ -32,7 +32,8 @@ data class OwnerConfigInput(
             location = location!!,
             copyright = copyright!!,
             languages = languages!! as List<String>,
-            defaultLanguage = defaultLanguage!!
+            defaultLanguage = defaultLanguage!!,
+            marker = marker
         )
     }
 }

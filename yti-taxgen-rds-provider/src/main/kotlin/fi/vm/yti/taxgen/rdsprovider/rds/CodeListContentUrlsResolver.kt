@@ -24,22 +24,16 @@ internal class CodeListContentUrlsResolver(
     private val blueprint: CodeListBlueprint,
     private val diagnostic: Diagnostic
 ) {
-    fun resolveForAddress(
-        address: String,
-        addressType: CodeListSourceRdsAdapter.AddressType
+    fun resolveForUri(
+        uri: String
     ): ContentUrls {
 
-        val httpUrl = when (addressType) {
-
-            CodeListSourceRdsAdapter.AddressType.URI -> {
-                val metaDataJson = fetchUriMetaDataJson(address)
-                metaDataJson.httpUrlAt("/url", diagnostic, "Content URL resolution via URI")
-            }
-
-            CodeListSourceRdsAdapter.AddressType.URL -> {
-                parseHttpUrlAt(address, diagnostic, "Content URL resolution via URL")
-            }
-        }
+        val metaDataJson = fetchUriMetaDataJson(uri)
+        val httpUrl = metaDataJson.httpUrlAt(
+            "/url",
+            diagnostic,
+            "Content URL resolution via URI"
+        )
 
         val codeListJson = fetchExpandedCodeListJson(httpUrl)
 
