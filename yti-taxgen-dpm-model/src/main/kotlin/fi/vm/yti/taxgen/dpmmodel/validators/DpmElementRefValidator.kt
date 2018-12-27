@@ -22,6 +22,7 @@ fun <I : Validatable> validateDpmElementRef(
     )
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <I : Validatable> validateOptionalDpmElementRef(
     validationResults: ValidationResults,
     instance: I,

@@ -6,6 +6,7 @@ data class CodeListConfigInput(
     val uri: String?
 ) {
 
+    @Suppress("UNUSED_PARAMETER")
     fun toConfig(diagnostic: Diagnostic): CodeListConfig {
         return CodeListConfig(
             uri = uri
