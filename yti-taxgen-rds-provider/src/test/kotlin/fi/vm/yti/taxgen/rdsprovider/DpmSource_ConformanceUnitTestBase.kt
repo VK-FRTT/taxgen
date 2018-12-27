@@ -217,6 +217,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelistExtension)
                                 assertThat(extensions[0].contextLabel()).isEqualTo("")
                                 assertThat(extensions[0].contextIdentifier()).isEqualTo("")
+                                assertThat(extensions[11].contextIdentifier()).isEqualTo("")
                             },
 
                             dynamicTest("Should have extension members pages") {

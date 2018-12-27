@@ -48,30 +48,36 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
     @DisplayName("which is empty")
     inner class EmptyTargetFolder {
 
-        private fun assertTargetFolderHavingJsonFile(expectedFile: String) {
+        private fun assertTargetFolderHavingJsonFileWithMarker(
+            expectedFile: String,
+            expectedMarker: String
+        ) {
             val expectedFilePath = emptyTargetFolder.resolve("$expectedFile.json")
             assertThat(Files.isRegularFile(expectedFilePath)).isTrue()
 
             val json = objectMapper.readTree(expectedFilePath.toFile())
             assertThat(json.isObject).isTrue()
-            assertThat(json.get("marker").textValue()).isEqualTo(expectedFile)
+            assertThat(json.get("marker").textValue()).isEqualTo(expectedMarker)
         }
 
         @Test
         fun `Should have source config at root`() {
-            assertTargetFolderHavingJsonFile(
-                expectedFile = "meta/source_config"
+            assertTargetFolderHavingJsonFileWithMarker(
+                expectedFile = "meta/source_config",
+                expectedMarker = "meta/source_config"
             )
         }
 
         @Test
         fun `Should have owner config`() {
-            assertTargetFolderHavingJsonFile(
-                expectedFile = "dpm_dictionary_0/dpm_owner_config"
+            assertTargetFolderHavingJsonFileWithMarker(
+                expectedFile = "dpm_dictionary_0/dpm_owner_config",
+                expectedMarker = "dpm_dictionary_0/dpm_owner_config"
             )
 
-            assertTargetFolderHavingJsonFile(
-                expectedFile = "dpm_dictionary_1/dpm_owner_config"
+            assertTargetFolderHavingJsonFileWithMarker(
+                expectedFile = "dpm_dictionary_1/dpm_owner_config",
+                expectedMarker = "dpm_dictionary_1/dpm_owner_config"
             )
         }
 
@@ -80,36 +86,41 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
 
             @Test
             fun `Should have Metrics concept`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/met/code_list_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/met/code_list_meta",
+                    expectedMarker = "dpm_dictionary_0/met/code_list_meta"
                 )
             }
 
             @Test
             fun `Should have ExplicitDomainsAndHierarchies concept`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/code_list_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/code_list_meta",
+                    expectedMarker = "dpm_dictionary_0/exp_dom_hier/code_list_meta"
                 )
             }
 
             @Test
             fun `Should have TypedDomains concept`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/typ_dom/code_list_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/typ_dom/code_list_meta",
+                    expectedMarker = "dpm_dictionary_0/typ_dom/code_list_meta"
                 )
             }
 
             @Test
             fun `Should have ExplicitDimensions concept`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dim/code_list_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dim/code_list_meta",
+                    expectedMarker = "dpm_dictionary_0/exp_dim/code_list_meta"
                 )
             }
 
             @Test
             fun `Should have TypedDimensions concept`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/typ_dim/code_list_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/typ_dim/code_list_meta",
+                    expectedMarker = "dpm_dictionary_0/typ_dim/code_list_meta"
                 )
             }
         }
@@ -119,50 +130,57 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
 
             @Test
             fun `Should have codepage`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/codes_page_0"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/codes_page_0",
+                    expectedMarker = "dpm_dictionary_0/exp_dom_hier/codes_page_0/codes"
                 )
             }
 
             @Test
             fun `Should have extension`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta",
+                    expectedMarker = "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta"
                 )
             }
 
             @Test
             fun `Should have extension member page`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0",
+                    expectedMarker = "dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0/members"
                 )
             }
 
             @Test
             fun `Should have sub code list`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/code_list_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/code_list_meta",
+                    expectedMarker = "dpm_dictionary_0/edh_sub_code_list_0/code_list_meta"
                 )
             }
 
             @Test
             fun `Should have codepage within sub code list`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/codes_page_0"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/codes_page_0",
+                    expectedMarker = "dpm_dictionary_0/edh_sub_code_list_0/codes_page_0/codes"
                 )
             }
 
             @Test
             fun `Should have extension within sub code list`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/extension_0/extension_meta"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/extension_0/extension_meta",
+                    expectedMarker = "dpm_dictionary_0/edh_sub_code_list_0/extension_0/extension_meta"
                 )
             }
 
             @Test
             fun `Should have extension members within sub code list`() {
-                assertTargetFolderHavingJsonFile(
-                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/extension_0/members_page_0"
+                assertTargetFolderHavingJsonFileWithMarker(
+                    expectedFile = "dpm_dictionary_0/exp_dom_hier/sub_code_list_0/extension_0/members_page_0",
+                    expectedMarker = "dpm_dictionary_0/edh_sub_code_list_0/extension_0/members_page_0/members"
                 )
             }
         }
