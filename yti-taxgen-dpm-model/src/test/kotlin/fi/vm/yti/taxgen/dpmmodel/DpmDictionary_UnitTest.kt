@@ -17,7 +17,11 @@ internal class DpmDictionary_UnitTest :
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
         "owner,                 required",
-        "explicitDomains,       required"
+        "metrics,               required",
+        "explicitDomains,       required",
+        "typedDomains,          required",
+        "explicitDimensions,    required",
+        "typedDimensions,       required"
     )
     fun testPropertyOptionality(
         propertyName: String,
@@ -32,8 +36,16 @@ internal class DpmDictionary_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
+        "metrics,               minColLength,       1",
+        "metrics,               maxColLength,   10000",
         "explicitDomains,       minColLength,       1",
-        "explicitDomains,       maxColLength,   10000"
+        "explicitDomains,       maxColLength,   10000",
+        "typedDomains,          minColLength,       1",
+        "typedDomains,          maxColLength,   10000",
+        "explicitDimensions,    minColLength,       1",
+        "explicitDimensions,    maxColLength,   10000",
+        "typedDimensions,       minColLength,       1",
+        "typedDimensions,       maxColLength,   10000"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -45,10 +57,40 @@ internal class DpmDictionary_UnitTest :
             validationType = validationType,
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
-                if (property.name == "explicitDomains") {
-                    List(length) { index -> explicitDomain("$index") }
-                } else {
-                    null
+                when (property.name) {
+                    "metrics" ->
+                        List(length) { index ->
+                            metric("$index", index)
+                        }
+
+                    "explicitDomains" ->
+                        List(length) { index ->
+                            explicitDomain("$index")
+                        }
+
+                    "typedDomains" ->
+                        List(length) { index ->
+                            typedDomain("$index")
+                        }
+
+                    "explicitDimensions" ->
+                        List(length) { index ->
+                            explicitDimension(
+                                "$index",
+                                refTo<ExplicitDomain>("$index")
+                            )
+                        }
+
+                    "typedDimensions" ->
+                        List(length) { index ->
+                            typedDimension(
+                                "$index",
+                                refTo<TypedDomain>("$index")
+                            )
+                        }
+
+                    else ->
+                        null
                 }
             }
         )

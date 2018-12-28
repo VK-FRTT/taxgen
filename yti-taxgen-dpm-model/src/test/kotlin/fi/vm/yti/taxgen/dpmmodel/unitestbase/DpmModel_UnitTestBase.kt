@@ -4,11 +4,15 @@ import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
 import fi.vm.yti.taxgen.dpmmodel.DpmElementRef
+import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
+import fi.vm.yti.taxgen.dpmmodel.Metric
+import fi.vm.yti.taxgen.dpmmodel.TypedDimension
+import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.dpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.dpmTestData
@@ -55,6 +59,20 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
+    protected fun metric(baseId: String, memberCodeNumber: Int): Metric {
+        return Metric(
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            memberCodeNumber = memberCodeNumber,
+            concept = Factory.instantiate(),
+            dataType = Metric.DataType.STRING,
+            flowType = Metric.FlowType.INSTANT,
+            balanceType = Metric.BalanceType.CREDIT,
+            domainRef = null,
+            hierarchyRef = null
+        )
+    }
+
     protected fun explicitDomain(baseId: String): ExplicitDomain {
         return ExplicitDomain(
             id = "${baseId}_id",
@@ -100,6 +118,36 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             unaryOperator = "+",
             memberRef = memberRef,
             childNodes = children.toList()
+        )
+    }
+
+    protected fun typedDomain(baseId: String): TypedDomain{
+        return TypedDomain(
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            domainCode = "${baseId}_code",
+            concept = Factory.instantiate(),
+            dataType = TypedDomain.DataType.STRING
+        )
+    }
+
+    protected fun explicitDimension(baseId: String, domainRef: DpmElementRef): ExplicitDimension {
+        return ExplicitDimension(
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            dimensionCode = "${baseId}_code",
+            concept = Factory.instantiate(),
+            domainRef = domainRef
+        )
+    }
+
+    protected fun typedDimension(baseId: String, domainRef: DpmElementRef): TypedDimension {
+        return TypedDimension(
+            id = "${baseId}_id",
+            uri = "${baseId}_uri",
+            dimensionCode = "${baseId}_code",
+            concept = Factory.instantiate(),
+            domainRef = domainRef
         )
     }
 

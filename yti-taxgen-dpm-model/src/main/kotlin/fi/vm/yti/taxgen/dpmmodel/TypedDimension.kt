@@ -9,7 +9,7 @@ data class TypedDimension(
     override val uri: String,
     override val concept: Concept,
     val dimensionCode: String,
-    val domainRef: DpmElementRef
+    val domainRef: DpmElementRef //TODO - validate ref points to TypedDomain?
 ) : DpmElement {
 
     override fun validate(validationResults: ValidationResults) {
