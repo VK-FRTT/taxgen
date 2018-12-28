@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.dpmmodel.validators.validateOptionalDpmElementRef
 
 data class Metric(
@@ -11,8 +12,8 @@ data class Metric(
     val dataType: Metric.DataType,
     val flowType: Metric.FlowType,
     val balanceType: Metric.BalanceType,
-    val domainRef: DpmElementRef?,
-    val hierarchyRef: DpmElementRef?
+    val domainRef: DpmElementRef?,  //TODO - validate refs points to *Domain?
+    val hierarchyRef: DpmElementRef? //TODO - validate refs points to Hierarchy?
 ) : DpmElement {
 
     enum class DataType {
@@ -41,6 +42,14 @@ data class Metric(
     override fun validate(validationResults: ValidationResults) {
 
         super.validate(validationResults)
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::memberCodeNumber,
+            condition = { memberCodeNumber >= 0 },
+            message = { "negative member code number" }
+        )
 
         validateOptionalDpmElementRef(
             validationResults = validationResults,

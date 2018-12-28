@@ -73,6 +73,36 @@ internal class Metric_UnitTest :
     }
 
     @Nested
+    inner class MemberCodeNumberProp {
+
+        @DisplayName("Value validation")
+        @ParameterizedTest(name = "Value `{0}` should be {1} member code number")
+        @CsvSource(
+            "-10,       invalid",
+            "-1,        invalid",
+            "0,         valid",
+            "1,         valid",
+            "10,        valid"
+        )
+        fun `memberCodeNumber should error if value is invalid`(
+            value: Int,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "memberCodeNumber" to value
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.memberCodeNumber: negative member code number")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
+        }
+    }
+
+    @Nested
     inner class DomainRefProp {
 
         @DisplayName("id validation")
