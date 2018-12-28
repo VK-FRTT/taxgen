@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.dpmmodel.validators.validateIterablePropertyValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class Owner(
@@ -73,11 +73,13 @@ data class Owner(
             maxLength = 10
         )
 
-        validateIterablePropertyValuesUnique(
+        validateElementValueUnique(
             validationResults = validationResults,
             instance = this,
-            iterableProperty = Owner::languages,
-            valueProperty = Language::iso6391Code
+            instancePropertyName = "languages",
+            iterable = languages,
+            valueSelector = { it.iso6391Code },
+            valueDescription = "iso6391Code"
         )
     }
 }

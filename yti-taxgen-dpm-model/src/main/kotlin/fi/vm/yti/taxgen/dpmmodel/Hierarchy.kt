@@ -1,8 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableElementsUnique
-import fi.vm.yti.taxgen.dpmmodel.validators.validateIterablePropertyValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class Hierarchy(
@@ -25,24 +24,23 @@ data class Hierarchy(
             maxLength = 50
         )
 
-        validateIterablePropertyValuesUnique(
+        validateElementValueUnique(
             validationResults = validationResults,
             instance = this,
             instancePropertyName = "rootNodes",
             iterable = allNodes(),
-            valueProperty = HierarchyNode::id
+            valueSelector = { it.id },
+            valueDescription = "id"
         )
 
-        validateIterableElementsUnique(
+        //TODO - better error message for this (as it is quite likely user caused modeling issue)
+        validateElementValueUnique(
             validationResults = validationResults,
             instance = this,
-            propertyName = "rootNodes",
+            instancePropertyName = "rootNodes",
             iterable = allNodes(),
-            keySelector = { it.memberRef.id },
-            message = { duplicateNode ->
-                "DPM Hierarchy contains multiple times same DPM Member. " +
-                    "${duplicateNode.memberRef.diagnosticTag()} in ${duplicateNode.ref().diagnosticTag()}"
-            }
+            valueSelector = { it.memberRef.id },
+            valueDescription = "memberRef.id"
         )
     }
 

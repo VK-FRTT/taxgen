@@ -4,6 +4,24 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import kotlin.reflect.KProperty1
 
+fun <T : Any, P : Any> validateLengths(
+    validationResults: ValidationResults,
+    instance: T,
+    properties: List<KProperty1<T, P>>,
+    minLength: Int? = null,
+    maxLength: Int? = null
+) {
+    properties.forEach {
+        validateLength(
+            validationResults = validationResults,
+            instance = instance,
+            property = it,
+            minLength = minLength,
+            maxLength = maxLength
+        )
+    }
+}
+
 fun <T : Any, P : Any> validateLength(
     validationResults: ValidationResults,
     instance: T,

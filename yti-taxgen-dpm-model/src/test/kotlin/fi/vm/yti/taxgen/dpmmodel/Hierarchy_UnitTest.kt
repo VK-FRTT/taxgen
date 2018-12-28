@@ -137,8 +137,7 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_2_diagnostic_label (m_2_uri) in (DPM HierarchyNode) Text#fi (hn_2_uri)",
-                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_2_diagnostic_label (m_2_uri) in (DPM HierarchyNode) Text#fi (hn_3_uri)"
+                    "Hierarchy.rootNodes: duplicate memberRef.id value 'm_2_id'"
                 )
         }
 
@@ -177,8 +176,7 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_4_diagnostic_label (m_4_uri) in (DPM HierarchyNode) Text#fi (hn_4_uri)",
-                    "Hierarchy.rootNodes: DPM Hierarchy contains multiple times same DPM Member. (DPM Member) m_4_diagnostic_label (m_4_uri) in (DPM HierarchyNode) Text#fi (hn_5_uri)"
+                    "Hierarchy.rootNodes: duplicate memberRef.id value 'm_4_id'"
                 )
         }
     }

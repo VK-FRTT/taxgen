@@ -4,32 +4,36 @@ import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
-fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateIterablePropertyValuesUnique(
+fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateElementPropertyValuesUnique(
     validationResults: ValidationResults,
     instance: I,
     iterableProperty: KProperty1<I, P>,
-    valueProperty: KProperty1<E, K>
+    valueProperties: List<KProperty1<E, K>>
 ) {
     val iterable: P = iterableProperty.getter.call(instance)
 
-    validateIterablePropertyValuesUnique(
-        validationResults,
-        instance,
-        iterableProperty.name,
-        iterable,
-        valueProperty
-    )
+    valueProperties.forEach { valueProperty ->
+        validateElementValueUnique(
+            validationResults = validationResults,
+            instance = instance,
+            instancePropertyName = iterableProperty.name,
+            iterable = iterable,
+            valueSelector = { valueProperty.getter.call(it) },
+            valueDescription = valueProperty.name
+        )
+    }
 }
 
-fun <I : Validatable, E : Any, K : Any> validateIterablePropertyValuesUnique(
+fun <I : Validatable, E : Any, K : Any> validateElementValueUnique(
     validationResults: ValidationResults,
     instance: I,
     instancePropertyName: String,
     iterable: Iterable<E>,
-    valueProperty: KProperty1<E, K>
+    valueSelector: (E) -> K,
+    valueDescription: String
 ) {
     val duplicateValues = iterable
-        .groupingBy { valueProperty.getter.call(it) }
+        .groupingBy(valueSelector)
         .eachCount()
         .filter { it.value > 1 }.keys
 
@@ -37,25 +41,7 @@ fun <I : Validatable, E : Any, K : Any> validateIterablePropertyValuesUnique(
         validationResults.addError(
             instance,
             instancePropertyName,
-            "duplicate ${valueProperty.name} value '$value'"
+            "duplicate $valueDescription value '$value'"
         )
     }
-}
-
-fun <I : Validatable, E : Any, K : Any> validateIterableElementsUnique(
-    validationResults: ValidationResults,
-    instance: I,
-    propertyName: String,
-    iterable: Iterable<E>,
-    keySelector: (E) -> K,
-    message: (E) -> String
-) {
-    iterable
-        .groupBy(keySelector)
-        .filter { (_, elements) -> elements.size > 1 }
-        .forEach { (_, elements) ->
-            elements.forEach { element ->
-                validationResults.addError(instance, propertyName, message(element))
-            }
-        }
 }

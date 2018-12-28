@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.validators.validateIterablePropertyValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validateElementPropertyValuesUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class ExplicitDomain(
@@ -34,18 +34,11 @@ data class ExplicitDomain(
             maxLength = 10000
         )
 
-        validateIterablePropertyValuesUnique(
+        validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
             iterableProperty = ExplicitDomain::members,
-            valueProperty = Member::id
-        )
-
-        validateIterablePropertyValuesUnique(
-            validationResults = validationResults,
-            instance = this,
-            iterableProperty = ExplicitDomain::members,
-            valueProperty = Member::memberCode
+            valueProperties = listOf(Member::id, Member::memberCode)
         )
 
         validateCustom(
@@ -61,18 +54,11 @@ data class ExplicitDomain(
             }
         )
 
-        validateIterablePropertyValuesUnique(
+        validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
             iterableProperty = ExplicitDomain::hierarchies,
-            valueProperty = Hierarchy::id
-        )
-
-        validateIterablePropertyValuesUnique(
-            validationResults = validationResults,
-            instance = this,
-            iterableProperty = ExplicitDomain::hierarchies,
-            valueProperty = Hierarchy::hierarchyCode
+            valueProperties = listOf(Hierarchy::id, Hierarchy::hierarchyCode)
         )
 
         validateCustom(
