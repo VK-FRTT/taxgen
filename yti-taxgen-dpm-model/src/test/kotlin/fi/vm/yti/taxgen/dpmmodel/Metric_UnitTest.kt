@@ -103,6 +103,104 @@ internal class Metric_UnitTest :
     }
 
     @Nested
+    inner class DataTypeProp {
+
+        @DisplayName("dataType validation")
+        @ParameterizedTest(name = "`{0}` should be {1} dataType")
+        @CsvSource(
+            "Enumeration,   valid",
+            "Boolean,       valid",
+            "Date,          valid",
+            "Integer,       valid",
+            "Monetary,      valid",
+            "Percentage,    valid",
+            "String,        valid",
+            "Decimal,       valid",
+            "Lei,           valid",
+            "Isin,          valid",
+            "'',            invalid",
+            "null,          invalid",
+            "foo,           invalid"
+        )
+        fun `dataType should error if invalid`(
+            dataType: String,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "dataType" to dataType
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.dataType: unsupported data type '$dataType'")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
+        }
+    }
+
+    @Nested
+    inner class FlowTypeProp {
+
+        @DisplayName("flowType validation")
+        @ParameterizedTest(name = "`{0}` should be {1} flowType")
+        @CsvSource(
+            "Instant,       valid",
+            "Duration,      valid",
+            "'',            invalid",
+            "null,          invalid",
+            "foo,           invalid"
+        )
+        fun `flowType should error if invalid`(
+            flowType: String,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "flowType" to flowType
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.flowType: unsupported flow type '$flowType'")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
+        }
+    }
+
+    @Nested
+    inner class BalanceTypeProp {
+
+        @DisplayName("balanceType validation")
+        @ParameterizedTest(name = "`{0}` should be {1} balanceType")
+        @CsvSource(
+            "Credit,        valid",
+            "Debit,         valid",
+            "'',            invalid",
+            "null,          invalid",
+            "foo,           invalid"
+        )
+        fun `balanceType should error if invalid`(
+            balanceType: String,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "balanceType" to balanceType
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.balanceType: unsupported balance type '$balanceType'")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
+        }
+    }
+
+    @Nested
     inner class DomainRefProp {
 
         @DisplayName("id validation")

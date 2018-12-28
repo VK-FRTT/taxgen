@@ -65,9 +65,9 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             uri = "${baseId}_uri",
             memberCodeNumber = memberCodeNumber,
             concept = Factory.instantiate(),
-            dataType = Metric.DataType.STRING,
-            flowType = Metric.FlowType.INSTANT,
-            balanceType = Metric.BalanceType.CREDIT,
+            dataType = "String",
+            flowType = "Instant",
+            balanceType = "Credit",
             domainRef = null,
             hierarchyRef = null
         )
@@ -121,13 +121,13 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         )
     }
 
-    protected fun typedDomain(baseId: String): TypedDomain{
+    protected fun typedDomain(baseId: String): TypedDomain {
         return TypedDomain(
             id = "${baseId}_id",
             uri = "${baseId}_uri",
             domainCode = "${baseId}_code",
             concept = Factory.instantiate(),
-            dataType = TypedDomain.DataType.STRING
+            dataType = "String"
         )
     }
 

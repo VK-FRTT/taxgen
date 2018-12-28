@@ -129,7 +129,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "uri" to "typ_dom_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "typ_dom",
-                "dataType" to TypedDomain.DataType.STRING
+                "dataType" to "String"
             )
         )
     )
@@ -181,9 +181,9 @@ fun dpmTestData(): Set<DataDefinition> {
                 "uri" to "met_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCodeNumber" to 1,
-                "dataType" to Metric.DataType.STRING,
-                "flowType" to Metric.FlowType.DURATION,
-                "balanceType" to Metric.BalanceType.CREDIT,
+                "dataType" to "String",
+                "flowType" to "Duration",
+                "balanceType" to "Credit",
                 "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom", "uri_1", "diagnostic_label"),
                 "hierarchyRef" to dpmElementRef<Hierarchy>("hie_1", "uri_1", "diagnostic_label")
             )

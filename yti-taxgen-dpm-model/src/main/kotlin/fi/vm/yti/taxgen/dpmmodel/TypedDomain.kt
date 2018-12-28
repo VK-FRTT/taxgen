@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class TypedDomain(
@@ -8,19 +9,21 @@ data class TypedDomain(
     override val uri: String,
     override val concept: Concept,
     val domainCode: String,
-    val dataType: TypedDomain.DataType
+    val dataType: String
 ) : DpmElement {
 
-    enum class DataType {
-        BOOLEAN,
-        DATE,
-        INTEGER,
-        MONETARY,
-        PERCENTAGE,
-        STRING,
-        DECIMAL,
-        LEI,
-        ISIN
+    companion object {
+        val VALID_DATA_TYPES = listOf(
+            "Boolean",
+            "Date",
+            "Integer",
+            "Monetary",
+            "Percentage",
+            "String",
+            "Decimal",
+            "Lei",
+            "Isin"
+        )
     }
 
     override fun validate(validationResults: ValidationResults) {
@@ -33,6 +36,14 @@ data class TypedDomain(
             property = TypedDomain::domainCode,
             minLength = 2,
             maxLength = 50
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = TypedDomain::dataType,
+            condition = { VALID_DATA_TYPES.contains(dataType) },
+            message = { "unsupported data type '$dataType'" }
         )
     }
 }

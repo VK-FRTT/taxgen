@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
@@ -65,6 +66,43 @@ internal class TypedDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly("Concept.label: has too few translations (minimum 1)")
+        }
+    }
+
+    @Nested
+    inner class DataTypeProp {
+
+        @DisplayName("dataType validation")
+        @ParameterizedTest(name = "`{0}` should be {1} dataType")
+        @CsvSource(
+            "Boolean,       valid",
+            "Date,          valid",
+            "Integer,       valid",
+            "Monetary,      valid",
+            "Percentage,    valid",
+            "String,        valid",
+            "Decimal,       valid",
+            "Lei,           valid",
+            "Isin,          valid",
+            "'',            invalid",
+            "null,          invalid",
+            "foo,           invalid"
+        )
+        fun `dataType should error if invalid`(
+            dataType: String,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "dataType" to dataType
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).containsExactly("TypedDomain.dataType: unsupported data type '$dataType'")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
         }
     }
 }

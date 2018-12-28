@@ -9,34 +9,36 @@ data class Metric(
     override val uri: String,
     override val concept: Concept,
     val memberCodeNumber: Int,
-    val dataType: Metric.DataType,
-    val flowType: Metric.FlowType,
-    val balanceType: Metric.BalanceType,
+    val dataType: String,
+    val flowType: String,
+    val balanceType: String,
     val domainRef: DpmElementRef?,  //TODO - validate refs points to *Domain?
     val hierarchyRef: DpmElementRef? //TODO - validate refs points to Hierarchy?
 ) : DpmElement {
 
-    enum class DataType {
-        ENUMERATION,
-        BOOLEAN,
-        DATE,
-        INTEGER,
-        MONETARY,
-        PERCENTAGE,
-        STRING,
-        DECIMAL,
-        LEI, //TODO - Should LEI & ISIN be removed from the set?
-        ISIN
-    }
+    companion object {
+        val VALID_DATA_TYPES = listOf(
+            "Enumeration",
+            "Boolean",
+            "Date",
+            "Integer",
+            "Monetary",
+            "Percentage",
+            "String",
+            "Decimal",
+            "Lei",
+            "Isin"
+        )
 
-    enum class FlowType {
-        INSTANT,
-        DURATION
-    }
+        val VALID_FLOW_TYPES = listOf(
+            "Instant",
+            "Duration"
+        )
 
-    enum class BalanceType {
-        CREDIT,
-        DEBIT
+        val VALID_BALANCE_TYPES = listOf(
+            "Credit",
+            "Debit"
+        )
     }
 
     override fun validate(validationResults: ValidationResults) {
@@ -49,6 +51,30 @@ data class Metric(
             property = Metric::memberCodeNumber,
             condition = { memberCodeNumber >= 0 },
             message = { "negative member code number" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::dataType,
+            condition = { VALID_DATA_TYPES.contains(dataType) },
+            message = { "unsupported data type '$dataType'" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::flowType,
+            condition = { VALID_FLOW_TYPES.contains(flowType) },
+            message = { "unsupported flow type '$flowType'" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::balanceType,
+            condition = { VALID_BALANCE_TYPES.contains(balanceType) },
+            message = { "unsupported balance type '$balanceType'" }
         )
 
         validateOptionalDpmElementRef(
