@@ -80,23 +80,17 @@ internal class HierarchyNode_UnitTest :
             "=,         valid",
             "<=,        valid",
             ">=,        valid",
-            "null,      valid",
+            ",          valid", //NULL
             "==,        invalid",
             "<<,        invalid",
             "foo,       invalid"
         )
         fun `comparisonOperator should error if invalid`(
-            comparisonOperator: String,
+            comparisonOperator: String?,
             expectedValidity: String
         ) {
-            val op = if (comparisonOperator == "null") {
-                null
-            } else {
-                comparisonOperator
-            }
-
             attributeOverrides(
-                "comparisonOperator" to op
+                "comparisonOperator" to comparisonOperator
             )
 
             instantiateAndValidate()
@@ -117,23 +111,17 @@ internal class HierarchyNode_UnitTest :
         @CsvSource(
             "+,         valid",
             "-,         valid",
-            "null,      valid",
+            ",          valid", //NULL
             "==,        invalid",
             "<<,        invalid",
             "foo,       invalid"
         )
         fun `unaryOperator should error if invalid`(
-            unaryOperator: String,
+            unaryOperator: String?,
             expectedValidity: String
         ) {
-            val op = if (unaryOperator == "null") {
-                null
-            } else {
-                unaryOperator
-            }
-
             attributeOverrides(
-                "unaryOperator" to op
+                "unaryOperator" to unaryOperator
             )
 
             instantiateAndValidate()
@@ -165,7 +153,7 @@ internal class HierarchyNode_UnitTest :
                     id = id,
                     uri = "uri_value",
                     diagnosticLabel = "label_value"
-                    )
+                )
             )
 
             instantiateAndValidate()
