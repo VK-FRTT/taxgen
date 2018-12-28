@@ -48,11 +48,12 @@ data class HierarchyNode(
     }
 
     fun allNodes(): List<HierarchyNode> = mutableListOf(this)
-        .also {
+        .also { nodes ->
             if (childNodes != null) {
-                it.addAll(childNodes
-                    .map { it.allNodes() }
-                    .flatten()
+                nodes.addAll(
+                    childNodes
+                        .map { it.allNodes() }
+                        .flatten()
                 )
             }
         }
