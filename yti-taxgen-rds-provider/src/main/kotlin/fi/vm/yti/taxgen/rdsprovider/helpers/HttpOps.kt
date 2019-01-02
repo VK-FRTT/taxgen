@@ -7,7 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.Closeable
 
-object HttpOps : Closeable {
+internal object HttpOps : Closeable {
 
     private var httpClient: OkHttpClient? = null
 

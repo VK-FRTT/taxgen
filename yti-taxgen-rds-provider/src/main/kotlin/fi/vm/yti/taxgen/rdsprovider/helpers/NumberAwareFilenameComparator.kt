@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider.helpers
 import java.nio.file.Path
 import java.util.Comparator
 
-object NumberAwareFilenameComparator : Comparator<Path> {
+internal object NumberAwareFilenameComparator : Comparator<Path> {
 
     private val stringComparator = NumberAwareStringComparator.instance()
 

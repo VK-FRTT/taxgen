@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider.helpers
 import java.math.BigInteger
 import java.util.Comparator
 
-object NumberAwareStringComparator : Comparator<String> {
+internal object NumberAwareStringComparator : Comparator<String> {
     private val regex = """(\D*)(\d*)""".toRegex()
 
     fun instance() = this
