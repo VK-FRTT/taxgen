@@ -32,7 +32,7 @@ open class DpmSource_UnitTestBase {
     companion object {
         val objectMapper = jacksonObjectMapper()
 
-        fun dpmSourceFolderAdapterToReferenceData(): Pair<DpmSourceFolderAdapter, Path> {
+        fun dpmSourceFolderAdapterToReferenceData(): Pair<DpmSource, Path> {
             val classLoader = Thread.currentThread().contextClassLoader
             val referenceUri = classLoader.getResource("folder_adapter_reference").toURI()
             val dpmSourceRootPath = Paths.get(referenceUri)
@@ -46,6 +46,15 @@ open class DpmSource_UnitTestBase {
             val json = objectMapper.readTree(jsonData)
             assertThat(json.isObject).isTrue()
             return json.get("marker").textValue()
+        }
+
+        fun extractMarkerValueFromJsonData(
+            markers: MutableList<String>,
+            jsonData: String
+        ) {
+            val json = objectMapper.readTree(jsonData)
+            assertThat(json.isObject).isTrue()
+            markers.add(json.get("marker").textValue())
         }
 
         fun extractMarkerValuesFromJsonData(

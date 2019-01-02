@@ -8,7 +8,7 @@ import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.Path
 
-class DpmSourceZipFileAdapter(
+internal class DpmSourceZipFileAdapter(
     sourceZipPath: Path
 ) : DpmSource() {
 
@@ -21,8 +21,10 @@ class DpmSourceZipFileAdapter(
 
     override fun sourceConfigData(): String = folderStructureAdapter.sourceConfigData()
 
-    override fun dpmDictionarySources(): Sequence<DpmDictionarySource> = folderStructureAdapter.dpmDictionarySources()
-
+    override fun eachDpmDictionarySource(action: (DpmDictionarySource) -> Unit){
+        folderStructureAdapter.eachDpmDictionarySource(action)
+    }
+    
     override fun close() {
         folderStructureAdapter.close()
         zipFileSystem.close()

@@ -2,18 +2,17 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.validators.validateOptionalDpmElementRef
 
 data class Metric(
     override val id: String,
     override val uri: String,
     override val concept: Concept,
-    val memberCodeNumber: Int,
+    val memberCodeNumber: String,
     val dataType: String,
     val flowType: String,
     val balanceType: String,
-    val domainRef: DpmElementRef?,  //TODO - validate refs points to *Domain?
-    val hierarchyRef: DpmElementRef? //TODO - validate refs points to Hierarchy?
+    val referencedDomainCode: String?,  //TODO - validation? Ref points to *Domain?
+    val referencedHierarchyCode: String? //TODO - validation? Ref points to Hierarchy?
 ) : DpmElement {
 
     companion object {
@@ -49,8 +48,8 @@ data class Metric(
             validationResults = validationResults,
             instance = this,
             property = Metric::memberCodeNumber,
-            condition = { memberCodeNumber >= 0 },
-            message = { "negative member code number" }
+            condition = { memberCodeNumber.all { char -> char.isDigit() } },
+            message = { "contains non-digit characters" }
         )
 
         validateConditionTruthy(
@@ -75,18 +74,6 @@ data class Metric(
             property = Metric::balanceType,
             condition = { VALID_BALANCE_TYPES.contains(balanceType) },
             message = { "unsupported balance type '$balanceType'" }
-        )
-
-        validateOptionalDpmElementRef(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::domainRef
-        )
-
-        validateOptionalDpmElementRef(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::hierarchyRef
         )
     }
 }

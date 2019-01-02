@@ -1,11 +1,11 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.extractor
+package fi.vm.yti.taxgen.rdsdpmmapper.mapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsprovider.config.OwnerConfig
 
-internal fun Owner.Companion.fromConfig(
+internal fun mapAndValidateOwner(
     ownerConfig: OwnerConfig,
     diagnostic: Diagnostic
 ): Owner {
@@ -18,7 +18,7 @@ internal fun Owner.Companion.fromConfig(
         return Language.findByIso6391Code(code) ?: diagnostic.fatal("Unsupported language: '$code'")
     }
 
-    return Owner(
+    val owner = Owner(
         name = ownerConfig.name,
         namespace = ownerConfig.namespace,
         prefix = ownerConfig.prefix,
@@ -27,4 +27,8 @@ internal fun Owner.Companion.fromConfig(
         languages = ownerConfig.languages.map { findLanguage(it) }.toSet(),
         defaultLanguage = findLanguage(ownerConfig.defaultLanguage)
     )
+
+    diagnostic.validate(owner)
+
+    return owner
 }

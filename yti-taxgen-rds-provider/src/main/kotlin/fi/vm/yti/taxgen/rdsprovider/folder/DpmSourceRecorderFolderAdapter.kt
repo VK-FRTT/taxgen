@@ -12,7 +12,7 @@ import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 import java.nio.file.Path
 import java.time.Instant
 
-class DpmSourceRecorderFolderAdapter(
+internal class DpmSourceRecorderFolderAdapter(
     baseFolderPath: Path,
     private val forceOverwrite: Boolean,
     private val diagnostic: Diagnostic
@@ -60,61 +60,74 @@ class DpmSourceRecorderFolderAdapter(
                 )
             }
 
-            captureDpmDictionarySources(
-                dpmSource.dpmDictionarySources(),
-                pathStack
-            )
+            var index = 0
+            dpmSource.eachDpmDictionarySource {
+                captureDpmDictionarySources(
+                    it,
+                    index,
+                    pathStack
+                )
+
+                index++
+            }
         }
     }
 
     private fun captureDpmDictionarySources(
-        yclDpmDictionarySources: Sequence<DpmDictionarySource>,
+        dictionarySource: DpmDictionarySource,
+        dictionaryIndex: Int,
         pathStack: PathStack
     ) {
-        yclDpmDictionarySources.withIndex().forEach { (dictionaryIndex, dictionarySource) ->
+        pathStack.withSubfolder("dpm_dictionary_$dictionaryIndex") {
 
-            diagnostic.withContext(dictionarySource) {
+            dictionarySource.dpmOwnerConfigData {
+                FileOps.writeTextFile(
+                    it,
+                    pathStack,
+                    "dpm_owner_config.json",
+                    forceOverwrite,
+                    diagnostic
+                )
+            }
 
-                pathStack.withSubfolder("dpm_dictionary_$dictionaryIndex") {
+            dictionarySource.metricsSource {
+                captureCodeListSource(
+                    it,
+                    "met",
+                    pathStack
+                )
+            }
 
-                    FileOps.writeTextFile(
-                        dictionarySource.dpmOwnerConfigData(),
-                        pathStack,
-                        "dpm_owner_config.json",
-                        forceOverwrite,
-                        diagnostic
-                    )
+            dictionarySource.explicitDomainsAndHierarchiesSource {
+                captureCodeListSource(
+                    it,
+                    "exp_dom_hier",
+                    pathStack
+                )
+            }
 
-                    captureCodeListSource(
-                        dictionarySource.metricsSource(),
-                        "met",
-                        pathStack
-                    )
+            dictionarySource.explicitDimensionsSource {
+                captureCodeListSource(
+                    it,
+                    "exp_dim",
+                    pathStack
+                )
+            }
 
-                    captureCodeListSource(
-                        dictionarySource.explicitDomainsAndHierarchiesSource(),
-                        "exp_dom_hier",
-                        pathStack
-                    )
+            dictionarySource.typedDomainsSource {
+                captureCodeListSource(
+                    it,
+                    "typ_dom",
+                    pathStack
+                )
+            }
 
-                    captureCodeListSource(
-                        dictionarySource.explicitDimensionsSource(),
-                        "exp_dim",
-                        pathStack
-                    )
-
-                    captureCodeListSource(
-                        dictionarySource.typedDomainsSource(),
-                        "typ_dom",
-                        pathStack
-                    )
-
-                    captureCodeListSource(
-                        dictionarySource.typedDimensionsSource(),
-                        "typ_dim",
-                        pathStack
-                    )
-                }
+            dictionarySource.typedDimensionsSource {
+                captureCodeListSource(
+                    it,
+                    "typ_dim",
+                    pathStack
+                )
             }
         }
     }

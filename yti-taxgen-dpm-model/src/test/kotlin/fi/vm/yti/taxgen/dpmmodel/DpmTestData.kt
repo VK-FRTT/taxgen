@@ -149,19 +149,6 @@ fun dpmTestData(): Set<DataDefinition> {
 
     definitions.add(
         DataDefinition(
-            kClass = ExplicitDimension::class,
-            attributes = mapOf(
-                "id" to "exp_dim_1",
-                "uri" to "exp_dim_1_uri",
-                "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "dimensionCode" to "exp_dim",
-                "domainRef" to dpmElementRef<ExplicitDomain>("exp_dom", "uri_1", "diagnostic_label")
-            )
-        )
-    )
-
-    definitions.add(
-        DataDefinition(
             kClass = TypedDimension::class,
             attributes = mapOf(
                 "id" to "typ_dim_1",
@@ -180,12 +167,12 @@ fun dpmTestData(): Set<DataDefinition> {
                 "id" to "met_1",
                 "uri" to "met_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "memberCodeNumber" to 1,
+                "memberCodeNumber" to "1",
                 "dataType" to "String",
                 "flowType" to "Duration",
                 "balanceType" to "Credit",
-                "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom", "uri_1", "diagnostic_label"),
-                "hierarchyRef" to dpmElementRef<Hierarchy>("hie_1", "uri_1", "diagnostic_label")
+                "referencedDomainCode" to "exp_dom",
+                "referencedHierarchyCode" to "hier_code"
             )
         )
     )

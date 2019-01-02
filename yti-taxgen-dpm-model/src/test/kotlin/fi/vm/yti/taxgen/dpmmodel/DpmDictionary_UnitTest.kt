@@ -60,7 +60,7 @@ internal class DpmDictionary_UnitTest :
                 when (property.name) {
                     "metrics" ->
                         List(length) { index ->
-                            metric("$index", index)
+                            metric("$index", "$index")
                         }
 
                     "explicitDomains" ->

@@ -38,7 +38,7 @@ internal class RdsToDpmMapper_UnitTest {
 
         yclToDpmMapper = RdsToDpmMapper(diagnostic)
 
-        return yclToDpmMapper.getDpmDictionariesFromSource(
+        return yclToDpmMapper.extractDpmDictionariesFromSource(
             dpmSource = dpmSource
         )
     }
@@ -116,7 +116,7 @@ internal class RdsToDpmMapper_UnitTest {
             assertThat(explicitDomain.domainCode).isEqualTo("tf_dc_override")
             assertThat(explicitDomain.id).isEqualTo("5314a353-5ad4-4c81-8368-70495979e3c4")
             assertThat(explicitDomain.uri).isEqualTo("http://uri.suomi.fi/codelist/yti-xbrl/testfixture_codelist_comprehensive")
-            assertThat(explicitDomain.type).isEqualTo("ExplicitDomain")
+            assertThat(explicitDomain.type).isEqualTo("ExplicitDomain.kt")
         }
 
         @Test
@@ -451,41 +451,41 @@ internal class RdsToDpmMapper_UnitTest {
                 "UPDATE [DpmDictionary]",
                 "ENTER [YclCodelist]",
                 "UPDATE [YclCodelist]",
-                "ENTER [YclCode]",
-                "EXIT [YclCode]",
-                "ENTER [YclCode]",
-                "EXIT [YclCode]",
-                "ENTER [YclCode]",
-                "EXIT [YclCode]",
-                "ENTER [YclCode]",
-                "EXIT [YclCode]",
-                "ENTER [YclCode]",
-                "EXIT [YclCode]",
+                "ENTER [RdsCode]",
+                "EXIT [RdsCode]",
+                "ENTER [RdsCode]",
+                "EXIT [RdsCode]",
+                "ENTER [RdsCode]",
+                "EXIT [RdsCode]",
+                "ENTER [RdsCode]",
+                "EXIT [RdsCode]",
+                "ENTER [RdsCode]",
+                "EXIT [RdsCode]",
                 "ENTER [YclCodelistExtension]",
                 "UPDATE [YclCodelistExtension]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
                 "EXIT [YclCodelistExtension]",
                 "ENTER [YclCodelistExtension]",
                 "UPDATE [YclCodelistExtension]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
-                "ENTER [YclExtensionMember]",
-                "EXIT [YclExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
+                "ENTER [RdsExtensionMember]",
+                "EXIT [RdsExtensionMember]",
                 "EXIT [YclCodelistExtension]",
                 "EXIT [YclCodelist]",
                 "EXIT [DpmDictionary]",

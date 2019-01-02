@@ -56,8 +56,8 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,label-A,id-A}]",
-            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
+            "ENTER [CTX{RdsCode,label-A,id-A}]",
+            "EXIT [] RETIRED [CTX{RdsCode,label-A,id-A}]"
         )
     }
 
@@ -75,10 +75,10 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,label-A,id-A}]",
-            "ENTER [CTX{DpmSource,label-B,id-B}, CTX{YclCode,label-A,id-A}]",
-            "EXIT [CTX{YclCode,label-A,id-A}] RETIRED [CTX{DpmSource,label-B,id-B}]",
-            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
+            "ENTER [CTX{RdsCode,label-A,id-A}]",
+            "ENTER [CTX{DpmSource,label-B,id-B}, CTX{RdsCode,label-A,id-A}]",
+            "EXIT [CTX{RdsCode,label-A,id-A}] RETIRED [CTX{DpmSource,label-B,id-B}]",
+            "EXIT [] RETIRED [CTX{RdsCode,label-A,id-A}]"
         )
     }
 
@@ -99,12 +99,12 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue)
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,label-A,id-A}]",
-            "UPDATE [CTX{YclCode,updated-label-A,id-A}] ORIGINAL [CTX{YclCode,label-A,id-A}]",
-            "ENTER [CTX{DpmSource,label-B,id-B}, CTX{YclCode,updated-label-A,id-A}]",
-            "UPDATE [CTX{DpmSource,updated-label-B,id-B}, CTX{YclCode,updated-label-A,id-A}] ORIGINAL [CTX{DpmSource,label-B,id-B}]",
-            "EXIT [CTX{YclCode,updated-label-A,id-A}] RETIRED [CTX{DpmSource,updated-label-B,id-B}]",
-            "EXIT [] RETIRED [CTX{YclCode,updated-label-A,id-A}]"
+            "ENTER [CTX{RdsCode,label-A,id-A}]",
+            "UPDATE [CTX{RdsCode,updated-label-A,id-A}] ORIGINAL [CTX{RdsCode,label-A,id-A}]",
+            "ENTER [CTX{DpmSource,label-B,id-B}, CTX{RdsCode,updated-label-A,id-A}]",
+            "UPDATE [CTX{DpmSource,updated-label-B,id-B}, CTX{RdsCode,updated-label-A,id-A}] ORIGINAL [CTX{DpmSource,label-B,id-B}]",
+            "EXIT [CTX{RdsCode,updated-label-A,id-A}] RETIRED [CTX{DpmSource,updated-label-B,id-B}]",
+            "EXIT [] RETIRED [CTX{RdsCode,updated-label-A,id-A}]"
         )
     }
 
@@ -125,8 +125,8 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue[1])
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,label-A,id-A}]",
-            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
+            "ENTER [CTX{RdsCode,label-A,id-A}]",
+            "EXIT [] RETIRED [CTX{RdsCode,label-A,id-A}]"
         )
     }
 
@@ -149,10 +149,10 @@ class DpmMappingContext_UnitTest {
         verifyNoMoreInteractions(extractRetValue[1])
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [CTX{YclCode,label-A,id-A}]",
-            "ENTER [CTX{DpmSource,label-B,id-B}, CTX{YclCode,label-A,id-A}]",
-            "EXIT [CTX{YclCode,label-A,id-A}] RETIRED [CTX{DpmSource,label-B,id-B}]",
-            "EXIT [] RETIRED [CTX{YclCode,label-A,id-A}]"
+            "ENTER [CTX{RdsCode,label-A,id-A}]",
+            "ENTER [CTX{DpmSource,label-B,id-B}, CTX{RdsCode,label-A,id-A}]",
+            "EXIT [CTX{RdsCode,label-A,id-A}] RETIRED [CTX{DpmSource,label-B,id-B}]",
+            "EXIT [] RETIRED [CTX{RdsCode,label-A,id-A}]"
         )
     }
 }

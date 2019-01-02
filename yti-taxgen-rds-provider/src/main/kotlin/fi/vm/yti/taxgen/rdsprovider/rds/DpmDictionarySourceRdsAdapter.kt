@@ -12,42 +12,52 @@ internal class DpmDictionarySourceRdsAdapter(
     private val diagnostic: Diagnostic
 ) : DpmDictionarySource {
 
-    override fun dpmOwnerConfigData(): String {
-        return JsonOps.writeAsJsonString(config.owner)
+    override fun dpmOwnerConfigData(action: (String) -> Unit) {
+        action(JsonOps.writeAsJsonString(config.owner))
     }
 
-    override fun metricsSource(): CodeListSource? {
-        return codeListSourceOrNullForUri(
-            config.metrics.uri,
-            CodeListBlueprint.metrics()
+    override fun metricsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForUri(
+                config.metrics.uri,
+                CodeListBlueprint.metrics()
+            )
         )
     }
 
-    override fun explicitDomainsAndHierarchiesSource(): CodeListSource? {
-        return codeListSourceOrNullForUri(
-            config.explicitDomainsAndHierarchies.uri,
-            CodeListBlueprint.explicitDomainsAndHierarchies()
+    override fun explicitDomainsAndHierarchiesSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForUri(
+                config.explicitDomainsAndHierarchies.uri,
+                CodeListBlueprint.explicitDomainsAndHierarchies()
+            )
         )
     }
 
-    override fun explicitDimensionsSource(): CodeListSource? {
-        return codeListSourceOrNullForUri(
-            config.explicitDimensions.uri,
-            CodeListBlueprint.explicitOrTypedDimensions()
+    override fun explicitDimensionsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForUri(
+                config.explicitDimensions.uri,
+                CodeListBlueprint.explicitOrTypedDimensions()
+            )
         )
     }
 
-    override fun typedDomainsSource(): CodeListSource? {
-        return codeListSourceOrNullForUri(
-            config.typedDomains.uri,
-            CodeListBlueprint.typedDomains()
+    override fun typedDomainsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForUri(
+                config.typedDomains.uri,
+                CodeListBlueprint.typedDomains()
+            )
         )
     }
 
-    override fun typedDimensionsSource(): CodeListSource? {
-        return codeListSourceOrNullForUri(
-            config.typedDimensions.uri,
-            CodeListBlueprint.explicitOrTypedDimensions()
+    override fun typedDimensionsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForUri(
+                config.typedDimensions.uri,
+                CodeListBlueprint.explicitOrTypedDimensions()
+            )
         )
     }
 

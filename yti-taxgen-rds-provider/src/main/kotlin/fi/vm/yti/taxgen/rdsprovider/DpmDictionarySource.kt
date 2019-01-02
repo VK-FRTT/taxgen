@@ -9,10 +9,10 @@ interface DpmDictionarySource : DiagnosticContextProvider {
     override fun contextLabel(): String = ""
     override fun contextIdentifier(): String = ""
 
-    fun dpmOwnerConfigData(): String
-    fun metricsSource(): CodeListSource?
-    fun explicitDomainsAndHierarchiesSource(): CodeListSource?
-    fun explicitDimensionsSource(): CodeListSource?
-    fun typedDomainsSource(): CodeListSource?
-    fun typedDimensionsSource(): CodeListSource?
+    fun dpmOwnerConfigData(action: (String) -> Unit)
+    fun metricsSource(action: (CodeListSource?) -> Unit)
+    fun explicitDomainsAndHierarchiesSource(action: (CodeListSource?) -> Unit)
+    fun explicitDimensionsSource(action: (CodeListSource?) -> Unit)
+    fun typedDomainsSource(action: (CodeListSource?) -> Unit)
+    fun typedDimensionsSource(action: (CodeListSource?) -> Unit)
 }

@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,14 +19,14 @@ internal class Metric_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "id,                    required",
-        "concept,               required",
-        "memberCodeNumber,      required",
-        "dataType,              required",
-        "flowType,              required",
-        "balanceType,           required",
-        "domainRef,             optional",
-        "hierarchyRef,          optional"
+        "id,                        required",
+        "concept,                   required",
+        "memberCodeNumber,          required",
+        "dataType,                  required",
+        "flowType,                  required",
+        "balanceType,               required",
+        "referencedDomainCode,      optional",
+        "referencedHierarchyCode,   optional"
     )
     fun testPropertyOptionality(
         propertyName: String,
@@ -80,12 +81,14 @@ internal class Metric_UnitTest :
         @CsvSource(
             "-10,       invalid",
             "-1,        invalid",
+            "+1,        invalid",
+            "a,         invalid",
             "0,         valid",
             "1,         valid",
             "10,        valid"
         )
         fun `memberCodeNumber should error if value is invalid`(
-            value: Int,
+            value: String,
             expectedValidity: String
         ) {
             attributeOverrides(
@@ -96,7 +99,7 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.memberCodeNumber: negative member code number")
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.memberCodeNumber: contains non-digit characters")
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }
@@ -201,40 +204,37 @@ internal class Metric_UnitTest :
     }
 
     @Nested
-    inner class DomainRefProp {
+    inner class ReferencedDomainCodeProp {
 
-        @DisplayName("id validation")
-        @ParameterizedTest(name = "id `{0}` should be {1} member ref")
+        @Disabled
+        @DisplayName("code validation")
+        @ParameterizedTest(name = "code `{0}` should be {1} referencedDomainCode")
         @CsvSource(
             "1,         valid",
             "'',        invalid",
             "' ',       invalid"
         )
-        fun `domainRef should error if 'id' is invalid`(
-            id: String,
+        fun `referencedDomainCode should error if invalid`(
+            code: String,
             expectedValidity: String
         ) {
             attributeOverrides(
-                "domainRef" to dpmElementRef<ExplicitDomain>(
-                    id = id,
-                    uri = "uri_value",
-                    diagnosticLabel = "label_value"
-                )
+                "referencedDomainCode" to code
             )
 
             instantiateAndValidate()
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.domainRef: empty or blank id")
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedDomainCode: empty or blank id")
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }
 
         @Test
-        fun `domainRef should allow null value`() {
+        fun `referencedDomainCode should allow null value`() {
             attributeOverrides(
-                "domainRef" to null
+                "referencedDomainCode" to null
             )
 
             instantiateAndValidate()
@@ -243,40 +243,37 @@ internal class Metric_UnitTest :
     }
 
     @Nested
-    inner class HierarchyRefProp {
+    inner class ReferencedHierarchyCodeProp {
 
-        @DisplayName("id validation")
-        @ParameterizedTest(name = "id `{0}` should be {1} member ref")
+        @Disabled
+        @DisplayName("code validation")
+        @ParameterizedTest(name = "code `{0}` should be {1} referencedHierarchyCode")
         @CsvSource(
             "1,         valid",
             "'',        invalid",
             "' ',       invalid"
         )
-        fun `hierarchyRef should error if 'id' is invalid`(
-            id: String,
+        fun `referencedHierarchyCode should error if invalid`(
+            code: String,
             expectedValidity: String
         ) {
             attributeOverrides(
-                "hierarchyRef" to dpmElementRef<ExplicitDomain>(
-                    id = id,
-                    uri = "uri_value",
-                    diagnosticLabel = "label_value"
-                )
+                "referencedHierarchyCode" to code
             )
 
             instantiateAndValidate()
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.hierarchyRef: empty or blank id")
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedHierarchyCode: empty or blank id")
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }
 
         @Test
-        fun `hierarchyRef should allow null value`() {
+        fun `referencedHierarchyCode should allow null value`() {
             attributeOverrides(
-                "hierarchyRef" to null
+                "referencedHierarchyCode" to null
             )
 
             instantiateAndValidate()

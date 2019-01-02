@@ -10,7 +10,7 @@ import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfig
 import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfigInput
 import java.nio.file.Path
 
-class DpmSourceRdsAdapter(
+internal class DpmSourceRdsAdapter(
     configPath: Path,
     private val diagnostic: Diagnostic
 ) : DpmSource() {
@@ -29,12 +29,14 @@ class DpmSourceRdsAdapter(
 
     override fun sourceConfigData(): String = loadedConfig.configData
 
-    override fun dpmDictionarySources(): Sequence<DpmDictionarySource> {
-        return loadedConfig.config.dpmDictionaries.asSequence().map { config ->
-            DpmDictionarySourceRdsAdapter(
+    override fun eachDpmDictionarySource(action: (DpmDictionarySource) -> Unit) {
+        loadedConfig.config.dpmDictionaries.forEach { config ->
+            val dictionarySource = DpmDictionarySourceRdsAdapter(
                 config,
                 diagnostic
             )
+
+            action(dictionarySource)
         }
     }
 

@@ -252,10 +252,11 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         var progress = "INIT"
 
         val thrown = catchThrowable {
-            val codeListSource = source
-                .dpmDictionarySources()
-                .first()
-                .explicitDomainsAndHierarchiesSource()!!
+            val dictionarySource = grabList<DpmDictionarySource> { source.eachDpmDictionarySource(it) }.first()
+
+            val codeListSource = grabNullable<CodeListSource?> {
+                dictionarySource.explicitDomainsAndHierarchiesSource(it)
+            }!!
 
             codeListSource.codeListMetaData()
             progress = "CODE_LIST_META_DONE"

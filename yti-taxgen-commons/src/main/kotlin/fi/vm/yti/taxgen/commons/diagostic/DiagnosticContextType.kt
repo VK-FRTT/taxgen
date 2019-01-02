@@ -15,10 +15,10 @@ enum class DiagnosticContextType(val recurring: Boolean, val displayName: String
     DpmOwner(true, "Owner"),
     DpmDictionary(true, "DPM dictionary"),
 
-    RdsCodelist(true, "Codelist"),
-    RdsCodesPage(true, "Codes Page"),
+    RdsCodeList(true, "Codelist"),
+    RdsCodesPage(true, "Codes Page"),       //TODO - Filter out?
     RdsCode(true, "Code"),
-    RdsCodelistExtension(true, "Codelist Extension"),
-    RdsCodelistExtensionMembersPage(true, "Codelist Extension Members Page"),
+    RdsExtension(true, "Extension"),
+    RdsExtensionMembersPage(true, "Extension Members Page"), //TODO - Filter out?
     RdsExtensionMember(true, "Extension Member")
 }

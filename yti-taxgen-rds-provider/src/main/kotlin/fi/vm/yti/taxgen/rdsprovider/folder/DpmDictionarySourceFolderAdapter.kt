@@ -11,42 +11,52 @@ internal class DpmDictionarySourceFolderAdapter(
     private val dpmDictionaryRootPath: Path
 ) : DpmDictionarySource {
 
-    override fun dpmOwnerConfigData(): String {
-        return FileOps.readTextFile(dpmDictionaryRootPath, "dpm_owner_config.json")
+    override fun dpmOwnerConfigData(action: (String) -> Unit) {
+        action(FileOps.readTextFile(dpmDictionaryRootPath, "dpm_owner_config.json"))
     }
 
-    override fun metricsSource(): CodeListSource? {
-        return codeListSourceOrNullForConcept(
-            "met",
-            CodeListBlueprint.metrics()
+    override fun metricsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForConcept(
+                "met",
+                CodeListBlueprint.metrics()
+            )
         )
     }
 
-    override fun explicitDomainsAndHierarchiesSource(): CodeListSource? {
-        return codeListSourceOrNullForConcept(
-            "exp_dom_hier",
-            CodeListBlueprint.explicitDomainsAndHierarchies()
+    override fun explicitDomainsAndHierarchiesSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForConcept(
+                "exp_dom_hier",
+                CodeListBlueprint.explicitDomainsAndHierarchies()
+            )
         )
     }
 
-    override fun explicitDimensionsSource(): CodeListSource? {
-        return codeListSourceOrNullForConcept(
-            "exp_dim",
-            CodeListBlueprint.explicitOrTypedDimensions()
+    override fun explicitDimensionsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForConcept(
+                "exp_dim",
+                CodeListBlueprint.explicitOrTypedDimensions()
+            )
         )
     }
 
-    override fun typedDomainsSource(): CodeListSource? {
-        return codeListSourceOrNullForConcept(
-            "typ_dom",
-            CodeListBlueprint.typedDomains()
+    override fun typedDomainsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForConcept(
+                "typ_dom",
+                CodeListBlueprint.typedDomains()
+            )
         )
     }
 
-    override fun typedDimensionsSource(): CodeListSource? {
-        return codeListSourceOrNullForConcept(
-            "typ_dim",
-            CodeListBlueprint.explicitOrTypedDimensions()
+    override fun typedDimensionsSource(action: (CodeListSource?) -> Unit) {
+        action(
+            codeListSourceOrNullForConcept(
+                "typ_dim",
+                CodeListBlueprint.explicitOrTypedDimensions()
+            )
         )
     }
 

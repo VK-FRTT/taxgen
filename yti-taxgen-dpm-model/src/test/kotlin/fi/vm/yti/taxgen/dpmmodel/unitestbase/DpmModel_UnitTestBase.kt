@@ -59,7 +59,7 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
-    protected fun metric(baseId: String, memberCodeNumber: Int): Metric {
+    protected fun metric(baseId: String, memberCodeNumber: String): Metric {
         return Metric(
             id = "${baseId}_id",
             uri = "${baseId}_uri",
@@ -68,8 +68,8 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             dataType = "String",
             flowType = "Instant",
             balanceType = "Credit",
-            domainRef = null,
-            hierarchyRef = null
+            referencedDomainCode = null,
+            referencedHierarchyCode = null
         )
     }
 

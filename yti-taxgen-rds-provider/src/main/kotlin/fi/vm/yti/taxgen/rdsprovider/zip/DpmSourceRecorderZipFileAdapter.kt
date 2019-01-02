@@ -10,7 +10,7 @@ import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.Path
 
-class DpmSourceRecorderZipFileAdapter(
+internal class DpmSourceRecorderZipFileAdapter(
     targetZipPath: Path,
     private val forceOverwrite: Boolean,
     private val diagnostic: Diagnostic

@@ -14,6 +14,36 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
         val dpmSourceContextIdentifier: String
     )
 
+    protected fun <T> grabList(producer: ((T) -> Unit) -> Unit): List<T> {
+        val list = mutableListOf<T>()
+
+        producer {
+            list.add(it)
+        }
+
+        return list
+    }
+
+    private fun <T : Any> grab(producer: ((T) -> Unit) -> Unit): T {
+        lateinit var value: T
+
+        producer {
+            value = it
+        }
+
+        return value
+    }
+
+    protected fun <T : Any?> grabNullable(producer: ((T?) -> Unit) -> Unit): T? {
+        var value: T? = null
+
+        producer {
+            value = it
+        }
+
+        return value
+    }
+
     protected fun createAdapterConformanceTestCases(
         dpmSource: DpmSource,
         expectedDetails: ExpectedDetails
@@ -43,22 +73,26 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                 listOf(
 
                     dynamicTest("Should have diagnostic context info about DPM dictionary") {
-                        val dpmDictionarySources = dpmSource.dpmDictionarySources().toList()
+                        val dpmDictionarySources = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }
 
-                        //assertThat(dpmDictionarySources.size).isEqualTo(12)
+                        assertThat(dpmDictionarySources.size).isEqualTo(12)
 
                         assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
                         assertThat(dpmDictionarySources[0].contextLabel()).isEqualTo("")
                         assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
-                        //assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
+                        assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
                     },
 
                     dynamicTest("Should have owner config") {
-                        val dpmDictionarySources = dpmSource.dpmDictionarySources()
+                        val markers = mutableListOf<String>()
 
-                        val markers =
-                            extractMarkerValuesFromJsonData(dpmDictionarySources)
-                            { it -> (it as DpmDictionarySource).dpmOwnerConfigData() }
+                        dpmSource.eachDpmDictionarySource { dictionarySource ->
+                            dictionarySource.dpmOwnerConfigData {
+                                extractMarkerValueFromJsonData(markers, it)
+                            }
+                        }
 
                         assertThat(markers).containsExactly(
                             "dpm_dictionary_0/dpm_owner_config",
@@ -82,28 +116,35 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                 "MetricsConcept",
                 listOf(
                     dynamicTest("Should provide source when concept folder exists in data") {
-                        val metrics = dpmSource
-                            .dpmDictionarySources().toList()[0]
-                            .metricsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
+
+                        val metrics = grabNullable<CodeListSource?> { dictionarySource.metricsSource(it) }
 
                         assertThat(metrics).isNotNull()
                         assertMetricsBlueprint(metrics!!.blueprint())
                     },
 
                     dynamicTest("Should not provide source when concept folder does not exist in data") {
-                        val metrics = dpmSource
-                            .dpmDictionarySources().toList()[2]
-                            .metricsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[2]
+
+                        val metrics = grabNullable<CodeListSource?> { dictionarySource.metricsSource(it) }
 
                         assertThat(metrics).isNull()
                     },
 
                     dynamicTest("Should have codeList") {
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
+
+                        val metrics = grabNullable<CodeListSource?> { dictionarySource.metricsSource(it) }
+
                         val marker = extractMarkerValueFromJsonData {
-                            dpmSource
-                                .dpmDictionarySources().toList()[0]
-                                .metricsSource()!!
-                                .codeListMetaData()
+                            metrics!!.codeListMetaData()
                         }
 
                         assertThat(marker).isEqualTo("dpm_dictionary_0/met/code_list_meta")
@@ -115,18 +156,25 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                 "ExplicitDomainsAndHierarchiesConcept",
                 listOf(
                     dynamicTest("Should provide source when concept folder exists in data") {
-                        val expDoms = dpmSource
-                            .dpmDictionarySources().toList()[0]
-                            .explicitDomainsAndHierarchiesSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
+
+                        val expDoms = grabNullable<CodeListSource?> {
+                            dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                        }
 
                         assertThat(expDoms).isNotNull()
                         assertExplicitDomainsAndHierarchiesBlueprint(expDoms!!.blueprint())
                     },
 
                     dynamicTest("Should not provide source when concept folder does not exist in data") {
-                        val expDoms = dpmSource
-                            .dpmDictionarySources().toList()[2]
-                            .explicitDomainsAndHierarchiesSource()
+                        val dictionarySource =
+                            grabList<DpmDictionarySource> { dpmSource.eachDpmDictionarySource(it) }[2]
+
+                        val expDoms = grabNullable<CodeListSource?> {
+                            dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                        }
 
                         assertThat(expDoms).isNull()
                     },
@@ -135,34 +183,46 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                         "ListOfDomains",
                         listOf(
                             dynamicTest("Should have codeList") {
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }
+
                                 val marker = extractMarkerValueFromJsonData {
-                                    dpmSource
-                                        .dpmDictionarySources().toList()[0]
-                                        .explicitDomainsAndHierarchiesSource()!!
-                                        .codeListMetaData()
+                                    expDoms!!.codeListMetaData()
                                 }
 
                                 assertThat(marker).isEqualTo("dpm_dictionary_0/exp_dom_hier/code_list_meta")
                             },
 
                             dynamicTest("Should have diagnostic context info") {
-                                val expDoms = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
 
-                                assertThat(expDoms.contextType()).isEqualTo(DiagnosticContextType.RdsCodelist)
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                assertThat(expDoms.contextType()).isEqualTo(DiagnosticContextType.RdsCodeList)
                                 assertThat(expDoms.contextLabel()).isEqualTo("")
                                 assertThat(expDoms.contextIdentifier()).isEqualTo("")
                             },
 
                             dynamicTest("Should have codePages") {
-                                val codepages = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .codePagesData()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(codepages)
+                                    extractMarkerValuesFromJsonData(expDoms.codePagesData())
                                     { it -> it as String }
 
                                 assertThat(markers).containsExactly(
@@ -182,13 +242,17 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                             },
 
                             dynamicTest("Should have extensions") {
-                                val extensions = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .extensionSources()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensions)
-                                    { it -> (it as CodeListExtensionSource).extensionMetaData() }
+                                    extractMarkerValuesFromJsonData(expDoms.extensionSources())
+                                    { it -> (it as ExtensionSource).extensionMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta",
@@ -207,25 +271,36 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                             },
 
                             dynamicTest("Should have diagnostic context info about extension") {
-                                val extensions = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .extensionSources().toList()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val extensions = expDoms.extensionSources().toList()
 
                                 assertThat(extensions.size).isEqualTo(12)
 
-                                assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelistExtension)
+                                assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsExtension)
                                 assertThat(extensions[0].contextLabel()).isEqualTo("")
                                 assertThat(extensions[0].contextIdentifier()).isEqualTo("")
                                 assertThat(extensions[11].contextIdentifier()).isEqualTo("")
                             },
 
                             dynamicTest("Should have extension members pages") {
-                                val extensionPages = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .extensionSources().first()
-                                    .extensionMemberPagesData()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val extensions = expDoms.extensionSources()
+
+                                val extensionPages = extensions.first().extensionMemberPagesData()
 
                                 val markers =
                                     extractMarkerValuesFromJsonData(extensionPages)
@@ -254,29 +329,43 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                         listOf(
 
                             dynamicTest("Should provide subCodeListSources when available") {
-                                val subCodeListSources = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources().toList()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
 
                                 assertThat(subCodeListSources).isNotEmpty
                             },
 
                             dynamicTest("Should not provide subCodeListSources when not available") {
-                                val subCodeListSources = dpmSource
-                                    .dpmDictionarySources().toList()[1]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources()
-                                    .toList()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[1]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
 
                                 assertThat(subCodeListSources).isEmpty()
                             },
 
                             dynamicTest("Should have subCodeLists") {
-                                val subCodeListSources = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources()
 
                                 val markers =
                                     extractMarkerValuesFromJsonData(subCodeListSources)
@@ -299,25 +388,37 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                             },
 
                             dynamicTest("Should have diagnostic context info about subCodeLists") {
-                                val subCodeListSources = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources().toList()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
 
                                 assertThat(subCodeListSources.size).isEqualTo(12)
 
-                                assertThat(subCodeListSources[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelist)
+                                assertThat(subCodeListSources[0].contextType()).isEqualTo(
+                                    DiagnosticContextType.RdsCodeList
+                                )
                                 assertThat(subCodeListSources[0].contextLabel()).isEqualTo("")
                                 assertThat(subCodeListSources[0].contextIdentifier()).isEqualTo("")
                                 assertThat(subCodeListSources[11].contextIdentifier()).isEqualTo("")
                             },
 
                             dynamicTest("Should have codePages") {
-                                val codepages = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources().first()
-                                    .codePagesData()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val codepages = subCodeListSources.first().codePagesData()
 
                                 val markers =
                                     extractMarkerValuesFromJsonData(codepages)
@@ -329,14 +430,21 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                             },
 
                             dynamicTest("Should have extensions") {
-                                val extensions = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources().first()
-                                    .extensionSources()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
+
+                                val extensionSources = subCodeListSources.first().extensionSources()
+
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensions)
-                                    { it -> (it as CodeListExtensionSource).extensionMetaData() }
+                                    extractMarkerValuesFromJsonData(extensionSources)
+                                    { it -> (it as ExtensionSource).extensionMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/extension_0/extension_meta"
@@ -344,29 +452,40 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                             },
 
                             dynamicTest("Should have diagnostic context info about extension") {
-                                val extensions = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources().first()
-                                    .extensionSources().toList()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
 
-                                assertThat(extensions.size).isEqualTo(1)
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
 
-                                assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsCodelistExtension)
-                                assertThat(extensions[0].contextLabel()).isEqualTo("")
-                                assertThat(extensions[0].contextIdentifier()).isEqualTo("")
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
+
+                                val extensionSources = subCodeListSources.first().extensionSources().toList()
+
+                                assertThat(extensionSources.size).isEqualTo(1)
+
+                                assertThat(extensionSources[0].contextType()).isEqualTo(DiagnosticContextType.RdsExtension)
+                                assertThat(extensionSources[0].contextLabel()).isEqualTo("")
+                                assertThat(extensionSources[0].contextIdentifier()).isEqualTo("")
                             },
 
                             dynamicTest("Should have extension members pages") {
-                                val extensionPages = dpmSource
-                                    .dpmDictionarySources().toList()[0]
-                                    .explicitDomainsAndHierarchiesSource()!!
-                                    .subCodeListSources().first()
-                                    .extensionSources().first()
-                                    .extensionMemberPagesData()
+                                val dictionarySource = grabList<DpmDictionarySource> {
+                                    dpmSource.eachDpmDictionarySource(it)
+                                }[0]
+
+                                val expDoms = grabNullable<CodeListSource?> {
+                                    dictionarySource.explicitDomainsAndHierarchiesSource(it)
+                                }!!
+
+                                val subCodeListSources = expDoms.subCodeListSources().toList()
+
+                                val extensionSources = subCodeListSources.first().extensionSources().toList()
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensionPages)
+                                    extractMarkerValuesFromJsonData(extensionSources[0].extensionMemberPagesData())
                                     { it -> it as String }
 
                                 assertThat(markers).containsExactly(
@@ -383,28 +502,41 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                 listOf(
 
                     dynamicTest("Should provide source when concept folder exists in data") {
-                        val expDim = dpmSource
-                            .dpmDictionarySources().toList()[0]
-                            .explicitDimensionsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
 
-                        assertThat(expDim).isNotNull()
-                        assertExplictOrTypedDimensionsBlueprint(expDim!!.blueprint())
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.explicitDimensionsSource(it)
+                        }
+
+                        assertThat(codeListSource).isNotNull()
+                        assertExplictOrTypedDimensionsBlueprint(codeListSource!!.blueprint())
                     },
 
                     dynamicTest("Should not provide source when concept folder does not exist in data") {
-                        val expDim = dpmSource
-                            .dpmDictionarySources().toList()[2]
-                            .explicitDimensionsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[2]
 
-                        assertThat(expDim).isNull()
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.explicitDimensionsSource(it)
+                        }
+
+                        assertThat(codeListSource).isNull()
                     },
 
                     dynamicTest("Should have codeList") {
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
+
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.explicitDimensionsSource(it)
+                        }!!
+
                         val marker = extractMarkerValueFromJsonData {
-                            dpmSource
-                                .dpmDictionarySources().toList()[0]
-                                .explicitDimensionsSource()!!
-                                .codeListMetaData()
+                            codeListSource.codeListMetaData()
                         }
 
                         assertThat(marker).isEqualTo("dpm_dictionary_0/exp_dim/code_list_meta")
@@ -412,36 +544,47 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                 )
             ),
 
-
             dynamicContainer(
                 "TypedDomainsConcept",
                 listOf(
 
                     dynamicTest("Should provide source when concept folder exists in data") {
-                        val typDom = dpmSource
-                            .dpmDictionarySources().toList()[0]
-                            .typedDomainsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
 
-                        assertThat(typDom).isNotNull()
-                        assertTypedDomainBlueprint(typDom!!.blueprint())
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.typedDomainsSource(it)
+                        }
+
+                        assertThat(codeListSource).isNotNull()
+                        assertTypedDomainBlueprint(codeListSource!!.blueprint())
                     },
 
                     dynamicTest("Should not provide source when concept folder does not exist in data") {
-                        val typDom = dpmSource
-                            .dpmDictionarySources().toList()[2]
-                            .typedDomainsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[2]
 
-                        assertThat(typDom).isNull()
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.typedDomainsSource(it)
+                        }
+
+                        assertThat(codeListSource).isNull()
                     },
 
                     dynamicTest("Should have codeList") {
-                        val marker = extractMarkerValueFromJsonData {
-                            dpmSource
-                                .dpmDictionarySources().toList()[0]
-                                .typedDomainsSource()!!
-                                .codeListMetaData()
-                        }
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
 
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.typedDomainsSource(it)
+                        }!!
+
+                        val marker = extractMarkerValueFromJsonData {
+                            codeListSource.codeListMetaData()
+                        }
                         assertThat(marker).isEqualTo("dpm_dictionary_0/typ_dom/code_list_meta")
                     }
                 )
@@ -451,30 +594,42 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                 "TypedDimensionsConcept",
                 listOf(
                     dynamicTest("Should provide source when concept folder exists in data") {
-                        val typDim = dpmSource
-                            .dpmDictionarySources().toList()[0]
-                            .typedDimensionsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
 
-                        assertThat(typDim).isNotNull()
-                        assertExplictOrTypedDimensionsBlueprint(typDim!!.blueprint())
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.typedDimensionsSource(it)
+                        }
+
+                        assertThat(codeListSource).isNotNull()
+                        assertExplictOrTypedDimensionsBlueprint(codeListSource!!.blueprint())
                     },
 
                     dynamicTest("Should not provide source when concept folder does not exist in data") {
-                        val typDim = dpmSource
-                            .dpmDictionarySources().toList()[2]
-                            .typedDimensionsSource()
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[2]
 
-                        assertThat(typDim).isNull()
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.typedDimensionsSource(it)
+                        }
+
+                        assertThat(codeListSource).isNull()
                     },
 
                     dynamicTest("Should have codeList") {
-                        val marker = extractMarkerValueFromJsonData {
-                            dpmSource
-                                .dpmDictionarySources().toList()[0]
-                                .typedDimensionsSource()!!
-                                .codeListMetaData()
-                        }
+                        val dictionarySource = grabList<DpmDictionarySource> {
+                            dpmSource.eachDpmDictionarySource(it)
+                        }[0]
 
+                        val codeListSource = grabNullable<CodeListSource?> {
+                            dictionarySource.typedDimensionsSource(it)
+                        }!!
+
+                        val marker = extractMarkerValueFromJsonData {
+                            codeListSource.codeListMetaData()
+                        }
                         assertThat(marker).isEqualTo("dpm_dictionary_0/typ_dim/code_list_meta")
                     }
                 )

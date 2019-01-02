@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
+import fi.vm.yti.taxgen.commons.datavalidation.Validatable
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
 import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.Severity.INFO
@@ -86,10 +88,22 @@ class DiagnosticBridge(
         consumer.message(INFO, message)
     }
 
-    override fun validationResults(validationResults: List<ValidationResultInfo>) {
-        if (validationResults.any()) incrementCounter(ERROR)
+    override fun validate(validatable: Validatable) {
+        val collector = ValidationCollector()
+        validatable.validate(collector)
 
-        consumer.validationResults(validationResults)
+        val results = collector.compileResults()
+
+        if (results.any()) {
+            incrementCounter(ERROR)
+            consumer.validationResults(results)
+        }
+    }
+
+    override fun validate(validatables: List<Validatable>) {
+        validatables.forEach {
+            validate(it)
+        }
     }
 
     override fun counters(): Map<Severity, Int> {

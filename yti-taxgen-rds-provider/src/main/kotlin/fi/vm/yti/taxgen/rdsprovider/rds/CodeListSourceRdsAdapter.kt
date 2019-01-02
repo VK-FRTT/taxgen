@@ -7,8 +7,8 @@ import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
-import fi.vm.yti.taxgen.rdsprovider.CodeListExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
+import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
 internal class CodeListSourceRdsAdapter(
@@ -37,9 +37,9 @@ internal class CodeListSourceRdsAdapter(
         ).asSequence()
     }
 
-    override fun extensionSources(): Sequence<CodeListExtensionSource> {
+    override fun extensionSources(): Sequence<ExtensionSource> {
         return contentUrls.extensionUrls.map { extensionUrls ->
-            CodeListExtensionSourceAdapter(
+            ExtensionSourceRdsAdapter(
                 extensionUrls,
                 diagnostic
             )

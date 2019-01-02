@@ -8,15 +8,11 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
-import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
-import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
-import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceZipFileAdapter
-import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceRecorderZipFileAdapter
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
+import fi.vm.yti.taxgen.rdsprovider.DpmSource
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceFactory
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
+import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -94,11 +90,11 @@ class TaxgenCli(
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
-            resolveRdsSource(detectedOptions).use { yclSource ->
+            resolveRdsSource(detectedOptions).use { rdsSource ->
                 val dbWriter = resolveDpmDbWriter(detectedOptions)
                 val dpmMapper = RdsToDpmMapper(diagnostic)
 
-                val dpmDictionaries = dpmMapper.getDpmDictionariesFromSource(yclSource)
+                val dpmDictionaries = dpmMapper.extractDpmDictionariesFromSource(rdsSource)
 
                 if (diagnostic.counters()[Severity.ERROR] != 0) {
                     diagnostic.info("Mapping failed due content errors")
@@ -116,9 +112,9 @@ class TaxgenCli(
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
-            resolveRdsSource(detectedOptions).use { yclSource ->
-                resolveRdsSourceRecorder(detectedOptions).use { yclSourceRecorder ->
-                    yclSourceRecorder.captureSources(yclSource)
+            resolveRdsSource(detectedOptions).use { rdsSource ->
+                resolveRdsSourceRecorder(detectedOptions).use { rdsSourceRecorder ->
+                    rdsSourceRecorder.captureSources(rdsSource)
                 }
             }
 
@@ -130,21 +126,23 @@ class TaxgenCli(
 
     private fun resolveRdsSource(detectedOptions: DetectedOptions): DpmSource {
         if (detectedOptions.sourceConfigFile != null) {
-            return DpmSourceRdsAdapter(
-                configPath = detectedOptions.sourceConfigFile,
+            return DpmSourceFactory.rdsSource(
+                configFilePath = detectedOptions.sourceConfigFile,
                 diagnostic = diagnostic
             )
         }
 
         if (detectedOptions.sourceFolder != null) {
-            return DpmSourceFolderAdapter(
-                dpmSourceRootPath = detectedOptions.sourceFolder
+            return DpmSourceFactory.folderSource(
+                sourceRootPath = detectedOptions.sourceFolder,
+                diagnostic = diagnostic
             )
         }
 
         if (detectedOptions.sourceZipFile != null) {
-            return DpmSourceZipFileAdapter(
-                sourceZipPath = detectedOptions.sourceZipFile
+            return DpmSourceFactory.zipFileSource(
+                zipFilePath = detectedOptions.sourceZipFile,
+                diagnostic = diagnostic
             )
         }
 
@@ -156,7 +154,7 @@ class TaxgenCli(
     ): DpmSourceRecorder {
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder != null) {
-            return DpmSourceRecorderFolderAdapter(
+            return DpmSourceFactory.folderRecorder(
                 baseFolderPath = detectedOptions.cmdCaptureDpmSourcesToFolder,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnostic = diagnostic
@@ -164,8 +162,8 @@ class TaxgenCli(
         }
 
         if (detectedOptions.cmdCaptureDpmSourcesToZip != null) {
-            return DpmSourceRecorderZipFileAdapter(
-                targetZipPath = detectedOptions.cmdCaptureDpmSourcesToZip,
+            return DpmSourceFactory.zipRecorder(
+                zipFilePath = detectedOptions.cmdCaptureDpmSourcesToZip,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnostic = diagnostic
             )
