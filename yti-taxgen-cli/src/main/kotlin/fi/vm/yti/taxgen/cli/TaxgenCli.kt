@@ -2,16 +2,16 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.commons.HaltException
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
-import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.DpmSourceFactory
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
+import fi.vm.yti.taxgen.rdsprovider.ProviderFactory
+import fi.vm.yti.taxgen.rdsprovider.SourceProvider
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import java.io.BufferedWriter
 import java.io.Closeable
@@ -34,7 +34,7 @@ class TaxgenCli(
     private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
     private val dtp = DiagnosticTextPrinter(outWriter)
-    private val diagnostic: Diagnostic = DiagnosticBridge(dtp)
+    private val diagnosticContext: DiagnosticContext = DiagnosticBridge(dtp)
 
     override fun close() {
         outWriter.close()
@@ -85,64 +85,63 @@ class TaxgenCli(
     }
 
     private fun compileDpmDb(detectedOptions: DetectedOptions) {
-        diagnostic.withContext(
+        diagnosticContext.withContext(
             contextType = DiagnosticContextType.CmdCompileDpmDb
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
-            resolveRdsSource(detectedOptions).use { rdsSource ->
-                val dbWriter = resolveDpmDbWriter(detectedOptions)
-                val dpmMapper = RdsToDpmMapper(diagnostic)
+            val sourceProvider = resolveSourceProvider(detectedOptions)
+            val dbWriter = resolveDpmDbWriter(detectedOptions)
+            val dpmMapper = RdsToDpmMapper(diagnosticContext)
+            val dpmDictionaries = dpmMapper.extractDpmDictionariesFromSource(sourceProvider)
 
-                val dpmDictionaries = dpmMapper.extractDpmDictionariesFromSource(rdsSource)
-
-                if (diagnostic.counters()[Severity.ERROR] != 0) {
-                    diagnostic.info("Mapping failed due content errors")
-                    throwHalt()
-                }
-
-                dbWriter.writeDpmDb(dpmDictionaries)
+            if (diagnosticContext.counters()[Severity.ERROR] != 0) {
+                diagnosticContext.info("Mapping failed due content errors")
+                throwHalt()
             }
+
+            dbWriter.writeDpmDb(dpmDictionaries)
         }
     }
 
     private fun captureDpmSources(detectedOptions: DetectedOptions) {
-        diagnostic.withContext(
+        diagnosticContext.withContext(
             contextType = DiagnosticContextType.CmdCaptureDpmSources
         ) {
             detectedOptions.ensureSingleSourceGiven()
 
-            resolveRdsSource(detectedOptions).use { rdsSource ->
-                resolveRdsSourceRecorder(detectedOptions).use { rdsSourceRecorder ->
-                    rdsSourceRecorder.captureSources(rdsSource)
-                }
-            }
+            val sourceProvider = resolveSourceProvider(detectedOptions)
+            val recorder = resolveRdsSourceRecorder(detectedOptions)
 
-            if (diagnostic.counters()[Severity.ERROR] != 0) {
-                diagnostic.info("Capturing failed")
+            recorder.use { rdsSourceRecorder ->
+                rdsSourceRecorder.captureSources(sourceProvider)
             }
+        }
+
+        if (diagnosticContext.counters()[Severity.ERROR] != 0) {
+            diagnosticContext.info("Capturing failed")
         }
     }
 
-    private fun resolveRdsSource(detectedOptions: DetectedOptions): DpmSource {
+    private fun resolveSourceProvider(detectedOptions: DetectedOptions): SourceProvider {
         if (detectedOptions.sourceConfigFile != null) {
-            return DpmSourceFactory.rdsSource(
+            return ProviderFactory.rdsProvider(
                 configFilePath = detectedOptions.sourceConfigFile,
-                diagnostic = diagnostic
+                diagnosticContext = diagnosticContext
             )
         }
 
         if (detectedOptions.sourceFolder != null) {
-            return DpmSourceFactory.folderSource(
+            return ProviderFactory.folderProvider(
                 sourceRootPath = detectedOptions.sourceFolder,
-                diagnostic = diagnostic
+                diagnosticContext = diagnosticContext
             )
         }
 
         if (detectedOptions.sourceZipFile != null) {
-            return DpmSourceFactory.zipFileSource(
+            return ProviderFactory.zipFileProvider(
                 zipFilePath = detectedOptions.sourceZipFile,
-                diagnostic = diagnostic
+                diagnosticContext = diagnosticContext
             )
         }
 
@@ -154,18 +153,18 @@ class TaxgenCli(
     ): DpmSourceRecorder {
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder != null) {
-            return DpmSourceFactory.folderRecorder(
+            return ProviderFactory.folderRecorder(
                 baseFolderPath = detectedOptions.cmdCaptureDpmSourcesToFolder,
                 forceOverwrite = detectedOptions.forceOverwrite,
-                diagnostic = diagnostic
+                diagnosticContext = diagnosticContext
             )
         }
 
         if (detectedOptions.cmdCaptureDpmSourcesToZip != null) {
-            return DpmSourceFactory.zipRecorder(
+            return ProviderFactory.zipRecorder(
                 zipFilePath = detectedOptions.cmdCaptureDpmSourcesToZip,
                 forceOverwrite = detectedOptions.forceOverwrite,
-                diagnostic = diagnostic
+                diagnosticContext = diagnosticContext
             )
         }
 
@@ -178,7 +177,7 @@ class TaxgenCli(
         return DpmDbWriter(
             rawTargetDbPath = detectedOptions.cmdCompileDpmDb!!,
             forceOverwrite = detectedOptions.forceOverwrite,
-            diagnostic = diagnostic
+            diagnosticContext = diagnosticContext
         )
     }
 }

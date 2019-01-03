@@ -1,14 +1,9 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextDetails
 import java.io.Closeable
 
-abstract class DpmSource : Closeable, DiagnosticContextProvider {
-
-    override fun contextType(): DiagnosticContextType = DiagnosticContextType.DpmSource
-
-    abstract fun sourceConfigData(): String
-
-    abstract fun eachDpmDictionarySource(action: (DpmDictionarySource) -> Unit)
+interface DpmSource : Closeable, DiagnosticContextDetails {
+    fun sourceConfigData(): String
+    fun eachDpmDictionarySource(action: (DpmDictionarySource) -> Unit)
 }

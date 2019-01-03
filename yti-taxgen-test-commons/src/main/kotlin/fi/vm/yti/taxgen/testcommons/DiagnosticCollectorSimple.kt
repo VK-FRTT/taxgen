@@ -10,7 +10,7 @@ class DiagnosticCollectorSimple : DiagnosticConsumer {
     val events = mutableListOf<String>()
 
     override fun contextEnter(contextStack: List<ContextInfo>) {
-        events.add("ENTER [${contextStack.firstOrNull()?.type ?: ""}]")
+        events.add("ENTER [${contextStack.firstOrNull()?.type ?: ""}] [${contextStack.firstOrNull()?.label ?: ""}]")
     }
 
     override fun contextExit(contextStack: List<ContextInfo>, retiredContext: ContextInfo) {
@@ -22,7 +22,7 @@ class DiagnosticCollectorSimple : DiagnosticConsumer {
     }
 
     override fun message(severity: Severity, message: String) {
-        events.add("MESSAGE [$severity] MESSAGE [$message]")
+        events.add("MESSAGE [$severity] [$message]")
     }
 
     override fun validationResults(validationResults: List<ValidationResultInfo>) {

@@ -12,6 +12,9 @@ internal class DpmDictionarySourceRdsAdapter(
     private val diagnostic: Diagnostic
 ) : DpmDictionarySource {
 
+    override fun contextLabel(): String = ""
+    override fun contextIdentifier(): String = ""
+
     override fun dpmOwnerConfigData(action: (String) -> Unit) {
         action(JsonOps.writeAsJsonString(config.owner))
     }

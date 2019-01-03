@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
@@ -13,7 +14,7 @@ import java.nio.file.Path
 internal class DpmSourceRdsAdapter(
     configPath: Path,
     private val diagnostic: Diagnostic
-) : DpmSource() {
+) : DpmSource {
 
     private val configFilePath = configPath.toAbsolutePath().normalize()
 
@@ -44,7 +45,7 @@ internal class DpmSourceRdsAdapter(
     }
 
     private fun loadConfig(): LoadedConfig {
-        return diagnostic.withContext(
+        return (diagnostic as DiagnosticContext).withContext(
             contextType = DiagnosticContextType.InitConfiguration,
             contextIdentifier = configFilePath.fileName.toString()
         ) {

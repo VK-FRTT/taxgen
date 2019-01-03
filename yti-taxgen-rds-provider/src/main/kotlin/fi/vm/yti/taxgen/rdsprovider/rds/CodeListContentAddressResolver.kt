@@ -9,24 +9,25 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 import okhttp3.HttpUrl
 
-internal data class ContentUrls(
+internal data class ContentAddress(
     val codeListUrl: HttpUrl,
     val codesUrl: HttpUrl,
-    val extensionUrls: List<ExtensionUrls>
+    val extensionUrls: List<ExtensionAddress>
 )
 
-internal data class ExtensionUrls(
+internal data class ExtensionAddress(
+    val extensionUri: String,
     val extensionUrl: HttpUrl,
     val extensionMembersUrl: HttpUrl
 )
 
-internal class CodeListContentUrlsResolver(
+internal class CodeListContentAddressResolver(
     private val blueprint: CodeListBlueprint,
     private val diagnostic: Diagnostic
 ) {
     fun resolveForUri(
         uri: String
-    ): ContentUrls {
+    ): ContentAddress {
 
         val metaDataJson = fetchUriMetaDataJson(uri)
         val httpUrl = metaDataJson.httpUrlAt(
@@ -37,10 +38,10 @@ internal class CodeListContentUrlsResolver(
 
         val codeListJson = fetchExpandedCodeListJson(httpUrl)
 
-        return ContentUrls(
+        return ContentAddress(
             codeListUrl = resolveCodeListContentUrl(codeListJson),
             codesUrl = resolveCodesContentUrl(codeListJson),
-            extensionUrls = resolveKnownExtensionContentUrls(codeListJson)
+            extensionUrls = resolveExtensionContentAddress(codeListJson)
         )
     }
 
@@ -72,21 +73,23 @@ internal class CodeListContentUrlsResolver(
         return codeListJson.httpUrlAt("/codesUrl", diagnostic, "Codes at content URL resolution")
     }
 
-    private fun resolveKnownExtensionContentUrls(codeListJson: JsonNode): List<ExtensionUrls> {
+    private fun resolveExtensionContentAddress(codeListJson: JsonNode): List<ExtensionAddress> {
         return codeListJson.arrayAt("/extensions", diagnostic).mapNotNull { extensionNode ->
 
             val propertyTypeUri = extensionNode.nonBlankTextAt("/propertyType/uri", diagnostic)
 
             if (blueprint.extensionPropertyTypeUris.contains(propertyTypeUri)) {
-                extensionUrlsFromExtensionNode(extensionNode)
+                extensionAddressFromExtensionNode(extensionNode)
             } else {
                 null
             }
         }
     }
 
-    private fun extensionUrlsFromExtensionNode(extensionNode: JsonNode): ExtensionUrls {
-        return ExtensionUrls(
+    private fun extensionAddressFromExtensionNode(extensionNode: JsonNode): ExtensionAddress {
+        return ExtensionAddress(
+            extensionUri = extensionNode
+                .nonBlankTextAt("/uri", diagnostic),
             extensionUrl = extensionNode
                 .httpUrlAt("/url", diagnostic, "Extension at content URL resolution"),
             extensionMembersUrl = extensionNode

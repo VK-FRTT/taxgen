@@ -11,6 +11,9 @@ internal class DpmDictionarySourceFolderAdapter(
     private val dpmDictionaryRootPath: Path
 ) : DpmDictionarySource {
 
+    override fun contextLabel(): String = ""
+    override fun contextIdentifier(): String = ""
+
     override fun dpmOwnerConfigData(action: (String) -> Unit) {
         action(FileOps.readTextFile(dpmDictionaryRootPath, "dpm_owner_config.json"))
     }

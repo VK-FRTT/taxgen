@@ -2,8 +2,8 @@ package fi.vm.yti.taxgen.rdsprovider.folder
 
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
-import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
+import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.helpers.SortOps
 import java.nio.file.Path
 
@@ -12,9 +12,10 @@ internal class CodeListSourceFolderAdapter(
     private val blueprint: CodeListBlueprint
 ) : CodeListSource {
 
-    override fun blueprint(): CodeListBlueprint {
-        return blueprint
-    }
+    override fun contextLabel(): String = ""
+    override fun contextIdentifier(): String = ""
+
+    override fun blueprint(): CodeListBlueprint = blueprint
 
     override fun codeListMetaData(): String {
         return FileOps.readTextFile(codeListRootPath, "code_list_meta.json")

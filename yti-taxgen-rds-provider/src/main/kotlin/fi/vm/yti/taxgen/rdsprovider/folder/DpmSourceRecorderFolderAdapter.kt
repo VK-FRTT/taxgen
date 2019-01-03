@@ -9,6 +9,7 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
+import fi.vm.yti.taxgen.rdsprovider.SourceProvider
 import java.nio.file.Path
 import java.time.Instant
 
@@ -23,14 +24,14 @@ internal class DpmSourceRecorderFolderAdapter(
     override fun contextLabel(): String = "folder"
     override fun contextIdentifier(): String = baseFolderPath.toString()
 
-    override fun captureSources(dpmSource: DpmSource) {
+    override fun captureSources(sourceProvider: SourceProvider) {
         val pathStack = PathStack(
             baseFolderPath = baseFolderPath,
             createFileSystemPaths = true,
             diagnostic = diagnostic
         )
 
-        diagnostic.withContext(this) {
+        sourceProvider.withDpmSource { dpmSource ->
             captureDpmSource(dpmSource, pathStack)
         }
     }
@@ -39,37 +40,34 @@ internal class DpmSourceRecorderFolderAdapter(
         dpmSource: DpmSource,
         pathStack: PathStack
     ) {
-        diagnostic.withContext(dpmSource) {
+        pathStack.withSubfolder("meta") {
 
-            pathStack.withSubfolder("meta") {
+            FileOps.writeTextFile(
+                captureInfoData(),
+                pathStack,
+                "capture_info.json",
+                forceOverwrite,
+                diagnostic
+            )
 
-                FileOps.writeTextFile(
-                    captureInfoData(),
-                    pathStack,
-                    "capture_info.json",
-                    forceOverwrite,
-                    diagnostic
-                )
+            FileOps.writeTextFile(
+                dpmSource.sourceConfigData(),
+                pathStack,
+                "source_config.json",
+                forceOverwrite,
+                diagnostic
+            )
+        }
 
-                FileOps.writeTextFile(
-                    dpmSource.sourceConfigData(),
-                    pathStack,
-                    "source_config.json",
-                    forceOverwrite,
-                    diagnostic
-                )
-            }
+        var index = 0
+        dpmSource.eachDpmDictionarySource {
+            captureDpmDictionarySources(
+                it,
+                index,
+                pathStack
+            )
 
-            var index = 0
-            dpmSource.eachDpmDictionarySource {
-                captureDpmDictionarySources(
-                    it,
-                    index,
-                    pathStack
-                )
-
-                index++
-            }
+            index++
         }
     }
 
@@ -140,39 +138,35 @@ internal class DpmSourceRecorderFolderAdapter(
         if (codeListSource == null) {
             return
         }
+        pathStack.withSubfolder(conceptFolderName) {
 
-        diagnostic.withContext(codeListSource) {
+            FileOps.writeTextFile(
+                codeListSource.codeListMetaData(),
+                pathStack,
+                "code_list_meta.json",
+                forceOverwrite,
+                diagnostic
+            )
 
-            pathStack.withSubfolder(conceptFolderName) {
-
+            codeListSource.codePagesData().withIndex().forEach { (index, pageData) ->
                 FileOps.writeTextFile(
-                    codeListSource.codeListMetaData(),
+                    pageData,
                     pathStack,
-                    "code_list_meta.json",
+                    "codes_page_$index.json",
                     forceOverwrite,
                     diagnostic
                 )
-
-                codeListSource.codePagesData().withIndex().forEach { (index, pageData) ->
-                    FileOps.writeTextFile(
-                        pageData,
-                        pathStack,
-                        "codes_page_$index.json",
-                        forceOverwrite,
-                        diagnostic
-                    )
-                }
-
-                captureExtensionSources(
-                    codeListSource,
-                    pathStack
-                )
-
-                captureSubCodeListSources(
-                    codeListSource,
-                    pathStack
-                )
             }
+
+            captureExtensionSources(
+                codeListSource,
+                pathStack
+            )
+
+            captureSubCodeListSources(
+                codeListSource,
+                pathStack
+            )
         }
     }
 
@@ -186,28 +180,26 @@ internal class DpmSourceRecorderFolderAdapter(
 
         codeListSource.extensionSources().withIndex().forEach { (listIndex, extensionSource) ->
 
-            diagnostic.withContext(extensionSource) {
+            pathStack.withSubfolder("extension_$listIndex") {
 
-                pathStack.withSubfolder("extension_$listIndex") {
+                FileOps.writeTextFile(
+                    extensionSource.extensionMetaData(),
+                    pathStack,
+                    "extension_meta.json",
+                    forceOverwrite,
+                    diagnostic
+                )
 
+                extensionSource.extensionMemberPagesData().withIndex().forEach { (index, pageData) ->
                     FileOps.writeTextFile(
-                        extensionSource.extensionMetaData(),
+                        pageData,
                         pathStack,
-                        "extension_meta.json",
+                        "members_page_$index.json",
                         forceOverwrite,
                         diagnostic
                     )
-
-                    extensionSource.extensionMemberPagesData().withIndex().forEach { (index, pageData) ->
-                        FileOps.writeTextFile(
-                            pageData,
-                            pathStack,
-                            "members_page_$index.json",
-                            forceOverwrite,
-                            diagnostic
-                        )
-                    }
                 }
+
             }
         }
     }
@@ -221,9 +213,7 @@ internal class DpmSourceRecorderFolderAdapter(
         }
 
         codeListSource.subCodeListSources().withIndex().forEach { (listIndex, subCodeListSource) ->
-            diagnostic.withContext(subCodeListSource) {
-                captureCodeListSource(subCodeListSource, "sub_code_list_$listIndex", pathStack)
-            }
+            captureCodeListSource(subCodeListSource, "sub_code_list_$listIndex", pathStack)
         }
     }
 

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.FileOps
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -19,18 +19,18 @@ import java.sql.Connection
 class DpmDbWriter(
     rawTargetDbPath: Path,
     forceOverwrite: Boolean,
-    private val diagnostic: Diagnostic
+    private val diagnosticContext: DiagnosticContext
 ) {
     private val targetDbPath: Path = rawTargetDbPath.toAbsolutePath().normalize()
 
     init {
         FileOps.deleteConflictingTargetFileIfAllowed(targetDbPath, forceOverwrite)
-        FileOps.failIfTargetFileExists(targetDbPath, diagnostic)
+        FileOps.failIfTargetFileExists(targetDbPath, diagnosticContext)
         FileOps.createIntermediateFolders(targetDbPath)
     }
 
     fun writeDpmDb(dpmDictionaries: List<DpmDictionary>) {
-        diagnostic.withContext(
+        diagnosticContext.withContext(
             contextType = DiagnosticContextType.WritingSQLiteDpmDb,
             contextIdentifier = targetDbPath.toString()
         ) {

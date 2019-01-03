@@ -90,15 +90,4 @@ internal class Owner_UnitTest :
             ).containsExactlyInAnyOrderElementsOf(listOf("fi", "sv"))
         }
     }
-
-    @Nested
-    inner class CompanionObject {
-
-        @Test
-        fun `companion should provide diagnostic context info about owner`() {
-            assertThat(Owner.Companion.contextType()).isEqualTo(DiagnosticContextType.DpmOwner)
-            assertThat(Owner.Companion.contextLabel()).isEqualTo("")
-            assertThat(Owner.Companion.contextIdentifier()).isEqualTo("")
-        }
-    }
 }

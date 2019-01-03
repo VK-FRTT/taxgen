@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
@@ -17,32 +17,38 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
 
     companion object {
         lateinit var emptyTargetFolder: TempFolder
+        lateinit var emptyTargetEvents: List<String>
 
         @BeforeAll
         @JvmStatic
         fun beforeAll() {
             emptyTargetFolder = TempFolder("empty_target_folder")
 
-            val dc = DiagnosticCollectorSimple()
-            val d = DiagnosticBridge(dc)
+            val diagnosticCollector = DiagnosticCollectorSimple()
+            val diagnosticContext: DiagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-
-            DpmSourceRecorderFolderAdapter(
+            ProviderFactory.folderRecorder(
                 baseFolderPath = emptyTargetFolder.path(),
                 forceOverwrite = false,
-                diagnostic = d
+                diagnosticContext = diagnosticContext
             ).use {
-                val (source, _) = dpmSourceFolderAdapterToReferenceData()
+                val (source, _) = sourceProviderFolderAdapterFromReferenceData(diagnosticContext)
                 it.captureSources(source)
             }
+
+            emptyTargetEvents = diagnosticCollector.events
+
+            println(emptyTargetEvents.joinToString(separator = "\n"))
         }
 
         @AfterAll
         @JvmStatic
         fun afterAll() {
             emptyTargetFolder.close()
+            emptyTargetEvents = emptyList()
         }
     }
+
 
     @Nested
     @DisplayName("which is empty")
@@ -58,6 +64,16 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
             val json = objectMapper.readTree(expectedFilePath.toFile())
             assertThat(json.isObject).isTrue()
             assertThat(json.get("marker").textValue()).isEqualTo(expectedMarker)
+        }
+
+        @Test
+        fun `Should produce correct diagnostic events`() {
+            assertThat(emptyTargetEvents).contains(
+                "ENTER [CaptureDpmSource] [folder]",
+                "ENTER [DpmSource] [folder]",
+                "ENTER [DpmDictionary] []",
+                "ENTER [RdsCodeList] []"
+            )
         }
 
         @Test

@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 
 import com.fasterxml.jackson.databind.JsonNode
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
@@ -17,20 +18,21 @@ internal class CodeListSourceRdsAdapter(
     private val diagnostic: Diagnostic
 ) : CodeListSource {
 
-    private val contentUrls: ContentUrls by lazy(this::resolveContentUrls)
+    private val contentAddress: ContentAddress by lazy(this::resolveContentAddress)
     private var subCodeListUris: List<String>? = null
 
-    override fun blueprint(): CodeListBlueprint {
-        return blueprint
-    }
+    override fun contextLabel(): String = ""
+    override fun contextIdentifier(): String = rdsCodeListUri
+
+    override fun blueprint(): CodeListBlueprint = blueprint
 
     override fun codeListMetaData(): String {
-        return HttpOps.fetchJsonData(contentUrls.codeListUrl, diagnostic)
+        return HttpOps.fetchJsonData(contentAddress.codeListUrl, diagnostic)
     }
 
     override fun codePagesData(): Sequence<String> {
         return PaginationAwareCollectionIterator(
-            contentUrls.codesUrl,
+            contentAddress.codesUrl,
             diagnostic,
             DiagnosticContextType.RdsCodesPage,
             SubCodeListUriExtractor(this)
@@ -38,7 +40,7 @@ internal class CodeListSourceRdsAdapter(
     }
 
     override fun extensionSources(): Sequence<ExtensionSource> {
-        return contentUrls.extensionUrls.map { extensionUrls ->
+        return contentAddress.extensionUrls.map { extensionUrls ->
             ExtensionSourceRdsAdapter(
                 extensionUrls,
                 diagnostic
@@ -64,15 +66,14 @@ internal class CodeListSourceRdsAdapter(
         thisShouldNeverHappen("subCodeListUris is null")
     }
 
-    private fun resolveContentUrls(): ContentUrls {
-        return diagnostic.withContext(
-            contextType = DiagnosticContextType.InitContentUrls,
+    private fun resolveContentAddress(): ContentAddress {
+        return (diagnostic as DiagnosticContext).withContext(
+            contextType = DiagnosticContextType.InitContentAddress,
             contextIdentifier = rdsCodeListUri
         ) {
-            CodeListContentUrlsResolver(blueprint, diagnostic)
-                .resolveForUri(
-                    rdsCodeListUri
-                )
+            val resolver = CodeListContentAddressResolver(blueprint, diagnostic)
+
+            resolver.resolveForUri(rdsCodeListUri)
         }
     }
 

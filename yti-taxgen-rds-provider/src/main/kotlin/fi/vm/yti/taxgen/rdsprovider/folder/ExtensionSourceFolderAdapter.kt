@@ -8,6 +8,9 @@ internal class ExtensionSourceFolderAdapter(
     private val extensionPath: Path
 ) : ExtensionSource {
 
+    override fun contextLabel(): String = ""
+    override fun contextIdentifier(): String = ""
+
     override fun extensionMetaData(): String {
         return FileOps.readTextFile(extensionPath, "extension_meta.json")
     }

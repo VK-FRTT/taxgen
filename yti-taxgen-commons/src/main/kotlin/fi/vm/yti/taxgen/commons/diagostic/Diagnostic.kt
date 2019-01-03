@@ -4,18 +4,6 @@ import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 
 interface Diagnostic {
 
-    fun <R> withContext(
-        diagnosticContext: DiagnosticContextProvider,
-        block: () -> R
-    ): R
-
-    fun <R> withContext(
-        contextType: DiagnosticContextType,
-        contextLabel: String = "",
-        contextIdentifier: String = "",
-        block: () -> R
-    ): R
-
     fun updateCurrentContextDetails(label: String? = null, identifier: String? = null)
 
     fun fatal(message: String): Nothing

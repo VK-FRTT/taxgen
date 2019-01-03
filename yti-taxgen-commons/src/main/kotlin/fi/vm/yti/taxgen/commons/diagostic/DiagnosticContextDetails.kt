@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
-interface DiagnosticContextProvider {
-    fun contextType(): DiagnosticContextType
+interface DiagnosticContextDetails {
     fun contextLabel(): String
     fun contextIdentifier(): String
 }

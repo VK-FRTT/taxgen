@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
 import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
 import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
 import java.io.PrintWriter
@@ -56,7 +56,7 @@ class DiagnosticTextPrinter(
 
     private fun ContextInfo.contextHeader(): String {
         return if (type.recurring) {
-            "${type.displayName} #$index:"
+            "${type.displayName} #$recurrenceIndex:"
         } else {
             "${type.displayName}:"
         }

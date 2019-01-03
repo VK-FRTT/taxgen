@@ -1,8 +1,6 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import java.time.Instant
 import java.time.LocalDate
 
@@ -22,11 +20,7 @@ internal data class RdsExtensionMember(
     val code: RdsCode?,
     val memberValues: List<RdsMemberValue>?,
     val relatedMember: RdsExtensionMember?
-) : RdsEntity(), DiagnosticContextProvider {
-
-    override fun contextType() = DiagnosticContextType.RdsExtensionMember
-    override fun contextLabel() = diagnosticLabel()
-    override fun contextIdentifier() = diagnosticIdentifier()
+) : RdsEntity() {
 
     fun validCodeUri(diagnostic: Diagnostic): String {
         if (code == null) diagnostic.fatal("RDS Extension Member not having valid Code element")

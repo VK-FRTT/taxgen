@@ -2,8 +2,6 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
@@ -16,12 +14,6 @@ data class Owner(
     val languages: Set<Language>,
     val defaultLanguage: Language
 ) : Validatable {
-
-    companion object : DiagnosticContextProvider {
-        override fun contextType(): DiagnosticContextType = DiagnosticContextType.DpmOwner
-        override fun contextLabel(): String = ""
-        override fun contextIdentifier(): String = ""
-    }
 
     override fun validate(validationResults: ValidationResults) {
 

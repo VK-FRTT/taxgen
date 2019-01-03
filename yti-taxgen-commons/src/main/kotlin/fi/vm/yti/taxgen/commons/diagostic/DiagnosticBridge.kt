@@ -11,34 +11,23 @@ import java.util.LinkedList
 
 class DiagnosticBridge(
     private val consumer: DiagnosticConsumer
-) : Diagnostic {
+) : DiagnosticContext {
     private val contextStack = LinkedList<ContextInfo>()
     private var previousRetiredContext: ContextInfo? = null
     private val counters = Severity.values().map { it -> Pair(it, 0) }.toMap().toMutableMap()
 
     override fun <R> withContext(
-        diagnosticContext: DiagnosticContextProvider,
-        block: () -> R
-    ): R {
-        return withContext(
-            diagnosticContext.contextType(),
-            diagnosticContext.contextLabel(),
-            diagnosticContext.contextIdentifier(),
-            block
-        )
-    }
-
-    override fun <R> withContext(
         contextType: DiagnosticContextType,
         contextLabel: String,
         contextIdentifier: String,
-        block: () -> R
+        action: () -> R
     ): R {
-        val index = previousRetiredContext?.let { if (it.type == contextType) it.index + 1 else null } ?: 0
+        val recurrenceIndex =
+            previousRetiredContext?.let { if (it.type == contextType) it.recurrenceIndex + 1 else null } ?: 0
 
         val info = ContextInfo(
             type = contextType,
-            index = index,
+            recurrenceIndex = recurrenceIndex,
             label = contextLabel,
             identifier = contextIdentifier
         )
@@ -46,7 +35,7 @@ class DiagnosticBridge(
         contextStack.push(info)
         consumer.contextEnter(contextStack)
 
-        val ret = block()
+        val ret = action()
 
         val retired = contextStack.pop()
         previousRetiredContext = retired

@@ -1,14 +1,8 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextProvider
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextDetails
 
-interface DpmDictionarySource : DiagnosticContextProvider {
-
-    override fun contextType(): DiagnosticContextType = DiagnosticContextType.DpmDictionary
-    override fun contextLabel(): String = ""
-    override fun contextIdentifier(): String = ""
-
+interface DpmDictionarySource : DiagnosticContextDetails {
     fun dpmOwnerConfigData(action: (String) -> Unit)
     fun metricsSource(action: (CodeListSource?) -> Unit)
     fun explicitDomainsAndHierarchiesSource(action: (CodeListSource?) -> Unit)

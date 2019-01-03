@@ -8,7 +8,7 @@ import java.nio.file.Path
 
 internal class DpmSourceFolderAdapter(
     dpmSourceRootPath: Path
-) : DpmSource() {
+) : DpmSource {
 
     private val dpmSourceRootPath = dpmSourceRootPath.toAbsolutePath().normalize()
 
