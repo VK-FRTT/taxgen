@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.rdsdpmmapper.sourcereader
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
+import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMembersPage
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMeta
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 
@@ -19,5 +20,9 @@ internal class ExtensionSourceReader(
     }
 
     fun eachExtensionMember(action: (RdsExtensionMember) -> Unit) {
+        extensionSource.extensionMemberPagesData().forEach { pageData ->
+            val membersPage = JsonOps.readValue<RdsExtensionMembersPage>(pageData, diagnostic)
+            membersPage.results?.forEach(action)
+        }
     }
 }

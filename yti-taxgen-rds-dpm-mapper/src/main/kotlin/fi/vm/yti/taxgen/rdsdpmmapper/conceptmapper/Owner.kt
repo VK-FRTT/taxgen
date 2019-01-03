@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.mapper
+package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Language

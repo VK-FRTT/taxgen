@@ -60,6 +60,6 @@ internal class DpmDictionarySourceReader(
             return null
         }
 
-        return CodeListSourceReader(codeListSource)
+        return CodeListSourceReader(codeListSource, diagnostic)
     }
 }

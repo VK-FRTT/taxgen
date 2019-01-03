@@ -16,7 +16,9 @@ internal data class RdsCode(
     override val endDate: LocalDate?,
 
     override val prefLabel: Map<String, String>?,
-    override val description: Map<String, String>?
+    override val description: Map<String, String>?,
+
+    val subCodeList: RdsCodeListMeta?
 ) : RdsEntity(), DiagnosticContextProvider {
 
     override fun contextType(): DiagnosticContextType = DiagnosticContextType.RdsCode

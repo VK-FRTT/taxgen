@@ -6,9 +6,9 @@ import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.rdsdpmmapper.mapper.mapAndValidateExplicitDomainsAndHierarchies
-import fi.vm.yti.taxgen.rdsdpmmapper.mapper.mapAndValidateMetrics
-import fi.vm.yti.taxgen.rdsdpmmapper.mapper.mapAndValidateOwner
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDomainsAndHierarchies
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetrics
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateOwner
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.DpmDictionarySourceReader
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.DpmSourceReader
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
