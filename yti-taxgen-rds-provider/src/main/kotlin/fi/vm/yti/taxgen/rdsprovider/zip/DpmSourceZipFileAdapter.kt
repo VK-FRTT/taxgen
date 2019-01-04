@@ -25,8 +25,7 @@ internal class DpmSourceZipFileAdapter(
         folderStructureAdapter.eachDpmDictionarySource(action)
     }
 
-    override fun close() {
-        folderStructureAdapter.close()
+    fun close() {
         zipFileSystem.close()
     }
 

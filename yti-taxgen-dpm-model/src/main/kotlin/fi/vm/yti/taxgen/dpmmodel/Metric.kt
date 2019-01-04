@@ -11,7 +11,7 @@ data class Metric(
     val dataType: String,
     val flowType: String,
     val balanceType: String,
-    val referencedDomainCode: String?,  //TODO - validation? Ref points to *Domain?
+    val referencedDomainCode: String?, //TODO - validation? Ref points to *Domain?
     val referencedHierarchyCode: String? //TODO - validation? Ref points to Hierarchy?
 ) : DpmElement {
 

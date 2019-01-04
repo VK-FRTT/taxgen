@@ -9,7 +9,7 @@ internal class ExtensionSourceFolderAdapter(
 ) : ExtensionSource {
 
     override fun contextLabel(): String = ""
-    override fun contextIdentifier(): String = ""
+    override fun contextIdentifier(): String = extensionPath.toString()
 
     override fun extensionMetaData(): String {
         return FileOps.readTextFile(extensionPath, "extension_meta.json")

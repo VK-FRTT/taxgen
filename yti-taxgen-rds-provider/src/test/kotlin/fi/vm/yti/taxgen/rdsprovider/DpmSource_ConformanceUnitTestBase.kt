@@ -45,15 +45,19 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
     }
 
     protected fun createAdapterConformanceTestCases(
-        dpmSource: DpmSource,
+        sourceProvider: SourceProvider,
         expectedDetails: ExpectedDetails
     ): List<DynamicNode> {
+
+        val dpmSource = grab<DpmSource> {
+            sourceProvider.withDpmSource(it)
+        }
+
         return listOf(
             dynamicContainer(
                 "DpmSourceRoot",
                 listOf(
                     dynamicTest("Should have diagnostic context info about RDS source") {
-                        assertThat(dpmSource.contextType()).isEqualTo(expectedDetails.dpmSourceContextType)
                         assertThat(dpmSource.contextLabel()).isEqualTo(expectedDetails.dpmSourceContextLabel)
                         assertThat(dpmSource.contextIdentifier()).isEqualTo(expectedDetails.dpmSourceContextIdentifier)
                     },
@@ -79,7 +83,6 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
 
                         assertThat(dpmDictionarySources.size).isEqualTo(12)
 
-                        assertThat(dpmDictionarySources[0].contextType()).isEqualTo(DiagnosticContextType.DpmDictionary)
                         assertThat(dpmDictionarySources[0].contextLabel()).isEqualTo("")
                         assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
                         assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
@@ -207,9 +210,8 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                assertThat(expDoms.contextType()).isEqualTo(DiagnosticContextType.RdsCodeList)
                                 assertThat(expDoms.contextLabel()).isEqualTo("")
-                                assertThat(expDoms.contextIdentifier()).isEqualTo("")
+                                assertThat(expDoms.contextIdentifier()).contains("dpm_dictionary_0", "exp_dom_hier")
                             },
 
                             dynamicTest("Should have codePages") {
@@ -222,8 +224,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 }!!
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(expDoms.codePagesData())
-                                    { it -> it as String }
+                                    extractMarkerValuesFromJsonData(expDoms.codePagesData()) { it -> it as String }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/codes_page_0/codes",
@@ -251,8 +252,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 }!!
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(expDoms.extensionSources())
-                                    { it -> (it as ExtensionSource).extensionMetaData() }
+                                    extractMarkerValuesFromJsonData(expDoms.extensionSources()) { it -> (it as ExtensionSource).extensionMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta",
@@ -283,10 +283,9 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
 
                                 assertThat(extensions.size).isEqualTo(12)
 
-                                assertThat(extensions[0].contextType()).isEqualTo(DiagnosticContextType.RdsExtension)
                                 assertThat(extensions[0].contextLabel()).isEqualTo("")
-                                assertThat(extensions[0].contextIdentifier()).isEqualTo("")
-                                assertThat(extensions[11].contextIdentifier()).isEqualTo("")
+                                assertThat(extensions[0].contextIdentifier()).contains("dpm_dictionary_0", "exp_dom_hier", "extension_0")
+                                assertThat(extensions[11].contextIdentifier()).contains("dpm_dictionary_0", "exp_dom_hier", "extension_11")
                             },
 
                             dynamicTest("Should have extension members pages") {
@@ -303,8 +302,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 val extensionPages = extensions.first().extensionMemberPagesData()
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensionPages)
-                                    { it -> it as String }
+                                    extractMarkerValuesFromJsonData(extensionPages) { it -> it as String }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0/members",
@@ -368,8 +366,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 val subCodeListSources = expDoms.subCodeListSources()
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(subCodeListSources)
-                                    { it -> (it as CodeListSource).codeListMetaData() }
+                                    extractMarkerValuesFromJsonData(subCodeListSources) { it -> (it as CodeListSource).codeListMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/code_list_meta",
@@ -400,12 +397,9 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
 
                                 assertThat(subCodeListSources.size).isEqualTo(12)
 
-                                assertThat(subCodeListSources[0].contextType()).isEqualTo(
-                                    DiagnosticContextType.RdsCodeList
-                                )
                                 assertThat(subCodeListSources[0].contextLabel()).isEqualTo("")
-                                assertThat(subCodeListSources[0].contextIdentifier()).isEqualTo("")
-                                assertThat(subCodeListSources[11].contextIdentifier()).isEqualTo("")
+                                assertThat(subCodeListSources[0].contextIdentifier()).contains("dpm_dictionary_0", "sub_code_list_0")
+                                assertThat(subCodeListSources[11].contextIdentifier()).contains("dpm_dictionary_0", "sub_code_list_11")
                             },
 
                             dynamicTest("Should have codePages") {
@@ -421,8 +415,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 val codepages = subCodeListSources.first().codePagesData()
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(codepages)
-                                    { it -> it as String }
+                                    extractMarkerValuesFromJsonData(codepages) { it -> it as String }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/codes_page_0/codes"
@@ -443,8 +436,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 val extensionSources = subCodeListSources.first().extensionSources()
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensionSources)
-                                    { it -> (it as ExtensionSource).extensionMetaData() }
+                                    extractMarkerValuesFromJsonData(extensionSources) { it -> (it as ExtensionSource).extensionMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/extension_0/extension_meta"
@@ -466,9 +458,8 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
 
                                 assertThat(extensionSources.size).isEqualTo(1)
 
-                                assertThat(extensionSources[0].contextType()).isEqualTo(DiagnosticContextType.RdsExtension)
                                 assertThat(extensionSources[0].contextLabel()).isEqualTo("")
-                                assertThat(extensionSources[0].contextIdentifier()).isEqualTo("")
+                                assertThat(extensionSources[0].contextIdentifier()).contains("dpm_dictionary_0", "sub_code_list_0", "extension_0")
                             },
 
                             dynamicTest("Should have extension members pages") {
@@ -485,8 +476,7 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                 val extensionSources = subCodeListSources.first().extensionSources().toList()
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensionSources[0].extensionMemberPagesData())
-                                    { it -> it as String }
+                                    extractMarkerValuesFromJsonData(extensionSources[0].extensionMemberPagesData()) { it -> it as String }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/extension_0/members_page_0/members"

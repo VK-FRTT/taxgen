@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.folder.SourceProviderFolderAdapter
@@ -15,12 +14,12 @@ import java.nio.file.Paths
 open class DpmSource_UnitTestBase {
 
     protected lateinit var diagnosticCollector: DiagnosticCollectorSimple
-    protected lateinit var diagnostic: Diagnostic
+    protected lateinit var diagnosticContext: DiagnosticContext
 
     @BeforeEach
     fun baseInit() {
         diagnosticCollector = DiagnosticCollectorSimple()
-        diagnostic = DiagnosticBridge(diagnosticCollector)
+        diagnosticContext = DiagnosticBridge(diagnosticCollector)
     }
 
     @AfterEach

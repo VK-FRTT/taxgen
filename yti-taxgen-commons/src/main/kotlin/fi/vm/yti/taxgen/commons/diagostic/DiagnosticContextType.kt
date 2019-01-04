@@ -5,8 +5,8 @@ enum class DiagnosticContextType(val recurring: Boolean, val displayName: String
     CmdCaptureDpmSources(false, "Capturing DPM sources"),
 
     CaptureDpmSource(false, "Writing DPM sources"),
-    MappingRdsToDpm(false, "Processing RDS sources"),
-    WritingSQLiteDpmDb(false, "Writing DPM database"),
+    MapRdsToDpm(false, "Processing RDS sources"),
+    WriteSQLiteDb(false, "Writing DPM database"),
 
     InitConfiguration(false, "Configuration file"),
     InitContentAddress(false, "Content URLs"),
@@ -16,7 +16,7 @@ enum class DiagnosticContextType(val recurring: Boolean, val displayName: String
     DpmDictionary(true, "DPM dictionary"),
 
     RdsCodeList(true, "Codelist"),
-    RdsCodesPage(true, "Codes Page"),
-    RdsExtension(true, "Extension"),
+    RdsCodesPage(true, "Codes Page"), //TODO - usage
+    RdsExtension(true, "Extension"), //TODO - usage
     RdsExtensionMembersPage(true, "Extension Members Page"),
 }

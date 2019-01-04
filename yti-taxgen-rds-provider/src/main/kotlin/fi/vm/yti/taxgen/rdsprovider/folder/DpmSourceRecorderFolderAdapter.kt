@@ -199,7 +199,6 @@ internal class DpmSourceRecorderFolderAdapter(
                         diagnostic
                     )
                 }
-
             }
         }
     }

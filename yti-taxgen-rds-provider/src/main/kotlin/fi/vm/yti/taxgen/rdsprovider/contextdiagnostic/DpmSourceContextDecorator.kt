@@ -27,6 +27,4 @@ internal class DpmSourceContextDecorator(
             }
         }
     }
-
-    override fun close() = dpmSource.close()
 }

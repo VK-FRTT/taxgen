@@ -12,7 +12,6 @@ import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.ExtensionSourceReader
 
-
 internal fun mapAndValidateExplicitDomainsAndHierarchies(
     codeListSource: CodeListSourceReader?,
     owner: Owner,
@@ -93,7 +92,6 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
 
     return explicitDomains
 }
-
 
 private fun mapAndValidateExplicitDomainMembers(
     codeListSource: CodeListSourceReader,

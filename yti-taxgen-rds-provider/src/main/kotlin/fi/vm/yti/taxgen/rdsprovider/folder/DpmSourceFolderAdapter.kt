@@ -28,6 +28,4 @@ internal class DpmSourceFolderAdapter(
             action(dictionarySource)
         }
     }
-
-    override fun close() {}
 }

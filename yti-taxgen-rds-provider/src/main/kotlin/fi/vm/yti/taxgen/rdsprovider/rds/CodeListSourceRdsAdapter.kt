@@ -96,5 +96,3 @@ internal class CodeListSourceRdsAdapter(
         }
     }
 }
-
-

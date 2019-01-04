@@ -218,7 +218,10 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         useCustomisedHttpClient()
         configureHoverflySimulation()
 
-        val source = DpmSourceRdsAdapter(configFilePath, diagnostic)
+        val sourceProvider = ProviderFactory.rdsProvider(
+            configFilePath = configFilePath,
+            diagnosticContext = diagnosticContext
+        )
 
         val expectedDetails = DpmSource_ConformanceUnitTestBase.ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
@@ -226,9 +229,8 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             dpmSourceContextIdentifier = configFilePath.toString()
         )
 
-        return createAdapterConformanceTestCases(source, expectedDetails)
+        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
     }
-
 
     @ParameterizedTest(
         name = "Should handle timeouts within {0}"
@@ -247,7 +249,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             )
         )
 
-        val source = DpmSourceRdsAdapter(configFilePath, diagnostic)
+        val source = DpmSourceRdsAdapter(configFilePath, diagnosticContext)
 
         var progress = "INIT"
 
@@ -276,7 +278,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.events).contains(
-            "MESSAGE [FATAL] MESSAGE [The server communication timeout]"
+            "MESSAGE [FATAL] [The server communication timeout]"
         )
 
         when (timeoutPhase) {
@@ -674,6 +676,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
               "codesUrl": "http://koodistot.suomi.fi/taxgenfixture/${dictionary.name}/${codeList.name}/codes/",
               "extensions": [${codeList.extensions.map { extension ->
                 """{
+                        "uri": "http://uri.suomi.fi/codelist/${dictionary.name}/${codeList.name}/${extension.name}",
                         "url": "http://koodistot.suomi.fi/taxgenfixture/${dictionary.name}/${codeList.name}/${extension.name}",
                         "membersUrl": "http://koodistot.suomi.fi/taxgenfixture/${dictionary.name}/${codeList.name}/${extension.name}/members/",
                         "propertyType":{

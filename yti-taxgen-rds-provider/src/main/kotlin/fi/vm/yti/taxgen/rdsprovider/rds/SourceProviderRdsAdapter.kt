@@ -13,6 +13,7 @@ class SourceProviderRdsAdapter(
     override fun withDpmSource(action: (DpmSource) -> Unit) {
         val dpmSource = DpmSourceRdsAdapter(configPath, diagnostic)
         action(dpmSource)
-        dpmSource.close()
     }
+
+    override fun close() {}
 }

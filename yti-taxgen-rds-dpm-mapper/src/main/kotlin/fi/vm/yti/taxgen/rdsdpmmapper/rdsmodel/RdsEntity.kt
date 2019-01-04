@@ -86,6 +86,4 @@ abstract class RdsEntity {
 
         return TranslatedText(resolveTranslations())
     }
-
-
 }

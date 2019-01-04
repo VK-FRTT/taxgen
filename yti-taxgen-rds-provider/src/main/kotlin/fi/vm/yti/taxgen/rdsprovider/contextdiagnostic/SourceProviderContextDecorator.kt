@@ -25,4 +25,6 @@ internal class SourceProviderContextDecorator(
             }
         }
     }
+
+    override fun close() = sourceProvider.close()
 }

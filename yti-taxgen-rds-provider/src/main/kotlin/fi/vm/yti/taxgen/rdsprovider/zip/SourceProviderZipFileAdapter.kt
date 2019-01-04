@@ -8,9 +8,15 @@ class SourceProviderZipFileAdapter(
     private val sourceZipPath: Path
 ) : SourceProvider {
 
+    private val dpmSource: DpmSourceZipFileAdapter by lazy {
+        DpmSourceZipFileAdapter(sourceZipPath)
+    }
+
     override fun withDpmSource(action: (DpmSource) -> Unit) {
-        val dpmSource = DpmSourceZipFileAdapter(sourceZipPath)
         action(dpmSource)
+    }
+
+    override fun close() {
         dpmSource.close()
     }
 }

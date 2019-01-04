@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate

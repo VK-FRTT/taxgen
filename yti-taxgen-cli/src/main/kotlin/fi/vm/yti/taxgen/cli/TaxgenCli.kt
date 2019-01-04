@@ -91,15 +91,18 @@ class TaxgenCli(
             detectedOptions.ensureSingleSourceGiven()
 
             val sourceProvider = resolveSourceProvider(detectedOptions)
-            val dbWriter = resolveDpmDbWriter(detectedOptions)
-            val dpmMapper = RdsToDpmMapper(diagnosticContext)
-            val dpmDictionaries = dpmMapper.extractDpmDictionariesFromSource(sourceProvider)
+
+            val dpmDictionaries = sourceProvider.use {
+                val dpmMapper = RdsToDpmMapper(diagnosticContext)
+                dpmMapper.extractDpmDictionariesFromSource(sourceProvider)
+            }
 
             if (diagnosticContext.counters()[Severity.ERROR] != 0) {
                 diagnosticContext.info("Mapping failed due content errors")
                 throwHalt()
             }
 
+            val dbWriter = resolveDpmDbWriter(detectedOptions)
             dbWriter.writeDpmDb(dpmDictionaries)
         }
     }

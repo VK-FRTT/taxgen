@@ -41,9 +41,6 @@ internal class DpmSourceRdsAdapter(
         }
     }
 
-    override fun close() {
-    }
-
     private fun loadConfig(): LoadedConfig {
         return (diagnostic as DiagnosticContext).withContext(
             contextType = DiagnosticContextType.InitConfiguration,

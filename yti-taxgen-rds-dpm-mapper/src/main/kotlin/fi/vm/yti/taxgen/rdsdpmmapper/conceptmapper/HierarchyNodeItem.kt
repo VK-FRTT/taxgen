@@ -8,7 +8,6 @@ import fi.vm.yti.taxgen.dpmmodel.dpmElementRef
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
 
-
 internal data class HierarchyNodeItem(
     private val extensionMember: RdsExtensionMember,
     private val children: MutableList<HierarchyNodeItem> = mutableListOf()
@@ -45,7 +44,6 @@ internal data class HierarchyNodeItem(
 
         children.forEach { it.takeChildren(workingNodes) }
     }
-
 
     private fun takeChildren(workingNodes: MutableList<HierarchyNodeItem>) {
 

@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-interface SourceProvider {
+import java.io.Closeable
+
+interface SourceProvider : Closeable {
     fun withDpmSource(action: (DpmSource) -> Unit)
 }

@@ -49,7 +49,6 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
         }
     }
 
-
     @Nested
     @DisplayName("which is empty")
     inner class EmptyTargetFolder {

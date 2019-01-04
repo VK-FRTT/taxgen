@@ -31,7 +31,7 @@ class DpmDbWriter(
 
     fun writeDpmDb(dpmDictionaries: List<DpmDictionary>) {
         diagnosticContext.withContext(
-            contextType = DiagnosticContextType.WritingSQLiteDpmDb,
+            contextType = DiagnosticContextType.WriteSQLiteDb,
             contextIdentifier = targetDbPath.toString()
         ) {
             connectDatabase()

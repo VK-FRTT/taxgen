@@ -11,6 +11,7 @@ class SourceProviderFolderAdapter(
     override fun withDpmSource(action: (DpmSource) -> Unit) {
         val dpmSource = DpmSourceFolderAdapter(dpmSourceRootPath)
         action(dpmSource)
-        dpmSource.close()
     }
+
+    override fun close() {}
 }

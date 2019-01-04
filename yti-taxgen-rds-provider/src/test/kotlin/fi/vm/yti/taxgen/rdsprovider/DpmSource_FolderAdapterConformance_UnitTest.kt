@@ -1,10 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceRecorderZipFileAdapter
-import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceZipFileAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -36,7 +32,7 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
 
     @TestFactory
     fun `Folder adapter with static reference data`(): List<DynamicNode> {
-        val (source, rootPath) = dpmSourceFolderAdapterToReferenceData()
+        val (sourceProvider, rootPath) = sourceProviderFolderAdapterFromReferenceData()
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
@@ -44,21 +40,39 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = rootPath.toString()
         )
 
-        return createAdapterConformanceTestCases(source, expectedDetails)
+        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
+    }
+
+    @TestFactory
+    fun `Context decorated folder adapter with static reference data`(): List<DynamicNode> {
+        val (sourceProvider, rootPath) = sourceProviderFolderAdapterFromReferenceData(diagnosticContext)
+
+        val expectedDetails = ExpectedDetails(
+            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextLabel = "folder",
+            dpmSourceContextIdentifier = rootPath.toString()
+        )
+
+        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
     }
 
     @TestFactory
     fun `Folder adapter with loopback data`(): List<DynamicNode> {
-        DpmSourceRecorderFolderAdapter(
+        ProviderFactory.folderRecorder(
             baseFolderPath = loopbackTempFolder.path(),
             forceOverwrite = false,
-            diagnostic = diagnostic
+            diagnosticContext = diagnosticContext
         ).use {
-            val (source, _) = dpmSourceFolderAdapterToReferenceData()
+            val (source, _) = sourceProviderFolderAdapterFromReferenceData(
+                diagnosticContext = diagnosticContext
+            )
             it.captureSources(source)
         }
 
-        val dpmSource = DpmSourceFolderAdapter(loopbackTempFolder.path())
+        val sourceProvider = ProviderFactory.folderProvider(
+            sourceRootPath = loopbackTempFolder.path(),
+            diagnosticContext = diagnosticContext
+        )
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
@@ -66,23 +80,27 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = loopbackTempFolder.path().toString()
         )
 
-        return createAdapterConformanceTestCases(dpmSource, expectedDetails)
+        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
     }
 
     @TestFactory
     fun `Folder adapter with zip-loopback data`(): List<DynamicNode> {
         val targetZipPath = zipLoopbackTempFolder.resolve("file.zip")
 
-        DpmSourceRecorderZipFileAdapter(
-            targetZipPath = targetZipPath,
+        ProviderFactory.zipRecorder(
+            zipFilePath = targetZipPath,
             forceOverwrite = false,
-            diagnostic = diagnostic
+            diagnosticContext = diagnosticContext
         ).use {
-            val (source, _) = dpmSourceFolderAdapterToReferenceData()
+            val (source, _) = sourceProviderFolderAdapterFromReferenceData(
+                diagnosticContext = diagnosticContext)
             it.captureSources(source)
         }
 
-        val dpmSource = DpmSourceZipFileAdapter(targetZipPath)
+        val sourceProvider = ProviderFactory.zipFileProvider(
+            zipFilePath = targetZipPath,
+            diagnosticContext = diagnosticContext
+        )
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
@@ -90,6 +108,6 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = targetZipPath.toString()
         )
 
-        return createAdapterConformanceTestCases(dpmSource, expectedDetails)
+        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
     }
 }
