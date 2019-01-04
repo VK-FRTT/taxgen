@@ -13,26 +13,29 @@ import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
 internal class CodeListSourceRdsAdapter(
-    private val rdsCodeListUri: String,
+    private val codeListUri: String,
     private val blueprint: CodeListBlueprint,
     private val diagnostic: Diagnostic
 ) : CodeListSource {
 
-    private val contentAddress: ContentAddress by lazy(this::resolveContentAddress)
+    private val contentAddressResolver: CodeListContentAddressResolver by lazy(this::resolveContentAddress)
     private var subCodeListUris: List<String>? = null
 
     override fun contextLabel(): String = ""
-    override fun contextIdentifier(): String = rdsCodeListUri
+    override fun contextIdentifier(): String = codeListUri
 
     override fun blueprint(): CodeListBlueprint = blueprint
 
     override fun codeListMetaData(): String {
-        return HttpOps.fetchJsonData(contentAddress.codeListUrl, diagnostic)
+        return HttpOps.fetchJsonData(
+            contentAddressResolver.contentAddress.codeListUrl,
+            diagnostic
+        )
     }
 
     override fun codePagesData(): Sequence<String> {
         return PaginationAwareCollectionIterator(
-            contentAddress.codesUrl,
+            contentAddressResolver.contentAddress.codesUrl,
             diagnostic,
             DiagnosticContextType.RdsCodesPage,
             SubCodeListUriExtractor(this)
@@ -40,7 +43,7 @@ internal class CodeListSourceRdsAdapter(
     }
 
     override fun extensionSources(): Sequence<ExtensionSource> {
-        return contentAddress.extensionUrls.map { extensionUrls ->
+        return contentAddressResolver.contentAddress.extensionUrls.map { extensionUrls ->
             ExtensionSourceRdsAdapter(
                 extensionUrls,
                 diagnostic
@@ -54,9 +57,9 @@ internal class CodeListSourceRdsAdapter(
         }
 
         subCodeListUris?.let { uris ->
-            return uris.asSequence().map {
+            return uris.asSequence().map { uri ->
                 CodeListSourceRdsAdapter(
-                    rdsCodeListUri = it,
+                    codeListUri = contentAddressResolver.decorateUriWithInheritedParams(uri),
                     blueprint = blueprint.subCodeListBlueprint!!,
                     diagnostic = diagnostic
                 )
@@ -66,14 +69,16 @@ internal class CodeListSourceRdsAdapter(
         thisShouldNeverHappen("subCodeListUris is null")
     }
 
-    private fun resolveContentAddress(): ContentAddress {
+    private fun resolveContentAddress(): CodeListContentAddressResolver {
         return (diagnostic as DiagnosticContext).withContext(
             contextType = DiagnosticContextType.InitContentAddress,
-            contextIdentifier = rdsCodeListUri
+            contextIdentifier = codeListUri
         ) {
-            val resolver = CodeListContentAddressResolver(blueprint, diagnostic)
-
-            resolver.resolveForUri(rdsCodeListUri)
+            CodeListContentAddressResolver(
+                codeLisUri = codeListUri,
+                blueprint = blueprint,
+                diagnostic = diagnostic
+            )
         }
     }
 

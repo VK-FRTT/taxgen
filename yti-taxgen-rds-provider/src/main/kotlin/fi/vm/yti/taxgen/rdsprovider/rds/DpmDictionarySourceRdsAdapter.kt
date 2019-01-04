@@ -70,7 +70,7 @@ internal class DpmDictionarySourceRdsAdapter(
     ): CodeListSource? {
         return if (uri != null) {
             CodeListSourceRdsAdapter(
-                rdsCodeListUri = uri,
+                codeListUri = uri,
                 blueprint = blueprint,
                 diagnostic = diagnostic
             )

@@ -22,14 +22,35 @@ internal data class ExtensionAddress(
 )
 
 internal class CodeListContentAddressResolver(
+    codeLisUri: String,
     private val blueprint: CodeListBlueprint,
     private val diagnostic: Diagnostic
 ) {
-    fun resolveForUri(
-        uri: String
-    ): ContentAddress {
+    private val codeLisUri = HttpUrl.parse(codeLisUri) ?: diagnostic.fatal("Malformed URI")
+    private val passthroughUriParams = resolveUriPassthroughParams()
+    val contentAddress = resolveContentAddress()
 
-        val metaDataJson = fetchUriMetaDataJson(uri)
+    fun decorateUriWithInheritedParams(uri: String): String {
+        val httpUrlBuilder = HttpUrl.parse(uri)?.newBuilder() ?: diagnostic.fatal("Malformed URI for decoration")
+
+        passthroughUriParams.forEach { (name, values) ->
+            values.forEach { value ->
+                httpUrlBuilder.setQueryParameter(name, value)
+            }
+        }
+
+        return httpUrlBuilder.build().toString()
+    }
+
+    private fun resolveUriPassthroughParams(): Map<String, List<String>> {
+        return arrayOf("env").map { name ->
+            name to codeLisUri.queryParameterValues(name)
+        }.toMap()
+    }
+
+    private fun resolveContentAddress(): ContentAddress {
+        val metaDataJson = fetchUriMetaDataJson()
+
         val httpUrl = metaDataJson.httpUrlAt(
             "/url",
             diagnostic,
@@ -45,9 +66,8 @@ internal class CodeListContentAddressResolver(
         )
     }
 
-    private fun fetchUriMetaDataJson(uri: String): JsonNode {
-        val httpUrl = HttpUrl.parse(uri) ?: diagnostic.fatal("Malformed URI")
-        val uriResolutionData = HttpOps.fetchJsonData(httpUrl, diagnostic)
+    private fun fetchUriMetaDataJson(): JsonNode {
+        val uriResolutionData = HttpOps.fetchJsonData(codeLisUri, diagnostic)
         return JsonOps.readTree(uriResolutionData, diagnostic)
     }
 
