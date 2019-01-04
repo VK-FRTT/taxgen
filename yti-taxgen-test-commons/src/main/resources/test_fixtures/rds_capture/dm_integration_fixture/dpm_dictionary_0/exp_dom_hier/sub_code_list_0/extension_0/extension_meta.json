@@ -1,0 +1,29 @@
+{
+  "id": "54fce058-b41e-40d1-b714-daf97821daf1",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/extension/HIER",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER/members/",
+  "members": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/extension/HIER/member/d92580a0-579b-4f80-803c-9ee17ee2ac6a",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER/members/d92580a0-579b-4f80-803c-9ee17ee2ac6a"
+    }
+  ],
+  "codeValue": "HIER",
+  "status": "DRAFT",
+  "startDate": "2018-10-31",
+  "created": "2019-01-04T12:01:21.893Z",
+  "modified": "2019-01-04T12:01:21.893Z",
+  "prefLabel": {
+    "fi": "Hierarchy (fi, label)"
+  },
+  "parentCodeScheme": {
+    "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1"
+  },
+  "codeSchemes": [],
+  "propertyType": {
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri": "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

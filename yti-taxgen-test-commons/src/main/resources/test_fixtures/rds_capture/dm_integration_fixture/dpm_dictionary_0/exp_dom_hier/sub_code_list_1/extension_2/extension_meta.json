@@ -1,0 +1,24 @@
+{
+  "id": "d4f486ea-68d7-432d-a524-7778a5b57073",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H10",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H10",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H10/members/",
+  "members": [],
+  "codeValue": "EDA-H10",
+  "status": "DRAFT",
+  "startDate": "2018-10-31",
+  "created": "2019-01-04T12:05:35.776Z",
+  "modified": "2019-01-04T12:05:35.776Z",
+  "prefLabel": {
+    "fi": "EDA hierarchy 10"
+  },
+  "parentCodeScheme": {
+    "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1"
+  },
+  "codeSchemes": [],
+  "propertyType": {
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri": "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

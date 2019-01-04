@@ -1,0 +1,54 @@
+{
+  "id": "be284738-2d01-4047-ae69-fd01fc4dbd16",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/",
+  "members": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/db3de3c0-91f1-4b24-9f72-cd840ebfe89b",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/db3de3c0-91f1-4b24-9f72-cd840ebfe89b"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/8b1f7bb5-9b32-43c2-a0e9-3cc946fb272a",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/8b1f7bb5-9b32-43c2-a0e9-3cc946fb272a"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/225bdb1d-0ef8-4ed6-83fa-916f08edc993",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/225bdb1d-0ef8-4ed6-83fa-916f08edc993"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/42c209dd-6ca9-48d0-8922-731becacda36",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/42c209dd-6ca9-48d0-8922-731becacda36"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/070db73c-0980-42d1-aec6-bdecca65139a",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/070db73c-0980-42d1-aec6-bdecca65139a"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/e28e91ca-d40e-4f31-a517-1a4503f3612f",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/e28e91ca-d40e-4f31-a517-1a4503f3612f"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/c36cf5bd-d5e5-4c1a-915f-5d53323c7abb",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/c36cf5bd-d5e5-4c1a-915f-5d53323c7abb"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/9e5319f1-6d6c-49d6-ae9e-34b6ba9fc52f",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/9e5319f1-6d6c-49d6-ae9e-34b6ba9fc52f"
+    }
+  ],
+  "codeValue": "dpmTypedDomain",
+  "status": "DRAFT",
+  "created": "2019-01-04T12:12:07.881Z",
+  "modified": "2019-01-04T12:12:07.881Z",
+  "prefLabel": {},
+  "parentCodeScheme": {
+    "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+  },
+  "codeSchemes": [],
+  "propertyType": {
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/44d0ec0e-e767-4f59-8276-b055da510fe8",
+    "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain"
+  }
+}

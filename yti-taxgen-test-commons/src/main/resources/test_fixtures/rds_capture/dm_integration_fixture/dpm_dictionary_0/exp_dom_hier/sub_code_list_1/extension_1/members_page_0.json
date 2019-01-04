@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 5,
+    "totalResults": 5
+  },
+  "results": [
+    {
+      "id": "78c78d82-3120-4129-89f3-0590f1f9702e",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2/member/78c78d82-3120-4129-89f3-0590f1f9702e",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2/members/78c78d82-3120-4129-89f3-0590f1f9702e",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/code/EDA-x4",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/codes/EDA-x4"
+      },
+      "prefLabel": {
+        "fi": "EDA member (=, 1)"
+      },
+      "created": "2019-01-04T12:05:35.856Z",
+      "modified": "2019-01-04T12:05:35.856Z",
+      "memberValues": [
+        {
+          "id": "b9718550-8ee0-45c9-a6e0-ffbe72a09d06",
+          "value": "+",
+          "valueType": {
+            "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/6534a9e9-5246-4d7e-965c-fd8e64a5d704",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#unaryOperator"
+          },
+          "created": "2019-01-04T12:05:35.860Z",
+          "modified": "2019-01-04T12:05:35.860Z"
+        }
+      ],
+      "order": 1,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      }
+    },
+    {
+      "id": "caa08e78-af2c-452f-9462-a13733977cc3",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2/member/caa08e78-af2c-452f-9462-a13733977cc3",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2/members/caa08e78-af2c-452f-9462-a13733977cc3",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/code/EDA-x5",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/codes/EDA-x5"
+      },
+      "prefLabel": {
+        "fi": "EDA member (>, 2)"
+      },
+      "created": "2019-01-04T12:05:35.860Z",
+      "modified": "2019-01-04T12:05:35.860Z",
+      "memberValues": [
+        {
+          "id": "0006560b-12c6-49d1-af7c-b9f339af9845",
+          "value": ">=",
+          "valueType": {
+            "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-01-04T12:05:35.863Z",
+          "modified": "2019-01-04T12:05:35.863Z"
+        }
+      ],
+      "order": 2,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      }
+    },
+    {
+      "id": "c229e784-4be3-4536-abe1-999d277d494e",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2/member/c229e784-4be3-4536-abe1-999d277d494e",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2/members/c229e784-4be3-4536-abe1-999d277d494e",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/code/EDA-x6",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/codes/EDA-x6"
+      },
+      "prefLabel": {
+        "fi": "EDA member (<, 0)"
+      },
+      "created": "2019-01-04T12:05:35.863Z",
+      "modified": "2019-01-04T12:05:35.863Z",
+      "memberValues": [
+        {
+          "id": "e451f4fe-331d-4fac-8ae9-7e0fc1371832",
+          "value": "<=",
+          "valueType": {
+            "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-01-04T12:05:35.864Z",
+          "modified": "2019-01-04T12:05:35.864Z"
+        }
+      ],
+      "order": 3,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      }
+    },
+    {
+      "id": "415820b6-5018-427f-8d96-4e3390740044",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2/member/415820b6-5018-427f-8d96-4e3390740044",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2/members/415820b6-5018-427f-8d96-4e3390740044",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/code/EDA-x7",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/codes/EDA-x7"
+      },
+      "prefLabel": {
+        "fi": "EDA member (>=, -1)"
+      },
+      "created": "2019-01-04T12:05:35.864Z",
+      "modified": "2019-01-04T12:05:35.864Z",
+      "memberValues": [
+        {
+          "id": "0a562974-c34b-482d-83b2-c75ab14dea32",
+          "value": "-",
+          "valueType": {
+            "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/6534a9e9-5246-4d7e-965c-fd8e64a5d704",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#unaryOperator"
+          },
+          "created": "2019-01-04T12:05:35.866Z",
+          "modified": "2019-01-04T12:05:35.866Z"
+        },
+        {
+          "id": "430c7bd0-4109-4e3a-acb2-3d90268aa198",
+          "value": ">=",
+          "valueType": {
+            "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-01-04T12:05:35.867Z",
+          "modified": "2019-01-04T12:05:35.867Z"
+        }
+      ],
+      "order": 4,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      }
+    },
+    {
+      "id": "414188f3-31a2-4bfb-8448-6021ef29400d",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2/member/414188f3-31a2-4bfb-8448-6021ef29400d",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2/members/414188f3-31a2-4bfb-8448-6021ef29400d",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/code/EDA-x8",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/codes/EDA-x8"
+      },
+      "prefLabel": {
+        "fi": "EDA member (<=, -2)"
+      },
+      "created": "2019-01-04T12:05:35.867Z",
+      "modified": "2019-01-04T12:05:35.867Z",
+      "memberValues": [
+        {
+          "id": "c25b5e2d-d9bc-4bbd-82aa-a6b2b6d92e64",
+          "value": "<=",
+          "valueType": {
+            "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-01-04T12:05:35.869Z",
+          "modified": "2019-01-04T12:05:35.869Z"
+        }
+      ],
+      "order": 5,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      }
+    }
+  ]
+}

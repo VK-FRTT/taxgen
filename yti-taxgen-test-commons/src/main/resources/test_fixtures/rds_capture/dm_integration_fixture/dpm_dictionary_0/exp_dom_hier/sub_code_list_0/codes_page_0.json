@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 1,
+    "totalResults": 1
+  },
+  "results": [
+    {
+      "id": "263ff260-543a-4add-95b4-16c743211c56",
+      "codeValue": "MEM",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/code/MEM",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/codes/MEM",
+      "status": "DRAFT",
+      "order": 1,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:01:21.805Z",
+      "modified": "2019-01-04T12:01:21.805Z",
+      "prefLabel": {
+        "fi": "Member (fi, label)"
+      },
+      "description": {
+        "fi": "Member (fi, description)"
+      },
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/codes/MEM/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/extension/HIER/member/d92580a0-579b-4f80-803c-9ee17ee2ac6a",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER/members/d92580a0-579b-4f80-803c-9ee17ee2ac6a"
+        }
+      ],
+      "codeExtensions": []
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 8,
+    "totalResults": 8
+  },
+  "results": [
+    {
+      "id": "994ccf30-bde9-4866-8a37-c1b2d46bfe4b",
+      "codeValue": "DOMT",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/DOMT",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/DOMT",
+      "status": "DRAFT",
+      "order": 1,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.793Z",
+      "modified": "2019-01-04T12:12:07.793Z",
+      "prefLabel": {
+        "fi": "Typed domain (fi, label)"
+      },
+      "description": {
+        "fi": "Typed domain (fi, description)"
+      },
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/DOMT/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/db3de3c0-91f1-4b24-9f72-cd840ebfe89b",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/db3de3c0-91f1-4b24-9f72-cd840ebfe89b"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "559904fe-cc83-49b4-b628-6bca9f28eaa3",
+      "codeValue": "TDB",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDB",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDB",
+      "status": "DRAFT",
+      "order": 2,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.796Z",
+      "modified": "2019-01-04T12:12:07.796Z",
+      "prefLabel": {
+        "fi": "Typed domain (Boolean)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDB/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/42c209dd-6ca9-48d0-8922-731becacda36",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/42c209dd-6ca9-48d0-8922-731becacda36"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "795756d3-cb04-47a6-9a9b-9f276006e5c5",
+      "codeValue": "TDD",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDD",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDD",
+      "status": "DRAFT",
+      "order": 3,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.804Z",
+      "modified": "2019-01-04T12:12:07.804Z",
+      "prefLabel": {
+        "fi": "Typed domain (Date)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDD/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/9e5319f1-6d6c-49d6-ae9e-34b6ba9fc52f",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/9e5319f1-6d6c-49d6-ae9e-34b6ba9fc52f"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "31964a79-dec4-42f5-8ac0-9c140f8b54e3",
+      "codeValue": "TDI",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDI",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDI",
+      "status": "DRAFT",
+      "order": 4,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.806Z",
+      "modified": "2019-01-04T12:12:07.806Z",
+      "prefLabel": {
+        "fi": "Typed domain (Integer)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDI/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/225bdb1d-0ef8-4ed6-83fa-916f08edc993",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/225bdb1d-0ef8-4ed6-83fa-916f08edc993"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "fccab370-e8fa-4c4e-bd32-f826700ee5fb",
+      "codeValue": "TDM",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDM",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDM",
+      "status": "DRAFT",
+      "order": 5,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.808Z",
+      "modified": "2019-01-04T12:12:07.808Z",
+      "prefLabel": {
+        "fi": "Typed domain (Monetary)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDM/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/c36cf5bd-d5e5-4c1a-915f-5d53323c7abb",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/c36cf5bd-d5e5-4c1a-915f-5d53323c7abb"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "091e1cc2-6bea-4859-a851-dd278db93e4c",
+      "codeValue": "TDP",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDP",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDP",
+      "status": "DRAFT",
+      "order": 6,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.810Z",
+      "modified": "2019-01-04T12:12:07.810Z",
+      "prefLabel": {
+        "fi": "Typed domain (Percentage)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDP/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/8b1f7bb5-9b32-43c2-a0e9-3cc946fb272a",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/8b1f7bb5-9b32-43c2-a0e9-3cc946fb272a"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "fdaa329e-b64c-4827-b58f-8122b92c779b",
+      "codeValue": "TDR",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDR",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDR",
+      "status": "DRAFT",
+      "order": 7,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.813Z",
+      "modified": "2019-01-04T12:12:07.813Z",
+      "prefLabel": {
+        "fi": "Typed domain (Decimal)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDR/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/e28e91ca-d40e-4f31-a517-1a4503f3612f",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/e28e91ca-d40e-4f31-a517-1a4503f3612f"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    },
+    {
+      "id": "2f9108a8-f501-4ea7-a36f-84baf5875e0e",
+      "codeValue": "TDS",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/TDS",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDS",
+      "status": "DRAFT",
+      "order": 8,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-01-04T12:12:07.815Z",
+      "modified": "2019-01-04T12:12:07.815Z",
+      "prefLabel": {
+        "fi": "Typed domain (String)"
+      },
+      "description": {},
+      "definition": {},
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1"
+      },
+      "externalReferences": [],
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/codes/TDS/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain/member/070db73c-0980-42d1-aec6-bdecca65139a",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/070db73c-0980-42d1-aec6-bdecca65139a"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/extension/dpmTypedDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+        }
+      ]
+    }
+  ]
+}
