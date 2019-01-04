@@ -1,0 +1,34 @@
+{
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "DM Integration Fixture",
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
+        "languages": [
+          "en",
+          "fi",
+          "sv"
+        ],
+        "defaultLanguage": "en"
+      },
+      "metrics": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/metrics-2018-1?env=dev"
+      },
+      "explicitDomainsAndHierarchies": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1?env=dev&foo=bar"
+      },
+      "explicitDimensions": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-dims-2018-1?env=dev"
+      },
+      "typedDomains": {
+      	"uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1?env=dev"
+      },
+      "typedDimensions": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-dims-2018-1?env=dev"
+      }
+    }
+  ]
+}
