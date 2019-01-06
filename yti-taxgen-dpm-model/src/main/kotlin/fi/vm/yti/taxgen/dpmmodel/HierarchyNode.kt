@@ -16,7 +16,7 @@ data class HierarchyNode(
 ) : DpmElement {
 
     companion object {
-        val VALID_COMPARISON_OPERATORS = listOf("=", "<=", ">=", "<", ">", null) //TODO - tests for < & >
+        val VALID_COMPARISON_OPERATORS = listOf("=", "<=", ">=", "<", ">", null)
         val VALID_UNARY_OPERATORS = listOf("+", "-", null)
     }
 

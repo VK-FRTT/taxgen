@@ -84,7 +84,7 @@ object DbHierarchies {
             hierarchyNodeIndex = hierarchyNodeIndex
         )
 
-        hierarchyTreeContext.currentNode().childNodes?.forEachIndexed { childIndex, childNode ->
+        hierarchyTreeContext.currentNode().childNodes.forEachIndexed { childIndex, childNode ->
             hierarchyTreeContext.withNode(childNode) {
                 writeHierarchyNodeAndChilds(
                     writeContext = writeContext,

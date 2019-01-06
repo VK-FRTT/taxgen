@@ -24,7 +24,7 @@ internal class HierarchyNode_UnitTest :
         "comparisonOperator,    optional",
         "unaryOperator,         optional",
         "memberRef,             required",
-        "childNodes,            optional"
+        "childNodes,            required"
     )
     fun testPropertyOptionality(
         propertyName: String,
@@ -80,6 +80,8 @@ internal class HierarchyNode_UnitTest :
             "=,         valid",
             "<=,        valid",
             ">=,        valid",
+            "<,         valid",
+            ">,         valid",
             ",          valid", //NULL
             "==,        invalid",
             "<<,        invalid",
