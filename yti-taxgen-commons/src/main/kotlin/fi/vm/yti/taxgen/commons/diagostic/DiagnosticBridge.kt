@@ -84,6 +84,7 @@ class DiagnosticBridge(
         val results = collector.compileResults()
 
         if (results.any()) {
+            //TODO - get diagnostic identifier etc from validatable to diagnostic output
             incrementCounter(ERROR)
             consumer.validationResults(results)
         }

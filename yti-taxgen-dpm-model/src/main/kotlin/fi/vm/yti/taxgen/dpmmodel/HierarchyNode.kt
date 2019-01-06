@@ -12,11 +12,11 @@ data class HierarchyNode(
     val comparisonOperator: String?,
     val unaryOperator: String?,
     val memberRef: DpmElementRef,
-    val childNodes: List<HierarchyNode>?
+    val childNodes: List<HierarchyNode>
 ) : DpmElement {
 
     companion object {
-        val VALID_COMPARISON_OPERATORS = listOf("=", "<=", ">=", null)
+        val VALID_COMPARISON_OPERATORS = listOf("=", "<=", ">=", "<", ">", null) //TODO - tests for < & >
         val VALID_UNARY_OPERATORS = listOf("+", "-", null)
     }
 
@@ -49,12 +49,10 @@ data class HierarchyNode(
 
     fun allNodes(): List<HierarchyNode> = mutableListOf(this)
         .also { nodes ->
-            if (childNodes != null) {
-                nodes.addAll(
-                    childNodes
-                        .map { it.allNodes() }
-                        .flatten()
-                )
-            }
+            nodes.addAll(
+                childNodes
+                    .map { it.allNodes() }
+                    .flatten()
+            )
         }
 }

@@ -9,17 +9,19 @@ import java.time.Instant
 import java.time.LocalDate
 
 abstract class RdsEntity {
-    abstract val id: String?
-    abstract val uri: String?
-    abstract val codeValue: String?
+    val id: String? = null
+    val uri: String? = null
+    val codeValue: String? = null
 
-    abstract val created: Instant?
-    abstract val modified: Instant?
-    abstract val startDate: LocalDate?
-    abstract val endDate: LocalDate?
+    val created: Instant? = null
+    val modified: Instant? = null
+    val startDate: LocalDate? = null
+    val endDate: LocalDate? = null
 
-    abstract val prefLabel: Map<String, String>?
-    abstract val description: Map<String, String>?
+    val prefLabel: Map<String, String>? = null
+    val description: Map<String, String>? = null
+
+    val order: Int? = null
 
     fun diagnosticLabel(): String {
         return prefLabel?.entries?.firstOrNull { it.value.isNotBlank() }?.value ?: ""
@@ -30,7 +32,11 @@ abstract class RdsEntity {
     }
 
     fun validUri(diagnostic: Diagnostic): String {
-        return uri ?: diagnostic.fatal("RDS Entity not having valid URI")
+        return uri ?: diagnostic.fatal("RDS Entity not having valid URI value")
+    }
+
+    fun validOrder(diagnostic: Diagnostic): Int {
+        return order ?: diagnostic.fatal("RDS Entity not having valid Order value")
     }
 
     fun hasUri(uri: String?): Boolean {

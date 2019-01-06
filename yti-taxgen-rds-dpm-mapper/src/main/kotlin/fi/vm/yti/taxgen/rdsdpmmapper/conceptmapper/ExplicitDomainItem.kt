@@ -14,7 +14,8 @@ internal data class ExplicitDomainItem(
     val members: List<Member>,
     val hierarchies: List<Hierarchy>,
     val subCodeListUri: String?,
-    val memberPrefix: String?
+    val memberPrefix: String?,
+    val order: Int
 ) : DpmElement {
 
     fun toExplicitDomain(): ExplicitDomain {

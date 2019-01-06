@@ -1,21 +1,18 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 
-import java.time.Instant
-import java.time.LocalDate
-
 internal data class RdsExtensionMeta(
-    override val id: String?,
-    override val uri: String?,
-    override val codeValue: String?,
+    //id
+    //uri
+    //codeValue
 
-    override val created: Instant?,
-    override val modified: Instant?,
+    //created
+    //modified
 
-    override val startDate: LocalDate?,
-    override val endDate: LocalDate?,
+    //startDate
+    //endDate
 
-    override val prefLabel: Map<String, String>?,
-    override val description: Map<String, String>?, //Currently not present in of Extension JSON
+    //prefLabel
+    //description - Currently not present in of Extension JSON
 
     val propertyType: RdsPropertyType?
 ) : RdsEntity() {

@@ -11,8 +11,8 @@ import java.nio.file.Path
 object TestFixture {
 
     enum class Type(val folderName: String) {
-        YCL_SOURCE_CAPTURE("ycl_source_capture"),
-        YCL_SOURCE_CONFIG("ycl_source_config"),
+        RDS_CAPTURE("rds_capture"),
+        RDS_SOURCE_CONFIG("rds_source_config"),
         DPM_LANGUAGE_CONFIG("dpm_language_config")
     }
 

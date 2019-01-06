@@ -3,8 +3,8 @@ package fi.vm.yti.taxgen.cli
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.TestFixture
-import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CAPTURE
-import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CONFIG
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_CAPTURE
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -28,8 +28,8 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        yclSourceCapturePath = tempTestFixture(YCL_SOURCE_CAPTURE, "codelist_comprehensive")
-        yclSourceConfigPath = tempTestFixture(YCL_SOURCE_CONFIG, "codelist_comprehensive.json")
+        yclSourceCapturePath = tempTestFixture(RDS_CAPTURE, "codelist_comprehensive")
+        yclSourceConfigPath = tempTestFixture(RDS_SOURCE_CONFIG, "codelist_comprehensive.json")
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)
@@ -57,12 +57,12 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
 
         return when (fixtureType) {
 
-            YCL_SOURCE_CAPTURE -> tempFolder.copyFolderRecursivelyUnderSubfolder(
+            RDS_CAPTURE -> tempFolder.copyFolderRecursivelyUnderSubfolder(
                 fixturePath,
                 fixtureType.folderName
             ).toString()
 
-            YCL_SOURCE_CONFIG -> tempFolder.copyFileToSubfolder(
+            RDS_SOURCE_CONFIG -> tempFolder.copyFileToSubfolder(
                 fixturePath,
                 fixtureType.folderName
             ).toString()

@@ -1,9 +1,9 @@
-package fi.vm.yti.taxgen.rdsprovider.helpers
+package fi.vm.yti.taxgen.commons.naturalsort
 
 import java.math.BigInteger
 import java.util.Comparator
 
-internal object NumberAwareStringComparator : Comparator<String> {
+object NumberAwareStringComparator : Comparator<String> {
     private val regex = """(\D*)(\d*)""".toRegex()
 
     fun instance() = this
@@ -13,11 +13,17 @@ internal object NumberAwareStringComparator : Comparator<String> {
         val matchIterator2 = regex.findAll(string2).iterator()
 
         while (matchIterator1.hasNext() && matchIterator2.hasNext()) {
-            val compareResult = compareMatchResults(matchIterator1.next(), matchIterator2.next())
+            val compareResult = compareMatchResults(
+                matchIterator1.next(),
+                matchIterator2.next()
+            )
             if (compareResult != 0) return compareResult
         }
 
-        return compareIteratorTails(matchIterator1, matchIterator2)
+        return compareIteratorTails(
+            matchIterator1,
+            matchIterator2
+        )
     }
 
     private fun compareMatchResults(

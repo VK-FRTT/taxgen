@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.testcommons.TestFixture.Type.YCL_SOURCE_CONFIG
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -284,7 +284,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(YCL_SOURCE_CONFIG, "ycl_source_config_broken_json.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "ycl_source_config_broken_json.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -328,7 +328,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(YCL_SOURCE_CONFIG, "codelist_uri_unknown_codelist.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_unknown_codelist.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -351,7 +351,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(YCL_SOURCE_CONFIG, "codelist_uri_unresolvable_host.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_unresolvable_host.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -374,7 +374,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(YCL_SOURCE_CONFIG, "codelist_uri_bad_protocol.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_bad_protocol.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -397,7 +397,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(YCL_SOURCE_CONFIG, "codelist_uri_non_responsive_host_ip.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_non_responsive_host_ip.json")
         )
 
         val (status, outText, errText) = executeCli(args)

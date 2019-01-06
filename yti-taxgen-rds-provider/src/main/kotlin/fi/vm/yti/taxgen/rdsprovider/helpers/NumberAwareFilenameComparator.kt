@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.helpers
 
+import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import java.nio.file.Path
 import java.util.Comparator
 
