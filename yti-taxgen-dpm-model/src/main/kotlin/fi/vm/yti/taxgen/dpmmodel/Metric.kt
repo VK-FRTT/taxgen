@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 
 data class Metric(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val memberCodeNumber: String,

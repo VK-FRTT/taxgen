@@ -18,7 +18,7 @@ internal class TypedDomain_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "id,                    required",
+        "uri,                   required",
         "concept,               required",
         "domainCode,            required"
     )
@@ -35,8 +35,8 @@ internal class TypedDomain_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "id,                    minLength,      1",
-        "id,                    maxLength,      128",
+        "uri,                    minLength,      1",
+        "uri,                    maxLength,      128",
         "domainCode,            minLength,      2",
         "domainCode,            maxLength,      50"
     )

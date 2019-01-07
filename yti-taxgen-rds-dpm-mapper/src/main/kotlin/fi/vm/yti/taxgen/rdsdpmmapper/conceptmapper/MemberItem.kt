@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.dpmmodel.DpmElement
 import fi.vm.yti.taxgen.dpmmodel.Member
 
 data class MemberItem(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val memberCode: String,
@@ -15,7 +14,6 @@ data class MemberItem(
 
     fun toMember(): Member {
         return Member(
-            id = id,
             uri = uri,
             concept = concept,
             memberCode = memberCode,

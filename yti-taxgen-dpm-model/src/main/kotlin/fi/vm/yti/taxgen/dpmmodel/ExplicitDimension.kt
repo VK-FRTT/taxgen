@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class ExplicitDimension(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val dimensionCode: String,

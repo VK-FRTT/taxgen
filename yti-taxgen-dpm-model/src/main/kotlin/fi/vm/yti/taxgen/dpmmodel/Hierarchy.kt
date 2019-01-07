@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class Hierarchy(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val hierarchyCode: String,
@@ -29,8 +28,8 @@ data class Hierarchy(
             instance = this,
             instancePropertyName = "rootNodes",
             iterable = allNodes(),
-            valueSelector = { it.id },
-            valueDescription = "id"
+            valueSelector = { it.uri },
+            valueDescription = "uri"
         )
 
         //TODO - better error message for this (as it is quite likely user caused modeling issue)
@@ -39,8 +38,8 @@ data class Hierarchy(
             instance = this,
             instancePropertyName = "rootNodes",
             iterable = allNodes(),
-            valueSelector = { it.memberRef.id },
-            valueDescription = "memberRef.id"
+            valueSelector = { it.memberRef.uri },
+            valueDescription = "memberRef.uri"
         )
     }
 

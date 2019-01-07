@@ -27,7 +27,6 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
     codeListSource.eachCode { code ->
         val domain = ExplicitDomainItem(
             uri = code.validUri(diagnostic),
-            id = code.idOrEmpty(),
             concept = code.dpmConcept(owner),
             domainCode = code.codeValueOrEmpty(),
             members = emptyList(),
@@ -112,7 +111,6 @@ private fun mapAndValidateExplicitDomainMembers(
     codeListSource.eachCode { code ->
         val member = MemberItem(
             uri = code.validUri(diagnostic),
-            id = code.idOrEmpty(),
             concept = code.dpmConcept(owner),
             memberCode = "${memberPrefix ?: ""}${code.codeValueOrEmpty()}",
             defaultMember = code.hasUri(defaultCodeUri),
@@ -151,7 +149,6 @@ private fun mapAndValidateExplicitDomainHierarchies(
             )
 
             val hierarchy = Hierarchy(
-                id = extensionMetadata.idOrEmpty(),
                 uri = extensionMetadata.validUri(diagnostic),
                 concept = extensionMetadata.dpmConcept(owner),
                 hierarchyCode = extensionMetadata.codeValueOrEmpty(),
@@ -178,17 +175,15 @@ private fun mapAndValidateHierarchyNodes(
     extensionSource.eachExtensionMember { extensionMember ->
 
         val domainMemberRef = if (extensionMember.code == null) {
-            dpmElementRef<Member>("", "", "${extensionMember.diagnosticLabel()}: No Code reference")
+            dpmElementRef<Member>("", "${extensionMember.diagnosticLabel()}: No Code reference")
         } else {
             dpmElementRef<Member>(
-                extensionMember.code.idOrEmpty(),
                 extensionMember.code.validUri(diagnostic),
                 extensionMember.code.diagnosticLabel()
             )
         }
 
         val nodeItem = HierarchyNodeItem(
-            id = extensionMember.idOrEmpty(),
             uri = extensionMember.validUri(diagnostic),
             concept = extensionMember.dpmConcept(owner),
             comparisonOperator = extensionMember.stringValueOrNull(RdsMemberValueType.ComparisonOperator),

@@ -9,17 +9,17 @@ internal class DpmElementRef_UnitTest {
     @Test
     fun `DpmElementRefs should not equal when other is null`() {
 
-        val ref1 = dpmElementRef<Member>("id_1", "uri_1", "diagnostic_label")
+        val ref1 = dpmElementRef<Member>("uri_1", "diagnostic_label")
         val ref2 = null
 
         assertThat(ref1.equals(ref2)).isFalse()
     }
 
     @Test
-    fun `DpmElementRefs should equal & == when type & id same, despite uri & diagnostic label`() {
+    fun `DpmElementRefs should equal and == when type and URI are same, despite diagnostic label`() {
 
-        val ref1 = dpmElementRef<Member>("id_1", "uri_1", "diagnostic_label_1")
-        val ref2 = dpmElementRef<Member>("id_1", "uri_2", "diagnostic_label_2")
+        val ref1 = dpmElementRef<Member>("uri_1", "diagnostic_label_1")
+        val ref2 = dpmElementRef<Member>("uri_1", "diagnostic_label_2")
 
         assertThat(ref1.equals(ref2)).isTrue()
 
@@ -29,10 +29,10 @@ internal class DpmElementRef_UnitTest {
     }
 
     @Test
-    fun `DpmElementRefs should not equal when ids not same`() {
+    fun `DpmElementRefs should not equal when URI not same`() {
 
-        val ref1 = dpmElementRef<Member>("id_1", "uri", "diagnostic_label")
-        val ref2 = dpmElementRef<Member>("id_2", "uri", "diagnostic_label")
+        val ref1 = dpmElementRef<Member>("uri_1", "diagnostic_label")
+        val ref2 = dpmElementRef<Member>("uri_2", "diagnostic_label")
 
         assertThat(ref1.equals(ref2)).isFalse()
     }
@@ -40,8 +40,8 @@ internal class DpmElementRef_UnitTest {
     @Test
     fun `DpmElementRefs should not equal when types not same`() {
 
-        val ref1 = dpmElementRef<Member>("id_1", "uri", "diagnostic_label")
-        val ref2 = dpmElementRef<HierarchyNode>("id_1", "uri", "diagnostic_label")
+        val ref1 = dpmElementRef<Member>("uri", "diagnostic_label")
+        val ref2 = dpmElementRef<HierarchyNode>("uri", "diagnostic_label")
 
         assertThat(ref1.equals(ref2)).isFalse()
     }

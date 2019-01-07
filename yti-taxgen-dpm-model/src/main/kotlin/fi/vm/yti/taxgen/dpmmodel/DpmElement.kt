@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
 interface DpmElement : Validatable {
-    val id: String
     val uri: String
     val concept: Concept
     val type: String
@@ -19,7 +18,7 @@ interface DpmElement : Validatable {
         validateLength(
             validationResults = validationResults,
             instance = this,
-            property = DpmElement::id,
+            property = DpmElement::uri,
             minLength = 1,
             maxLength = 128
         )
@@ -28,7 +27,6 @@ interface DpmElement : Validatable {
     }
 
     fun ref(): DpmElementRef = DpmElementRef(
-        id = id,
         uri = uri,
         type = type,
         diagnosticLabel = concept.diagnosticLabel()

@@ -18,7 +18,7 @@ internal class ExplicitDimension_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "id,                    required",
+        "uri,                       required",
         "concept,                   required",
         "dimensionCode,             required",
         "domainRef,                 required"
@@ -36,8 +36,8 @@ internal class ExplicitDimension_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "id,                    minLength,      1",
-        "id,                    maxLength,      128",
+        "uri,                   minLength,      1",
+        "uri,                   maxLength,      128",
         "dimensionCode,         minLength,      2",
         "dimensionCode,         maxLength,      50"
     )
@@ -73,21 +73,20 @@ internal class ExplicitDimension_UnitTest :
     @Nested
     inner class DomainRefProp {
 
-        @DisplayName("id validation")
-        @ParameterizedTest(name = "id `{0}` should be {1} member ref")
+        @DisplayName("URI validation")
+        @ParameterizedTest(name = "URI `{0}` should be {1} domain ref")
         @CsvSource(
             "1,         valid",
             "'',        invalid",
             "' ',       invalid"
         )
-        fun `domainRef should error if 'id' is invalid`(
-            id: String,
+        fun `domainRef should error if 'URI' is invalid`(
+            uri: String,
             expectedValidity: String
         ) {
             attributeOverrides(
                 "domainRef" to dpmElementRef<ExplicitDomain>(
-                    id = id,
-                    uri = "uri_value",
+                    uri = uri,
                     diagnosticLabel = "label_value"
                 )
             )
@@ -96,7 +95,7 @@ internal class ExplicitDimension_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("ExplicitDimension.domainRef: empty or blank id")
+                "invalid" -> assertThat(validationErrors).containsExactly("ExplicitDimension.domainRef: empty or blank uri")
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }

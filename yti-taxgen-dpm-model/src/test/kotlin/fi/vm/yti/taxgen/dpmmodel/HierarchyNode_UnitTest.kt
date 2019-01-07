@@ -18,7 +18,7 @@ internal class HierarchyNode_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "id,                    required",
+        "uri,                   required",
         "concept,               required",
         "abstract,              required",
         "comparisonOperator,    optional",
@@ -39,8 +39,8 @@ internal class HierarchyNode_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "id,                    minLength,      1",
-        "id,                    maxLength,      128"
+        "uri,                    minLength,      1",
+        "uri,                    maxLength,      128"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -139,21 +139,20 @@ internal class HierarchyNode_UnitTest :
     @Nested
     inner class MemberRefProp {
 
-        @DisplayName("id validation")
-        @ParameterizedTest(name = "id `{0}` should be {1} member ref")
+        @DisplayName("URI validation")
+        @ParameterizedTest(name = "URI `{0}` should be {1} member ref")
         @CsvSource(
             "1,         valid",
             "'',        invalid",
             "' ',       invalid"
         )
-        fun `memberRef should error if 'id' is invalid`(
-            id: String,
+        fun `memberRef should error if 'URI' is invalid`(
+            uri: String,
             expectedValidity: String
         ) {
             attributeOverrides(
                 "memberRef" to dpmElementRef<Member>(
-                    id = id,
-                    uri = "uri_value",
+                    uri = uri,
                     diagnosticLabel = "label_value"
                 )
             )
@@ -162,7 +161,7 @@ internal class HierarchyNode_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.memberRef: empty or blank id")
+                "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.memberRef: empty or blank uri")
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }

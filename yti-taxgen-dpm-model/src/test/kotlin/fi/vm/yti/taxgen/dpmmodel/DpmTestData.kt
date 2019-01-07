@@ -69,7 +69,6 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = ExplicitDomain::class,
             attributes = mapOf(
-                "id" to "exp_dom_1",
                 "uri" to "exp_dom_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "exp_dom",
@@ -83,7 +82,6 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Member::class,
             attributes = mapOf(
-                "id" to "mem_1",
                 "uri" to "mem_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCode" to "exp_mc",
@@ -96,7 +94,6 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Hierarchy::class,
             attributes = mapOf(
-                "id" to "hie_1",
                 "uri" to "hie_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "hierarchyCode" to "hier_code",
@@ -109,13 +106,12 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = HierarchyNode::class,
             attributes = mapOf(
-                "id" to "hie_nod_1",
                 "uri" to "hie_nod_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "abstract" to false,
                 "comparisonOperator" to "=",
                 "unaryOperator" to "+",
-                "memberRef" to dpmElementRef<Member>("mem_1", "uri_1", "diagnostic_label"),
+                "memberRef" to dpmElementRef<Member>("mem_uri", "diagnostic_label"),
                 "childNodes" to listOf<HierarchyNode>()
             )
         )
@@ -125,7 +121,6 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = TypedDomain::class,
             attributes = mapOf(
-                "id" to "typ_dom_1",
                 "uri" to "typ_dom_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "typ_dom",
@@ -138,11 +133,10 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = ExplicitDimension::class,
             attributes = mapOf(
-                "id" to "exp_dim_1",
                 "uri" to "exp_dim_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "dimensionCode" to "exp_dim",
-                "domainRef" to dpmElementRef<ExplicitDomain>("exp_dom", "uri_1", "diagnostic_label")
+                "domainRef" to dpmElementRef<ExplicitDomain>("exp_dom_uri", "diagnostic_label")
             )
         )
     )
@@ -151,11 +145,10 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = TypedDimension::class,
             attributes = mapOf(
-                "id" to "typ_dim_1",
                 "uri" to "typ_dim_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "dimensionCode" to "typ_dim",
-                "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom", "uri_1", "diagnostic_label")
+                "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom_uri", "diagnostic_label")
             )
         )
     )
@@ -164,7 +157,6 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Metric::class,
             attributes = mapOf(
-                "id" to "met_1",
                 "uri" to "met_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCodeNumber" to "1",

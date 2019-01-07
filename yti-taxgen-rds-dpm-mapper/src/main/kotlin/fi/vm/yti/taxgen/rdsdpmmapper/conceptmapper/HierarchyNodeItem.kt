@@ -6,7 +6,6 @@ import fi.vm.yti.taxgen.dpmmodel.DpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 
 internal data class HierarchyNodeItem(
-    val id: String,
     val uri: String,
     val concept: Concept,
     val comparisonOperator: String?,
@@ -41,7 +40,6 @@ internal data class HierarchyNodeItem(
         diagnostic: Diagnostic
     ): HierarchyNode {
         val node = HierarchyNode(
-            id = id,
             uri = uri,
             concept = concept,
             abstract = false,

@@ -17,7 +17,7 @@ internal class Hierarchy_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "id,                required",
+        "uri,               required",
         "concept,           required",
         "hierarchyCode,     required",
         "rootNodes,         required"
@@ -35,8 +35,8 @@ internal class Hierarchy_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "id,                    minLength,      1",
-        "id,                    maxLength,      128"
+        "uri,                    minLength,      1",
+        "uri,                    maxLength,      128"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -71,7 +71,7 @@ internal class Hierarchy_UnitTest :
     inner class RootNodesProp {
 
         @Test
-        fun `rootNodes should have unique ids {within flat root}`() {
+        fun `rootNodes should have unique URIs {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
                     hierarchyNode("hn_1", refTo<Member>("m_1")),
@@ -83,11 +83,11 @@ internal class Hierarchy_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_2_id'")
+                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hn_2_uri'")
         }
 
         @Test
-        fun `rootNodes should have unique ids {within hierarchy}`() {
+        fun `rootNodes should have unique URIs {within hierarchy}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
 
@@ -120,7 +120,7 @@ internal class Hierarchy_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate id value 'hn_4_id'")
+                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hn_4_uri'")
         }
 
         @Test
@@ -137,7 +137,7 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate memberRef.id value 'm_2_id'"
+                    "Hierarchy.rootNodes: duplicate memberRef.uri value 'm_2_uri'"
                 )
         }
 
@@ -176,7 +176,7 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate memberRef.id value 'm_4_id'"
+                    "Hierarchy.rootNodes: duplicate memberRef.uri value 'm_4_uri'"
                 )
         }
     }

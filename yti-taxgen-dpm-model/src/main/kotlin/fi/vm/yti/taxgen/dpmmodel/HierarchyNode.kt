@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementRef
 
 data class HierarchyNode(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val abstract: Boolean,

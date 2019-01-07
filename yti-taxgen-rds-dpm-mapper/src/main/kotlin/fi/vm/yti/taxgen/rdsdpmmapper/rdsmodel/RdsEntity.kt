@@ -9,7 +9,6 @@ import java.time.Instant
 import java.time.LocalDate
 
 abstract class RdsEntity {
-    val id: String? = null
     val uri: String? = null
     val codeValue: String? = null
 
@@ -44,10 +43,6 @@ abstract class RdsEntity {
         if (uri == null) return false
 
         return (this.uri == uri)
-    }
-
-    fun idOrEmpty(): String {
-        return id ?: ""
     }
 
     fun codeValueOrEmpty(): String {

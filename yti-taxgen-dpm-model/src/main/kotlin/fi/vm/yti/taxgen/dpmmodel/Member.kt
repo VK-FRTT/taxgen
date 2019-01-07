@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmCodeContent
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class Member(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val memberCode: String,

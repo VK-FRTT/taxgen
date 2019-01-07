@@ -34,35 +34,35 @@ data class DpmDictionary(
             validationResults = validationResults,
             instance = this,
             iterableProperty = DpmDictionary::metrics,
-            valueProperties = listOf(Metric::id, Metric::memberCodeNumber)
+            valueProperties = listOf(Metric::uri, Metric::memberCodeNumber)
         )
 
         validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
             iterableProperty = DpmDictionary::explicitDomains,
-            valueProperties = listOf(ExplicitDomain::id, ExplicitDomain::domainCode)
+            valueProperties = listOf(ExplicitDomain::uri, ExplicitDomain::domainCode)
         )
 
         validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
             iterableProperty = DpmDictionary::typedDomains,
-            valueProperties = listOf(TypedDomain::id, TypedDomain::domainCode)
+            valueProperties = listOf(TypedDomain::uri, TypedDomain::domainCode)
         )
 
         validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
             iterableProperty = DpmDictionary::explicitDimensions,
-            valueProperties = listOf(ExplicitDimension::id, ExplicitDimension::dimensionCode)
+            valueProperties = listOf(ExplicitDimension::uri, ExplicitDimension::dimensionCode)
         )
 
         validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
             iterableProperty = DpmDictionary::typedDimensions,
-            valueProperties = listOf(TypedDimension::id, TypedDimension::dimensionCode)
+            valueProperties = listOf(TypedDimension::uri, TypedDimension::dimensionCode)
         )
 
         // TODO: Validate that domain codes do not overlap (typed + explicit)

@@ -115,7 +115,7 @@ internal class DpmDictionary_UnitTest :
             Assertions.assertThat(validationErrors)
                 .containsExactly(
                     "DpmDictionary.explicitDomains: duplicate domainCode value 'd_2_code'",
-                    "DpmDictionary.explicitDomains: duplicate id value 'd_2_id'"
+                    "DpmDictionary.explicitDomains: duplicate uri value 'd_2_uri'"
                 )
         }
     }

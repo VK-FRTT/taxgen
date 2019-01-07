@@ -7,7 +7,6 @@ import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.Member
 
 internal data class ExplicitDomainItem(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val domainCode: String,
@@ -20,7 +19,6 @@ internal data class ExplicitDomainItem(
 
     fun toExplicitDomain(): ExplicitDomain {
         return ExplicitDomain(
-            id = id,
             uri = uri,
             concept = concept,
             domainCode = domainCode,

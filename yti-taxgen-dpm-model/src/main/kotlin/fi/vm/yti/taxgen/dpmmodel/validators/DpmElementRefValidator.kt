@@ -17,8 +17,8 @@ fun <I : Validatable> validateDpmElementRef(
         validationResults = validationResults,
         instance = instance,
         property = property,
-        condition = { ref.id.isNotEmpty() && ref.id.isNotBlank() },
-        message = { "empty or blank id" }
+        condition = { ref.uri.isNotEmpty() && ref.uri.isNotBlank() },
+        message = { "empty or blank uri" }
     )
 }
 

@@ -6,7 +6,6 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateElementPropertyValuesUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class ExplicitDomain(
-    override val id: String,
     override val uri: String,
     override val concept: Concept,
     val domainCode: String,
@@ -38,7 +37,7 @@ data class ExplicitDomain(
             validationResults = validationResults,
             instance = this,
             iterableProperty = ExplicitDomain::members,
-            valueProperties = listOf(Member::id, Member::memberCode)
+            valueProperties = listOf(Member::uri, Member::memberCode)
         )
 
         validateCustom(
@@ -58,7 +57,7 @@ data class ExplicitDomain(
             validationResults = validationResults,
             instance = this,
             iterableProperty = ExplicitDomain::hierarchies,
-            valueProperties = listOf(Hierarchy::id, Hierarchy::hierarchyCode)
+            valueProperties = listOf(Hierarchy::uri, Hierarchy::hierarchyCode)
         )
 
         validateCustom(

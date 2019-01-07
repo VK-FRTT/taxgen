@@ -17,7 +17,7 @@ internal class ExplicitDomain_UnitTest :
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
-        "id,                    required",
+        "uri,                   required",
         "concept,               required",
         "domainCode,            required",
         "members,               required"
@@ -35,8 +35,8 @@ internal class ExplicitDomain_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "id,                    minLength,      1",
-        "id,                    maxLength,      128",
+        "uri,                   minLength,      1",
+        "uri,                   maxLength,      128",
         "domainCode,            minLength,      2",
         "domainCode,            maxLength,      50",
         "members,               minColLength,   1",
@@ -94,8 +94,8 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly(
-                    "ExplicitDomain.members: duplicate id value 'm_2_id'",
+                .containsExactlyInAnyOrder(
+                    "ExplicitDomain.members: duplicate uri value 'm_2_uri'",
                     "ExplicitDomain.members: duplicate memberCode value 'm_2_code'"
                 )
         }
@@ -163,7 +163,7 @@ internal class ExplicitDomain_UnitTest :
             assertThat(validationErrors)
                 .containsExactly(
                     "ExplicitDomain.hierarchies: duplicate hierarchyCode value 'h_2_code'",
-                    "ExplicitDomain.hierarchies: duplicate id value 'h_2_id'"
+                    "ExplicitDomain.hierarchies: duplicate uri value 'h_2_uri'"
                 )
         }
 

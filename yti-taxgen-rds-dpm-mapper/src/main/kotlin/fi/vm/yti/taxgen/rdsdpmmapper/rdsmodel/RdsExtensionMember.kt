@@ -3,7 +3,6 @@ package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 
 internal data class RdsExtensionMember(
-    //id
     //uri
     //codeValue - Currently not present in of ExtensionMember JSON
 

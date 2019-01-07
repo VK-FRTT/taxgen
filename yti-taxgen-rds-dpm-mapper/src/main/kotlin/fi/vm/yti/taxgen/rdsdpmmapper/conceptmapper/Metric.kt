@@ -20,7 +20,6 @@ internal fun mapAndValidateMetrics(
     //Base details
     codeListSource.eachCode { code ->
         val metric = Metric(
-            id = code.idOrEmpty(),
             uri = code.validUri(diagnostic),
             concept = code.dpmConcept(owner),
             memberCodeNumber = code.codeValueOrEmpty(),
