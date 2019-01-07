@@ -9,8 +9,8 @@ data class Metric(
     override val concept: Concept,
     val memberCodeNumber: String,
     val dataType: String,
-    val flowType: String,
-    val balanceType: String,
+    val flowType: String?,
+    val balanceType: String?,
     val referencedDomainCode: String?, //TODO - validation? Ref points to *Domain?
     val referencedHierarchyCode: String? //TODO - validation? Ref points to Hierarchy?
 ) : DpmElement {
@@ -31,12 +31,14 @@ data class Metric(
 
         val VALID_FLOW_TYPES = listOf(
             "Instant",
-            "Duration"
+            "Duration",
+            null
         )
 
         val VALID_BALANCE_TYPES = listOf(
             "Credit",
-            "Debit"
+            "Debit",
+            null
         )
     }
 

@@ -23,8 +23,8 @@ internal class Metric_UnitTest :
         "concept,                   required",
         "memberCodeNumber,          required",
         "dataType,                  required",
-        "flowType,                  required",
-        "balanceType,               required",
+        "flowType,                  optional",
+        "balanceType,               optional",
         "referencedDomainCode,      optional",
         "referencedHierarchyCode,   optional"
     )
@@ -151,12 +151,13 @@ internal class Metric_UnitTest :
         @CsvSource(
             "Instant,       valid",
             "Duration,      valid",
+            ",              valid", //null
             "'',            invalid",
             "null,          invalid",
             "foo,           invalid"
         )
         fun `flowType should error if invalid`(
-            flowType: String,
+            flowType: String?,
             expectedValidity: String
         ) {
             attributeOverrides(
@@ -181,12 +182,13 @@ internal class Metric_UnitTest :
         @CsvSource(
             "Credit,        valid",
             "Debit,         valid",
+            ",              valid", //null
             "'',            invalid",
             "null,          invalid",
             "foo,           invalid"
         )
         fun `balanceType should error if invalid`(
-            balanceType: String,
+            balanceType: String?,
             expectedValidity: String
         ) {
             attributeOverrides(

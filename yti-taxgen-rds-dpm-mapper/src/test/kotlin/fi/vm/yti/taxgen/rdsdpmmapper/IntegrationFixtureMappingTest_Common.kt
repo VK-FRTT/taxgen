@@ -5,15 +5,13 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("Mapping Integration Fixture to DPM model - Common")
-internal class IntegrationFixtureMappingTest_Common : IntegrationFixtureMappingTestBase() {
+internal class IntegrationFixtureMappingTest_Common : RdsToDpmMapper_UnitTestBase() {
 
     @Test
-    fun `should produce 1 DPM Dictionary with proper Owner`() {
-        val dpmDictionaries = performMappingAndGetAll()
+    fun `should produce DPM Dictionary with proper Owner`() {
+        val dpmDictionary = performMappingFromIntegrationFixture()
 
-        assertThat(dpmDictionaries.size).isEqualTo(1)
-
-        val owner = dpmDictionaries[0].owner
+        val owner = dpmDictionary.owner
 
         assertThat(owner.name).isEqualTo("DM Integration Fixture")
         assertThat(owner.namespace).isEqualTo("namespace")
@@ -26,7 +24,7 @@ internal class IntegrationFixtureMappingTest_Common : IntegrationFixtureMappingT
 
     @Test
     fun `should produce correct diagnostic context events`() {
-        performMappingAndGetAll()
+        performMappingFromIntegrationFixture()
 
         assertThat(diagnosticCollector.events).contains(
             "ENTER [MapRdsToDpm] [RDS source data to DPM model]"

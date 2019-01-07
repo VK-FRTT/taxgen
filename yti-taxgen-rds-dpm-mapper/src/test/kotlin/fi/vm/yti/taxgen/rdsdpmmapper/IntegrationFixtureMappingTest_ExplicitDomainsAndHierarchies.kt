@@ -9,11 +9,11 @@ import org.junit.jupiter.api.fail
 
 @DisplayName("Mapping Integration Fixture to DPM model - ExplicitDomainsAndHierarchies")
 internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
-    : IntegrationFixtureMappingTestBase() {
+    : RdsToDpmMapper_UnitTestBase() {
 
     @Test
     fun `7 Explicit Domains`() {
-        val dpmDictionary = performMappingAndGetFirst()
+        val dpmDictionary = performMappingFromIntegrationFixture()
 
         dpmDictionary.explicitDomains.forEachIndexed { index, it ->
             when (index) {
@@ -104,7 +104,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `1 Member`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
 
             domain.members.forEachIndexed { index, it ->
                 when (index) {
@@ -139,7 +139,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `1 Hierarchy`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
 
             domain.hierarchies.forEachIndexed { index, it ->
                 when (index) {
@@ -171,7 +171,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `1 HierarchyNode within 'HIER' hierarchy`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "HIER" }!!
 
             hierarchy.rootNodes.forEachIndexed { index, it ->
@@ -215,7 +215,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `12 Members`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
 
             domain.members.forEachIndexed { index, it ->
                 when (index) {
@@ -295,7 +295,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `3 Hierarchies`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
 
             domain.hierarchies.forEachIndexed { index, it ->
                 when (index) {
@@ -341,7 +341,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `5 HierarchyNodes within 'EDA-H1' hierarchy`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "EDA-H1" }!!
 
             hierarchy.allNodes().forEachIndexed { index, it ->
@@ -405,7 +405,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `5 HierarchyNodes (with operators) within 'EDA-H2' hierarchy`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "EDA-H2" }!!
 
             hierarchy.allNodes().forEachIndexed { index, it ->
@@ -464,7 +464,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
         @Test
         fun `0 HierarchyNodes within 'EDA-H19' hierarchy`() {
-            val domain = performMappingAndGetFirst().explicitDomains.find { it.domainCode == domainCode }!!
+            val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "EDA-H10" }!!
 
             assertThat(hierarchy.allNodes()).isEmpty()

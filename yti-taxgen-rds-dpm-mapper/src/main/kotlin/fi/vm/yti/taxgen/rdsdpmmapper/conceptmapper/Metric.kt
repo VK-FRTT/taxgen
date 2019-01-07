@@ -25,8 +25,8 @@ internal fun mapAndValidateMetrics(
             concept = code.dpmConcept(owner),
             memberCodeNumber = code.codeValueOrEmpty(),
             dataType = "",
-            flowType = "",
-            balanceType = "",
+            flowType = null,
+            balanceType = null,
             referencedDomainCode = null,
             referencedHierarchyCode = null
         )
@@ -48,8 +48,8 @@ internal fun mapAndValidateMetrics(
 
                     val updatedMetric = metric.copy(
                         dataType = extensionMember.stringValueOrEmpty(RdsMemberValueType.DpmMetricDataType),
-                        flowType = extensionMember.stringValueOrEmpty(RdsMemberValueType.DpmFlowType),
-                        balanceType = extensionMember.stringValueOrEmpty(RdsMemberValueType.DpmBalanceType),
+                        flowType = extensionMember.stringValueOrNull(RdsMemberValueType.DpmFlowType),
+                        balanceType = extensionMember.stringValueOrNull(RdsMemberValueType.DpmBalanceType),
                         referencedDomainCode = extensionMember.stringValueOrNull(RdsMemberValueType.DpmDomainReference),
                         referencedHierarchyCode = extensionMember.stringValueOrNull(RdsMemberValueType.DpmHierarchyReference)
                     )

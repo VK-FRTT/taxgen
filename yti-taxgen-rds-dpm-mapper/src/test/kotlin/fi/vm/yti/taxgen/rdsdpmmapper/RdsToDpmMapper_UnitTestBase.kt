@@ -11,7 +11,7 @@ import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_CAPTURE
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 
-internal open class IntegrationFixtureMappingTestBase {
+internal open class RdsToDpmMapper_UnitTestBase {
 
     protected lateinit var diagnosticCollector: DiagnosticCollectorSimple
     protected lateinit var diagnosticContext: DiagnosticContext
@@ -34,8 +34,8 @@ internal open class IntegrationFixtureMappingTestBase {
     fun afterEach() {
     }
 
-    protected fun performMappingAndGetAll(): List<DpmDictionary> {
-        val fixturePath = TestFixture.pathOf(RDS_CAPTURE, "dm_integration_fixture")
+    protected fun performMappingAndGetAll(fixtureName: String): List<DpmDictionary> {
+        val fixturePath = TestFixture.pathOf(RDS_CAPTURE, fixtureName)
         val sourceProvider = ProviderFactory.folderProvider(fixturePath, diagnosticContext)
         val mapper = RdsToDpmMapper(diagnosticContext)
 
@@ -46,7 +46,9 @@ internal open class IntegrationFixtureMappingTestBase {
         return dictionaries
     }
 
-    protected fun performMappingAndGetFirst(): DpmDictionary {
-        return performMappingAndGetAll().first()
+    protected fun performMappingFromIntegrationFixture(): DpmDictionary {
+        val dictionary = performMappingAndGetAll("dm_integration_fixture").first()
+        //println(diagnosticCollector.events.joinToString(separator = "\n"))
+        return dictionary
     }
 }
