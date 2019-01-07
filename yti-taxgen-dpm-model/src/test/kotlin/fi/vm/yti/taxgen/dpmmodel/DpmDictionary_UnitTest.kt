@@ -36,15 +36,10 @@ internal class DpmDictionary_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "metrics,               minColLength,       1",
         "metrics,               maxColLength,   10000",
-        "explicitDomains,       minColLength,       1",
         "explicitDomains,       maxColLength,   10000",
-        "typedDomains,          minColLength,       1",
         "typedDomains,          maxColLength,   10000",
-        "explicitDimensions,    minColLength,       1",
         "explicitDimensions,    maxColLength,   10000",
-        "typedDimensions,       minColLength,       1",
         "typedDimensions,       maxColLength,   10000"
     )
     fun testPropertyLengthValidation(

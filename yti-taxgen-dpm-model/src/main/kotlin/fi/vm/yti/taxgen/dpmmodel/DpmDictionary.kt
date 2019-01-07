@@ -26,7 +26,7 @@ data class DpmDictionary(
                 DpmDictionary::explicitDimensions,
                 DpmDictionary::typedDimensions
             ),
-            minLength = 1,
+            minLength = 0,
             maxLength = 10000
         )
 

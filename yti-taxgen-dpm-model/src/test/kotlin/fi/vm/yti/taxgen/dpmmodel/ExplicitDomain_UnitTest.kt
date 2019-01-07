@@ -39,7 +39,6 @@ internal class ExplicitDomain_UnitTest :
         "uri,                   maxLength,      128",
         "domainCode,            minLength,      2",
         "domainCode,            maxLength,      50",
-        "members,               minColLength,   1",
         "members,               maxColLength,   10000"
     )
     fun testPropertyLengthValidation(
@@ -101,21 +100,6 @@ internal class ExplicitDomain_UnitTest :
         }
 
         @Test
-        fun `members should error with 0 default member`() {
-            attributeOverrides(
-                "members" to listOf(
-                    member("m_1", false),
-                    member("m_2", false),
-                    member("m_3", false)
-                )
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.members: has 0 default members (should have 1)")
-        }
-
-        @Test
         fun `members should error with 2 default members`() {
             attributeOverrides(
                 "members" to listOf(
@@ -127,7 +111,7 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.members: has 2 default members (should have 1)")
+                .containsExactly("ExplicitDomain.members: has 2 default members (should have at max 1)")
         }
 
         @Test

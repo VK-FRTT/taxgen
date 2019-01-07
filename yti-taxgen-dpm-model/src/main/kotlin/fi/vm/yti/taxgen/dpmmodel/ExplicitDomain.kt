@@ -29,7 +29,7 @@ data class ExplicitDomain(
             validationResults = validationResults,
             instance = this,
             property = ExplicitDomain::members,
-            minLength = 1,
+            minLength = 0,
             maxLength = 10000
         )
 
@@ -47,8 +47,8 @@ data class ExplicitDomain(
             validate = { messages ->
                 val count = members.count { it.defaultMember }
 
-                if (count != 1) {
-                    messages.add("has $count default members (should have 1)")
+                if (count > 1) {
+                    messages.add("has $count default members (should have at max 1)")
                 }
             }
         )
