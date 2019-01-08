@@ -3,13 +3,17 @@ package fi.vm.yti.taxgen.rdsdpmmapper
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDomainsAndHierarchies
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetrics
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateOwner
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDomains
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.DpmDictionarySourceReader
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.DpmSourceReader
@@ -48,6 +52,8 @@ class RdsToDpmMapper(
         lateinit var metrics: List<Metric>
         lateinit var explicitDomains: List<ExplicitDomain>
         lateinit var typedDomains: List<TypedDomain>
+        lateinit var explicitDimensions: List<ExplicitDimension>
+        lateinit var typedDimensions: List<TypedDimension>
 
         dpmDictionarySource.dpmOwnerConfig {
             owner = mapAndValidateOwner(it, diagnosticContext)
@@ -65,13 +71,21 @@ class RdsToDpmMapper(
             typedDomains = mapAndValidateTypedDomains(it, owner, diagnosticContext)
         }
 
+        dpmDictionarySource.explicitDimensionsSource {
+            explicitDimensions = mapAndValidateExplicitDimensions(it, owner, diagnosticContext)
+        }
+
+        dpmDictionarySource.typedDimensionsSource {
+            typedDimensions = mapAndValidateTypedDimensions(it, owner, diagnosticContext)
+        }
+
         val dpmDictionary = DpmDictionary(
             owner = owner,
             metrics = metrics,
             explicitDomains = explicitDomains,
             typedDomains = typedDomains,
-            explicitDimensions = emptyList(),
-            typedDimensions = emptyList()
+            explicitDimensions = explicitDimensions,
+            typedDimensions = typedDimensions
         )
 
         diagnosticContext.validate(dpmDictionary)

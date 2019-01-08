@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
@@ -21,7 +20,7 @@ internal class TypedDimension_UnitTest :
         "uri,                       required",
         "concept,                   required",
         "dimensionCode,             required",
-        "domainRef,                 required"
+        "referencedDomainCode,      required"
     )
     fun testPropertyOptionality(
         propertyName: String,
@@ -36,10 +35,12 @@ internal class TypedDimension_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "uri,                    minLength,      1",
-        "uri,                    maxLength,      128",
+        "uri,                   minLength,      1",
+        "uri,                   maxLength,      128",
         "dimensionCode,         minLength,      2",
-        "dimensionCode,         maxLength,      50"
+        "dimensionCode,         maxLength,      50",
+        "referencedDomainCode,  minLength,      2",
+        "referencedDomainCode,  maxLength,      50"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -67,37 +68,6 @@ internal class TypedDimension_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly("Concept.label: has too few translations (minimum 1)")
-        }
-    }
-
-    @Nested
-    inner class DomainRefProp {
-
-        @DisplayName("URI validation")
-        @ParameterizedTest(name = "URI `{0}` should be {1} domain ref")
-        @CsvSource(
-            "1,         valid",
-            "'',        invalid",
-            "' ',       invalid"
-        )
-        fun `domainRef should error if 'URI' is invalid`(
-            uri: String,
-            expectedValidity: String
-        ) {
-            attributeOverrides(
-                "domainRef" to dpmElementRef<TypedDomain>(
-                    uri = uri,
-                    diagnosticLabel = "label_value"
-                )
-            )
-
-            instantiateAndValidate()
-
-            when (expectedValidity) {
-                "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("TypedDimension.domainRef: empty or blank uri")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
-            }
         }
     }
 }

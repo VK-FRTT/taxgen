@@ -11,7 +11,7 @@ internal class IntegrationFixtureMappingTest_TypedDomains
     : RdsToDpmMapper_UnitTestBase() {
 
     @Test
-    fun `8 TypedDomains`() {
+    fun `8 Typed Domains`() {
         val dpmDictionary = performMappingFromIntegrationFixture()
 
         dpmDictionary.typedDomains.forEachIndexed { index, it ->

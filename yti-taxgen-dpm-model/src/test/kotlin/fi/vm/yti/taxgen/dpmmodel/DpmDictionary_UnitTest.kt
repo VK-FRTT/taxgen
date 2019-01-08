@@ -72,7 +72,7 @@ internal class DpmDictionary_UnitTest :
                         List(length) { index ->
                             explicitDimension(
                                 "$index",
-                                refTo<ExplicitDomain>("$index")
+                                "exp_dom_$index"
                             )
                         }
 
@@ -80,7 +80,7 @@ internal class DpmDictionary_UnitTest :
                         List(length) { index ->
                             typedDimension(
                                 "$index",
-                                refTo<TypedDomain>("$index")
+                                "typ_dom_$index"
                             )
                         }
 

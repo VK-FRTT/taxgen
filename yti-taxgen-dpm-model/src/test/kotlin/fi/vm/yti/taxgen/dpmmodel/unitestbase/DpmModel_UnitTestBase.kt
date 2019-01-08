@@ -125,21 +125,21 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         )
     }
 
-    protected fun explicitDimension(baseId: String, domainRef: DpmElementRef): ExplicitDimension {
+    protected fun explicitDimension(baseId: String, referencedDomainCode: String): ExplicitDimension {
         return ExplicitDimension(
             uri = "${baseId}_uri",
             dimensionCode = "${baseId}_code",
             concept = Factory.instantiate(),
-            domainRef = domainRef
+            referencedDomainCode = referencedDomainCode
         )
     }
 
-    protected fun typedDimension(baseId: String, domainRef: DpmElementRef): TypedDimension {
+    protected fun typedDimension(baseId: String, referencedDomainCode: String): TypedDimension {
         return TypedDimension(
             uri = "${baseId}_uri",
             dimensionCode = "${baseId}_code",
             concept = Factory.instantiate(),
-            domainRef = domainRef
+            referencedDomainCode = referencedDomainCode
         )
     }
 

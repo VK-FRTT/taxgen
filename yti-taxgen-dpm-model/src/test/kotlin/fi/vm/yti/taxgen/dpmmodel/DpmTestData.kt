@@ -131,7 +131,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "uri" to "exp_dim_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "dimensionCode" to "exp_dim",
-                "domainRef" to dpmElementRef<ExplicitDomain>("exp_dom_uri", "diagnostic_label")
+                "referencedDomainCode" to "exp_dom"
             )
         )
     )
@@ -143,7 +143,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "uri" to "typ_dim_1_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "dimensionCode" to "typ_dim",
-                "domainRef" to dpmElementRef<ExplicitDomain>("typ_dom_uri", "diagnostic_label")
+                "referencedDomainCode" to "typ_dom"
             )
         )
     )
