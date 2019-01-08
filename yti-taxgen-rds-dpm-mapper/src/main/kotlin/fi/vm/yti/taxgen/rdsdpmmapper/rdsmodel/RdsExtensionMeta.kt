@@ -22,8 +22,10 @@ internal data class RdsExtensionMeta(
 }
 
 enum class RdsExtensionType(val typeUri: String) {
+    DefinitionHierarchy("http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"),
+    CalculationHierarchy("http://uri.suomi.fi/datamodel/ns/code#calculationHierarchy"),
     DpmMetric("http://uri.suomi.fi/datamodel/ns/code#dpmMetric"),
     DpmExplicitDomain("http://uri.suomi.fi/datamodel/ns/code#dpmExplicitDomain"),
-    DefinitionHierarchy("http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"),
-    CalculationHierarchy("http://uri.suomi.fi/datamodel/ns/code#calculationHierarchy")
+    DpmDimension("http://uri.suomi.fi/datamodel/ns/code#dpmDimension"),
+    DpmTypedDomain("http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain")
 }
