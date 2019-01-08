@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
@@ -53,7 +53,7 @@ class DpmDbWriter_UnitTest {
     private lateinit var tempFolder: TempFolder
 
     private lateinit var diagnosticCollector: DiagnosticCollectorSimple
-    private lateinit var diagnostic: Diagnostic
+    private lateinit var diagnosticContext: DiagnosticContext
 
     private lateinit var dbWriter: DpmDbWriter
     private lateinit var dbConnection: Connection
@@ -65,12 +65,12 @@ class DpmDbWriter_UnitTest {
         val dbPath = tempFolder.resolve("dpm.db")
 
         diagnosticCollector = DiagnosticCollectorSimple()
-        diagnostic = DiagnosticBridge(diagnosticCollector)
+        diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
         dbWriter = DpmDbWriter(
             dbPath,
             false,
-            diagnostic
+            diagnosticContext
         )
 
         dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
@@ -653,9 +653,9 @@ class DpmDbWriter_UnitTest {
 
         @Test
         fun `should contain proper context events`() {
-            assertThat(diagnosticCollector.events).containsExactly(
-                "ENTER [ActivityWriteDpmDb]",
-                "EXIT [ActivityWriteDpmDb]"
+            assertThat(diagnosticCollector.eventsString()).contains(
+                "ENTER [WriteSQLiteDb]",
+                "EXIT [WriteSQLiteDb]"
             )
         }
     }
@@ -691,8 +691,8 @@ class DpmDbWriter_UnitTest {
             prefix = "OwnerPrefix",
             location = "OwnerLocation",
             copyright = "OwnerCopyright",
-            languages = setOf(language("en"), language("fi")),
-            defaultLanguage = language("fi")
+            languageCodes = listOf("en", "fi"),
+            defaultLanguageCode = "fi"
         )
 
         fun concept(name: String) = Concept(
@@ -717,35 +717,30 @@ class DpmDbWriter_UnitTest {
 
         val members = listOf(
             Member(
-                id = "Member-1-Id",
                 uri = "Member-1-Uri",
                 concept = concept("Member-1"),
                 memberCode = "Member-1-Code",
                 defaultMember = true
             ),
             Member(
-                id = "Member-2-Id",
                 uri = "Member-2-Uri",
                 concept = concept("Member-2"),
                 memberCode = "Member-2-Code",
                 defaultMember = false
             ),
             Member(
-                id = "Member-3-Id",
                 uri = "Member-3-Uri",
                 concept = concept("Member-3"),
                 memberCode = "Member-3-Code",
                 defaultMember = false
             ),
             Member(
-                id = "Member-4-Id",
                 uri = "Member-4-Uri",
                 concept = concept("Member-4"),
                 memberCode = "Member-4-Code",
                 defaultMember = false
             ),
             Member(
-                id = "Member-5-Id",
                 uri = "Member-5-Uri",
                 concept = concept("Member-5"),
                 memberCode = "Member-5-Code",
@@ -755,56 +750,51 @@ class DpmDbWriter_UnitTest {
 
         val hierarchyNodes = mutableListOf(
             HierarchyNode(
-                id = "HierarchyNode-1-Id",
                 uri = "HierarchyNode-1-Uri",
                 concept = concept("HierarchyNode-1"),
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                memberRef = dpmElementRefForId(members, "Member-1-Id"),
-                childNodes = null
+                memberRef = dpmElementRefForUri(members, "Member-1-Uri"),
+                childNodes = emptyList()
             ),
 
             HierarchyNode(
-                id = "HierarchyNode-2-Id",
                 uri = "HierarchyNode-2-Uri",
                 concept = concept("HierarchyNode-2"),
                 abstract = false,
                 comparisonOperator = "=",
                 unaryOperator = "+",
-                memberRef = dpmElementRefForId(members, "Member-2-Id"),
+                memberRef = dpmElementRefForUri(members, "Member-2-Uri"),
                 childNodes = listOf(
                     HierarchyNode(
-                        id = "HierarchyNode-2.1-Id",
                         uri = "HierarchyNode-2.1-Uri",
                         concept = concept("HierarchyNode-2.1"),
                         abstract = false,
                         comparisonOperator = "=",
                         unaryOperator = "+",
-                        memberRef = dpmElementRefForId(members, "Member-3-Id"),
+                        memberRef = dpmElementRefForUri(members, "Member-3-Uri"),
                         childNodes = listOf(
                             HierarchyNode(
-                                id = "HierarchyNode-2.1.1-Id",
                                 uri = "HierarchyNode-2.1.1-Uri",
                                 concept = concept("HierarchyNode-2.1.1"),
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
-                                memberRef = dpmElementRefForId(members, "Member-4-Id"),
-                                childNodes = null
+                                memberRef = dpmElementRefForUri(members, "Member-4-Uri"),
+                                childNodes = emptyList()
                             )
                         )
                     ),
 
                     HierarchyNode(
-                        id = "HierarchyNode-2.2-Id",
                         uri = "HierarchyNode-2.2-Uri",
                         concept = concept("HierarchyNode-2.2"),
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        memberRef = dpmElementRefForId(members, "Member-5-Id"),
-                        childNodes = null
+                        memberRef = dpmElementRefForUri(members, "Member-5-Uri"),
+                        childNodes = emptyList()
                     )
                 )
             )
@@ -813,21 +803,19 @@ class DpmDbWriter_UnitTest {
         if (variety == FixtureVariety.HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF) {
             hierarchyNodes.add(
                 HierarchyNode(
-                    id = "HierarchyNode-DuplicateMemberRef-Id",
                     uri = "HierarchyNode-DuplicateMemberRef-Uri",
                     concept = concept("HierarchyNode-DuplicateMemberRef"),
                     abstract = false,
                     comparisonOperator = null,
                     unaryOperator = null,
-                    memberRef = dpmElementRefForId(members, "Member-1-Id"),
-                    childNodes = null
+                    memberRef = dpmElementRefForUri(members, "Member-1-Uri"),
+                    childNodes = emptyList()
                 )
             )
         }
 
         val hierarchies = listOf(
             Hierarchy(
-                id = "Hierarchy-1-Id",
                 uri = "Hierarchy-1-Uri",
                 concept = concept("Hierarchy"),
                 hierarchyCode = "Hierarchy-Code",
@@ -840,22 +828,27 @@ class DpmDbWriter_UnitTest {
                 DpmDictionary(
                     owner = dpmOwner,
 
+                    metrics = emptyList(),
+
                     explicitDomains = listOf(
                         ExplicitDomain(
-                            id = "ExplicitDomain-1-Id",
                             uri = "ExplicitDomain-1-Uri",
                             concept = concept("ExplicitDomain"),
                             domainCode = "Domain-Code",
                             members = members,
                             hierarchies = hierarchies
                         )
-                    )
+                    ),
+
+                    typedDomains = emptyList(),
+                    explicitDimensions = emptyList(),
+                    typedDimensions = emptyList()
                 )
             )
 
         return dictionaries
     }
 
-    private inline fun <reified T : DpmElement> dpmElementRefForId(elements: List<T>, id: String) =
-        elements.firstOrNull { it.id == id }?.ref() ?: thisShouldNeverHappen("No element for given id: $id")
+    private inline fun <reified T : DpmElement> dpmElementRefForUri(elements: List<T>, uri: String) =
+        elements.firstOrNull { it.uri == uri }?.ref() ?: thisShouldNeverHappen("No element for given id: $uri")
 }
