@@ -39,13 +39,8 @@ fun dpmTestData(): Set<DataDefinition> {
                 "prefix" to "ns_prefix",
                 "location" to "official_location",
                 "copyright" to "Lorem ipsum",
-                "languages" to dynamicAttribute {
-                    setOf(
-                        Language.findByIso6391Code("en"),
-                        Language.findByIso6391Code("fi")
-                    )
-                },
-                "defaultLanguage" to dynamicAttribute { Language.findByIso6391Code("fi") }
+                "languageCodes" to listOf("en", "fi"),
+                "defaultLanguageCode" to "fi"
             )
         )
     )

@@ -1,0 +1,11 @@
+{
+  "name": "Owner 3/3",
+  "namespace": "namespace",
+  "prefix": "prefix",
+  "location": "location",
+  "copyright": "copyright",
+  "languages": [
+    "sv"
+  ],
+  "defaultLanguage": "en"
+}

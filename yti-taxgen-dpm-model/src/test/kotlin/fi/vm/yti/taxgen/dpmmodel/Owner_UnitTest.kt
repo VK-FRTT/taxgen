@@ -21,8 +21,8 @@ internal class Owner_UnitTest :
         "prefix,                required",
         "location,              required",
         "copyright,             required",
-        "languages,             required",
-        "defaultLanguage,       required"
+        "languageCodes,         required",
+        "defaultLanguageCode,   required"
     )
     fun testPropertyOptionality(
         propertyName: String,
@@ -38,17 +38,17 @@ internal class Owner_UnitTest :
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
         "name,                  minLength,      2",
-        "name,                  maxLength,      100",
+        "name,                  maxLength,      500",
         "namespace,             minLength,      2",
-        "namespace,             maxLength,      100",
+        "namespace,             maxLength,      500",
         "prefix,                minLength,      2",
-        "prefix,                maxLength,      50",
+        "prefix,                maxLength,      500",
         "location,              minLength,      2",
-        "location,              maxLength,      100",
+        "location,              maxLength,      500",
         "copyright,             minLength,      2",
-        "copyright,             maxLength,      1000",
-        "languages,             minColLength,   1",
-        "languages,             maxColLength,   10"
+        "copyright,             maxLength,      500",
+        "languageCodes,         minColLength,   1",
+        "languageCodes,         maxColLength,   10"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -60,8 +60,8 @@ internal class Owner_UnitTest :
             validationType = validationType,
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
-                if (property.name == "languages") {
-                    Language.languages().take(length).toSet()
+                if (property.name == "languageCodes") {
+                    Language.languages().take(length).map { it.iso6391Code }
                 } else {
                     null
                 }
@@ -70,23 +70,64 @@ internal class Owner_UnitTest :
     }
 
     @Nested
-    inner class LanguagesProp {
+    inner class LanguageCodesProp {
 
         @Test
-        fun `languages should ignore duplicates without errors`() {
+        fun `languageCodes should detect duplicates`() {
             attributeOverrides(
-                "languages" to setOf(
-                    language("fi"),
-                    language("sv"),
-                    language("fi")
-                )
+                "languageCodes" to listOf("fi", "sv", "fi")
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors).isEmpty()
-            assertThat(
-                instance!!.languages.map { it.iso6391Code }.toList()
-            ).containsExactlyInAnyOrderElementsOf(listOf("fi", "sv"))
+            assertThat(validationErrors)
+                .containsExactly("Owner.languages: duplicate language code value 'fi'")
+        }
+
+        @Test
+        fun `languageCodes should detect unknown codes`() {
+            attributeOverrides(
+                "languageCodes" to listOf("fi", "zyx", "en")
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly("Owner.languages: unsupported language 'zyx'")
+        }
+
+        @Test
+        fun `languageCodes should be mapped to languages`() {
+            attributeOverrides(
+                "languageCodes" to listOf("fi", "sv", "en")
+            )
+
+            instantiateAndValidate()
+            assertThat(instance!!.languages.map { it.iso6391Code })
+                .containsExactly("fi", "sv", "en")
+        }
+    }
+
+    @Nested
+    inner class DefaultLanguageCodeProp {
+
+        @Test
+        fun `defaultLanguageCode should detect unknown codes`() {
+            attributeOverrides(
+                "defaultLanguageCode" to "foobar"
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly("Owner.defaultLanguage: unsupported default language 'foobar'")
+        }
+
+        @Test
+        fun `defaultLanguageCode should be mapped to language`() {
+            attributeOverrides(
+                "defaultLanguageCode" to "sv"
+            )
+
+            instantiateAndValidate()
+            assertThat(instance!!.defaultLanguage.iso6391Code).isEqualTo("sv")
         }
     }
 }

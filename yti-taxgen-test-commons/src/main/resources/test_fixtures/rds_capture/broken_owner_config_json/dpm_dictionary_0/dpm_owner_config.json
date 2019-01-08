@@ -1,0 +1,13 @@
+{
+  "name": "Broken owner config"
+  "namespace": "namespace",
+  "prefix": "prefix",
+  "location": "location",
+  "copyright": "copyright",
+  "languages": [
+    "en",
+    "fi",
+    "sv"
+  ],
+  "defaultLanguage": "en"
+}

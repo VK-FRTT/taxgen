@@ -113,7 +113,7 @@ internal class Language_UnitTest :
         fun `loading language configuration without default language should fail`() {
             val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "default_language_en_missing.json")
 
-            val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
+            val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
                 .isInstanceOf(FailException::class.java)
@@ -124,7 +124,7 @@ internal class Language_UnitTest :
         fun `loading language configuration with unsupported translation language should fail`() {
             val languageConfigPath: Path =
                 TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
-            val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
+            val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
                 .isInstanceOf(FailException::class.java)
@@ -135,7 +135,7 @@ internal class Language_UnitTest :
         fun `loading language configuration with broken JSON syntax should fail`() {
             val languageConfigPath: Path =
                 TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
-            val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
+            val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
                 .isInstanceOf(FailException::class.java)
@@ -146,7 +146,7 @@ internal class Language_UnitTest :
         fun `loading language configuration without translations should fail`() {
             val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "language_no_translations.json")
 
-            val thrown = catchThrowable { Language.Companion.loadLanguages(languageConfigPath) }
+            val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
                 .isInstanceOf(FailException::class.java)

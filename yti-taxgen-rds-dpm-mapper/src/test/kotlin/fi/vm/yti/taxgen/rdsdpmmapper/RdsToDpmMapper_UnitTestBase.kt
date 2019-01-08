@@ -8,6 +8,7 @@ import fi.vm.yti.taxgen.rdsprovider.ProviderFactory
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_CAPTURE
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 
@@ -48,7 +49,17 @@ internal open class RdsToDpmMapper_UnitTestBase {
 
     protected fun performMappingFromIntegrationFixture(): DpmDictionary {
         val dictionary = performMappingAndGetAll("dm_integration_fixture").first()
-        //println(diagnosticCollector.events.joinToString(separator = "\n"))
+
+        val fails = diagnosticCollector.run { fatalCount + errorCount + validationCount }
+
+        if (fails != 0) {
+            println(diagnosticCollector.eventsString())
+        }
+
+        assertThat(diagnosticCollector.fatalCount).isEqualTo(0)
+        assertThat(diagnosticCollector.errorCount).isEqualTo(0)
+        assertThat(diagnosticCollector.validationCount).isEqualTo(0)
+
         return dictionary
     }
 }

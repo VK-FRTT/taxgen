@@ -1,0 +1,13 @@
+{
+  "name": "Unsupported owner language",
+  "namespace": "namespace",
+  "prefix": "prefix",
+  "location": "location",
+  "copyright": "copyright",
+  "languages": [
+    "en",
+    "fi",
+    "xyz"
+  ],
+  "defaultLanguage": "en"
+}

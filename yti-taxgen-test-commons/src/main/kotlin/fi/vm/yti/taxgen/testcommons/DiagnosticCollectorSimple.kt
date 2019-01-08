@@ -9,6 +9,10 @@ class DiagnosticCollectorSimple : DiagnosticConsumer {
 
     val events = mutableListOf<String>()
 
+    var fatalCount = 0
+    var errorCount = 0
+    var validationCount = 0
+
     override fun contextEnter(contextStack: List<ContextInfo>) {
         events.add("ENTER [${contextStack.firstOrNull()?.type ?: ""}] [${contextStack.firstOrNull()?.label ?: ""}]")
     }
@@ -23,11 +27,19 @@ class DiagnosticCollectorSimple : DiagnosticConsumer {
 
     override fun message(severity: Severity, message: String) {
         events.add("MESSAGE [$severity] [$message]")
+
+        if (severity == Severity.FATAL) fatalCount++
+        if (severity == Severity.ERROR) errorCount++
     }
 
     override fun validationResults(validationResults: List<ValidationResultInfo>) {
         validationResults.forEach {
             events.add("VALIDATION [${it.className.substringAfterLast(".")}.${it.propertyName}: ${it.message}]")
+            validationCount++
         }
+    }
+
+    fun eventsString(): String {
+        return events.joinToString(separator = "\n")
     }
 }
