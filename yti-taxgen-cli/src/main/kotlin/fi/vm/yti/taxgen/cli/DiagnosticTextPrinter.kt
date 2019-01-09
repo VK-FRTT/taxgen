@@ -35,7 +35,7 @@ class DiagnosticTextPrinter(
         contextStack: List<ContextInfo>,
         originalContext: ContextInfo
     ) {
-        printLine(contextStack.first().contextDetails())
+        printLine(contextStack.first().contextDetailsForUpdate(originalContext))
     }
 
     override fun message(severity: Severity, message: String) {
@@ -73,6 +73,24 @@ class DiagnosticTextPrinter(
         }
 
         if (identifier.isNotBlank()) {
+            details += separator
+            details += "($identifier)"
+        }
+
+        return details
+    }
+
+    private fun ContextInfo.contextDetailsForUpdate(original: ContextInfo): String {
+        val separatorValue = " "
+        var separator = ""
+        var details = ""
+
+        if (label.isNotBlank() && label != original.label) {
+            separator = separatorValue
+            details += "$label"
+        }
+
+        if (identifier.isNotBlank() && identifier != original.identifier) {
             details += separator
             details += "($identifier)"
         }

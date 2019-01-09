@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
+//TODO - Test with multiple code & extension member pages
+
 open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
 
     data class ExpectedDetails(
@@ -223,8 +225,11 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val markers =
-                                    extractMarkerValuesFromJsonData(expDoms.codePagesData()) { it -> it as String }
+                                val codePagesData = grabList<String> {
+                                    expDoms.eachCodePageData(it)
+                                }
+
+                                val markers = extractMarkerValuesFromJsonData(codePagesData) { it }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/codes_page_0/codes",
@@ -251,8 +256,12 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
+                                val extensionSources = grabList<ExtensionSource> {
+                                    expDoms.eachExtensionSource(it)
+                                }
+
                                 val markers =
-                                    extractMarkerValuesFromJsonData(expDoms.extensionSources()) { it -> (it as ExtensionSource).extensionMetaData() }
+                                    extractMarkerValuesFromJsonData(extensionSources) { it.extensionMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/extension_0/extension_meta",
@@ -279,13 +288,23 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val extensions = expDoms.extensionSources().toList()
+                                val extensionSources = grabList<ExtensionSource> {
+                                    expDoms.eachExtensionSource(it)
+                                }
 
-                                assertThat(extensions.size).isEqualTo(12)
+                                assertThat(extensionSources.size).isEqualTo(12)
 
-                                assertThat(extensions[0].contextLabel()).isEqualTo("")
-                                assertThat(extensions[0].contextIdentifier()).contains("dpm_dictionary_0", "exp_dom_hier", "extension_0")
-                                assertThat(extensions[11].contextIdentifier()).contains("dpm_dictionary_0", "exp_dom_hier", "extension_11")
+                                assertThat(extensionSources[0].contextLabel()).isEqualTo("")
+                                assertThat(extensionSources[0].contextIdentifier()).contains(
+                                    "dpm_dictionary_0",
+                                    "exp_dom_hier",
+                                    "extension_0"
+                                )
+                                assertThat(extensionSources[11].contextIdentifier()).contains(
+                                    "dpm_dictionary_0",
+                                    "exp_dom_hier",
+                                    "extension_11"
+                                )
                             },
 
                             dynamicTest("Should have extension members pages") {
@@ -297,12 +316,15 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val extensions = expDoms.extensionSources()
+                                val extensionSources = grabList<ExtensionSource> {
+                                    expDoms.eachExtensionSource(it)
+                                }
 
-                                val extensionPages = extensions.first().extensionMemberPagesData()
+                                val extensionPages = grabList<String> {
+                                    extensionSources.first().eachExtensionMemberPageData(it)
+                                }
 
-                                val markers =
-                                    extractMarkerValuesFromJsonData(extensionPages) { it -> it as String }
+                                val markers = extractMarkerValuesFromJsonData(extensionPages) { it }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0/members",
@@ -335,7 +357,9 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
                                 assertThat(subCodeListSources).isNotEmpty
                             },
@@ -349,7 +373,9 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
                                 assertThat(subCodeListSources).isEmpty()
                             },
@@ -363,10 +389,12 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(subCodeListSources) { it -> (it as CodeListSource).codeListMetaData() }
+                                    extractMarkerValuesFromJsonData(subCodeListSources) { it.codeListMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/code_list_meta",
@@ -393,13 +421,21 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
                                 assertThat(subCodeListSources.size).isEqualTo(12)
 
                                 assertThat(subCodeListSources[0].contextLabel()).isEqualTo("")
-                                assertThat(subCodeListSources[0].contextIdentifier()).contains("dpm_dictionary_0", "sub_code_list_0")
-                                assertThat(subCodeListSources[11].contextIdentifier()).contains("dpm_dictionary_0", "sub_code_list_11")
+                                assertThat(subCodeListSources[0].contextIdentifier()).contains(
+                                    "dpm_dictionary_0",
+                                    "sub_code_list_0"
+                                )
+                                assertThat(subCodeListSources[11].contextIdentifier()).contains(
+                                    "dpm_dictionary_0",
+                                    "sub_code_list_11"
+                                )
                             },
 
                             dynamicTest("Should have codePages") {
@@ -411,11 +447,16 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
-                                val codepages = subCodeListSources.first().codePagesData()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
+
+                                val codePagesData = grabList<String> {
+                                    subCodeListSources.first().eachCodePageData(it)
+                                }
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(codepages) { it -> it as String }
+                                    extractMarkerValuesFromJsonData(codePagesData) { it }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/codes_page_0/codes"
@@ -431,12 +472,16 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
-                                val extensionSources = subCodeListSources.first().extensionSources()
+                                val extensionSources = grabList<ExtensionSource> {
+                                    subCodeListSources.first().eachExtensionSource(it)
+                                }
 
                                 val markers =
-                                    extractMarkerValuesFromJsonData(extensionSources) { it -> (it as ExtensionSource).extensionMetaData() }
+                                    extractMarkerValuesFromJsonData(extensionSources) { it.extensionMetaData() }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/extension_0/extension_meta"
@@ -452,14 +497,22 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
-                                val extensionSources = subCodeListSources.first().extensionSources().toList()
+                                val extensionSources = grabList<ExtensionSource> {
+                                    subCodeListSources.first().eachExtensionSource(it)
+                                }
 
                                 assertThat(extensionSources.size).isEqualTo(1)
 
                                 assertThat(extensionSources[0].contextLabel()).isEqualTo("")
-                                assertThat(extensionSources[0].contextIdentifier()).contains("dpm_dictionary_0", "sub_code_list_0", "extension_0")
+                                assertThat(extensionSources[0].contextIdentifier()).contains(
+                                    "dpm_dictionary_0",
+                                    "sub_code_list_0",
+                                    "extension_0"
+                                )
                             },
 
                             dynamicTest("Should have extension members pages") {
@@ -471,12 +524,19 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                val subCodeListSources = expDoms.subCodeListSources().toList()
+                                val subCodeListSources = grabList<CodeListSource> {
+                                    expDoms.eachSubCodeListSource(it)
+                                }
 
-                                val extensionSources = subCodeListSources.first().extensionSources().toList()
+                                val extensionSources = grabList<ExtensionSource> {
+                                    subCodeListSources.first().eachExtensionSource(it)
+                                }
 
-                                val markers =
-                                    extractMarkerValuesFromJsonData(extensionSources[0].extensionMemberPagesData()) { it -> it as String }
+                                val extensionPages = grabList<String> {
+                                    extensionSources.first().eachExtensionMemberPageData(it)
+                                }
+
+                                val markers = extractMarkerValuesFromJsonData(extensionPages) { it }
 
                                 assertThat(markers).containsExactly(
                                     "dpm_dictionary_0/edh_sub_code_list_0/extension_0/members_page_0/members"

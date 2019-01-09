@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-@DisplayName("when RDS sources are recorded to folder")
+@DisplayName("Test RDS source recording to folder")
 internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
 
     companion object {

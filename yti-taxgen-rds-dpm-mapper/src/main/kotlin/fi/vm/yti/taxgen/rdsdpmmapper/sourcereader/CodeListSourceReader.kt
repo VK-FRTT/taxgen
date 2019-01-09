@@ -21,20 +21,26 @@ internal class CodeListSourceReader(
     }
 
     fun eachCode(action: (RdsCode) -> Unit) {
-        codeListSource.codePagesData().forEach { pageData ->
+        codeListSource.eachCodePageData { pageData ->
             val codePage = JsonOps.readValue<RdsCodePage>(pageData, diagnostic)
             codePage.results?.forEach(action)
         }
     }
 
     fun eachExtensionSource(action: (ExtensionSourceReader) -> Unit) {
-        codeListSource.extensionSources().forEach { extensionSource ->
-            action(ExtensionSourceReader(extensionSource, diagnostic))
+        codeListSource.eachExtensionSource { extensionSource ->
+            val reader = ExtensionSourceReader(extensionSource, diagnostic)
+
+            diagnostic.updateCurrentContextDetails(
+                label = reader.extensionMetaData().diagnosticLabel()
+            )
+
+            action(reader)
         }
     }
 
     fun eachSubCodeListSource(action: (CodeListSourceReader) -> Unit) {
-        codeListSource.subCodeListSources().forEach { subCodeListSource ->
+        codeListSource.eachSubCodeListSource { subCodeListSource ->
             action(CodeListSourceReader(subCodeListSource, diagnostic))
         }
     }

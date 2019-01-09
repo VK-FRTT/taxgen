@@ -60,6 +60,12 @@ internal class DpmDictionarySourceReader(
             return null
         }
 
-        return CodeListSourceReader(codeListSource, diagnostic)
+        val reader = CodeListSourceReader(codeListSource, diagnostic)
+
+        diagnostic.updateCurrentContextDetails(
+            label = reader.codeListMeta().diagnosticLabel()
+        )
+
+        return reader
     }
 }

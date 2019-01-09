@@ -59,11 +59,13 @@ internal class CodeListContentAddressResolver(
 
         val codeListJson = fetchExpandedCodeListJson(httpUrl)
 
-        return ContentAddress(
+        val contentAddress = ContentAddress(
             codeListUrl = resolveCodeListContentUrl(codeListJson),
             codesUrl = resolveCodesContentUrl(codeListJson),
             extensionUrls = resolveExtensionContentAddress(codeListJson)
         )
+
+        return contentAddress
     }
 
     private fun fetchUriMetaDataJson(): JsonNode {

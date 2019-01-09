@@ -148,14 +148,16 @@ internal class DpmSourceRecorderFolderAdapter(
                 diagnostic
             )
 
-            codeListSource.codePagesData().withIndex().forEach { (index, pageData) ->
+            var codePageIndex = 0
+            codeListSource.eachCodePageData { pageData ->
                 FileOps.writeTextFile(
                     pageData,
                     pathStack,
-                    "codes_page_$index.json",
+                    "codes_page_$codePageIndex.json",
                     forceOverwrite,
                     diagnostic
                 )
+                codePageIndex++
             }
 
             captureExtensionSources(
@@ -178,9 +180,10 @@ internal class DpmSourceRecorderFolderAdapter(
             return
         }
 
-        codeListSource.extensionSources().withIndex().forEach { (listIndex, extensionSource) ->
+        var extensionIndex = 0
+        codeListSource.eachExtensionSource { extensionSource ->
 
-            pathStack.withSubfolder("extension_$listIndex") {
+            pathStack.withSubfolder("extension_$extensionIndex") {
 
                 FileOps.writeTextFile(
                     extensionSource.extensionMetaData(),
@@ -190,16 +193,21 @@ internal class DpmSourceRecorderFolderAdapter(
                     diagnostic
                 )
 
-                extensionSource.extensionMemberPagesData().withIndex().forEach { (index, pageData) ->
+                var extensionMemberPageIndex = 0
+                extensionSource.eachExtensionMemberPageData { pageData ->
                     FileOps.writeTextFile(
                         pageData,
                         pathStack,
-                        "members_page_$index.json",
+                        "members_page_$extensionMemberPageIndex.json",
                         forceOverwrite,
                         diagnostic
                     )
+
+                    extensionMemberPageIndex++
                 }
             }
+
+            extensionIndex++
         }
     }
 
@@ -208,11 +216,15 @@ internal class DpmSourceRecorderFolderAdapter(
         pathStack: PathStack
     ) {
         if (!codeListSource.blueprint().usesSubCodeLists) {
-            return
+            return //TODO - are these uses* checks needed?
         }
 
-        codeListSource.subCodeListSources().withIndex().forEach { (listIndex, subCodeListSource) ->
-            captureCodeListSource(subCodeListSource, "sub_code_list_$listIndex", pathStack)
+        var subCodeListIndex = 0
+        codeListSource.eachSubCodeListSource { subCodeListSource ->
+
+            captureCodeListSource(subCodeListSource, "sub_code_list_$subCodeListIndex", pathStack)
+
+            subCodeListIndex++
         }
     }
 
