@@ -21,27 +21,31 @@ internal class CodeListSourceFolderAdapter(
         return FileOps.readTextFile(codeListRootPath, "code_list_meta.json")
     }
 
-    override fun codePagesData(): Sequence<String> {
-        return NumberedFilesIterator(codeListRootPath, "codes_page_*.json").asSequence()
+    override fun eachCodePageData(action: (String) -> Unit) {
+        NumberedFilesIterator(
+            codeListRootPath,
+            "codes_page_*.json"
+        ).forEach(action)
     }
 
-    override fun extensionSources(): Sequence<ExtensionSource> {
-        if (!blueprint.usesExtensions) {
-            return emptySequence()
-        }
-
+    override fun eachExtensionSource(action: (ExtensionSource) -> Unit) {
         val paths = FileOps.listSubFoldersMatching(codeListRootPath, "extension_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
-        return sortedPaths.map { path -> ExtensionSourceFolderAdapter(path) }.asSequence()
+
+        sortedPaths.forEach { path ->
+            val extensionSource = ExtensionSourceFolderAdapter(path)
+            action(extensionSource)
+        }
     }
 
-    override fun subCodeListSources(): Sequence<CodeListSource> {
-        if (!blueprint.usesSubCodeLists) {
-            return emptySequence()
-        }
+    override fun eachSubCodeListSource(action: (CodeListSource) -> Unit) {
         val paths = FileOps.listSubFoldersMatching(codeListRootPath, "sub_code_list_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
-        return sortedPaths.map { path -> CodeListSourceFolderAdapter(path, blueprint.subCodeListBlueprint!!) }
-            .asSequence()
+
+        sortedPaths.forEach { path ->
+            val codeListSource = CodeListSourceFolderAdapter(path, blueprint.subCodeListBlueprint!!)
+
+            action(codeListSource)
+        }
     }
 }

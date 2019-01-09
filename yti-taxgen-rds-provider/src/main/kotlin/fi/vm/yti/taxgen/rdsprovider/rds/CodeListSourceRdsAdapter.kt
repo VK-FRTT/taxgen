@@ -6,7 +6,6 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
@@ -33,40 +32,38 @@ internal class CodeListSourceRdsAdapter(
         )
     }
 
-    override fun codePagesData(): Sequence<String> {
-        return PaginationAwareCollectionIterator(
+    override fun eachCodePageData(action: (String) -> Unit) {
+        PaginationAwareCollectionIterator(
             contentAddressResolver.contentAddress.codesUrl,
             diagnostic,
-            DiagnosticContextType.RdsCodesPage,
             SubCodeListUriExtractor(this)
-        ).asSequence()
+        ).forEach(action)
     }
 
-    override fun extensionSources(): Sequence<ExtensionSource> {
-        return contentAddressResolver.contentAddress.extensionUrls.map { extensionUrls ->
-            ExtensionSourceRdsAdapter(
+    override fun eachExtensionSource(action: (ExtensionSource) -> Unit) {
+        contentAddressResolver.contentAddress.extensionUrls.forEach { extensionUrls ->
+            val extensionSource = ExtensionSourceRdsAdapter(
                 extensionUrls,
                 diagnostic
             )
-        }.asSequence()
+            action(extensionSource)
+        }
     }
 
-    override fun subCodeListSources(): Sequence<CodeListSource> {
+    override fun eachSubCodeListSource(action: (CodeListSource) -> Unit) {
         if (subCodeListUris == null) {
-            codePagesData().all { true }
+            eachCodePageData {}
         }
 
-        subCodeListUris?.let { uris ->
-            return uris.asSequence().map { uri ->
-                CodeListSourceRdsAdapter(
-                    codeListUri = contentAddressResolver.decorateUriWithInheritedParams(uri),
-                    blueprint = blueprint.subCodeListBlueprint!!,
-                    diagnostic = diagnostic
-                )
-            }
-        }
+        subCodeListUris?.forEach { uri ->
+            val codelistSource = CodeListSourceRdsAdapter(
+                codeListUri = contentAddressResolver.decorateUriWithInheritedParams(uri),
+                blueprint = blueprint.subCodeListBlueprint!!,
+                diagnostic = diagnostic
+            )
 
-        thisShouldNeverHappen("subCodeListUris is null")
+            action(codelistSource)
+        }
     }
 
     private fun resolveContentAddress(): CodeListContentAddressResolver {

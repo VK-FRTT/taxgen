@@ -15,7 +15,10 @@ internal class ExtensionSourceFolderAdapter(
         return FileOps.readTextFile(extensionPath, "extension_meta.json")
     }
 
-    override fun extensionMemberPagesData(): Sequence<String> {
-        return NumberedFilesIterator(extensionPath, "members_page_*.json").asSequence()
+    override fun eachExtensionMemberPageData(action: (String) -> Unit) {
+        NumberedFilesIterator(
+            extensionPath,
+            "members_page_*.json"
+        ).forEach(action)
     }
 }

@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
@@ -17,11 +16,10 @@ internal class ExtensionSourceRdsAdapter(
         return HttpOps.fetchJsonData(extensionAddress.extensionUrl, diagnostic)
     }
 
-    override fun extensionMemberPagesData(): Sequence<String> {
-        return PaginationAwareCollectionIterator(
+    override fun eachExtensionMemberPageData(action: (String) -> Unit) {
+        PaginationAwareCollectionIterator(
             extensionAddress.extensionMembersUrl,
-            diagnostic,
-            DiagnosticContextType.RdsExtensionMembersPage
-        ).asSequence()
+            diagnostic
+        ).forEach(action)
     }
 }

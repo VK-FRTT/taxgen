@@ -67,9 +67,9 @@ open class DpmSource_UnitTestBase {
             markers.add(json.get("marker").textValue())
         }
 
-        fun extractMarkerValuesFromJsonData(
-            objects: Sequence<Any>,
-            jsonDataExtractor: (Any) -> String
+        fun <T> extractMarkerValuesFromJsonData(
+            objects: List<T>,
+            jsonDataExtractor: (T) -> String
         ): List<String> {
             val markers = objects.map { obj ->
                 val jsonData = jsonDataExtractor(obj)

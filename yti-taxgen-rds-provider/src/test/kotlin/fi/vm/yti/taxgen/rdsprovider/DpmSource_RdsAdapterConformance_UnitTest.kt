@@ -263,15 +263,19 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             codeListSource.codeListMetaData()
             progress = "CODE_LIST_META_DONE"
 
-            codeListSource.codePagesData().toList()
+            codeListSource.eachCodePageData {}
             progress = "CODE_PAGES_DONE"
 
-            val extensionSource = codeListSource.extensionSources().first()
+            val extensionSources = grabList<ExtensionSource> {
+                codeListSource.eachExtensionSource(it)
+            }
+
+            val extensionSource = extensionSources.first()
 
             extensionSource.extensionMetaData()
             progress = "EXTENSION_META_DONE"
 
-            extensionSource.extensionMemberPagesData().toList()
+            extensionSources.first().eachExtensionMemberPageData {}
             progress = "EXTENSION_PAGES_DONE"
         }
 

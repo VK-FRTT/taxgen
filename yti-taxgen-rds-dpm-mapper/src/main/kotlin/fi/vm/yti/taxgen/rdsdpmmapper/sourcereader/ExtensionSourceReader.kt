@@ -20,7 +20,7 @@ internal class ExtensionSourceReader(
     }
 
     fun eachExtensionMember(action: (RdsExtensionMember) -> Unit) {
-        extensionSource.extensionMemberPagesData().forEach { pageData ->
+        extensionSource.eachExtensionMemberPageData { pageData ->
             val membersPage = JsonOps.readValue<RdsExtensionMembersPage>(pageData, diagnostic)
             membersPage.results?.forEach(action)
         }

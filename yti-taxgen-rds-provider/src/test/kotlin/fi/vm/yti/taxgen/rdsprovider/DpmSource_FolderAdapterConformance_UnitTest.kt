@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.TestFactory
 
-@DisplayName("Test RDS source adapter conformance")
+@DisplayName("Test folder source adapter conformance")
 internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_ConformanceUnitTestBase() {
 
     companion object {
