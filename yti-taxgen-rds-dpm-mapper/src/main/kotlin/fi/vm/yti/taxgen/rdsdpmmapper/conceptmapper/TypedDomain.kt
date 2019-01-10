@@ -51,7 +51,7 @@ internal fun mapAndValidateTypedDomains(
         }
     }
 
-    diagnostic.validate(typedDomains)
+    validateDpmElements(diagnostic, typedDomains)
 
     return typedDomains
 }

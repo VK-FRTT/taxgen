@@ -16,7 +16,7 @@ internal fun mapAndValidateTypedDimensions(
 ): List<TypedDimension> {
     val dimensions = mapDimensions(codeListSource, owner, diagnostic).map { it.toTypedDimension() }
 
-    diagnostic.validate(dimensions)
+    validateDpmElements(diagnostic, dimensions)
 
     return dimensions
 }
@@ -28,7 +28,7 @@ internal fun mapAndValidateExplicitDimensions(
 ): List<ExplicitDimension> {
     val dimensions = mapDimensions(codeListSource, owner, diagnostic).map { it.toExplicitDimension() }
 
-    diagnostic.validate(dimensions)
+    validateDpmElements(diagnostic, dimensions)
 
     return dimensions
 }

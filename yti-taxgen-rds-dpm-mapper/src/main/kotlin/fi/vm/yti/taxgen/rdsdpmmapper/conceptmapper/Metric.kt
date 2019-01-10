@@ -59,7 +59,7 @@ internal fun mapAndValidateMetrics(
         }
     }
 
-    diagnostic.validate(metrics)
+    validateDpmElements(diagnostic, metrics)
 
     return metrics
 }

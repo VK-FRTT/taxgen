@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.testcommons
 
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
 import fi.vm.yti.taxgen.commons.diagostic.Severity
@@ -35,7 +36,11 @@ class DiagnosticCollector : DiagnosticConsumer {
         events.add("MESSAGE [$severity] MESSAGE [$message]")
     }
 
-    override fun validationResults(validationResults: List<ValidationResultInfo>) {
+    override fun validationResults(
+        validationContextInfo: ValidationContextInfo,
+        validationResults: List<ValidationResultInfo>
+    ) {
+        //TODO - validationContextInfo
         validationResults.forEach {
             events.add("VALIDATION [${it.className.substringAfterLast(".")}.${it.propertyName}: ${it.message}]")
         }
