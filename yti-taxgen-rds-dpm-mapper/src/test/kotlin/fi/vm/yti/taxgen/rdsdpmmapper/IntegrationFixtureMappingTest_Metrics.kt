@@ -11,8 +11,10 @@ internal class IntegrationFixtureMappingTest_Metrics
     : RdsToDpmMapper_UnitTestBase() {
 
     @Test
-    fun `12 Metrics`() {
+    fun `13 Metrics`() {
         val dpmDictionary = performMappingFromIntegrationFixture()
+
+        assertThat(dpmDictionary.metrics.size).isEqualTo(13)
 
         dpmDictionary.metrics.forEachIndexed { index, it ->
             when (index) {

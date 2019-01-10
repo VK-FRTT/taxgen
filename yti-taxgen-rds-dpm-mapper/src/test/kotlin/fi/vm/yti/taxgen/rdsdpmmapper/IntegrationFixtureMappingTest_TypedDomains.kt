@@ -14,6 +14,8 @@ internal class IntegrationFixtureMappingTest_TypedDomains
     fun `8 Typed Domains`() {
         val dpmDictionary = performMappingFromIntegrationFixture()
 
+        assertThat(dpmDictionary.typedDomains.size).isEqualTo(8)
+
         dpmDictionary.typedDomains.forEachIndexed { index, it ->
             when (index) {
                 0 -> {

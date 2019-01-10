@@ -15,6 +15,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
     fun `7 Explicit Domains`() {
         val dpmDictionary = performMappingFromIntegrationFixture()
 
+        assertThat(dpmDictionary.explicitDomains.size).isEqualTo(7)
+
         dpmDictionary.explicitDomains.forEachIndexed { index, it ->
             when (index) {
                 0 -> {
@@ -103,8 +105,10 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         private val domainCode = "DOME"
 
         @Test
-        fun `1 Member`() {
+        fun `2 Members`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
+
+            assertThat(domain.members.size).isEqualTo(2)
 
             domain.members.forEachIndexed { index, it ->
                 when (index) {
@@ -130,6 +134,24 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         )
                     }
 
+                    1 -> {
+                        assertThat(it.memberCode).isEqualTo("EDA-x1")
+                        assertThat(it.defaultMember).isFalse()
+
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/code/EDA-x1")
+                        assertThat(it.type).isEqualTo("Member")
+
+                        assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
+                        assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+
+                        assertThat(it.concept.applicableFrom).isEqualTo("2018-10-31")
+                        assertThat(it.concept.applicableUntil).isNull()
+
+                        assertThat(it.concept.label.translations).containsOnly(
+                            entry(fi, "DOME member duplicating EDA code")
+                        )
+                    }
+
                     else -> {
                         fail { "Unexpected item" }
                     }
@@ -140,6 +162,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         @Test
         fun `1 Hierarchy`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
+
+            assertThat(domain.hierarchies.size).isEqualTo(1)
 
             domain.hierarchies.forEachIndexed { index, it ->
                 when (index) {
@@ -173,6 +197,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         fun `1 HierarchyNode within 'HIER' hierarchy`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "HIER" }!!
+
+            assertThat(hierarchy.allNodes().size).isEqualTo(1)
 
             hierarchy.rootNodes.forEachIndexed { index, it ->
                 when (index) {
@@ -216,6 +242,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         @Test
         fun `12 Members`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
+
+            assertThat(domain.members.size).isEqualTo(12)
 
             domain.members.forEachIndexed { index, it ->
                 when (index) {
@@ -297,6 +325,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         fun `3 Hierarchies`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
 
+            assertThat(domain.hierarchies.size).isEqualTo(3)
+
             domain.hierarchies.forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
@@ -343,6 +373,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         fun `5 HierarchyNodes within 'EDA-H1' hierarchy`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "EDA-H1" }!!
+
+            assertThat(hierarchy.allNodes().size).isEqualTo(5)
 
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {
@@ -407,6 +439,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         fun `5 HierarchyNodes (with operators) within 'EDA-H2' hierarchy`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "EDA-H2" }!!
+
+            assertThat(hierarchy.allNodes().size).isEqualTo(5)
 
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {

@@ -13,6 +13,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDimensions
     @Test
     fun `4 Explicit Dimensions`() {
         val dpmDictionary = performMappingFromIntegrationFixture()
+        assertThat(dpmDictionary.explicitDimensions.size).isEqualTo(4)
 
         dpmDictionary.explicitDimensions.forEachIndexed { index, it ->
             when (index) {

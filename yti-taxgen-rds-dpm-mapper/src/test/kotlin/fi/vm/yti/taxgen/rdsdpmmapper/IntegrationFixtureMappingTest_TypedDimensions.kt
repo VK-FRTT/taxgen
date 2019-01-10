@@ -14,6 +14,8 @@ internal class IntegrationFixtureMappingTest_TypedDimensions
     fun `2 Typed Dimensions`() {
         val dpmDictionary = performMappingFromIntegrationFixture()
 
+        assertThat(dpmDictionary.typedDimensions.size).isEqualTo(2)
+
         dpmDictionary.typedDimensions.forEachIndexed { index, it ->
             when (index) {
                 0 -> {
