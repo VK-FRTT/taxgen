@@ -33,6 +33,8 @@ interface DpmElement : Validatable {
         diagnosticLabel = concept.diagnosticLabel()
     )
 
+    fun code(): String = ""
+
     fun validationContextInfo(): ValidationContextInfo {
         return ValidationContextInfo(
             validatableType = typeName(this::class),

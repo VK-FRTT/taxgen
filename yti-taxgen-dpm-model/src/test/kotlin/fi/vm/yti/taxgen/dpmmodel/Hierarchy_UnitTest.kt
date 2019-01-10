@@ -74,16 +74,16 @@ internal class Hierarchy_UnitTest :
         fun `rootNodes should have unique URIs {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
-                    hierarchyNode("hn_1", refTo<Member>("m_1")),
-                    hierarchyNode("hn_2", refTo<Member>("m_2")),
-                    hierarchyNode("hn_2", refTo<Member>("m_3")),
-                    hierarchyNode("hn_4", refTo<Member>("m_4"))
+                    hierarchyNode("hn_1", memberRef("m_1")),
+                    hierarchyNode("hn_2", memberRef("m_2")),
+                    hierarchyNode("hn_2", memberRef("m_3")),
+                    hierarchyNode("hn_4", memberRef("m_4"))
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hn_2_uri'")
+                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hierarchy_node_hn_2_uri'")
         }
 
         @Test
@@ -93,51 +93,51 @@ internal class Hierarchy_UnitTest :
 
                     hierarchyNode(
                         "hn_1",
-                        refTo<Member>("m_1")
+                        memberRef("m_1")
                     ),
 
                     hierarchyNode(
                         "hn_2",
-                        refTo<Member>("m_2"),
+                        memberRef("m_2"),
 
                         hierarchyNode(
                             "hn_3",
-                            refTo<Member>("m_3"),
+                            memberRef("m_3"),
 
                             hierarchyNode(
                                 "hn_4",
-                                refTo<Member>("m_4")
+                                memberRef("m_4")
                             )
                         )
                     ),
 
                     hierarchyNode(
                         "hn_4",
-                        refTo<Member>("m_5")
+                        memberRef("m_5")
                     )
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hn_4_uri'")
+                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hierarchy_node_hn_4_uri'")
         }
 
         @Test
         fun `rootNodes should have unique memberRefs {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
-                    hierarchyNode("hn_1", refTo<Member>("m_1")),
-                    hierarchyNode("hn_2", refTo<Member>("m_2")),
-                    hierarchyNode("hn_3", refTo<Member>("m_2")),
-                    hierarchyNode("hn_4", refTo<Member>("m_4"))
+                    hierarchyNode("hn_1", memberRef("m_1")),
+                    hierarchyNode("hn_2", memberRef("m_2")),
+                    hierarchyNode("hn_3", memberRef("m_2")),
+                    hierarchyNode("hn_4", memberRef("m_4"))
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate memberRef.uri value 'm_2_uri'"
+                    "Hierarchy.rootNodes: duplicate memberRef.uri value 'member_m_2_uri'"
                 )
         }
 
@@ -148,27 +148,27 @@ internal class Hierarchy_UnitTest :
 
                     hierarchyNode(
                         "hn_1",
-                        refTo<Member>("m_1")
+                        memberRef("m_1")
                     ),
 
                     hierarchyNode(
                         "hn_2",
-                        refTo<Member>("m_2"),
+                        memberRef("m_2"),
 
                         hierarchyNode(
                             "hn_3",
-                            refTo<Member>("m_3"),
+                            memberRef("m_3"),
 
                             hierarchyNode(
                                 "hn_4",
-                                refTo<Member>("m_4")
+                                memberRef("m_4")
                             )
                         )
                     ),
 
                     hierarchyNode(
                         "hn_5",
-                        refTo<Member>("m_4")
+                        memberRef("m_4")
                     )
                 )
             )
@@ -176,7 +176,7 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate memberRef.uri value 'm_4_uri'"
+                    "Hierarchy.rootNodes: duplicate memberRef.uri value 'member_m_4_uri'"
                 )
         }
     }

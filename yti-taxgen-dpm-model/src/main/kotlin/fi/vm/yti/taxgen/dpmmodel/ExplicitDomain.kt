@@ -68,18 +68,17 @@ data class ExplicitDomain(
                 val domainMemberRefs = members.map { it.ref() }.toSet()
 
                 hierarchies.forEach { hierarchy ->
-                    hierarchy
-                        .allNodes()
-                        .toSet()
-                        .filterNot { domainMemberRefs.contains(it.memberRef) }
-                        .forEach { node ->
+                    hierarchy.allNodes().forEach { node ->
+                        if (!domainMemberRefs.contains(node.memberRef)){
                             messages.add(
-                                "DPM Hierarchy contains to DPM Member, which is not part of the DPM Domain. " +
-                                    "${node.memberRef.diagnosticTag()} in ${node.ref().diagnosticTag()} at ${hierarchy.ref().diagnosticTag()}"
+                                "DPM HierarchyNode ${node.uri} refers to DPM Member ${node.memberRef.uri} which is not part of the containing DPM ExplicitDomain."
                             )
                         }
+                    }
                 }
             }
         )
     }
+
+    override fun code(): String = domainCode
 }

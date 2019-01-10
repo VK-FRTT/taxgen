@@ -7,7 +7,7 @@ data class TypedDimension(
     override val uri: String,
     override val concept: Concept,
     val dimensionCode: String,
-    val referencedDomainCode: String //TODO - validate ref points to TypedDomain?
+    val referencedDomainCode: String
 ) : DpmElement {
 
     override fun validate(validationResults: ValidationResults) {
@@ -22,4 +22,6 @@ data class TypedDimension(
             maxLength = 50
         )
     }
+
+    override fun code(): String = dimensionCode
 }

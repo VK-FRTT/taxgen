@@ -10,7 +10,7 @@ data class HierarchyNode(
     val abstract: Boolean,
     val comparisonOperator: String?,
     val unaryOperator: String?,
-    val memberRef: DpmElementRef,
+    val memberRef: DpmElementRef, //Plain Member.memberCode can't be used in binding, as there can be duplicate memberCodes
     val childNodes: List<HierarchyNode>
 ) : DpmElement {
 

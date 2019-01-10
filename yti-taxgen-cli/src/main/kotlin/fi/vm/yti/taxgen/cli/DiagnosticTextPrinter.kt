@@ -48,7 +48,7 @@ class DiagnosticTextPrinter(
         validationResults: List<ValidationResultInfo>
     ) {
         validationResults.forEach {
-            message(Severity.ERROR, "${validationContextInfo.validatableType} (${validationContextInfo.validatableUri}) ${it.propertyName} ${it.message}")
+            message(Severity.ERROR, "${validationContextInfo.validatableType} (${validationContextInfo.validatableUri}) => ${it.propertyName}: ${it.message}")
         }
     }
 

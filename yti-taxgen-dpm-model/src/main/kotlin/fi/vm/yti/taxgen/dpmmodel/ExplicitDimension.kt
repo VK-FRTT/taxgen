@@ -7,7 +7,7 @@ data class ExplicitDimension(
     override val uri: String,
     override val concept: Concept,
     val dimensionCode: String,
-    val referencedDomainCode: String //TODO - validate ref points to ExplicitDomain?
+    val referencedDomainCode: String
 ) : DpmElement {
 
     override fun validate(validationResults: ValidationResults) {
@@ -22,4 +22,6 @@ data class ExplicitDimension(
             maxLength = 50
         )
     }
+
+    override fun code(): String = dimensionCode
 }

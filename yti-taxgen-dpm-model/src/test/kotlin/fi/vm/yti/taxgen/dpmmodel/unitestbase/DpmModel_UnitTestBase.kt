@@ -74,8 +74,8 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun explicitDomain(baseId: String): ExplicitDomain {
         return ExplicitDomain(
-            uri = "${baseId}_uri",
-            domainCode = "${baseId}_code",
+            uri = "exp_dom_${baseId}_uri",
+            domainCode = "exp_dom_${baseId}_code",
             concept = Factory.instantiate(),
             members = listOf(Factory.instantiate()),
             hierarchies = listOf()
@@ -84,17 +84,20 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun member(baseId: String, default: Boolean): Member {
         return Member(
-            uri = "${baseId}_uri",
-            memberCode = "${baseId}_code",
+            uri = "member_${baseId}_uri",
+            memberCode = "member_${baseId}_code",
             concept = Factory.instantiate(),
             defaultMember = default
         )
     }
 
+    protected fun memberRef(baseId: String) =
+        dpmElementRef<Member>("member_${baseId}_uri", "member_${baseId}_diagnostic_label")
+
     protected fun hierarchy(baseId: String, vararg roots: HierarchyNode): Hierarchy {
         return Hierarchy(
-            uri = "${baseId}_uri",
-            hierarchyCode = "${baseId}_code",
+            uri = "hierarchy_${baseId}_uri",
+            hierarchyCode = "hierarchy_${baseId}_code",
             concept = Factory.instantiate(),
             rootNodes = roots.toList()
         )
@@ -106,7 +109,7 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         vararg children: HierarchyNode
     ): HierarchyNode {
         return HierarchyNode(
-            uri = "${baseId}_uri",
+            uri = "hierarchy_node_${baseId}_uri",
             concept = Factory.instantiate(),
             abstract = false,
             comparisonOperator = "=",
@@ -118,8 +121,8 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun typedDomain(baseId: String): TypedDomain {
         return TypedDomain(
-            uri = "${baseId}_uri",
-            domainCode = "${baseId}_code",
+            uri = "typ_dom_${baseId}_uri",
+            domainCode = "typ_dom_${baseId}_code",
             concept = Factory.instantiate(),
             dataType = "String"
         )
@@ -127,8 +130,8 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun explicitDimension(baseId: String, referencedDomainCode: String): ExplicitDimension {
         return ExplicitDimension(
-            uri = "${baseId}_uri",
-            dimensionCode = "${baseId}_code",
+            uri = "exp_dim_${baseId}_uri",
+            dimensionCode = "exp_dim_${baseId}_code",
             concept = Factory.instantiate(),
             referencedDomainCode = referencedDomainCode
         )
@@ -136,13 +139,10 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun typedDimension(baseId: String, referencedDomainCode: String): TypedDimension {
         return TypedDimension(
-            uri = "${baseId}_uri",
-            dimensionCode = "${baseId}_code",
+            uri = "typ_dim_${baseId}_uri",
+            dimensionCode = "typ_dim_${baseId}_code",
             concept = Factory.instantiate(),
             referencedDomainCode = referencedDomainCode
         )
     }
-
-    inline fun <reified T : DpmElement> refTo(baseId: String) =
-        dpmElementRef<T>("${baseId}_uri", "${baseId}_diagnostic_label")
 }

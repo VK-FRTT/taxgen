@@ -64,11 +64,11 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = ExplicitDomain::class,
             attributes = mapOf(
-                "uri" to "exp_dom_1_uri",
+                "uri" to "exp_dom_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "exp_dom",
                 "members" to dynamicAttribute { listOf(it.instantiate<Member>()) },
-                "hierarchies" to dynamicAttribute { listOf<Hierarchy>() }
+                "hierarchies" to dynamicAttribute { listOf(it.instantiate<Hierarchy>()) }
             )
         )
     )
@@ -77,7 +77,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Member::class,
             attributes = mapOf(
-                "uri" to "mem_1_uri",
+                "uri" to "mem_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCode" to "exp_mc",
                 "defaultMember" to true
@@ -89,7 +89,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Hierarchy::class,
             attributes = mapOf(
-                "uri" to "hie_1_uri",
+                "uri" to "hie_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "hierarchyCode" to "hier_code",
                 "rootNodes" to listOf<HierarchyNode>()
@@ -101,7 +101,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = HierarchyNode::class,
             attributes = mapOf(
-                "uri" to "hie_nod_1_uri",
+                "uri" to "hie_nod_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "abstract" to false,
                 "comparisonOperator" to "=",
@@ -116,7 +116,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = TypedDomain::class,
             attributes = mapOf(
-                "uri" to "typ_dom_1_uri",
+                "uri" to "typ_dom_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "domainCode" to "typ_dom",
                 "dataType" to "String"
@@ -128,7 +128,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = ExplicitDimension::class,
             attributes = mapOf(
-                "uri" to "exp_dim_1_uri",
+                "uri" to "exp_dim_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "dimensionCode" to "exp_dim",
                 "referencedDomainCode" to "exp_dom"
@@ -140,7 +140,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = TypedDimension::class,
             attributes = mapOf(
-                "uri" to "typ_dim_1_uri",
+                "uri" to "typ_dim_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "dimensionCode" to "typ_dim",
                 "referencedDomainCode" to "typ_dom"
@@ -152,7 +152,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = Metric::class,
             attributes = mapOf(
-                "uri" to "met_1_uri",
+                "uri" to "met_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "memberCodeNumber" to "1",
                 "dataType" to "String",
@@ -169,11 +169,11 @@ fun dpmTestData(): Set<DataDefinition> {
             kClass = DpmDictionary::class,
             attributes = mapOf(
                 "owner" to dynamicAttribute { it.instantiate<Owner>() },
-                "metrics" to dynamicAttribute { listOf(it.instantiate<Metric>()) },
-                "explicitDomains" to dynamicAttribute { listOf(it.instantiate<ExplicitDomain>()) },
-                "typedDomains" to dynamicAttribute { listOf(it.instantiate<TypedDomain>()) },
-                "explicitDimensions" to dynamicAttribute { listOf(it.instantiate<ExplicitDimension>()) },
-                "typedDimensions" to dynamicAttribute { listOf(it.instantiate<TypedDimension>()) }
+                "metrics" to emptyList<Metric>(),
+                "explicitDomains" to emptyList<ExplicitDomain>(),
+                "typedDomains" to emptyList<TypedDomain>(),
+                "explicitDimensions" to emptyList<ExplicitDimension>(),
+                "typedDimensions" to emptyList<TypedDimension>()
             )
         )
     )

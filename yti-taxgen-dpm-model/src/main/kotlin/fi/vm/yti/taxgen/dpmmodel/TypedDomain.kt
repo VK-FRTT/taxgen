@@ -45,4 +45,6 @@ data class TypedDomain(
             message = { "unsupported data type '$dataType'" }
         )
     }
+
+    override fun code(): String = domainCode
 }
