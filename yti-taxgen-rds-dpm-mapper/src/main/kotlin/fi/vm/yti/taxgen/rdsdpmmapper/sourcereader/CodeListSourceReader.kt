@@ -41,7 +41,6 @@ internal class CodeListSourceReader(
 
     fun eachSubCodeListSource(action: (CodeListSourceReader) -> Unit) {
         codeListSource.eachSubCodeListSource { subCodeListSource ->
-
             val reader = CodeListSourceReader(subCodeListSource, diagnostic)
 
             diagnostic.updateCurrentContextDetails(
