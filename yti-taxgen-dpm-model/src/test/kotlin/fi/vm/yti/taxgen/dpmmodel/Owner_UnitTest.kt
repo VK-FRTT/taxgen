@@ -61,9 +61,9 @@ internal class Owner_UnitTest :
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
                 if (property.name == "languageCodes") {
-                    Language.languages().take(length).map { it.iso6391Code }
+                    mapOf("languageCodes" to Language.languages().take(length).map { it.iso6391Code })
                 } else {
-                    null
+                    emptyMap()
                 }
             }
         )

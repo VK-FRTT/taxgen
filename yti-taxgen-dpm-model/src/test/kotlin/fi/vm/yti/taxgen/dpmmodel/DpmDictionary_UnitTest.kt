@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel
 
+import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
@@ -52,40 +53,30 @@ internal class DpmDictionary_UnitTest :
             validationType = validationType,
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
+
                 when (property.name) {
                     "metrics" ->
-                        List(length) { index ->
-                            metric("$index", "$index")
-                        }
+                        mapOf("metrics" to List(length) { index -> metric("$index", "$index") })
 
                     "explicitDomains" ->
-                        List(length) { index ->
-                            explicitDomain("$index")
-                        }
+                        mapOf("explicitDomains" to List(length) { index -> explicitDomain("$index") })
 
                     "typedDomains" ->
-                        List(length) { index ->
-                            typedDomain("$index")
-                        }
+                        mapOf("typedDomains" to List(length) { index -> typedDomain("$index") })
 
                     "explicitDimensions" ->
-                        List(length) { index ->
-                            explicitDimension(
-                                "$index",
-                                "exp_dom_$index"
-                            )
-                        }
+                        mapOf(
+                            "explicitDimensions" to List(length) { index -> explicitDimension("$index", "exp_dom") },
+                            "explicitDomains" to listOf(Factory.instantiate<ExplicitDomain>())
+                        )
 
                     "typedDimensions" ->
-                        List(length) { index ->
-                            typedDimension(
-                                "$index",
-                                "typ_dom_$index"
-                            )
-                        }
-
+                        mapOf(
+                            "typedDimensions" to List(length) { index -> typedDimension("$index", "typ_dom") },
+                            "typedDomains" to listOf(Factory.instantiate<TypedDomain>())
+                        )
                     else ->
-                        null
+                        emptyMap()
                 }
             }
         )

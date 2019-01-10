@@ -15,37 +15,40 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     propertyName: String,
     validationType: String,
     expectedLimit: Int,
-    customValueBuilder: ((KProperty1<*, *>, Int) -> (Any?))? = null
+    customValueBuilder: ((KProperty1<*, *>, Int) -> (Map<String, Any>))? = null
 ) {
-    val validValue: Any
-    val invalidValue: Any
+    val validOverrideAttributes: Map<String, Any>
+    val invalidOverrideAttributes: Map<String, Any>
     val messageComposer: (String) -> String
 
     when (validationType) {
         "minLength" -> {
-            validValue = stringValueForProperty(propertyName, expectedLimit)
-            invalidValue = stringValueForProperty(propertyName, expectedLimit - 1)
+            validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
+            invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit - 1)
             messageComposer =
                 { className -> "$className.$propertyName: is too short (minimum $expectedLimit characters)" }
         }
 
         "minColLength" -> {
-            validValue = customValueForProperty(propertyName, expectedLimit, customValueBuilder)
-            invalidValue = customValueForProperty(propertyName, expectedLimit - 1, customValueBuilder)
+            validOverrideAttributes = customOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+            invalidOverrideAttributes =
+                customOverrideAttributesForProp(propertyName, expectedLimit - 1, customValueBuilder)
             messageComposer =
                 { className -> "$className.$propertyName: is too short (minimum $expectedLimit elements)" }
         }
 
         "maxLength" -> {
-            validValue = stringValueForProperty<T>(propertyName, expectedLimit)
-            invalidValue = stringValueForProperty<T>(propertyName, expectedLimit + 1)
+            validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
+            invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit + 1)
             messageComposer =
                 { className -> "$className.$propertyName: is too long (maximum $expectedLimit characters)" }
         }
 
         "maxColLength" -> {
-            validValue = customValueForProperty<T>(propertyName, expectedLimit, customValueBuilder)
-            invalidValue = customValueForProperty<T>(propertyName, expectedLimit + 1, customValueBuilder)
+            validOverrideAttributes =
+                customOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+            invalidOverrideAttributes =
+                customOverrideAttributesForProp(propertyName, expectedLimit + 1, customValueBuilder)
             messageComposer = { className -> "$className.$propertyName: is too long (maximum $expectedLimit elements)" }
         }
 
@@ -53,7 +56,7 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     }
 
     //Valid value
-    val validAttributes = Factory.Builder.attributesFor(kClass, mapOf(propertyName to validValue))
+    val validAttributes = Factory.Builder.attributesFor(kClass, validOverrideAttributes)
     val valid = Factory.Builder.instantiate(kClass, validAttributes) as Validatable
 
     val validCollector = ValidationCollector()
@@ -61,7 +64,7 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     assertThat(validCollector.compileResultsToSimpleStrings()).isEmpty()
 
     //Invalid value
-    val invalidAttributes = Factory.Builder.attributesFor(kClass, mapOf(propertyName to invalidValue))
+    val invalidAttributes = Factory.Builder.attributesFor(kClass, invalidOverrideAttributes)
     val invalid = Factory.Builder.instantiate(kClass, invalidAttributes) as Validatable
 
     val invalidCollector = ValidationCollector()
@@ -71,29 +74,29 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     assertThat(invalidCollector.compileResultsToSimpleStrings()).containsOnlyOnce(message)
 }
 
-private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringValueForProperty(
+private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringOverrideAtributeForProp(
     propertyName: String,
     length: Int
-): Any {
+): Map<String, Any> {
     val property = kClass.memberProperties.find { it.name == propertyName }
         ?: throw IllegalArgumentException("No property found for name: $propertyName from class: ${kClass.simpleName}")
 
     if (property.returnType.isSubtypeOf(String::class.createType())) {
-        return "a".repeat(length)
+        return mapOf(propertyName to "a".repeat(length))
     }
 
     if (property.returnType.isSupertypeOf(emptyList<String>()::class.createType())) {
-        return List(length) { index -> index.toString() }
+        return mapOf(propertyName to List(length) { index -> index.toString() })
     }
 
-    thisShouldNeverHappen("PropertyLengthValidationTemplate can not build value for '$propertyName' property with length $length")
+    thisShouldNeverHappen("Can not build value for '$propertyName' property with length $length")
 }
 
-private fun <T : Validatable> DpmModel_UnitTestBase<T>.customValueForProperty(
+private fun <T : Validatable> DpmModel_UnitTestBase<T>.customOverrideAttributesForProp(
     propertyName: String,
     length: Int,
-    customValueBuilder: ((KProperty1<T, *>, Int) -> (Any?))?
-): Any {
+    customValueBuilder: ((KProperty1<T, *>, Int) -> (Map<String, Any>))?
+): Map<String, Any> {
     val property = kClass.memberProperties.find { it.name == propertyName }
         ?: throw IllegalArgumentException("No property found for name: $propertyName from class: ${kClass.simpleName}")
 
@@ -101,10 +104,11 @@ private fun <T : Validatable> DpmModel_UnitTestBase<T>.customValueForProperty(
         thisShouldNeverHappen("CustomValueBuilder not provided for '$propertyName' property")
     }
 
-    val value = customValueBuilder(property, length)
-    if (value != null) {
-        return value
+    val attributes = customValueBuilder(property, length)
+
+    if (!attributes.containsKey(propertyName)) {
+        thisShouldNeverHappen("CustomValueBuilder did not build value for '$propertyName' property with length $length")
     }
 
-    thisShouldNeverHappen("CustomValueBuilder did not build value for '$propertyName' property with length $length")
+    return attributes
 }

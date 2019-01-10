@@ -52,9 +52,9 @@ internal class ExplicitDomain_UnitTest :
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
                 if (property.name == "members") {
-                    List(length) { index -> member("$index", (index == 0)) }
+                    mapOf("members" to List(length) { index -> member("$index", (index == 0)) })
                 } else {
-                    null
+                    emptyMap()
                 }
             }
         )
