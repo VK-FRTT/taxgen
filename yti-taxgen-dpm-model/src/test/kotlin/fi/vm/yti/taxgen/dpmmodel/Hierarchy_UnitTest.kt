@@ -36,7 +36,7 @@ internal class Hierarchy_UnitTest :
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
         "uri,                    minLength,      1",
-        "uri,                    maxLength,      128"
+        "uri,                    maxLength,      500"
     )
     fun testPropertyLengthValidation(
         propertyName: String,

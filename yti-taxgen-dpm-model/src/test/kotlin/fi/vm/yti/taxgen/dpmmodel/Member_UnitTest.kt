@@ -36,8 +36,8 @@ internal class Member_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "uri,                    minLength,      1",
-        "uri,                    maxLength,      128",
+        "uri,                   minLength,      1",
+        "uri,                   maxLength,      500",
         "memberCode,            minLength,      1",
         "memberCode,            maxLength,      50"
     )

@@ -21,7 +21,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                 0 -> {
                     assertThat(it.memberCodeNumber).isEqualTo("1")
 
-                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-test-fixtures/metrics-2018-1/code/1")
+                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/1")
                     assertThat(it.type).isEqualTo("Metric")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")

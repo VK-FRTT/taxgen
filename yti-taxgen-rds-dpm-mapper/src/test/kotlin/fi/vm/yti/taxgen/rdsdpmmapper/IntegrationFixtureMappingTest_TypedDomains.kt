@@ -21,7 +21,7 @@ internal class IntegrationFixtureMappingTest_TypedDomains
                 0 -> {
                     assertThat(it.domainCode).isEqualTo("DOMT")
 
-                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1/code/DOMT")
+                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/DOMT")
                     assertThat(it.type).isEqualTo("TypedDomain")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")

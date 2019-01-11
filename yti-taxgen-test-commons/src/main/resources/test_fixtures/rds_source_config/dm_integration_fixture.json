@@ -15,19 +15,19 @@
         "defaultLanguage": "en"
       },
       "metrics": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/metrics-2018-1?env=dev"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1?env=dev"
       },
       "explicitDomainsAndHierarchies": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1?env=dev"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1?env=dev"
       },
       "explicitDimensions": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-dims-2018-1?env=dev"
-      },
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-dims-2018-1?env=dev"
+    },
       "typedDomains": {
-      	"uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-doms-2018-1?env=dev"
+      	"uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1?env=dev"
       },
       "typedDimensions": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-dims-2018-1?env=dev"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1?env=dev"
       }
     }
   ]

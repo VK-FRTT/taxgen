@@ -21,7 +21,7 @@ internal class IntegrationFixtureMappingTest_TypedDimensions
                 0 -> {
                     assertThat(it.dimensionCode).isEqualTo("TDB-D1")
 
-                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-test-fixtures/typ-dims-2018-1/code/TDB-D1")
+                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/code/TDB-D1")
                     assertThat(it.type).isEqualTo("TypedDimension")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
+import fi.vm.yti.taxgen.commons.ext.jackson.arrayOrNullAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextAt
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
@@ -96,7 +97,7 @@ internal class CodeListContentAddressResolver(
     }
 
     private fun resolveExtensionContentAddress(codeListJson: JsonNode): List<ExtensionAddress> {
-        return codeListJson.arrayAt("/extensions", diagnostic).mapNotNull { extensionNode ->
+        return codeListJson.arrayOrNullAt("/extensions")?.mapNotNull { extensionNode ->
 
             val propertyTypeUri = extensionNode.nonBlankTextAt("/propertyType/uri", diagnostic)
 
@@ -105,7 +106,7 @@ internal class CodeListContentAddressResolver(
             } else {
                 null
             }
-        }
+        } ?: emptyList()
     }
 
     private fun extensionAddressFromExtensionNode(extensionNode: JsonNode): ExtensionAddress {

@@ -1,25 +1,20 @@
 {
-  "id": "54fce058-b41e-40d1-b714-daf97821daf1",
-  "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/extension/HIER",
-  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER",
-  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER/members/",
-  "members": [
-    {
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1/extension/HIER/member/d92580a0-579b-4f80-803c-9ee17ee2ac6a",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1/extensions/HIER/members/d92580a0-579b-4f80-803c-9ee17ee2ac6a"
-    }
-  ],
-  "codeValue": "HIER",
+  "id": "547ae846-b7c4-4b8d-a165-a3cf807e9db1",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/EDA-H1",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1/members/",
+  "members": [],
+  "codeValue": "EDA-H1",
   "status": "DRAFT",
-  "startDate": "2018-10-31",
-  "created": "2019-01-04T12:01:21.893Z",
-  "modified": "2019-01-04T12:01:21.893Z",
+  "startDate": "2018-12-31",
+  "created": "2019-01-11T09:26:17.355Z",
+  "modified": "2019-01-11T09:26:17.355Z",
   "prefLabel": {
-    "fi": "Hierarchy (fi, label)"
+    "fi": "DOME hierarchy duplicating EDA code"
   },
   "parentCodeScheme": {
-    "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1",
-    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1"
+    "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
   },
   "codeSchemes": [],
   "propertyType": {

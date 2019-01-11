@@ -8,17 +8,17 @@
   },
   "results": [
     {
-      "id": "9e6d9030-e213-4f1d-a777-7a69bbadd2b4",
+      "id": "b6034beb-48b1-476c-b389-4466a550f570",
       "codeValue": "DOME",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/DOME",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/DOME",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/DOME",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/DOME",
       "status": "DRAFT",
       "order": 1,
       "hierarchyLevel": 1,
       "startDate": "2018-12-31",
       "endDate": "2019-05-30",
-      "created": "2019-01-04T12:10:51.475Z",
-      "modified": "2019-01-04T12:10:51.475Z",
+      "created": "2019-01-11T09:33:29.189Z",
+      "modified": "2019-01-11T09:33:29.189Z",
       "prefLabel": {
         "fi": "Explicit domain (fi, label)"
       },
@@ -27,225 +27,225 @@
       },
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/DOME/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/DOME/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/DOME-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/DOME-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
       }
     },
     {
-      "id": "a6065abc-5bd0-49d9-a5b8-70f68d7b5708",
+      "id": "a8ab2568-627c-4f66-893f-5f1bf29a8fdb",
       "codeValue": "EDA",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/EDA",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA",
       "status": "DRAFT",
       "order": 2,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-04T12:10:51.482Z",
-      "modified": "2019-01-04T12:10:51.482Z",
+      "created": "2019-01-11T09:33:29.201Z",
+      "modified": "2019-01-11T09:33:29.201Z",
       "prefLabel": {
         "fi": "Explicit domain A"
       },
       "description": {},
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA-2018-1"
       }
     },
     {
-      "id": "c919726b-6210-47eb-9a0d-c86f3b3a4232",
+      "id": "0d194d52-5f80-4f79-ab49-892ba58e2e57",
       "codeValue": "EDA1",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/EDA1",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA1",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA1",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA1",
       "status": "DRAFT",
       "order": 3,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-04T12:10:51.487Z",
-      "modified": "2019-01-04T12:10:51.487Z",
+      "created": "2019-01-11T09:33:29.209Z",
+      "modified": "2019-01-11T09:33:29.209Z",
       "prefLabel": {
         "fi": "Explicit domain A1"
       },
       "description": {},
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA1/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA1/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA1-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA1-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA1-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA1-2018-1"
       }
     },
     {
-      "id": "4fcf48a5-b904-4a41-8fec-c66d56187308",
+      "id": "23319de9-7bd4-45b2-860d-860585e64188",
       "codeValue": "EDA9",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/EDA9",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA9",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA9",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA9",
       "status": "DRAFT",
       "order": 4,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-04T12:10:51.492Z",
-      "modified": "2019-01-04T12:10:51.492Z",
+      "created": "2019-01-11T09:33:29.216Z",
+      "modified": "2019-01-11T09:33:29.216Z",
       "prefLabel": {
         "fi": "Explicit domain A9"
       },
       "description": {},
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA9/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA9/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA9-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA9-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA9-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA9-2018-1"
       }
     },
     {
-      "id": "773f04b3-ad7d-48ba-829b-9b70c916f6ab",
+      "id": "20aa51cd-f8e1-4411-abc1-52caa9ff6a6a",
       "codeValue": "EDA10",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/EDA10",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA10",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA10",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA10",
       "status": "DRAFT",
       "order": 5,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-04T12:10:51.496Z",
-      "modified": "2019-01-04T12:10:51.496Z",
+      "created": "2019-01-11T09:33:29.223Z",
+      "modified": "2019-01-11T09:33:29.223Z",
       "prefLabel": {
         "fi": "Explicit domain A10"
       },
       "description": {},
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA10/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA10/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA10-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA10-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA10-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA10-2018-1"
       }
     },
     {
-      "id": "67f70f36-4824-4c1b-9da6-9f55c26ffc8f",
+      "id": "dccb79a2-e7fe-4fb3-afa4-7ea33f1daef0",
       "codeValue": "EDA11",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/EDA11",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA11",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA11",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA11",
       "status": "DRAFT",
       "order": 6,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-04T12:10:51.501Z",
-      "modified": "2019-01-04T12:10:51.501Z",
+      "created": "2019-01-11T09:33:29.229Z",
+      "modified": "2019-01-11T09:33:29.229Z",
       "prefLabel": {
         "fi": "Explicit domain A11"
       },
       "description": {},
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA11/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA11/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA11-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA11-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA11-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA11-2018-1"
       }
     },
     {
-      "id": "3dc43d2a-17b0-49d3-a12e-5889f5621fd9",
+      "id": "53573e19-43f9-44a9-9645-9351cb3df12a",
       "codeValue": "EDA20",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/code/EDA20",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA20",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA20",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA20",
       "status": "DRAFT",
       "order": 7,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-04T12:10:51.506Z",
-      "modified": "2019-01-04T12:10:51.506Z",
+      "created": "2019-01-11T09:33:29.236Z",
+      "modified": "2019-01-11T09:33:29.236Z",
       "prefLabel": {
         "fi": "Explicit domain A20"
       },
       "description": {},
       "definition": {},
       "codeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1"
       },
       "externalReferences": [],
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/codes/EDA20/members/",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA20/members/",
       "members": [],
       "codeExtensions": [
         {
-          "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-doms-2018-1/extension/dpmExplicitDomain",
-          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
         }
       ],
       "subCodeScheme": {
-        "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA20-2018-1",
-        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA20-2018-1"
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA20-2018-1",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA20-2018-1"
       }
     }
   ]

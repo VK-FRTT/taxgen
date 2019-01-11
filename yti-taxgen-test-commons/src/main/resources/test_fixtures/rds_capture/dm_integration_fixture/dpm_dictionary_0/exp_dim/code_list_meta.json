@@ -1,14 +1,14 @@
 {
-  "id": "183031f5-9d06-4c40-b1d4-2e9aca9f4a37",
+  "id": "45754185-b964-4112-8fc4-f6d69a1fe881",
   "codeValue": "exp-dims-2018-1",
-  "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-dims-2018-1",
-  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-dims-2018-1",
-  "codesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-dims-2018-1/codes/",
-  "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-dims-2018-1/extensions/",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-dims-2018-1",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-dims-2018-1",
+  "codesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-dims-2018-1/codes/",
+  "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/",
   "extensions": [
     {
-      "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/exp-dims-2018-1/extension/dpmDimension",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/exp-dims-2018-1/extensions/dpmDimension"
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-dims-2018-1/extension/dpmDimension",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension"
     }
   ],
   "prefLabel": {
@@ -19,8 +19,8 @@
     "fi": "Lista Explicit Dimensioista."
   },
   "changeNote": {},
-  "created": "2019-01-04T12:10:26.821Z",
-  "modified": "2019-01-04T12:10:26.821Z",
+  "created": "2019-01-11T09:32:19.218Z",
+  "modified": "2019-01-11T09:33:05.676Z",
   "status": "DRAFT",
   "infoDomains": [
     {
@@ -47,6 +47,27 @@
     }
   ],
   "languageCodes": [
+    {
+      "id": "1cc15c8d-256e-4235-b1cc-071e5b750a08",
+      "codeValue": "en",
+      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
+      "status": "VALID",
+      "order": 668,
+      "hierarchyLevel": 1,
+      "created": "2018-09-04T06:44:31.349Z",
+      "modified": "2018-09-07T11:35:05.969Z",
+      "prefLabel": {
+        "fi": "englanti",
+        "sv": "engelska",
+        "en": "English"
+      },
+      "description": {},
+      "definition": {},
+      "shortName": "",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
+      "conceptUriInVocabularies": ""
+    },
     {
       "id": "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
       "codeValue": "fi",
@@ -88,30 +109,8 @@
       "shortName": "",
       "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv/members/",
       "conceptUriInVocabularies": ""
-    },
-    {
-      "id": "1cc15c8d-256e-4235-b1cc-071e5b750a08",
-      "codeValue": "en",
-      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
-      "status": "VALID",
-      "order": 668,
-      "hierarchyLevel": 1,
-      "created": "2018-09-04T06:44:31.349Z",
-      "modified": "2018-09-07T11:35:05.969Z",
-      "prefLabel": {
-        "fi": "englanti",
-        "sv": "engelska",
-        "en": "English"
-      },
-      "description": {},
-      "definition": {},
-      "shortName": "",
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
-      "conceptUriInVocabularies": ""
     }
   ],
-  "externalReferences": [],
   "variantsOfThisCodeScheme": [],
   "variantMothersOfThisCodeScheme": [],
   "allVersions": [],
@@ -121,7 +120,7 @@
     }
   ],
   "codeRegistry": {
-    "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures",
-    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures"
+    "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture"
   }
 }

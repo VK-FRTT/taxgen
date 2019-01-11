@@ -36,7 +36,7 @@ internal class TypedDimension_UnitTest :
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
         "uri,                   minLength,      1",
-        "uri,                   maxLength,      128",
+        "uri,                   maxLength,      500",
         "dimensionCode,         minLength,      2",
         "dimensionCode,         maxLength,      50",
         "referencedDomainCode,  minLength,      2",

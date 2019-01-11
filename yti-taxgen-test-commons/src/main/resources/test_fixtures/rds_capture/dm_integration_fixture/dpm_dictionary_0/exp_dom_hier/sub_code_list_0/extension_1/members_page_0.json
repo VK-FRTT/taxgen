@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 1,
+    "totalResults": 1
+  },
+  "results": [
+    {
+      "id": "45395986-ece0-4f2c-847f-3af8bbd0ba6b",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/45395986-ece0-4f2c-847f-3af8bbd0ba6b",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/45395986-ece0-4f2c-847f-3af8bbd0ba6b",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM"
+      },
+      "prefLabel": {
+        "fi": "Member (fi, label)"
+      },
+      "created": "2019-01-11T09:26:17.415Z",
+      "modified": "2019-01-11T09:26:17.415Z",
+      "order": 1,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER",
+        "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER"
+      }
+    }
+  ]
+}

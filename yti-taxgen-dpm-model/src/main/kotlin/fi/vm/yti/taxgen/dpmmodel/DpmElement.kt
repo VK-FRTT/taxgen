@@ -21,7 +21,7 @@ interface DpmElement : Validatable {
             instance = this,
             property = DpmElement::uri,
             minLength = 1,
-            maxLength = 128
+            maxLength = 500
         )
 
         concept.validate(validationResults)

@@ -1,10 +1,10 @@
 {
-  "id": "4c6460c0-be66-4674-99e5-c0840269980f",
+  "id": "42058b83-d1d7-4018-bd20-ea053d4f9aef",
   "codeValue": "EDA11-2018-1",
-  "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures/EDA11-2018-1",
-  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA11-2018-1",
-  "codesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA11-2018-1/codes/",
-  "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures/codeschemes/EDA11-2018-1/extensions/",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA11-2018-1",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA11-2018-1",
+  "codesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA11-2018-1/codes/",
+  "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA11-2018-1/extensions/",
   "extensions": [],
   "prefLabel": {
     "fi": "Explicit domain A11 2018-1"
@@ -12,8 +12,8 @@
   "definition": {},
   "description": {},
   "changeNote": {},
-  "created": "2019-01-04T12:08:40.426Z",
-  "modified": "2019-01-04T12:08:40.426Z",
+  "created": "2019-01-11T09:29:54.038Z",
+  "modified": "2019-01-11T09:30:37.318Z",
   "status": "DRAFT",
   "infoDomains": [
     {
@@ -104,7 +104,6 @@
       "conceptUriInVocabularies": ""
     }
   ],
-  "externalReferences": [],
   "variantsOfThisCodeScheme": [],
   "variantMothersOfThisCodeScheme": [],
   "allVersions": [],
@@ -114,7 +113,7 @@
     }
   ],
   "codeRegistry": {
-    "uri": "http://uri.suomi.fi/codelist/taxgen-test-fixtures",
-    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-test-fixtures"
+    "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture"
   }
 }
