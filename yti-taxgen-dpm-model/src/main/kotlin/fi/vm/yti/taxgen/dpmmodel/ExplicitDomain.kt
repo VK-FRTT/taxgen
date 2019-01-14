@@ -69,7 +69,7 @@ data class ExplicitDomain(
 
                 hierarchies.forEach { hierarchy ->
                     hierarchy.allNodes().forEach { node ->
-                        if (!domainMemberUris.contains(node.referencedMemberUri)){
+                        if (!domainMemberUris.contains(node.referencedMemberUri)) {
                             messages.add(
                                 "DPM HierarchyNode ${node.uri} refers to DPM Member ${node.referencedMemberUri} which is not part of the containing DPM ExplicitDomain."
                             )

@@ -24,12 +24,12 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from YCL source capture`() {
+    fun `Should produce database from DPM source capture`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -44,7 +44,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
             "Owner Name In DB",
-            "ComprehensiveName"
+            "DM Integration Fixture"
         )
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
@@ -59,7 +59,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "$targetDbPath",
             "--force-overwrite",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -81,7 +81,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--compile-dpm-db",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -104,7 +104,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -127,7 +127,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "${tempFolder.path()}",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -210,9 +210,9 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-folder",
-            "$yclSourceCapturePath",
+            "$dpmSourceCapturePath",
             "--source-config",
-            "$yclSourceConfigPath"
+            "$dpmSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -247,21 +247,21 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from YCL source config`() {
+    fun `Should produce database from DPM source config`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            "$yclSourceConfigPath"
+            "$dpmSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
             "Compiling DPM database",
-            "Processing YCL sources: YCL Source data to DPM model",
-            "YCL Sources: YTI Reference Data service",
-            "Configuration file: (codelist_comprehensive.json)",
+            "Processing RDS sources: RDS source data to DPM model",
+            "DPM Sources: Reference Data service",
+            "Configuration file: (dm_integration_fixture.json)",
             "Configuration file: OK",
             "Compiling DPM database: OK"
         )
@@ -272,7 +272,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
             "Owner Name In DB",
-            "ComprehensiveName"
+            "DM Integration Fixture"
         )
 
         assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
@@ -284,16 +284,15 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(RDS_SOURCE_CONFIG, "ycl_source_config_broken_json.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "broken_source_config_json.json")
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
             "Compiling DPM database",
-            "Processing YCL sources: YCL Source data to DPM model",
-            "YCL Sources: YTI Reference Data service",
-            "Configuration file: (ycl_source_config_broken_json.json)",
+            "DPM Sources: Reference Data service",
+            "Configuration file: (broken_source_config_json.json)",
             "FATAL: Processing JSON content failed: "
         )
 
@@ -323,12 +322,12 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when source config links to non existing YCL code list`() {
+    fun `Should report error when source config links to non existing DPM code list`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_unknown_codelist.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -336,7 +335,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         assertThat(outText).containsSubsequence(
             "DPM dictionary", "codelist_uri_unknown_codelist",
             "Codelist",
-            "URI resolution",
+            "Content URLs",
             "FATAL: JSON content fetch failed: HTTP 404 (Not Found)"
         )
 
@@ -346,12 +345,12 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when source config links to unresolvable YCL host name`() {
+    fun `Should report error when source config links to unresolvable DPM host name`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_unresolvable_host.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -359,7 +358,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         assertThat(outText).containsSubsequence(
             "DPM dictionary", "codelist_uri_unresolvable_host",
             "Codelist",
-            "URI resolution",
+            "Content URLs",
             "FATAL: Could not determine the server IP address"
         )
 
@@ -369,12 +368,12 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when source config has URI with broken protocol`() {
+    fun `Should report error when source config has URI with bad protocol`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_bad_protocol.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -382,7 +381,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         assertThat(outText).containsSubsequence(
             "DPM dictionary", "codelist_uri_bad_protocol",
             "Codelist",
-            "URI resolution",
+            "Content URLs",
             "FATAL: Malformed URI"
         )
 
@@ -392,12 +391,12 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when source config links to non responsive YCL host IP`() {
+    fun `Should report error when source config URI points to non-responsive host IP`() {
         val args = arrayOf(
             "--compile-dpm-db",
             "$targetDbPath",
             "--source-config",
-            tempTestFixture(RDS_SOURCE_CONFIG, "codelist_uri_non_responsive_host_ip.json")
+            tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json")
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -405,7 +404,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         assertThat(outText).containsSubsequence(
             "DPM dictionary", "codelist_uri_non_responsive_host_ip",
             "Codelist",
-            "URI resolution",
+            "Content URLs",
             "FATAL: Could not connect the server"
         )
 

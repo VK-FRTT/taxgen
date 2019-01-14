@@ -33,8 +33,8 @@ internal class TaxgenCli_Common_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--compile-dpm-db",
             "${tempFolder.resolve("output_dpm.db")}",
-            "--capture-ycl-sources-to-folder",
-            "${tempFolder.resolve("output_ycl_capture")}"
+            "--capture-dpm-sources-to-folder",
+            "${tempFolder.resolve("output_capture")}"
         )
 
         val (status, outText, errText) = executeCli(args)

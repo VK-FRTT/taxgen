@@ -15,8 +15,8 @@ import java.nio.charset.StandardCharsets
 
 open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
-    protected lateinit var yclSourceCapturePath: String
-    protected lateinit var yclSourceConfigPath: String
+    protected lateinit var dpmSourceCapturePath: String
+    protected lateinit var dpmSourceConfigPath: String
 
     private lateinit var charset: Charset
     private lateinit var outCollector: PrintStreamCollector
@@ -28,8 +28,8 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        yclSourceCapturePath = tempTestFixture(RDS_CAPTURE, "codelist_comprehensive")
-        yclSourceConfigPath = tempTestFixture(RDS_SOURCE_CONFIG, "codelist_comprehensive.json")
+        dpmSourceCapturePath = tempTestFixture(RDS_CAPTURE, "dm_integration_fixture")
+        dpmSourceConfigPath = tempTestFixture(RDS_SOURCE_CONFIG, "dm_integration_fixture.json")
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)

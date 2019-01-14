@@ -3,7 +3,6 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 import com.fasterxml.jackson.databind.JsonNode
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayOrNullAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextAt
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint

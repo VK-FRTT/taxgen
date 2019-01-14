@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-@DisplayName("Command ´--capture-ycl-sources-to-zip´")
+@DisplayName("Command ´--capture-dpm-sources-to-zip´")
 internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
-    primaryCommand = "--capture-ycl-sources-to-zip"
+    primaryCommand = "--capture-dpm-sources-to-zip"
 ) {
 
     private lateinit var targetZipPath: Path
@@ -20,22 +20,21 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should capture YCL sources to zip file from existing capture`() {
+    fun `Should capture DPM sources to zip file from existing capture`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
-            "Writing YCL sources: folder",
-            "YCL Sources: folder",
-            "Capturing YTI Codelist sources: OK"
+            "Capturing DPM sources",
+            "Writing DPM sources: ZIP file",
+            "DPM Sources: folder",
+            "Capturing DPM sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -45,22 +44,21 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should capture YCL sources to zip file from YCL source config`() {
+    fun `Should capture DPM sources to zip file from DPM source config`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--source-config",
-            "$yclSourceConfigPath"
+            "$dpmSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
-            "Writing YCL sources: folder",
-            "YCL Sources: YTI Reference Data service",
-            "Capturing YTI Codelist sources: OK"
+            "Capturing DPM sources",
+            "Writing DPM sources: ZIP file",
+            "DPM Sources: Reference Data service",
+            "Capturing DPM sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -75,20 +73,20 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         Files.write(targetZipPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--force-overwrite",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: folder",
-            "YCL Sources: folder",
-            "Capturing YTI Codelist sources: OK"
+            "Capturing DPM sources",
+            "Writing DPM sources: ZIP file",
+            "DPM Sources: folder",
+            "Capturing DPM sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -101,9 +99,9 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when target zip filename is not given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -123,17 +121,17 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         Files.write(targetZipPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
+            "Capturing DPM sources",
+            "Writing DPM sources: ZIP file",
             "FATAL: Target file '$targetZipPath' already exists"
         )
 
@@ -147,17 +145,17 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when given target zip file path points to folder`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "${tempFolder.path()}",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: ZIP file",
+            "Capturing DPM sources",
+            "Writing DPM sources: ZIP file",
             "FATAL: Target file '${tempFolder.path()}' already exists"
         )
 
@@ -169,14 +167,14 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources"
+            "Capturing DPM sources"
         )
 
         assertThat(errText).containsSubsequence(
@@ -190,7 +188,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--source-folder"
         )
@@ -210,7 +208,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--source-folder",
             "${tempFolder.resolve("non_existing_folder")}"
@@ -231,18 +229,18 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-zip",
+            "--capture-dpm-sources-to-zip",
             "$targetZipPath",
             "--source-folder",
-            "$yclSourceCapturePath",
+            "$dpmSourceCapturePath",
             "--source-config",
-            "$yclSourceConfigPath"
+            "$dpmSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources"
+            "Capturing DPM sources"
         )
 
         assertThat(errText).containsSubsequence(

@@ -1,0 +1,34 @@
+{
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "broken_source_config_json"
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
+        "languages": [
+          "en",
+          "fi",
+          "sv"
+        ],
+        "defaultLanguage": "en"
+      },
+      "metrics": {
+        "uri": "http://uri.suomi.fi/codelist/taxgen-fixture/metrics-2018-1?env=dev"
+      },
+      "explicitDomainsAndHierarchies": {
+        "uri": null
+      },
+      "explicitDimensions": {
+        "uri": null
+      },
+      "typedDomains": {
+        "uri": null
+      },
+      "typedDimensions": {
+        "uri": null
+      }
+    }
+  ]
+}

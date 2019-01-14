@@ -7,35 +7,35 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-@DisplayName("Command ´--capture-ycl-sources-to-folder´")
+@DisplayName("Command ´--capture-dpm-sources-to-folder´")
 internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
-    primaryCommand = "--capture-ycl-sources-to-folder"
+    primaryCommand = "--capture-dpm-sources-to-folder"
 ) {
     private lateinit var targetFolderPath: Path
     private lateinit var targetFolderMetaConfigFilePath: Path
 
     @BeforeEach
     fun init() {
-        targetFolderPath = tempFolder.resolve("ycl_sources")
+        targetFolderPath = tempFolder.resolve("dpm_sources")
         targetFolderMetaConfigFilePath = targetFolderPath.resolve("meta/source_config.json")
     }
 
     @Test
-    fun `Should capture YCL sources to folder from existing capture`() {
+    fun `Should capture DPM sources to folder from existing capture`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: folder",
-            "YCL Sources: folder",
-            "Capturing YTI Codelist sources: OK"
+            "Capturing DPM sources",
+            "Writing DPM sources: folder",
+            "DPM Sources: folder",
+            "Capturing DPM sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -47,21 +47,21 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should capture YCL sources to folder from YCL source config`() {
+    fun `Should capture DPM sources to folder from DPM source config`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--source-config",
-            "$yclSourceConfigPath"
+            "$dpmSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: folder",
-            "YCL Sources: YTI Reference Data service",
-            "Capturing YTI Codelist sources: OK"
+            "Capturing DPM sources",
+            "Writing DPM sources: folder",
+            "DPM Sources: Reference Data service",
+            "Capturing DPM sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -78,11 +78,11 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--force-overwrite",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -90,10 +90,10 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         assertThat(errText).isBlank()
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: folder",
-            "YCL Sources: folder",
-            "Capturing YTI Codelist sources: OK"
+            "Capturing DPM sources",
+            "Writing DPM sources: folder",
+            "DPM Sources: folder",
+            "Capturing DPM sources: OK"
         )
 
         assertThat(errText).isBlank()
@@ -107,9 +107,9 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when target folder path is not given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -130,10 +130,10 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
@@ -141,10 +141,10 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         assertThat(errText).isBlank()
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
-            "Writing YCL sources: folder",
-            "YCL Sources: folder",
-            "FATAL: Target file 'ycl_sources/meta/source_config.json' already exists"
+            "Capturing DPM sources",
+            "Writing DPM sources: folder",
+            "DPM Sources: folder",
+            "FATAL: Target file 'dpm_sources/meta/source_config.json' already exists"
         )
 
         assertThat(targetFolderPath).exists().isDirectory()
@@ -159,16 +159,16 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         Files.write(workFolderFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             workFolderFilePath.toString(),
             "--source-folder",
-            "$yclSourceCapturePath"
+            "$dpmSourceCapturePath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources",
+            "Capturing DPM sources",
             "FATAL: Could not create filesystem path",
             "(already exists)"
         )
@@ -181,14 +181,14 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources"
+            "Capturing DPM sources"
         )
 
         assertThat(errText).containsSubsequence(
@@ -202,7 +202,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--source-folder"
         )
@@ -222,7 +222,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--source-folder",
             "${tempFolder.resolve("non_existing_folder")}"
@@ -243,18 +243,18 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
-            "--capture-ycl-sources-to-folder",
+            "--capture-dpm-sources-to-folder",
             "$targetFolderPath",
             "--source-folder",
-            "$yclSourceCapturePath",
+            "$dpmSourceCapturePath",
             "--source-config",
-            "$yclSourceConfigPath"
+            "$dpmSourceConfigPath"
         )
 
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Capturing YTI Codelist sources"
+            "Capturing DPM sources"
         )
 
         assertThat(errText).containsSubsequence(

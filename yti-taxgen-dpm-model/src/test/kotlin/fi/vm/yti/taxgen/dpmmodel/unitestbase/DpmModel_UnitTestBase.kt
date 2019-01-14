@@ -88,7 +88,6 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         )
     }
 
-
     protected fun hierarchy(baseId: String, vararg roots: HierarchyNode): Hierarchy {
         return Hierarchy(
             uri = "hierarchy_${baseId}_uri",

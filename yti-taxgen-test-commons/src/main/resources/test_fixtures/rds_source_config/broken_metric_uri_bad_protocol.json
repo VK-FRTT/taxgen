@@ -2,11 +2,11 @@
   "dpmDictionaries": [
     {
       "owner": {
-        "name": "ComprehensiveName",
-        "namespace": "ComprehensiveNamespace",
-        "prefix": "ComprehensivePrefix",
-        "location": "ComprehensiveLocation",
-        "copyright": "ComprehensiveCopyright",
+        "name": "codelist_uri_bad_protocol",
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
         "languages": [
           "en",
           "fi",
@@ -15,7 +15,7 @@
         "defaultLanguage": "en"
       },
       "metrics": {
-        "uri": null
+        "uri": "htp://uri.suomi.fi/codelist/taxgen-fixture/metrics-2018-1?env=dev"
       },
       "explicitDomainsAndHierarchies": {
         "uri": null
