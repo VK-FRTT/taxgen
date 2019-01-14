@@ -165,37 +165,38 @@ internal class ExplicitDomain_UnitTest :
                         "h_1",
                         hierarchyNode(
                             "hn_1",
-                            memberRef("m_1"),
+                            "member_m_1_uri"
+                        ),
+
+                        hierarchyNode(
+                            "hn_1.2",
+                            "member_m_2_uri",
 
                             hierarchyNode(
-                                "hn_1.2",
-                                memberRef("m_2"),
-
-                                hierarchyNode(
-                                    "hn_1.3",
-                                    memberRef("m_3") //External
-                                )
+                                "hn_1.3",
+                                "member_m_3_uri" //External
                             )
                         )
+
                     ),
 
                     hierarchy(
                         "h_2",
                         hierarchyNode(
                             "hn_2",
-                            memberRef("m_1"),
+                            "member_m_1_uri",
 
                             hierarchyNode(
                                 "hn_2.1",
-                                memberRef("m_2"),
+                                "member_m_2_uri",
 
                                 hierarchyNode(
                                     "hn_2.2",
-                                    memberRef("m_4"), //External
+                                    "member_m_4_uri", //External
 
                                     hierarchyNode(
                                         "hn_2.3",
-                                        memberRef("m_5") //External
+                                        "member_m_5_uri" //External
                                     )
                                 )
                             )

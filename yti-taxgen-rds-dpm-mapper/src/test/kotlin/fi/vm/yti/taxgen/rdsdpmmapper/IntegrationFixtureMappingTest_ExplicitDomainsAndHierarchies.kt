@@ -242,7 +242,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.comparisonOperator).isNull()
                         assertThat(it.unaryOperator).isNull()
 
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -411,9 +411,9 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                             entry(fi, "EDA member 2")
                         )
 
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x2")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x2")
 
-                        assertThat(it.childNodes[0].memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
+                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
                         assertThat(it.childNodes.size).isEqualTo(1)
                     }
 
@@ -422,9 +422,9 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                             entry(fi, "EDA member 3")
                         )
 
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
 
-                        assertThat(it.childNodes[0].memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
+                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
                         assertThat(it.childNodes.size).isEqualTo(1)
                     }
 
@@ -433,7 +433,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                             entry(fi, "EDA member 1")
                         )
 
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -442,8 +442,8 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                             entry(fi, "EDA member 4")
                         )
 
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x9")
-                        assertThat(it.childNodes[0].memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x9")
+                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
                         assertThat(it.childNodes.size).isEqualTo(1)
                     }
 
@@ -452,7 +452,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                             entry(fi, "EDA member 5")
                         )
 
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -478,7 +478,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         )
                         assertThat(it.unaryOperator).isEqualTo("+")
                         assertThat(it.comparisonOperator).isEqualTo("=")
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x4")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x4")
                     }
 
                     1 -> {
@@ -487,7 +487,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         )
                         assertThat(it.unaryOperator).isNull()
                         assertThat(it.comparisonOperator).isEqualTo(">")
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x5")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x5")
                     }
 
                     2 -> {
@@ -496,7 +496,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         )
                         assertThat(it.unaryOperator).isNull()
                         assertThat(it.comparisonOperator).isEqualTo("<")
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x6")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x6")
                     }
 
                     3 -> {
@@ -505,7 +505,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         )
                         assertThat(it.unaryOperator).isEqualTo("-")
                         assertThat(it.comparisonOperator).isEqualTo(">=")
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x7")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x7")
                     }
 
                     4 -> {
@@ -514,7 +514,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         )
                         assertThat(it.unaryOperator).isNull()
                         assertThat(it.comparisonOperator).isEqualTo("<=")
-                        assertThat(it.memberRef.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x8")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x8")
                     }
 
                     else -> {

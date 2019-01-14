@@ -2,10 +2,8 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
-import fi.vm.yti.taxgen.dpmmodel.DpmElement
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
@@ -665,8 +663,8 @@ class DpmDbWriter_UnitTest {
     inner class DatabaseConstraints {
 
         @Test
-        fun `should detect when multiple HirarchyNodes refer same Mamber`() {
-            val dpmDictionaries = dpmDictionaryFixture(FixtureVariety.HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF)
+        fun `should detect when multiple HierarchyNodes refer same Member`() {
+            val dpmDictionaries = dpmDictionaryFixture(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
 
             val thrown = catchThrowable { dbWriter.writeDpmDb(dpmDictionaries) }
 
@@ -679,7 +677,7 @@ class DpmDbWriter_UnitTest {
 
     enum class FixtureVariety {
         NONE,
-        HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF,
+        SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER,
     }
 
     private fun dpmDictionaryFixture(variety: FixtureVariety = FixtureVariety.NONE): List<DpmDictionary> {
@@ -755,7 +753,7 @@ class DpmDbWriter_UnitTest {
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                memberRef = dpmElementRefForUri(members, "Member-1-Uri"),
+                referencedMemberUri = "Member-1-Uri",
                 childNodes = emptyList()
             ),
 
@@ -765,7 +763,7 @@ class DpmDbWriter_UnitTest {
                 abstract = false,
                 comparisonOperator = "=",
                 unaryOperator = "+",
-                memberRef = dpmElementRefForUri(members, "Member-2-Uri"),
+                referencedMemberUri = "Member-2-Uri",
                 childNodes = listOf(
                     HierarchyNode(
                         uri = "HierarchyNode-2.1-Uri",
@@ -773,7 +771,7 @@ class DpmDbWriter_UnitTest {
                         abstract = false,
                         comparisonOperator = "=",
                         unaryOperator = "+",
-                        memberRef = dpmElementRefForUri(members, "Member-3-Uri"),
+                        referencedMemberUri = "Member-3-Uri",
                         childNodes = listOf(
                             HierarchyNode(
                                 uri = "HierarchyNode-2.1.1-Uri",
@@ -781,7 +779,7 @@ class DpmDbWriter_UnitTest {
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
-                                memberRef = dpmElementRefForUri(members, "Member-4-Uri"),
+                                referencedMemberUri = "Member-4-Uri",
                                 childNodes = emptyList()
                             )
                         )
@@ -793,22 +791,22 @@ class DpmDbWriter_UnitTest {
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        memberRef = dpmElementRefForUri(members, "Member-5-Uri"),
+                        referencedMemberUri = "Member-5-Uri",
                         childNodes = emptyList()
                     )
                 )
             )
         )
 
-        if (variety == FixtureVariety.HIERARCHY_NODE_WITH_DUPLICATE_MEMBER_REF) {
+        if (variety == FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
             hierarchyNodes.add(
                 HierarchyNode(
-                    uri = "HierarchyNode-DuplicateMemberRef-Uri",
-                    concept = concept("HierarchyNode-DuplicateMemberRef"),
+                    uri = "HierarchyNode-SecondReferringSameMember-Uri",
+                    concept = concept("HierarchyNode-§SecondReferringSameMember"),
                     abstract = false,
                     comparisonOperator = null,
                     unaryOperator = null,
-                    memberRef = dpmElementRefForUri(members, "Member-1-Uri"),
+                    referencedMemberUri = "Member-1-Uri",
                     childNodes = emptyList()
                 )
             )
@@ -848,7 +846,4 @@ class DpmDbWriter_UnitTest {
 
         return dictionaries
     }
-
-    private inline fun <reified T : DpmElement> dpmElementRefForUri(elements: List<T>, uri: String) =
-        elements.firstOrNull { it.uri == uri }?.ref() ?: thisShouldNeverHappen("No element for given id: $uri")
 }

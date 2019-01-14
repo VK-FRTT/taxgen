@@ -7,7 +7,6 @@ import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.dpmmodel.dpmElementRef
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
@@ -174,21 +173,12 @@ private fun mapAndValidateHierarchyNodes(
 
     extensionSource.eachExtensionMember { extensionMember ->
 
-        val domainMemberRef = if (extensionMember.code == null) {
-            dpmElementRef<Member>("", "${extensionMember.diagnosticLabel()}: No Code reference")
-        } else {
-            dpmElementRef<Member>(
-                extensionMember.code.validUri(diagnostic),
-                extensionMember.code.diagnosticLabel()
-            )
-        }
-
         val nodeItem = HierarchyNodeItem(
             uri = extensionMember.validUri(diagnostic),
             concept = extensionMember.dpmConcept(owner),
             comparisonOperator = extensionMember.stringValueOrNull(RdsMemberValueType.ComparisonOperator),
             unaryOperator = extensionMember.stringValueOrNull(RdsMemberValueType.UnaryOperator),
-            memberRef = domainMemberRef,
+            referencedMemberUri = extensionMember.validCodeUri(diagnostic),
             parentMemberUri = extensionMember.relatedMember?.uri,
             order = extensionMember.validOrder(diagnostic)
         )

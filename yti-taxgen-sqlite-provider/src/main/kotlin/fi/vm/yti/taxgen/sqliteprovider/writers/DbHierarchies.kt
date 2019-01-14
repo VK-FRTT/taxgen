@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.writers
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.DpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.sqliteprovider.DpmDictionaryWriteContext
@@ -20,7 +19,7 @@ object DbHierarchies {
         writeContext: DpmDictionaryWriteContext,
         hierarchy: Hierarchy,
         domainId: EntityID<Int>,
-        memberIds: Map<DpmElementRef, EntityID<Int>>
+        memberIds: Map<String, EntityID<Int>>
     ) {
 
         transaction {
@@ -119,7 +118,7 @@ object DbHierarchies {
 
     private class HierarchyTreeContext(
         private val hierarchyId: EntityID<Int>,
-        private val memberIds: Map<DpmElementRef, EntityID<Int>>
+        private val memberIds: Map<String, EntityID<Int>>
     ) {
         private val nodeStack = LinkedList<HierarchyNode>()
 
@@ -132,7 +131,7 @@ object DbHierarchies {
         }
 
         fun memberId(): EntityID<Int> {
-            return memberIds[currentNode().memberRef] ?: thisShouldNeverHappen("No ID for Member")
+            return memberIds[currentNode().referencedMemberUri] ?: thisShouldNeverHappen("No ID for Member")
         }
 
         fun parentMemberId(): EntityID<Int>? {
@@ -140,7 +139,7 @@ object DbHierarchies {
 
             val parentNode = nodeStack[1]
 
-            return memberIds[parentNode.memberRef] ?: thisShouldNeverHappen("No ID for parent Member")
+            return memberIds[parentNode.referencedMemberUri] ?: thisShouldNeverHappen("No ID for parent Member")
         }
 
         fun level(): Int {

@@ -106,7 +106,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "abstract" to false,
                 "comparisonOperator" to "=",
                 "unaryOperator" to "+",
-                "memberRef" to dpmElementRef<Member>("mem_uri", "diagnostic_label"),
+                "referencedMemberUri" to "mem_uri",
                 "childNodes" to listOf<HierarchyNode>()
             )
         )

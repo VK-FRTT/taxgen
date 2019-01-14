@@ -2,8 +2,6 @@ package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
-import fi.vm.yti.taxgen.dpmmodel.DpmElement
-import fi.vm.yti.taxgen.dpmmodel.DpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -14,7 +12,6 @@ import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
-import fi.vm.yti.taxgen.dpmmodel.dpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.dpmTestData
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -91,8 +88,6 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         )
     }
 
-    protected fun memberRef(baseId: String) =
-        dpmElementRef<Member>("member_${baseId}_uri", "member_${baseId}_diagnostic_label")
 
     protected fun hierarchy(baseId: String, vararg roots: HierarchyNode): Hierarchy {
         return Hierarchy(
@@ -105,7 +100,7 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun hierarchyNode(
         baseId: String,
-        memberRef: DpmElementRef,
+        referencedMemberUri: String,
         vararg children: HierarchyNode
     ): HierarchyNode {
         return HierarchyNode(
@@ -114,7 +109,7 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             abstract = false,
             comparisonOperator = "=",
             unaryOperator = "+",
-            memberRef = memberRef,
+            referencedMemberUri = referencedMemberUri,
             childNodes = children.toList()
         )
     }

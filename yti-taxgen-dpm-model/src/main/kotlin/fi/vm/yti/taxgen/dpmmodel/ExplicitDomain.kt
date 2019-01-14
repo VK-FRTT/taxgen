@@ -65,13 +65,13 @@ data class ExplicitDomain(
             instance = this,
             propertyName = "hierarchies",
             validate = { messages ->
-                val domainMemberRefs = members.map { it.ref() }.toSet()
+                val domainMemberUris = members.map { it.uri }.toSet()
 
                 hierarchies.forEach { hierarchy ->
                     hierarchy.allNodes().forEach { node ->
-                        if (!domainMemberRefs.contains(node.memberRef)){
+                        if (!domainMemberUris.contains(node.referencedMemberUri)){
                             messages.add(
-                                "DPM HierarchyNode ${node.uri} refers to DPM Member ${node.memberRef.uri} which is not part of the containing DPM ExplicitDomain."
+                                "DPM HierarchyNode ${node.uri} refers to DPM Member ${node.referencedMemberUri} which is not part of the containing DPM ExplicitDomain."
                             )
                         }
                     }

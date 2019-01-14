@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementRef
+import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 
 data class HierarchyNode(
     override val uri: String,
@@ -10,7 +10,7 @@ data class HierarchyNode(
     val abstract: Boolean,
     val comparisonOperator: String?,
     val unaryOperator: String?,
-    val memberRef: DpmElementRef, //Plain Member.memberCode can't be used in binding, as there can be duplicate memberCodes
+    val referencedMemberUri: String, //Plain Member.memberCode can't be used in binding, as there can be duplicate memberCodes
     val childNodes: List<HierarchyNode>
 ) : DpmElement {
 
@@ -39,10 +39,12 @@ data class HierarchyNode(
             message = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
         )
 
-        validateDpmElementRef(
+        validateLength(
             validationResults = validationResults,
             instance = this,
-            property = HierarchyNode::memberRef
+            property = HierarchyNode::referencedMemberUri,
+            minLength = 1,
+            maxLength = 500
         )
     }
 

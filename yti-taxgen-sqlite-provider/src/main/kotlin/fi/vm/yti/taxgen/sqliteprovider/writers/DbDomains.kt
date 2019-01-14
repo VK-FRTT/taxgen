@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteprovider.writers
 
-import fi.vm.yti.taxgen.dpmmodel.DpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.sqliteprovider.DpmDictionaryWriteContext
@@ -15,7 +14,7 @@ object DbDomains {
     fun writeExplicitDomainAndMembers(
         writeContext: DpmDictionaryWriteContext,
         domain: ExplicitDomain
-    ): Pair<EntityID<Int>, Map<DpmElementRef, EntityID<Int>>> {
+    ): Pair<EntityID<Int>, Map<String, EntityID<Int>>> {
 
         val ret = transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
@@ -30,7 +29,7 @@ object DbDomains {
                 domainConceptId
             )
 
-            val memberIds = mutableMapOf<DpmElementRef, EntityID<Int>>()
+            val memberIds = mutableMapOf<String, EntityID<Int>>()
 
             domain.members.forEach { member ->
 
@@ -48,7 +47,7 @@ object DbDomains {
                     memberConceptId
                 )
 
-                memberIds[member.ref()] = memberId
+                memberIds[member.uri] = memberId
             }
 
             Pair(domainId, memberIds)

@@ -23,7 +23,7 @@ internal class HierarchyNode_UnitTest :
         "abstract,              required",
         "comparisonOperator,    optional",
         "unaryOperator,         optional",
-        "memberRef,             required",
+        "referencedMemberUri,   required",
         "childNodes,            required"
     )
     fun testPropertyOptionality(
@@ -40,7 +40,9 @@ internal class HierarchyNode_UnitTest :
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
         "uri,                    minLength,      1",
-        "uri,                    maxLength,      500"
+        "uri,                    maxLength,      500",
+        "referencedMemberUri,    minLength,      1",
+        "referencedMemberUri,    maxLength,      500"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -131,37 +133,6 @@ internal class HierarchyNode_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.unaryOperator: unsupported arithmetical sign (unary operator) '$unaryOperator'")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
-            }
-        }
-    }
-
-    @Nested
-    inner class MemberRefProp {
-
-        @DisplayName("URI validation")
-        @ParameterizedTest(name = "URI `{0}` should be {1} member ref")
-        @CsvSource(
-            "1,         valid",
-            "'',        invalid",
-            "' ',       invalid"
-        )
-        fun `memberRef should error if 'URI' is invalid`(
-            uri: String,
-            expectedValidity: String
-        ) {
-            attributeOverrides(
-                "memberRef" to dpmElementRef<Member>(
-                    uri = uri,
-                    diagnosticLabel = "label_value"
-                )
-            )
-
-            instantiateAndValidate()
-
-            when (expectedValidity) {
-                "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.memberRef: empty or blank uri")
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }

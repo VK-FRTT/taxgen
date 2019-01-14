@@ -27,12 +27,6 @@ interface DpmElement : Validatable {
         concept.validate(validationResults)
     }
 
-    fun ref(): DpmElementRef = DpmElementRef(
-        uri = uri,
-        type = type,
-        diagnosticLabel = concept.diagnosticLabel()
-    )
-
     fun code(): String = ""
 
     fun validationContextInfo(): ValidationContextInfo {

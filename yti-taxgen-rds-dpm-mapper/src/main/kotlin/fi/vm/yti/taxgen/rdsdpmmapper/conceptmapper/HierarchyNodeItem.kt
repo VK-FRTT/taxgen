@@ -2,7 +2,6 @@ package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Concept
-import fi.vm.yti.taxgen.dpmmodel.DpmElementRef
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 
 internal data class HierarchyNodeItem(
@@ -10,7 +9,7 @@ internal data class HierarchyNodeItem(
     val concept: Concept,
     val comparisonOperator: String?,
     val unaryOperator: String?,
-    val memberRef: DpmElementRef,
+    val referencedMemberUri: String,
     val parentMemberUri: String?,
     val order: Int,
     private val children: MutableList<HierarchyNodeItem> = mutableListOf()
@@ -45,7 +44,7 @@ internal data class HierarchyNodeItem(
             abstract = false,
             comparisonOperator = comparisonOperator,
             unaryOperator = unaryOperator,
-            memberRef = memberRef,
+            referencedMemberUri = referencedMemberUri,
             childNodes = children.map { it.createAndValidateHierarchyNode(diagnostic) }
         )
 
