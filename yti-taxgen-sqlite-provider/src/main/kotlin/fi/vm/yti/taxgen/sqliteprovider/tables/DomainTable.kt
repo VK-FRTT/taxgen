@@ -20,6 +20,12 @@ import org.jetbrains.exposed.sql.ReferenceOption
  *
  * DataType reference values (from BR-AG Data Modeler):
  * - `String`
+ * - `Percent`
+ * - `Monetary`
+ * - `Integer`
+ * - `Decimal`
+ * - `Date`
+ * - `Boolean`
  *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - T4U defines DataType as INTEGER (most likely error in spec)

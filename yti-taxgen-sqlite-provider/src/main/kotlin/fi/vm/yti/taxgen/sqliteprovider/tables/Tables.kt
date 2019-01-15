@@ -14,7 +14,9 @@ object Tables {
                 DomainTable,
                 MemberTable,
                 HierarchyTable,
-                HierarchyNodeTable
+                HierarchyNodeTable,
+                DimensionTable,
+                MetricTable
             )
         }
     }

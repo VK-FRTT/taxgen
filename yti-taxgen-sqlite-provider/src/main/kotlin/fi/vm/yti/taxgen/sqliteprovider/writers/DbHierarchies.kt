@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider.writers
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
-import fi.vm.yti.taxgen.sqliteprovider.DpmDictionaryWriteContext
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
@@ -16,15 +16,15 @@ import java.util.LinkedList
 object DbHierarchies {
 
     fun writeHierarchyAndAndNodes(
-        writeContext: DpmDictionaryWriteContext,
+        dictionaryItem: DpmDictionaryItem,
         hierarchy: Hierarchy,
         domainId: EntityID<Int>,
         memberIds: Map<String, EntityID<Int>>
-    ) {
+    ): EntityID<Int> {
 
-        transaction {
+        return transaction {
             val hierarchyConceptId = DbConcepts.writeConceptAndTranslations(
-                writeContext,
+                dictionaryItem,
                 hierarchy.concept,
                 ConceptType.HIERARCHY
             )
@@ -40,12 +40,14 @@ object DbHierarchies {
             hierarchy.rootNodes.forEachIndexed { index, hierarchyNode ->
                 hierarchyTreeContext.withNode(hierarchyNode) {
                     writeHierarchyNodeAndChilds(
-                        writeContext,
+                        dictionaryItem,
                         hierarchyTreeContext,
                         index
                     )
                 }
             }
+
+            hierarchyId
         }
     }
 
@@ -67,12 +69,12 @@ object DbHierarchies {
     }
 
     private fun writeHierarchyNodeAndChilds(
-        writeContext: DpmDictionaryWriteContext,
+        dictionaryItem: DpmDictionaryItem,
         hierarchyTreeContext: HierarchyTreeContext,
         hierarchyNodeIndex: Int
     ) {
         val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
-            writeContext,
+            dictionaryItem,
             hierarchyTreeContext.currentNode().concept,
             ConceptType.HIERARCHY_NODE
         )
@@ -86,7 +88,7 @@ object DbHierarchies {
         hierarchyTreeContext.currentNode().childNodes.forEachIndexed { childIndex, childNode ->
             hierarchyTreeContext.withNode(childNode) {
                 writeHierarchyNodeAndChilds(
-                    writeContext = writeContext,
+                    dictionaryItem = dictionaryItem,
                     hierarchyTreeContext = hierarchyTreeContext,
                     hierarchyNodeIndex = childIndex
                 )

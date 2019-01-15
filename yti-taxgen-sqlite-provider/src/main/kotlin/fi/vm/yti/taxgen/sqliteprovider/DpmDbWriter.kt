@@ -5,10 +5,15 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DomainItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.HierarchyItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.Tables
+import fi.vm.yti.taxgen.sqliteprovider.writers.DbDimensions
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbDomains
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbHierarchies
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbLanguages
+import fi.vm.yti.taxgen.sqliteprovider.writers.DbMetric
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbOwners
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Database
@@ -57,7 +62,7 @@ class DpmDbWriter(
     ) {
         val ownerId = DbOwners.writeOwner(dpmDictionary.owner)
 
-        val writeContext = DpmDictionaryWriteContext(
+        val dictionaryContext = DpmDictionaryItem(
             dpmDictionary.owner,
             ownerId,
             languageIds
@@ -66,18 +71,67 @@ class DpmDbWriter(
         dpmDictionary.explicitDomains.forEach { explicitDomain ->
 
             val (domainId, memberIds) = DbDomains.writeExplicitDomainAndMembers(
-                writeContext,
+                dictionaryContext,
                 explicitDomain
             )
 
+            val hierarchyItems = mutableListOf<HierarchyItem>()
+
             explicitDomain.hierarchies.forEach { hierarchy ->
-                DbHierarchies.writeHierarchyAndAndNodes(
-                    writeContext,
+                val hierarchyId = DbHierarchies.writeHierarchyAndAndNodes(
+                    dictionaryContext,
                     hierarchy,
                     domainId,
                     memberIds
                 )
+
+                hierarchyItems.add(
+                    HierarchyItem(
+                        hierarchyCode = hierarchy.hierarchyCode,
+                        hierarchyId = hierarchyId
+                    )
+                )
             }
+
+            dictionaryContext.addDomainItem(
+                DomainItem(
+                    domainCode = explicitDomain.domainCode,
+                    domainId = domainId,
+                    hierarchyItems = hierarchyItems
+                )
+            )
+        }
+
+        dpmDictionary.typedDomains.forEach { typedDomain ->
+            DbDomains.writeTypedDomain(
+                dictionaryContext,
+                typedDomain
+            )
+        }
+
+        dpmDictionary.explicitDimensions.forEach { explicitDimension ->
+            DbDimensions.writeExplicitDimension(
+                dictionaryContext,
+                explicitDimension
+            )
+        }
+
+        dpmDictionary.typedDimensions.forEach { typedDimension ->
+            DbDimensions.writeTypedDimension(
+                dictionaryContext,
+                typedDimension
+            )
+        }
+
+        val (metricDomainId, metricHierarchyId) = DbMetric.writeMetricDomainAndHierarchy(dictionaryContext)
+
+        dpmDictionary.metrics.forEach { metric ->
+            DbMetric.writeMetric(
+                dictionaryContext,
+                metric,
+                metricDomainId,
+                metricHierarchyId
+            )
         }
     }
 }

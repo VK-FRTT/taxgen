@@ -8,7 +8,8 @@ enum class ConceptType(val value: String) {
     DOMAIN("Domain"),
     MEMBER("Member"),
     HIERARCHY("Hierarchy"),
-    HIERARCHY_NODE("HierarchyNode")
+    HIERARCHY_NODE("HierarchyNode"),
+    DIMENSION("Dimension")
 }
 
 /**

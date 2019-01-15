@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider.writers
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.sqliteprovider.DpmDictionaryWriteContext
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTimeOrNull
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable
@@ -17,7 +17,7 @@ import org.jetbrains.exposed.sql.insertAndGetId
 object DbConcepts {
 
     fun writeConceptAndTranslations(
-        writeContext: DpmDictionaryWriteContext,
+        dictionaryItem: DpmDictionaryItem,
         concept: Concept,
         conceptType: ConceptType
     ): EntityID<Int> {
@@ -25,12 +25,12 @@ object DbConcepts {
         val conceptId = insertConcept(
             concept,
             conceptType,
-            writeContext.ownerId
+            dictionaryItem.ownerId
         )
 
         concept.label.translations.forEach { (language, text) ->
             insertConceptTranslation(
-                writeContext,
+                dictionaryItem,
                 conceptId,
                 ConceptTranslationRole.LABEL,
                 language,
@@ -58,14 +58,14 @@ object DbConcepts {
     }
 
     private fun insertConceptTranslation(
-        writeContext: DpmDictionaryWriteContext,
+        dictionaryItem: DpmDictionaryItem,
         conceptId: EntityID<Int>,
         role: ConceptTranslationRole,
         language: Language,
         text: String
     ) {
         val languageId =
-            writeContext.languageIds[language] ?: thisShouldNeverHappen("Language without DB mapping: $language")
+            dictionaryItem.languageIds[language] ?: thisShouldNeverHappen("Language without DB mapping: $language")
 
         ConceptTranslationTable.insert {
             it[conceptIdCol] = conceptId
