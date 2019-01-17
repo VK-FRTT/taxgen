@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider.writers
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTimeOrNull
@@ -15,6 +16,14 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 
 object DbConcepts {
+
+    private val requiredLabelLang by lazy { Language.byIso6391CodeOrFail("en") }
+    private val fallbackCandidateLangs by lazy {
+        listOf(
+            Language.byIso6391CodeOrFail("fi"),
+            Language.byIso6391CodeOrFail("sv")
+        )
+    }
 
     fun writeConceptAndTranslations(
         dictionaryItem: DpmDictionaryItem,
@@ -38,9 +47,42 @@ object DbConcepts {
             )
         }
 
+        val fallbackTranslation = selectFallbackTranslationTextOrNull(
+            concept.label,
+            requiredLabelLang,
+            fallbackCandidateLangs
+        )
+
+        if (fallbackTranslation != null) {
+            insertConceptTranslation(
+                dictionaryItem,
+                conceptId,
+                ConceptTranslationRole.LABEL,
+                requiredLabelLang,
+                fallbackTranslation
+            )
+        }
+
         return conceptId
     }
 
+    private fun selectFallbackTranslationTextOrNull(
+        translatedText: TranslatedText,
+        requiredLang: Language,
+        fallbackCandidateLangs: List<Language>
+    ): String? {
+        if (translatedText.translations.containsKey(requiredLang)) {
+            return null
+        }
+
+        fallbackCandidateLangs.forEach { candidateLang ->
+            val text = translatedText.translations[candidateLang]
+            if (text != null) return text
+        }
+
+        return null
+    }
+    
     private fun insertConcept(
         concept: Concept,
         conceptType: ConceptType,

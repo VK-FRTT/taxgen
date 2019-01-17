@@ -53,10 +53,10 @@ internal open class DpmDbWriter_UnitTestBase {
         dbConnection.close()
     }
 
-
     enum class FixtureVariety {
         NONE,
         SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER,
+        NO_EN_TRANSLATIONS
     }
 
     protected fun dpmDictionaryFixture(variety: FixtureVariety = FixtureVariety.NONE): List<DpmDictionary> {
@@ -78,16 +78,29 @@ internal open class DpmDbWriter_UnitTestBase {
             applicableFrom = LocalDate.of(2018, 2, 22),
             applicableUntil = LocalDate.of(2018, 5, 15),
             label = TranslatedText(
-                translations = listOf(
-                    Pair(language("fi"), "$name-LabelFi"),
-                    Pair(language("en"), "$name-LabelEn")
-                ).toMap()
+                translations = if (variety == FixtureVariety.NO_EN_TRANSLATIONS) {
+                    listOf(
+                        Pair(language("fi"), "$name-LabelFi")
+                    ).toMap()
+                } else {
+                    listOf(
+                        Pair(language("fi"), "$name-LabelFi"),
+                        Pair(language("en"), "$name-LabelEn")
+                    ).toMap()
+                }
             ),
             description = TranslatedText(
-                translations = listOf(
-                    Pair(language("fi"), "$name-DescriptionFi"),
-                    Pair(language("en"), "$name-DescriptionEn")
-                ).toMap()
+                translations = if (variety == FixtureVariety.NO_EN_TRANSLATIONS) {
+                    listOf(
+                        Pair(language("fi"), "$name-DescriptionFi")
+                    ).toMap()
+                } else {
+                    listOf(
+                        Pair(language("fi"), "$name-DescriptionFi"),
+                        Pair(language("en"), "$name-DescriptionEn")
+                    ).toMap()
+                }
+
             ),
             owner = dpmOwner
         )
@@ -225,5 +238,4 @@ internal open class DpmDbWriter_UnitTestBase {
 
         return dictionaries
     }
-
 }

@@ -71,6 +71,11 @@ class Language constructor(
             return languages.find { it.iso6391Code == iso6391Code }
         }
 
+        fun byIso6391CodeOrFail(iso6391Code: String): Language {
+            return findByIso6391Code(iso6391Code)
+                ?: throwFail("Language configuration missing required language '$iso6391Code'")
+        }
+
         internal fun loadLanguages(languageConfigPath: Path? = null): Set<Language> {
             val configUrl = resolveConfigUrl(languageConfigPath)
 

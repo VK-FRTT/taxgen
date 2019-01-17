@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -12,13 +11,10 @@ import org.junit.jupiter.api.Test
 @DisplayName("SQLite DPM Database - data content")
 internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
-    @BeforeEach
-    fun init() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
-    }
-
     @Test
     fun `should have all configured languages`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery("SELECT IsoCode FROM mLanguage")
         val dbIsoCodes = rs.toStringList(false)
 
@@ -30,6 +26,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have English language with Concept and ConceptTranslation relations`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
@@ -55,6 +53,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have DPM Owner`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
@@ -71,6 +71,7 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have DPM ExplicitDomain with Concept and Owner relation`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -92,6 +93,7 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations for DPM ExplicitDomain`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -116,7 +118,34 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
     }
 
     @Test
+    fun `should have ConceptTranslations with EN fallbacking to FI content for DPM ExplicitDomain`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture(FixtureVariety.NO_EN_TRANSLATIONS))
+
+        val rs = dbConnection.createStatement().executeQuery(
+            """
+                SELECT
+                    D.DomainCode,
+                    C.ConceptType,
+                    T.Text, T.Role,
+                    TL.IsoCode
+                FROM mDomain AS D
+                INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
+                INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
+                INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
+                WHERE D.DomainCode = 'Domain-Code'
+              """
+        )
+
+        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+            "DomainCode, ConceptType, Text, Role, IsoCode",
+            "Domain-Code, Domain, ExplicitDomain-LabelFi, label, en",
+            "Domain-Code, Domain, ExplicitDomain-LabelFi, label, fi"
+        )
+    }
+
+    @Test
     fun `should have DPM Members with Domain, Concept and Owner relation`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -144,6 +173,7 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations for DPM Member`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -169,6 +199,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have DPM Hierarchy with Domain, Concept and Owner relation`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
@@ -191,6 +223,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations for DPM Hierarchy`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
@@ -215,6 +249,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have DPM HierarchyNodes with Member, Concept and Owner relation`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
@@ -245,6 +281,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations for DPM HierarchyNode`() {
+        dbWriter.writeDpmDb(dpmDictionaryFixture())
+
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
@@ -267,18 +305,14 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
         )
     }
 
-
     @Nested
     @DisplayName("diagnostic events")
     inner class DiagnosticEvents {
 
-        @BeforeEach
-        fun init() {
-            dbWriter.writeDpmDb(dpmDictionaryFixture())
-        }
-
         @Test
         fun `should contain proper context events`() {
+            dbWriter.writeDpmDb(dpmDictionaryFixture())
+
             assertThat(diagnosticCollector.eventsString()).contains(
                 "ENTER [WriteSQLiteDb]",
                 "EXIT [WriteSQLiteDb]"
@@ -292,9 +326,9 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
         @Test
         fun `should detect when multiple HierarchyNodes refer same Member`() {
-            val dpmDictionaries = dpmDictionaryFixture(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
+            val dpmDictionariesFixture = dpmDictionaryFixture(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
 
-            val thrown = catchThrowable { dbWriter.writeDpmDb(dpmDictionaries) }
+            val thrown = catchThrowable { dbWriter.writeDpmDb(dpmDictionariesFixture) }
 
             assertThat(thrown)
                 .isInstanceOf(org.jetbrains.exposed.exceptions.ExposedSQLException::class.java)
@@ -302,6 +336,4 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                 .hasMessageContaining("mHierarchyNode.HierarchyID, mHierarchyNode.MemberID")
         }
     }
-
-
 }
