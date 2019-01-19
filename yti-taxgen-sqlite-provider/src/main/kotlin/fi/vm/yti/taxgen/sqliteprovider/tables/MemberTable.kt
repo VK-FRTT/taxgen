@@ -25,10 +25,10 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - None
  */
 object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
+    val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
     val memberCodeCol = text("MemberCode").nullable()
     val memberLabelCol = text("MemberLabel").nullable()
     val memberXBRLCodeCol = text("MemberXBRLCode").nullable()
     val isDefaultMemberCol = bool("IsDefaultMember").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
-    val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
 }

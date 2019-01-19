@@ -12,7 +12,16 @@ fun ResultSetMetaData.columnConfigToString(column: Int): String {
     sb.append(getColumnName(column))
     sb.append(separator)
 
-    sb.append(getColumnTypeName(column))
+    val type = getColumnType(column)
+    val typeName = when (type) {
+        java.sql.Types.INTEGER -> "INTEGER"
+        java.sql.Types.VARCHAR -> "VARCHAR"
+        java.sql.Types.DATE -> "DATE"
+        java.sql.Types.BOOLEAN -> "BOOLEAN"
+        else -> "UNMAPPED: $type"
+    }
+
+    sb.append(typeName)
     sb.append(separator)
 
     when (isNullable(column)) {

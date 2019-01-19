@@ -23,11 +23,11 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - TODO
  */
 object DimensionTable : IntIdTable(name = "mDimension", columnName = "DimensionID") {
-    val dimensionCodeCol = text("DimensionCode").nullable()
     val dimensionLabelCol = text("DimensionLabel").nullable()
+    val dimensionCodeCol = text("DimensionCode").nullable()
     val dimensionDescriptionCol = text("DimensionDescription").nullable()
     val dimensionXBRLCodeCol = text("DimensionXBRLCode").nullable()
-    val isTypedDimensionCol = bool("IsTypedDimension").nullable()
     val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
+    val isTypedDimensionCol = bool("IsTypedDimension").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 }
