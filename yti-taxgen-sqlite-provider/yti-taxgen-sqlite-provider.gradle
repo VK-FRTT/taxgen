@@ -3,7 +3,9 @@ description = 'Produces SQLite based DPM database from Data Point Meta Model dat
 dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
-    implementation libs.xerialSqliteJdbc
+    //Switch to fork
+    implementation 'com.github.VRK-YTI:sqlite-jdbc:9eeba854e8e7326a59daa548ff3851c59c389f19'
+    //implementation libs.xerialSqliteJdbc
     implementation libs.jetbrainsExposed
 
     implementation(project(':yti-taxgen-commons'))
