@@ -63,11 +63,11 @@ internal open class DpmDbWriter_UnitTestBase {
         fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
         val dpmOwner = Owner(
-            name = "OwnerName",
-            namespace = "OwnerNamespace",
-            prefix = "OwnerPrefix",
-            location = "OwnerLocation",
-            copyright = "OwnerCopyright",
+            name = "FixName",
+            namespace = "FixNamespace",
+            prefix = "FixPrefix",
+            location = "FixLocation",
+            copyright = "FixCopyright",
             languageCodes = listOf("en", "fi"),
             defaultLanguageCode = "fi"
         )

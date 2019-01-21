@@ -8,17 +8,17 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DomainItem
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.HierarchyItem
-import fi.vm.yti.taxgen.sqliteprovider.tables.Tables
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbDimensions
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbDomains
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbHierarchies
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbLanguages
-import fi.vm.yti.taxgen.sqliteprovider.writers.DbMetric
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbOwners
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 import java.sql.Connection
 
 class DpmDbWriter(
@@ -32,6 +32,8 @@ class DpmDbWriter(
         FileOps.deleteConflictingTargetFileIfAllowed(targetDbPath, forceOverwrite)
         FileOps.failIfTargetFileExists(targetDbPath, diagnosticContext)
         FileOps.createIntermediateFolders(targetDbPath)
+
+        initDbFileFromSeed(targetDbPath)
     }
 
     fun writeDpmDb(dpmDictionaries: List<DpmDictionary>) {
@@ -40,13 +42,18 @@ class DpmDbWriter(
             contextIdentifier = targetDbPath.toString()
         ) {
             connectDatabase()
-            Tables.create()
-            val languageIds = DbLanguages.writeLanguages()
+            DbLanguages.configureLanguages()
+            val languageIds = DbLanguages.resolveLanguageIds()
 
             dpmDictionaries.forEach {
                 writeDpmDictionary(it, languageIds)
             }
         }
+    }
+
+    private fun initDbFileFromSeed(targetDbPath: Path) {
+        val stream = this::class.java.getResourceAsStream("/dm_database_seed.db")
+        Files.copy(stream, targetDbPath, StandardCopyOption.REPLACE_EXISTING)
     }
 
     private fun targetSqliteDbUrl() = "jdbc:sqlite:$targetDbPath"
@@ -123,6 +130,7 @@ class DpmDbWriter(
             )
         }
 
+        /* TODO
         val (metricDomainId, metricHierarchyId) = DbMetric.writeMetricDomainAndHierarchy(dictionaryContext)
 
         dpmDictionary.metrics.forEach { metric ->
@@ -133,5 +141,6 @@ class DpmDbWriter(
                 metricHierarchyId
             )
         }
+        */
     }
 }

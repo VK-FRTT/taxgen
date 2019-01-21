@@ -25,7 +25,7 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
     }
 
     @Test
-    fun `should have English language with Concept and ConceptTranslation relations`() {
+    fun `should have English language but no Concept nor ConceptTranslation relations`() {
         dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
@@ -36,18 +36,16 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                     T.Text, T.Role,
                     TL.IsoCode
                 FROM mLanguage AS L
-                INNER JOIN mConcept AS C ON C.ConceptID = L.ConceptID
-                INNER JOIN mConceptTranslation AS T ON T.ConceptID = L.ConceptID
-                INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
+                LEFT JOIN mConcept AS C ON C.ConceptID = L.ConceptID
+                LEFT JOIN mConceptTranslation AS T ON T.ConceptID = L.ConceptID
+                LEFT JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
                 WHERE L.IsoCode = 'en'
                 """
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "LanguageIsoCode, LanguageName, LanguageEnglishName, ConceptType, OwnerID, CreationDate, ModificationDate, FromDate, ToDate, Text, Role, IsoCode",
-            "en, English, English, Language, nil, nil, nil, nil, nil, English, label, en",
-            "en, English, English, Language, nil, nil, nil, nil, nil, englanti, label, fi",
-            "en, English, English, Language, nil, nil, nil, nil, nil, engelska, label, sv"
+            "en, English, English, nil, nil, nil, nil, nil, nil, nil, nil, nil"
         )
     }
 
@@ -65,7 +63,8 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "OwnerName, OwnerNamespace, OwnerLocation, OwnerPrefix, OwnerCopyright, ParentOwnerID, ConceptID",
-            "OwnerName, OwnerNamespace, OwnerLocation, OwnerPrefix, OwnerCopyright, nil, nil"
+            "FixName, FixNamespace, FixLocation, FixPrefix, FixCopyright, nil, nil",
+            "EuroFiling, http://www.eurofiling.info/xbrl/, http://www.eurofiling.info/eu/fr/xbrl/, eu, (C) Eurofiling, nil, nil"
         )
     }
 
@@ -85,9 +84,10 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
               """
         )
 
-        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+        assertThat(rs.toStringList()).contains(
             "DomainCode, DomainLabel, DomainDescription, DomainXBRLCode, DataType, IsTypedDomain, ConceptType, CreationDate, ModificationDate, FromDate, ToDate, OwnerName",
-            "Domain-Code, ExplicitDomain-LabelFi, ExplicitDomain-DescriptionFi, OwnerPrefix_exp:Domain-Code, nil, 0, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName"
+            "MET, Metrics, nil, MET, nil, 0, Domain, nil, nil, nil, nil, EuroFiling",
+            "Domain-Code, ExplicitDomain-LabelFi, ExplicitDomain-DescriptionFi, FixPrefix_exp:Domain-Code, nil, 0, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
         )
     }
 
@@ -163,11 +163,11 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "MemberCode, MemberLabel, MemberXBRLCode, IsDefaultMember, DomainCode, ConceptType, CreationDate, ModificationDate, FromDate, ToDate, OwnerName",
-            "Member-1-Code, Member-1-LabelFi, OwnerPrefix_Domain-Code:Member-1-Code, 1, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "Member-2-Code, Member-2-LabelFi, OwnerPrefix_Domain-Code:Member-2-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "Member-3-Code, Member-3-LabelFi, OwnerPrefix_Domain-Code:Member-3-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "Member-4-Code, Member-4-LabelFi, OwnerPrefix_Domain-Code:Member-4-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "Member-5-Code, Member-5-LabelFi, OwnerPrefix_Domain-Code:Member-5-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName"
+            "Member-1-Code, Member-1-LabelFi, FixPrefix_Domain-Code:Member-1-Code, 1, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "Member-2-Code, Member-2-LabelFi, FixPrefix_Domain-Code:Member-2-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "Member-3-Code, Member-3-LabelFi, FixPrefix_Domain-Code:Member-3-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "Member-4-Code, Member-4-LabelFi, FixPrefix_Domain-Code:Member-4-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "Member-5-Code, Member-5-LabelFi, FixPrefix_Domain-Code:Member-5-Code, 0, Domain-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
         )
     }
 
@@ -215,10 +215,12 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
               """
         )
 
-        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+        assertThat(rs.toStringList()).contains(
             "HierarchyCode, HierarchyLabel, HierarchyDescription, ConceptType, CreationDate, ModificationDate, FromDate, ToDate, DomainCode, OwnerName",
-            "Hierarchy-Code, Hierarchy-LabelFi, Hierarchy-DescriptionFi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, Domain-Code, OwnerName"
+            "Hierarchy-Code, Hierarchy-LabelFi, Hierarchy-DescriptionFi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, Domain-Code, FixName"
         )
+
+        //TODO - verify metric hierarchy
     }
 
     @Test
@@ -271,11 +273,11 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "HierarchyNodeLabel, ComparisonOperator, UnaryOperator, IsAbstract, Order, Level, Path, HierarchyCode, MemberCode, ParentMemberCode, ConceptType, CreationDate, ModificationDate, FromDate, ToDate, OwnerName",
-            "HierarchyNode-1-LabelFi, nil, nil, 0, 1, 1, nil, Hierarchy-Code, Member-1-Code, nil, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "HierarchyNode-2-LabelFi, =, +, 0, 2, 1, nil, Hierarchy-Code, Member-2-Code, nil, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "HierarchyNode-2.1-LabelFi, =, +, 0, 1, 2, nil, Hierarchy-Code, Member-3-Code, Member-2-Code, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "HierarchyNode-2.1.1-LabelFi, nil, nil, 0, 1, 3, nil, Hierarchy-Code, Member-4-Code, Member-3-Code, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName",
-            "HierarchyNode-2.2-LabelFi, nil, nil, 0, 2, 2, nil, Hierarchy-Code, Member-5-Code, Member-2-Code, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, OwnerName"
+            "HierarchyNode-1-LabelFi, nil, nil, 0, 1, 1, nil, Hierarchy-Code, Member-1-Code, nil, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "HierarchyNode-2-LabelFi, =, +, 0, 2, 1, nil, Hierarchy-Code, Member-2-Code, nil, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "HierarchyNode-2.1-LabelFi, =, +, 0, 1, 2, nil, Hierarchy-Code, Member-3-Code, Member-2-Code, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "HierarchyNode-2.1.1-LabelFi, nil, nil, 0, 1, 3, nil, Hierarchy-Code, Member-4-Code, Member-3-Code, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "HierarchyNode-2.2-LabelFi, nil, nil, 0, 2, 2, nil, Hierarchy-Code, Member-5-Code, Member-2-Code, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
         )
     }
 
@@ -332,7 +334,7 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
 
             assertThat(thrown)
                 .isInstanceOf(org.jetbrains.exposed.exceptions.ExposedSQLException::class.java)
-                .hasMessageContaining("A PRIMARY KEY constraint failed")
+                .hasMessageContaining("UNIQUE constraint failed")
                 .hasMessageContaining("mHierarchyNode.HierarchyID, mHierarchyNode.MemberID")
         }
     }
