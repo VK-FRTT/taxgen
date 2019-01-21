@@ -107,18 +107,21 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
                 WHERE D.DomainCode = 'Domain-Code'
+                ORDER BY T.Role DESC, TL.IsoCode ASC
               """
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "DomainCode, ConceptType, Text, Role, IsoCode",
             "Domain-Code, Domain, ExplicitDomain-LabelEn, label, en",
-            "Domain-Code, Domain, ExplicitDomain-LabelFi, label, fi"
+            "Domain-Code, Domain, ExplicitDomain-LabelFi, label, fi",
+            "Domain-Code, Domain, ExplicitDomain-DescriptionEn, description, en",
+            "Domain-Code, Domain, ExplicitDomain-DescriptionFi, description, fi"
         )
     }
 
     @Test
-    fun `should have ConceptTranslations with EN fallbacking to FI content for DPM ExplicitDomain`() {
+    fun `should have ConceptTranslations with EN label fallbacking to FI content for DPM ExplicitDomain`() {
         dbWriter.writeDpmDb(dpmDictionaryFixture(FixtureVariety.NO_EN_TRANSLATIONS))
 
         val rs = dbConnection.createStatement().executeQuery(
@@ -133,13 +136,15 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
                 WHERE D.DomainCode = 'Domain-Code'
+                ORDER BY T.Role DESC, TL.IsoCode ASC
               """
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "DomainCode, ConceptType, Text, Role, IsoCode",
             "Domain-Code, Domain, ExplicitDomain-LabelFi, label, en",
-            "Domain-Code, Domain, ExplicitDomain-LabelFi, label, fi"
+            "Domain-Code, Domain, ExplicitDomain-LabelFi, label, fi",
+            "Domain-Code, Domain, ExplicitDomain-DescriptionFi, description, fi"
         )
     }
 
@@ -187,13 +192,16 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
                 WHERE M.MemberCode = 'Member-1-Code'
+                ORDER BY T.Role DESC, TL.IsoCode ASC
               """
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "MemberCode, ConceptType, Text, Role, IsoCode",
             "Member-1-Code, Member, Member-1-LabelEn, label, en",
-            "Member-1-Code, Member, Member-1-LabelFi, label, fi"
+            "Member-1-Code, Member, Member-1-LabelFi, label, fi",
+            "Member-1-Code, Member, Member-1-DescriptionEn, description, en",
+            "Member-1-Code, Member, Member-1-DescriptionFi, description, fi"
         )
     }
 
@@ -239,13 +247,16 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
                 WHERE H.HierarchyCode = 'Hierarchy-Code'
+                ORDER BY T.Role DESC, TL.IsoCode ASC
               """
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "HierarchyCode, ConceptType, Text, Role, IsoCode",
             "Hierarchy-Code, Hierarchy, Hierarchy-LabelEn, label, en",
-            "Hierarchy-Code, Hierarchy, Hierarchy-LabelFi, label, fi"
+            "Hierarchy-Code, Hierarchy, Hierarchy-LabelFi, label, fi",
+            "Hierarchy-Code, Hierarchy, Hierarchy-DescriptionEn, description, en",
+            "Hierarchy-Code, Hierarchy, Hierarchy-DescriptionFi, description, fi"
         )
     }
 
@@ -297,13 +308,16 @@ internal class DpmDbWriter_Content_UnitTest : DpmDbWriter_UnitTestBase() {
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
                 WHERE N.'Order'= 1 AND N.Level = 1
+                ORDER BY T.Role DESC, TL.IsoCode ASC
               """
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "HierarchyNodeLabel, ConceptType, Text, Role, IsoCode",
             "HierarchyNode-1-LabelFi, HierarchyNode, HierarchyNode-1-LabelEn, label, en",
-            "HierarchyNode-1-LabelFi, HierarchyNode, HierarchyNode-1-LabelFi, label, fi"
+            "HierarchyNode-1-LabelFi, HierarchyNode, HierarchyNode-1-LabelFi, label, fi",
+            "HierarchyNode-1-LabelFi, HierarchyNode, HierarchyNode-1-DescriptionEn, description, en",
+            "HierarchyNode-1-LabelFi, HierarchyNode, HierarchyNode-1-DescriptionFi, description, fi"
         )
     }
 

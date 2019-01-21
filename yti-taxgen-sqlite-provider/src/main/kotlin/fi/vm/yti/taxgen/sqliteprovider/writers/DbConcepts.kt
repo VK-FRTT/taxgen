@@ -63,6 +63,16 @@ object DbConcepts {
             )
         }
 
+        concept.description.translations.forEach { (language, text) ->
+            insertConceptTranslation(
+                dictionaryItem,
+                conceptId,
+                ConceptTranslationRole.DESCRIPTION,
+                language,
+                text
+            )
+        }
+
         return conceptId
     }
 
@@ -82,7 +92,7 @@ object DbConcepts {
 
         return null
     }
-    
+
     private fun insertConcept(
         concept: Concept,
         conceptType: ConceptType,

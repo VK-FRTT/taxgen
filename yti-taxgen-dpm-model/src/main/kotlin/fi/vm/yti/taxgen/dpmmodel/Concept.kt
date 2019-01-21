@@ -76,14 +76,4 @@ data class Concept(
             acceptedLanguages = owner.languages
         )
     }
-
-    fun diagnosticLabel(): String {
-        val defaultTranslation = label.defaultTranslation()
-        if (defaultTranslation != null && defaultTranslation.isNotBlank()) return defaultTranslation
-
-        val anyTranslation = label.anyNonBlankTranslation()
-        if (anyTranslation != null) return anyTranslation
-
-        return ""
-    }
 }

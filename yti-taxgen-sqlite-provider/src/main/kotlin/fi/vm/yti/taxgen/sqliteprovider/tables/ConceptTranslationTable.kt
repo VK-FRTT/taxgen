@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 enum class ConceptTranslationRole(val value: String) {
     LABEL("label"),
+    DESCRIPTION("description")
 }
 
 /**
