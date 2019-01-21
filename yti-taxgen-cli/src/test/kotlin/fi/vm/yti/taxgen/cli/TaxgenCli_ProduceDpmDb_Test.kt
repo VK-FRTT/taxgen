@@ -44,6 +44,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
             "Owner Name In DB",
+            "EuroFiling",
             "DM Integration Fixture"
         )
 
@@ -272,6 +273,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
 
         assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
             "Owner Name In DB",
+            "EuroFiling",
             "DM Integration Fixture"
         )
 
@@ -420,6 +422,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
                 SELECT
                     mOwner.OwnerName AS 'Owner Name In DB'
                 FROM mOwner
+                ORDER BY mOwner.OwnerName DESC
                 """
         ).toStringList()
 

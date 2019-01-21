@@ -281,8 +281,8 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
 
         assertThat(thrown).isInstanceOf(HaltException::class.java)
 
-        assertThat(diagnosticCollector.events).contains(
-            "MESSAGE [FATAL] [The server communication timeout]"
+        assertThat(diagnosticCollector.eventsString()).contains(
+            "MESSAGE [FATAL] [The server communication timeout. Url:"
         )
 
         when (timeoutPhase) {

@@ -25,11 +25,11 @@ internal object HttpOps : Closeable {
         val response = try {
             httpClient().newCall(request).execute()
         } catch (e: java.net.UnknownHostException) {
-            diagnostic.fatal("Could not determine the server IP address")
+            diagnostic.fatal("Could not determine the server IP address. Url: $url")
         } catch (e: java.net.ConnectException) {
-            diagnostic.fatal("Could not connect the server")
+            diagnostic.fatal("Could not connect the server. Url: $url")
         } catch (e: java.net.SocketTimeoutException) {
-            diagnostic.fatal("The server communication timeout")
+            diagnostic.fatal("The server communication timeout. Url: $url")
         }
 
         if (!response.isSuccessful) {
