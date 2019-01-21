@@ -14,13 +14,38 @@ Mapping is split for clarity to three sections:
 
 <br>
 
-## 1 DPM metrics
+## 1 DPM "metrics" concepts
 
 ![Mapping Metrics to YTI](images/metrics-yti-mapping.png)
 
 <br>
 
-### 1.1 Metric
+### 1.1 Metric Domain
+
+#### Structure
+Element                             | Source
+----------------------------------- | -------------------------------------
+Metrics Explict Domain              | Parent Explict Domain for Metrics (a.k.a `MET` Domain) exists as predefined in DPM models. Thus no need to configure it via YTI. 
+
+#### Explict Domain for Metrics attributes
+Attribute                     | Data type   | Value source                                                      | Notes
+----------------------------- | ----------- | ----------------------------------------------------------------- | --------------------------------------
+DomainCode                    | String      | _Fixed_                                                           | `MET`
+DomainXBRLCode                | String      | _Fixed_                                                           | `MET`
+DomainLabel                   | String      | _Fixed_                                                           | `Metrics`
+DomainDescription             | String      | _Fixed_                                                           | Empty
+DataType                      | String      | _Fixed_                                                           | `NULL`
+IsTypedDomain                 | Boolean     | _Fixed_                                                           | `FALSE`
+Concept.ConceptType           | String      | _Fixed_                                                           | `Domain`
+Concept.Owner                 | String      | _Fixed_                                                           | `EuroFiling`
+Concept.CreationDate          | Date        | _Fixed_                                                           | `NULL`
+Concept.ModificationDate      | Date        | _Fixed_                                                           | `NULL`
+Concept.FromDate              | Date        | _Fixed_                                                           | `NULL`
+Concept.ToDate                | Date        | _Fixed_                                                           | `NULL`
+
+<br>
+
+### 1.2 Metric
 
 #### Structure
 Element                       | Source
@@ -31,7 +56,7 @@ Complete Metrics collection   | Single Yti Codelist listing all Metrics. Linked 
 #### Metric attributes
 Attribute                 | Data type   | Value source                                              | Notes
 ------------------------- | ----------- | --------------------------------------------------------- | -------------------------------------
-Domain                    | Association | _Fixed_                                                   | Domain this Member belongs to. Single fixed Explicit Domain `MET`
+Domain                    | Association | _Fixed_                                                   | Domain this Member belongs to. Fixed Explicit Domain with code `MET`
 MemberCode                | String      | _Derived_                                                 | "${DataType -> Identifier()}${PeriodType -> Identifier()}${MetricNumber}"
 MemberXBRLCode            | String      | _Derived_                                                 | "${Owner -> prefix}_met:${MemberCode}
 MemberLabel               | String      | YtiCode -> prefLabel                                      |
@@ -41,7 +66,7 @@ MetricNumber              | Integer     | YtiCode -> codeValue                  
 DataType                  | String      | YtiCode -> extension(DpmMetric, DpmDataType)              | Type of data, enumerated text
 FlowType                  | String      | YtiCode -> extension(DpmMetric, DpmFlowType)              | The time dynamics of the information, enumerated text
 BalanceType               | String      | YtiCode -> extension(DpmMetric, DpmBalanceType)           | Balance type, enumerated text
-ReferencedDomainCode      | String      | YtiCode -> extension(DpmMetric, DpmReferencedDomai)       | Associates metric with Domain, from where allowed values for this Metric are obtained
+ReferencedDomainCode      | String      | YtiCode -> extension(DpmMetric, DpmReferencedDomain)      | Associates metric with Domain, from where allowed values for this Metric are obtained
 ReferencedHierarchyCode   | String      | YtiCode -> extension(DpmMetric, DpmReferencedHierarchy)   | Associates metric with Hierarchy, from where allowed values for this Metric are obtained
 HierarchyStartingNode     | String      | _Fixed_                                                   | `NULL` for now 
 IsStartingMemberIncluded  | Boolean     | _Fixed_                                                   | `NULL` for now
@@ -60,6 +85,47 @@ DpmFlowType                  | String    | Flow type             | TODO      | 
 DpmBalanceType               | String    | Balance type          | TODO      | `Credit`, `Debit`
 DpmDomainReference           | String    | Domain reference      | TODO      | DomainCode text or blank, no syntax constraints for now
 DpmHierarchyReference        | String    | Hierarchy reference   | TODO      | HierarchyCode text or blank, no syntax constraints for now
+
+<br>
+
+### 1.3 Metric Hierarchy
+
+#### Structure
+Element                                             | Source
+--------------------------------------------------- | -------------------------------------
+Single Metric Hierarchy                             | Yti Codelist Extension (extension type: `DefinitionHierarchy`)
+Hierarchies collection for Metric Domain            | All Yti Codelist Extensions in Yti Codelist presenting the Metric Domain.
+
+#### Hierarchy attributes
+Attribute                    | Data type   | Source                               | Notes
+---------------------------- | ----------- | ------------------------------------ | ------------------------------------
+Domain                       | Association |  _Fixed_                             | Domain this Hierarchy relates to. Here fixed to Metric Domain.
+HierarchyCode                | String      | YtiCodelistExtension -> codeValue    |
+HierarchyLabel               | String      | YtiCodelistExtension -> prefLabel    |
+HierarchyDescription         | String      | _Fixed_                              | `NULL` for now
+Concept                      | ValueObject | YtiCodelistExtension                 | Timestamps, validity dates, etc
+
+<br>
+
+### 1.4 Metric Hierarchy Node
+
+#### Structure
+Element                                                       | Source
+------------------------------------------------------------- | -------------------------------------
+Single Metric Hierarchy Node                                  | Yti Codelist Extension Member
+Metric Hierarchy Nodes collection for single Metric Hierarchy | All Yti Codelist Extension Members present in Yti Codelist Extension of type `DefinitionHierarchy`
+
+#### Hierarchy Node attributes
+Attribute            | Data type   | Value source                                                    | Notes
+---------------------| ----------- | --------------------------------------------------------------- | -------------------------------------
+Hierarchy            | Association | _Derived_                                                       | Metric Hierarchy to which this Node belongs. Derived from YtiCodelistExtension relation.
+Member               | Association | YtiCodelistExtensionMember -> YtiCode                           | Metric / Member this node represents
+ParentMember         | Association | YtiCodelistExtensionMember -> hierarchyParent() -> YtiCode      | Parent Member in hierarchy, `NULL` for root level nodes
+IsAbstract           | Boolean     | _Fixed_                                                         | `FALSE` for now
+Order                | String      | _Derived_                                                       | Computed from the Yti Codelist Extension Members order in Yti Codelist Extension
+Level                | String      | _Derived_                                                       | Computed from the Yti Codelist Extension Members hierarchical structure in Yti Codelist Extension
+Path                 | String      | _Fixed_                                                         | `NULL` for now
+Concept              | ValueObject | YtiCodelistExtensionMember                                      | Timestamps, validity dates, etc
 
 <br>
 
