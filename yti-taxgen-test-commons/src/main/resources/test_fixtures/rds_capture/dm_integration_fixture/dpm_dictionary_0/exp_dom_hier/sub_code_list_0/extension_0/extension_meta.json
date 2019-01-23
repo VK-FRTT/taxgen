@@ -1,5 +1,5 @@
 {
-  "id": "547ae846-b7c4-4b8d-a165-a3cf807e9db1",
+  "id": "5d0ddb13-ac77-407a-9e6b-c308bfef3146",
   "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/EDA-H1",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1",
   "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1/members/",
@@ -7,8 +7,8 @@
   "codeValue": "EDA-H1",
   "status": "DRAFT",
   "startDate": "2018-12-31",
-  "created": "2019-01-11T09:26:17.355Z",
-  "modified": "2019-01-11T09:26:17.355Z",
+  "created": "2019-01-22T14:20:48.000Z",
+  "modified": "2019-01-22T14:20:48.000Z",
   "prefLabel": {
     "fi": "DOME hierarchy duplicating EDA code"
   },

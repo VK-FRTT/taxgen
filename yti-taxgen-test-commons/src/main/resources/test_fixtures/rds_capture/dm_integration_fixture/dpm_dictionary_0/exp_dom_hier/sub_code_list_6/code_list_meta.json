@@ -1,5 +1,5 @@
 {
-  "id": "ed5c8cc0-3299-463d-9474-56242187e817",
+  "id": "3713b47f-fdaa-4ae7-98ed-daeefd116a63",
   "codeValue": "EDA20-2018-1",
   "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA20-2018-1",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA20-2018-1",
@@ -12,8 +12,8 @@
   "definition": {},
   "description": {},
   "changeNote": {},
-  "created": "2019-01-11T09:31:04.615Z",
-  "modified": "2019-01-11T09:31:31.301Z",
+  "created": "2019-01-22T14:24:39.144Z",
+  "modified": "2019-01-22T14:24:39.144Z",
   "status": "DRAFT",
   "infoDomains": [
     {
@@ -40,6 +40,27 @@
     }
   ],
   "languageCodes": [
+    {
+      "id": "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
+      "codeValue": "fi",
+      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/fi",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi",
+      "status": "VALID",
+      "order": 538,
+      "hierarchyLevel": 1,
+      "created": "2018-09-04T06:44:30.722Z",
+      "modified": "2018-09-07T11:34:11.280Z",
+      "prefLabel": {
+        "fi": "suomi",
+        "sv": "finska",
+        "en": "Finnish"
+      },
+      "description": {},
+      "definition": {},
+      "shortName": "",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi/members/",
+      "conceptUriInVocabularies": ""
+    },
     {
       "id": "931ea36d-b2e9-409b-bf86-87ff85708c75",
       "codeValue": "sv",
@@ -81,29 +102,9 @@
       "shortName": "",
       "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
       "conceptUriInVocabularies": ""
-    },
-    {
-      "id": "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
-      "codeValue": "fi",
-      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/fi",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi",
-      "status": "VALID",
-      "order": 538,
-      "hierarchyLevel": 1,
-      "created": "2018-09-04T06:44:30.722Z",
-      "modified": "2018-09-07T11:34:11.280Z",
-      "prefLabel": {
-        "fi": "suomi",
-        "sv": "finska",
-        "en": "Finnish"
-      },
-      "description": {},
-      "definition": {},
-      "shortName": "",
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi/members/",
-      "conceptUriInVocabularies": ""
     }
   ],
+  "externalReferences": [],
   "variantsOfThisCodeScheme": [],
   "variantMothersOfThisCodeScheme": [],
   "allVersions": [],

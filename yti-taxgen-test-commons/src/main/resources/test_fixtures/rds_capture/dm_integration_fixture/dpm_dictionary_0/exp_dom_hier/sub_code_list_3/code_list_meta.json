@@ -1,18 +1,19 @@
 {
-  "id": "1824d625-7eec-490e-885e-e00b903f28ac",
+  "id": "2ed27bd1-68a6-4724-bccb-46943652c845",
   "codeValue": "EDA9-2018-1",
   "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA9-2018-1",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA9-2018-1",
   "codesUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA9-2018-1/codes/",
   "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA9-2018-1/extensions/",
+  "extensions": [],
   "prefLabel": {
     "fi": "Explicit domain A9 2018-1"
   },
   "definition": {},
   "description": {},
   "changeNote": {},
-  "created": "2019-01-11T09:27:51.042Z",
-  "modified": "2019-01-11T09:27:51.042Z",
+  "created": "2019-01-22T14:23:27.401Z",
+  "modified": "2019-01-22T14:23:27.401Z",
   "status": "DRAFT",
   "infoDomains": [
     {
@@ -39,27 +40,6 @@
     }
   ],
   "languageCodes": [
-    {
-      "id": "931ea36d-b2e9-409b-bf86-87ff85708c75",
-      "codeValue": "sv",
-      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/sv",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv",
-      "status": "VALID",
-      "order": 418,
-      "hierarchyLevel": 1,
-      "created": "2018-09-04T06:44:30.199Z",
-      "modified": "2018-09-07T11:33:27.381Z",
-      "prefLabel": {
-        "fi": "ruotsi",
-        "sv": "svenska",
-        "en": "Swedish"
-      },
-      "description": {},
-      "definition": {},
-      "shortName": "",
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv/members/",
-      "conceptUriInVocabularies": ""
-    },
     {
       "id": "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
       "codeValue": "fi",
@@ -101,8 +81,30 @@
       "shortName": "",
       "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
       "conceptUriInVocabularies": ""
+    },
+    {
+      "id": "931ea36d-b2e9-409b-bf86-87ff85708c75",
+      "codeValue": "sv",
+      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/sv",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv",
+      "status": "VALID",
+      "order": 418,
+      "hierarchyLevel": 1,
+      "created": "2018-09-04T06:44:30.199Z",
+      "modified": "2018-09-07T11:33:27.381Z",
+      "prefLabel": {
+        "fi": "ruotsi",
+        "sv": "svenska",
+        "en": "Swedish"
+      },
+      "description": {},
+      "definition": {},
+      "shortName": "",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv/members/",
+      "conceptUriInVocabularies": ""
     }
   ],
+  "externalReferences": [],
   "variantsOfThisCodeScheme": [],
   "variantMothersOfThisCodeScheme": [],
   "allVersions": [],

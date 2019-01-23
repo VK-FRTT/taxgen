@@ -1,5 +1,5 @@
 {
-  "id": "2028e3b1-67af-4eff-8303-953184898716",
+  "id": "11f1bd60-89b9-44cf-8b34-e8d0b1255463",
   "codeValue": "metrics-2018-1",
   "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1",
@@ -7,8 +7,20 @@
   "extensionsUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/",
   "extensions": [
     {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1"
+    },
+    {
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/dpmMetric",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/dpmMetric"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/METHIER",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
     }
   ],
   "prefLabel": {
@@ -19,8 +31,8 @@
     "fi": "Lista Metriceistä."
   },
   "changeNote": {},
-  "created": "2019-01-11T09:33:59.437Z",
-  "modified": "2019-01-11T09:33:59.437Z",
+  "created": "2019-01-23T17:53:00.756Z",
+  "modified": "2019-01-23T17:53:00.756Z",
   "status": "DRAFT",
   "infoDomains": [
     {
@@ -47,27 +59,6 @@
     }
   ],
   "languageCodes": [
-    {
-      "id": "1cc15c8d-256e-4235-b1cc-071e5b750a08",
-      "codeValue": "en",
-      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
-      "status": "VALID",
-      "order": 668,
-      "hierarchyLevel": 1,
-      "created": "2018-09-04T06:44:31.349Z",
-      "modified": "2018-09-07T11:35:05.969Z",
-      "prefLabel": {
-        "fi": "englanti",
-        "sv": "engelska",
-        "en": "English"
-      },
-      "description": {},
-      "definition": {},
-      "shortName": "",
-      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
-      "conceptUriInVocabularies": ""
-    },
     {
       "id": "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
       "codeValue": "fi",
@@ -108,6 +99,27 @@
       "definition": {},
       "shortName": "",
       "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv/members/",
+      "conceptUriInVocabularies": ""
+    },
+    {
+      "id": "1cc15c8d-256e-4235-b1cc-071e5b750a08",
+      "codeValue": "en",
+      "uri": "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
+      "status": "VALID",
+      "order": 668,
+      "hierarchyLevel": 1,
+      "created": "2018-09-04T06:44:31.349Z",
+      "modified": "2018-09-07T11:35:05.969Z",
+      "prefLabel": {
+        "fi": "englanti",
+        "sv": "engelska",
+        "en": "English"
+      },
+      "description": {},
+      "definition": {},
+      "shortName": "",
+      "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/",
       "conceptUriInVocabularies": ""
     }
   ],

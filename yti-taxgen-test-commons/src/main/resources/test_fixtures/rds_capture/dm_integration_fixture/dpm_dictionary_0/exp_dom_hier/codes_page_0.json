@@ -8,7 +8,7 @@
   },
   "results": [
     {
-      "id": "b6034beb-48b1-476c-b389-4466a550f570",
+      "id": "b81b6180-8b39-4edd-9fb9-3ef32622f0b0",
       "codeValue": "DOME",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/DOME",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/DOME",
@@ -17,8 +17,8 @@
       "hierarchyLevel": 1,
       "startDate": "2018-12-31",
       "endDate": "2019-05-30",
-      "created": "2019-01-11T09:33:29.189Z",
-      "modified": "2019-01-11T09:33:29.189Z",
+      "created": "2019-01-22T14:32:07.456Z",
+      "modified": "2019-01-22T14:32:07.456Z",
       "prefLabel": {
         "fi": "Explicit domain (fi, label)"
       },
@@ -45,7 +45,7 @@
       }
     },
     {
-      "id": "a8ab2568-627c-4f66-893f-5f1bf29a8fdb",
+      "id": "6ba70523-0b4f-45e0-bff0-d248c3824832",
       "codeValue": "EDA",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA",
@@ -53,8 +53,8 @@
       "order": 2,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-11T09:33:29.201Z",
-      "modified": "2019-01-11T09:33:29.201Z",
+      "created": "2019-01-22T14:32:07.481Z",
+      "modified": "2019-01-23T17:53:59.282Z",
       "prefLabel": {
         "fi": "Explicit domain A"
       },
@@ -66,7 +66,12 @@
       },
       "externalReferences": [],
       "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA/members/",
-      "members": [],
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain/member/728b9c0f-2421-4236-b3c4-9508b614f0fa",
+          "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain/members/728b9c0f-2421-4236-b3c4-9508b614f0fa"
+        }
+      ],
       "codeExtensions": [
         {
           "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
@@ -79,7 +84,7 @@
       }
     },
     {
-      "id": "0d194d52-5f80-4f79-ab49-892ba58e2e57",
+      "id": "e19f54f2-bd3b-482a-8087-ea962ff9f548",
       "codeValue": "EDA1",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA1",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA1",
@@ -87,8 +92,8 @@
       "order": 3,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-11T09:33:29.209Z",
-      "modified": "2019-01-11T09:33:29.209Z",
+      "created": "2019-01-22T14:32:07.487Z",
+      "modified": "2019-01-22T14:32:07.487Z",
       "prefLabel": {
         "fi": "Explicit domain A1"
       },
@@ -113,7 +118,7 @@
       }
     },
     {
-      "id": "23319de9-7bd4-45b2-860d-860585e64188",
+      "id": "b761e37d-2700-4cff-aec8-728a87e0b31c",
       "codeValue": "EDA9",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA9",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA9",
@@ -121,8 +126,8 @@
       "order": 4,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-11T09:33:29.216Z",
-      "modified": "2019-01-11T09:33:29.216Z",
+      "created": "2019-01-22T14:32:07.494Z",
+      "modified": "2019-01-22T14:32:07.494Z",
       "prefLabel": {
         "fi": "Explicit domain A9"
       },
@@ -147,7 +152,7 @@
       }
     },
     {
-      "id": "20aa51cd-f8e1-4411-abc1-52caa9ff6a6a",
+      "id": "13510de6-d515-4ed4-a2c7-6b65ff98edb6",
       "codeValue": "EDA10",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA10",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA10",
@@ -155,8 +160,8 @@
       "order": 5,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-11T09:33:29.223Z",
-      "modified": "2019-01-11T09:33:29.223Z",
+      "created": "2019-01-22T14:32:07.501Z",
+      "modified": "2019-01-22T14:32:07.501Z",
       "prefLabel": {
         "fi": "Explicit domain A10"
       },
@@ -181,7 +186,7 @@
       }
     },
     {
-      "id": "dccb79a2-e7fe-4fb3-afa4-7ea33f1daef0",
+      "id": "439a12ed-bfa3-4366-94f8-9b592b837929",
       "codeValue": "EDA11",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA11",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA11",
@@ -189,8 +194,8 @@
       "order": 6,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-11T09:33:29.229Z",
-      "modified": "2019-01-11T09:33:29.229Z",
+      "created": "2019-01-22T14:32:07.507Z",
+      "modified": "2019-01-22T14:32:07.507Z",
       "prefLabel": {
         "fi": "Explicit domain A11"
       },
@@ -215,7 +220,7 @@
       }
     },
     {
-      "id": "53573e19-43f9-44a9-9645-9351cb3df12a",
+      "id": "de759e31-9cae-4e06-a8dd-0d8c8cab7faf",
       "codeValue": "EDA20",
       "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA20",
       "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA20",
@@ -223,8 +228,8 @@
       "order": 7,
       "hierarchyLevel": 1,
       "startDate": "2018-10-31",
-      "created": "2019-01-11T09:33:29.236Z",
-      "modified": "2019-01-11T09:33:29.236Z",
+      "created": "2019-01-22T14:32:07.514Z",
+      "modified": "2019-01-22T14:32:07.514Z",
       "prefLabel": {
         "fi": "Explicit domain A20"
       },

@@ -1,19 +1,19 @@
 {
-  "id": "dc0a8827-8f95-4eec-9057-4d44f00976fc",
+  "id": "f5d9f27f-2ec4-4444-adc0-687dc1f52da9",
   "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER",
   "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/",
   "members": [
     {
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/45395986-ece0-4f2c-847f-3af8bbd0ba6b",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/45395986-ece0-4f2c-847f-3af8bbd0ba6b"
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/bbbab95b-e3cf-43fc-9cf5-aecb8105f1d9",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/bbbab95b-e3cf-43fc-9cf5-aecb8105f1d9"
     }
   ],
   "codeValue": "HIER",
   "status": "DRAFT",
   "startDate": "2018-10-31",
-  "created": "2019-01-11T09:26:17.340Z",
-  "modified": "2019-01-11T09:26:17.340Z",
+  "created": "2019-01-22T14:20:48.018Z",
+  "modified": "2019-01-22T14:20:48.018Z",
   "prefLabel": {
     "fi": "Hierarchy (fi, label)"
   },

@@ -8,9 +8,9 @@
   },
   "results": [
     {
-      "id": "45395986-ece0-4f2c-847f-3af8bbd0ba6b",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/45395986-ece0-4f2c-847f-3af8bbd0ba6b",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/45395986-ece0-4f2c-847f-3af8bbd0ba6b",
+      "id": "bbbab95b-e3cf-43fc-9cf5-aecb8105f1d9",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/bbbab95b-e3cf-43fc-9cf5-aecb8105f1d9",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/bbbab95b-e3cf-43fc-9cf5-aecb8105f1d9",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM"
@@ -18,8 +18,8 @@
       "prefLabel": {
         "fi": "Member (fi, label)"
       },
-      "created": "2019-01-11T09:26:17.415Z",
-      "modified": "2019-01-11T09:26:17.415Z",
+      "created": "2019-01-22T14:20:48.057Z",
+      "modified": "2019-01-22T14:20:48.057Z",
       "order": 1,
       "extension": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER",

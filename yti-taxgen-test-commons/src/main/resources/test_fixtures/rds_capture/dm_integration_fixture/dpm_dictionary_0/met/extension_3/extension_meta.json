@@ -1,0 +1,65 @@
+{
+  "id": "4dbfd70d-c501-4d10-a272-0bd083a5ccf9",
+  "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1",
+  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1",
+  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/",
+  "members": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/87ac932a-0680-432a-954e-fed529b32a0a",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/87ac932a-0680-432a-954e-fed529b32a0a"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/1a9a80d0-5c92-48fe-9c27-e0367ffdcc88",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/1a9a80d0-5c92-48fe-9c27-e0367ffdcc88"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/b0bd0b2a-0ab7-4b8c-8dbe-5ca052bdb6a8",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/b0bd0b2a-0ab7-4b8c-8dbe-5ca052bdb6a8"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/2f9933ce-9129-48cc-bf9e-9ea1aa4f7853",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/2f9933ce-9129-48cc-bf9e-9ea1aa4f7853"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/24c9dee0-6dd2-4fae-9383-5041dad28bc0",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/24c9dee0-6dd2-4fae-9383-5041dad28bc0"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/0e761975-ab7b-435d-8e82-150f8c46ace9",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/0e761975-ab7b-435d-8e82-150f8c46ace9"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/b9158a32-86a2-4aac-a551-7bdda07e8c2c",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/b9158a32-86a2-4aac-a551-7bdda07e8c2c"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/204a464a-8598-4af0-b78f-e80c5a436848",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/204a464a-8598-4af0-b78f-e80c5a436848"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/85916488-ade3-431d-9459-b351589f7207",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/85916488-ade3-431d-9459-b351589f7207"
+    },
+    {
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/32caabe1-aacb-4942-93e3-ab721b0efefc",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1/members/32caabe1-aacb-4942-93e3-ab721b0efefc"
+    }
+  ],
+  "codeValue": "MET1",
+  "status": "DRAFT",
+  "startDate": "2018-10-31",
+  "created": "2019-01-23T17:53:00.962Z",
+  "modified": "2019-01-23T17:53:00.962Z",
+  "prefLabel": {
+    "fi": "Metric hierarchy 1"
+  },
+  "parentCodeScheme": {
+    "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1",
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1"
+  },
+  "codeSchemes": [],
+  "propertyType": {
+    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri": "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

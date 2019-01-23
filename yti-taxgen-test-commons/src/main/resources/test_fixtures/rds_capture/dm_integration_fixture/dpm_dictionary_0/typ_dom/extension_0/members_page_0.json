@@ -8,26 +8,26 @@
   },
   "results": [
     {
-      "id": "774b3968-a678-4354-a4be-d27b469f6ec0",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/774b3968-a678-4354-a4be-d27b469f6ec0",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/774b3968-a678-4354-a4be-d27b469f6ec0",
+      "id": "5791e8c1-a618-4c45-97f6-f67a46bdbf96",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/5791e8c1-a618-4c45-97f6-f67a46bdbf96",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/5791e8c1-a618-4c45-97f6-f67a46bdbf96",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/DOMT",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/DOMT"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.706Z",
-      "modified": "2019-01-11T09:35:17.706Z",
+      "created": "2019-01-22T14:26:56.913Z",
+      "modified": "2019-01-22T14:26:56.913Z",
       "memberValues": [
         {
-          "id": "7f0259b8-30ef-4902-8ba8-276acd1643bc",
+          "id": "26760901-5170-457b-98a6-59b04aaf681d",
           "value": "Boolean",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.708Z",
-          "modified": "2019-01-11T09:35:17.708Z"
+          "created": "2019-01-22T14:26:56.914Z",
+          "modified": "2019-01-22T14:26:56.914Z"
         }
       ],
       "order": 1,
@@ -37,26 +37,26 @@
       }
     },
     {
-      "id": "db9d97b3-8eab-4f0d-8ee9-b0fffaa6af72",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/db9d97b3-8eab-4f0d-8ee9-b0fffaa6af72",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/db9d97b3-8eab-4f0d-8ee9-b0fffaa6af72",
+      "id": "78a55fe2-6b50-4274-a1cb-3d8e2ff7bea9",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/78a55fe2-6b50-4274-a1cb-3d8e2ff7bea9",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/78a55fe2-6b50-4274-a1cb-3d8e2ff7bea9",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDB",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDB"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.708Z",
-      "modified": "2019-01-11T09:35:17.708Z",
+      "created": "2019-01-22T14:26:56.914Z",
+      "modified": "2019-01-22T14:26:56.914Z",
       "memberValues": [
         {
-          "id": "5c73aa5d-9790-4fb2-aca7-fa3c370f8148",
+          "id": "925d03ec-d9f7-45dc-b16e-5550b23dcbdb",
           "value": "Boolean",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.710Z",
-          "modified": "2019-01-11T09:35:17.710Z"
+          "created": "2019-01-22T14:26:56.916Z",
+          "modified": "2019-01-22T14:26:56.916Z"
         }
       ],
       "order": 2,
@@ -66,26 +66,26 @@
       }
     },
     {
-      "id": "9e51a057-2b6a-45a7-a3c7-2f63b2f6c9a3",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/9e51a057-2b6a-45a7-a3c7-2f63b2f6c9a3",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/9e51a057-2b6a-45a7-a3c7-2f63b2f6c9a3",
+      "id": "8dd2f75d-ffb9-4a99-964a-230287adbdf6",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/8dd2f75d-ffb9-4a99-964a-230287adbdf6",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/8dd2f75d-ffb9-4a99-964a-230287adbdf6",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDD",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDD"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.710Z",
-      "modified": "2019-01-11T09:35:17.710Z",
+      "created": "2019-01-22T14:26:56.916Z",
+      "modified": "2019-01-22T14:26:56.916Z",
       "memberValues": [
         {
-          "id": "9b2cd29a-fede-432e-984b-1b8ee0f553ba",
+          "id": "9cd8c207-a220-492f-8d8c-de700c2fabd5",
           "value": "Date",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.712Z",
-          "modified": "2019-01-11T09:35:17.712Z"
+          "created": "2019-01-22T14:26:56.918Z",
+          "modified": "2019-01-22T14:26:56.918Z"
         }
       ],
       "order": 3,
@@ -95,26 +95,26 @@
       }
     },
     {
-      "id": "28604848-96aa-426e-aae3-a7e6bd86d7a9",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/28604848-96aa-426e-aae3-a7e6bd86d7a9",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/28604848-96aa-426e-aae3-a7e6bd86d7a9",
+      "id": "9e126408-7159-4871-b5ab-7bb0343eda93",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/9e126408-7159-4871-b5ab-7bb0343eda93",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/9e126408-7159-4871-b5ab-7bb0343eda93",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDI",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDI"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.712Z",
-      "modified": "2019-01-11T09:35:17.712Z",
+      "created": "2019-01-22T14:26:56.918Z",
+      "modified": "2019-01-22T14:26:56.918Z",
       "memberValues": [
         {
-          "id": "763e2efb-0eaf-4a95-adf7-441b812f3438",
+          "id": "11e218c4-f0d2-4216-b615-704ad6a2a648",
           "value": "Integer",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.714Z",
-          "modified": "2019-01-11T09:35:17.714Z"
+          "created": "2019-01-22T14:26:56.919Z",
+          "modified": "2019-01-22T14:26:56.919Z"
         }
       ],
       "order": 4,
@@ -124,26 +124,26 @@
       }
     },
     {
-      "id": "30a2c744-9b42-4ef5-a4f2-a0dd7fe59860",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/30a2c744-9b42-4ef5-a4f2-a0dd7fe59860",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/30a2c744-9b42-4ef5-a4f2-a0dd7fe59860",
+      "id": "c8f8f88b-6ae1-4efd-bb34-35e33b675e0a",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/c8f8f88b-6ae1-4efd-bb34-35e33b675e0a",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/c8f8f88b-6ae1-4efd-bb34-35e33b675e0a",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDM",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDM"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.714Z",
-      "modified": "2019-01-11T09:35:17.714Z",
+      "created": "2019-01-22T14:26:56.919Z",
+      "modified": "2019-01-22T14:26:56.919Z",
       "memberValues": [
         {
-          "id": "ff589e2d-79d1-48fb-a62a-5b942470b6b3",
+          "id": "1550b18c-1f37-4d06-a722-e0eecf18c48e",
           "value": "Monetary",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.715Z",
-          "modified": "2019-01-11T09:35:17.715Z"
+          "created": "2019-01-22T14:26:56.921Z",
+          "modified": "2019-01-22T14:26:56.921Z"
         }
       ],
       "order": 5,
@@ -153,26 +153,26 @@
       }
     },
     {
-      "id": "25103273-459c-4ef9-9e74-93b5c707754f",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/25103273-459c-4ef9-9e74-93b5c707754f",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/25103273-459c-4ef9-9e74-93b5c707754f",
+      "id": "a5392778-b3d5-4bdc-bda7-74b19aa92d72",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/a5392778-b3d5-4bdc-bda7-74b19aa92d72",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/a5392778-b3d5-4bdc-bda7-74b19aa92d72",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDP",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDP"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.715Z",
-      "modified": "2019-01-11T09:35:17.715Z",
+      "created": "2019-01-22T14:26:56.921Z",
+      "modified": "2019-01-22T14:26:56.921Z",
       "memberValues": [
         {
-          "id": "8401089d-e3ce-41cf-b137-510efd3504ae",
+          "id": "191140bf-073f-4a93-aefc-47af0a07fd1e",
           "value": "Percentage",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.717Z",
-          "modified": "2019-01-11T09:35:17.717Z"
+          "created": "2019-01-22T14:26:56.922Z",
+          "modified": "2019-01-22T14:26:56.922Z"
         }
       ],
       "order": 6,
@@ -182,26 +182,26 @@
       }
     },
     {
-      "id": "b48a8bc7-bd8a-4569-b946-76ee31a13862",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/b48a8bc7-bd8a-4569-b946-76ee31a13862",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/b48a8bc7-bd8a-4569-b946-76ee31a13862",
+      "id": "f416fad4-24cd-41b2-97d9-c076b4e4f2e3",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/f416fad4-24cd-41b2-97d9-c076b4e4f2e3",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/f416fad4-24cd-41b2-97d9-c076b4e4f2e3",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDR",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDR"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.717Z",
-      "modified": "2019-01-11T09:35:17.717Z",
+      "created": "2019-01-22T14:26:56.922Z",
+      "modified": "2019-01-22T14:26:56.922Z",
       "memberValues": [
         {
-          "id": "dcf7eddf-7e67-4fb0-86d9-f16bce99c593",
+          "id": "8b048380-2928-47b3-afa4-e01abb6c9ede",
           "value": "Decimal",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.718Z",
-          "modified": "2019-01-11T09:35:17.718Z"
+          "created": "2019-01-22T14:26:56.923Z",
+          "modified": "2019-01-22T14:26:56.923Z"
         }
       ],
       "order": 7,
@@ -211,26 +211,26 @@
       }
     },
     {
-      "id": "445e5ffe-626f-4acb-b0ed-0d0b22c00ef5",
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/445e5ffe-626f-4acb-b0ed-0d0b22c00ef5",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/445e5ffe-626f-4acb-b0ed-0d0b22c00ef5",
+      "id": "961c73d4-89b6-4513-9eb7-aa7719a236f6",
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/961c73d4-89b6-4513-9eb7-aa7719a236f6",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/961c73d4-89b6-4513-9eb7-aa7719a236f6",
       "code": {
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/code/TDS",
         "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDS"
       },
       "prefLabel": {},
-      "created": "2019-01-11T09:35:17.718Z",
-      "modified": "2019-01-11T09:35:17.718Z",
+      "created": "2019-01-22T14:26:56.923Z",
+      "modified": "2019-01-22T14:26:56.923Z",
       "memberValues": [
         {
-          "id": "9248c264-896f-43a1-abd4-71f5cae076af",
+          "id": "8b821415-c836-4ef3-a7c9-06ee4f562e47",
           "value": "String",
           "valueType": {
             "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
             "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
           },
-          "created": "2019-01-11T09:35:17.720Z",
-          "modified": "2019-01-11T09:35:17.720Z"
+          "created": "2019-01-22T14:26:56.925Z",
+          "modified": "2019-01-22T14:26:56.925Z"
         }
       ],
       "order": 8,

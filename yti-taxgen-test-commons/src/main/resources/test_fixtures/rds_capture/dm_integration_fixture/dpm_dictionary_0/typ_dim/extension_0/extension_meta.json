@@ -1,22 +1,22 @@
 {
-  "id": "14364d3f-ae3e-4532-85c7-aa4c2d88af74",
+  "id": "1fb961fc-4917-4978-936d-0a58dd65ee3d",
   "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
   "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension",
   "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/",
   "members": [
     {
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/8d3ba600-dfea-433c-965a-55d15191fc56",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/8d3ba600-dfea-433c-965a-55d15191fc56"
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/ec5f13d0-51ff-43b5-95aa-d0fbfef07552",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/ec5f13d0-51ff-43b5-95aa-d0fbfef07552"
     },
     {
-      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/7c41c694-3725-43c4-8577-4eb2169f082a",
-      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/7c41c694-3725-43c4-8577-4eb2169f082a"
+      "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/7143cf0c-e938-4c64-8cd5-a9f13314994b",
+      "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/7143cf0c-e938-4c64-8cd5-a9f13314994b"
     }
   ],
   "codeValue": "dpmDimension",
   "status": "DRAFT",
-  "created": "2019-01-11T09:34:27.771Z",
-  "modified": "2019-01-11T09:34:27.771Z",
+  "created": "2019-01-22T14:30:00.474Z",
+  "modified": "2019-01-22T14:30:00.474Z",
   "prefLabel": {},
   "parentCodeScheme": {
     "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1",
