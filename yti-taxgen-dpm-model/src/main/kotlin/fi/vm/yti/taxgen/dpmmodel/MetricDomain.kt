@@ -6,11 +6,11 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateElementPropertyValuesUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLengths
 
-data class ExplicitDomain(
+data class MetricDomain(
     override val uri: String,
     override val concept: Concept,
     val domainCode: String,
-    val members: List<Member>,
+    val metrics: List<Metric>,
     val hierarchies: List<Hierarchy>
 ) : DpmElement {
 
@@ -21,7 +21,7 @@ data class ExplicitDomain(
         validateLength(
             validationResults = validationResults,
             instance = this,
-            property = ExplicitDomain::domainCode,
+            property = MetricDomain::domainCode,
             minLength = 2,
             maxLength = 50
         )
@@ -29,7 +29,7 @@ data class ExplicitDomain(
         validateLengths(
             validationResults = validationResults,
             instance = this,
-            properties = listOf(ExplicitDomain::members, ExplicitDomain::hierarchies),
+            properties = listOf(MetricDomain::metrics, MetricDomain::hierarchies),
             minLength = 0,
             maxLength = 10000
         )
@@ -37,42 +37,29 @@ data class ExplicitDomain(
         validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
-            iterableProperty = ExplicitDomain::members,
-            valueProperties = listOf(Member::uri, Member::memberCode)
-        )
-
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "members",
-            validate = { messages ->
-                val count = members.count { it.defaultMember }
-
-                if (count > 1) {
-                    messages.add("has $count default members (should have at max 1)")
-                }
-            }
+            iterableProperty = MetricDomain::metrics,
+            valueProperties = listOf(Metric::uri, Metric::metricCode)
         )
 
         validateElementPropertyValuesUnique(
             validationResults = validationResults,
             instance = this,
-            iterableProperty = ExplicitDomain::hierarchies,
+            iterableProperty = MetricDomain::hierarchies,
             valueProperties = listOf(Hierarchy::uri, Hierarchy::hierarchyCode)
         )
 
-        validateCustom(
+        validateCustom( //TODO - abstract the validation & share with ExplicitDomain
             validationResults = validationResults,
             instance = this,
             propertyName = "hierarchies",
             validate = { messages ->
-                val domainMemberUris = members.map { it.uri }.toSet()
+                val domainMetricUris = metrics.map { it.uri }.toSet()
 
                 hierarchies.forEach { hierarchy ->
                     hierarchy.allNodes().forEach { node ->
-                        if (!domainMemberUris.contains(node.referencedMemberUri)) {
+                        if (!domainMetricUris.contains(node.referencedMemberUri)) {
                             messages.add(
-                                "DPM HierarchyNode ${node.uri} refers to DPM Member ${node.referencedMemberUri} which is not part of the containing DPM ExplicitDomain."
+                                "DPM HierarchyNode ${node.uri} refers to DPM Metric ${node.referencedMemberUri} which is not part of the containing DPM MetricDomain."
                             )
                         }
                     }

@@ -88,7 +88,7 @@ internal class IntegrationFixtureMappingTest_TypedDomains
                         entry(fi, "Typed domain (Percentage)")
                     )
 
-                    assertThat(it.dataType).isEqualTo("Percentage")
+                    assertThat(it.dataType).isEqualTo("Percent")
                 }
 
                 6 -> {

@@ -690,7 +690,8 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
     private fun assertMetricsBlueprint(blueprint: CodeListBlueprint) {
         assertThat(blueprint.usesExtensions).isTrue()
         assertThat(blueprint.extensionPropertyTypeUris).containsExactly(
-            "http://uri.suomi.fi/datamodel/ns/code#dpmMetric"
+            "http://uri.suomi.fi/datamodel/ns/code#dpmMetric",
+            "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
         )
 
         assertThat(blueprint.usesSubCodeLists).isFalse()

@@ -1,26 +1,22 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
-import fi.vm.yti.taxgen.dpmmodel.Hierarchy
-import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.ExtensionSourceReader
 
 internal fun mapAndValidateExplicitDomainsAndHierarchies(
     codeListSource: CodeListSourceReader?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<ExplicitDomain> {
-    val explicitDomainItems = mutableListOf<ExplicitDomainItem>()
-
     if (codeListSource == null) return emptyList()
+
+    val explicitDomainItems = mutableListOf<ExplicitDomainItem>()
 
     //Base details
     codeListSource.eachCode { code ->
@@ -72,8 +68,9 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
                 diagnostic
             )
 
-            val hierarchies = mapAndValidateExplicitDomainHierarchies(
+            val hierarchies = mapAndValidateHierarchies(
                 subCodeListSource,
+                listOf(RdsExtensionType.DefinitionHierarchy, RdsExtensionType.CalculationHierarchy),
                 owner,
                 diagnostic
             )
@@ -126,74 +123,4 @@ private fun mapAndValidateExplicitDomainMembers(
     validateDpmElements(diagnostic, members)
 
     return members
-}
-
-private fun mapAndValidateExplicitDomainHierarchies(
-    codeListSource: CodeListSourceReader,
-    owner: Owner,
-    diagnostic: Diagnostic
-): List<Hierarchy> {
-    val hierarchies = mutableListOf<Hierarchy>()
-
-    codeListSource.eachExtensionSource { extensionSource ->
-        val extensionMetadata = extensionSource.extensionMetaData()
-
-        if (extensionMetadata.isType(RdsExtensionType.DefinitionHierarchy) ||
-            extensionMetadata.isType(RdsExtensionType.CalculationHierarchy)
-        ) {
-            val rootNodes = mapAndValidateHierarchyNodes(
-                extensionSource,
-                owner,
-                diagnostic
-            )
-
-            val hierarchy = Hierarchy(
-                uri = extensionMetadata.validUri(diagnostic),
-                concept = extensionMetadata.dpmConcept(owner),
-                hierarchyCode = extensionMetadata.codeValueOrEmpty(),
-                rootNodes = rootNodes
-            )
-
-            diagnostic.validate(hierarchy)
-            hierarchies.add(hierarchy)
-        }
-    }
-
-    hierarchies.sortWith(compareBy(NumberAwareStringComparator.instance()) { it.hierarchyCode })
-
-    return hierarchies
-}
-
-private fun mapAndValidateHierarchyNodes(
-    extensionSource: ExtensionSourceReader,
-    owner: Owner,
-    diagnostic: Diagnostic
-): List<HierarchyNode> {
-    val workingNodes = mutableListOf<HierarchyNodeItem>()
-
-    extensionSource.eachExtensionMember { extensionMember ->
-
-        val nodeItem = HierarchyNodeItem(
-            uri = extensionMember.validUri(diagnostic),
-            concept = extensionMember.dpmConcept(owner),
-            comparisonOperator = extensionMember.stringValueOrNull(RdsMemberValueType.ComparisonOperator),
-            unaryOperator = extensionMember.stringValueOrNull(RdsMemberValueType.UnaryOperator),
-            referencedMemberUri = extensionMember.validCodeUri(diagnostic),
-            parentMemberUri = extensionMember.relatedMember?.uri,
-            order = extensionMember.validOrder(diagnostic)
-        )
-
-        workingNodes.add(nodeItem)
-    }
-
-    workingNodes.sortWith(compareBy { it.order })
-
-    val rootNode = HierarchyNodeRoot()
-    rootNode.buildTree(workingNodes)
-
-    if (workingNodes.any()) {
-        diagnostic.fatal("Extension has members which are not part of hierarchy")
-    }
-
-    return rootNode.createAndValidateHierarchyNodes(diagnostic)
 }

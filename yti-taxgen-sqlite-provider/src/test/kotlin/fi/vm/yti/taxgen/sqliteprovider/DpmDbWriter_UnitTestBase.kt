@@ -218,7 +218,7 @@ internal open class DpmDbWriter_UnitTestBase {
                 DpmDictionary(
                     owner = dpmOwner,
 
-                    metrics = emptyList(),
+                    metricDomains = emptyList(),
 
                     explicitDomains = listOf(
                         ExplicitDomain(

@@ -18,7 +18,7 @@ internal class DpmDictionary_UnitTest :
     @ParameterizedTest(name = "{0} should be {1}")
     @CsvSource(
         "owner,                 required",
-        "metrics,               required",
+        "metricDomains,         required",
         "explicitDomains,       required",
         "typedDomains,          required",
         "explicitDimensions,    required",
@@ -37,7 +37,7 @@ internal class DpmDictionary_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "metrics,               maxColLength,   10000",
+        "metricDomains,         maxColLength,   1",
         "explicitDomains,       maxColLength,   10000",
         "typedDomains,          maxColLength,   10000",
         "explicitDimensions,    maxColLength,   10000",
@@ -55,8 +55,11 @@ internal class DpmDictionary_UnitTest :
             customValueBuilder = { property, length ->
 
                 when (property.name) {
-                    "metrics" ->
-                        mapOf("metrics" to List(length) { index -> metric("$index", "$index") })
+                    "metricDomains" ->
+                        mapOf(
+                            "metricDomains" to List(length) { index -> metricDomain() },
+                            "explicitDomains" to listOf(Factory.instantiate<ExplicitDomain>())
+                        )
 
                     "explicitDomains" ->
                         mapOf("explicitDomains" to List(length) { index -> explicitDomain("$index") })

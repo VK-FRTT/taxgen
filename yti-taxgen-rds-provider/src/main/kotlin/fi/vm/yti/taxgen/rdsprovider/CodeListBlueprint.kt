@@ -22,7 +22,8 @@ data class CodeListBlueprint(
                 "usesExtensions": true,
                 "usesSubCodeLists": false,
                 "extensionPropertyTypeUris": [
-                    "http://uri.suomi.fi/datamodel/ns/code#dpmMetric"
+                    "http://uri.suomi.fi/datamodel/ns/code#dpmMetric",
+                    "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
                 ],
                 "subCodeListBlueprint": null
                 }

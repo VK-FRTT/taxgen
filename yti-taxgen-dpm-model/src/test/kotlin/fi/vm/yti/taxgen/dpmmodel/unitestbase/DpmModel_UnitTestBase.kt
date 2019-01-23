@@ -9,6 +9,7 @@ import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
+import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
@@ -56,10 +57,10 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
-    protected fun metric(baseId: String, memberCodeNumber: String): Metric {
+    protected fun metric(baseId: String): Metric {
         return Metric(
-            uri = "${baseId}_uri",
-            memberCodeNumber = memberCodeNumber,
+            uri = "met_${baseId}_uri",
+            metricCode = "met_${baseId}_code",
             concept = Factory.instantiate(),
             dataType = "String",
             flowType = "Instant",
@@ -75,7 +76,7 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             domainCode = "exp_dom_${baseId}_code",
             concept = Factory.instantiate(),
             members = listOf(Factory.instantiate()),
-            hierarchies = listOf()
+            hierarchies = emptyList()
         )
     }
 
@@ -137,6 +138,16 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
             dimensionCode = "typ_dim_${baseId}_code",
             concept = Factory.instantiate(),
             referencedDomainCode = referencedDomainCode
+        )
+    }
+
+    protected fun metricDomain(): MetricDomain {
+        return MetricDomain(
+            uri = "MET",
+            domainCode = "MET",
+            concept = Factory.instantiate(),
+            metrics = listOf(Factory.instantiate()),
+            hierarchies = listOf()
         )
     }
 }

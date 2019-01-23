@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import java.util.regex.Pattern
 
 @DisplayName("Mapping Integration Fixture to DPM model - ExplicitDomainsAndHierarchies")
 internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
@@ -223,7 +224,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
             hierarchy.rootNodes.forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/45395986-ece0-4f2c-847f-3af8bbd0ba6b")
+                        assertThat(it.uri).containsPattern(Pattern.compile("http:\\/\\/uri\\.suomi\\.fi\\/codelist\\/taxgen-dm-integration-fixture\\/DOME-2018-1\\/extension\\/HIER\\/member\\/[a-f0-9-]{36}\$"))
                         assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -268,10 +269,10 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         private val domainCode = "EDA"
 
         @Test
-        fun `12 Members`() {
+        fun `13 Members`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
 
-            assertThat(domain.members.size).isEqualTo(12)
+            assertThat(domain.members.size).isEqualTo(13)
 
             domain.members.forEachIndexed { index, it ->
                 when (index) {
@@ -342,6 +343,10 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.memberCode).isEqualTo("EDA-x20")
                     }
 
+                    12 -> {
+                        assertThat(it.memberCode).isEqualTo("EDA-x21")
+                    }
+
                     else -> {
                         fail { "Unexpected item" }
                     }
@@ -398,37 +403,64 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
         }
 
         @Test
-        fun `5 HierarchyNodes within 'EDA-H1' hierarchy`() {
+        fun `8 HierarchyNodes within 'EDA-H1' hierarchy`() {
             val domain = performMappingFromIntegrationFixture().explicitDomains.find { it.domainCode == domainCode }!!
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "EDA-H1" }!!
 
-            assertThat(hierarchy.allNodes().size).isEqualTo(5)
+            assertThat(hierarchy.allNodes().size).isEqualTo(8)
 
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 2")
+                            entry(fi, "EDA member 7")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x2")
-
-                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
-                        assertThat(it.childNodes.size).isEqualTo(1)
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x20")
+                        assertThat(it.childNodes).isEmpty()
                     }
 
                     1 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 3")
+                            entry(fi, "EDA member 4")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x9")
 
-                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
+                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
                         assertThat(it.childNodes.size).isEqualTo(1)
                     }
 
                     2 -> {
+                        assertThat(it.concept.label.translations).containsOnly(
+                            entry(fi, "EDA member 5")
+                        )
+
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
+                        assertThat(it.childNodes).isEmpty()
+                    }
+
+                    3 -> {
+                        assertThat(it.concept.label.translations).containsOnly(
+                            entry(fi, "EDA member 6")
+                        )
+
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x19")
+                        assertThat(it.childNodes).isEmpty()
+                    }
+
+                    4 -> {
+                        assertThat(it.concept.label.translations).containsOnly(
+                            entry(fi, "EDA member 2")
+                        )
+
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x2")
+                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
+                        assertThat(it.childNodes[1].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
+                        assertThat(it.childNodes.size).isEqualTo(2)
+                    }
+
+                    5 -> {
                         assertThat(it.concept.label.translations).containsOnly(
                             entry(fi, "EDA member 1")
                         )
@@ -437,22 +469,21 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.childNodes).isEmpty()
                     }
 
-                    3 -> {
+                    6 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 4")
+                            entry(fi, "EDA member 3")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x9")
-                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
-                        assertThat(it.childNodes.size).isEqualTo(1)
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x3")
+                        assertThat(it.childNodes).isEmpty()
                     }
 
-                    4 -> {
+                    7 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 5")
+                            entry(fi, "EDA member 8")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x10")
+                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x21")
                         assertThat(it.childNodes).isEmpty()
                     }
 

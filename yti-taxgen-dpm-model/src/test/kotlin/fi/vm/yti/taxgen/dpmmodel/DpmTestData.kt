@@ -79,7 +79,7 @@ fun dpmTestData(): Set<DataDefinition> {
             attributes = mapOf(
                 "uri" to "mem_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "memberCode" to "exp_mc",
+                "memberCode" to "mc",
                 "defaultMember" to true
             )
         )
@@ -150,13 +150,26 @@ fun dpmTestData(): Set<DataDefinition> {
 
     definitions.add(
         DataDefinition(
+            kClass = MetricDomain::class,
+            attributes = mapOf(
+                "uri" to "MET",
+                "concept" to dynamicAttribute { it.instantiate<Concept>() },
+                "domainCode" to "MET",
+                "metrics" to dynamicAttribute { listOf(it.instantiate<Metric>()) },
+                "hierarchies" to dynamicAttribute { listOf(it.instantiate<Hierarchy>()) }
+            )
+        )
+    )
+
+    definitions.add(
+        DataDefinition(
             kClass = Metric::class,
             attributes = mapOf(
                 "uri" to "met_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
-                "memberCodeNumber" to "1",
+                "metricCode" to "sd1",
                 "dataType" to "String",
-                "flowType" to "Duration",
+                "flowType" to "Stock",
                 "balanceType" to "Credit",
                 "referencedDomainCode" to "exp_dom",
                 "referencedHierarchyCode" to "hier_code"
@@ -169,7 +182,7 @@ fun dpmTestData(): Set<DataDefinition> {
             kClass = DpmDictionary::class,
             attributes = mapOf(
                 "owner" to dynamicAttribute { it.instantiate<Owner>() },
-                "metrics" to emptyList<Metric>(),
+                "metricDomains" to emptyList<ExplicitDomain>(),
                 "explicitDomains" to emptyList<ExplicitDomain>(),
                 "typedDomains" to emptyList<TypedDomain>(),
                 "explicitDimensions" to emptyList<ExplicitDimension>(),

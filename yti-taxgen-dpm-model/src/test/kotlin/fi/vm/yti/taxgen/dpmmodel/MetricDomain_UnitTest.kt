@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-internal class ExplicitDomain_UnitTest :
-    DpmModel_UnitTestBase<ExplicitDomain>(ExplicitDomain::class) {
+internal class MetricDomain_UnitTest :
+    DpmModel_UnitTestBase<MetricDomain>(MetricDomain::class) {
 
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
@@ -20,7 +20,7 @@ internal class ExplicitDomain_UnitTest :
         "uri,                   required",
         "concept,               required",
         "domainCode,            required",
-        "members,               required",
+        "metrics,               required",
         "hierarchies,           required"
     )
     fun testPropertyOptionality(
@@ -40,7 +40,7 @@ internal class ExplicitDomain_UnitTest :
         "uri,                   maxLength,      500",
         "domainCode,            minLength,      2",
         "domainCode,            maxLength,      50",
-        "members,               maxColLength,   10000",
+        "metrics,               maxColLength,   10000",
         "hierarchies,           maxColLength,   10000"
     )
     fun testPropertyLengthValidation(
@@ -53,8 +53,8 @@ internal class ExplicitDomain_UnitTest :
             validationType = validationType,
             expectedLimit = expectedLimit,
             customValueBuilder = { property, length ->
-                if (property.name == "members") {
-                    mapOf("members" to List(length) { index -> member("$index", (index == 0)) })
+                if (property.name == "metrics") {
+                    mapOf("metrics" to List(length) { index -> metric("$index") })
                 } else if (property.name == "hierarchies") {
                     mapOf("hierarchies" to List(length) { index -> hierarchy("$index") })
                 } else {
@@ -82,54 +82,25 @@ internal class ExplicitDomain_UnitTest :
     }
 
     @Nested
-    inner class MembersProp {
+    inner class MetricsProp {
 
         @Test
-        fun `members should have unique ids and memberCodes`() {
+        fun `metrics should have unique ids and metricCodes`() {
             attributeOverrides(
-                "members" to listOf(
-                    member("m_1", false),
-                    member("m_2", false),
-                    member("m_2", true),
-                    member("m_4", false)
+                "metrics" to listOf(
+                    metric("m_1"),
+                    metric("m_2"),
+                    metric("m_2"),
+                    metric("m_4")
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactlyInAnyOrder(
-                    "ExplicitDomain.members: duplicate uri value 'member_m_2_uri'",
-                    "ExplicitDomain.members: duplicate memberCode value 'member_m_2_code'"
+                    "MetricDomain.metrics: duplicate uri value 'met_m_2_uri'",
+                    "MetricDomain.metrics: duplicate metricCode value 'met_m_2_code'"
                 )
-        }
-
-        @Test
-        fun `members should error with 2 default members`() {
-            attributeOverrides(
-                "members" to listOf(
-                    member("m_1", false),
-                    member("m_2", true),
-                    member("m_3", true)
-                )
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.members: has 2 default members (should have at max 1)")
-        }
-
-        @Test
-        fun `members should accept 1 default member`() {
-            attributeOverrides(
-                "members" to listOf(
-                    member("m_1", false),
-                    member("m_2", true),
-                    member("m_3", false)
-                )
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors).isEmpty()
         }
     }
 
@@ -150,18 +121,18 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "ExplicitDomain.hierarchies: duplicate hierarchyCode value 'hierarchy_h_2_code'",
-                    "ExplicitDomain.hierarchies: duplicate uri value 'hierarchy_h_2_uri'"
+                    "MetricDomain.hierarchies: duplicate hierarchyCode value 'hierarchy_h_2_code'",
+                    "MetricDomain.hierarchies: duplicate uri value 'hierarchy_h_2_uri'"
                 )
         }
 
         @Test
-        fun `hierarchies should refer only Members which are from the Domain itself`() {
+        fun `hierarchies should refer only Metrics which are from the Domain itself`() {
 
             attributeOverrides(
-                "members" to listOf(
-                    member("m_1", false),
-                    member("m_2", true)
+                "metrics" to listOf(
+                    metric("m_1"),
+                    metric("m_2")
                 ),
 
                 "hierarchies" to listOf(
@@ -169,16 +140,16 @@ internal class ExplicitDomain_UnitTest :
                         "h_1",
                         hierarchyNode(
                             "hn_1",
-                            "member_m_1_uri"
+                            "met_m_1_uri"
                         ),
 
                         hierarchyNode(
                             "hn_1.2",
-                            "member_m_2_uri",
+                            "met_m_2_uri",
 
                             hierarchyNode(
                                 "hn_1.3",
-                                "member_m_3_uri" //External
+                                "met_m_3_uri" //External
                             )
                         )
 
@@ -188,19 +159,19 @@ internal class ExplicitDomain_UnitTest :
                         "h_2",
                         hierarchyNode(
                             "hn_2",
-                            "member_m_1_uri",
+                            "met_m_1_uri",
 
                             hierarchyNode(
                                 "hn_2.1",
-                                "member_m_2_uri",
+                                "met_m_2_uri",
 
                                 hierarchyNode(
                                     "hn_2.2",
-                                    "member_m_4_uri", //External
+                                    "met_m_4_uri", //External
 
                                     hierarchyNode(
                                         "hn_2.3",
-                                        "member_m_5_uri" //External
+                                        "met_m_5_uri" //External
                                     )
                                 )
                             )
@@ -212,9 +183,9 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Member member_m_3_uri which is not part of the containing DPM ExplicitDomain.",
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Member member_m_4_uri which is not part of the containing DPM ExplicitDomain.",
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Member member_m_5_uri which is not part of the containing DPM ExplicitDomain."
+                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Metric met_m_3_uri which is not part of the containing DPM MetricDomain.",
+                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Metric met_m_4_uri which is not part of the containing DPM MetricDomain.",
+                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Metric met_m_5_uri which is not part of the containing DPM MetricDomain."
                 )
         }
     }

@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
@@ -42,7 +43,7 @@ internal fun mapAndValidateTypedDomains(
                 if (typedDomain != null) {
 
                     val updatedTypedDomain = typedDomain.copy(
-                        dataType = extensionMember.stringValueOrEmpty(RdsMemberValueType.DpmDomainDataType)
+                        dataType = extensionMember.mappedDomainDataType()
                     )
 
                     typedDomains.replaceOrAddByUri(updatedTypedDomain)
@@ -54,4 +55,24 @@ internal fun mapAndValidateTypedDomains(
     validateDpmElements(diagnostic, typedDomains)
 
     return typedDomains
+}
+
+private val RDS_DOMAIN_DATA_TYPE_TO_DPM = mapOf(
+    "Enumeration" to "Enumeration/Code",
+    "Boolean" to "Boolean",
+    "Date" to "Date",
+    "Integer" to "Integer",
+    "Monetary" to "Monetary",
+    "Percentage" to "Percent",
+    "String" to "String",
+    "Decimal" to "Decimal",
+    "Lei" to "Lei",
+    "Isin" to "Isin"
+)
+
+private fun RdsExtensionMember.mappedDomainDataType(): String {
+    val sourceVal = stringValueOrEmpty(RdsMemberValueType.DpmDomainDataType)
+    val mappedVal = RDS_DOMAIN_DATA_TYPE_TO_DPM[sourceVal]
+
+    return mappedVal ?: sourceVal ?: ""
 }

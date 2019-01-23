@@ -26,10 +26,6 @@ abstract class RdsEntity {
         return prefLabel?.entries?.firstOrNull { it.value.isNotBlank() }?.value ?: ""
     }
 
-    fun diagnosticIdentifier(): String {
-        return uri ?: ""
-    }
-
     fun validUri(diagnostic: Diagnostic): String {
         return uri ?: diagnostic.fatal("RDS Entity not having valid URI value")
     }

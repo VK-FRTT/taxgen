@@ -5,13 +5,13 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
-import fi.vm.yti.taxgen.dpmmodel.Metric
+import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDomainsAndHierarchies
-import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetrics
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetricDomain
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateOwner
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDomains
@@ -49,18 +49,14 @@ class RdsToDpmMapper(
         dpmDictionarySource: DpmDictionarySourceReader
     ): DpmDictionary {
         lateinit var owner: Owner
-        lateinit var metrics: List<Metric>
         lateinit var explicitDomains: List<ExplicitDomain>
         lateinit var typedDomains: List<TypedDomain>
         lateinit var explicitDimensions: List<ExplicitDimension>
         lateinit var typedDimensions: List<TypedDimension>
+        lateinit var metricDomains: List<MetricDomain>
 
         dpmDictionarySource.dpmOwnerConfig {
             owner = mapAndValidateOwner(it, diagnosticContext)
-        }
-
-        dpmDictionarySource.metricsSource {
-            metrics = mapAndValidateMetrics(it, owner, diagnosticContext)
         }
 
         dpmDictionarySource.explicitDomainsAndHierarchiesSource {
@@ -79,9 +75,13 @@ class RdsToDpmMapper(
             typedDimensions = mapAndValidateTypedDimensions(it, owner, diagnosticContext)
         }
 
+        dpmDictionarySource.metricsSource {
+            metricDomains = mapAndValidateMetricDomain(it, owner, diagnosticContext)
+        }
+
         val dpmDictionary = DpmDictionary(
             owner = owner,
-            metrics = metrics,
+            metricDomains = metricDomains,
             explicitDomains = explicitDomains,
             typedDomains = typedDomains,
             explicitDimensions = explicitDimensions,

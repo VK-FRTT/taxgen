@@ -17,7 +17,7 @@ data class TypedDomain(
             "Date",
             "Integer",
             "Monetary",
-            "Percentage",
+            "Percent",
             "String",
             "Decimal",
             "Lei",

@@ -21,7 +21,7 @@ internal class Metric_UnitTest :
     @CsvSource(
         "uri,                       required",
         "concept,                   required",
-        "memberCodeNumber,          required",
+        "metricCode,                required",
         "dataType,                  required",
         "flowType,                  optional",
         "balanceType,               optional",
@@ -42,7 +42,9 @@ internal class Metric_UnitTest :
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
         "uri,                    minLength,      1",
-        "uri,                    maxLength,      500"
+        "uri,                    maxLength,      500",
+        "metricCode,             minLength,      1",
+        "metricCode,             maxLength,      50"
     )
     fun testPropertyLengthValidation(
         propertyName: String,
@@ -74,60 +76,29 @@ internal class Metric_UnitTest :
     }
 
     @Nested
-    inner class MemberCodeNumberProp {
-
-        @DisplayName("Value validation")
-        @ParameterizedTest(name = "Value `{0}` should be {1} member code number")
-        @CsvSource(
-            "-10,       invalid",
-            "-1,        invalid",
-            "+1,        invalid",
-            "a,         invalid",
-            "0,         valid",
-            "1,         valid",
-            "10,        valid"
-        )
-        fun `memberCodeNumber should error if value is invalid`(
-            value: String,
-            expectedValidity: String
-        ) {
-            attributeOverrides(
-                "memberCodeNumber" to value
-            )
-
-            instantiateAndValidate()
-
-            when (expectedValidity) {
-                "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.memberCodeNumber: contains non-digit characters")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
-            }
-        }
-    }
-
-    @Nested
     inner class DataTypeProp {
 
         @DisplayName("dataType validation")
-        @ParameterizedTest(name = "`{0}` should be {1} dataType")
+        @ParameterizedTest(name = "`{0}` should be {1} dataType with code tag {2}")
         @CsvSource(
-            "Enumeration,   valid",
-            "Boolean,       valid",
-            "Date,          valid",
-            "Integer,       valid",
-            "Monetary,      valid",
-            "Percentage,    valid",
-            "String,        valid",
-            "Decimal,       valid",
-            "Lei,           valid",
-            "Isin,          valid",
-            "'',            invalid",
-            "null,          invalid",
-            "foo,           invalid"
+            "Enumeration/Code,  valid,      e",
+            "Boolean,           valid,      b",
+            "Date,              valid,      d",
+            "Integer,           valid,      i",
+            "Monetary,          valid,      m",
+            "Percent,           valid,      p",
+            "String,            valid,      s",
+            "Decimal,           valid,      d",
+            "Lei,               valid,      l",
+            "Isin,              valid,      i",
+            "'',                invalid,     ",
+            "null,              invalid,     ",
+            "foo,               invalid,     "
         )
         fun `dataType should error if invalid`(
             dataType: String,
-            expectedValidity: String
+            expectedValidity: String,
+            expectedCodeTag: String?
         ) {
             attributeOverrides(
                 "dataType" to dataType
@@ -136,8 +107,16 @@ internal class Metric_UnitTest :
             instantiateAndValidate()
 
             when (expectedValidity) {
-                "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.dataType: unsupported data type '$dataType'")
+                "valid" -> {
+                    assertThat(validationErrors).isEmpty()
+                    assertThat(Metric.codeTagFromDataType(dataType)).isEqualTo(expectedCodeTag)
+                }
+
+                "invalid" -> {
+                    assertThat(validationErrors).containsExactly("Metric.dataType: unsupported data type '$dataType'")
+                    assertThat(Metric.codeTagFromDataType(dataType)).isEqualTo("?")
+                }
+
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }
@@ -149,16 +128,17 @@ internal class Metric_UnitTest :
         @DisplayName("flowType validation")
         @ParameterizedTest(name = "`{0}` should be {1} flowType")
         @CsvSource(
-            "Instant,       valid",
-            "Duration,      valid",
-            ",              valid", //null
-            "'',            invalid",
-            "null,          invalid",
-            "foo,           invalid"
+            "Flow,          valid,      d",
+            "Stock,         valid,      i",
+            ",              valid,     ''", //null flowType value
+            "'',            invalid,     ",
+            "null,          invalid,     ",
+            "foo,           invalid,     "
         )
         fun `flowType should error if invalid`(
             flowType: String?,
-            expectedValidity: String
+            expectedValidity: String,
+            expectedCodeTag: String?
         ) {
             attributeOverrides(
                 "flowType" to flowType
@@ -167,8 +147,15 @@ internal class Metric_UnitTest :
             instantiateAndValidate()
 
             when (expectedValidity) {
-                "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.flowType: unsupported flow type '$flowType'")
+                "valid" -> {
+                    assertThat(validationErrors).isEmpty()
+                    assertThat(Metric.codeTagFromFlowType(flowType)).isEqualTo(expectedCodeTag)
+                }
+
+                "invalid" -> {
+                    assertThat(validationErrors).containsExactly("Metric.flowType: unsupported flow type '$flowType'")
+                    assertThat(Metric.codeTagFromFlowType(flowType)).isEqualTo("?")
+                }
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
         }

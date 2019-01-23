@@ -9,7 +9,7 @@ data class TranslatedText(
         return translations[defaultLanguage]
     }
 
-    fun anyNonBlankTranslation(): String? {
-        return translations.entries.firstOrNull { it.value.isNotBlank() }?.value
+    companion object {
+        fun empty() = TranslatedText(emptyMap())
     }
 }

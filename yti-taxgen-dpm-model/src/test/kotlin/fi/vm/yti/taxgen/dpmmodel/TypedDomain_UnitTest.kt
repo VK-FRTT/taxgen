@@ -79,7 +79,7 @@ internal class TypedDomain_UnitTest :
             "Date,          valid",
             "Integer,       valid",
             "Monetary,      valid",
-            "Percentage,    valid",
+            "Percent,       valid",
             "String,        valid",
             "Decimal,       valid",
             "Lei,           valid",
