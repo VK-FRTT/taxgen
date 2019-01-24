@@ -43,7 +43,7 @@ internal class Metric_UnitTest :
     @CsvSource(
         "uri,                    minLength,      1",
         "uri,                    maxLength,      500",
-        "metricCode,             minLength,      1",
+        "metricCode,             minLength,      2",
         "metricCode,             maxLength,      50"
     )
     fun testPropertyLengthValidation(
@@ -54,8 +54,68 @@ internal class Metric_UnitTest :
         propertyLengthValidationTemplate(
             propertyName = propertyName,
             validationType = validationType,
-            expectedLimit = expectedLimit
+            expectedLimit = expectedLimit,
+            customValueBuilder = { property, length ->
+
+                when (property.name) {
+                    "metricCode" -> {
+                        mapOf(
+                            "metricCode" to "b${"0".repeat(100)}".take(length)
+                        )
+                    }
+                    else ->
+                        emptyMap()
+                }
+            }
         )
+    }
+
+    @Nested
+    inner class MetricCodeProp {
+
+        @DisplayName("metricCode validation")
+        @ParameterizedTest(name = "`{0}` should be {1} metricCode")
+        @CsvSource(
+            "b0,           valid",
+            "d0,           valid",
+            "e0,           valid",
+            "i0,           valid",
+            "l0,           valid",
+            "m0,           valid",
+            "p0,           valid",
+            "s0,           valid",
+            "bd0,          valid",
+            "bi0,          valid",
+            "bi00000000,   valid",
+
+            "'',           invalid", //empty
+            "b,            invalid",
+            "bd,           invalid",
+            "xy0,          invalid",
+            "' b0',        invalid",
+            "' b0 ',       invalid",
+            "'b0 ',        invalid",
+            "' bi0',       invalid",
+            "' bi0 ',      invalid",
+            "'bi0 ',       invalid",
+            "'b-0',        invalid"
+        )
+        fun `balanceType should error if invalid`(
+            metricCode: String,
+            expectedValidity: String
+        ) {
+            attributeOverrides(
+                "metricCode" to metricCode
+            )
+
+            instantiateAndValidate()
+
+            when (expectedValidity) {
+                "valid" -> assertThat(validationErrors).isEmpty()
+                "invalid" -> assertThat(validationErrors).contains("Metric.metricCode: metric code does not match required pattern '$metricCode'")
+                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+            }
+        }
     }
 
     @Nested

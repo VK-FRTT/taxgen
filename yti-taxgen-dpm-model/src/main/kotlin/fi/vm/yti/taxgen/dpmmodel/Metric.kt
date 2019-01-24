@@ -18,21 +18,21 @@ data class Metric(
 
     companion object {
         val VALID_DATA_TYPES = mapOf(
-            "Enumeration/Code" to "e",
             "Boolean" to "b",
             "Date" to "d",
+            "Decimal" to "d",
+            "Enumeration/Code" to "e",
             "Integer" to "i",
+            "Isin" to "i",
+            "Lei" to "l",
             "Monetary" to "m",
             "Percent" to "p",
-            "String" to "s",
-            "Decimal" to "d",
-            "Lei" to "l",
-            "Isin" to "i"
+            "String" to "s"
         )
 
         val VALID_FLOW_TYPES = mapOf(
-            "Stock" to "i",
             "Flow" to "d",
+            "Stock" to "i",
             null to null
         )
 
@@ -51,6 +51,18 @@ data class Metric(
 
             return VALID_FLOW_TYPES[flowType] ?: "?"
         }
+
+        private val DATA_TYPE_MARKERS = VALID_DATA_TYPES.values.toSet().joinToString(separator = "")
+        private val FLOW_TYPE_MARKERS = VALID_FLOW_TYPES.values.filterNotNull().toSet().joinToString(separator = "")
+        private val METRIC_CODE_PATTERN = "\\A[$DATA_TYPE_MARKERS][$FLOW_TYPE_MARKERS]?[0-9]+\\z".toRegex()
+
+        fun isValidMetricCode(metricCode: String): Boolean {
+            if (METRIC_CODE_PATTERN.matches(metricCode)) {
+                return true
+            }
+
+            return false
+        }
     }
 
     override fun validate(validationResults: ValidationResults) {
@@ -61,7 +73,7 @@ data class Metric(
             validationResults = validationResults,
             instance = this,
             property = Metric::metricCode,
-            minLength = 1,
+            minLength = 2,
             maxLength = 50
         )
 
@@ -93,6 +105,14 @@ data class Metric(
             property = Metric::balanceType,
             condition = { VALID_BALANCE_TYPES.contains(balanceType) },
             message = { "unsupported balance type '$balanceType'" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::metricCode,
+            condition = { isValidMetricCode(metricCode) },
+            message = { "metric code does not match required pattern '$metricCode'" }
         )
     }
 

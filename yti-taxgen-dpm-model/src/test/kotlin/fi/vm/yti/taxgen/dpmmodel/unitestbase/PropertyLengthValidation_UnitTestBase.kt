@@ -17,14 +17,24 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     expectedLimit: Int,
     customValueBuilder: ((KProperty1<*, *>, Int) -> (Map<String, Any>))? = null
 ) {
-    val validOverrideAttributes: Map<String, Any>
-    val invalidOverrideAttributes: Map<String, Any>
+    var validOverrideAttributes: Map<String, Any>
+    var invalidOverrideAttributes: Map<String, Any>
     val messageComposer: (String) -> String
 
     when (validationType) {
         "minLength" -> {
-            validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
-            invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit - 1)
+            validOverrideAttributes =
+                tryCustomOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+            if (!validOverrideAttributes.containsKey(propertyName)) {
+                validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
+            }
+
+            invalidOverrideAttributes =
+                tryCustomOverrideAttributesForProp(propertyName, expectedLimit - 1, customValueBuilder)
+            if (!invalidOverrideAttributes.containsKey(propertyName)) {
+                invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit - 1)
+            }
+
             messageComposer =
                 { className -> "$className.$propertyName: is too short (minimum $expectedLimit characters)" }
         }
@@ -38,8 +48,17 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
         }
 
         "maxLength" -> {
-            validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
-            invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit + 1)
+            validOverrideAttributes =
+                tryCustomOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+            if (!validOverrideAttributes.containsKey(propertyName)) {
+                validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
+            }
+
+            invalidOverrideAttributes =
+                tryCustomOverrideAttributesForProp(propertyName, expectedLimit + 1, customValueBuilder)
+            if (!invalidOverrideAttributes.containsKey(propertyName)) {
+                invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit + 1)
+            }
             messageComposer =
                 { className -> "$className.$propertyName: is too long (maximum $expectedLimit characters)" }
         }
@@ -111,4 +130,19 @@ private fun <T : Validatable> DpmModel_UnitTestBase<T>.customOverrideAttributesF
     }
 
     return attributes
+}
+
+private fun <T : Validatable> DpmModel_UnitTestBase<T>.tryCustomOverrideAttributesForProp(
+    propertyName: String,
+    length: Int,
+    customValueBuilder: ((KProperty1<T, *>, Int) -> (Map<String, Any>))?
+): Map<String, Any> {
+    val property = kClass.memberProperties.find { it.name == propertyName }
+        ?: throw IllegalArgumentException("No property found for name: $propertyName from class: ${kClass.simpleName}")
+
+    if (customValueBuilder != null) {
+        return customValueBuilder(property, length)
+    }
+
+    return emptyMap()
 }
