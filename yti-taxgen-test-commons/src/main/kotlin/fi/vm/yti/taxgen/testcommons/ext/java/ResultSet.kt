@@ -10,7 +10,7 @@ fun ResultSet.toStringList(includeHeader: Boolean = true): List<String> {
     if (includeHeader) {
         val headerValues = mutableListOf<String>()
         for (index in 1..md.columnCount) {
-            headerValues.add(md.getColumnName(index))
+            headerValues.add("#" + md.getColumnName(index))
         }
         rows.add(headerValues.joinToString())
     }

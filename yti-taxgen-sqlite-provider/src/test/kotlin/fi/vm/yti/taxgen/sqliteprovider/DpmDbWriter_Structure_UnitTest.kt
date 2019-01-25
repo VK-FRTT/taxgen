@@ -38,7 +38,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 
-@DisplayName("SQLite DPM Database - table structure")
+@DisplayName("SQLite DPM DB: table structure")
 internal class DpmDbWriter_Structure_UnitTest {
 
     private lateinit var tempFolder: TempFolder

@@ -4,13 +4,17 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
+import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
+import fi.vm.yti.taxgen.dpmmodel.TypedDimension
+import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
@@ -64,10 +68,10 @@ internal open class DpmDbWriter_UnitTestBase {
 
         val dpmOwner = Owner(
             name = "FixName",
-            namespace = "FixNamespace",
-            prefix = "FixPrefix",
-            location = "FixLocation",
-            copyright = "FixCopyright",
+            namespace = "FixNSpace",
+            prefix = "FixPrfx",
+            location = "FixLoc",
+            copyright = "FixCop",
             languageCodes = listOf("en", "fi"),
             defaultLanguageCode = "fi"
         )
@@ -80,24 +84,24 @@ internal open class DpmDbWriter_UnitTestBase {
             label = TranslatedText(
                 translations = if (variety == FixtureVariety.NO_EN_TRANSLATIONS) {
                     listOf(
-                        Pair(language("fi"), "$name-LabelFi")
+                        Pair(language("fi"), "$name-Lbl-Fi")
                     ).toMap()
                 } else {
                     listOf(
-                        Pair(language("fi"), "$name-LabelFi"),
-                        Pair(language("en"), "$name-LabelEn")
+                        Pair(language("fi"), "$name-Lbl-Fi"),
+                        Pair(language("en"), "$name-Lbl-En")
                     ).toMap()
                 }
             ),
             description = TranslatedText(
                 translations = if (variety == FixtureVariety.NO_EN_TRANSLATIONS) {
                     listOf(
-                        Pair(language("fi"), "$name-DescriptionFi")
+                        Pair(language("fi"), "$name-Desc-Fi")
                     ).toMap()
                 } else {
                     listOf(
-                        Pair(language("fi"), "$name-DescriptionFi"),
-                        Pair(language("en"), "$name-DescriptionEn")
+                        Pair(language("fi"), "$name-Desc-Fi"),
+                        Pair(language("en"), "$name-Desc-En")
                     ).toMap()
                 }
 
@@ -105,137 +109,159 @@ internal open class DpmDbWriter_UnitTestBase {
             owner = dpmOwner
         )
 
-        val members = listOf(
-            Member(
-                uri = "Member-1-Uri",
-                concept = concept("Member-1"),
-                memberCode = "Member-1-Code",
-                defaultMember = true
-            ),
-            Member(
-                uri = "Member-2-Uri",
-                concept = concept("Member-2"),
-                memberCode = "Member-2-Code",
-                defaultMember = false
-            ),
-            Member(
-                uri = "Member-3-Uri",
-                concept = concept("Member-3"),
-                memberCode = "Member-3-Code",
-                defaultMember = false
-            ),
-            Member(
-                uri = "Member-4-Uri",
-                concept = concept("Member-4"),
-                memberCode = "Member-4-Code",
-                defaultMember = false
-            ),
-            Member(
-                uri = "Member-5-Uri",
-                concept = concept("Member-5"),
-                memberCode = "Member-5-Code",
-                defaultMember = false
-            )
-        )
+        fun explicitDomains(): List<ExplicitDomain> {
 
-        val hierarchyNodes = mutableListOf(
-            HierarchyNode(
-                uri = "HierarchyNode-1-Uri",
-                concept = concept("HierarchyNode-1"),
-                abstract = false,
-                comparisonOperator = null,
-                unaryOperator = null,
-                referencedMemberUri = "Member-1-Uri",
-                childNodes = emptyList()
-            ),
-
-            HierarchyNode(
-                uri = "HierarchyNode-2-Uri",
-                concept = concept("HierarchyNode-2"),
-                abstract = false,
-                comparisonOperator = "=",
-                unaryOperator = "+",
-                referencedMemberUri = "Member-2-Uri",
-                childNodes = listOf(
-                    HierarchyNode(
-                        uri = "HierarchyNode-2.1-Uri",
-                        concept = concept("HierarchyNode-2.1"),
-                        abstract = false,
-                        comparisonOperator = "=",
-                        unaryOperator = "+",
-                        referencedMemberUri = "Member-3-Uri",
-                        childNodes = listOf(
-                            HierarchyNode(
-                                uri = "HierarchyNode-2.1.1-Uri",
-                                concept = concept("HierarchyNode-2.1.1"),
-                                abstract = false,
-                                comparisonOperator = null,
-                                unaryOperator = null,
-                                referencedMemberUri = "Member-4-Uri",
-                                childNodes = emptyList()
-                            )
-                        )
-                    ),
-
-                    HierarchyNode(
-                        uri = "HierarchyNode-2.2-Uri",
-                        concept = concept("HierarchyNode-2.2"),
-                        abstract = false,
-                        comparisonOperator = null,
-                        unaryOperator = null,
-                        referencedMemberUri = "Member-5-Uri",
-                        childNodes = emptyList()
-                    )
+            val members = listOf(
+                Member(
+                    uri = "Mbr-1-Uri",
+                    concept = concept("Mbr-1"),
+                    memberCode = "Mbr-1-Code",
+                    defaultMember = true
+                ),
+                Member(
+                    uri = "Mbr-2-Uri",
+                    concept = concept("Mbr-2"),
+                    memberCode = "Mbr-2-Code",
+                    defaultMember = false
+                ),
+                Member(
+                    uri = "Mbr-3-Uri",
+                    concept = concept("Mbr-3"),
+                    memberCode = "Mbr-3-Code",
+                    defaultMember = false
+                ),
+                Member(
+                    uri = "Mbr-4-Uri",
+                    concept = concept("Mbr-4"),
+                    memberCode = "Mbr-4-Code",
+                    defaultMember = false
+                ),
+                Member(
+                    uri = "Mbr-5-Uri",
+                    concept = concept("Mbr-5"),
+                    memberCode = "Mbr-5-Code",
+                    defaultMember = false
                 )
             )
-        )
 
-        if (variety == FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
-            hierarchyNodes.add(
+            val hierarchyNodes = mutableListOf(
                 HierarchyNode(
-                    uri = "HierarchyNode-SecondReferringSameMember-Uri",
-                    concept = concept("HierarchyNode-§SecondReferringSameMember"),
+                    uri = "HierNode-1-Uri",
+                    concept = concept("HierNode-1"),
                     abstract = false,
                     comparisonOperator = null,
                     unaryOperator = null,
-                    referencedMemberUri = "Member-1-Uri",
+                    referencedMemberUri = "Mbr-1-Uri",
                     childNodes = emptyList()
+                ),
+
+                HierarchyNode(
+                    uri = "HierNode-2-Uri",
+                    concept = concept("HierNode-2"),
+                    abstract = false,
+                    comparisonOperator = "=",
+                    unaryOperator = "+",
+                    referencedMemberUri = "Mbr-2-Uri",
+                    childNodes = listOf(
+                        HierarchyNode(
+                            uri = "HierNode-2.1-Uri",
+                            concept = concept("HierNode-2.1"),
+                            abstract = false,
+                            comparisonOperator = "=",
+                            unaryOperator = "+",
+                            referencedMemberUri = "Mbr-3-Uri",
+                            childNodes = listOf(
+                                HierarchyNode(
+                                    uri = "HierNode-2.1.1-Uri",
+                                    concept = concept("HierNode-2.1.1"),
+                                    abstract = false,
+                                    comparisonOperator = null,
+                                    unaryOperator = null,
+                                    referencedMemberUri = "Mbr-4-Uri",
+                                    childNodes = emptyList()
+                                )
+                            )
+                        ),
+
+                        HierarchyNode(
+                            uri = "HierNode-2.2-Uri",
+                            concept = concept("HierNode-2.2"),
+                            abstract = false,
+                            comparisonOperator = null,
+                            unaryOperator = null,
+                            referencedMemberUri = "Mbr-5-Uri",
+                            childNodes = emptyList()
+                        )
+                    )
+                )
+            )
+
+            if (variety == FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
+                hierarchyNodes.add(
+                    HierarchyNode(
+                        uri = "HierNode-SecondReferringSameMember-Uri",
+                        concept = concept("HierNode-SecondReferringSameMember"),
+                        abstract = false,
+                        comparisonOperator = null,
+                        unaryOperator = null,
+                        referencedMemberUri = "Mbr-1-Uri",
+                        childNodes = emptyList()
+                    )
+                )
+            }
+
+            val hierarchies = listOf(
+                Hierarchy(
+                    uri = "Hier-1-Uri",
+                    concept = concept("Hierarchy"),
+                    hierarchyCode = "Hier-Code",
+                    rootNodes = hierarchyNodes
+                )
+            )
+
+            return listOf(
+                ExplicitDomain(
+                    uri = "ExpDom-1-Uri",
+                    concept = concept("ExplicitDomain"),
+                    domainCode = "ExpDom-Code",
+                    members = members,
+                    hierarchies = hierarchies
                 )
             )
         }
 
-        val hierarchies = listOf(
-            Hierarchy(
-                uri = "Hierarchy-1-Uri",
-                concept = concept("Hierarchy"),
-                hierarchyCode = "Hierarchy-Code",
-                rootNodes = hierarchyNodes
-            )
-        )
-
-        val dictionaries =
-            listOf(
-                DpmDictionary(
-                    owner = dpmOwner,
-
-                    metricDomains = emptyList(),
-
-                    explicitDomains = listOf(
-                        ExplicitDomain(
-                            uri = "ExplicitDomain-1-Uri",
-                            concept = concept("ExplicitDomain"),
-                            domainCode = "Domain-Code",
-                            members = members,
-                            hierarchies = hierarchies
-                        )
-                    ),
-
-                    typedDomains = emptyList(),
-                    explicitDimensions = emptyList(),
-                    typedDimensions = emptyList()
+        fun typedDomains(): List<TypedDomain> {
+            return listOf(
+                TypedDomain(
+                    uri = "TypDom-1-Uri",
+                    concept = concept("TypedDomain"),
+                    domainCode = "TypDom-Code",
+                    dataType = "Boolean"
                 )
             )
+        }
 
-        return dictionaries
+        fun explicitDimensions(): List<ExplicitDimension> {
+            return emptyList()
+        }
+
+        fun typedDimensions(): List<TypedDimension> {
+            return emptyList()
+        }
+
+        fun metricDomains(): List<MetricDomain> {
+            return emptyList()
+        }
+
+        return listOf(
+            DpmDictionary(
+                owner = dpmOwner,
+                explicitDomains = explicitDomains(),
+                typedDomains = typedDomains(),
+                explicitDimensions = explicitDimensions(),
+                typedDimensions = typedDimensions(),
+                metricDomains = metricDomains()
+            )
+        )
     }
 }
