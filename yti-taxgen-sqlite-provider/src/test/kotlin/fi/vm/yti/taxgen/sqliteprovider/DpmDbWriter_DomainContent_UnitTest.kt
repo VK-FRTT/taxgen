@@ -30,15 +30,14 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
                 FROM mDomain AS D
                 INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
                 INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
-                ORDER BY D.DomainCode
               """
         )
 
-        assertThat(rs.toStringList()).containsExactly(
+        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "#DomainCode, #DomainLabel, #DomainDescription, #DomainXBRLCode, #DataType, #IsTypedDomain, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #OwnerName",
-            "ExpDom-Code, ExplicitDomain-Lbl-Fi, ExplicitDomain-Desc-Fi, FixPrfx_exp:ExpDom-Code, nil, 0, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-            "MET, Metrics, nil, MET, nil, 0, Domain, nil, nil, nil, nil, EuroFiling",
-            "TypDom-Code, TypedDomain-Lbl-Fi, TypedDomain-Desc-Fi, FixPrfx_typ:TypDom-Code, Boolean, 1, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
+            "ExpDom-1-Code, ExpDom-Lbl-Fi, ExpDom-Desc-Fi, FixPrfx_exp:ExpDom-1-Code, nil, 0, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "TypDom-1-Code, TypDom-Lbl-Fi, TypDom-Desc-Fi, FixPrfx_typ:TypDom-1-Code, Boolean, 1, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "MET, Metrics, nil, MET, nil, 0, Domain, nil, nil, nil, nil, EuroFiling"
         )
     }
 
@@ -51,8 +50,9 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
                 SELECT
                     D.DomainCode,
                     C.ConceptType,
-                    T.Text, T.Role,
-                    TL.IsoCode
+                    T.Role,
+                    TL.IsoCode,
+                    T.Text
                 FROM mDomain AS D
                 INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
@@ -62,16 +62,16 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#DomainCode, #ConceptType, #Text, #Role, #IsoCode",
-            "ExpDom-Code, Domain, ExplicitDomain-Lbl-En, label, en",
-            "ExpDom-Code, Domain, ExplicitDomain-Lbl-Fi, label, fi",
-            "ExpDom-Code, Domain, ExplicitDomain-Desc-En, description, en",
-            "ExpDom-Code, Domain, ExplicitDomain-Desc-Fi, description, fi",
-            "MET, Domain, Metrics, label, en",
-            "TypDom-Code, Domain, TypedDomain-Lbl-En, label, en",
-            "TypDom-Code, Domain, TypedDomain-Lbl-Fi, label, fi",
-            "TypDom-Code, Domain, TypedDomain-Desc-En, description, en",
-            "TypDom-Code, Domain, TypedDomain-Desc-Fi, description, fi"
+            "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
+            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-En",
+            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
+            "ExpDom-1-Code, Domain, description, en, ExpDom-Desc-En",
+            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi",
+            "MET, Domain, label, en, Metrics",
+            "TypDom-1-Code, Domain, label, en, TypDom-Lbl-En",
+            "TypDom-1-Code, Domain, label, fi, TypDom-Lbl-Fi",
+            "TypDom-1-Code, Domain, description, en, TypDom-Desc-En",
+            "TypDom-1-Code, Domain, description, fi, TypDom-Desc-Fi"
         )
     }
 
@@ -84,8 +84,9 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
                 SELECT
                     D.DomainCode,
                     C.ConceptType,
-                    T.Text, T.Role,
-                    TL.IsoCode
+                    T.Role,
+                    TL.IsoCode,
+                    T.Text
                 FROM mDomain AS D
                 INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
@@ -95,14 +96,14 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#DomainCode, #ConceptType, #Text, #Role, #IsoCode",
-            "ExpDom-Code, Domain, ExplicitDomain-Lbl-Fi, label, en",
-            "ExpDom-Code, Domain, ExplicitDomain-Lbl-Fi, label, fi",
-            "ExpDom-Code, Domain, ExplicitDomain-Desc-Fi, description, fi",
-            "MET, Domain, Metrics, label, en",
-            "TypDom-Code, Domain, TypedDomain-Lbl-Fi, label, en",
-            "TypDom-Code, Domain, TypedDomain-Lbl-Fi, label, fi",
-            "TypDom-Code, Domain, TypedDomain-Desc-Fi, description, fi"
+            "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
+            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-Fi",
+            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
+            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi",
+            "MET, Domain, label, en, Metrics",
+            "TypDom-1-Code, Domain, label, en, TypDom-Lbl-Fi",
+            "TypDom-1-Code, Domain, label, fi, TypDom-Lbl-Fi",
+            "TypDom-1-Code, Domain, description, fi, TypDom-Desc-Fi"
         )
     }
 }

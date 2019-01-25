@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class DpmDbWriter_HierarchyContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
-    fun `should have DPM Hierarchy with Domain, Concept and Owner relation`() {
+    fun `should have Hierarchy with Domain, Concept and Owner relation`() {
         dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
@@ -33,12 +33,11 @@ internal class DpmDbWriter_HierarchyContent_UnitTest : DpmDbWriter_UnitTestBase(
               """
         )
 
-        assertThat(rs.toStringList()).contains(
+        assertThat(rs.toStringList()).containsExactly(
             "#HierarchyCode, #HierarchyLabel, #HierarchyDescription, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #DomainCode, #OwnerName",
-            "Hier-Code, Hierarchy-Lbl-Fi, Hierarchy-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-Code, FixName"
+            "ExpDomHier-1-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
+            "MetHier-1-Code, MetHier-Lbl-Fi, MetHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, MET, FixName"
         )
-
-        //TODO - verify metric hierarchy
     }
 
     @Test
@@ -50,23 +49,24 @@ internal class DpmDbWriter_HierarchyContent_UnitTest : DpmDbWriter_UnitTestBase(
                 SELECT
                     H.HierarchyCode,
                     C.ConceptType,
-                    T.Text, T.Role,
-                    TL.IsoCode
+                    T.Role,
+                    TL.IsoCode,
+                    T.Text
                 FROM mHierarchy AS H
                 INNER JOIN mConcept AS C ON C.ConceptID = H.ConceptID
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
-                WHERE H.HierarchyCode = 'Hier-Code'
+                WHERE H.HierarchyCode = 'ExpDomHier-1-Code'
                 ORDER BY T.Role DESC, TL.IsoCode ASC
               """
         )
 
-        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#HierarchyCode, #ConceptType, #Text, #Role, #IsoCode",
-            "Hier-Code, Hierarchy, Hierarchy-Lbl-En, label, en",
-            "Hier-Code, Hierarchy, Hierarchy-Lbl-Fi, label, fi",
-            "Hier-Code, Hierarchy, Hierarchy-Desc-En, description, en",
-            "Hier-Code, Hierarchy, Hierarchy-Desc-Fi, description, fi"
+        assertThat(rs.toStringList()).containsExactly(
+            "#HierarchyCode, #ConceptType, #Role, #IsoCode, #Text",
+            "ExpDomHier-1-Code, Hierarchy, label, en, ExpDomHier-Lbl-En",
+            "ExpDomHier-1-Code, Hierarchy, label, fi, ExpDomHier-Lbl-Fi",
+            "ExpDomHier-1-Code, Hierarchy, description, en, ExpDomHier-Desc-En",
+            "ExpDomHier-1-Code, Hierarchy, description, fi, ExpDomHier-Desc-Fi"
         )
     }
 

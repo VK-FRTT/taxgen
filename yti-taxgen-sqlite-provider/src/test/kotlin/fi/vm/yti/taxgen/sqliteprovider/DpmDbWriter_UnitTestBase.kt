@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.Concept
@@ -10,6 +11,7 @@ import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
+import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
@@ -17,6 +19,7 @@ import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import java.sql.Connection
@@ -146,8 +149,8 @@ internal open class DpmDbWriter_UnitTestBase {
 
             val hierarchyNodes = mutableListOf(
                 HierarchyNode(
-                    uri = "HierNode-1-Uri",
-                    concept = concept("HierNode-1"),
+                    uri = "ExpDomHierNode-1-Uri",
+                    concept = concept("ExpDomHierNode-1"),
                     abstract = false,
                     comparisonOperator = null,
                     unaryOperator = null,
@@ -156,24 +159,24 @@ internal open class DpmDbWriter_UnitTestBase {
                 ),
 
                 HierarchyNode(
-                    uri = "HierNode-2-Uri",
-                    concept = concept("HierNode-2"),
+                    uri = "ExpDomHierNode-2-Uri",
+                    concept = concept("ExpDomHierNode-2"),
                     abstract = false,
                     comparisonOperator = "=",
                     unaryOperator = "+",
                     referencedMemberUri = "Mbr-2-Uri",
                     childNodes = listOf(
                         HierarchyNode(
-                            uri = "HierNode-2.1-Uri",
-                            concept = concept("HierNode-2.1"),
+                            uri = "ExpDomHierNode-2.1-Uri",
+                            concept = concept("ExpDomHierNode-2.1"),
                             abstract = false,
                             comparisonOperator = "=",
                             unaryOperator = "+",
                             referencedMemberUri = "Mbr-3-Uri",
                             childNodes = listOf(
                                 HierarchyNode(
-                                    uri = "HierNode-2.1.1-Uri",
-                                    concept = concept("HierNode-2.1.1"),
+                                    uri = "ExpDomHierNode-2.1.1-Uri",
+                                    concept = concept("ExpDomHierNode-2.1.1"),
                                     abstract = false,
                                     comparisonOperator = null,
                                     unaryOperator = null,
@@ -184,8 +187,8 @@ internal open class DpmDbWriter_UnitTestBase {
                         ),
 
                         HierarchyNode(
-                            uri = "HierNode-2.2-Uri",
-                            concept = concept("HierNode-2.2"),
+                            uri = "ExpDomHierNode-2.2-Uri",
+                            concept = concept("ExpDomHierNode-2.2"),
                             abstract = false,
                             comparisonOperator = null,
                             unaryOperator = null,
@@ -212,9 +215,9 @@ internal open class DpmDbWriter_UnitTestBase {
 
             val hierarchies = listOf(
                 Hierarchy(
-                    uri = "Hier-1-Uri",
-                    concept = concept("Hierarchy"),
-                    hierarchyCode = "Hier-Code",
+                    uri = "ExpDomHier-1-Uri",
+                    concept = concept("ExpDomHier"),
+                    hierarchyCode = "ExpDomHier-1-Code",
                     rootNodes = hierarchyNodes
                 )
             )
@@ -222,8 +225,8 @@ internal open class DpmDbWriter_UnitTestBase {
             return listOf(
                 ExplicitDomain(
                     uri = "ExpDom-1-Uri",
-                    concept = concept("ExplicitDomain"),
-                    domainCode = "ExpDom-Code",
+                    concept = concept("ExpDom"),
+                    domainCode = "ExpDom-1-Code",
                     members = members,
                     hierarchies = hierarchies
                 )
@@ -234,34 +237,205 @@ internal open class DpmDbWriter_UnitTestBase {
             return listOf(
                 TypedDomain(
                     uri = "TypDom-1-Uri",
-                    concept = concept("TypedDomain"),
-                    domainCode = "TypDom-Code",
+                    concept = concept("TypDom"),
+                    domainCode = "TypDom-1-Code",
                     dataType = "Boolean"
                 )
             )
         }
 
         fun explicitDimensions(): List<ExplicitDimension> {
-            return emptyList()
+            return listOf(
+                ExplicitDimension(
+                    uri = "ExpDim-1-Uri",
+                    concept = concept("ExpDim"),
+                    dimensionCode = "ExpDim-1-Code",
+                    referencedDomainCode = "ExpDom-1-Code"
+                )
+            )
         }
 
         fun typedDimensions(): List<TypedDimension> {
-            return emptyList()
+            return listOf(
+                TypedDimension(
+                    uri = "TypDim-1-Uri",
+                    concept = concept("TypDim"),
+                    dimensionCode = "TypDim-1-Code",
+                    referencedDomainCode = "TypDom-1-Code"
+                )
+            )
         }
 
         fun metricDomains(): List<MetricDomain> {
-            return emptyList()
+            val metrics = listOf(
+                Metric(
+                    uri = "Met-1-Uri",
+                    concept = concept("Met-1"),
+                    metricCode = "ed1",
+                    dataType = "Enumeration/Code",
+                    flowType = "Flow",
+                    balanceType = "Credit",
+                    referencedDomainCode = "ExpDom-1-Code",
+                    referencedHierarchyCode = "ExpDomHier-1-Code"
+                ),
+                Metric(
+                    uri = "Met-2-Uri",
+                    concept = concept("Met-2"),
+                    metricCode = "bd2",
+                    dataType = "Boolean",
+                    flowType = "Flow",
+                    balanceType = "Debit",
+                    referencedDomainCode = null,
+                    referencedHierarchyCode = null
+                ),
+                Metric(
+                    uri = "Met-3-Uri",
+                    concept = concept("Met-3"),
+                    metricCode = "di3",
+                    dataType = "Date",
+                    flowType = "Stock",
+                    balanceType = null,
+                    referencedDomainCode = null,
+                    referencedHierarchyCode = null
+                ),
+                Metric(
+                    uri = "Met-4-Uri",
+                    concept = concept("Met-4"),
+                    metricCode = "ii4",
+                    dataType = "Integer",
+                    flowType = "Stock",
+                    balanceType = null,
+                    referencedDomainCode = null,
+                    referencedHierarchyCode = null
+                ),
+                Metric(
+                    uri = "Met-5-Uri",
+                    concept = concept("Met-5"),
+                    metricCode = "p5",
+                    dataType = "Percent",
+                    flowType = null,
+                    balanceType = null,
+                    referencedDomainCode = null,
+                    referencedHierarchyCode = null
+                )
+            )
+
+            val metricHierarchyNodes = mutableListOf(
+                HierarchyNode(
+                    uri = "MetHierNode-1-Uri",
+                    concept = concept("MetHierNode-1"),
+                    abstract = false,
+                    comparisonOperator = null,
+                    unaryOperator = null,
+                    referencedMemberUri = "Met-1-Uri",
+                    childNodes = emptyList()
+                ),
+
+                HierarchyNode(
+                    uri = "MetHierNode-2-Uri",
+                    concept = concept("MetHierNode-2"),
+                    abstract = false,
+                    comparisonOperator = null,
+                    unaryOperator = null,
+                    referencedMemberUri = "Met-2-Uri",
+                    childNodes = listOf(
+                        HierarchyNode(
+                            uri = "MetHierNode-2.1-Uri",
+                            concept = concept("MetHierNode-2.1"),
+                            abstract = false,
+                            comparisonOperator = null,
+                            unaryOperator = null,
+                            referencedMemberUri = "Met-3-Uri",
+                            childNodes = emptyList()
+                        ),
+                        HierarchyNode(
+                            uri = "MetHierNode-2.2-Uri",
+                            concept = concept("MetHierNode-2.2"),
+                            abstract = false,
+                            comparisonOperator = null,
+                            unaryOperator = null,
+                            referencedMemberUri = "Met-4-Uri",
+                            childNodes = emptyList()
+                        )
+                    )
+                ),
+
+                HierarchyNode(
+                    uri = "MetHierNode-3-Uri",
+                    concept = concept("MetHierNode-3"),
+                    abstract = false,
+                    comparisonOperator = null,
+                    unaryOperator = null,
+                    referencedMemberUri = "Met-5-Uri",
+                    childNodes = emptyList()
+                )
+            )
+
+            val metricHierarchies = listOf(
+                Hierarchy(
+                    uri = "MetHier-1-Uri",
+                    concept = concept("MetHier"),
+                    hierarchyCode = "MetHier-1-Code",
+                    rootNodes = metricHierarchyNodes
+                )
+            )
+
+            return listOf(
+                MetricDomain(
+                    uri = "MetDom-1-Uri",
+                    concept = concept("MetDom"),
+                    domainCode = "MetDom-1-Code",
+                    metrics = metrics,
+                    hierarchies = metricHierarchies
+                )
+            )
         }
 
-        return listOf(
-            DpmDictionary(
-                owner = dpmOwner,
-                explicitDomains = explicitDomains(),
-                typedDomains = typedDomains(),
-                explicitDimensions = explicitDimensions(),
-                typedDimensions = typedDimensions(),
-                metricDomains = metricDomains()
-            )
+        val dictionary = DpmDictionary(
+            owner = dpmOwner,
+            explicitDomains = explicitDomains(),
+            typedDomains = typedDomains(),
+            explicitDimensions = explicitDimensions(),
+            typedDimensions = typedDimensions(),
+            metricDomains = metricDomains()
         )
+
+        if (variety != FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
+            validateDictionaryContents(dictionary)
+        }
+
+        return listOf(dictionary)
+    }
+
+    private fun validateDictionaryContents(dpmDictionary: DpmDictionary) {
+        val collecor = ValidationCollector()
+
+        dpmDictionary.explicitDomains.forEach { explicitDomain ->
+            explicitDomain.members.forEach { it.validate(collecor) }
+            explicitDomain.hierarchies.forEach { it.validate(collecor) }
+            explicitDomain.validate(collecor)
+        }
+
+        dpmDictionary.typedDomains.forEach { typedDomain ->
+            typedDomain.validate(collecor)
+        }
+
+        dpmDictionary.explicitDimensions.forEach { explicitDimension ->
+            explicitDimension.validate(collecor)
+        }
+
+        dpmDictionary.typedDimensions.forEach { typedDimension ->
+            typedDimension.validate(collecor)
+        }
+
+        dpmDictionary.metricDomains.forEach { metricDomain ->
+            metricDomain.metrics.forEach { it.validate(collecor) }
+            metricDomain.hierarchies.forEach { it.validate(collecor) }
+            metricDomain.validate(collecor)
+        }
+
+        dpmDictionary.validate(collecor)
+
+        assertThat(collecor.compileResultsToSimpleStrings()).isEmpty()
     }
 }

@@ -13,8 +13,9 @@ data class DpmDictionaryItem(
 
     private val domainItems = mutableListOf<DomainItem>()
 
-    fun addDomainItem(domainItem: DomainItem) {
-        domainItems.add(domainItem)
+    fun setDomainItems(domainItems: List<DomainItem>) {
+        this.domainItems.clear()
+        this.domainItems.addAll(domainItems)
     }
 
     fun domainItemForCode(domainCode: String?): DomainItem? {

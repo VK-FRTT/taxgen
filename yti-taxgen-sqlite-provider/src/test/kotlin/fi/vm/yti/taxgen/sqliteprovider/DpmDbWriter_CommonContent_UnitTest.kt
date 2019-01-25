@@ -29,10 +29,18 @@ internal class DpmDbWriter_CommonContent_UnitTest : DpmDbWriter_UnitTestBase() {
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
-                    L.IsoCode AS LanguageIsoCode, L.LanguageName, L.EnglishName AS LanguageEnglishName,
-                    C.ConceptType, C.OwnerID, C.CreationDate, C.ModificationDate, C.FromDate, C.ToDate,
-                    T.Text, T.Role,
-                    TL.IsoCode
+                    L.IsoCode AS LanguageIsoCode,
+                    L.LanguageName,
+                    L.EnglishName AS LanguageEnglishName,
+                    C.ConceptType,
+                    C.OwnerID,
+                    C.CreationDate,
+                    C.ModificationDate,
+                    C.FromDate,
+                    C.ToDate,
+                    T.Role,
+                    TL.IsoCode,
+                    T.Text
                 FROM mLanguage AS L
                 LEFT JOIN mConcept AS C ON C.ConceptID = L.ConceptID
                 LEFT JOIN mConceptTranslation AS T ON T.ConceptID = L.ConceptID
@@ -42,19 +50,25 @@ internal class DpmDbWriter_CommonContent_UnitTest : DpmDbWriter_UnitTestBase() {
         )
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#LanguageIsoCode, #LanguageName, #LanguageEnglishName, #ConceptType, #OwnerID, #CreationDate, #ModificationDate, #FromDate, #ToDate, #Text, #Role, #IsoCode",
+            "#LanguageIsoCode, #LanguageName, #LanguageEnglishName, #ConceptType, #OwnerID, #CreationDate, #ModificationDate, #FromDate, #ToDate, #Role, #IsoCode, #Text",
             "en, English, English, nil, nil, nil, nil, nil, nil, nil, nil, nil"
         )
     }
 
     @Test
-    fun `should have DPM Owner`() {
+    fun `should have Owner`() {
         dbWriter.writeDpmDb(dpmDictionaryFixture())
 
         val rs = dbConnection.createStatement().executeQuery(
             """
                 SELECT
-                    O.OwnerName, O.OwnerNamespace, O.OwnerLocation, O.OwnerPrefix, O.OwnerCopyright, O.ParentOwnerID, O.ConceptID
+                    O.OwnerName,
+                    O.OwnerNamespace,
+                    O.OwnerLocation,
+                    O.OwnerPrefix,
+                    O.OwnerCopyright,
+                    O.ParentOwnerID,
+                    O.ConceptID
                 FROM mOwner AS O
                 """
         )

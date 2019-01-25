@@ -12,6 +12,7 @@ import fi.vm.yti.taxgen.sqliteprovider.writers.DbDimensions
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbDomains
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbHierarchies
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbLanguages
+import fi.vm.yti.taxgen.sqliteprovider.writers.DbMetric
 import fi.vm.yti.taxgen.sqliteprovider.writers.DbOwners
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Database
@@ -69,78 +70,81 @@ class DpmDbWriter(
     ) {
         val ownerId = DbOwners.writeOwner(dpmDictionary.owner)
 
-        val dictionaryContext = DpmDictionaryItem(
+        val dpmDictionaryItem = DpmDictionaryItem(
             dpmDictionary.owner,
             ownerId,
             languageIds
         )
 
-        dpmDictionary.explicitDomains.forEach { explicitDomain ->
+        val domainItems = dpmDictionary.explicitDomains.map { explicitDomain ->
 
             val (domainId, memberIds) = DbDomains.writeExplicitDomainAndMembers(
-                dictionaryContext,
+                dpmDictionaryItem,
                 explicitDomain
             )
 
-            val hierarchyItems = mutableListOf<HierarchyItem>()
-
-            explicitDomain.hierarchies.forEach { hierarchy ->
+            val hierarchyItems = explicitDomain.hierarchies.map { hierarchy ->
                 val hierarchyId = DbHierarchies.writeHierarchyAndAndNodes(
-                    dictionaryContext,
+                    dpmDictionaryItem,
                     hierarchy,
                     domainId,
                     memberIds
                 )
 
-                hierarchyItems.add(
-                    HierarchyItem(
-                        hierarchyCode = hierarchy.hierarchyCode,
-                        hierarchyId = hierarchyId
-                    )
+                HierarchyItem(
+                    hierarchyCode = hierarchy.hierarchyCode,
+                    hierarchyId = hierarchyId
                 )
             }
 
-            dictionaryContext.addDomainItem(
-                DomainItem(
-                    domainCode = explicitDomain.domainCode,
-                    domainId = domainId,
-                    hierarchyItems = hierarchyItems
-                )
+            DomainItem(
+                domainCode = explicitDomain.domainCode,
+                domainId = domainId,
+                hierarchyItems = hierarchyItems
             )
         }
 
+        dpmDictionaryItem.setDomainItems(domainItems)
+
         dpmDictionary.typedDomains.forEach { typedDomain ->
             DbDomains.writeTypedDomain(
-                dictionaryContext,
+                dpmDictionaryItem,
                 typedDomain
             )
         }
 
         dpmDictionary.explicitDimensions.forEach { explicitDimension ->
             DbDimensions.writeExplicitDimension(
-                dictionaryContext,
+                dpmDictionaryItem,
                 explicitDimension
             )
         }
 
         dpmDictionary.typedDimensions.forEach { typedDimension ->
             DbDimensions.writeTypedDimension(
-                dictionaryContext,
+                dpmDictionaryItem,
                 typedDimension
             )
         }
 
-        /* TODO
-        val (metricDomainId, metricHierarchyId) = DbMetric.writeMetricDomainAndHierarchy(dictionaryContext)
+        //TODO - insert "Open" member  with ID 9999
 
-        dpmDictionary.metrics.forEach { metric ->
-            DbMetric.writeMetric(
-                dictionaryContext,
-                metric,
-                metricDomainId,
-                metricHierarchyId
+        dpmDictionary.metricDomains.map { metricDomain ->
+
+            //TODO - Metric members IDs should start from 10000
+            val (domainId, memberIds) = DbMetric.writeMetricDomainMembers(
+                dpmDictionaryItem,
+                metricDomain
             )
+
+            metricDomain.hierarchies.map { hierarchy ->
+                DbHierarchies.writeHierarchyAndAndNodes(
+                    dpmDictionaryItem,
+                    hierarchy,
+                    domainId,
+                    memberIds
+                )
+            }
         }
-        */
     }
 }

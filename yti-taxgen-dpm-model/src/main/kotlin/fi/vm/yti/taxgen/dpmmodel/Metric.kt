@@ -8,12 +8,12 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 data class Metric(
     override val uri: String,
     override val concept: Concept,
-    val metricCode: String, //TODO - validate + test metric code follows required syntax (dataType & flowType tags + valid numeric part)
-    val dataType: String,
+    val metricCode: String, //TODO validate & test: metric code has matching dataType & flowType tags from the metric self
+    val dataType: String, //TODO validate & test: if data type == Enumeration => referencedDomainCode != null
     val flowType: String?,
     val balanceType: String?,
-    val referencedDomainCode: String?,
-    val referencedHierarchyCode: String?
+    val referencedDomainCode: String?, //TODO validate & test: if referencedDomainCode != null => Data type must be Enumeration
+    val referencedHierarchyCode: String? //TODO validate & test: if referencedHierarchyCode != null => referencedDomainCode != null
 ) : DpmElement {
 
     companion object {

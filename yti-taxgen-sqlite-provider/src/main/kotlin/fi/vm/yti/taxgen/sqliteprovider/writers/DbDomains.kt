@@ -31,9 +31,7 @@ object DbDomains {
                 domainConceptId
             )
 
-            val memberIds = mutableMapOf<String, EntityID<Int>>()
-
-            domain.members.forEach { member ->
+            val memberIds = domain.members.map { member ->
 
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
                     dictionaryItem,
@@ -49,8 +47,8 @@ object DbDomains {
                     memberConceptId
                 )
 
-                memberIds[member.uri] = memberId
-            }
+                member.uri to memberId
+            }.toMap()
 
             Pair(domainId, memberIds)
         }
