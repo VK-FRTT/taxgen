@@ -8,7 +8,6 @@ import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -57,8 +56,8 @@ object DbDomains {
     fun writeTypedDomain(
         dictionaryItem: DpmDictionaryItem,
         domain: TypedDomain
-    ) {
-        transaction {
+    ): EntityID<Int> {
+        return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
                 dictionaryItem,
                 domain.concept,
@@ -97,10 +96,10 @@ object DbDomains {
         dictionaryItem: DpmDictionaryItem,
         domain: TypedDomain,
         domainConceptId: EntityID<Int>
-    ) {
+    ): EntityID<Int> {
         val domainXbrlCode = "${dictionaryItem.owner.prefix}_typ:${domain.domainCode}"
 
-        DomainTable.insert {
+        return DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
             it[domainLabelCol] = domain.concept.label.defaultTranslation()
             it[domainDescriptionCol] = domain.concept.description.defaultTranslation()

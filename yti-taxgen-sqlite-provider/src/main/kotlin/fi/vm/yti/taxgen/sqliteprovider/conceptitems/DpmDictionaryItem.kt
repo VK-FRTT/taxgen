@@ -13,16 +13,19 @@ data class DpmDictionaryItem(
 
     private val domainItems = mutableListOf<DomainItem>()
 
-    fun setDomainItems(domainItems: List<DomainItem>) {
-        this.domainItems.clear()
+    fun addDomainItems(domainItems: List<DomainItem>) {
         this.domainItems.addAll(domainItems)
     }
 
-    fun domainItemForCode(domainCode: String?): DomainItem? {
+    fun optionalDomainItemForCode(domainCode: String?): DomainItem? {
         if (domainCode == null) {
             return null
         }
 
+        return domainItemForCode(domainCode)
+    }
+
+    fun domainItemForCode(domainCode: String): DomainItem {
         return domainItems.find { it.domainCode == domainCode }
             ?: thisShouldNeverHappen("No domain for given code: $domainCode")
     }

@@ -8,7 +8,7 @@ data class DomainItem(
     val domainId: EntityID<Int>,
     val hierarchyItems: List<HierarchyItem>
 ) {
-    fun hierarchyItemForCode(hierarchyCode: String?): HierarchyItem? {
+    fun optionalHierarchyItemForCode(hierarchyCode: String?): HierarchyItem? {
         if (hierarchyCode == null) {
             return null
         }

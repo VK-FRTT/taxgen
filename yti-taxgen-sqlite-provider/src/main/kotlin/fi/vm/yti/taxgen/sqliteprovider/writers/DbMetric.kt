@@ -85,9 +85,8 @@ object DbMetric {
         metric: Metric,
         metricMemberId: EntityID<Int>
     ) {
-        val referencedDomainItem = dictionaryItem.domainItemForCode(metric.referencedDomainCode)
-        val referencedHierarchyItem =
-            referencedDomainItem?.hierarchyItems?.find { it.hierarchyCode == metric.referencedHierarchyCode }
+        val referencedDomainItem = dictionaryItem.optionalDomainItemForCode(metric.referencedDomainCode)
+        val referencedHierarchyItem = referencedDomainItem?.optionalHierarchyItemForCode(metric.referencedHierarchyCode)
 
         MetricTable.insert {
             it[correspondingMemberCol] = metricMemberId

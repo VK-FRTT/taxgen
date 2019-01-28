@@ -54,12 +54,14 @@ object DbDimensions {
         dimensionConceptId: EntityID<Int>
     ) {
         val dimensionXbrlCode = "${dictionaryItem.owner.prefix}_dim:${dimension.dimensionCode}"
+        val referencedDomainItem = dictionaryItem.domainItemForCode(dimension.referencedDomainCode)
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
             it[dimensionLabelCol] = dimension.concept.label.defaultTranslation()
             it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslation()
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
+            it[domainIdCol] = referencedDomainItem.domainId
             it[isTypedDimensionCol] = false
             it[conceptIdCol] = dimensionConceptId
         }
@@ -71,12 +73,14 @@ object DbDimensions {
         dimensionConceptId: EntityID<Int>
     ) {
         val dimensionXbrlCode = "${dictionaryItem.owner.prefix}_dim:${dimension.dimensionCode}"
+        val referencedDomainItem = dictionaryItem.domainItemForCode(dimension.referencedDomainCode)
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
             it[dimensionLabelCol] = dimension.concept.label.defaultTranslation()
             it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslation()
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
+            it[domainIdCol] = referencedDomainItem.domainId
             it[isTypedDimensionCol] = true
             it[conceptIdCol] = dimensionConceptId
         }

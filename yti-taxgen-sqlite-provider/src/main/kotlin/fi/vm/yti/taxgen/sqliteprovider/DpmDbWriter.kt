@@ -76,9 +76,9 @@ class DpmDbWriter(
             languageIds
         )
 
-        val domainItems = dpmDictionary.explicitDomains.map { explicitDomain ->
+        val explicitDomainItems = dpmDictionary.explicitDomains.map { explicitDomain ->
 
-            val (domainId, memberIds) = DbDomains.writeExplicitDomainAndMembers(
+            val (explicitDomainId, memberIds) = DbDomains.writeExplicitDomainAndMembers(
                 dpmDictionaryItem,
                 explicitDomain
             )
@@ -87,7 +87,7 @@ class DpmDbWriter(
                 val hierarchyId = DbHierarchies.writeHierarchyAndAndNodes(
                     dpmDictionaryItem,
                     hierarchy,
-                    domainId,
+                    explicitDomainId,
                     memberIds
                 )
 
@@ -99,19 +99,26 @@ class DpmDbWriter(
 
             DomainItem(
                 domainCode = explicitDomain.domainCode,
-                domainId = domainId,
+                domainId = explicitDomainId,
                 hierarchyItems = hierarchyItems
             )
         }
 
-        dpmDictionaryItem.setDomainItems(domainItems)
+        dpmDictionaryItem.addDomainItems(explicitDomainItems)
 
-        dpmDictionary.typedDomains.forEach { typedDomain ->
-            DbDomains.writeTypedDomain(
+        val typedDomainItems = dpmDictionary.typedDomains.map { typedDomain ->
+            val typedDomainId = DbDomains.writeTypedDomain(
                 dpmDictionaryItem,
                 typedDomain
             )
+
+            DomainItem(
+                domainCode = typedDomain.domainCode,
+                domainId = typedDomainId,
+                hierarchyItems = emptyList()
+            )
         }
+        dpmDictionaryItem.addDomainItems(typedDomainItems)
 
         dpmDictionary.explicitDimensions.forEach { explicitDimension ->
             DbDimensions.writeExplicitDimension(

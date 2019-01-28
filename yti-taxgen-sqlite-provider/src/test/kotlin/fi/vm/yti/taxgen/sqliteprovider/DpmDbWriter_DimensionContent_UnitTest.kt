@@ -20,6 +20,7 @@ internal class DpmDbWriter_DimensionContent_UnitTest : DpmDbWriter_UnitTestBase(
                     D.DimensionDescription,
                     D.DimensionXBRLCode,
                     D.IsTypedDimension,
+                    DOM.DomainCode,
                     C.ConceptType,
                     C.CreationDate,
                     C.ModificationDate,
@@ -29,15 +30,16 @@ internal class DpmDbWriter_DimensionContent_UnitTest : DpmDbWriter_UnitTestBase(
                 FROM mDimension AS D
                 INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
                 INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+                INNER JOIN mDomain AS DOM ON D.DomainID = DOM.DomainID
                 ORDER BY D.DimensionCode
               """
         )
 
         assertThat(rs.toStringList()).containsExactly(
-            "#DimensionCode, #DimensionLabel, #DimensionDescription, #DimensionXBRLCode, #IsTypedDimension, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #OwnerName",
-            "ExpDim-1-Code, ExpDim-Lbl-Fi, ExpDim-Desc-Fi, FixPrfx_dim:ExpDim-1-Code, 0, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-            "MET, Metric dimension, nil, MET, 0, Dimension, nil, nil, nil, nil, EuroFiling",
-            "TypDim-1-Code, TypDim-Lbl-Fi, TypDim-Desc-Fi, FixPrfx_dim:TypDim-1-Code, 1, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
+            "#DimensionCode, #DimensionLabel, #DimensionDescription, #DimensionXBRLCode, #IsTypedDimension, #DomainCode, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #OwnerName",
+            "ExpDim-1-Code, ExpDim-Lbl-Fi, ExpDim-Desc-Fi, FixPrfx_dim:ExpDim-1-Code, 0, ExpDom-1-Code, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+            "MET, Metric dimension, nil, MET, 0, MET, Dimension, nil, nil, nil, nil, EuroFiling",
+            "TypDim-1-Code, TypDim-Lbl-Fi, TypDim-Desc-Fi, FixPrfx_dim:TypDim-1-Code, 1, TypDom-1-Code, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
         )
     }
 
