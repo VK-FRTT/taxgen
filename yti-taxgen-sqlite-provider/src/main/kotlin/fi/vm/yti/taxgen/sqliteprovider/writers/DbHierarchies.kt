@@ -11,7 +11,6 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.LinkedList
 
 object DbHierarchies {
 
@@ -35,16 +34,25 @@ object DbHierarchies {
                 domainId
             )
 
-            val hierarchyTreeContext = HierarchyTreeContext(hierarchyId, memberIds)
+            var order = 0
+            hierarchy.traverseNodesInPreOrder { parentNode, currentNode, currentLevel ->
+                order++
 
-            hierarchy.rootNodes.forEachIndexed { index, hierarchyNode ->
-                hierarchyTreeContext.withNode(hierarchyNode) {
-                    writeHierarchyNodeAndChilds(
-                        dictionaryItem,
-                        hierarchyTreeContext,
-                        index
-                    )
-                }
+                val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
+                    dictionaryItem,
+                    currentNode.concept,
+                    ConceptType.HIERARCHY_NODE
+                )
+
+                insertHierarchyNode(
+                    memberIds,
+                    hierarchyNodeConceptId,
+                    hierarchyId,
+                    parentNode,
+                    currentNode,
+                    currentLevel,
+                    order
+                )
             }
 
             hierarchyId
@@ -68,94 +76,33 @@ object DbHierarchies {
         return hierarchyId
     }
 
-    private fun writeHierarchyNodeAndChilds(
-        dictionaryItem: DpmDictionaryItem,
-        hierarchyTreeContext: HierarchyTreeContext,
-        hierarchyNodeIndex: Int
-    ) {
-        val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
-            dictionaryItem,
-            hierarchyTreeContext.currentNode().concept,
-            ConceptType.HIERARCHY_NODE
-        )
-
-        insertHierarchyNode(
-            hierarchyTreeContext = hierarchyTreeContext,
-            hierarchyNodeConceptId = hierarchyNodeConceptId,
-            hierarchyNodeIndex = hierarchyNodeIndex
-        )
-
-        hierarchyTreeContext.currentNode().childNodes.forEachIndexed { childIndex, childNode ->
-            hierarchyTreeContext.withNode(childNode) {
-                writeHierarchyNodeAndChilds(
-                    dictionaryItem = dictionaryItem,
-                    hierarchyTreeContext = hierarchyTreeContext,
-                    hierarchyNodeIndex = childIndex
-                )
-            }
-        }
-    }
-
     private fun insertHierarchyNode(
-        hierarchyTreeContext: HierarchyTreeContext,
+        memberIds: Map<String, EntityID<Int>>,
         hierarchyNodeConceptId: EntityID<Int>,
-        hierarchyNodeIndex: Int
+        hierarchyId: EntityID<Int>,
+        parentNode: HierarchyNode?,
+        currentNode: HierarchyNode,
+        currentLevel: Int,
+        order: Int
     ) {
-        val node = hierarchyTreeContext.currentNode()
+        val memberId = memberIds[currentNode.referencedMemberUri] ?: thisShouldNeverHappen("No ID for Member")
+
+        val parentMemberId = parentNode?.let {
+            memberIds[it.referencedMemberUri]?.value ?: thisShouldNeverHappen("No ID for parent Member")
+        }
 
         HierarchyNodeTable.insert {
-            it[hierarchyIdCol] = hierarchyTreeContext.hierarchyId()
-            it[memberIdCol] = hierarchyTreeContext.memberId()
-            it[isAbstractCol] = node.abstract
-            it[comparisonOperatorCol] = node.comparisonOperator
-            it[unaryOperatorCol] = node.unaryOperator
-            it[orderCol] = hierarchyNodeIndex + 1
-            it[levelCol] = hierarchyTreeContext.level()
-            it[parentMemberID] = hierarchyTreeContext.parentMemberId()?.value
-            it[hierarchyNodeLabel] = node.concept.label.defaultTranslation()
+            it[hierarchyIdCol] = hierarchyId
+            it[memberIdCol] = memberId
+            it[isAbstractCol] = currentNode.abstract
+            it[comparisonOperatorCol] = currentNode.comparisonOperator
+            it[unaryOperatorCol] = currentNode.unaryOperator
+            it[orderCol] = order
+            it[levelCol] = currentLevel
+            it[parentMemberID] = parentMemberId
+            it[hierarchyNodeLabel] = currentNode.concept.label.defaultTranslation()
             it[conceptIdCol] = hierarchyNodeConceptId
-            it[pathCol] = hierarchyTreeContext.path()
-        }
-    }
-
-    private class HierarchyTreeContext(
-        private val hierarchyId: EntityID<Int>,
-        private val memberIds: Map<String, EntityID<Int>>
-    ) {
-        private val nodeStack = LinkedList<HierarchyNode>()
-
-        fun hierarchyId(): EntityID<Int> {
-            return hierarchyId
-        }
-
-        fun currentNode(): HierarchyNode {
-            return nodeStack.peek() ?: thisShouldNeverHappen("Node stack empty")
-        }
-
-        fun memberId(): EntityID<Int> {
-            return memberIds[currentNode().referencedMemberUri] ?: thisShouldNeverHappen("No ID for Member")
-        }
-
-        fun parentMemberId(): EntityID<Int>? {
-            if (nodeStack.size < 2) return null
-
-            val parentNode = nodeStack[1]
-
-            return memberIds[parentNode.referencedMemberUri] ?: thisShouldNeverHappen("No ID for parent Member")
-        }
-
-        fun level(): Int {
-            return nodeStack.size
-        }
-
-        fun path(): String? {
-            return null
-        }
-
-        fun withNode(node: HierarchyNode, block: () -> Unit) {
-            nodeStack.push(node)
-            block()
-            nodeStack.pop()
+            it[pathCol] = null
         }
     }
 }

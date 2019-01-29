@@ -166,6 +166,7 @@ internal open class DpmDbWriter_UnitTestBase {
                     unaryOperator = "+",
                     referencedMemberUri = "Mbr-2-Uri",
                     childNodes = listOf(
+
                         HierarchyNode(
                             uri = "ExpDomHierNode-2.1-Uri",
                             concept = concept("ExpDomHierNode-2.1"),
@@ -174,6 +175,7 @@ internal open class DpmDbWriter_UnitTestBase {
                             unaryOperator = "+",
                             referencedMemberUri = "Mbr-3-Uri",
                             childNodes = listOf(
+
                                 HierarchyNode(
                                     uri = "ExpDomHierNode-2.1.1-Uri",
                                     concept = concept("ExpDomHierNode-2.1.1"),
@@ -339,6 +341,7 @@ internal open class DpmDbWriter_UnitTestBase {
                     unaryOperator = null,
                     referencedMemberUri = "Met-2-Uri",
                     childNodes = listOf(
+
                         HierarchyNode(
                             uri = "MetHierNode-2.1-Uri",
                             concept = concept("MetHierNode-2.1"),
@@ -348,6 +351,7 @@ internal open class DpmDbWriter_UnitTestBase {
                             referencedMemberUri = "Met-3-Uri",
                             childNodes = emptyList()
                         ),
+
                         HierarchyNode(
                             uri = "MetHierNode-2.2-Uri",
                             concept = concept("MetHierNode-2.2"),

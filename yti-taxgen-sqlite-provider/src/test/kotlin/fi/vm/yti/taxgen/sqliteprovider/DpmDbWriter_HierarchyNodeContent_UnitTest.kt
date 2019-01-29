@@ -34,14 +34,14 @@ internal class DpmDbWriter_HierarchyNodeContent_UnitTest : DpmDbWriter_UnitTestB
             "#HierarchyCode, #HierarchyNodeLabel, #MemberCode, #ParentMemberCode, #ParentMemberLabel, #Level, #Order, #Path",
             "ExpDomHier-1-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 1, 1, nil",
             "ExpDomHier-1-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, nil, nil, 1, 2, nil",
-            "ExpDomHier-1-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 1, nil",
-            "ExpDomHier-1-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, Mbr-3-Code, Mbr-3-Lbl-Fi, 3, 1, nil",
-            "ExpDomHier-1-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 2, nil",
+            "ExpDomHier-1-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 3, nil",
+            "ExpDomHier-1-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, Mbr-3-Code, Mbr-3-Lbl-Fi, 3, 4, nil",
+            "ExpDomHier-1-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 5, nil",
             "MetHier-1-Code, MetHierNode-1-Lbl-Fi, ed1, nil, nil, 1, 1, nil",
             "MetHier-1-Code, MetHierNode-2-Lbl-Fi, bd2, nil, nil, 1, 2, nil",
-            "MetHier-1-Code, MetHierNode-2.1-Lbl-Fi, di3, bd2, Met-2-Lbl-Fi, 2, 1, nil",
-            "MetHier-1-Code, MetHierNode-2.2-Lbl-Fi, ii4, bd2, Met-2-Lbl-Fi, 2, 2, nil",
-            "MetHier-1-Code, MetHierNode-3-Lbl-Fi, p5, nil, nil, 1, 3, nil"
+            "MetHier-1-Code, MetHierNode-2.1-Lbl-Fi, di3, bd2, Met-2-Lbl-Fi, 2, 3, nil",
+            "MetHier-1-Code, MetHierNode-2.2-Lbl-Fi, ii4, bd2, Met-2-Lbl-Fi, 2, 4, nil",
+            "MetHier-1-Code, MetHierNode-3-Lbl-Fi, p5, nil, nil, 1, 5, nil"
         )
     }
 

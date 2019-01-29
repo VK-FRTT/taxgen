@@ -56,4 +56,16 @@ data class HierarchyNode(
                     .flatten()
             )
         }
+
+    fun traverseInPreOrder(
+        theParent: HierarchyNode?,
+        theCurrentLevel: Int,
+        action: (parentNode: HierarchyNode?, currentNode: HierarchyNode, levelIndex: Int) -> Unit
+    ) {
+        action(theParent, this, theCurrentLevel)
+
+        childNodes.forEach {
+            it.traverseInPreOrder(this, theCurrentLevel + 1, action)
+        }
+    }
 }

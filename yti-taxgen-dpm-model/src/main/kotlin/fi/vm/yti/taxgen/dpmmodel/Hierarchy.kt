@@ -48,4 +48,12 @@ data class Hierarchy(
             .map { it.allNodes() }
             .flatten()
     }
+
+    fun traverseNodesInPreOrder(
+        action: (parentNode: HierarchyNode?, currentNode: HierarchyNode, currentLevel: Int) -> Unit
+    ) {
+        rootNodes.forEach {
+            it.traverseInPreOrder(null, 1, action)
+        }
+    }
 }
