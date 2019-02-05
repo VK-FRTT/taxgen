@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.MemberItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -15,7 +16,7 @@ object DbDomains {
     fun writeExplicitDomainAndMembers(
         dictionaryItem: DpmDictionaryItem,
         domain: ExplicitDomain
-    ): Pair<EntityID<Int>, Map<String, EntityID<Int>>> {
+    ): Pair<EntityID<Int>, Map<String, MemberItem>> {
 
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
@@ -46,7 +47,10 @@ object DbDomains {
                     memberConceptId
                 )
 
-                member.uri to memberId
+                member.uri to MemberItem(
+                    memberId = memberId,
+                    defaultLabelText = member.concept.label.defaultTranslation()
+                )
             }.toMap()
 
             Pair(domainId, memberIds)

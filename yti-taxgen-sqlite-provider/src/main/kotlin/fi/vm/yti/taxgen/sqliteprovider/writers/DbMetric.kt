@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.MemberItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -19,7 +20,7 @@ object DbMetric {
     fun writeMetricDomainMembers(
         dictionaryItem: DpmDictionaryItem,
         metricDomain: MetricDomain
-    ): Pair<EntityID<Int>, Map<String, EntityID<Int>>> {
+    ): Pair<EntityID<Int>, Map<String, MemberItem>> {
 
         return transaction {
 
@@ -46,7 +47,10 @@ object DbMetric {
                     metricMemberId
                 )
 
-                metric.uri to metricMemberId
+                metric.uri to MemberItem(
+                    memberId = metricMemberId,
+                    defaultLabelText = metric.concept.label.defaultTranslation()
+                )
             }.toMap()
 
             Pair(metricDomainId, metricMemberIds)

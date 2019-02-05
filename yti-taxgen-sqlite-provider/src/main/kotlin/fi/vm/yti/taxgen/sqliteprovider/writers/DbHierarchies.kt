@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitems.MemberItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
@@ -18,7 +19,7 @@ object DbHierarchies {
         dictionaryItem: DpmDictionaryItem,
         hierarchy: Hierarchy,
         domainId: EntityID<Int>,
-        memberIds: Map<String, EntityID<Int>>
+        memberItems: Map<String, MemberItem>
     ): EntityID<Int> {
 
         return transaction {
@@ -45,7 +46,7 @@ object DbHierarchies {
                 )
 
                 insertHierarchyNode(
-                    memberIds,
+                    memberItems,
                     hierarchyNodeConceptId,
                     hierarchyId,
                     parentNode,
@@ -77,7 +78,7 @@ object DbHierarchies {
     }
 
     private fun insertHierarchyNode(
-        memberIds: Map<String, EntityID<Int>>,
+        memberItems: Map<String, MemberItem>,
         hierarchyNodeConceptId: EntityID<Int>,
         hierarchyId: EntityID<Int>,
         parentNode: HierarchyNode?,
@@ -85,22 +86,24 @@ object DbHierarchies {
         currentLevel: Int,
         order: Int
     ) {
-        val memberId = memberIds[currentNode.referencedMemberUri] ?: thisShouldNeverHappen("No ID for Member")
+        val memberItem = memberItems[currentNode.referencedMemberUri] ?: thisShouldNeverHappen("ReferencedMemberUri refers to unknown Member")
 
-        val parentMemberId = parentNode?.let {
-            memberIds[it.referencedMemberUri]?.value ?: thisShouldNeverHappen("No ID for parent Member")
+        val parentMemberItem = parentNode?.let {
+            memberItems[it.referencedMemberUri] ?: thisShouldNeverHappen("Parent ReferencedMemberUri refers to unknown Member")
         }
+
+        val defaultLabel = currentNode.concept.label.defaultTranslation() ?: memberItem.defaultLabelText
 
         HierarchyNodeTable.insert {
             it[hierarchyIdCol] = hierarchyId
-            it[memberIdCol] = memberId
+            it[memberIdCol] = memberItem.memberId
             it[isAbstractCol] = currentNode.abstract
             it[comparisonOperatorCol] = currentNode.comparisonOperator
             it[unaryOperatorCol] = currentNode.unaryOperator
             it[orderCol] = order
             it[levelCol] = currentLevel
-            it[parentMemberID] = parentMemberId
-            it[hierarchyNodeLabel] = currentNode.concept.label.defaultTranslation()
+            it[parentMemberID] = parentMemberItem?.memberId?.value
+            it[hierarchyNodeLabel] = defaultLabel
             it[conceptIdCol] = hierarchyNodeConceptId
             it[pathCol] = null
         }

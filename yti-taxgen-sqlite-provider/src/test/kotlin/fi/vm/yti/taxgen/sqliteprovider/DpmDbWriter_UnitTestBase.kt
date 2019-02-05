@@ -79,38 +79,40 @@ internal open class DpmDbWriter_UnitTestBase {
             defaultLanguageCode = "fi"
         )
 
-        fun concept(name: String) = Concept(
-            createdAt = Instant.parse("2018-09-03T10:12:25.763Z"),
-            modifiedAt = Instant.parse("2018-09-03T22:10:36.863Z"),
-            applicableFrom = LocalDate.of(2018, 2, 22),
-            applicableUntil = LocalDate.of(2018, 5, 15),
-            label = TranslatedText(
-                translations = if (variety == FixtureVariety.NO_EN_TRANSLATIONS) {
-                    listOf(
-                        Pair(language("fi"), "$name-Lbl-Fi")
-                    ).toMap()
-                } else {
-                    listOf(
-                        Pair(language("fi"), "$name-Lbl-Fi"),
-                        Pair(language("en"), "$name-Lbl-En")
-                    ).toMap()
-                }
-            ),
-            description = TranslatedText(
-                translations = if (variety == FixtureVariety.NO_EN_TRANSLATIONS) {
-                    listOf(
-                        Pair(language("fi"), "$name-Desc-Fi")
-                    ).toMap()
-                } else {
-                    listOf(
-                        Pair(language("fi"), "$name-Desc-Fi"),
-                        Pair(language("en"), "$name-Desc-En")
-                    ).toMap()
+        fun concept(label: String?, description: String?): Concept {
+
+            fun makeTranslations(basename: String?, kind: String): Map<Language, String> =
+                when {
+                    basename == null ->
+                        emptyMap()
+
+                    variety == FixtureVariety.NO_EN_TRANSLATIONS ->
+                        listOf(
+                            Pair(language("fi"), "$basename-$kind-Fi")
+                        ).toMap()
+
+                    else ->
+                        listOf(
+                            Pair(language("fi"), "$basename-$kind-Fi"),
+                            Pair(language("en"), "$basename-$kind-En")
+                        ).toMap()
                 }
 
-            ),
-            owner = dpmOwner
-        )
+            val labelTranslations = makeTranslations(label, "Lbl")
+            val descriptionTranslations = makeTranslations(description, "Desc")
+
+            return Concept(
+                createdAt = Instant.parse("2018-09-03T10:12:25.763Z"),
+                modifiedAt = Instant.parse("2018-09-03T22:10:36.863Z"),
+                applicableFrom = LocalDate.of(2018, 2, 22),
+                applicableUntil = LocalDate.of(2018, 5, 15),
+                label = TranslatedText(labelTranslations),
+                description = TranslatedText(descriptionTranslations),
+                owner = dpmOwner
+            )
+        }
+
+        fun concept(name: String) = concept(name, name)
 
         fun explicitDomains(): List<ExplicitDomain> {
 
@@ -178,7 +180,7 @@ internal open class DpmDbWriter_UnitTestBase {
 
                                 HierarchyNode(
                                     uri = "ExpDomHierNode-2.1.1-Uri",
-                                    concept = concept("ExpDomHierNode-2.1.1"),
+                                    concept = concept(null, "ExpDomHierNode-2.1.1"),
                                     abstract = false,
                                     comparisonOperator = null,
                                     unaryOperator = null,

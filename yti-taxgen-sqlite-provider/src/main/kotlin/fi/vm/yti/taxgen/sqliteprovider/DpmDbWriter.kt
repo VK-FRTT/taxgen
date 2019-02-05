@@ -78,7 +78,7 @@ class DpmDbWriter(
 
         val explicitDomainItems = dpmDictionary.explicitDomains.map { explicitDomain ->
 
-            val (explicitDomainId, memberIds) = DbDomains.writeExplicitDomainAndMembers(
+            val (explicitDomainId, memberItems) = DbDomains.writeExplicitDomainAndMembers(
                 dpmDictionaryItem,
                 explicitDomain
             )
@@ -88,7 +88,7 @@ class DpmDbWriter(
                     dpmDictionaryItem,
                     hierarchy,
                     explicitDomainId,
-                    memberIds
+                    memberItems
                 )
 
                 HierarchyItem(
