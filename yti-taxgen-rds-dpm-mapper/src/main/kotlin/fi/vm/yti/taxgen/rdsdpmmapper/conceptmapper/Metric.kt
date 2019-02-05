@@ -95,9 +95,9 @@ private fun mapMetrics(
                     val updatedItem = metricItem.copy(
                         dataType = extensionMember.mappedMetricDataType(),
                         flowType = extensionMember.mappedMetricFlowTypeOrNull(),
-                        balanceType = extensionMember.stringValueOrNull(RdsMemberValueType.DpmBalanceType),
-                        referencedDomainCode = extensionMember.stringValueOrNull(RdsMemberValueType.DpmDomainReference),
-                        referencedHierarchyCode = extensionMember.stringValueOrNull(RdsMemberValueType.DpmHierarchyReference)
+                        balanceType = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.DpmBalanceType),
+                        referencedDomainCode = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.DpmDomainReference),
+                        referencedHierarchyCode = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.DpmHierarchyReference)
                     )
 
                     metricItems.replaceOrAddItemByUri(updatedItem)
@@ -127,7 +127,7 @@ private val RDS_METRIC_DATA_TYPE_TO_DPM = mapOf(
 )
 
 private fun RdsExtensionMember.mappedMetricDataType(): String {
-    val sourceVal = stringValueOrNull(RdsMemberValueType.DpmMetricDataType)
+    val sourceVal = stringValueOrEmpty(RdsMemberValueType.DpmMetricDataType)
     val mappedVal = RDS_METRIC_DATA_TYPE_TO_DPM[sourceVal]
 
     return mappedVal ?: sourceVal
@@ -139,7 +139,7 @@ private val RDS_METRIC_FLOW_TYPE_TO_DPM = mapOf(
 )
 
 private fun RdsExtensionMember.mappedMetricFlowTypeOrNull(): String? {
-    val sourceVal = stringValueOrNull(RdsMemberValueType.DpmFlowType)
+    val sourceVal = nonEmptyStringValueOrNull(RdsMemberValueType.DpmFlowType)
     val mappedVal = RDS_METRIC_FLOW_TYPE_TO_DPM[sourceVal]
 
     return mappedVal ?: sourceVal

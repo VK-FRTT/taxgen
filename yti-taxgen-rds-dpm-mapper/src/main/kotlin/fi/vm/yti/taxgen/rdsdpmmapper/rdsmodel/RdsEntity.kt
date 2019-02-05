@@ -22,6 +22,7 @@ abstract class RdsEntity {
 
     val order: Int? = null
 
+    //TODO - select label by language preference
     fun diagnosticLabel(): String {
         return prefLabel?.entries?.firstOrNull { it.value.isNotBlank() }?.value ?: ""
     }

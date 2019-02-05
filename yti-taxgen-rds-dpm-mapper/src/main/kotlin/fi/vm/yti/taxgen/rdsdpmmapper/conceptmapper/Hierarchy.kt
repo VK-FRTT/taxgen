@@ -57,8 +57,8 @@ private fun mapAndValidateHierarchyNodes(
         val nodeItem = HierarchyNodeItem(
             uri = extensionMember.validUri(diagnostic),
             concept = extensionMember.dpmConcept(owner),
-            comparisonOperator = extensionMember.stringValueOrNull(RdsMemberValueType.ComparisonOperator),
-            unaryOperator = extensionMember.stringValueOrNull(RdsMemberValueType.UnaryOperator),
+            comparisonOperator = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.ComparisonOperator),
+            unaryOperator = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.UnaryOperator),
             referencedMemberUri = extensionMember.validCodeUri(diagnostic),
             parentMemberUri = extensionMember.relatedMember?.uri,
             order = extensionMember.validOrder(diagnostic)

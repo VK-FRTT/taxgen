@@ -28,8 +28,14 @@ internal data class RdsExtensionMember(
         return memberValueOfType(valueType.typeUri)?.value ?: ""
     }
 
-    fun stringValueOrNull(valueType: RdsMemberValueType): String? {
-        return memberValueOfType(valueType.typeUri)?.value
+    fun nonEmptyStringValueOrNull(valueType: RdsMemberValueType): String? {
+        val value = memberValueOfType(valueType.typeUri)?.value ?: return null
+
+        if (value.isEmpty()) {
+            return null
+        }
+
+        return value
     }
 
     private fun memberValueOfType(typeUri: String): RdsMemberValue? {

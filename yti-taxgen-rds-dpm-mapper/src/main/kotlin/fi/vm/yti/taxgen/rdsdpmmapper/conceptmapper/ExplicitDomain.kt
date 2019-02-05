@@ -46,7 +46,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
 
                 if (domain != null) {
                     val updatedDomain = domain.copy(
-                        memberPrefix = extensionMember.stringValueOrNull(RdsMemberValueType.DpmMemberXBRLCodePrefix)
+                        memberPrefix = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.DpmMemberXBRLCodePrefix)
                     )
 
                     explicitDomainItems.replaceOrAddItemByUri(updatedDomain)
