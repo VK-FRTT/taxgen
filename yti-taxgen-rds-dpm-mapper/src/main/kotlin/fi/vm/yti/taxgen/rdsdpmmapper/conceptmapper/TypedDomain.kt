@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
-import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
@@ -14,20 +14,20 @@ internal fun mapAndValidateTypedDomains(
     owner: Owner,
     diagnostic: Diagnostic
 ): List<TypedDomain> {
-    val typedDomains = mutableListOf<TypedDomain>()
+    codeListSource ?: return emptyList()
 
-    if (codeListSource == null) return typedDomains
+    val typedDomainItems = mutableListOf<TypedDomainItem>()
 
     //Base details
     codeListSource.eachCode { code ->
-        val typedDomain = TypedDomain(
+        val typedDomainItem = TypedDomainItem(
             uri = code.validUri(diagnostic),
             concept = code.dpmConcept(owner),
             domainCode = code.codeValueOrEmpty(),
             dataType = ""
         )
 
-        typedDomains.add(typedDomain)
+        typedDomainItems.add(typedDomainItem)
     }
 
     //Extension based details
@@ -38,7 +38,7 @@ internal fun mapAndValidateTypedDomains(
 
             extensionSource.eachExtensionMember { extensionMember ->
                 val codeUri = extensionMember.validCodeUri(diagnostic)
-                val typedDomain = typedDomains.find { it.uri == codeUri }
+                val typedDomain = typedDomainItems.find { it.uri == codeUri }
 
                 if (typedDomain != null) {
 
@@ -46,11 +46,13 @@ internal fun mapAndValidateTypedDomains(
                         dataType = extensionMember.mappedDomainDataType()
                     )
 
-                    typedDomains.replaceOrAddByUri(updatedTypedDomain)
+                    typedDomainItems.replaceOrAddItemByUri(updatedTypedDomain)
                 }
             }
         }
     }
+
+    val typedDomains = typedDomainItems.map { it.toTypedDomain() }
 
     validateDpmElements(diagnostic, typedDomains)
 
@@ -74,5 +76,5 @@ private fun RdsExtensionMember.mappedDomainDataType(): String {
     val sourceVal = stringValueOrEmpty(RdsMemberValueType.DpmDomainDataType)
     val mappedVal = RDS_DOMAIN_DATA_TYPE_TO_DPM[sourceVal]
 
-    return mappedVal ?: sourceVal ?: ""
+    return mappedVal ?: sourceVal
 }

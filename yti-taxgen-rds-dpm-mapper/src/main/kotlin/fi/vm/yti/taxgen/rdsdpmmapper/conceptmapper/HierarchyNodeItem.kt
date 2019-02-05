@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 
 internal data class HierarchyNodeItem(
-    val uri: String,
+    override val uri: String,
     val concept: Concept,
     val comparisonOperator: String?,
     val unaryOperator: String?,
@@ -13,7 +13,7 @@ internal data class HierarchyNodeItem(
     val parentMemberUri: String?,
     val order: Int,
     private val children: MutableList<HierarchyNodeItem> = mutableListOf()
-) {
+) : UriIdentifiedItem {
 
     fun isRootMember() = parentMemberUri == null
 

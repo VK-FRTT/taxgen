@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
-import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
@@ -38,9 +38,9 @@ private fun mapDimensions(
     owner: Owner,
     diagnostic: Diagnostic
 ): List<DimensionItem> {
-    val dimensionItems = mutableListOf<DimensionItem>()
+    codeListSource ?: return emptyList()
 
-    if (codeListSource == null) return dimensionItems
+    val dimensionItems = mutableListOf<DimensionItem>()
 
     //Base details
     codeListSource.eachCode { code ->
@@ -70,7 +70,7 @@ private fun mapDimensions(
                         referencedDomainCode = extensionMember.stringValueOrEmpty(RdsMemberValueType.DpmDomainReference)
                     )
 
-                    dimensionItems.replaceOrAddByUri(updatedDimensionItem)
+                    dimensionItems.replaceOrAddItemByUri(updatedDimensionItem)
                 }
             }
         }

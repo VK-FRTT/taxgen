@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
 import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
@@ -14,7 +14,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
     owner: Owner,
     diagnostic: Diagnostic
 ): List<ExplicitDomain> {
-    if (codeListSource == null) return emptyList()
+    codeListSource ?: return emptyList()
 
     val explicitDomainItems = mutableListOf<ExplicitDomainItem>()
 
@@ -49,7 +49,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
                         memberPrefix = extensionMember.stringValueOrNull(RdsMemberValueType.DpmMemberXBRLCodePrefix)
                     )
 
-                    explicitDomainItems.replaceOrAddByUri(updatedDomain)
+                    explicitDomainItems.replaceOrAddItemByUri(updatedDomain)
                 }
             }
         }
@@ -80,7 +80,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
                 hierarchies = hierarchies
             )
 
-            explicitDomainItems.replaceOrAddByUri(updatedDomain)
+            explicitDomainItems.replaceOrAddItemByUri(updatedDomain)
         }
     }
 

@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
-import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
@@ -17,7 +17,7 @@ internal fun mapAndValidateMetricDomain(
     owner: Owner,
     diagnostic: Diagnostic
 ): List<MetricDomain> {
-    if (codeListSource == null) return emptyList()
+    codeListSource ?: return emptyList()
 
     val domainConcept = codeListSource
         .codeListMeta()
@@ -100,7 +100,7 @@ private fun mapMetrics(
                         referencedHierarchyCode = extensionMember.stringValueOrNull(RdsMemberValueType.DpmHierarchyReference)
                     )
 
-                    metricItems.replaceOrAddByUri(updatedItem)
+                    metricItems.replaceOrAddItemByUri(updatedItem)
                 }
             }
         }
@@ -130,7 +130,7 @@ private fun RdsExtensionMember.mappedMetricDataType(): String {
     val sourceVal = stringValueOrNull(RdsMemberValueType.DpmMetricDataType)
     val mappedVal = RDS_METRIC_DATA_TYPE_TO_DPM[sourceVal]
 
-    return mappedVal ?: sourceVal ?: ""
+    return mappedVal ?: sourceVal
 }
 
 private val RDS_METRIC_FLOW_TYPE_TO_DPM = mapOf(
