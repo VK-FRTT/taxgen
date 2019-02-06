@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin
 
-import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.UriIdentifiedItem
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.UriIdentifiedItem
 
 fun <T : UriIdentifiedItem> MutableList<T>.replaceOrAddItemByUri(item: T) {
     val index = indexOfFirst { it.uri == item.uri }

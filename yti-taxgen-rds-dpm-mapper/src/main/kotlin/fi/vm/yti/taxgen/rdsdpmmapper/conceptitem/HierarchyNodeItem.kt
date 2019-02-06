@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
+package fi.vm.yti.taxgen.rdsdpmmapper.conceptitem
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Concept

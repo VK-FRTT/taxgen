@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
+package fi.vm.yti.taxgen.rdsdpmmapper.conceptitem
 
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain

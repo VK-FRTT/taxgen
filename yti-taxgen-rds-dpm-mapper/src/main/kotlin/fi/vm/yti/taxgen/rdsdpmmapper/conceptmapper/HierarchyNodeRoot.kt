@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
+import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.HierarchyNodeItem
 
 internal data class HierarchyNodeRoot(
     private val children: MutableList<HierarchyNodeItem> = mutableListOf()
