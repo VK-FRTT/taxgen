@@ -11,7 +11,7 @@ internal class DpmDbWriter_HierarchyContent_UnitTest : DpmDbWriter_UnitTestBase(
 
     @Test
     fun `should have Hierarchy with Domain, Concept and Owner relation`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -42,7 +42,7 @@ internal class DpmDbWriter_HierarchyContent_UnitTest : DpmDbWriter_UnitTestBase(
 
     @Test
     fun `should have ConceptTranslations for DPM Hierarchy`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -72,9 +72,7 @@ internal class DpmDbWriter_HierarchyContent_UnitTest : DpmDbWriter_UnitTestBase(
 
     @Test
     fun `should detect when multiple HierarchyNodes refer same Member`() {
-        val dpmDictionariesFixture = dpmDictionaryFixture(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
-
-        val thrown = catchThrowable { dbWriter.writeDpmDb(dpmDictionariesFixture) }
+        val thrown = catchThrowable { runDictionaryCreateDbWriter(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) }
 
         assertThat(thrown)
             .isInstanceOf(org.jetbrains.exposed.exceptions.ExposedSQLException::class.java)

@@ -1,8 +1,8 @@
-package fi.vm.yti.taxgen.sqliteprovider.writers
+package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
-import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import org.jetbrains.exposed.dao.EntityID

@@ -10,7 +10,7 @@ internal class DpmDbWriter_HierarchyNodeContent_UnitTest : DpmDbWriter_UnitTestB
 
     @Test
     fun `should have correct HierarchyNode structure`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -47,7 +47,7 @@ internal class DpmDbWriter_HierarchyNodeContent_UnitTest : DpmDbWriter_UnitTestB
 
     @Test
     fun `should have HierarchyNodes with Member, Concept and Owner relation`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -90,7 +90,7 @@ internal class DpmDbWriter_HierarchyNodeContent_UnitTest : DpmDbWriter_UnitTestB
 
     @Test
     fun `should have ConceptTranslations for HierarchyNode`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """

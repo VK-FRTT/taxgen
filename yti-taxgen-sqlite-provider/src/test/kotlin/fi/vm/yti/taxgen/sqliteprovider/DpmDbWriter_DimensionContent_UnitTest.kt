@@ -10,7 +10,7 @@ internal class DpmDbWriter_DimensionContent_UnitTest : DpmDbWriter_UnitTestBase(
 
     @Test
     fun `should have Dimensions with Concept and Owner relation`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -45,7 +45,7 @@ internal class DpmDbWriter_DimensionContent_UnitTest : DpmDbWriter_UnitTestBase(
 
     @Test
     fun `should have ConceptTranslations for Dimensions`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """

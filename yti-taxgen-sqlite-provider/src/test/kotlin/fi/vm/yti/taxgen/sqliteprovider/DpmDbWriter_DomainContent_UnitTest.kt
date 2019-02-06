@@ -10,7 +10,7 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have Domains with Concept and Owner relation`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -43,7 +43,7 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations for Domains`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -77,7 +77,7 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations with EN label fallback to FI content for Domains`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture(FixtureVariety.NO_EN_TRANSLATIONS))
+        runDictionaryCreateDbWriter(FixtureVariety.NO_EN_TRANSLATIONS)
 
         val rs = dbConnection.createStatement().executeQuery(
             """

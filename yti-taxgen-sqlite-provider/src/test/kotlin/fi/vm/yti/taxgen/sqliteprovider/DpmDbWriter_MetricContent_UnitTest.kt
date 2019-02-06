@@ -10,7 +10,7 @@ internal class DpmDbWriter_MetricContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have Metrics with Member relation`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """

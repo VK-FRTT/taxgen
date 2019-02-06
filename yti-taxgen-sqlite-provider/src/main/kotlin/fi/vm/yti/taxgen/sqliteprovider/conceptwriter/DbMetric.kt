@@ -1,10 +1,10 @@
-package fi.vm.yti.taxgen.sqliteprovider.writers
+package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
-import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
-import fi.vm.yti.taxgen.sqliteprovider.conceptitems.MemberItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitem.MemberItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable

@@ -11,9 +11,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.sql.DriverManager
 
-@DisplayName("Command ´--compile-dpm-db´")
-internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
-    primaryCommand = "--compile-dpm-db"
+@DisplayName("Command ´--create-dictionary-to-new-dpm-db´")
+internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
+    primaryCommand = "--create-dictionary-to-new-dpm-db"
 ) {
 
     private lateinit var targetDbPath: Path
@@ -26,7 +26,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should produce database from DPM source capture`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath"
@@ -56,7 +56,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--force-overwrite",
             "--source-folder",
@@ -80,7 +80,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when target database filename is not given`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "--source-folder",
             "$dpmSourceCapturePath"
         )
@@ -102,7 +102,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath"
@@ -125,7 +125,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when given target database path points to folder`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "${tempFolder.path()}",
             "--source-folder",
             "$dpmSourceCapturePath"
@@ -146,7 +146,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath"
         )
 
@@ -167,7 +167,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-folder"
         )
@@ -187,7 +187,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "${tempFolder.resolve("non_existing_folder")}"
@@ -208,7 +208,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath",
@@ -234,7 +234,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source capture folder is empty`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "${tempFolder.path()}"
@@ -250,7 +250,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should produce database from DPM source config`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$dpmSourceConfigPath"
@@ -283,7 +283,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config file is broken JSON`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_source_config_json.json")
@@ -306,7 +306,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source config file does not exist`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             "${tempFolder.resolve("non_existing_config.json")}"
@@ -326,7 +326,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config links to non existing DPM code list`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json")
@@ -349,7 +349,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config links to unresolvable DPM host name`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json")
@@ -372,7 +372,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config has URI with bad protocol`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json")
@@ -395,7 +395,7 @@ internal class TaxgenCli_ProduceDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config URI points to non-responsive host IP`() {
         val args = arrayOf(
-            "--compile-dpm-db",
+            "--create-dictionary-to-new-dpm-db",
             "$targetDbPath",
             "--source-config",
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json")

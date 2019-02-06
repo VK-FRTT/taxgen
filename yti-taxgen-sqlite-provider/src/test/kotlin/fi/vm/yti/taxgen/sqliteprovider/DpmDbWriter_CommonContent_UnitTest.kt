@@ -11,7 +11,7 @@ internal class DpmDbWriter_CommonContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have all configured languages`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery("SELECT IsoCode FROM mLanguage")
         val dbIsoCodes = rs.toStringList(false)
@@ -24,7 +24,7 @@ internal class DpmDbWriter_CommonContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have English language but no Concept nor ConceptTranslation relations`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -57,7 +57,7 @@ internal class DpmDbWriter_CommonContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have Owner`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -82,7 +82,7 @@ internal class DpmDbWriter_CommonContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should produce proper context events`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         assertThat(diagnosticCollector.eventsString()).contains(
             "ENTER [WriteSQLiteDb]",

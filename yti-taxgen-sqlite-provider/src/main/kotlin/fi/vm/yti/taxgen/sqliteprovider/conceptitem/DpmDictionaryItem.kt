@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.sqliteprovider.conceptitems
+package fi.vm.yti.taxgen.sqliteprovider.conceptitem
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Language

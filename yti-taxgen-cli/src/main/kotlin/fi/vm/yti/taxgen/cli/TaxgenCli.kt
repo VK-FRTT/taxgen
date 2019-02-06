@@ -13,6 +13,7 @@ import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 import fi.vm.yti.taxgen.rdsprovider.ProviderFactory
 import fi.vm.yti.taxgen.rdsprovider.SourceProvider
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
+import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriterFactory
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -58,8 +59,10 @@ class TaxgenCli(
                 captureDpmSources(detectedOptions)
             }
 
-            if (detectedOptions.cmdCompileDpmDb != null) {
-                compileDpmDb(detectedOptions)
+            if (detectedOptions.cmdCreateDictionaryToNewDpmDb != null ||
+                detectedOptions.cmdReplaceDictionaryInDpmDb != null
+            ) {
+                writeDictionaryToDpmDb(detectedOptions)
             }
         }
     }
@@ -84,7 +87,7 @@ class TaxgenCli(
         }
     }
 
-    private fun compileDpmDb(detectedOptions: DetectedOptions) {
+    private fun writeDictionaryToDpmDb(detectedOptions: DetectedOptions) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.CmdCompileDpmDb
         ) {
@@ -103,7 +106,7 @@ class TaxgenCli(
             }
 
             val dbWriter = resolveDpmDbWriter(detectedOptions)
-            dbWriter.writeDpmDb(dpmDictionaries)
+            dbWriter.writeWithDictionaries(dpmDictionaries)
         }
     }
 
@@ -177,10 +180,22 @@ class TaxgenCli(
     private fun resolveDpmDbWriter(
         detectedOptions: DetectedOptions
     ): DpmDbWriter {
-        return DpmDbWriter(
-            rawTargetDbPath = detectedOptions.cmdCompileDpmDb!!,
-            forceOverwrite = detectedOptions.forceOverwrite,
-            diagnosticContext = diagnosticContext
-        )
+
+        if (detectedOptions.cmdCreateDictionaryToNewDpmDb != null) {
+            return DpmDbWriterFactory.dictionaryCreateWriter(
+                targetDbPath = detectedOptions.cmdCreateDictionaryToNewDpmDb,
+                forceOverwrite = detectedOptions.forceOverwrite,
+                diagnosticContext = diagnosticContext
+            )
+        }
+
+        if (detectedOptions.cmdReplaceDictionaryInDpmDb != null) {
+            return DpmDbWriterFactory.dictionaryReplaceWriter(
+                targetDbPath = detectedOptions.cmdReplaceDictionaryInDpmDb,
+                diagnosticContext = diagnosticContext
+            )
+        }
+
+        thisShouldNeverHappen("No suitable DB writer given")
     }
 }

@@ -10,7 +10,7 @@ internal class DpmDbWriter_MemberContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have Members with Domain, Concept and Owner relation`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """
@@ -50,7 +50,7 @@ internal class DpmDbWriter_MemberContent_UnitTest : DpmDbWriter_UnitTestBase() {
 
     @Test
     fun `should have ConceptTranslations for DPM Member`() {
-        dbWriter.writeDpmDb(dpmDictionaryFixture())
+        runDictionaryCreateDbWriter()
 
         val rs = dbConnection.createStatement().executeQuery(
             """

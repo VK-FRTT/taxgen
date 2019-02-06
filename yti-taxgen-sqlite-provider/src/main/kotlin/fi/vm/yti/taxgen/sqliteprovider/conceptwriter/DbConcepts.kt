@@ -1,10 +1,10 @@
-package fi.vm.yti.taxgen.sqliteprovider.writers
+package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
-import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTimeOrNull
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable

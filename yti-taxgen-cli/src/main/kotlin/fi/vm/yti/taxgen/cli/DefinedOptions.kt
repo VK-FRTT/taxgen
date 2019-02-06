@@ -17,7 +17,8 @@ class DefinedOptions {
     private val optionParser = OptionParser()
 
     private val cmdShowHelp: OptionSpec<Void>
-    private val cmdCompileDpmDb: OptionSpec<Path>
+    private val cmdCreateDictionaryToNewDpmDb: OptionSpec<Path>
+    private val cmdReplaceDictionaryInDpmDb: OptionSpec<Path>
     private val cmdCaptureDpmSourcesToFolder: OptionSpec<Path>
     private val cmdCaptureDpmSourcesToZip: OptionSpec<Path>
 
@@ -34,10 +35,18 @@ class DefinedOptions {
                 "show this help message"
             ).forHelp()
 
-        cmdCompileDpmDb = optionParser
+        cmdCreateDictionaryToNewDpmDb = optionParser
             .accepts(
-                "compile-dpm-db",
-                "compile DPM database from given sources"
+                "create-dictionary-to-new-dpm-db",
+                "create dictionary to new DPM database from given sources"
+            )
+            .withOptionalArg()
+            .withValuesConvertedBy(PathConverter())
+
+        cmdReplaceDictionaryInDpmDb = optionParser
+            .accepts(
+                "replace-dictionary-in-dpm-db",
+                "replace dictionary in DPM database from given sources"
             )
             .withOptionalArg()
             .withValuesConvertedBy(PathConverter())
@@ -117,7 +126,8 @@ class DefinedOptions {
 
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
-            cmdCompileDpmDb = optionSet.valueOf(this.cmdCompileDpmDb),
+            cmdCreateDictionaryToNewDpmDb = optionSet.valueOf(this.cmdCreateDictionaryToNewDpmDb),
+            cmdReplaceDictionaryInDpmDb = optionSet.valueOf(this.cmdReplaceDictionaryInDpmDb),
             cmdCaptureDpmSourcesToFolder = optionSet.valueOf(this.cmdCaptureDpmSourcesToFolder),
             cmdCaptureDpmSourcesToZip = optionSet.valueOf(this.cmdCaptureDpmSourcesToZip),
 

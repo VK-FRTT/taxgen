@@ -1,10 +1,10 @@
-package fi.vm.yti.taxgen.sqliteprovider.writers
+package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
-import fi.vm.yti.taxgen.sqliteprovider.conceptitems.DpmDictionaryItem
-import fi.vm.yti.taxgen.sqliteprovider.conceptitems.MemberItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
+import fi.vm.yti.taxgen.sqliteprovider.conceptitem.MemberItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable

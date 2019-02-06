@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.sqliteprovider.writers
+package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.sqliteprovider.tables.OwnerTable

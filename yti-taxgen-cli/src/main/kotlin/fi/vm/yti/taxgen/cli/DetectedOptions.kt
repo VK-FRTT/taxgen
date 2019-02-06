@@ -6,7 +6,8 @@ import java.nio.file.Path
 data class DetectedOptions(
     val cmdShowHelp: Boolean,
 
-    val cmdCompileDpmDb: Path?,
+    val cmdCreateDictionaryToNewDpmDb: Path?,
+    val cmdReplaceDictionaryInDpmDb: Path?,
     val cmdCaptureDpmSourcesToFolder: Path?,
     val cmdCaptureDpmSourcesToZip: Path?,
 
@@ -19,7 +20,8 @@ data class DetectedOptions(
 
     fun ensureSingleCommandGiven() {
         val commandCount = listOf<Any?>(
-            cmdCompileDpmDb,
+            cmdCreateDictionaryToNewDpmDb,
+            cmdReplaceDictionaryInDpmDb,
             cmdCaptureDpmSourcesToFolder,
             cmdCaptureDpmSourcesToZip
         ).count { it != null }

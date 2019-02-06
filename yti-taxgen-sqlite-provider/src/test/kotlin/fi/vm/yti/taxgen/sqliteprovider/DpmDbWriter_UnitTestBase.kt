@@ -2,7 +2,6 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
@@ -21,7 +20,6 @@ import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.Instant
@@ -29,27 +27,24 @@ import java.time.LocalDate
 
 internal open class DpmDbWriter_UnitTestBase {
     protected lateinit var tempFolder: TempFolder
-
     protected lateinit var diagnosticCollector: DiagnosticCollectorSimple
-    protected lateinit var diagnosticContext: DiagnosticContext
-
-    protected lateinit var dbWriter: DpmDbWriter
     protected lateinit var dbConnection: Connection
 
-    @BeforeEach
-    fun baseInit() {
+    fun runDictionaryCreateDbWriter(fixtureVariety: FixtureVariety = FixtureVariety.NONE) {
         tempFolder = TempFolder("sqliteprovider")
-
         val dbPath = tempFolder.resolve("dpm.db")
 
         diagnosticCollector = DiagnosticCollectorSimple()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        dbWriter = DpmDbWriter(
+        val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
             dbPath,
             false,
             diagnosticContext
         )
+
+        val dictionaries = dpmDictionaryFixture(fixtureVariety)
+        dbWriter.writeWithDictionaries(dictionaries)
 
         dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
     }
@@ -57,7 +52,10 @@ internal open class DpmDbWriter_UnitTestBase {
     @AfterEach
     fun baseTeardown() {
         tempFolder.close()
-        dbConnection.close()
+
+        if (::dbConnection.isInitialized) {
+            dbConnection.close()
+        }
     }
 
     enum class FixtureVariety {
@@ -66,7 +64,7 @@ internal open class DpmDbWriter_UnitTestBase {
         NO_EN_TRANSLATIONS
     }
 
-    protected fun dpmDictionaryFixture(variety: FixtureVariety = FixtureVariety.NONE): List<DpmDictionary> {
+    protected fun dpmDictionaryFixture(variety: FixtureVariety): List<DpmDictionary> {
         fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
         val dpmOwner = Owner(
