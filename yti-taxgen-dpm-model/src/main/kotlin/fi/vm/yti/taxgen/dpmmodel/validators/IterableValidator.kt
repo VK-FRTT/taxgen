@@ -1,10 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel.validators
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
-fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateElementPropertyValuesUnique(
+fun <I : Any, P : Iterable<E>, E : Any, K : Any> validateElementPropertyValuesUnique(
     validationResults: ValidationResults,
     instance: I,
     iterableProperty: KProperty1<I, P>,
@@ -24,7 +23,7 @@ fun <I : Validatable, P : Iterable<E>, E : Any, K : Any> validateElementProperty
     }
 }
 
-fun <I : Validatable, E : Any, K : Any> validateElementValueUnique(
+fun <I : Any, E : Any, K : Any> validateElementValueUnique(
     validationResults: ValidationResults,
     instance: I,
     instancePropertyName: String,

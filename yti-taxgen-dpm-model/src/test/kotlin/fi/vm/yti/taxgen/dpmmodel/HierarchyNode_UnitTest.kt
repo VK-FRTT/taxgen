@@ -60,7 +60,7 @@ internal class HierarchyNode_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should allow empty label`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -68,8 +68,20 @@ internal class HierarchyNode_UnitTest :
             )
 
             instantiateAndValidate()
+            assertThat(validationErrors).isEmpty()
+        }
+
+    @Test
+        fun `concept should error if invalid`() {
+            attributeOverrides(
+                "concept" to Factory.instantiateWithOverrides<Concept>(
+                    "label" to TranslatedText(listOf( Language.byIso6391CodeOrFail("en") to "").toMap() )
+                )
+            )
+
+            instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+                .containsExactly("Concept.label: has too short translations for languages [en]")
         }
     }
 

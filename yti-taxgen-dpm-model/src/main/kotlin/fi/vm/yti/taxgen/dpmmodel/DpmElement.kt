@@ -14,7 +14,10 @@ interface DpmElement : Validatable {
     val type: String
         get() = typeName(this::class)
 
-    override fun validate(validationResults: ValidationResults) {
+    fun validateDpmElement(
+        validationResults: ValidationResults,
+        minLabelLangCount: Int = 1
+    ) {
 
         validateLength(
             validationResults = validationResults,
@@ -24,7 +27,10 @@ interface DpmElement : Validatable {
             maxLength = 500
         )
 
-        concept.validate(validationResults)
+        concept.validateConcept(
+            validationResults,
+            minLabelLangCount
+        )
     }
 
     fun code(): String = ""
@@ -41,9 +47,7 @@ interface DpmElement : Validatable {
 
             require(kClass.isSubclassOf(DpmElement::class), { "Expecting a DpmElement based class" })
 
-            val name = kClass.simpleName ?: thisShouldNeverHappen("Anonymous DpmElement")
-
-            return "$name"
+            return kClass.simpleName ?: thisShouldNeverHappen("Anonymous DpmElement")
         }
     }
 }

@@ -11,7 +11,7 @@ import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.isSupertypeOf
 import kotlin.reflect.full.memberProperties
 
-internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate(
+internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate(
     propertyName: String,
     validationType: String,
     expectedLimit: Int,
@@ -26,13 +26,13 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
             validOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
             if (!validOverrideAttributes.containsKey(propertyName)) {
-                validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
+                validOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit)
             }
 
             invalidOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit - 1, customValueBuilder)
             if (!invalidOverrideAttributes.containsKey(propertyName)) {
-                invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit - 1)
+                invalidOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit - 1)
             }
 
             messageComposer =
@@ -51,13 +51,13 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
             validOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
             if (!validOverrideAttributes.containsKey(propertyName)) {
-                validOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit)
+                validOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit)
             }
 
             invalidOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit + 1, customValueBuilder)
             if (!invalidOverrideAttributes.containsKey(propertyName)) {
-                invalidOverrideAttributes = stringOverrideAtributeForProp(propertyName, expectedLimit + 1)
+                invalidOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit + 1)
             }
             messageComposer =
                 { className -> "$className.$propertyName: is too long (maximum $expectedLimit characters)" }
@@ -93,7 +93,7 @@ internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyLengthValidation
     assertThat(invalidCollector.compileResultsToSimpleStrings()).containsOnlyOnce(message)
 }
 
-private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringOverrideAtributeForProp(
+private fun <T : Any> DpmModel_UnitTestBase<T>.stringOverrideAttributeForProp(
     propertyName: String,
     length: Int
 ): Map<String, Any> {
@@ -111,7 +111,7 @@ private fun <T : Validatable> DpmModel_UnitTestBase<T>.stringOverrideAtributeFor
     thisShouldNeverHappen("Can not build value for '$propertyName' property with length $length")
 }
 
-private fun <T : Validatable> DpmModel_UnitTestBase<T>.customOverrideAttributesForProp(
+private fun <T : Any> DpmModel_UnitTestBase<T>.customOverrideAttributesForProp(
     propertyName: String,
     length: Int,
     customValueBuilder: ((KProperty1<T, *>, Int) -> (Map<String, Any>))?
@@ -132,7 +132,7 @@ private fun <T : Validatable> DpmModel_UnitTestBase<T>.customOverrideAttributesF
     return attributes
 }
 
-private fun <T : Validatable> DpmModel_UnitTestBase<T>.tryCustomOverrideAttributesForProp(
+private fun <T : Any> DpmModel_UnitTestBase<T>.tryCustomOverrideAttributesForProp(
     propertyName: String,
     length: Int,
     customValueBuilder: ((KProperty1<T, *>, Int) -> (Map<String, Any>))?

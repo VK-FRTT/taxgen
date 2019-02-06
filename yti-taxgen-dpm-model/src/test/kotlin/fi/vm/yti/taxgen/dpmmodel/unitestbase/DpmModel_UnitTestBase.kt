@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import kotlin.reflect.KClass
 
-internal open class DpmModel_UnitTestBase<T : Validatable>(
+internal open class DpmModel_UnitTestBase<T : Any>(
     val kClass: KClass<T>
 ) {
     protected var attributeOverrides: Map<String, Any?>? = null
@@ -41,7 +42,9 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
         attributeOverrides = overrides.toMap()
     }
 
-    protected fun instantiateAndValidate() {
+    protected fun instantiateAndValidate(
+        customValidationAdapter: ((Any, ValidationResults) -> (Unit))? = null
+    ) {
         require(attributeOverrides != null)
 
         val attributes = Factory.Builder.attributesFor(kClass, attributeOverrides)
@@ -50,8 +53,14 @@ internal open class DpmModel_UnitTestBase<T : Validatable>(
 
         @Suppress("UNCHECKED_CAST")
         instance = Factory.Builder.instantiate(kClass, attributes) as T
+        val theInstance = instance!!
 
-        instance!!.validate(collector)
+        if (customValidationAdapter != null) {
+            customValidationAdapter(theInstance, collector)
+        } else {
+            (theInstance as Validatable).validate(collector)
+        }
+
         validationErrors = collector.compileResultsToSimpleStrings()
     }
 

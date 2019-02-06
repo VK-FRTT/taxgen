@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel
 
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
 import org.assertj.core.api.Assertions.assertThat
@@ -13,6 +14,16 @@ import java.time.LocalDate
 
 internal class Concept_UnitTest :
     DpmModel_UnitTestBase<Concept>(Concept::class) {
+
+    fun conceptValidationAdapter(
+        instance: Any,
+        validationResults: ValidationResults
+    ) {
+        (instance as Concept).validateConcept(
+            validationResults = validationResults,
+            minLabelLangCount = 1
+        )
+    }
 
     @DisplayName("Property optionality")
     @ParameterizedTest(name = "{0} should be {1}")
@@ -44,7 +55,7 @@ internal class Concept_UnitTest :
                 "createdAt" to Instant.EPOCH
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.createdAt: is illegal timestamp value")
         }
     }
@@ -58,7 +69,7 @@ internal class Concept_UnitTest :
                 "modifiedAt" to Instant.EPOCH
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactlyInAnyOrder(
                 "Concept.modifiedAt: is illegal timestamp value",
                 "Concept.modifiedAt: is earlier than createdAt"
@@ -72,7 +83,7 @@ internal class Concept_UnitTest :
                 "modifiedAt" to Instant.parse("2018-03-19T10:20:30.40Z")
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.modifiedAt: is earlier than createdAt")
         }
 
@@ -83,7 +94,7 @@ internal class Concept_UnitTest :
                 "modifiedAt" to Instant.parse("2018-03-20T10:20:30.40Z")
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
     }
@@ -98,7 +109,7 @@ internal class Concept_UnitTest :
                 "applicableUntil" to LocalDate.of(2018, 1, 19)
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.applicableUntil: is earlier than applicableFrom")
         }
 
@@ -109,7 +120,7 @@ internal class Concept_UnitTest :
                 "applicableUntil" to LocalDate.of(2018, 1, 20)
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
 
@@ -120,7 +131,7 @@ internal class Concept_UnitTest :
                 "applicableUntil" to null
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
 
@@ -131,7 +142,7 @@ internal class Concept_UnitTest :
                 "applicableUntil" to LocalDate.of(2018, 1, 20)
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
 
@@ -142,7 +153,7 @@ internal class Concept_UnitTest :
                 "applicableUntil" to null
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
     }
@@ -156,7 +167,7 @@ internal class Concept_UnitTest :
                 "label" to TranslatedText(emptyMap())
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.label: has too few translations (minimum 1)")
         }
 
@@ -170,7 +181,7 @@ internal class Concept_UnitTest :
                 )
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
 
@@ -185,7 +196,7 @@ internal class Concept_UnitTest :
                 )
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.label: has too short translations for languages [en, fi]")
         }
 
@@ -195,7 +206,7 @@ internal class Concept_UnitTest :
                 "label" to TranslatedText(mapOf(language("en") to "12"))
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
 
@@ -210,7 +221,7 @@ internal class Concept_UnitTest :
                 )
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.label: contains translations with surplus languages [es, fr]")
         }
     }
@@ -228,7 +239,7 @@ internal class Concept_UnitTest :
                 )
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.description: has too short translations for languages [en, fi]")
         }
 
@@ -238,7 +249,7 @@ internal class Concept_UnitTest :
                 "description" to TranslatedText(mapOf(language("en") to "12"))
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).isEmpty()
         }
 
@@ -253,7 +264,7 @@ internal class Concept_UnitTest :
                 )
             )
 
-            instantiateAndValidate()
+            instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactly("Concept.description: contains translations with surplus languages [es, fr]")
         }
     }

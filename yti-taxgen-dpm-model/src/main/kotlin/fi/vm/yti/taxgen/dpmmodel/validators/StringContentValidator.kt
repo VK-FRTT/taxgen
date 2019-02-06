@@ -1,10 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel.validators
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
-fun <I : Validatable> validateDpmCodeContent(
+fun <I : Any> validateDpmCodeContent(
     validationResults: ValidationResults,
     instance: I,
     property: KProperty1<I, String>

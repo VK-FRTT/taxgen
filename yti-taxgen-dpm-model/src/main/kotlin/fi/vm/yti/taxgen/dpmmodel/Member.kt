@@ -13,7 +13,7 @@ data class Member(
 
     override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationResults)
+        validateDpmElement(validationResults)
 
         validateLength(
             validationResults = validationResults,

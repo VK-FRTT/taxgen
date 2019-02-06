@@ -1,13 +1,12 @@
 package fi.vm.yti.taxgen.dpmmodel.validators
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import kotlin.reflect.KProperty1
 
 @Suppress("FINAL_UPPER_BOUND")
-fun <I : Validatable, P : TranslatedText> validateTranslatedText(
+fun <I : Any, P : TranslatedText> validateTranslatedText(
     validationResults: ValidationResults,
     instance: I,
     property: KProperty1<I, P>,

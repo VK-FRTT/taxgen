@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.commons.datavalidation
 
 import kotlin.reflect.KProperty1
 
-fun <I : Validatable, P : Any?> validateConditionTruthy(
+fun <I : Any, P : Any?> validateConditionTruthy(
     validationResults: ValidationResults,
     instance: I,
     property: KProperty1<I, P>,
@@ -18,7 +18,7 @@ fun <I : Validatable, P : Any?> validateConditionTruthy(
     }
 }
 
-fun <I : Validatable> validateCustom(
+fun <I : Any> validateCustom(
     validationResults: ValidationResults,
     instance: I,
     propertyName: String,

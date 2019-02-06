@@ -12,7 +12,7 @@ data class TypedDimension(
 
     override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationResults)
+        validateDpmElement(validationResults)
 
         validateLengths(
             validationResults = validationResults,

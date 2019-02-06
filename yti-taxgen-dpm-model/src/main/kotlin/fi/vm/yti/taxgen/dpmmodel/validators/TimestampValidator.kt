@@ -1,12 +1,11 @@
 package fi.vm.yti.taxgen.dpmmodel.validators
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import java.time.Instant
 import kotlin.reflect.KProperty1
 
 @Suppress("FINAL_UPPER_BOUND")
-fun <I : Validatable, P : Instant> validateTimestamp(
+fun <I : Any, P : Instant> validateTimestamp(
     validationResults: ValidationResults,
     instance: I,
     property: KProperty1<I, P>

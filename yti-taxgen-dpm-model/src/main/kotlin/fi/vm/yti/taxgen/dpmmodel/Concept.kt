@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.dpmmodel.validators.validateTimestamp
@@ -16,7 +15,7 @@ data class Concept(
     val label: TranslatedText,
     val description: TranslatedText,
     val owner: Owner
-) : Validatable {
+) {
     companion object {} //ktlint-disable no-empty-class-body
 
     init {
@@ -24,7 +23,10 @@ data class Concept(
         description.defaultLanguage = owner.defaultLanguage
     }
 
-    override fun validate(validationResults: ValidationResults) {
+    fun validateConcept(
+        validationResults: ValidationResults,
+        minLabelLangCount: Int
+    ) {
 
         validateTimestamp(
             validationResults = validationResults,
@@ -64,7 +66,7 @@ data class Concept(
             instance = this,
             property = Concept::label,
             minTranslationLength = 2,
-            minLangCount = 1,
+            minLangCount = minLabelLangCount,
             acceptedLanguages = owner.languages
         )
 

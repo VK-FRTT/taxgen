@@ -21,7 +21,10 @@ data class HierarchyNode(
 
     override fun validate(validationResults: ValidationResults) {
 
-        super.validate(validationResults)
+        validateDpmElement(
+            validationResults = validationResults,
+            minLabelLangCount = 0
+        )
 
         validateConditionTruthy(
             validationResults = validationResults,

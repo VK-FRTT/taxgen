@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.ext.kotlin.chainToString
 import fi.vm.yti.taxgen.commons.ext.kotlin.getPropertyValue
 import fi.vm.yti.taxgen.commons.ext.kotlin.rootExceptionOfClass
@@ -11,7 +10,7 @@ import fi.vm.yti.taxgen.testcommons.shouldBeNullException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 
-internal fun <T : Validatable> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
+internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
     propertyName: String,
     expectedOptionality: String
 ) {
