@@ -20,6 +20,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  *
  * DataType reference values (from BR-AG Data Modeler):
  * - `String`
+ * - TODO
  *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None

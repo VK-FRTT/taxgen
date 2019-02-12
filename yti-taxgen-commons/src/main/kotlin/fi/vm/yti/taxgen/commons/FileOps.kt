@@ -27,6 +27,15 @@ object FileOps {
         }
     }
 
+    fun failIfTargetFileMissing(
+        targetPath: Path,
+        diagnostic: Diagnostic
+    ) {
+        if (!Files.exists(targetPath)) {
+            diagnostic.fatal("Target file '$targetPath' not found")
+        }
+    }
+
     fun writeTextFile(
         content: String,
         pathStack: PathStack,

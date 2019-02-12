@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
+import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
-import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
-import fi.vm.yti.taxgen.sqliteprovider.conceptitem.MemberItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -14,74 +15,83 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbDomains {
     fun writeExplicitDomainAndMembers(
-        dictionaryItem: DpmDictionaryItem,
-        domain: ExplicitDomain
-    ): Pair<EntityID<Int>, Map<String, MemberItem>> {
+        domain: ExplicitDomain,
+        owner: Owner,
+        ownerId: EntityID<Int>,
+        languageIds: Map<Language, EntityID<Int>>
+    ): Pair<EntityID<Int>, List<MemberLookupItem>> {
 
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
-                dictionaryItem,
                 domain.concept,
-                ConceptType.DOMAIN
+                ConceptType.DOMAIN,
+                ownerId,
+                languageIds
             )
 
-            val domainId: EntityID<Int> = insertExplicitDomain(
-                dictionaryItem,
+            val domainId = insertExplicitDomain(
                 domain,
-                domainConceptId
+                domainConceptId,
+                owner
             )
 
-            val memberIds = domain.members.map { member ->
+            val memberLookupItems = domain.members.map { member ->
 
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
-                    dictionaryItem,
                     member.concept,
-                    ConceptType.MEMBER
+                    ConceptType.MEMBER,
+                    ownerId,
+                    languageIds
                 )
 
-                val memberId = insertMember(
-                    dictionaryItem,
+                val (memberId, memberXbrlCode) = insertMember(
                     domain,
                     domainId,
                     member,
-                    memberConceptId
+                    memberConceptId,
+                    owner
                 )
 
-                member.uri to MemberItem(
-                    memberId = memberId,
-                    defaultLabelText = member.concept.label.defaultTranslation()
+                MemberLookupItem(
+                    memberUri = member.uri,
+                    memberXbrlCode = memberXbrlCode,
+                    defaultLabelText = member.concept.label.defaultTranslation(),
+                    memberId = memberId
                 )
-            }.toMap()
+            }
 
-            Pair(domainId, memberIds)
+            Pair(domainId, memberLookupItems)
         }
     }
 
     fun writeTypedDomain(
-        dictionaryItem: DpmDictionaryItem,
-        domain: TypedDomain
+        domain: TypedDomain,
+        owner: Owner,
+        ownerId: EntityID<Int>,
+        languageIds: Map<Language, EntityID<Int>>
     ): EntityID<Int> {
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
-                dictionaryItem,
                 domain.concept,
-                ConceptType.DOMAIN
+                ConceptType.DOMAIN,
+                ownerId,
+                languageIds
             )
 
             insertTypedDomain(
-                dictionaryItem,
                 domain,
-                domainConceptId
+                domainConceptId,
+                owner
             )
         }
     }
 
     private fun insertExplicitDomain(
-        dictionaryItem: DpmDictionaryItem,
         domain: ExplicitDomain,
-        domainConceptId: EntityID<Int>
+        domainConceptId: EntityID<Int>,
+        owner: Owner
     ): EntityID<Int> {
-        val domainXbrlCode = "${dictionaryItem.owner.prefix}_exp:${domain.domainCode}"
+        val domainXbrlCode = "${owner.prefix}_exp:${domain.domainCode}"
 
         val domainId = DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
@@ -97,11 +107,11 @@ object DbDomains {
     }
 
     private fun insertTypedDomain(
-        dictionaryItem: DpmDictionaryItem,
         domain: TypedDomain,
-        domainConceptId: EntityID<Int>
+        domainConceptId: EntityID<Int>,
+        owner: Owner
     ): EntityID<Int> {
-        val domainXbrlCode = "${dictionaryItem.owner.prefix}_typ:${domain.domainCode}"
+        val domainXbrlCode = "${owner.prefix}_typ:${domain.domainCode}"
 
         return DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
@@ -115,13 +125,13 @@ object DbDomains {
     }
 
     private fun insertMember(
-        dictionaryItem: DpmDictionaryItem,
         domain: ExplicitDomain,
         domainId: EntityID<Int>,
         member: Member,
-        memberConceptId: EntityID<Int>
-    ): EntityID<Int> {
-        val memberXbrlCode = "${dictionaryItem.owner.prefix}_${domain.domainCode}:${member.memberCode}"
+        memberConceptId: EntityID<Int>,
+        owner: Owner
+    ): Pair<EntityID<Int>, String> {
+        val memberXbrlCode = "${owner.prefix}_${domain.domainCode}:${member.memberCode}"
 
         val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = member.memberCode
@@ -132,6 +142,6 @@ object DbDomains {
             it[domainIdCol] = domainId
         }
 
-        return memberId
+        return Pair(memberId, memberXbrlCode)
     }
 }

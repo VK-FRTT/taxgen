@@ -37,7 +37,7 @@ internal class DpmDbWriter_DomainContent_UnitTest : DpmDbWriter_UnitTestBase() {
             "#DomainCode, #DomainLabel, #DomainDescription, #DomainXBRLCode, #DataType, #IsTypedDomain, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #OwnerName",
             "ExpDom-1-Code, ExpDom-Lbl-Fi, ExpDom-Desc-Fi, FixPrfx_exp:ExpDom-1-Code, nil, 0, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
             "TypDom-1-Code, TypDom-Lbl-Fi, TypDom-Desc-Fi, FixPrfx_typ:TypDom-1-Code, Boolean, 1, Domain, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-            "MET, Metrics, nil, MET, nil, 0, Domain, nil, nil, nil, nil, EuroFiling"
+            "MET, Metrics, nil, MET, nil, 0, Domain, nil, nil, 1970-01-01, nil, EuroFiling"
         )
     }
 

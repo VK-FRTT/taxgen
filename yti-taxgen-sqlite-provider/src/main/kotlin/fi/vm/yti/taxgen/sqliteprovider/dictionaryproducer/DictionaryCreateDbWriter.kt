@@ -5,14 +5,14 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
+import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
+import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
-import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DpmDictionaries
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
+import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
-import java.sql.Connection
 
 class DictionaryCreateDbWriter(
     targetDbPath: Path,
@@ -32,23 +32,43 @@ class DictionaryCreateDbWriter(
 
             initDbFileFromSeed(targetDbPath)
 
-            connectDatabase()
+            SqliteOps.connectDatabase(targetDbPath)
+
             DbLanguages.configureLanguages()
             val languageIds = DbLanguages.resolveLanguageIds()
 
-            DpmDictionaries.writeDpmDictionaries(dpmDictionaries, languageIds)
+            DbDictionaries.purgeDictionaryContent()
+
+            val dictionaryLookupItems = dpmDictionaries.map {
+                val ownerId = DbOwners.writeOwner(it.owner)
+
+                DbDictionaries.writeDictionaryBaseParts(
+                    it,
+                    ownerId,
+                    languageIds
+                )
+            }
+
+            val fixedEntitiesLookupItem = DbFixedEntities.writeFixedEntities(
+                languageIds,
+                diagnosticContext
+            )
+
+            dpmDictionaries
+                .zip(dictionaryLookupItems)
+                .forEach { (dictionary, dictionaryLookupItem) ->
+                    DbDictionaries.writeDictionaryMetrics(
+                        dictionary,
+                        languageIds,
+                        dictionaryLookupItem,
+                        fixedEntitiesLookupItem
+                    )
+                }
         }
     }
 
     private fun initDbFileFromSeed(targetDbPath: Path) {
         val stream = this::class.java.getResourceAsStream("/dm_database_seed.db")
         Files.copy(stream, targetDbPath, StandardCopyOption.REPLACE_EXISTING)
-    }
-
-    private fun targetSqliteDbUrl() = "jdbc:sqlite:$targetDbPath"
-
-    private fun connectDatabase() {
-        Database.connect(targetSqliteDbUrl(), "org.sqlite.JDBC")
-        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
     }
 }

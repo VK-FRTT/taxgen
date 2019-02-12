@@ -1,76 +1,76 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
-import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
-import fi.vm.yti.taxgen.sqliteprovider.conceptitem.MemberItem
+import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.FixedEntitiesLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
-import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MetricTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbMetric {
 
     fun writeMetricDomainMembers(
-        dictionaryItem: DpmDictionaryItem,
-        metricDomain: MetricDomain
-    ): Pair<EntityID<Int>, Map<String, MemberItem>> {
+        metricDomain: MetricDomain,
+        owner: Owner,
+        languageIds: Map<Language, EntityID<Int>>,
+        ownerId: EntityID<Int>,
+        domainLookupItems: List<DomainLookupItem>,
+        fixedEntitiesLookupItem: FixedEntitiesLookupItem
+    ): Pair<EntityID<Int>, List<MemberLookupItem>> {
 
         return transaction {
 
-            val metricDomainId = lookupMetricDomainId()
+            val domainId = fixedEntitiesLookupItem.metricDomainId
 
-            val metricMemberIds = metricDomain.metrics.map { metric ->
+            val memberLookupItems = metricDomain.metrics.map { metric ->
 
                 val metricMemberConceptId = DbConcepts.writeConceptAndTranslations(
-                    dictionaryItem,
                     metric.concept,
-                    ConceptType.MEMBER
+                    ConceptType.MEMBER,
+                    ownerId,
+                    languageIds
                 )
 
-                val metricMemberId = insertMetricMember(
-                    dictionaryItem,
-                    metricDomainId,
+                val (metricMemberId, memberXbrlCode) = insertMetricMember(
                     metric,
-                    metricMemberConceptId
+                    owner,
+                    metricMemberConceptId,
+                    domainId
                 )
 
                 insertMetric(
-                    dictionaryItem,
                     metric,
-                    metricMemberId
+                    metricMemberId,
+                    domainLookupItems
                 )
 
-                metric.uri to MemberItem(
-                    memberId = metricMemberId,
-                    defaultLabelText = metric.concept.label.defaultTranslation()
+                MemberLookupItem(
+                    memberUri = metric.uri,
+                    memberXbrlCode = memberXbrlCode,
+                    defaultLabelText = metric.concept.label.defaultTranslation(),
+                    memberId = metricMemberId
                 )
-            }.toMap()
+            }
 
-            Pair(metricDomainId, metricMemberIds)
+            Pair(domainId, memberLookupItems)
         }
     }
 
-    private fun lookupMetricDomainId(): EntityID<Int> {
-        val metDomain = DomainTable.select { DomainTable.domainCodeCol eq "MET" }.firstOrNull()
-            ?: thisShouldNeverHappen("Missing MET domain")
-
-        return metDomain[DomainTable.id]
-    }
-
     private fun insertMetricMember(
-        dictionaryItem: DpmDictionaryItem,
-        metricDomainId: EntityID<Int>,
         metric: Metric,
-        metricMemberConceptId: EntityID<Int>
-    ): EntityID<Int> {
-        val memberXbrlCode = "${dictionaryItem.owner.prefix}_met:${metric.metricCode}"
+        owner: Owner,
+        metricMemberConceptId: EntityID<Int>,
+        metricDomainId: EntityID<Int>
+    ): Pair<EntityID<Int>, String> {
+        val memberXbrlCode = "${owner.prefix}_met:${metric.metricCode}"
 
         val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = metric.metricCode
@@ -81,16 +81,19 @@ object DbMetric {
             it[domainIdCol] = metricDomainId
         }
 
-        return memberId
+        return Pair(memberId, memberXbrlCode)
     }
 
     private fun insertMetric(
-        dictionaryItem: DpmDictionaryItem,
         metric: Metric,
-        metricMemberId: EntityID<Int>
+        metricMemberId: EntityID<Int>,
+        domainLookupItems: List<DomainLookupItem>
     ) {
-        val referencedDomainItem = dictionaryItem.optionalDomainItemForCode(metric.referencedDomainCode)
-        val referencedHierarchyItem = referencedDomainItem?.optionalHierarchyItemForCode(metric.referencedHierarchyCode)
+        val referencedDomainItem =
+            domainLookupItems.find { it.domainCode == metric.referencedDomainCode }
+
+        val referencedHierarchyItem =
+            referencedDomainItem?.hierarchyLookupItems?.find { it.hierarchyCode == metric.referencedHierarchyCode }
 
         MetricTable.insert {
             it[correspondingMemberCol] = metricMemberId

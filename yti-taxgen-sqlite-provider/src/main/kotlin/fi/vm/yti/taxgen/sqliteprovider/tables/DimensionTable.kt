@@ -18,7 +18,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  *   PRIMARY KEY(`DimensionID`),
  *   FOREIGN KEY(`ConceptID`) REFERENCES `mConcept`(`ConceptID`)
  * );
- **
+ *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - TODO
  */

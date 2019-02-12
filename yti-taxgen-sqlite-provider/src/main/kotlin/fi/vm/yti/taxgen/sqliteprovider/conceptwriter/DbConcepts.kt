@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
-import fi.vm.yti.taxgen.sqliteprovider.conceptitem.DpmDictionaryItem
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTimeOrNull
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable
@@ -12,8 +11,10 @@ import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTranslationRole
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTranslationTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
+import org.jetbrains.exposed.sql.select
 
 object DbConcepts {
 
@@ -26,20 +27,21 @@ object DbConcepts {
     }
 
     fun writeConceptAndTranslations(
-        dictionaryItem: DpmDictionaryItem,
         concept: Concept,
-        conceptType: ConceptType
+        conceptType: ConceptType,
+        ownerId: EntityID<Int>,
+        languageIds: Map<Language, EntityID<Int>>
     ): EntityID<Int> {
 
         val conceptId = insertConcept(
             concept,
             conceptType,
-            dictionaryItem.ownerId
+            ownerId
         )
 
         concept.label.translations.forEach { (language, text) ->
             insertConceptTranslation(
-                dictionaryItem,
+                languageIds,
                 conceptId,
                 ConceptTranslationRole.LABEL,
                 language,
@@ -55,7 +57,7 @@ object DbConcepts {
 
         if (fallbackTranslation != null) {
             insertConceptTranslation(
-                dictionaryItem,
+                languageIds,
                 conceptId,
                 ConceptTranslationRole.LABEL,
                 requiredLabelLang,
@@ -65,7 +67,7 @@ object DbConcepts {
 
         concept.description.translations.forEach { (language, text) ->
             insertConceptTranslation(
-                dictionaryItem,
+                languageIds,
                 conceptId,
                 ConceptTranslationRole.DESCRIPTION,
                 language,
@@ -74,6 +76,17 @@ object DbConcepts {
         }
 
         return conceptId
+    }
+
+    fun deleteAllConceptsAndTranslations(conceptType: ConceptType) {
+        val conceptTypeString = conceptType.value
+
+        val matchingConceptIds = ConceptTable
+            .select { ConceptTable.conceptTypeCol eq conceptTypeString }
+            .map { it[ConceptTable.id] }
+
+        ConceptTranslationTable.deleteWhere { ConceptTranslationTable.conceptIdCol inList matchingConceptIds }
+        ConceptTable.deleteWhere { ConceptTable.conceptTypeCol eq conceptTypeString }
     }
 
     private fun selectFallbackTranslationTextOrNull(
@@ -110,14 +123,13 @@ object DbConcepts {
     }
 
     private fun insertConceptTranslation(
-        dictionaryItem: DpmDictionaryItem,
+        languageIds: Map<Language, EntityID<Int>>,
         conceptId: EntityID<Int>,
         role: ConceptTranslationRole,
         language: Language,
         text: String
     ) {
-        val languageId =
-            dictionaryItem.languageIds[language] ?: thisShouldNeverHappen("Language without DB mapping: $language")
+        val languageId = languageIds[language] ?: thisShouldNeverHappen("Language without DB mapping: $language")
 
         ConceptTranslationTable.insert {
             it[conceptIdCol] = conceptId
