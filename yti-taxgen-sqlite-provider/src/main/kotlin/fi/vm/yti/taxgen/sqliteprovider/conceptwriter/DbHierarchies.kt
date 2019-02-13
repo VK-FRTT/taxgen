@@ -16,7 +16,26 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbHierarchies {
 
-    fun writeHierarchyAndAndNodes(
+    fun writeHierarchiesAndAndNodes(
+        hierarchies: List<Hierarchy>,
+        domainId: EntityID<Int>,
+        ownerId: EntityID<Int>,
+        languageIds: Map<Language, EntityID<Int>>,
+        memberLookupItems: List<MemberLookupItem>
+    ): List<HierarchyLookupItem> {
+
+        return hierarchies.map { hierarchy ->
+            DbHierarchies.writeHierarchyAndAndNodes(
+                hierarchy,
+                domainId,
+                ownerId,
+                languageIds,
+                memberLookupItems
+            )
+        }
+    }
+
+    private fun writeHierarchyAndAndNodes(
         hierarchy: Hierarchy,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,

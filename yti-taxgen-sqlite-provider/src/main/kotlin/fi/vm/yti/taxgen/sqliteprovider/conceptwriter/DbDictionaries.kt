@@ -4,7 +4,8 @@ import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.FixedEntitiesLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.HierarchyLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
@@ -32,15 +33,13 @@ object DbDictionaries {
                 languageIds
             )
 
-            val hierarchyLookupItems = explicitDomain.hierarchies.map { hierarchy ->
-                DbHierarchies.writeHierarchyAndAndNodes(
-                    hierarchy,
-                    explicitDomainId,
-                    ownerId,
-                    languageIds,
-                    memberLookupItems
-                )
-            }
+            val hierarchyLookupItems = DbHierarchies.writeHierarchiesAndAndNodes(
+                explicitDomain.hierarchies,
+                explicitDomainId,
+                ownerId,
+                languageIds,
+                memberLookupItems
+            )
 
             DomainLookupItem(
                 domainCode = explicitDomain.domainCode,
@@ -97,32 +96,38 @@ object DbDictionaries {
         )
     }
 
-    fun writeDictionaryMetrics(
+    fun writeDictionaryMetricsToFixedDomain(
         dpmDictionary: DpmDictionary,
         languageIds: Map<Language, EntityID<Int>>,
         dpmDictionaryLookupItem: DpmDictionaryLookupItem,
-        fixedEntitiesLookupItem: FixedEntitiesLookupItem
-    ) {
-        dpmDictionary.metricDomains.map { metricDomain ->
+        metricDomainId: EntityID<Int>
+    ): Pair<List<MemberLookupItem>, List<HierarchyLookupItem>> {
 
-            val (metricDomainId, memberLookupItems) = DbMetric.writeMetricDomainMembers(
+        return dpmDictionary.metricDomains.map { metricDomain ->
+
+            val memberLookupItems = DbMetric.writeMetricDomainMembers(
                 metricDomain,
                 dpmDictionary.owner,
-                languageIds,
+                metricDomainId,
                 dpmDictionaryLookupItem.ownerId,
-                dpmDictionaryLookupItem.domainLookupItems,
-                fixedEntitiesLookupItem
+                languageIds,
+                dpmDictionaryLookupItem.domainLookupItems
             )
 
-            metricDomain.hierarchies.map { hierarchy ->
-                DbHierarchies.writeHierarchyAndAndNodes(
-                    hierarchy,
-                    metricDomainId,
-                    dpmDictionaryLookupItem.ownerId,
-                    languageIds,
-                    memberLookupItems
-                )
-            }
+            val hierarchyLookupItems = DbHierarchies.writeHierarchiesAndAndNodes(
+                metricDomain.hierarchies,
+                metricDomainId,
+                dpmDictionaryLookupItem.ownerId,
+                languageIds,
+                memberLookupItems
+            )
+
+            Pair(memberLookupItems, hierarchyLookupItems)
+        }.reduce { accumulator, element ->
+            Pair(
+                accumulator.first + element.first,
+                accumulator.second + element.second
+            )
         }
     }
 

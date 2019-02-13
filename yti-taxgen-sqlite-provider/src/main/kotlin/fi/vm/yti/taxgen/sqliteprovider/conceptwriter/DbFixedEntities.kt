@@ -30,16 +30,25 @@ object DbFixedEntities {
         val enLanguageId = languageIds[enLang] ?: throwFail("Missing language id for language 'en'")
 
         return transaction {
-            val ownerId = lookupEurofilingOwnerId(diagnostic)
+            val metricDomainOwnerId = lookupEurofilingOwnerId(diagnostic)
 
-            val (metricDomainId, metricDomainCode) = writeMetricDomain(ownerId, enLanguageId)
-            writeMetricDimension(ownerId, metricDomainId, enLanguageId)
+            val (metricDomainId, metricDomainCode) = writeMetricDomain(metricDomainOwnerId, enLanguageId)
+            val (metricDimensionId, metricDimensionCode) = writeMetricDimension(
+                metricDomainOwnerId,
+                metricDomainId,
+                enLanguageId
+            )
 
             val openMemberId = writeOpenDomainAndMember()
 
             FixedEntitiesLookupItem(
+                metricDomainOwnerId = metricDomainOwnerId,
                 metricDomainCode = metricDomainCode,
                 metricDomainId = metricDomainId,
+
+                metricDimensionXbrlCode = metricDimensionCode,
+                metricDimensionId = metricDimensionId,
+
                 openMemberId = openMemberId
             )
         }
@@ -97,7 +106,7 @@ object DbFixedEntities {
         ownerId: EntityID<Int>,
         domainId: EntityID<Int>,
         enLanguageId: EntityID<Int>
-    ) {
+    ): Pair<EntityID<Int>, String> {
         val label = "Metric dimension"
         val code = "MET"
 
@@ -109,13 +118,15 @@ object DbFixedEntities {
             label
         )
 
-        insertDimension(
+        val dimensionId = insertDimension(
             domainId,
             code,
             code,
             label,
             dimensionConceptId
         )
+
+        return Pair(dimensionId, code)
     }
 
     private fun lookupEurofilingOwnerId(
@@ -182,8 +193,8 @@ object DbFixedEntities {
         dimensionXbrlCode: String,
         dimensionDefaultLabel: String,
         conceptId: EntityID<Int>
-    ) {
-        DimensionTable.insert {
+    ): EntityID<Int> {
+        return DimensionTable.insertAndGetId {
             it[dimensionCodeCol] = dimensionCode
             it[dimensionLabelCol] = dimensionDefaultLabel
             it[dimensionDescriptionCol] = null

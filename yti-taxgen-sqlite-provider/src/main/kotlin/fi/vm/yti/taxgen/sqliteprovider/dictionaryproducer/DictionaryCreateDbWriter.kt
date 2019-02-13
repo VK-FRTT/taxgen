@@ -57,11 +57,11 @@ class DictionaryCreateDbWriter(
             dpmDictionaries
                 .zip(dictionaryLookupItems)
                 .forEach { (dictionary, dictionaryLookupItem) ->
-                    DbDictionaries.writeDictionaryMetrics(
+                    DbDictionaries.writeDictionaryMetricsToFixedDomain(
                         dictionary,
                         languageIds,
                         dictionaryLookupItem,
-                        fixedEntitiesLookupItem
+                        fixedEntitiesLookupItem.metricDomainId
                     )
                 }
         }

@@ -1,11 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.FixedEntitiesLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -20,17 +20,15 @@ object DbMetric {
     fun writeMetricDomainMembers(
         metricDomain: MetricDomain,
         owner: Owner,
-        languageIds: Map<Language, EntityID<Int>>,
+        metricDomainId: EntityID<Int>,
         ownerId: EntityID<Int>,
-        domainLookupItems: List<DomainLookupItem>,
-        fixedEntitiesLookupItem: FixedEntitiesLookupItem
-    ): Pair<EntityID<Int>, List<MemberLookupItem>> {
+        languageIds: Map<Language, EntityID<Int>>,
+        domainLookupItems: List<DomainLookupItem>
+    ): List<MemberLookupItem> {
 
         return transaction {
 
-            val domainId = fixedEntitiesLookupItem.metricDomainId
-
-            val memberLookupItems = metricDomain.metrics.map { metric ->
+            metricDomain.metrics.map { metric ->
 
                 val metricMemberConceptId = DbConcepts.writeConceptAndTranslations(
                     metric.concept,
@@ -43,7 +41,7 @@ object DbMetric {
                     metric,
                     owner,
                     metricMemberConceptId,
-                    domainId
+                    metricDomainId
                 )
 
                 insertMetric(
@@ -59,8 +57,6 @@ object DbMetric {
                     memberId = metricMemberId
                 )
             }
-
-            Pair(domainId, memberLookupItems)
         }
     }
 
@@ -89,11 +85,23 @@ object DbMetric {
         metricMemberId: EntityID<Int>,
         domainLookupItems: List<DomainLookupItem>
     ) {
-        val referencedDomainItem =
-            domainLookupItems.find { it.domainCode == metric.referencedDomainCode }
+        val (referencedDomainItem, referencedHierarchyItem) =
+            if (metric.referencedDomainCode != null) {
 
-        val referencedHierarchyItem =
-            referencedDomainItem?.hierarchyLookupItems?.find { it.hierarchyCode == metric.referencedHierarchyCode }
+                val rdi = domainLookupItems.find { it.domainCode == metric.referencedDomainCode }
+                    ?: thisShouldNeverHappen("No Domain matching Metric.ReferencedDomainCode: ${metric.referencedDomainCode}")
+
+                val rhi = if (metric.referencedHierarchyCode != null) {
+                    rdi.hierarchyLookupItems.find { it.hierarchyCode == metric.referencedHierarchyCode }
+                        ?: thisShouldNeverHappen("No Hierarchy matching Metric.ReferencedHierarchyCode: ${metric.referencedHierarchyCode}")
+                } else {
+                    null
+                }
+
+                Pair(rdi, rhi)
+            } else {
+                Pair(null, null)
+            }
 
         MetricTable.insert {
             it[correspondingMemberCol] = metricMemberId

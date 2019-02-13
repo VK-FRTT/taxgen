@@ -16,7 +16,7 @@ data class MetricDomain(
 
     override fun validate(validationResults: ValidationResults) {
 
-        validateDpmElement(validationResults)
+        validateDpmElement(validationResults, 0)
 
         validateLength(
             validationResults = validationResults,

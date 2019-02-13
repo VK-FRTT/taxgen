@@ -1,11 +1,10 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.MetricItem
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
@@ -19,14 +18,6 @@ internal fun mapAndValidateMetricDomain(
     diagnostic: Diagnostic
 ): List<MetricDomain> {
     codeListSource ?: return emptyList()
-
-    val domainConcept = codeListSource
-        .codeListMeta()
-        .dpmConcept(owner)
-        .copy(
-            label = TranslatedText(mapOf(Language.byIso6391CodeOrFail("en") to "Metrics")),
-            description = TranslatedText.empty()
-        )
 
     val metrics = mapMetrics(
         codeListSource,
@@ -43,7 +34,7 @@ internal fun mapAndValidateMetricDomain(
 
     val domain = MetricDomain(
         uri = "MET",
-        concept = domainConcept,
+        concept = Concept.empty(owner),
         domainCode = "MET",
         metrics = metrics,
         hierarchies = hierarchies

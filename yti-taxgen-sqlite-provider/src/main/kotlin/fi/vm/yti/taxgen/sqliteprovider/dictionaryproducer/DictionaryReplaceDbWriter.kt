@@ -10,6 +10,9 @@ import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
 import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -26,9 +29,6 @@ class DictionaryReplaceDbWriter(
             contextType = DiagnosticContextType.WriteSQLiteDb,
             contextIdentifier = targetDbPath.toString()
         ) {
-            val stream = this::class.java.getResourceAsStream("/SBR_2019-01-22_exportable_original_from_DM.db")
-            Files.copy(stream, targetDbPath, StandardCopyOption.REPLACE_EXISTING)
-
             FileOps.failIfTargetFileMissing(targetDbPath, diagnosticContext)
 
             SqliteOps.connectDatabase(targetDbPath)
@@ -55,22 +55,42 @@ class DictionaryReplaceDbWriter(
                 diagnosticContext
             )
 
-            dpmDictionaries
+            val (memberLookupItems, hierarchyLookupItems) = dpmDictionaries
                 .zip(dictionaryLookupItems)
                 .map { (dictionary, dictionaryLookupItem) ->
-                    DbDictionaries.writeDictionaryMetrics(
+                    DbDictionaries.writeDictionaryMetricsToFixedDomain(
                         dictionary,
                         languageIds,
                         dictionaryLookupItem,
-                        fixedEntitiesLookupItem
+                        fixedEntitiesLookupItem.metricDomainId
+                    )
+                }.reduce { accumulator, element ->
+                    Pair(
+                        accumulator.first + element.first,
+                        accumulator.second + element.second
                     )
                 }
 
-            //TODO - binding doesn't locate MET dimension & members
-            //Consider creating artificial DPM dictionary (with Eurofiling stub owner)
-            //and place fixed MET dimension & domain & domain members under that dictionary
+            val metricDictionaryLookupItem = DpmDictionaryLookupItem(
+                domainLookupItems = listOf(
+                    DomainLookupItem(
+                        domainCode = fixedEntitiesLookupItem.metricDomainCode,
+                        memberLookupItems = memberLookupItems,
+                        hierarchyLookupItems = hierarchyLookupItems,
+                        domainId = fixedEntitiesLookupItem.metricDomainId
+                    )
+                ),
+                dimensionLookupItems = listOf(
+                    DimensionLookupItem(
+                        dimensionXbrlCode = fixedEntitiesLookupItem.metricDimensionXbrlCode,
+                        dimensionId = fixedEntitiesLookupItem.metricDimensionId
+                    )
+                ),
+                ownerId = fixedEntitiesLookupItem.metricDomainOwnerId
+            )
+
             ordinateCategorisationBinder.rebindAndWriteCategorisations(
-                dictionaryLookupItems,
+                dictionaryLookupItems + metricDictionaryLookupItem,
                 fixedEntitiesLookupItem,
                 diagnosticContext
             )

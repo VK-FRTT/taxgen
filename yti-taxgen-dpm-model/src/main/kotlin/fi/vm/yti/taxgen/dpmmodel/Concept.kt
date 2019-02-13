@@ -16,7 +16,19 @@ data class Concept(
     val description: TranslatedText,
     val owner: Owner
 ) {
-    companion object {} //ktlint-disable no-empty-class-body
+    companion object {
+
+        fun empty(owner: Owner) =
+            Concept(
+                createdAt = Instant.now(),
+                modifiedAt = Instant.now(),
+                applicableFrom = null,
+                applicableUntil = null,
+                label = TranslatedText.empty(),
+                description = TranslatedText.empty(),
+                owner = owner
+            )
+    }
 
     init {
         label.defaultLanguage = owner.defaultLanguage

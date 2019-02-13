@@ -31,9 +31,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                     assertThat(it.concept.applicableFrom).isNull()
                     assertThat(it.concept.applicableUntil).isNull()
 
-                    assertThat(it.concept.label.translations).containsOnly(
-                        entry(en, "Metrics")
-                    )
+                    assertThat(it.concept.label.translations).isEmpty()
                     assertThat(it.concept.description.translations).isEmpty()
                 }
             }
