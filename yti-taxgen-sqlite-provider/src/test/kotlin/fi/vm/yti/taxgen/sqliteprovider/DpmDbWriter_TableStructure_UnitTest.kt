@@ -39,7 +39,7 @@ import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 
 @DisplayName("SQLite DPM DB: table structure")
-internal class DpmDbWriter_Structure_UnitTest {
+internal class DpmDbWriter_TableStructure_UnitTest {
 
     private lateinit var tempFolder: TempFolder
     private lateinit var seedBasedDbConnection: Connection
@@ -47,7 +47,7 @@ internal class DpmDbWriter_Structure_UnitTest {
 
     @BeforeEach
     fun baseInit() {
-        tempFolder = TempFolder("sqliteprovider")
+        tempFolder = TempFolder("sqliteprovider_structure")
     }
 
     @AfterEach
