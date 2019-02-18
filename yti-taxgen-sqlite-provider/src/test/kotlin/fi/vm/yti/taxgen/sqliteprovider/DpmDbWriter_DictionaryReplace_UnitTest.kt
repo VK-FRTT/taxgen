@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +23,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
     private lateinit var tempFolder: TempFolder
     private lateinit var dbPath: Path
     private lateinit var dbConnection: Connection
-    private lateinit var diagnosticCollector: DiagnosticCollectorSimple
+    private lateinit var diagnosticCollector: DiagnosticCollector
 
     @BeforeEach
     fun baseInit() {
@@ -35,7 +35,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
 
         dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
-        diagnosticCollector = DiagnosticCollectorSimple()
+        diagnosticCollector = DiagnosticCollector()
     }
 
     private fun replaceDictionaryInDb() {
@@ -139,7 +139,8 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
 
         replaceDictionaryInDb()
 
-        assertThat(diagnosticCollector.events).contains(
+        assertThat(diagnosticCollector.events).containsSubsequence(
+            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DimensionMemberSignature: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
             "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]"
         )
     }
@@ -155,9 +156,10 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
 
         replaceDictionaryInDb()
 
-        assertThat(diagnosticCollector.events).contains(
-            "VALIDATION [OrdinateCategorisationBindingData.signatureDimensionPart: is blank]",
-            "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]"
+        assertThat(diagnosticCollector.events).containsSubsequence(
+            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DimensionMemberSignature:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+            "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]",
+            "VALIDATION [OrdinateCategorisationBindingData.signatureDimensionPart: is blank]"
         )
     }
 
@@ -207,7 +209,8 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
 
         assertThat(diagnosticCollector.events).containsExactly(
             "ENTER [WriteSQLiteDb] []",
-            "EXIT [WriteSQLiteDb]")
+            "EXIT [WriteSQLiteDb]"
+        )
 
         val rs = dbConnection.createStatement().executeQuery(
             """

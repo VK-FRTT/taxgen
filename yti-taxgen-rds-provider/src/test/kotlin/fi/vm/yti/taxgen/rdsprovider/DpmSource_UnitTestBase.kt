@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.folder.SourceProviderFolderAdapter
-import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -13,12 +13,12 @@ import java.nio.file.Paths
 
 open class DpmSource_UnitTestBase {
 
-    protected lateinit var diagnosticCollector: DiagnosticCollectorSimple
+    protected lateinit var diagnosticCollector: DiagnosticCollector
     protected lateinit var diagnosticContext: DiagnosticContext
 
     @BeforeEach
     fun baseInit() {
-        diagnosticCollector = DiagnosticCollectorSimple()
+        diagnosticCollector = DiagnosticCollector()
         diagnosticContext = DiagnosticBridge(diagnosticCollector)
     }
 

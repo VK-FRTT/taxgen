@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.rdsprovider.ProviderFactory
-import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_CAPTURE
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 
 internal open class RdsToDpmMapper_UnitTestBase {
 
-    protected lateinit var diagnosticCollector: DiagnosticCollectorSimple
+    protected lateinit var diagnosticCollector: DiagnosticCollector
     protected lateinit var diagnosticContext: DiagnosticContext
 
     protected lateinit var en: Language
@@ -23,7 +23,7 @@ internal open class RdsToDpmMapper_UnitTestBase {
 
     @BeforeEach
     fun beforeEach() {
-        diagnosticCollector = DiagnosticCollectorSimple()
+        diagnosticCollector = DiagnosticCollector()
         diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
         en = Language.findByIso6391Code("en")!!

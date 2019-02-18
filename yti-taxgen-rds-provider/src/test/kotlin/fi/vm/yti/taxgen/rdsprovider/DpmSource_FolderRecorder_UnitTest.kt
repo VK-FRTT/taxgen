@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
@@ -24,7 +24,7 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
         fun beforeAll() {
             emptyTargetFolder = TempFolder("empty_target_folder")
 
-            val diagnosticCollector = DiagnosticCollectorSimple()
+            val diagnosticCollector = DiagnosticCollector()
             val diagnosticContext: DiagnosticContext = DiagnosticBridge(diagnosticCollector)
 
             ProviderFactory.folderRecorder(

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.testcommons.DiagnosticCollectorSimple
+import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -21,7 +21,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
     data class TestContext(
         val mode: DbInitMode,
         val dbConnection: Connection,
-        val diagnosticCollector: DiagnosticCollectorSimple
+        val diagnosticCollector: DiagnosticCollector
     )
 
     private lateinit var tempFolder: TempFolder
@@ -61,7 +61,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
     fun initDbViaDictionaryCreate(variety: FixtureVariety = FixtureVariety.NONE): TestContext {
         val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
 
-        val diagnosticCollector = DiagnosticCollectorSimple()
+        val diagnosticCollector = DiagnosticCollector()
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
         val dictionaries = dpmDictionaryFixture(variety)
@@ -89,7 +89,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
         Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
 
-        val diagnosticCollector = DiagnosticCollectorSimple()
+        val diagnosticCollector = DiagnosticCollector()
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
         val dictionaries = dpmDictionaryFixture(FixtureVariety.NONE)
