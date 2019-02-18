@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 
 interface Diagnostic {
 
@@ -13,7 +13,7 @@ interface Diagnostic {
 
     fun validate(
         validatable: Validatable,
-        validationContextInfo: ValidationContextInfo? = null
+        validatableInfo: ValidatableInfo? = null
     )
 
     fun counters(): Map<Severity, Int>

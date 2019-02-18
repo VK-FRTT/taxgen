@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.cli
 import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
 import fi.vm.yti.taxgen.commons.diagostic.Severity
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
 import java.io.PrintWriter
 
@@ -44,11 +44,11 @@ class DiagnosticTextPrinter(
     }
 
     override fun validationResults(
-        validationContextInfo: ValidationContextInfo,
+        validatableInfo: ValidatableInfo,
         validationResults: List<ValidationResultInfo>
     ) {
         validationResults.forEach {
-            message(Severity.ERROR, "${validationContextInfo.validatableType} (${validationContextInfo.validatableUri}) => ${it.propertyName}: ${it.message}")
+            message(Severity.ERROR, "${validatableInfo.objectKind} (${validatableInfo.objectAddress}) => ${it.propertyName}: ${it.message}")
         }
     }
 

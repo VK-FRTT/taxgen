@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 
 interface DiagnosticConsumer {
 
@@ -10,7 +10,7 @@ interface DiagnosticConsumer {
 
     fun message(severity: Severity, message: String)
     fun validationResults(
-        validationContextInfo: ValidationContextInfo,
+        validatableInfo: ValidatableInfo,
         validationResults: List<ValidationResultInfo>
     )
 }

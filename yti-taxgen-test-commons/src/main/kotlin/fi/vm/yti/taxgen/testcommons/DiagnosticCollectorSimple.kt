@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.testcommons
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
 import fi.vm.yti.taxgen.commons.diagostic.Severity
@@ -34,7 +34,7 @@ class DiagnosticCollectorSimple : DiagnosticConsumer {
     }
 
     override fun validationResults(
-        validationContextInfo: ValidationContextInfo,
+        validatableInfo: ValidatableInfo,
         validationResults: List<ValidationResultInfo>
     ) {
         //TODO - validationContextInfo

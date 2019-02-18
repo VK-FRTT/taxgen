@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer
 
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.FixedEntitiesLookupItem
@@ -10,14 +11,24 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class OrdinateCategorisationBinder(val categorisations: List<OrdinateCategorisationData>) {
-
+class OrdinateCategorisationBinder(
+    val categorisationBindings: List<OrdinateCategorisationBindingData>,
+    val diagnostic: Diagnostic
+) {
     companion object {
-        private val DIMENSION_MEMBER_SIGNATURE_PATTERN = "\\A(.+)\\((.+)\\)\\z".toRegex()
-        private val EMPTY_XBRL_CODES = "" to ""
+        private val DIMENSION_MEMBER_SIGNATURE_PATTERN = "\\A([^\\(\\)]+)\\(([^\\(\\)]+)\\)\\z".toRegex()
         private const val SIGNATURE_OPEN_MEMBER_MARKER = "*"
 
-        fun rememberInitialCategorizations(): OrdinateCategorisationBinder {
+        fun rememberInitialCategorizations(diagnostic: Diagnostic): OrdinateCategorisationBinder {
+
+            fun parseSignature(signature: String?): Pair<String, String> {
+                signature ?: diagnostic.fatal("Empty DimensionMemberSignature")
+
+                val match = DIMENSION_MEMBER_SIGNATURE_PATTERN.matchEntire(signature)
+                    ?: diagnostic.fatal("Unsupported DimensionMemberSignature pattern")
+
+                return match.groupValues[1] to match.groupValues[2]
+            }
 
             val categorisations = transaction {
                 OrdinateCategorisationTable
@@ -26,7 +37,7 @@ class OrdinateCategorisationBinder(val categorisations: List<OrdinateCategorisat
                         val signature = row[OrdinateCategorisationTable.dimensionMemberSignatureCol]
                         val (dimensionPart, memberPart) = parseSignature(signature)
 
-                        OrdinateCategorisationData(
+                        OrdinateCategorisationBindingData(
                             ordinateId = row[OrdinateCategorisationTable.ordinateIdCol],
                             dimensionMemberSignature = signature,
                             signatureDimensionPart = dimensionPart,
@@ -37,22 +48,13 @@ class OrdinateCategorisationBinder(val categorisations: List<OrdinateCategorisat
                     }
             }
 
-            return OrdinateCategorisationBinder(categorisations)
-        }
-
-        private fun parseSignature(signature: String?): Pair<String, String> {
-            signature ?: return EMPTY_XBRL_CODES
-
-            val match = DIMENSION_MEMBER_SIGNATURE_PATTERN.matchEntire(signature) ?: return EMPTY_XBRL_CODES
-
-            return match.groupValues[1] to match.groupValues[2]
+            return OrdinateCategorisationBinder(categorisations, diagnostic)
         }
     }
 
     fun rebindAndWriteCategorisations(
         dpmDictionaryLookupItems: List<DpmDictionaryLookupItem>,
-        fixedEntitiesLookupItem: FixedEntitiesLookupItem,
-        diagnostic: Diagnostic
+        fixedEntitiesLookupItem: FixedEntitiesLookupItem
     ) {
         //Rebinding can be based on XBRL code since it contains owner prefix & thus is unique DB wide
         // - Dimension XBRL Code = {owner.prefix}_dim:{dimension.dimensionCode}
@@ -61,7 +63,7 @@ class OrdinateCategorisationBinder(val categorisations: List<OrdinateCategorisat
         val dimensionIds = collectDimensionIdsByXbrlCode(dpmDictionaryLookupItems)
         val memberIds = collectMemberIdsByXbrlCode(dpmDictionaryLookupItems)
 
-        val reboundCategorisations = categorisations.map { categorisationItem ->
+        val reboundCategorisations = categorisationBindings.map { categorisationItem ->
             val dimensionId = dimensionIds[categorisationItem.signatureDimensionPart]
 
             val memberId = if (categorisationItem.signatureMemberPart == SIGNATURE_OPEN_MEMBER_MARKER) {
@@ -77,7 +79,12 @@ class OrdinateCategorisationBinder(val categorisations: List<OrdinateCategorisat
         }
 
         reboundCategorisations.forEach {
-            diagnostic.validate(it, null)
+            val info = ValidatableInfo(
+                objectKind = "OrdinateCategorisation",
+                objectAddress = "OrdinateID: ${it.ordinateId}, DimensionMemberSignature: ${it.dimensionMemberSignature}"
+            )
+
+            diagnostic.validate(it, info)
         }
 
         transaction {
@@ -113,14 +120,14 @@ class OrdinateCategorisationBinder(val categorisations: List<OrdinateCategorisat
         }.toMap()
     }
 
-    private fun insertOrdinateCategorisation(ordinateCategorisation: OrdinateCategorisationData) {
+    private fun insertOrdinateCategorisation(categorisationBinding: OrdinateCategorisationBindingData) {
         OrdinateCategorisationTable.insert {
-            it[ordinateIdCol] = ordinateCategorisation.ordinateId
-            it[dimensionIdCol] = ordinateCategorisation.dimensionId
-            it[memberIdCol] = ordinateCategorisation.memberId
-            it[dimensionMemberSignatureCol] = ordinateCategorisation.dimensionMemberSignature
-            it[sourceCol] = ordinateCategorisation.source
-            it[dpsCol] = ordinateCategorisation.dps
+            it[ordinateIdCol] = categorisationBinding.ordinateId
+            it[dimensionIdCol] = categorisationBinding.dimensionId
+            it[memberIdCol] = categorisationBinding.memberId
+            it[dimensionMemberSignatureCol] = categorisationBinding.dimensionMemberSignature
+            it[sourceCol] = categorisationBinding.source
+            it[dpsCol] = categorisationBinding.dps
         }
     }
 }

@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.commons.diagostic
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
 import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.Severity.INFO
@@ -80,7 +80,7 @@ class DiagnosticBridge(
 
     override fun validate(
         validatable: Validatable,
-        validationContextInfo: ValidationContextInfo?
+        validatableInfo: ValidatableInfo?
     ) {
         val collector = ValidationCollector()
         validatable.validate(collector)
@@ -89,12 +89,12 @@ class DiagnosticBridge(
 
         if (results.any()) {
             incrementCounter(ERROR)
-            val ctxInfo = validationContextInfo ?: ValidationContextInfo(
-                validatableType = validatable.javaClass.simpleName,
-                validatableUri = ""
+            val info = validatableInfo ?: ValidatableInfo(
+                objectKind = validatable.javaClass.simpleName,
+                objectAddress = ""
             )
 
-            consumer.validationResults(ctxInfo, results)
+            consumer.validationResults(info, results)
         }
     }
 

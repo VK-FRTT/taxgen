@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 
 interface DiagnosticContext : Diagnostic {
 
@@ -33,7 +33,7 @@ interface DiagnosticContext : Diagnostic {
 
     override fun validate(
         validatable: Validatable,
-        validationContextInfo: ValidationContextInfo?
+        validatableInfo: ValidatableInfo?
     )
 
     override fun counters(): Map<Severity, Int>

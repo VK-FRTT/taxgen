@@ -136,7 +136,7 @@ object DbFixedEntities {
             val matchingRows = OwnerTable.select { OwnerTable.ownerPrefixCol eq "eu" }
 
             if (matchingRows.count() != 1) {
-                diagnostic.fatal("Selecting 'Eutofiling' Owner from database failed. Found ${matchingRows.count()} Owners with prefix 'eu'.")
+                diagnostic.fatal("Selecting 'Eurofiling' Owner from database failed. Found ${matchingRows.count()} Owners with prefix 'eu'.")
             }
 
             matchingRows.first()[OwnerTable.id]

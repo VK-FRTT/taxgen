@@ -13,9 +13,7 @@ import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 
 class DictionaryReplaceDbWriter(
     targetDbPath: Path,
@@ -23,7 +21,6 @@ class DictionaryReplaceDbWriter(
 ) : DpmDbWriter {
     private val targetDbPath: Path = targetDbPath.toAbsolutePath().normalize()
 
-    //TODO - tests
     override fun writeWithDictionaries(dpmDictionaries: List<DpmDictionary>) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.WriteSQLiteDb,
@@ -36,7 +33,7 @@ class DictionaryReplaceDbWriter(
             DbLanguages.configureLanguages()
             val languageIds = DbLanguages.resolveLanguageIds()
 
-            val ordinateCategorisationBinder = OrdinateCategorisationBinder.rememberInitialCategorizations()
+            val ordinateCategorisationBinder = OrdinateCategorisationBinder.rememberInitialCategorizations(diagnosticContext)
 
             DbDictionaries.purgeDictionaryContent()
 
@@ -91,8 +88,7 @@ class DictionaryReplaceDbWriter(
 
             ordinateCategorisationBinder.rebindAndWriteCategorisations(
                 dictionaryLookupItems + metricDictionaryLookupItem,
-                fixedEntitiesLookupItem,
-                diagnosticContext
+                fixedEntitiesLookupItem
             )
         }
     }

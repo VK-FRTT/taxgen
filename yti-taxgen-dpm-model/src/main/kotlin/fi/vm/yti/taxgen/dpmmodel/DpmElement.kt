@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationContextInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 import kotlin.reflect.KClass
@@ -35,10 +35,10 @@ interface DpmElement : Validatable {
 
     fun code(): String = ""
 
-    fun validationContextInfo(): ValidationContextInfo {
-        return ValidationContextInfo(
-            validatableType = typeName(this::class),
-            validatableUri = uri
+    fun validationContextInfo(): ValidatableInfo {
+        return ValidatableInfo(
+            objectKind = typeName(this::class),
+            objectAddress = uri
         )
     }
 
