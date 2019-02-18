@@ -16,7 +16,10 @@ object Tables {
                 HierarchyTable,
                 HierarchyNodeTable,
                 DimensionTable,
-                MetricTable
+                MetricTable,
+                AxisTable,
+                AxisOrdinateTable,
+                OrdinateCategorisationTable
             )
         }
     }

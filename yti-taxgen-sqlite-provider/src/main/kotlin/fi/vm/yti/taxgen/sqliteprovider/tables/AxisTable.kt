@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
 import org.jetbrains.exposed.dao.IntIdTable
-import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -18,9 +17,8 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - None
  */
 object AxisTable : IntIdTable(name = "mAxis", columnName = "AxisID") {
-    val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
     val axisOrientationCol = text("AxisOrientation").nullable()
     val axisLabelCol = text("AxisLabel").nullable()
     val isOpenAxisCol = bool("IsOpenAxis").nullable()
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+    val conceptIdCol = integer("ConceptID").nullable() //Note: In DM database column type is plain integer instead reference
 }

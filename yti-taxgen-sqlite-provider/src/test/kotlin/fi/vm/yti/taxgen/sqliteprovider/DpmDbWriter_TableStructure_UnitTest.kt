@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.sqliteprovider.tables.AxisOrdinateTable
+import fi.vm.yti.taxgen.sqliteprovider.tables.AxisTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTranslationTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
@@ -9,6 +11,7 @@ import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.LanguageTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MetricTable
+import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.OwnerTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.Tables
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -41,6 +44,11 @@ import java.sql.ResultSetMetaData
 @DisplayName("SQLite DPM DB: table structure")
 internal class DpmDbWriter_TableStructure_UnitTest {
 
+    enum class StructureInitMode {
+        SELF_INITIALIZED,
+        SEED_BASED
+    }
+
     private lateinit var tempFolder: TempFolder
     private lateinit var seedBasedDbConnection: Connection
     private lateinit var selfCreatedDbConnection: Connection
@@ -72,7 +80,10 @@ internal class DpmDbWriter_TableStructure_UnitTest {
 
         seedBasedDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
-        return createTableStructureTests(seedBasedDbConnection)
+        return createTableStructureTests(
+            seedBasedDbConnection,
+            StructureInitMode.SEED_BASED
+        )
     }
 
     @TestFactory
@@ -85,10 +96,16 @@ internal class DpmDbWriter_TableStructure_UnitTest {
 
         selfCreatedDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
-        return createTableStructureTests(selfCreatedDbConnection)
+        return createTableStructureTests(
+            selfCreatedDbConnection,
+            StructureInitMode.SELF_INITIALIZED
+        )
     }
 
-    private fun createTableStructureTests(dbConnection: Connection): List<DynamicNode> {
+    private fun createTableStructureTests(
+        dbConnection: Connection,
+        initMode: StructureInitMode
+    ): List<DynamicNode> {
 
         return listOf(
             DynamicTest.dynamicTest("mLanguage") {
@@ -347,6 +364,93 @@ internal class DpmDbWriter_TableStructure_UnitTest {
                     "ReferencedHierarchyID, mHierarchy, HierarchyID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred",
                     "HierarchyStartingMemberID, mMember, MemberID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred",
                     "CorrespondingMemberID, mMember, MemberID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred"
+                )
+            },
+
+            DynamicTest.dynamicTest("mAxis") {
+                val table = AxisTable
+                assertThat(table.tableName).isEqualTo("mAxis")
+
+                val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
+
+                assertThat(meta.columnCount).isEqualTo(5)
+                assertThat(meta.columnConfigToString(1)).isEqualTo("AxisID, INTEGER, NonNullable, false")
+                assertThat(meta.columnConfigToString(2)).isEqualTo("AxisOrientation, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigToString(3)).isEqualTo("AxisLabel, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigToString(4)).isEqualTo("IsOpenAxis, BOOLEAN, Nullable, false")
+                assertThat(meta.columnConfigToString(5)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+
+                assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
+                    "AxisID, 1"
+                )
+
+                assertThat(foreignKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
+                )
+            },
+
+            DynamicTest.dynamicTest("mAxisOrdinate") {
+                val table = AxisOrdinateTable
+                assertThat(table.tableName).isEqualTo("mAxisOrdinate")
+
+                val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
+
+                assertThat(meta.columnCount).isEqualTo(12)
+
+                val (axisColumnId, ordinateColumnId) = if (initMode == StructureInitMode.SELF_INITIALIZED) {
+                    listOf(2, 1)
+                } else {
+                    listOf(1, 2)
+                }
+
+                assertThat(meta.columnConfigToString(axisColumnId)).isEqualTo("AxisID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigToString(ordinateColumnId)).isEqualTo("OrdinateID, INTEGER, NonNullable, false")
+
+                assertThat(meta.columnConfigToString(3)).isEqualTo("OrdinateLabel, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigToString(4)).isEqualTo("OrdinateCode, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigToString(5)).isEqualTo("IsDisplayBeforeChildren, BOOLEAN, Nullable, false")
+                assertThat(meta.columnConfigToString(6)).isEqualTo("IsAbstractHeader, BOOLEAN, Nullable, false")
+                assertThat(meta.columnConfigToString(7)).isEqualTo("IsRowKey, BOOLEAN, Nullable, false")
+
+                assertThat(meta.columnConfigToString(8)).isEqualTo("Level, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigToString(9)).isEqualTo("Order, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigToString(10)).isEqualTo("ParentOrdinateID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigToString(11)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+
+                assertThat(meta.columnConfigToString(12)).isEqualTo("TypeOfKey, VARCHAR, Nullable, false")
+
+                assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
+                    "OrdinateID, 1"
+                )
+
+                assertThat(foreignKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
+                    "AxisID, mAxis, AxisID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred",
+                    "ParentOrdinateID, mAxisOrdinate, OrdinateID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred",
+                    "ConceptID, mConcept, ConceptID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred"
+                )
+            },
+
+            DynamicTest.dynamicTest("mOrdinateCategorisation") {
+                val table = OrdinateCategorisationTable
+                assertThat(table.tableName).isEqualTo("mOrdinateCategorisation")
+
+                val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
+
+                assertThat(meta.columnCount).isEqualTo(6)
+                assertThat(meta.columnConfigToString(1)).isEqualTo("OrdinateID, INTEGER, NonNullable, false")
+                assertThat(meta.columnConfigToString(2)).isEqualTo("DimensionID, INTEGER, NonNullable, false")
+                assertThat(meta.columnConfigToString(3)).isEqualTo("MemberID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigToString(4)).isEqualTo("DimensionMemberSignature, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigToString(5)).isEqualTo("Source, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigToString(6)).isEqualTo("DPS, VARCHAR, Nullable, false")
+
+                assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
+                    "DimensionID, 2", "OrdinateID, 1"
+                )
+
+                assertThat(foreignKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
+                    "OrdinateID, mAxisOrdinate, OrdinateID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred",
+                    "DimensionID, mDimension, DimensionID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred",
+                    "MemberID, mMember, MemberID, 1, UPDATE_RULE:NoAction, DELETE_RULE:NoAction, DEFERRABILITY:InitiallyDeferred"
                 )
             }
         )

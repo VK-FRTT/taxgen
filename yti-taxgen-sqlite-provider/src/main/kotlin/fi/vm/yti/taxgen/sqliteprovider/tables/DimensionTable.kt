@@ -20,7 +20,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * );
  *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
- * - TODO
+ * - None
  */
 object DimensionTable : IntIdTable(name = "mDimension", columnName = "DimensionID") {
     val dimensionLabelCol = text("DimensionLabel").nullable()

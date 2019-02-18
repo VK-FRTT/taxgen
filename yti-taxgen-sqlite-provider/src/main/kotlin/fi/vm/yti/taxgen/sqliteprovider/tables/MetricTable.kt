@@ -35,7 +35,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - `Boolean`
  *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
- * - TODO
+ * - In T4U spec DataType is integer
  */
 object MetricTable : IntIdTable(name = "mMetric", columnName = "MetricID") {
     val correspondingMemberCol = reference("CorrespondingMemberID", MemberTable, ReferenceOption.NO_ACTION).nullable()

@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.Table
 /**
  * Reference DDL (from BR-AG Data Modeler):
  * CREATE TABLE `mOrdinateCategorisation` (
- *   `OrdinateID`	INTEGER,
- *   `DimensionID`	INTEGER,
- *   `MemberID`	INTEGER,
- *   `DimensionMemberSignature`	TEXT,
- *   `Source`	Text,
- *   `DPS`	TEXT,
+ *   `OrdinateID` INTEGER,
+ *   `DimensionID` INTEGER,
+ *   `MemberID` INTEGER,
+ *   `DimensionMemberSignature` TEXT,
+ *   `Source` Text,
+ *   `DPS` TEXT,
  *   FOREIGN KEY(`OrdinateID`) REFERENCES `mAxisOrdinate`(`OrdinateID`),
  *   FOREIGN KEY(`MemberID`) REFERENCES `mMember`(`MemberID`),
  *   FOREIGN KEY(`DimensionID`) REFERENCES `mDimension`(`DimensionID`),
@@ -21,7 +21,7 @@ import org.jetbrains.exposed.sql.Table
  * );
  *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
- * - TODO
+ * - None
  */
 object OrdinateCategorisationTable : Table("mOrdinateCategorisation") {
     val ordinateIdCol: Column<EntityID<Int>?> = reference("OrdinateID", AxisOrdinateTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
