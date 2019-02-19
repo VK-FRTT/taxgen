@@ -8,12 +8,12 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
 data class Metric(
     override val uri: String,
     override val concept: Concept,
-    val metricCode: String, //TODO validate & test: metric code has matching dataType & flowType tags from the metric self
-    val dataType: String, //TODO validate & test: if data type == Enumeration => referencedDomainCode != null
+    val metricCode: String,
+    val dataType: String,
     val flowType: String?,
     val balanceType: String?,
-    val referencedDomainCode: String?, //TODO validate & test: if referencedDomainCode != null => Data type must be Enumeration
-    val referencedHierarchyCode: String? //TODO validate & test: if referencedHierarchyCode != null => referencedDomainCode != null
+    val referencedDomainCode: String?,
+    val referencedHierarchyCode: String?
 ) : DpmElement {
 
     companion object {
@@ -94,6 +94,14 @@ data class Metric(
         validateConditionTruthy(
             validationResults = validationResults,
             instance = this,
+            property = Metric::dataType,
+            condition = { (dataType != "Enumeration/Code") || (referencedDomainCode != null) },
+            message = { "missing ReferencedDomainCode when data type is Enumeration/Code" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
             property = Metric::flowType,
             condition = { VALID_FLOW_TYPES.containsKey(flowType) },
             message = { "unsupported flow type '$flowType'" }
@@ -113,6 +121,22 @@ data class Metric(
             property = Metric::metricCode,
             condition = { isValidMetricCode(metricCode) },
             message = { "metric code does not match required pattern '$metricCode'" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::dataType,
+            condition = { (referencedDomainCode == null) || (dataType == "Enumeration/Code") },
+            message = { "ReferencedDomainCode given but data type not Enumeration/Code" }
+        )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::dataType,
+            condition = { (referencedHierarchyCode == null) || (dataType == "Enumeration/Code") },
+            message = { "ReferencedHierarchyCode given but data type not Enumeration/Code" }
         )
     }
 

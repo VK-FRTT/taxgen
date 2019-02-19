@@ -160,9 +160,19 @@ internal class Metric_UnitTest :
             expectedValidity: String,
             expectedCodeTag: String?
         ) {
-            attributeOverrides(
-                "dataType" to dataType
-            )
+            if (dataType == "Enumeration/Code") {
+                attributeOverrides(
+                    "dataType" to dataType,
+                    "referencedDomainCode" to "dom",
+                    "referencedHierarchyCode" to "hier"
+                )
+            } else {
+                attributeOverrides(
+                    "dataType" to dataType,
+                    "referencedDomainCode" to null,
+                    "referencedHierarchyCode" to null
+                )
+            }
 
             instantiateAndValidate()
 
@@ -179,6 +189,19 @@ internal class Metric_UnitTest :
 
                 else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
             }
+        }
+
+        @Test
+        fun `enumeration data type should require non null referencedDomainCode`() {
+            attributeOverrides(
+                "dataType" to "Enumeration/Code",
+                "referencedDomainCode" to null,
+                "referencedHierarchyCode" to null
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly("Metric.dataType: missing ReferencedDomainCode when data type is Enumeration/Code")
         }
     }
 
@@ -283,11 +306,26 @@ internal class Metric_UnitTest :
         @Test
         fun `referencedDomainCode should allow null value`() {
             attributeOverrides(
-                "referencedDomainCode" to null
+                "dataType" to "String",
+                "referencedDomainCode" to null,
+                "referencedHierarchyCode" to null
             )
 
             instantiateAndValidate()
             assertThat(validationErrors).isEmpty()
+        }
+
+        @Test
+        fun `when referencedDomainCode is given data type must be enumeration`() {
+            attributeOverrides(
+                "dataType" to "String",
+                "referencedDomainCode" to "MC",
+                "referencedHierarchyCode" to null
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly("Metric.dataType: ReferencedDomainCode given but data type not Enumeration/Code")
         }
     }
 
@@ -327,6 +365,19 @@ internal class Metric_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).isEmpty()
+        }
+
+        @Test
+        fun `when referencedHierarchyCode is given data type must be enumeration`() {
+            attributeOverrides(
+                "dataType" to "String",
+                "referencedDomainCode" to null,
+                "referencedHierarchyCode" to "MC1"
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors)
+                .containsExactly("Metric.dataType: ReferencedHierarchyCode given but data type not Enumeration/Code")
         }
     }
 }

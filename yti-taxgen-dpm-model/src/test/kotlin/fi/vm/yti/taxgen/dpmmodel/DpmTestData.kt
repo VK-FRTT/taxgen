@@ -168,7 +168,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "uri" to "met_uri",
                 "concept" to dynamicAttribute { it.instantiate<Concept>() },
                 "metricCode" to "sd1",
-                "dataType" to "String",
+                "dataType" to "Enumeration/Code",
                 "flowType" to "Stock",
                 "balanceType" to "Credit",
                 "referencedDomainCode" to "exp_dom",
