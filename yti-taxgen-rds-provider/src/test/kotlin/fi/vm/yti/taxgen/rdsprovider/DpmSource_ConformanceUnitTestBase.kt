@@ -688,52 +688,42 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
     }
 
     private fun assertMetricsBlueprint(blueprint: CodeListBlueprint) {
-        assertThat(blueprint.usesExtensions).isTrue()
         assertThat(blueprint.extensionPropertyTypeUris).containsExactly(
             "http://uri.suomi.fi/datamodel/ns/code#dpmMetric",
             "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
         )
 
-        assertThat(blueprint.usesSubCodeLists).isFalse()
         assertThat(blueprint.subCodeListBlueprint).isNull()
     }
 
     private fun assertExplicitDomainsAndHierarchiesBlueprint(blueprint: CodeListBlueprint) {
-        assertThat(blueprint.usesExtensions).isTrue()
         assertThat(blueprint.extensionPropertyTypeUris).containsExactly(
             "http://uri.suomi.fi/datamodel/ns/code#dpmExplicitDomain"
         )
 
-        assertThat(blueprint.usesSubCodeLists).isTrue()
         assertThat(blueprint.subCodeListBlueprint).isNotNull()
 
-        assertThat(blueprint.subCodeListBlueprint!!.usesExtensions).isTrue()
         assertThat(blueprint.subCodeListBlueprint!!.extensionPropertyTypeUris).containsExactly(
             "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy",
             "http://uri.suomi.fi/datamodel/ns/code#calculationHierarchy"
         )
 
-        assertThat(blueprint.subCodeListBlueprint!!.usesSubCodeLists).isFalse()
         assertThat(blueprint.subCodeListBlueprint!!.subCodeListBlueprint).isNull()
     }
 
     private fun assertTypedDomainBlueprint(blueprint: CodeListBlueprint) {
-        assertThat(blueprint.usesExtensions).isTrue()
         assertThat(blueprint.extensionPropertyTypeUris).containsExactly(
             "http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain"
         )
 
-        assertThat(blueprint.usesSubCodeLists).isFalse()
         assertThat(blueprint.subCodeListBlueprint).isNull()
     }
 
     private fun assertExplictOrTypedDimensionsBlueprint(blueprint: CodeListBlueprint) {
-        assertThat(blueprint.usesExtensions).isTrue()
         assertThat(blueprint.extensionPropertyTypeUris).containsExactly(
             "http://uri.suomi.fi/datamodel/ns/code#dpmDimension"
         )
 
-        assertThat(blueprint.usesSubCodeLists).isFalse()
         assertThat(blueprint.subCodeListBlueprint).isNull()
     }
 }

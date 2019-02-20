@@ -7,8 +7,6 @@ import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.throwFail
 
 data class CodeListBlueprint(
-    val usesExtensions: Boolean,
-    val usesSubCodeLists: Boolean,
     val extensionPropertyTypeUris: List<String>,
     val subCodeListBlueprint: CodeListBlueprint?
 ) {
@@ -19,8 +17,6 @@ data class CodeListBlueprint(
             return fromConfig(
                 """
                 {
-                "usesExtensions": true,
-                "usesSubCodeLists": false,
                 "extensionPropertyTypeUris": [
                     "http://uri.suomi.fi/datamodel/ns/code#dpmMetric",
                     "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
@@ -35,14 +31,10 @@ data class CodeListBlueprint(
             return fromConfig(
                 """
                 {
-                "usesExtensions": true,
-                "usesSubCodeLists": true,
                 "extensionPropertyTypeUris": [
                     "http://uri.suomi.fi/datamodel/ns/code#dpmExplicitDomain"
                 ],
                 "subCodeListBlueprint": {
-                    "usesExtensions": true,
-                    "usesSubCodeLists": false,
                     "extensionPropertyTypeUris": [
                         "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy",
                         "http://uri.suomi.fi/datamodel/ns/code#calculationHierarchy"
@@ -58,8 +50,6 @@ data class CodeListBlueprint(
             return fromConfig(
                 """
                 {
-                "usesExtensions": true,
-                "usesSubCodeLists": false,
                 "extensionPropertyTypeUris": [
                     "http://uri.suomi.fi/datamodel/ns/code#dpmDimension"
                 ],
@@ -73,10 +63,8 @@ data class CodeListBlueprint(
             return fromConfig(
                 """
                 {
-                "usesExtensions": true,
-                "usesSubCodeLists": false,
                 "extensionPropertyTypeUris": [
-                "http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain"
+                    "http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain"
                 ],
                 "subCodeListBlueprint": null
                 }

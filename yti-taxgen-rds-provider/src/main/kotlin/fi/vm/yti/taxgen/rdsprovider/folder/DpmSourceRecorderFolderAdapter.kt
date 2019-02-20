@@ -176,10 +176,6 @@ internal class DpmSourceRecorderFolderAdapter(
         codeListSource: CodeListSource,
         pathStack: PathStack
     ) {
-        if (!codeListSource.blueprint().usesExtensions) {
-            return
-        }
-
         var extensionIndex = 0
         codeListSource.eachExtensionSource { extensionSource ->
 
@@ -215,10 +211,6 @@ internal class DpmSourceRecorderFolderAdapter(
         codeListSource: CodeListSource,
         pathStack: PathStack
     ) {
-        if (!codeListSource.blueprint().usesSubCodeLists) {
-            return //TODO - are these uses* checks needed?
-        }
-
         var subCodeListIndex = 0
         codeListSource.eachSubCodeListSource { subCodeListSource ->
 
