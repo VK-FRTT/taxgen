@@ -9,14 +9,14 @@ import org.jetbrains.exposed.dao.EntityID
 data class OrdinateCategorisationBindingData(
     val ordinateId: EntityID<Int>?,
     val dimensionMemberSignature: String?,
-    val signatureDimensionPart: String,
-    val signatureMemberPart: String,
-
     val source: String?,
     val dps: String?,
 
-    val dimensionId: EntityID<Int>? = null,
-    val memberId: EntityID<Int>? = null
+    val dpsDimensionXbrlCode: String,
+    val dpsMemberXbrlCode: String,
+
+    val dimensionId: EntityID<Int>?,
+    val memberId: EntityID<Int>?
 ) : Validatable {
 
     override fun validate(validationResults: ValidationResults) {
@@ -24,13 +24,13 @@ data class OrdinateCategorisationBindingData(
         validateNonBlank(
             validationResults = validationResults,
             instance = this,
-            property = OrdinateCategorisationBindingData::signatureDimensionPart
+            property = OrdinateCategorisationBindingData::dpsDimensionXbrlCode
         )
 
         validateNonBlank(
             validationResults = validationResults,
             instance = this,
-            property = OrdinateCategorisationBindingData::signatureMemberPart
+            property = OrdinateCategorisationBindingData::dpsMemberXbrlCode
         )
 
         validateNonNull(

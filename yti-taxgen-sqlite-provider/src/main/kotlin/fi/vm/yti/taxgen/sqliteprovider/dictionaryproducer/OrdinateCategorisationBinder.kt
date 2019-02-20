@@ -17,38 +17,42 @@ class OrdinateCategorisationBinder(
 ) {
     companion object {
         private val DIMENSION_MEMBER_SIGNATURE_PATTERN = "\\A([^\\(\\)]+)\\(([^\\(\\)]+)\\)\\z".toRegex()
-        private const val SIGNATURE_OPEN_MEMBER_MARKER = "*"
+        private const val OPEN_MEMBER_MARKER = "*"
 
         fun rememberInitialCategorizations(diagnostic: Diagnostic): OrdinateCategorisationBinder {
 
-            fun parseSignature(signature: String?): Pair<String, String> {
-                signature ?: diagnostic.fatal("Empty DimensionMemberSignature")
+            fun tokenizeDps(dps: String?): List<String> {
+                dps ?: diagnostic.fatal("Empty DPS")
 
-                val match = DIMENSION_MEMBER_SIGNATURE_PATTERN.matchEntire(signature)
-                    ?: diagnostic.fatal("Unsupported DimensionMemberSignature pattern")
+                val match = DIMENSION_MEMBER_SIGNATURE_PATTERN.matchEntire(dps)
+                    ?: diagnostic.fatal("Unsupported DPS structure")
 
-                return match.groupValues[1] to match.groupValues[2]
+                return listOf(match.groupValues[1], match.groupValues[2])
             }
 
-            val categorisations = transaction {
+            val categorisationBindings = transaction {
                 OrdinateCategorisationTable
                     .selectAll()
                     .map { row ->
-                        val signature = row[OrdinateCategorisationTable.dimensionMemberSignatureCol]
-                        val (dimensionPart, memberPart) = parseSignature(signature)
+                        val dps = row[OrdinateCategorisationTable.dpsCol]
+                        val (dimensionXbrlCode, memberXbrlCode) = tokenizeDps(dps)
 
                         OrdinateCategorisationBindingData(
                             ordinateId = row[OrdinateCategorisationTable.ordinateIdCol],
-                            dimensionMemberSignature = signature,
-                            signatureDimensionPart = dimensionPart,
-                            signatureMemberPart = memberPart,
+                            dimensionMemberSignature = row[OrdinateCategorisationTable.dimensionMemberSignatureCol],
                             source = row[OrdinateCategorisationTable.sourceCol],
-                            dps = row[OrdinateCategorisationTable.dpsCol]
+                            dps = row[OrdinateCategorisationTable.dpsCol],
+
+                            dpsDimensionXbrlCode = dimensionXbrlCode,
+                            dpsMemberXbrlCode = memberXbrlCode,
+
+                            dimensionId = null,
+                            memberId = null
                         )
                     }
             }
 
-            return OrdinateCategorisationBinder(categorisations, diagnostic)
+            return OrdinateCategorisationBinder(categorisationBindings, diagnostic)
         }
     }
 
@@ -64,12 +68,12 @@ class OrdinateCategorisationBinder(
         val memberIds = collectMemberIdsByXbrlCode(dpmDictionaryLookupItems)
 
         val reboundCategorisations = categorisationBindings.map { categorisationItem ->
-            val dimensionId = dimensionIds[categorisationItem.signatureDimensionPart]
+            val dimensionId = dimensionIds[categorisationItem.dpsDimensionXbrlCode]
 
-            val memberId = if (categorisationItem.signatureMemberPart == SIGNATURE_OPEN_MEMBER_MARKER) {
+            val memberId = if (categorisationItem.dpsMemberXbrlCode == OPEN_MEMBER_MARKER) {
                 fixedEntitiesLookupItem.openMemberId
             } else {
-                memberIds[categorisationItem.signatureMemberPart]
+                memberIds[categorisationItem.dpsMemberXbrlCode]
             }
 
             categorisationItem.copy(
@@ -81,11 +85,11 @@ class OrdinateCategorisationBinder(
         reboundCategorisations.forEach {
             val info = ValidatableInfo(
                 objectKind = "OrdinateCategorisation",
-                objectAddress = "OrdinateID: ${it.ordinateId}, DimensionMemberSignature: ${it.dimensionMemberSignature}"
+                objectAddress = "OrdinateID: ${it.ordinateId}, DPS: ${it.dps}"
             )
 
             diagnostic.validate(it, info)
-        }
+        } //TODO - fail if having errors?
 
         transaction {
             OrdinateCategorisationTable.deleteAll()

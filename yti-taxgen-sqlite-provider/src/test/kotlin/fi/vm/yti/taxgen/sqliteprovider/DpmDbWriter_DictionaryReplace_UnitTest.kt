@@ -93,11 +93,11 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
     }
 
     @Test
-    fun `should fail when ordinate categorisation signature has extra parentheses`() {
+    fun `should fail when ordinate categorisation DPS has extra parentheses`() {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:ExpDim-1-Code((FixPrfx_ExpDom-1-Code:Mbr-1-Code))", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code((FixPrfx_ExpDom-1-Code:Mbr-1-Code))")
             """
         )
 
@@ -106,7 +106,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.events).contains(
-            "MESSAGE [FATAL] [Unsupported DimensionMemberSignature pattern]"
+            "MESSAGE [FATAL] [Unsupported DPS structure]"
         )
     }
 
@@ -115,7 +115,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)(foo)", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)(foo)")
             """
         )
 
@@ -124,7 +124,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.eventsString()).contains(
-            "MESSAGE [FATAL] [Unsupported DimensionMemberSignature pattern]"
+            "MESSAGE [FATAL] [Unsupported DPS structure]"
         )
     }
 
@@ -133,14 +133,14 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
             """
         )
 
         replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).containsSubsequence(
-            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DimensionMemberSignature: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
             "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]"
         )
     }
@@ -150,16 +150,16 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, " (FixPrfx_ExpDom-1-Code:Mbr-1-Code)", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", " (FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
             """
         )
 
         replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).containsSubsequence(
-            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DimensionMemberSignature:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
             "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]",
-            "VALIDATION [OrdinateCategorisationBindingData.signatureDimensionPart: is blank]"
+            "VALIDATION [OrdinateCategorisationBindingData.dpsDimensionXbrlCode: is blank]"
         )
     }
 
@@ -168,7 +168,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)")
             """
         )
 
@@ -184,14 +184,14 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:ExpDim-1-Code( )", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code( )")
             """
         )
 
         replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).contains(
-            "VALIDATION [OrdinateCategorisationBindingData.signatureMemberPart: is blank]",
+            "VALIDATION [OrdinateCategorisationBindingData.dpsMemberXbrlCode: is blank]",
             "VALIDATION [OrdinateCategorisationBindingData.memberId: does not have value]"
         )
     }
@@ -201,7 +201,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
             """.trimIndent()
         )
 
@@ -220,7 +220,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-            "1122, 1, 1, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code), source_value, dps_value"
+            "1122, 1, 1, signature, source, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)"
         )
     }
 
@@ -229,7 +229,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         dbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "FixPrfx_dim:TypDim-1-Code(*)", "source_value", "dps_value")
+            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:TypDim-1-Code(*)")
             """.trimIndent()
         )
 
@@ -248,7 +248,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-            "1122, 2, 9999, FixPrfx_dim:TypDim-1-Code(*), source_value, dps_value"
+            "1122, 2, 9999, signature, source, FixPrfx_dim:TypDim-1-Code(*)"
         )
     }
 }
