@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
+import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
@@ -94,7 +95,9 @@ internal class CodeListSourceRdsAdapter(
         }
 
         override fun iterationDone() {
-            parentAdapter.subCodeListUris = subCodeListUris.distinct()
+            parentAdapter.subCodeListUris = subCodeListUris.distinct().sortedWith(
+                compareBy(NumberAwareStringComparator.instance()) { it }
+            )
         }
     }
 }

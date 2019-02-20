@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayOrNullAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextAt
+import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 import okhttp3.HttpUrl
@@ -62,7 +63,9 @@ internal class CodeListContentAddressResolver(
         val contentAddress = ContentAddress(
             codeListUrl = resolveCodeListContentUrl(codeListJson),
             codesUrl = resolveCodesContentUrl(codeListJson),
-            extensionUrls = resolveExtensionContentAddress(codeListJson)
+            extensionUrls = resolveExtensionContentAddress(codeListJson).sortedWith(
+                compareBy(NumberAwareStringComparator.instance()) { it.extensionUri }
+            )
         )
 
         return contentAddress
