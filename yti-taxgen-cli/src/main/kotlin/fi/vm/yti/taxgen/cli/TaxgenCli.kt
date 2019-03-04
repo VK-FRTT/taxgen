@@ -88,7 +88,7 @@ class TaxgenCli(
 
     private fun writeDictionaryToDpmDb(detectedOptions: DetectedOptions) {
         diagnosticContext.withContext(
-            contextType = DiagnosticContextType.CmdCompileDpmDb
+            contextType = DiagnosticContextType.CmdWriteDictionariesToDpmDb
         ) {
             detectedOptions.ensureSingleSourceGiven()
 

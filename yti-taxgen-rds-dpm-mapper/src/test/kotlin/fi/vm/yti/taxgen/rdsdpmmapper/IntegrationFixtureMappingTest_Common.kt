@@ -27,7 +27,7 @@ internal class IntegrationFixtureMappingTest_Common : RdsToDpmMapper_UnitTestBas
         performMappingFromIntegrationFixture()
 
         assertThat(diagnosticCollector.events).contains(
-            "ENTER [MapRdsToDpm] [RDS source data to DPM model]"
+            "ENTER [RdsToDpmMapper] [RDS source data to DPM model]"
         )
     }
 }

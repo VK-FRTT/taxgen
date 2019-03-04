@@ -208,8 +208,8 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [WriteSQLiteDb] []",
-            "EXIT [WriteSQLiteDb]"
+            "ENTER [SQLiteDbWriter] []",
+            "EXIT [SQLiteDbWriter]"
         )
 
         val rs = dbConnection.createStatement().executeQuery(
@@ -236,8 +236,8 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).contains(
-            "ENTER [WriteSQLiteDb] []",
-            "EXIT [WriteSQLiteDb]"
+            "ENTER [SQLiteDbWriter] []",
+            "EXIT [SQLiteDbWriter]"
         )
 
         val rs = dbConnection.createStatement().executeQuery(

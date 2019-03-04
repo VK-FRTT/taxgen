@@ -23,7 +23,7 @@ class DictionaryCreateDbWriter(
 
     override fun writeWithDictionaries(dpmDictionaries: List<DpmDictionary>) {
         diagnosticContext.withContext(
-            contextType = DiagnosticContextType.WriteSQLiteDb,
+            contextType = DiagnosticContextType.SQLiteDbWriter,
             contextIdentifier = targetDbPath.toString()
         ) {
             FileOps.deleteConflictingTargetFileIfAllowed(targetDbPath, forceOverwrite)

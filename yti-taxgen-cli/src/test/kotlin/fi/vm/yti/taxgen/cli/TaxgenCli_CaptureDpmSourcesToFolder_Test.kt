@@ -33,8 +33,8 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: folder",
-            "DPM Sources: folder",
+            "DPM source recorder: folder",
+            "DPM source: folder",
             "Capturing DPM sources: OK"
         )
 
@@ -59,8 +59,8 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: folder",
-            "DPM Sources: Reference Data service",
+            "DPM source recorder: folder",
+            "DPM source: Reference Data service",
             "Capturing DPM sources: OK"
         )
 
@@ -91,8 +91,8 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: folder",
-            "DPM Sources: folder",
+            "DPM source recorder: folder",
+            "DPM source: folder",
             "Capturing DPM sources: OK"
         )
 
@@ -142,8 +142,8 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: folder",
-            "DPM Sources: folder",
+            "DPM source recorder: folder",
+            "DPM source: folder",
             "FATAL: Target file 'dpm_sources/meta/source_config.json' already exists"
         )
 

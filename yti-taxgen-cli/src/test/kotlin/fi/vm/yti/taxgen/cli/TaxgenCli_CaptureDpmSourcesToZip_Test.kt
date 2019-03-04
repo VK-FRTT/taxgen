@@ -32,8 +32,8 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: ZIP file",
-            "DPM Sources: folder",
+            "DPM source recorder: ZIP file",
+            "DPM source: folder",
             "Capturing DPM sources: OK"
         )
 
@@ -56,8 +56,8 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: ZIP file",
-            "DPM Sources: Reference Data service",
+            "DPM source recorder: ZIP file",
+            "DPM source: Reference Data service",
             "Capturing DPM sources: OK"
         )
 
@@ -84,8 +84,8 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: ZIP file",
-            "DPM Sources: folder",
+            "DPM source recorder: ZIP file",
+            "DPM source: folder",
             "Capturing DPM sources: OK"
         )
 
@@ -131,7 +131,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: ZIP file",
+            "DPM source recorder: ZIP file",
             "FATAL: Target file '$targetZipPath' already exists"
         )
 
@@ -155,7 +155,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         assertThat(outText).containsSubsequence(
             "Capturing DPM sources",
-            "Writing DPM sources: ZIP file",
+            "DPM source recorder: ZIP file",
             "FATAL: Target file '${tempFolder.path()}' already exists"
         )
 

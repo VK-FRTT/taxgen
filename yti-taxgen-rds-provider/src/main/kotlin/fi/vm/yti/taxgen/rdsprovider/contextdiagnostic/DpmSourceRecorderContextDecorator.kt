@@ -15,7 +15,7 @@ internal class DpmSourceRecorderContextDecorator(
 
     override fun captureSources(sourceProvider: SourceProvider) {
         diagnosticContext.withContext(
-            contextType = DiagnosticContextType.CaptureDpmSource,
+            contextType = DiagnosticContextType.DpmSourceRecorder,
             contextDetails = this
         ) {
             dpmSourceRecorder.captureSources(sourceProvider)

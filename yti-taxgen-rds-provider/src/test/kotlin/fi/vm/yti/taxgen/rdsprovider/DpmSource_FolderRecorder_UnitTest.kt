@@ -68,7 +68,7 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
         @Test
         fun `Should produce correct diagnostic events`() {
             assertThat(emptyTargetEvents).contains(
-                "ENTER [CaptureDpmSource] [folder]",
+                "ENTER [DpmSourceRecorder] [folder]",
                 "ENTER [DpmSource] [folder]",
                 "ENTER [DpmDictionary] []",
                 "ENTER [RdsCodeList] []"

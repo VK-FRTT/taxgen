@@ -36,8 +36,8 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         assertThat(errText).isBlank()
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "Compiling DPM database: OK"
+            "Writing dictionaries to DPM database",
+            "Writing dictionaries to DPM database: OK"
         )
 
         assertThat(targetDbPath).exists().isRegularFile()
@@ -66,8 +66,8 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "Compiling DPM database: OK"
+            "Writing dictionaries to DPM database",
+            "Writing dictionaries to DPM database: OK"
         )
 
         assertThat(errText).isBlank()
@@ -111,7 +111,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
+            "Writing dictionaries to DPM database",
             "FATAL: Target file '$targetDbPath' already exists"
         )
 
@@ -134,7 +134,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
+            "Writing dictionaries to DPM database",
             "FATAL: Target file '${tempFolder.path()}' already exists"
         )
 
@@ -153,7 +153,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database"
+            "Writing dictionaries to DPM database"
         )
 
         assertThat(errText).containsSubsequence(
@@ -219,7 +219,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database"
+            "Writing dictionaries to DPM database"
         )
 
         assertThat(errText).containsSubsequence(
@@ -259,12 +259,12 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "Processing RDS sources: RDS source data to DPM model",
-            "DPM Sources: Reference Data service",
+            "Writing dictionaries to DPM database",
+            "RDS to DPM mapper",
+            "DPM source: Reference Data service",
             "Configuration file: (dm_integration_fixture.json)",
             "Configuration file: OK",
-            "Compiling DPM database: OK"
+            "Writing dictionaries to DPM database: OK"
         )
 
         assertThat(errText).isBlank()
@@ -292,8 +292,8 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val (status, outText, errText) = executeCli(args)
 
         assertThat(outText).containsSubsequence(
-            "Compiling DPM database",
-            "DPM Sources: Reference Data service",
+            "Writing dictionaries to DPM database",
+            "DPM source: Reference Data service",
             "Configuration file: (broken_source_config_json.json)",
             "FATAL: Processing JSON content failed: "
         )

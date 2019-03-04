@@ -23,7 +23,7 @@ class DictionaryReplaceDbWriter(
 
     override fun writeWithDictionaries(dpmDictionaries: List<DpmDictionary>) {
         diagnosticContext.withContext(
-            contextType = DiagnosticContextType.WriteSQLiteDb,
+            contextType = DiagnosticContextType.SQLiteDbWriter,
             contextIdentifier = targetDbPath.toString()
         ) {
             FileOps.failIfTargetFileMissing(targetDbPath, diagnosticContext)

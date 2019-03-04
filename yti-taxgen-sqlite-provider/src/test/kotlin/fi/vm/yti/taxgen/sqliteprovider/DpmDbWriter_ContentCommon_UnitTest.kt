@@ -91,8 +91,8 @@ internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestB
             DynamicTest.dynamicTest("should produce proper context events") {
 
                 assertThat(ctx.diagnosticCollector.eventsString()).contains(
-                    "ENTER [WriteSQLiteDb]",
-                    "EXIT [WriteSQLiteDb]"
+                    "ENTER [SQLiteDbWriter]",
+                    "EXIT [SQLiteDbWriter]"
                 )
             }
         )

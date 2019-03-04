@@ -27,7 +27,7 @@ class RdsToDpmMapper(
     ): List<DpmDictionary> {
 
         return diagnosticContext.withContext(
-            contextType = DiagnosticContextType.MapRdsToDpm,
+            contextType = DiagnosticContextType.RdsToDpmMapper,
             contextLabel = "RDS source data to DPM model"
         ) {
             val dictionaries = mutableListOf<DpmDictionary>()
