@@ -73,8 +73,14 @@ private fun mapAndValidateHierarchyNodes(
     val rootNode = HierarchyNodeRoot()
     rootNode.buildTree(workingNodes)
 
+    //Normally there should be no leftover nodes from tree building
+    //However, RDS API responses have contained occasionally faulty parent references and thus tree building has failed
     if (workingNodes.any()) {
-        diagnostic.fatal("Extension has members which are not part of hierarchy")
+        val orphanNodes = workingNodes.map {
+            "${it.concept.label} (${it.uri})"
+        }
+
+        diagnostic.fatal("Extension has members which position in hierarchy could not be determined: $orphanNodes")
     }
 
     return rootNode.createAndValidateHierarchyNodes(diagnostic)
