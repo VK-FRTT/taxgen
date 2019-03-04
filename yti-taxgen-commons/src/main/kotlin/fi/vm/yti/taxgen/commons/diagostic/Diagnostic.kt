@@ -16,5 +16,5 @@ interface Diagnostic {
         validatableInfo: ValidatableInfo? = null
     )
 
-    fun counters(): Map<Severity, Int>
+    fun haltIfUnrecoverableErrors(messageProvider: () -> String)
 }

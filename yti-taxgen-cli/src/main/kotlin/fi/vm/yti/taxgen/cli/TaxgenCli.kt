@@ -5,7 +5,6 @@ import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.commons.diagostic.Severity
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
@@ -100,9 +99,8 @@ class TaxgenCli(
                 dpmMapper.extractDpmDictionariesFromSource(sourceProvider)
             }
 
-            if (diagnosticContext.counters()[Severity.ERROR] != 0) {
-                diagnosticContext.info("Mapping failed due content errors")
-                throwHalt()
+            diagnosticContext.haltIfUnrecoverableErrors {
+                "Mapping failed due content errors"
             }
 
             val dbWriter = resolveDpmDbWriter(detectedOptions)
@@ -124,8 +122,8 @@ class TaxgenCli(
             }
         }
 
-        if (diagnosticContext.counters()[Severity.ERROR] != 0) {
-            diagnosticContext.info("Capturing failed")
+        diagnosticContext.haltIfUnrecoverableErrors {
+            "Capturing failed"
         }
     }
 

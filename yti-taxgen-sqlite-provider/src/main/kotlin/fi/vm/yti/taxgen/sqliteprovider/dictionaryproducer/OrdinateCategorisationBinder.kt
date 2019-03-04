@@ -89,7 +89,11 @@ class OrdinateCategorisationBinder(
             )
 
             diagnostic.validate(it, info)
-        } //TODO - fail if having errors?
+        }
+
+        diagnostic.haltIfUnrecoverableErrors {
+            "OrdinateCategorisation rebinding failed"
+        }
 
         transaction {
             OrdinateCategorisationTable.deleteAll()

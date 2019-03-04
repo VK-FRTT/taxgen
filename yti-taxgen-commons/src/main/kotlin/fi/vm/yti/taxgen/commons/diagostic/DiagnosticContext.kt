@@ -36,5 +36,5 @@ interface DiagnosticContext : Diagnostic {
         validatableInfo: ValidatableInfo?
     )
 
-    override fun counters(): Map<Severity, Int>
+    override fun haltIfUnrecoverableErrors(messageProvider: () -> String)
 }

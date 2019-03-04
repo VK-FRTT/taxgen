@@ -98,8 +98,13 @@ class DiagnosticBridge(
         }
     }
 
-    override fun counters(): Map<Severity, Int> {
-        return counters
+    override fun haltIfUnrecoverableErrors(messageProvider: () -> String) {
+        if (counters[FATAL] != 0) {
+            val message = messageProvider()
+            info(message)
+
+            throwHalt()
+        }
     }
 
     private fun incrementCounter(severity: Severity) {
