@@ -57,7 +57,7 @@ internal class DpmDictionary_UnitTest :
                 when (property.name) {
                     "metricDomains" ->
                         mapOf(
-                            "metricDomains" to List(length) { index -> metricDomain() },
+                            "metricDomains" to List(length) { metricDomain() },
                             "explicitDomains" to listOf(Factory.instantiate<ExplicitDomain>())
                         )
 
