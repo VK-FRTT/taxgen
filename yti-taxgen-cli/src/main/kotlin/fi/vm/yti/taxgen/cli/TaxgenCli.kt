@@ -94,9 +94,9 @@ class TaxgenCli(
 
             val sourceProvider = resolveSourceProvider(detectedOptions)
 
-            val dpmDictionaries = sourceProvider.use {
+            val dpmModel = sourceProvider.use {
                 val dpmMapper = RdsToDpmMapper(diagnosticContext)
-                dpmMapper.extractDpmDictionariesFromSource(sourceProvider)
+                dpmMapper.extractDpmModelFromSource(sourceProvider)
             }
 
             diagnosticContext.haltIfUnrecoverableErrors {
@@ -104,7 +104,7 @@ class TaxgenCli(
             }
 
             val dbWriter = resolveDpmDbWriter(detectedOptions)
-            dbWriter.writeWithDictionaries(dpmDictionaries)
+            dbWriter.writeModel(dpmModel)
         }
     }
 

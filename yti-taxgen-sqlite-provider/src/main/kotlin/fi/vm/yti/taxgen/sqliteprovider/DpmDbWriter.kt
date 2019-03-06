@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 
 interface DpmDbWriter {
 
-    fun writeWithDictionaries(dpmDictionaries: List<DpmDictionary>)
+    fun writeModel(dpmModel: DpmModel)
 }

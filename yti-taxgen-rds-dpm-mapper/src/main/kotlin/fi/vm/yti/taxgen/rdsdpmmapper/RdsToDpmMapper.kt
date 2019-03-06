@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.rdsdpmmapper
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
@@ -22,9 +23,9 @@ import fi.vm.yti.taxgen.rdsprovider.SourceProvider
 class RdsToDpmMapper(
     private val diagnosticContext: DiagnosticContext
 ) {
-    fun extractDpmDictionariesFromSource(
+    fun extractDpmModelFromSource(
         sourceProvider: SourceProvider
-    ): List<DpmDictionary> {
+    ): DpmModel {
 
         return diagnosticContext.withContext(
             contextType = DiagnosticContextType.RdsToDpmMapper,
@@ -41,9 +42,13 @@ class RdsToDpmMapper(
                 }
             }
 
-            //TODO: Validate Owner prefixes unique
+            val model = DpmModel(
+                dictionaries = dictionaries
+            )
 
-            dictionaries
+            diagnosticContext.validate(model)
+
+            model
         }
     }
 

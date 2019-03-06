@@ -35,20 +35,20 @@ internal open class RdsToDpmMapper_UnitTestBase {
     fun afterEach() {
     }
 
-    protected fun performMappingAndGetAll(fixtureName: String): List<DpmDictionary> {
+    protected fun performMappingAndGetAllDictionaries(fixtureName: String): List<DpmDictionary> {
         val fixturePath = TestFixture.pathOf(RDS_CAPTURE, fixtureName)
         val sourceProvider = ProviderFactory.folderProvider(fixturePath, diagnosticContext)
         val mapper = RdsToDpmMapper(diagnosticContext)
 
-        val dictionaries = mapper.extractDpmDictionariesFromSource(sourceProvider)
+        val model = mapper.extractDpmModelFromSource(sourceProvider)
 
         sourceProvider.close()
 
-        return dictionaries
+        return model.dictionaries
     }
 
     protected fun performMappingFromIntegrationFixture(): DpmDictionary {
-        val dictionary = performMappingAndGetAll("dm_integration_fixture").first()
+        val dictionary = performMappingAndGetAllDictionaries("dm_integration_fixture").first()
 
         val fails = diagnosticCollector.run { fatalCount + errorCount + validationCount }
 

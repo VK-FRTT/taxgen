@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
@@ -21,7 +21,7 @@ class DictionaryReplaceDbWriter(
 ) : DpmDbWriter {
     private val targetDbPath: Path = targetDbPath.toAbsolutePath().normalize()
 
-    override fun writeWithDictionaries(dpmDictionaries: List<DpmDictionary>) {
+    override fun writeModel(dpmModel: DpmModel) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.SQLiteDbWriter,
             contextIdentifier = targetDbPath.toString()
@@ -33,11 +33,12 @@ class DictionaryReplaceDbWriter(
             DbLanguages.configureLanguages()
             val languageIds = DbLanguages.resolveLanguageIds()
 
-            val ordinateCategorisationBinder = OrdinateCategorisationBinder.rememberInitialCategorizations(diagnosticContext)
+            val ordinateCategorisationBinder =
+                OrdinateCategorisationBinder.rememberInitialCategorizations(diagnosticContext)
 
             DbDictionaries.purgeDictionaryContent()
 
-            val dictionaryLookupItems = dpmDictionaries.map {
+            val dictionaryLookupItems = dpmModel.dictionaries.map {
                 val ownerId = DbOwners.lookupOwnerIdByPrefix(it.owner, diagnosticContext)
 
                 DbDictionaries.writeDictionaryBaseParts(
@@ -52,21 +53,22 @@ class DictionaryReplaceDbWriter(
                 diagnosticContext
             )
 
-            val (memberLookupItems, hierarchyLookupItems) = dpmDictionaries
-                .zip(dictionaryLookupItems)
-                .map { (dictionary, dictionaryLookupItem) ->
-                    DbDictionaries.writeDictionaryMetricsToFixedDomain(
-                        dictionary,
-                        languageIds,
-                        dictionaryLookupItem,
-                        fixedEntitiesLookupItem.metricDomainId
-                    )
-                }.reduce { accumulator, element ->
-                    Pair(
-                        accumulator.first + element.first,
-                        accumulator.second + element.second
-                    )
-                }
+            val (memberLookupItems, hierarchyLookupItems) =
+                dpmModel.dictionaries
+                    .zip(dictionaryLookupItems)
+                    .map { (dictionary, dictionaryLookupItem) ->
+                        DbDictionaries.writeDictionaryMetricsToFixedDomain(
+                            dictionary,
+                            languageIds,
+                            dictionaryLookupItem,
+                            fixedEntitiesLookupItem.metricDomainId
+                        )
+                    }.reduce { accumulator, element ->
+                        Pair(
+                            accumulator.first + element.first,
+                            accumulator.second + element.second
+                        )
+                    }
 
             val metricDictionaryLookupItem = DpmDictionaryLookupItem(
                 domainLookupItems = listOf(

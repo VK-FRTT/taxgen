@@ -24,7 +24,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
 
     @Test
     fun `should produce 3 DPM Dictionaries with proper Owners`() {
-        val dpmDictionaries = performMappingAndGetAll("3_empty_dictionaries")
+        val dpmDictionaries = performMappingAndGetAllDictionaries("3_empty_dictionaries")
 
         Assertions.assertThat(dpmDictionaries.size).isEqualTo(3)
 
@@ -71,7 +71,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
     @Test
     fun `should error when owner config JSON is broken`() {
 
-        val thrown = catchThrowable { performMappingAndGetAll("broken_owner_config_json") }
+        val thrown = catchThrowable { performMappingAndGetAllDictionaries("broken_owner_config_json") }
 
         assertThat(thrown).isInstanceOf(HaltException::class.java)
 
@@ -86,7 +86,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
 
     @Test
     fun `should error when owner name is null`() {
-        performMappingAndGetAll("broken_null_owner_name")
+        performMappingAndGetAllDictionaries("broken_null_owner_name")
 
         assertThat(diagnosticCollector.eventsString()).contains(
             "VALIDATION",
@@ -97,7 +97,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
 
     @Test
     fun `should error when owner name is blank`() {
-        performMappingAndGetAll("broken_empty_owner_name")
+        performMappingAndGetAllDictionaries("broken_empty_owner_name")
 
         assertThat(diagnosticCollector.eventsString()).contains(
             "VALIDATION",
@@ -108,7 +108,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
 
     @Test
     fun `should error when owner has unsupported language`() {
-        performMappingAndGetAll("broken_unsupported_owner_language")
+        performMappingAndGetAllDictionaries("broken_unsupported_owner_language")
 
         assertThat(diagnosticCollector.eventsString()).contains(
             "VALIDATION",

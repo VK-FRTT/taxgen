@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.dpmmodel.unitestbase
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -11,6 +12,7 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
@@ -157,6 +159,29 @@ internal open class DpmModel_UnitTestBase<T : Any>(
             concept = Factory.instantiate(),
             metrics = listOf(Factory.instantiate()),
             hierarchies = listOf()
+        )
+    }
+
+    protected fun owner(baseId: String): Owner {
+        return Owner(
+            name = "name_$baseId",
+            namespace = "namespace_$baseId",
+            prefix = "prefix_$baseId",
+            location = "location_$baseId",
+            copyright = "copyright_$baseId",
+            languageCodes = listOf("en"),
+            defaultLanguageCode = "en"
+        )
+    }
+
+    protected fun emptyDictionaryWithOwner(ownerBaseId: String): DpmDictionary {
+        return DpmDictionary(
+            owner = owner(ownerBaseId),
+            explicitDomains = emptyList(),
+            typedDomains = emptyList(),
+            explicitDimensions = emptyList(),
+            typedDimensions = emptyList(),
+            metricDomains = emptyList()
         )
     }
 }

@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
@@ -64,7 +65,9 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         val diagnosticCollector = DiagnosticCollector()
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val dictionaries = dpmDictionaryFixture(variety)
+        val model = DpmModel(
+            dictionaries = listOf(dpmDictionaryFixture(variety))
+        )
 
         val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
             dbPath,
@@ -72,7 +75,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             diagnosticContext
         )
 
-        dbWriter.writeWithDictionaries(dictionaries)
+        dbWriter.writeModel(model)
 
         dictionaryCreateDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
@@ -92,14 +95,16 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         val diagnosticCollector = DiagnosticCollector()
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val dictionaries = dpmDictionaryFixture(FixtureVariety.NONE)
+        val model = DpmModel(
+            dictionaries = listOf(dpmDictionaryFixture(FixtureVariety.NONE))
+        )
 
         val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
             dbPath,
             diagnosticContext
         )
 
-        dbWriter.writeWithDictionaries(dictionaries)
+        dbWriter.writeModel(model)
 
         dictionaryReplaceDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 

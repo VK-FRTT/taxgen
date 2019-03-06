@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
@@ -21,7 +21,7 @@ class DictionaryCreateDbWriter(
 ) : DpmDbWriter {
     private val targetDbPath: Path = targetDbPath.toAbsolutePath().normalize()
 
-    override fun writeWithDictionaries(dpmDictionaries: List<DpmDictionary>) {
+    override fun writeModel(dpmModel: DpmModel) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.SQLiteDbWriter,
             contextIdentifier = targetDbPath.toString()
@@ -39,7 +39,7 @@ class DictionaryCreateDbWriter(
 
             DbDictionaries.purgeDictionaryContent()
 
-            val dictionaryLookupItems = dpmDictionaries.map {
+            val dictionaryLookupItems = dpmModel.dictionaries.map {
                 val ownerId = DbOwners.writeOwner(it.owner)
 
                 DbDictionaries.writeDictionaryBaseParts(
@@ -54,7 +54,7 @@ class DictionaryCreateDbWriter(
                 diagnosticContext
             )
 
-            dpmDictionaries
+            dpmModel.dictionaries
                 .zip(dictionaryLookupItems)
                 .forEach { (dictionary, dictionaryLookupItem) ->
                     DbDictionaries.writeDictionaryMetricsToFixedDomain(

@@ -25,7 +25,7 @@ enum class FixtureVariety {
     NO_EN_TRANSLATIONS
 }
 
-fun dpmDictionaryFixture(variety: FixtureVariety): List<DpmDictionary> {
+fun dpmDictionaryFixture(variety: FixtureVariety): DpmDictionary {
     fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
     val dpmOwner = Owner(
@@ -369,7 +369,7 @@ fun dpmDictionaryFixture(variety: FixtureVariety): List<DpmDictionary> {
         validateDictionaryContents(dictionary)
     }
 
-    return listOf(dictionary)
+    return dictionary
 }
 
 private fun validateDictionaryContents(dpmDictionary: DpmDictionary) {
