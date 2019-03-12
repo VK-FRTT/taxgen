@@ -12,21 +12,19 @@ internal class TaxgenCli_Help_Test : TaxgenCli_TestBase(
     @Test
     fun `Should list available command line options`() {
         val args = arrayOf("--help")
-        val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).isBlank()
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "--help",
-            "--create-dictionary-to-new-dpm-db",
-            "--capture-dpm-sources-to-folder",
-            "--capture-dpm-sources-to-zip",
-            "--force-overwrite",
-            "--source-config",
-            "--source-folder",
-            "--source-zip"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "--help",
+                "--create-dictionary-to-new-dpm-db",
+                "--capture-dpm-sources-to-folder",
+                "--capture-dpm-sources-to-zip",
+                "--force-overwrite",
+                "--source-config",
+                "--source-folder",
+                "--source-zip"
+            )
+        }
     }
 }

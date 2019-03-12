@@ -18,14 +18,15 @@ internal class TaxgenCli_Common_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when no options are given`() {
         val args = emptyArray<String>()
-        val (status, outText, errText) = executeCli(args)
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "No options given (-h will show valid options)"
-        )
-        assertThat(outText).isBlank()
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        executeCliAndExpectFail(args) { outText, errText ->
+
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "No options given (-h will show valid options)"
+            )
+            assertThat(outText).isBlank()
+        }
     }
 
     @Test
@@ -37,13 +38,13 @@ internal class TaxgenCli_Common_Test : TaxgenCli_TestBase(
             "${tempFolder.resolve("output_capture")}"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single command with proper argument must be given"
-        )
-        assertThat(outText).isBlank()
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single command with proper argument must be given"
+            )
+            assertThat(outText).isBlank()
+        }
     }
 }

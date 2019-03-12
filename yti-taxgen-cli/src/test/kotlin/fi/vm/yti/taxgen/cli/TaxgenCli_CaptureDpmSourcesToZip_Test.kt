@@ -28,19 +28,17 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources",
-            "DPM source recorder: ZIP file",
-            "DPM source: folder",
-            "Capturing DPM sources: OK"
-        )
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources",
+                "DPM source recorder: ZIP file",
+                "DPM source: folder",
+                "Capturing DPM sources: OK"
+            )
 
-        assertThat(errText).isBlank()
-        assertThat(targetZipPath).exists().isRegularFile()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(targetZipPath).exists().isRegularFile()
+        }
     }
 
     @Test
@@ -52,20 +50,17 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceConfigPath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources",
-            "DPM source recorder: ZIP file",
-            "DPM source: Reference Data service",
-            "Capturing DPM sources: OK"
-        )
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources",
+                "DPM source recorder: ZIP file",
+                "DPM source: Reference Data service",
+                "Capturing DPM sources: OK"
+            )
 
-        assertThat(errText).isBlank()
-
-        assertThat(targetZipPath).exists().isRegularFile()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(targetZipPath).exists().isRegularFile()
+        }
     }
 
     @Test
@@ -80,20 +75,17 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources",
-            "DPM source recorder: ZIP file",
-            "DPM source: folder",
-            "Capturing DPM sources: OK"
-        )
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources",
+                "DPM source recorder: ZIP file",
+                "DPM source: folder",
+                "Capturing DPM sources: OK"
+            )
 
-        assertThat(errText).isBlank()
-
-        assertThat(targetZipPath).exists().isRegularFile()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(targetZipPath).exists().isRegularFile()
+        }
     }
 
     @Test
@@ -104,16 +96,15 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).isBlank()
+            assertThat(outText).isBlank()
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single command with proper argument must be given"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single command with proper argument must be given"
+            )
+        }
     }
 
     @Test
@@ -127,19 +118,16 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources",
-            "DPM source recorder: ZIP file",
-            "FATAL: Target file '$targetZipPath' already exists"
-        )
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources",
+                "DPM source recorder: ZIP file",
+                "FATAL: Target file '$targetZipPath' already exists"
+            )
 
-        assertThat(errText).isBlank()
-
-        assertThat(targetZipPath).exists().isRegularFile()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(targetZipPath).exists().isRegularFile()
+        }
     }
 
     @Test
@@ -151,17 +139,14 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources",
-            "DPM source recorder: ZIP file",
-            "FATAL: Target file '${tempFolder.path()}' already exists"
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources",
+                "DPM source recorder: ZIP file",
+                "FATAL: Target file '${tempFolder.path()}' already exists"
+            )
+        }
     }
 
     @Test
@@ -171,18 +156,17 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$targetZipPath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources"
-        )
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources"
+            )
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single source with proper argument must be given"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single source with proper argument must be given"
+            )
+        }
     }
 
     @Test
@@ -193,16 +177,15 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "--source-folder"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).isBlank()
+            assertThat(outText).isBlank()
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Option source-folder requires an argument"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option source-folder requires an argument"
+            )
+        }
     }
 
     @Test
@@ -214,16 +197,15 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "${tempFolder.resolve("non_existing_folder")}"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).isBlank()
+            assertThat(outText).isBlank()
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Option source-folder: Directory", "does not exist"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option source-folder: Directory", "does not exist"
+            )
+        }
     }
 
     @Test
@@ -237,17 +219,16 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "$dpmSourceConfigPath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).containsSubsequence(
-            "Capturing DPM sources"
-        )
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources"
+            )
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single source with proper argument must be given"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single source with proper argument must be given"
+            )
+        }
     }
 }

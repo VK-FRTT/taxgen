@@ -32,23 +32,21 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(errText).isBlank()
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database",
-            "Writing dictionaries to DPM database: OK"
-        )
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "Writing dictionaries to DPM database: OK"
+            )
 
-        assertThat(targetDbPath).exists().isRegularFile()
+            assertThat(targetDbPath).exists().isRegularFile()
 
-        assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
-            "#OwnerNameInDB",
-            "EuroFiling",
-            "DM Integration Fixture"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
+                "#OwnerNameInDB",
+                "EuroFiling",
+                "DM Integration Fixture"
+            )
+        }
     }
 
     @Test
@@ -63,18 +61,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database",
-            "Writing dictionaries to DPM database: OK"
-        )
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "Writing dictionaries to DPM database: OK"
+            )
 
-        assertThat(errText).isBlank()
-
-        assertThat(targetDbPath).exists().isRegularFile()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(targetDbPath).exists().isRegularFile()
+        }
     }
 
     @Test
@@ -85,16 +80,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).isBlank()
+            assertThat(outText).isBlank()
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single command with proper argument must be given"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single command with proper argument must be given"
+            )
+        }
     }
 
     @Test
@@ -108,22 +102,19 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database",
-            "FATAL: Target file '$targetDbPath' already exists"
-        )
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "FATAL: Target file '$targetDbPath' already exists"
+            )
 
-        assertThat(errText).isBlank()
-
-        assertThat(targetDbPath).exists().isRegularFile()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(targetDbPath).exists().isRegularFile()
+        }
     }
 
     @Test
-    fun `Should fail when given target database path points to folder`() {
+    fun `Should report error when given target database path points to folder`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
             "${tempFolder.path()}",
@@ -131,16 +122,13 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceCapturePath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database",
-            "FATAL: Target file '${tempFolder.path()}' already exists"
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "FATAL: Target file '${tempFolder.path()}' already exists"
+            )
+        }
     }
 
     @Test
@@ -150,18 +138,17 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$targetDbPath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database"
-        )
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database"
+            )
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single source with proper argument must be given"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single source with proper argument must be given"
+            )
+        }
     }
 
     @Test
@@ -172,16 +159,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-folder"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).isBlank()
+            assertThat(outText).isBlank()
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Option source-folder requires an argument"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option source-folder requires an argument"
+            )
+        }
     }
 
     @Test
@@ -193,16 +179,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "${tempFolder.resolve("non_existing_folder")}"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).isBlank()
+            assertThat(outText).isBlank()
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Option source-folder: Directory", "does not exist"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option source-folder: Directory", "does not exist"
+            )
+        }
     }
 
     @Test
@@ -216,18 +201,17 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceConfigPath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database"
-        )
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database"
+            )
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Single source with proper argument must be given"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Single source with proper argument must be given"
+            )
+        }
     }
 
     @Disabled
@@ -240,11 +224,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "${tempFolder.path()}"
         )
 
-        val (status, outText, errText) = executeCli(args)
-
-        assertThat(outText).isBlank()
-        assertThat(errText).isBlank()
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+        executeCliAndExpectFail(args) { outText, errText ->
+            assertThat(outText).isBlank()
+            assertThat(errText).isBlank()
+        }
     }
 
     @Test
@@ -256,28 +239,25 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "$dpmSourceConfigPath"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database",
-            "RDS to DPM mapper",
-            "DPM source: Reference Data service",
-            "Configuration file: (dm_integration_fixture.json)",
-            "Configuration file: OK",
-            "Writing dictionaries to DPM database: OK"
-        )
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "RDS to DPM mapper",
+                "DPM source: Reference Data service",
+                "Configuration file: (dm_integration_fixture.json)",
+                "Configuration file: OK",
+                "Writing dictionaries to DPM database: OK"
+            )
 
-        assertThat(errText).isBlank()
+            assertThat(targetDbPath).exists().isRegularFile()
 
-        assertThat(targetDbPath).exists().isRegularFile()
-
-        assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
-            "#OwnerNameInDB",
-            "EuroFiling",
-            "DM Integration Fixture"
-        )
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(fetchDpmOwnersFromTargetDb()).containsExactlyInAnyOrder(
+                "#OwnerNameInDB",
+                "EuroFiling",
+                "DM Integration Fixture"
+            )
+        }
     }
 
     @Test
@@ -289,18 +269,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_source_config_json.json")
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "Writing dictionaries to DPM database",
-            "DPM source: Reference Data service",
-            "Configuration file: (broken_source_config_json.json)",
-            "FATAL: Processing JSON content failed: "
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "DPM source: Reference Data service",
+                "Configuration file: (broken_source_config_json.json)",
+                "FATAL: Processing JSON content failed: "
+            )
+        }
     }
 
     @Test
@@ -312,15 +289,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "${tempFolder.resolve("non_existing_config.json")}"
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectFail(args) { outText, errText ->
 
-        assertThat(errText).containsSubsequence(
-            "yti-taxgen:",
-            "Option source-config: File", "does not exist"
-        )
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option source-config: File", "does not exist"
+            )
 
-        assertThat(outText).isBlank()
-        assertThat(status).isEqualTo(TAXGEN_CLI_FAIL)
+            assertThat(outText).isBlank()
+        }
     }
 
     @Test
@@ -332,18 +309,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json")
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "DPM dictionary", "codelist_uri_unknown_codelist",
-            "Codelist",
-            "Content URLs",
-            "FATAL: JSON content fetch failed: HTTP 404 (Not Found)"
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "DPM dictionary", "codelist_uri_unknown_codelist",
+                "Codelist",
+                "Content URLs",
+                "FATAL: JSON content fetch failed: HTTP 404 (Not Found)"
+            )
+        }
     }
 
     @Test
@@ -355,18 +329,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json")
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "DPM dictionary", "codelist_uri_unresolvable_host",
-            "Codelist",
-            "Content URLs",
-            "FATAL: Could not determine the server IP address"
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "DPM dictionary", "codelist_uri_unresolvable_host",
+                "Codelist",
+                "Content URLs",
+                "FATAL: Could not determine the server IP address"
+            )
+        }
     }
 
     @Test
@@ -378,18 +349,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json")
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "DPM dictionary", "codelist_uri_bad_protocol",
-            "Codelist",
-            "Content URLs",
-            "FATAL: Malformed URI"
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "DPM dictionary", "codelist_uri_bad_protocol",
+                "Codelist",
+                "Content URLs",
+                "FATAL: Malformed URI"
+            )
+        }
     }
 
     @Test
@@ -401,18 +369,15 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             tempTestFixture(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json")
         )
 
-        val (status, outText, errText) = executeCli(args)
+        executeCliAndExpectSuccess(args) { outText ->
 
-        assertThat(outText).containsSubsequence(
-            "DPM dictionary", "codelist_uri_non_responsive_host_ip",
-            "Codelist",
-            "Content URLs",
-            "FATAL: Could not connect the server"
-        )
-
-        assertThat(errText).isBlank()
-
-        assertThat(status).isEqualTo(TAXGEN_CLI_SUCCESS)
+            assertThat(outText).containsSubsequence(
+                "DPM dictionary", "codelist_uri_non_responsive_host_ip",
+                "Codelist",
+                "Content URLs",
+                "FATAL: Could not connect the server"
+            )
+        }
     }
 
     private fun fetchDpmOwnersFromTargetDb(): List<String> {

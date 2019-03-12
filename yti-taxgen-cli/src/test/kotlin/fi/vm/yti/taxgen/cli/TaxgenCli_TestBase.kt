@@ -71,7 +71,7 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         }
     }
 
-    protected fun executeCli(args: Array<String>): ExecuteResult {
+    private fun executeCli(args: Array<String>): ExecuteResult {
         if (primaryCommand != null) {
             assertThat(args).contains(primaryCommand)
         }
@@ -90,6 +90,26 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         return result
     }
 
+    protected fun executeCliAndExpectSuccess(args: Array<String>, verifier: (String) -> Unit) {
+        val result = executeCli(args)
+
+        assertThat(result.errText).isBlank()
+
+        verifier(result.outText)
+
+        assertThat(result.status).isEqualTo(TAXGEN_CLI_SUCCESS)
+    }
+
+    protected fun executeCliAndExpectFail(args: Array<String>, verifier: (String, String) -> Unit) {
+        val result = executeCli(args)
+
+        assertThat(result.errText).isNotBlank()
+
+        verifier(result.outText, result.errText)
+
+        assertThat(result.status).isEqualTo(TAXGEN_CLI_FAIL)
+    }
+
     private class PrintStreamCollector(val charset: Charset) {
         private val baos = ByteArrayOutputStream()
         private val ps = PrintStream(baos, true, charset.name())
@@ -102,7 +122,7 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         }
     }
 
-    protected data class ExecuteResult(
+    private data class ExecuteResult(
         val status: Int,
         val outText: String,
         val errText: String
