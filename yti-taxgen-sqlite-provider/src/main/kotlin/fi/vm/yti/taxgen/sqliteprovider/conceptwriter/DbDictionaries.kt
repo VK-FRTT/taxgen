@@ -103,27 +103,35 @@ object DbDictionaries {
         metricDomainId: EntityID<Int>
     ): Pair<List<MemberLookupItem>, List<HierarchyLookupItem>> {
 
-        return dpmDictionary.metricDomains.map { metricDomain ->
+        val lookupItems: List<Pair<List<MemberLookupItem>, List<HierarchyLookupItem>>> =
+            dpmDictionary.metricDomains.map { metricDomain ->
 
-            val memberLookupItems = DbMetric.writeMetricDomainMembers(
-                metricDomain,
-                dpmDictionary.owner,
-                metricDomainId,
-                dpmDictionaryLookupItem.ownerId,
-                languageIds,
-                dpmDictionaryLookupItem.domainLookupItems
+                val memberLookupItems = DbMetric.writeMetricDomainMembers(
+                    metricDomain,
+                    dpmDictionary.owner,
+                    metricDomainId,
+                    dpmDictionaryLookupItem.ownerId,
+                    languageIds,
+                    dpmDictionaryLookupItem.domainLookupItems
+                )
+
+                val hierarchyLookupItems = DbHierarchies.writeHierarchiesAndAndNodes(
+                    metricDomain.hierarchies,
+                    metricDomainId,
+                    dpmDictionaryLookupItem.ownerId,
+                    languageIds,
+                    memberLookupItems
+                )
+
+                Pair(memberLookupItems, hierarchyLookupItems)
+            }
+
+        return lookupItems.fold(
+            Pair(
+                emptyList(),
+                emptyList()
             )
-
-            val hierarchyLookupItems = DbHierarchies.writeHierarchiesAndAndNodes(
-                metricDomain.hierarchies,
-                metricDomainId,
-                dpmDictionaryLookupItem.ownerId,
-                languageIds,
-                memberLookupItems
-            )
-
-            Pair(memberLookupItems, hierarchyLookupItems)
-        }.reduce { accumulator, element ->
+        ) { accumulator, element ->
             Pair(
                 accumulator.first + element.first,
                 accumulator.second + element.second

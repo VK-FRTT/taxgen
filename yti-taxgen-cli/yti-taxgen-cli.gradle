@@ -31,6 +31,8 @@ dependencies {
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams
     testCompile libs.assertjCore
+    testCompile libs.jacksonKotlin
+    testCompile libs.jacksonJsr310
     testCompile(project(':yti-taxgen-commons'))
     testCompile(project(':yti-taxgen-test-commons'))
 

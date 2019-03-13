@@ -99,7 +99,7 @@ class DiagnosticBridge(
     }
 
     override fun haltIfUnrecoverableErrors(messageProvider: () -> String) {
-        if (counters[FATAL] != 0) {
+        if (counters[FATAL] != 0 || counters[ERROR] != 0) {
             val message = messageProvider()
             info(message)
 

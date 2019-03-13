@@ -141,7 +141,9 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
             """
         )
 
-        replaceDictionaryInDb()
+        val thrown = catchThrowable { replaceDictionaryInDb() }
+
+        assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.events).containsSubsequence(
             "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
@@ -158,7 +160,9 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
             """
         )
 
-        replaceDictionaryInDb()
+        val thrown = catchThrowable { replaceDictionaryInDb() }
+
+        assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.events).containsSubsequence(
             "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
@@ -176,7 +180,9 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
             """
         )
 
-        replaceDictionaryInDb()
+        val thrown = catchThrowable { replaceDictionaryInDb() }
+
+        assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.events).contains(
             "VALIDATION [OrdinateCategorisationBindingData.memberId: does not have value]"
@@ -192,7 +198,9 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
             """
         )
 
-        replaceDictionaryInDb()
+        val thrown = catchThrowable { replaceDictionaryInDb() }
+
+        assertThat(thrown).isInstanceOf(HaltException::class.java)
 
         assertThat(diagnosticCollector.events).contains(
             "VALIDATION [OrdinateCategorisationBindingData.dpsMemberXbrlCode: is blank]",
