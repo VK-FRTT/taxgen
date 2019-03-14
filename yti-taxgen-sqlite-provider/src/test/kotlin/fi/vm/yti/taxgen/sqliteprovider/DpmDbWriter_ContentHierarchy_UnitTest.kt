@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -75,12 +75,14 @@ internal class DpmDbWriter_ContentHierarchy_UnitTest : DpmDbWriter_ContentUnitTe
 
     @Test
     fun `should detect when multiple HierarchyNodes refer same Member`() {
-        val thrown =
-            catchThrowable { initDbViaDictionaryCreate(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) }
+        val context = initDbViaDictionaryCreate(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
 
-        assertThat(thrown)
-            .isInstanceOf(org.jetbrains.exposed.exceptions.ExposedSQLException::class.java)
-            .hasMessageContaining("UNIQUE constraint failed")
-            .hasMessageContaining("mHierarchyNode.HierarchyID, mHierarchyNode.MemberID")
+        assertThat(context.dbWriteException).isInstanceOf(HaltException::class.java)
+
+        assertThat(context.diagnosticCollector.eventsString()).contains(
+            "FATAL",
+            "UNIQUE constraint failed",
+            "mHierarchyNode.HierarchyID, mHierarchyNode.MemberID"
+        )
     }
 }

@@ -1,8 +1,10 @@
 package fi.vm.yti.taxgen.commons.diagostic
 
+import fi.vm.yti.taxgen.commons.FailException
+import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
 import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.Severity.INFO
@@ -36,13 +38,21 @@ class DiagnosticBridge(
         contextStack.push(info)
         consumer.contextEnter(contextStack)
 
-        val ret = action()
+        try {
+            val ret = action()
 
-        val retired = contextStack.pop()
-        previousRetiredContext = retired
-        consumer.contextExit(contextStack, retired)
+            val retired = contextStack.pop()
+            previousRetiredContext = retired
+            consumer.contextExit(contextStack, retired)
 
-        return ret
+            return ret
+        } catch (haltEx: HaltException) {
+            throw haltEx
+        } catch (failEx: FailException) {
+            throw failEx
+        } catch (ex: Exception) {
+            fatal(ex.message ?: ex.javaClass.simpleName)
+        }
     }
 
     override fun updateCurrentContextDetails(label: String?, identifier: String?) {

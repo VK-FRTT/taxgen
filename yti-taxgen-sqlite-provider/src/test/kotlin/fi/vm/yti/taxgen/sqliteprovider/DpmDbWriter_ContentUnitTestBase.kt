@@ -21,6 +21,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
 
     data class TestContext(
         val mode: DbInitMode,
+        val dbWriteException: Throwable?,
         val dbConnection: Connection,
         val diagnosticCollector: DiagnosticCollector
     )
@@ -69,18 +70,21 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             dictionaries = listOf(dpmDictionaryFixture(variety))
         )
 
-        val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
-            dbPath,
-            false,
-            diagnosticContext
-        )
+        val dbWriteException = catchException {
+            val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
+                dbPath,
+                false,
+                diagnosticContext
+            )
 
-        dbWriter.writeModel(model)
+            dbWriter.writeModel(model)
+        }
 
         dictionaryCreateDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
         return TestContext(
             mode = DbInitMode.DICTIONARY_CREATE,
+            dbWriteException = dbWriteException,
             dbConnection = dictionaryCreateDbConnection,
             diagnosticCollector = diagnosticCollector
         )
@@ -99,19 +103,32 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             dictionaries = listOf(dpmDictionaryFixture(FixtureVariety.NONE))
         )
 
-        val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
-            dbPath,
-            diagnosticContext
-        )
+        val dbWriteException = catchException {
+            val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
+                dbPath,
+                diagnosticContext
+            )
 
-        dbWriter.writeModel(model)
+            dbWriter.writeModel(model)
+        }
 
         dictionaryReplaceDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
         return TestContext(
             mode = DbInitMode.DICTIONARY_REPLACE,
+            dbWriteException = dbWriteException,
             dbConnection = dictionaryReplaceDbConnection,
             diagnosticCollector = diagnosticCollector
         )
+    }
+
+    private fun catchException(action: () -> Unit): Throwable? {
+        try {
+            action()
+        } catch (throwable: Throwable) {
+            return throwable
+        }
+
+        return null
     }
 }

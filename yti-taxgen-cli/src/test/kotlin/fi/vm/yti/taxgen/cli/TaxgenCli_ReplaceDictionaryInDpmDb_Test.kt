@@ -1,30 +1,30 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
 
-@DisplayName("Command ´--create-dictionary-to-new-dpm-db´")
-internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
-    primaryCommand = "--create-dictionary-to-new-dpm-db"
+@DisplayName("Command ´--replace-dictionary-in-dpm-db´")
+internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
+    primaryCommand = "--replace-dictionary-in-dpm-db"
 ) {
 
     private lateinit var targetDbPath: Path
 
     @BeforeEach
     fun init() {
-        targetDbPath = tempFolder.resolve("dpm.db")
+        targetDbPath = cloneTestFixtureToTemp(TestFixture.Type.DPM_DB, "dm_integration_fixture_pre_filled.db")
     }
 
     @Test
-    fun `Should produce database from DPM source capture`() {
+    fun `Should replace dictionary within database from DPM source capture`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath"
@@ -56,32 +56,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should overwrite target database file when force option is given`() {
-        Files.write(targetDbPath, "Existing file".toByteArray())
-
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
-            "--force-overwrite",
-            "--source-folder",
-            "$dpmSourceCapturePath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "Writing dictionaries to DPM database",
-                "Writing dictionaries to DPM database: OK"
-            )
-
-            assertThat(targetDbPath).exists().isRegularFile()
-        }
-    }
-
-    @Test
     fun `Should fail when target database filename is not given`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "--source-folder",
             "$dpmSourceCapturePath"
         )
@@ -98,11 +75,11 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when target database file already exists`() {
+    fun `Should report error when target file is not database`() {
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath"
@@ -112,7 +89,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "FATAL: Target file '$targetDbPath' already exists"
+                "FATAL: org.sqlite.SQLiteException: [SQLITE_NOTADB]  File opened that is not a database file (file is not a database)"
             )
 
             assertThat(targetDbPath).exists().isRegularFile()
@@ -122,7 +99,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when given target database path points to folder`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "${tempFolder.path()}",
             "--source-folder",
             "$dpmSourceCapturePath"
@@ -132,7 +109,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "FATAL: Target file '${tempFolder.path()}' already exists"
+                "FATAL: Target database file open failed: The database has been closed"
             )
         }
     }
@@ -140,7 +117,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath"
         )
 
@@ -160,7 +137,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-folder"
         )
@@ -179,7 +156,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "${tempFolder.resolve("non_existing_folder")}"
@@ -199,7 +176,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath",
@@ -220,26 +197,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
-    @Disabled
     @Test
-    fun `Should fail when source capture folder is empty`() {
+    fun `Should replace dictionary within database from DPM source config`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
-            "--source-folder",
-            "${tempFolder.path()}"
-        )
-
-        executeCliAndExpectFail(args) { outText, errText ->
-            assertThat(outText).isBlank()
-            assertThat(errText).isBlank()
-        }
-    }
-
-    @Test
-    fun `Should produce database from DPM source config`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$dpmSourceConfigPath"
@@ -283,7 +244,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         )
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$partialSourceConfigPath"
@@ -301,7 +262,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from DPM source config having Metrics and ExpDoms`() {
+    fun `Should replace dictionary within database from DPM source config having Metrics and ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
             configPath = dpmSourceConfigPath,
             nameTag = "Partial With Metrics and ExpDoms",
@@ -309,7 +270,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         )
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$partialSourceConfigPath"
@@ -325,7 +286,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             assertThat(fetchDpmOwnersFromDb(targetDbPath)).containsExactlyInAnyOrder(
                 "#OwnerNameInDB",
                 "EuroFiling",
-                "DM Integration Fixture / Partial With Metrics and ExpDoms"
+                "DM Integration Fixture"
             )
 
             assertThat(fetchElementCodesFromDb(targetDbPath)).containsExactly(
@@ -339,7 +300,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from DPM source config having ExpDoms only`() {
+    fun `Should replace dictionary within database from DPM source config having ExpDoms only`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
             configPath = dpmSourceConfigPath,
@@ -348,7 +309,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         )
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$partialSourceConfigPath"
@@ -364,7 +325,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             assertThat(fetchDpmOwnersFromDb(targetDbPath)).containsExactlyInAnyOrder(
                 "#OwnerNameInDB",
                 "EuroFiling",
-                "DM Integration Fixture / Partial With ExpDoms"
+                "DM Integration Fixture"
             )
 
             assertThat(fetchElementCodesFromDb(targetDbPath)).containsExactly(
@@ -378,7 +339,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from DPM source config having TypDoms only`() {
+    fun `Should replace dictionary within database from DPM source config having TypDoms only`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
             configPath = dpmSourceConfigPath,
@@ -387,7 +348,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         )
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$partialSourceConfigPath"
@@ -403,7 +364,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             assertThat(fetchDpmOwnersFromDb(targetDbPath)).containsExactlyInAnyOrder(
                 "#OwnerNameInDB",
                 "EuroFiling",
-                "DM Integration Fixture / Partial With TypDoms"
+                "DM Integration Fixture"
             )
 
             assertThat(fetchElementCodesFromDb(targetDbPath)).containsExactly(
@@ -417,7 +378,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from DPM source config having ExpDims and ExpDoms`() {
+    fun `Should replace dictionary within database from DPM source config having ExpDims and ExpDoms`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
             configPath = dpmSourceConfigPath,
@@ -426,7 +387,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         )
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$partialSourceConfigPath"
@@ -442,7 +403,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             assertThat(fetchDpmOwnersFromDb(targetDbPath)).containsExactlyInAnyOrder(
                 "#OwnerNameInDB",
                 "EuroFiling",
-                "DM Integration Fixture / Partial With ExpDims and ExpDoms"
+                "DM Integration Fixture"
             )
 
             assertThat(fetchElementCodesFromDb(targetDbPath)).containsExactly(
@@ -456,7 +417,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should produce database from DPM source config having TypDims and TypDoms`() {
+    fun `Should replace dictionary within database from DPM source config having TypDims and TypDoms`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
             configPath = dpmSourceConfigPath,
@@ -465,7 +426,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         )
 
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "$partialSourceConfigPath"
@@ -481,7 +442,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             assertThat(fetchDpmOwnersFromDb(targetDbPath)).containsExactlyInAnyOrder(
                 "#OwnerNameInDB",
                 "EuroFiling",
-                "DM Integration Fixture / Partial With TypDims and TypDoms"
+                "DM Integration Fixture"
             )
 
             assertThat(fetchElementCodesFromDb(targetDbPath)).containsExactly(
@@ -497,7 +458,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config file is broken JSON`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_source_config_json.json").toString()
@@ -517,7 +478,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should fail when source config file does not exist`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             "${tempFolder.resolve("non_existing_config.json")}"
@@ -537,7 +498,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config links to non existing DPM code list`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString()
@@ -557,7 +518,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config links to unresolvable DPM host name`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json").toString()
@@ -577,7 +538,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config has URI with bad protocol`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json").toString()
@@ -597,7 +558,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when source config URI points to non-responsive host IP`() {
         val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
+            "--replace-dictionary-in-dpm-db",
             "$targetDbPath",
             "--source-config",
             cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json").toString()

@@ -1,10 +1,14 @@
 package fi.vm.yti.taxgen.cli
 
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.TestFixture
+import fi.vm.yti.taxgen.testcommons.TestFixture.Type.DPM_DB
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_CAPTURE
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
+import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -12,6 +16,10 @@ import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.sql.DriverManager
 
 open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
@@ -28,8 +36,8 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        dpmSourceCapturePath = tempTestFixture(RDS_CAPTURE, "dm_integration_fixture")
-        dpmSourceConfigPath = tempTestFixture(RDS_SOURCE_CONFIG, "dm_integration_fixture.json")
+        dpmSourceCapturePath = cloneTestFixtureToTemp(RDS_CAPTURE, "dm_integration_fixture").toString()
+        dpmSourceConfigPath = cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "dm_integration_fixture.json").toString()
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)
@@ -48,10 +56,10 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         tempFolder.close()
     }
 
-    protected fun tempTestFixture(
+    protected fun cloneTestFixtureToTemp(
         fixtureType: TestFixture.Type,
         fixtureName: String
-    ): String {
+    ): Path {
 
         val fixturePath = TestFixture.pathOf(fixtureType, fixtureName)
 
@@ -60,12 +68,17 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
             RDS_CAPTURE -> tempFolder.copyFolderRecursivelyUnderSubfolder(
                 fixturePath,
                 fixtureType.folderName
-            ).toString()
+            )
 
             RDS_SOURCE_CONFIG -> tempFolder.copyFileToSubfolder(
                 fixturePath,
                 fixtureType.folderName
-            ).toString()
+            )
+
+            DPM_DB -> tempFolder.copyFileToSubfolder(
+                fixturePath,
+                fixtureType.folderName
+            )
 
             else -> thisShouldNeverHappen("Unsupported fixture type")
         }
@@ -127,4 +140,118 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         val outText: String,
         val errText: String
     )
+
+    fun fetchDpmOwnersFromDb(dbPath: Path): List<String> {
+        val dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+        val rows = dbConnection.createStatement().executeQuery(
+            """
+                SELECT
+                    mOwner.OwnerName AS 'OwnerNameInDB'
+                FROM mOwner
+                ORDER BY mOwner.OwnerName DESC
+            """
+        ).toStringList()
+
+        return rows
+    }
+
+    fun fetchElementCodesFromDb(dbPath: Path): List<String> {
+        val labels = mutableListOf<String>()
+
+        fun populateElementCodes(elementKind: String, query: String) {
+            val dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+            val elementLabels = dbConnection.createStatement().executeQuery(query).toStringList(false)
+
+            labels.add("#$elementKind $elementLabels")
+        }
+
+        populateElementCodes(
+            "Metrics",
+            """
+            SELECT mMember.MemberCode
+            FROM mMetric
+            INNER JOIN mMember on mMetric.CorrespondingMemberID = mMember.MemberID
+            ORDER BY mMember.MemberCode ASC
+            """
+        )
+
+        populateElementCodes(
+            "ExpDoms",
+            """
+            SELECT mDomain.DomainCode
+            FROM mDomain
+            WHERE mDomain.IsTypedDomain = 0
+            ORDER BY mDomain.DomainCode ASC
+            """
+        )
+
+        populateElementCodes(
+            "TypDoms",
+            """
+            SELECT mDomain.DomainCode
+            FROM mDomain
+            WHERE mDomain.IsTypedDomain = 1
+            ORDER BY mDomain.DomainCode ASC
+            """
+        )
+
+        populateElementCodes(
+            "ExpDims",
+            """
+            SELECT mDimension.DimensionCode
+            FROM mDimension
+            WHERE mDimension.IsTypedDimension = 0
+            ORDER BY mDimension.DimensionCode ASC
+            """
+        )
+
+        populateElementCodes(
+            "TypDims",
+            """
+            SELECT mDimension.DimensionCode
+            FROM mDimension
+            WHERE mDimension.IsTypedDimension = 1
+            ORDER BY mDimension.DimensionCode ASC
+            """
+        )
+
+        return labels
+    }
+
+    fun clonePartialSourceConfigFromConfig(
+        configPath: String,
+        nameTag: String,
+        retainedElementSources: List<String>
+    ): Path {
+        val mapper = jacksonObjectMapper()
+
+        val configReader = Files.newBufferedReader(Paths.get(configPath))
+        val config = mapper.readTree(configReader.readText())
+
+        val ownerNode = config.at("/dpmDictionaries/0/owner") as ObjectNode
+        val originalName = ownerNode.at("/name").textValue()
+        ownerNode.put("name", "$originalName / $nameTag")
+
+        val elementSources = listOf(
+            "metrics",
+            "explicitDomainsAndHierarchies",
+            "explicitDimensions",
+            "typedDomains",
+            "typedDimensions"
+        )
+
+        val discardedElementSources = elementSources - retainedElementSources
+
+        discardedElementSources.forEach { elementSource ->
+            val elementSourceNode = config.at("/dpmDictionaries/0/$elementSource") as ObjectNode
+            elementSourceNode.putNull("uri")
+        }
+
+        val partialConfigContent = mapper.writeValueAsString(config)
+
+        val partialSourceConfigPath =
+            tempFolder.createFileWithContent("partial_source_config.json", partialConfigContent)
+
+        return partialSourceConfigPath
+    }
 }

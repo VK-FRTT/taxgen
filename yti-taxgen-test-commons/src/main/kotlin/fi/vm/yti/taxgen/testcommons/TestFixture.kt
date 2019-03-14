@@ -13,7 +13,8 @@ object TestFixture {
     enum class Type(val folderName: String) {
         RDS_CAPTURE("rds_capture"),
         RDS_SOURCE_CONFIG("rds_source_config"),
-        DPM_LANGUAGE_CONFIG("dpm_language_config")
+        DPM_LANGUAGE_CONFIG("dpm_language_config"),
+        DPM_DB("dpm_db")
     }
 
     private val fixtureSource = createFixtureSource()

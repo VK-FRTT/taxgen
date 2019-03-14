@@ -14,6 +14,8 @@ import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
 import java.nio.file.Path
+import java.sql.DriverManager
+import java.sql.SQLException
 
 class DictionaryReplaceDbWriter(
     targetDbPath: Path,
@@ -27,6 +29,7 @@ class DictionaryReplaceDbWriter(
             contextIdentifier = targetDbPath.toString()
         ) {
             FileOps.failIfTargetFileMissing(targetDbPath, diagnosticContext)
+            failIfDbConnectionFails()
 
             SqliteOps.connectDatabase(targetDbPath)
 
@@ -92,6 +95,15 @@ class DictionaryReplaceDbWriter(
                 dictionaryLookupItems + metricDictionaryLookupItem,
                 fixedEntitiesLookupItem
             )
+        }
+    }
+
+    private fun failIfDbConnectionFails() {
+        try {
+            val dbConnection = DriverManager.getConnection("jdbc:sqlite:$targetDbPath")
+            dbConnection.close()
+        } catch (sqlEx: SQLException) {
+            diagnosticContext.fatal("Target database file open failed: ${sqlEx.message}")
         }
     }
 }
