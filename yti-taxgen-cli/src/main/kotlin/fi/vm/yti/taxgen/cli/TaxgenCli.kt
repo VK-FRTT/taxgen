@@ -50,6 +50,11 @@ class TaxgenCli(
                 throwHalt()
             }
 
+            if (detectedOptions.cmdShowVersion) {
+                TaxgenVersion.printVersion(outWriter)
+                throwHalt()
+            }
+
             detectedOptions.ensureSingleCommandGiven()
 
             if (detectedOptions.cmdCaptureDpmSourcesToFolder != null ||

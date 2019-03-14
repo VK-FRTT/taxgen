@@ -17,6 +17,7 @@ class DefinedOptions {
     private val optionParser = OptionParser()
 
     private val cmdShowHelp: OptionSpec<Void>
+    private val cmdShowVersion: OptionSpec<Void>
     private val cmdCreateDictionaryToNewDpmDb: OptionSpec<Path>
     private val cmdReplaceDictionaryInDpmDb: OptionSpec<Path>
     private val cmdCaptureDpmSourcesToFolder: OptionSpec<Path>
@@ -34,6 +35,12 @@ class DefinedOptions {
                 "help",
                 "show this help message"
             ).forHelp()
+
+        cmdShowVersion = optionParser
+            .accepts(
+                "version",
+                "show version information"
+            )
 
         cmdCreateDictionaryToNewDpmDb = optionParser
             .accepts(
@@ -126,6 +133,7 @@ class DefinedOptions {
 
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
+            cmdShowVersion = optionSet.has(this.cmdShowVersion),
             cmdCreateDictionaryToNewDpmDb = optionSet.valueOf(this.cmdCreateDictionaryToNewDpmDb),
             cmdReplaceDictionaryInDpmDb = optionSet.valueOf(this.cmdReplaceDictionaryInDpmDb),
             cmdCaptureDpmSourcesToFolder = optionSet.valueOf(this.cmdCaptureDpmSourcesToFolder),

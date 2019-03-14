@@ -5,6 +5,7 @@ import java.nio.file.Path
 
 data class DetectedOptions(
     val cmdShowHelp: Boolean,
+    val cmdShowVersion: Boolean,
 
     val cmdCreateDictionaryToNewDpmDb: Path?,
     val cmdReplaceDictionaryInDpmDb: Path?,
