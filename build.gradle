@@ -71,6 +71,17 @@ subprojects { subproj ->
         shadowed
     }
 
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'org.jetbrains.kotlin' && requested.name == 'kotlin-reflect') {
+                details.useVersion "$versions.kotlin"
+            }
+        }
+    }
+
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin/'
         test.java.srcDirs += 'src/test/kotlin/'
