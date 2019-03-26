@@ -134,7 +134,7 @@ class TaxgenCli(
 
     private fun resolveSourceProvider(detectedOptions: DetectedOptions): SourceProvider {
         if (detectedOptions.sourceConfigFile != null) {
-            return ProviderFactory.rdsProvider(
+            return ProviderFactory.providerForConfigFile(
                 configFilePath = detectedOptions.sourceConfigFile,
                 diagnosticContext = diagnosticContext
             )

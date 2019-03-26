@@ -249,10 +249,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "RDS to DPM mapper",
-                "DPM source: Reference Data service",
                 "Configuration file: (dm_integration_fixture.json)",
                 "Configuration file: OK",
+                "RDS to DPM mapper",
+                "DPM source: Reference Data service",
                 "Writing dictionaries to DPM database: OK"
             )
 
@@ -507,7 +507,6 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "DPM source: Reference Data service",
                 "Configuration file: (broken_source_config_json.json)",
                 "FATAL: Processing JSON content failed: "
             )

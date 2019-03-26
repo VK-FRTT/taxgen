@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsprovider.config
+package fi.vm.yti.taxgen.rdsprovider.config.input
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import kotlin.reflect.KProperty0

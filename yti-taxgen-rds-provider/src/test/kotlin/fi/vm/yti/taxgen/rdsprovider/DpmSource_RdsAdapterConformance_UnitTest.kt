@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
 import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -218,7 +219,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         useCustomisedHttpClient()
         configureHoverflySimulation()
 
-        val sourceProvider = ProviderFactory.rdsProvider(
+        val sourceProvider = ProviderFactory.providerForConfigFile(
             configFilePath = configFilePath,
             diagnosticContext = diagnosticContext
         )
@@ -226,7 +227,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         val expectedDetails = DpmSource_ConformanceUnitTestBase.ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "Reference Data service",
-            dpmSourceContextIdentifier = configFilePath.toString()
+            dpmSourceContextIdentifier = "config file: " + configFilePath.toString()
         )
 
         return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
@@ -249,7 +250,12 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             )
         )
 
-        val source = DpmSourceRdsAdapter(configFilePath, diagnosticContext)
+        val dpmSourceConfig = DpmSourceConfigInput.tryReadAndValidateConfig(
+            configFilePath,
+            diagnosticContext
+        )!!
+
+        val source = DpmSourceRdsAdapter(dpmSourceConfig, diagnosticContext)
 
         var progress = "INIT"
 

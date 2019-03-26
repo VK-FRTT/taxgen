@@ -1,6 +1,8 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.DpmSourceRecorderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceProviderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
@@ -12,19 +14,39 @@ import java.nio.file.Path
 
 object ProviderFactory {
 
-    fun rdsProvider(
+    fun providerForConfigFile(
         configFilePath: Path,
         diagnosticContext: DiagnosticContext
     ): SourceProvider {
-        val sourceProvider = SourceProviderRdsAdapter(
-            configPath = configFilePath,
-            diagnostic = diagnosticContext
+        val sourceProvider = resolveSourceProviderForConfigFile(
+            configFilePath,
+            diagnosticContext
         )
 
         return SourceProviderContextDecorator(
             sourceProvider = sourceProvider,
             diagnosticContext = diagnosticContext
         )
+    }
+
+    private fun resolveSourceProviderForConfigFile(
+        configFilePath: Path,
+        diagnosticContext: DiagnosticContext
+    ): SourceProvider {
+        return diagnosticContext.withContext(
+            contextType = DiagnosticContextType.InitConfiguration,
+            contextIdentifier = configFilePath.fileName.toString()
+        ) {
+            val dpmSourceConfig = DpmSourceConfigInput.tryReadAndValidateConfig(
+                configFilePath,
+                diagnosticContext
+            ) ?: diagnosticContext.fatal("Unsupported config file: $configFilePath")
+
+            SourceProviderRdsAdapter(
+                dpmSourceConfig = dpmSourceConfig,
+                diagnostic = diagnosticContext
+            )
+        }
     }
 
     fun folderProvider(
