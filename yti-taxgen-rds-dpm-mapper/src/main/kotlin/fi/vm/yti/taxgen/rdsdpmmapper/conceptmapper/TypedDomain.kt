@@ -61,7 +61,6 @@ internal fun mapAndValidateTypedDomains(
 }
 
 private val RDS_DOMAIN_DATA_TYPE_TO_DPM = mapOf(
-    "Enumeration" to "Enumeration/Code",
     "Boolean" to "Boolean",
     "Date" to "Date",
     "Integer" to "Integer",
