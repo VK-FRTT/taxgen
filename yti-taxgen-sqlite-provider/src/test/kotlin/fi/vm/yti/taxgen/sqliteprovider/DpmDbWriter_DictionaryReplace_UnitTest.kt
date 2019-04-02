@@ -2,7 +2,6 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
@@ -46,9 +45,7 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
             diagnosticContext
         )
 
-        val model = DpmModel(
-            dictionaries = listOf(dpmDictionaryFixture(FixtureVariety.NONE))
-        )
+        val model = dpmModelFixture(FixtureVariety.NONE)
 
         dbWriter.writeModel(model)
     }

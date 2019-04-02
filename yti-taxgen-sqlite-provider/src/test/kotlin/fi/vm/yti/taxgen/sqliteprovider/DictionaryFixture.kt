@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -25,7 +26,7 @@ enum class FixtureVariety {
     NO_EN_TRANSLATIONS
 }
 
-fun dpmDictionaryFixture(variety: FixtureVariety): DpmDictionary {
+fun dpmModelFixture(variety: FixtureVariety): DpmModel {
     fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
     val dpmOwner = Owner(
@@ -365,41 +366,50 @@ fun dpmDictionaryFixture(variety: FixtureVariety): DpmDictionary {
         metricDomains = metricDomains()
     )
 
+    val model = DpmModel(
+        dictionaries = listOf(dictionary)
+    )
+
     if (variety != FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
-        validateDictionaryContents(dictionary)
+        validateModelContents(model)
     }
 
-    return dictionary
+    return model
 }
 
-private fun validateDictionaryContents(dpmDictionary: DpmDictionary) {
+private fun validateModelContents(dpmModel: DpmModel) {
     val collecor = ValidationCollector()
 
-    dpmDictionary.explicitDomains.forEach { explicitDomain ->
-        explicitDomain.members.forEach { it.validate(collecor) }
-        explicitDomain.hierarchies.forEach { it.validate(collecor) }
-        explicitDomain.validate(collecor)
+    dpmModel.dictionaries.forEach { dictionary ->
+
+        dictionary.explicitDomains.forEach { explicitDomain ->
+            explicitDomain.members.forEach { it.validate(collecor) }
+            explicitDomain.hierarchies.forEach { it.validate(collecor) }
+            explicitDomain.validate(collecor)
+        }
+
+        dictionary.typedDomains.forEach { typedDomain ->
+            typedDomain.validate(collecor)
+        }
+
+        dictionary.explicitDimensions.forEach { explicitDimension ->
+            explicitDimension.validate(collecor)
+        }
+
+        dictionary.typedDimensions.forEach { typedDimension ->
+            typedDimension.validate(collecor)
+        }
+
+        dictionary.metricDomains.forEach { metricDomain ->
+            metricDomain.metrics.forEach { it.validate(collecor) }
+            metricDomain.hierarchies.forEach { it.validate(collecor) }
+            metricDomain.validate(collecor)
+        }
+
+        dictionary.validate(collecor)
     }
 
-    dpmDictionary.typedDomains.forEach { typedDomain ->
-        typedDomain.validate(collecor)
-    }
-
-    dpmDictionary.explicitDimensions.forEach { explicitDimension ->
-        explicitDimension.validate(collecor)
-    }
-
-    dpmDictionary.typedDimensions.forEach { typedDimension ->
-        typedDimension.validate(collecor)
-    }
-
-    dpmDictionary.metricDomains.forEach { metricDomain ->
-        metricDomain.metrics.forEach { it.validate(collecor) }
-        metricDomain.hierarchies.forEach { it.validate(collecor) }
-        metricDomain.validate(collecor)
-    }
-
-    dpmDictionary.validate(collecor)
+    dpmModel.validate(collecor)
 
     assertThat(collecor.compileResultsToSimpleStrings()).isEmpty()
 }

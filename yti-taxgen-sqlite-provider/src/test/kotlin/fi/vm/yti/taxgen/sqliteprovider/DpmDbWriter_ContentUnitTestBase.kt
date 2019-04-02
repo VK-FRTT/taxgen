@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
@@ -66,9 +65,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         val diagnosticCollector = DiagnosticCollector()
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val model = DpmModel(
-            dictionaries = listOf(dpmDictionaryFixture(variety))
-        )
+        val model = dpmModelFixture(variety)
 
         val dbWriteException = catchException {
             val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
@@ -99,9 +96,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         val diagnosticCollector = DiagnosticCollector()
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val model = DpmModel(
-            dictionaries = listOf(dpmDictionaryFixture(FixtureVariety.NONE))
-        )
+        val model = dpmModelFixture(FixtureVariety.NONE)
 
         val dbWriteException = catchException {
             val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
