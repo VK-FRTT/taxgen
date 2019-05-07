@@ -1,13 +1,11 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
 import com.fasterxml.jackson.databind.JsonNode
-import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayOrNullAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextAt
 import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
-import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 import okhttp3.HttpUrl
 
 internal data class ContentAddress(
@@ -25,6 +23,7 @@ internal data class ExtensionAddress(
 internal class CodeListContentAddressResolver(
     codeLisUri: String,
     private val blueprint: CodeListBlueprint,
+    private val rdsClient: RdsClient,
     private val diagnostic: Diagnostic
 ) {
     private val codeLisUri = HttpUrl.parse(codeLisUri) ?: diagnostic.fatal("Malformed URI")
@@ -50,7 +49,11 @@ internal class CodeListContentAddressResolver(
     }
 
     private fun resolveContentAddress(): ContentAddress {
-        val metaDataJson = fetchUriMetaDataJson()
+        val metaDataJson = rdsClient.fetchJsonAsNodeTree(
+            url = codeLisUri,
+            extraQueryParams = emptyList(),
+            requestPrettyJson = false
+        )
 
         val httpUrl = metaDataJson.httpUrlAt(
             "/url",
@@ -58,7 +61,11 @@ internal class CodeListContentAddressResolver(
             "Content URL resolution via URI"
         )
 
-        val codeListJson = fetchExpandedCodeListJson(httpUrl)
+        val codeListJson = rdsClient.fetchJsonAsNodeTree(
+            url = httpUrl,
+            extraQueryParams = listOf(Pair("expand", "extension")),
+            requestPrettyJson = false
+        )
 
         val contentAddress = ContentAddress(
             codeListUrl = resolveCodeListContentUrl(codeListJson),
@@ -69,21 +76,6 @@ internal class CodeListContentAddressResolver(
         )
 
         return contentAddress
-    }
-
-    private fun fetchUriMetaDataJson(): JsonNode {
-        val uriResolutionData = HttpOps.fetchJsonData(codeLisUri, diagnostic)
-        return JsonOps.readTree(uriResolutionData, diagnostic)
-    }
-
-    private fun fetchExpandedCodeListJson(url: HttpUrl): JsonNode {
-        val expandedUrl = url
-            .newBuilder()
-            .addQueryParameter("expand", "extension")
-            .build()
-
-        val data = HttpOps.fetchJsonData(expandedUrl, diagnostic)
-        return JsonOps.readTree(data, diagnostic)
     }
 
     private fun resolveCodeListContentUrl(codeListJson: JsonNode): HttpUrl {

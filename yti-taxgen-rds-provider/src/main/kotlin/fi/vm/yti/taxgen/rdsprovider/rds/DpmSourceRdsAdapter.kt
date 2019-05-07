@@ -10,6 +10,8 @@ internal class DpmSourceRdsAdapter(
     private val diagnostic: Diagnostic
 ) : DpmSource {
 
+    private val rdsClient = RdsClient(diagnostic)
+
     override fun contextLabel(): String = "Reference Data service"
     override fun contextIdentifier(): String = "config file: ${dpmSourceConfig.configFilePath}"
     override fun sourceConfigData(): String = dpmSourceConfig.rawConfigData
@@ -18,6 +20,7 @@ internal class DpmSourceRdsAdapter(
         dpmSourceConfig.dpmDictionaries.forEach { config ->
             val dictionarySource = DpmDictionarySourceRdsAdapter(
                 config,
+                rdsClient,
                 diagnostic
             )
 

@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
-import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
+import fi.vm.yti.taxgen.rdsprovider.rds.HttpClientHolder
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import io.specto.hoverfly.junit.core.Hoverfly
@@ -315,7 +315,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             .readTimeout(50, TimeUnit.MILLISECONDS)
             .build()
 
-        HttpOps.useCustomHttpClient(okHttpClient)
+        HttpClientHolder.useCustomHttpClient(okHttpClient)
     }
 
     private fun configureHoverflySimulation(varietyConf: Map<SimulationPhase, SimulationVariety> = emptyMap()) {
@@ -711,7 +711,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             currentPhase = SimulationPhase.CONTENT_CODE_LIST_META,
             varietyConf = varietyConf,
             requestPath = "/taxgenfixture/${dictionary.name}/${codeList.name}",
-            queryParams = listOf(Pair("expand", "code")),
+            queryParams = listOf(Pair("expand", "code"), Pair("pretty", "")),
             responseJson = """
                         {
                             "marker": "${dictionary.name}/${codeList.name}/code_list_meta"
@@ -729,7 +729,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                 )
             )
 
-            val queryParams = composePageIterationQueryParams(index)
+            val queryParams = composePageIterationQueryParams(index, Pair("pretty", ""))
 
             //Content fetch: Codes page
             rdsService.respondGetWithJson(
@@ -775,6 +775,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                 currentPhase = SimulationPhase.CONTENT_EXTENSION_META,
                 varietyConf = varietyConf,
                 requestPath = "/taxgenfixture/${dictionary.name}/${codeList.name}/${extension.name}",
+                queryParams = listOf(Pair("pretty", "")),
                 responseJson = """
                         {
                             "marker": "${dictionary.name}/${codeList.name}/${extension.name}/extension_meta"
@@ -792,7 +793,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                 )
 
                 val queryParams =
-                    composePageIterationQueryParams(index, Pair("expand", "memberValue"))
+                    composePageIterationQueryParams(index, Pair("expand", "memberValue"), Pair("pretty", ""))
 
                 //Content fetch: Extensions members page
                 rdsService.respondGetWithJson(

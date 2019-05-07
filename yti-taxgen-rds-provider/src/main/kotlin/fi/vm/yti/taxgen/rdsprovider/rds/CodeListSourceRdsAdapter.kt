@@ -10,11 +10,11 @@ import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
-import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
 internal class CodeListSourceRdsAdapter(
     private val codeListUri: String,
     private val blueprint: CodeListBlueprint,
+    private val rdsClient: RdsClient,
     private val diagnostic: Diagnostic
 ) : CodeListSource {
 
@@ -27,15 +27,15 @@ internal class CodeListSourceRdsAdapter(
     override fun blueprint(): CodeListBlueprint = blueprint
 
     override fun codeListMetaData(): String {
-        return HttpOps.fetchJsonData(
-            contentAddressResolver.contentAddress.codeListUrl,
-            diagnostic
+        return rdsClient.fetchJsonAsString(
+            contentAddressResolver.contentAddress.codeListUrl
         )
     }
 
     override fun eachCodePageData(action: (String) -> Unit) {
         PaginationAwareCollectionIterator(
             contentAddressResolver.contentAddress.codesUrl,
+            rdsClient,
             diagnostic,
             SubCodeListUriExtractor(this)
         ).forEach(action)
@@ -45,6 +45,7 @@ internal class CodeListSourceRdsAdapter(
         contentAddressResolver.contentAddress.extensionUrls.forEach { extensionUrls ->
             val extensionSource = ExtensionSourceRdsAdapter(
                 extensionUrls,
+                rdsClient,
                 diagnostic
             )
             action(extensionSource)
@@ -60,6 +61,7 @@ internal class CodeListSourceRdsAdapter(
             val codelistSource = CodeListSourceRdsAdapter(
                 codeListUri = contentAddressResolver.decorateUriWithInheritedParams(uri),
                 blueprint = blueprint.subCodeListBlueprint!!,
+                rdsClient = rdsClient,
                 diagnostic = diagnostic
             )
 
@@ -75,6 +77,7 @@ internal class CodeListSourceRdsAdapter(
             CodeListContentAddressResolver(
                 codeLisUri = codeListUri,
                 blueprint = blueprint,
+                rdsClient = rdsClient,
                 diagnostic = diagnostic
             )
         }
@@ -88,16 +91,21 @@ internal class CodeListSourceRdsAdapter(
 
         override fun iteratedPage(pageJson: JsonNode) {
             subCodeListUris.addAll(
-                pageJson.arrayAt("/results", parentAdapter.diagnostic).mapNotNull { codeNode ->
-                    codeNode.nonBlankTextOrNullAt("/subCodeScheme/uri")
-                }
+                pageJson
+                    .arrayAt("/results", parentAdapter.diagnostic)
+                    .mapNotNull { codeNode ->
+                        codeNode.nonBlankTextOrNullAt("/subCodeScheme/uri")
+                    }
             )
         }
 
         override fun iterationDone() {
-            parentAdapter.subCodeListUris = subCodeListUris.distinct().sortedWith(
-                compareBy(NumberAwareStringComparator.instance()) { it }
-            )
+            parentAdapter.subCodeListUris =
+                subCodeListUris
+                    .distinct()
+                    .sortedWith(
+                        compareBy(NumberAwareStringComparator.instance()) { it }
+                    )
         }
     }
 }

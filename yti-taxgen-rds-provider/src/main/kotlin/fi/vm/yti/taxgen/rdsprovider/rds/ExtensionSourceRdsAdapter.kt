@@ -2,10 +2,10 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
-import fi.vm.yti.taxgen.rdsprovider.helpers.HttpOps
 
 internal class ExtensionSourceRdsAdapter(
     private val extensionAddress: ExtensionAddress,
+    private val rdsClient: RdsClient,
     private val diagnostic: Diagnostic
 ) : ExtensionSource {
 
@@ -13,12 +13,13 @@ internal class ExtensionSourceRdsAdapter(
     override fun contextIdentifier(): String = extensionAddress.extensionUri
 
     override fun extensionMetaData(): String {
-        return HttpOps.fetchJsonData(extensionAddress.extensionUrl, diagnostic)
+        return rdsClient.fetchJsonAsString(extensionAddress.extensionUrl)
     }
 
     override fun eachExtensionMemberPageData(action: (String) -> Unit) {
         PaginationAwareCollectionIterator(
             extensionAddress.extensionMembersUrl,
+            rdsClient,
             diagnostic
         ).forEach(action)
     }

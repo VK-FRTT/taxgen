@@ -9,6 +9,7 @@ import fi.vm.yti.taxgen.rdsprovider.config.DpmDictionarySourceConfig
 
 internal class DpmDictionarySourceRdsAdapter(
     private val config: DpmDictionarySourceConfig,
+    private val rdsClient: RdsClient,
     private val diagnostic: Diagnostic
 ) : DpmDictionarySource {
 
@@ -72,6 +73,7 @@ internal class DpmDictionarySourceRdsAdapter(
             CodeListSourceRdsAdapter(
                 codeListUri = uri,
                 blueprint = blueprint,
+                rdsClient = rdsClient,
                 diagnostic = diagnostic
             )
         } else {
