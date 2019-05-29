@@ -53,7 +53,7 @@ object DbMetric {
                 MemberLookupItem(
                     memberUri = metric.uri,
                     memberXbrlCode = memberXbrlCode,
-                    defaultLabelText = metric.concept.label.defaultTranslation(),
+                    defaultLabelText = metric.concept.label.defaultTranslationOrNull(),
                     memberId = metricMemberId
                 )
             }
@@ -70,7 +70,7 @@ object DbMetric {
 
         val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = metric.metricCode
-            it[memberLabelCol] = metric.concept.label.defaultTranslation()
+            it[memberLabelCol] = metric.concept.label.defaultTranslationOrNull()
             it[memberXBRLCodeCol] = memberXbrlCode
             it[isDefaultMemberCol] = false
             it[conceptIdCol] = metricMemberConceptId

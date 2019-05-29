@@ -55,7 +55,7 @@ object DbDomains {
                 MemberLookupItem(
                     memberUri = member.uri,
                     memberXbrlCode = memberXbrlCode,
-                    defaultLabelText = member.concept.label.defaultTranslation(),
+                    defaultLabelText = member.concept.label.defaultTranslationOrNull(),
                     memberId = memberId
                 )
             }
@@ -95,8 +95,8 @@ object DbDomains {
 
         val domainId = DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] = domain.concept.label.defaultTranslation()
-            it[domainDescriptionCol] = domain.concept.description.defaultTranslation()
+            it[domainLabelCol] = domain.concept.label.defaultTranslationOrNull()
+            it[domainDescriptionCol] = domain.concept.description.defaultTranslationOrNull()
             it[domainXBRLCodeCol] = domainXbrlCode
             it[dataTypeCol] = null
             it[isTypedDomainCol] = false
@@ -115,8 +115,8 @@ object DbDomains {
 
         return DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] = domain.concept.label.defaultTranslation()
-            it[domainDescriptionCol] = domain.concept.description.defaultTranslation()
+            it[domainLabelCol] = domain.concept.label.defaultTranslationOrNull()
+            it[domainDescriptionCol] = domain.concept.description.defaultTranslationOrNull()
             it[domainXBRLCodeCol] = domainXbrlCode
             it[dataTypeCol] = domain.dataType
             it[isTypedDomainCol] = true
@@ -135,7 +135,7 @@ object DbDomains {
 
         val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = member.memberCode
-            it[memberLabelCol] = member.concept.label.defaultTranslation()
+            it[memberLabelCol] = member.concept.label.defaultTranslationOrNull()
             it[memberXBRLCodeCol] = memberXbrlCode
             it[isDefaultMemberCol] = member.defaultMember
             it[conceptIdCol] = memberConceptId

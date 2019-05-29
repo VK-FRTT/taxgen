@@ -51,7 +51,7 @@ private fun mapAndValidateHierarchyNodes(
     owner: Owner,
     diagnostic: Diagnostic
 ): List<HierarchyNode> {
-    val workingNodes = mutableListOf<HierarchyNodeItem>()
+    val candidateNodes = mutableListOf<HierarchyNodeItem>()
 
     extensionSource.eachExtensionMember { extensionMember ->
 
@@ -65,22 +65,20 @@ private fun mapAndValidateHierarchyNodes(
             order = extensionMember.validOrder(diagnostic)
         )
 
-        workingNodes.add(nodeItem)
+        candidateNodes.add(nodeItem)
     }
 
-    workingNodes.sortWith(compareBy { it.order })
+    candidateNodes.sortWith(compareBy { it.order })
 
     val rootNode = HierarchyNodeRoot()
-    rootNode.buildTree(workingNodes)
+    rootNode.buildTree(candidateNodes)
 
     //Normally there should be no leftover nodes from tree building
     //However, RDS API responses have contained occasionally faulty parent references and thus tree building has failed
-    if (workingNodes.any()) {
-        val orphanNodes = workingNodes.map {
-            "${it.concept.label} (${it.uri})"
-        }
+    if (candidateNodes.any()) {
+        val orphanNodeUris = candidateNodes.map { "${it.uri} (${it.concept.label.highestPriorityTranslationOrNull()})" }
 
-        diagnostic.fatal("Extension has members which position in hierarchy could not be determined: $orphanNodes")
+        diagnostic.fatal("Corrupted source data. Codelist Extension has Members, which position in DPM Hierarchy could not be determined: ${orphanNodeUris.joinToString()}")
     }
 
     return rootNode.createAndValidateHierarchyNodes(diagnostic)

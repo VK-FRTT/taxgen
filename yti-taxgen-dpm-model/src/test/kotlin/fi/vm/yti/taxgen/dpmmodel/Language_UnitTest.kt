@@ -105,8 +105,37 @@ internal class Language_UnitTest :
     inner class LanguageConfiguration {
 
         @Test
-        fun `default language configuration should be available`() {
-            Language.languages()
+        fun `languages should be available`() {
+            assertThat(Language.languages()).isNotEmpty
+        }
+
+        @DisplayName("prioritized languages")
+        @ParameterizedTest(name = "`{1}` should be the highest priority language from `{0}`")
+        @CsvSource(
+            "'de, pl, sv, fi, en, es',      fi",
+            "'de, pl, sv, en, es',          sv",
+            "'de, pl, en, es',              en",
+            "'de, pl, es',                  pl",
+            "'de, es',                       "
+        )
+        fun testPrioritizedLanguages(
+            candidateIsoCodes: String,
+            expectedResultIsoCode: String?
+        ) {
+            val candidateLanguages =
+                candidateIsoCodes
+                    .split(",")
+                    .map { Language.byIso6391CodeOrFail(it.trim()) }
+                    .toSet()
+
+            val selectedPriorityLanguage = Language.findHighestPriorityLanguage(candidateLanguages)
+
+            if (expectedResultIsoCode != null) {
+                assertThat(selectedPriorityLanguage).isNotNull()
+                assertThat(selectedPriorityLanguage!!.iso6391Code).isEqualTo(expectedResultIsoCode)
+            } else {
+                assertThat(selectedPriorityLanguage).isNull()
+            }
         }
 
         @Test

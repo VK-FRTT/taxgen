@@ -64,6 +64,7 @@ class Language constructor(
         )
 
         private val languages = loadLanguages()
+        private val prioritizedLanguages = resolvePrioritizedLanguages()
 
         fun languages() = languages
 
@@ -73,11 +74,15 @@ class Language constructor(
 
         fun byIso6391CodeOrFail(iso6391Code: String): Language {
             return findByIso6391Code(iso6391Code)
-                ?: throwFail("Language configuration missing required language '$iso6391Code'")
+                ?: throwFail("Language configuration missing requested language '$iso6391Code'")
         }
 
-        internal fun loadLanguages(languageConfigPath: Path? = null): Set<Language> {
-            val configUrl = resolveConfigUrl(languageConfigPath)
+        fun findHighestPriorityLanguage(candidates: Set<Language>): Language? {
+            return prioritizedLanguages.find { candidates.contains(it) }
+        }
+
+        internal fun loadLanguages(configPath: Path? = null): Set<Language> {
+            val configUrl = resolveConfigUrl(configPath, "languages/languages.json")
 
             val configs = loadLanguageConfigs(configUrl)
 
@@ -94,10 +99,23 @@ class Language constructor(
             return plainLanguages.sortedBy { it.iso6391Code }.toSet()
         }
 
-        private fun resolveConfigUrl(languageConfigPath: Path?): URL =
+        internal fun resolvePrioritizedLanguages(configPath: Path? = null): Set<Language> {
+            val configUrl = resolveConfigUrl(configPath, "languages/prioritized.json")
+
+            val priorityConfig: List<String> = loadPriorityConfig(configUrl)
+
+            return priorityConfig
+                .map { prioritizedIsoCode ->
+                    languages.find { it.iso6391Code == prioritizedIsoCode }
+                        ?: throwFail("Language priorities: No Language found for iso6391Code '$prioritizedIsoCode'")
+                }
+                .toSet()
+        }
+
+        private fun resolveConfigUrl(languageConfigPath: Path?, fallbackResourceName: String): URL =
             if (languageConfigPath == null) {
                 val contextClassLoader = Thread.currentThread().contextClassLoader
-                contextClassLoader.getResource("languages/languages.json")
+                contextClassLoader.getResource(fallbackResourceName)
             } else {
                 languageConfigPath.toUri().toURL()
             }
@@ -107,6 +125,14 @@ class Language constructor(
                 return JsonOps.lenientObjectMapper.readValue(configUrl)
             } catch (e: JsonProcessingException) {
                 throwFail("Language configuration loading failed: ${e.message}")
+            }
+        }
+
+        private fun loadPriorityConfig(configUrl: URL): List<String> {
+            try {
+                return JsonOps.lenientObjectMapper.readValue(configUrl)
+            } catch (e: JsonProcessingException) {
+                throwFail("Language priority configuration loading failed: ${e.message}")
             }
         }
 

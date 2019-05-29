@@ -5,8 +5,17 @@ data class TranslatedText(
 ) {
     internal lateinit var defaultLanguage: Language
 
-    fun defaultTranslation(): String? {
+    fun defaultTranslationOrNull(): String? {
         return translations[defaultLanguage]
+    }
+
+    fun highestPriorityTranslationOrNull(): String? {
+        return defaultTranslationOrNull() ?: selectHighestPriorityTranslation()
+    }
+
+    private fun selectHighestPriorityTranslation(): String? {
+        val prioritizedLanguage = Language.findHighestPriorityLanguage(translations.keys)
+        return translations[prioritizedLanguage]
     }
 
     companion object {

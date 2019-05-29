@@ -94,8 +94,8 @@ object DbHierarchies {
 
         val hierarchyId = HierarchyTable.insertAndGetId {
             it[hierarchyCodeCol] = hierarchy.hierarchyCode
-            it[hierarchyLabelCol] = hierarchy.concept.label.defaultTranslation()
-            it[hierarchyDescriptionCol] = hierarchy.concept.description.defaultTranslation()
+            it[hierarchyLabelCol] = hierarchy.concept.label.defaultTranslationOrNull()
+            it[hierarchyDescriptionCol] = hierarchy.concept.description.defaultTranslationOrNull()
             it[domainIdCol] = domainId
             it[conceptIdCol] = hierarchyConceptId
         }
@@ -124,7 +124,7 @@ object DbHierarchies {
                     ?: thisShouldNeverHappen("No Member matching ParentNode.ReferencedMemberUri: ${parentNode.referencedMemberUri}")
             }
 
-        val defaultLabel = currentNode.concept.label.defaultTranslation() ?: memberLookupItem.defaultLabelText
+        val defaultLabel = currentNode.concept.label.defaultTranslationOrNull() ?: memberLookupItem.defaultLabelText
 
         HierarchyNodeTable.insert {
             it[hierarchyIdCol] = hierarchyId

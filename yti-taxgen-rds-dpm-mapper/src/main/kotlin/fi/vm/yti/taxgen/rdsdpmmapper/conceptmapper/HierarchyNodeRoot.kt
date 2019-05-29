@@ -7,16 +7,16 @@ import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.HierarchyNodeItem
 internal data class HierarchyNodeRoot(
     private val children: MutableList<HierarchyNodeItem> = mutableListOf()
 ) {
-    fun buildTree(workingNodes: MutableList<HierarchyNodeItem>) {
+    fun buildTree(candidateNodes: MutableList<HierarchyNodeItem>) {
 
-        workingNodes
+        candidateNodes
             .filter { node -> node.isRootMember() }
             .also {
                 children.addAll(it)
-                workingNodes.removeAll(it)
+                candidateNodes.removeAll(it)
             }
 
-        children.forEach { it.takeChildren(workingNodes) }
+        children.forEach { it.takeChildren(candidateNodes) }
     }
 
     fun createAndValidateHierarchyNodes(

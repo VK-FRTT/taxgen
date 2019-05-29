@@ -84,8 +84,8 @@ object DbDimensions {
 
         val dimensionId = DimensionTable.insertAndGetId {
             it[dimensionCodeCol] = dimension.dimensionCode
-            it[dimensionLabelCol] = dimension.concept.label.defaultTranslation()
-            it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslation()
+            it[dimensionLabelCol] = dimension.concept.label.defaultTranslationOrNull()
+            it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslationOrNull()
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
             it[domainIdCol] = referencedDomainItem.domainId
             it[isTypedDimensionCol] = false
@@ -107,8 +107,8 @@ object DbDimensions {
 
         val dimensionId = DimensionTable.insertAndGetId {
             it[dimensionCodeCol] = dimension.dimensionCode
-            it[dimensionLabelCol] = dimension.concept.label.defaultTranslation()
-            it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslation()
+            it[dimensionLabelCol] = dimension.concept.label.defaultTranslationOrNull()
+            it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslationOrNull()
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
             it[domainIdCol] = referencedDomainItem.domainId
             it[isTypedDimensionCol] = true

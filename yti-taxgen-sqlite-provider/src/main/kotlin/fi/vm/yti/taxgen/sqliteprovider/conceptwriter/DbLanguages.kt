@@ -51,7 +51,7 @@ object DbLanguages {
             ?.let { language ->
                 LanguageTable.update({ LanguageTable.id.eq(languageEntityId) }) {
                     it[languageNameCol] = language.label.translations[language]
-                    it[englishNameCol] = language.label.defaultTranslation()
+                    it[englishNameCol] = language.label.defaultTranslationOrNull()
                 }
             }
     }
@@ -59,7 +59,7 @@ object DbLanguages {
     private fun insertLanguage(language: Language) {
         LanguageTable.insert {
             it[languageNameCol] = language.label.translations[language]
-            it[englishNameCol] = language.label.defaultTranslation()
+            it[englishNameCol] = language.label.defaultTranslationOrNull()
             it[isoCodeCol] = language.iso6391Code
             it[conceptIdCol] = null
         }
