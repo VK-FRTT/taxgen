@@ -9,13 +9,13 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 @DisplayName("SQLite DPM DB content: members")
 internal class DpmDbWriter_ContentMember_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Members with Domain, Concept and Owner relation") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         M.MemberCode,
@@ -53,7 +53,7 @@ internal class DpmDbWriter_ContentMember_UnitTest : DpmDbWriter_ContentUnitTestB
 
             dynamicTest("should have ConceptTranslations for DPM Member") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         M.MemberCode,

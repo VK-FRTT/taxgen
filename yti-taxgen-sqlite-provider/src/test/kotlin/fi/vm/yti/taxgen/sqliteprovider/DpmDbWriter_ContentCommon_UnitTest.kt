@@ -5,17 +5,17 @@ import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
-import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 
 @DisplayName("SQLite DPM DB content: common")
 internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
-            DynamicTest.dynamicTest("should have all configured languages") {
+            dynamicTest("should have all configured languages") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery("SELECT IsoCode FROM mLanguage")
+                val rs = dbConnection.createStatement().executeQuery("SELECT IsoCode FROM mLanguage")
                 val dbIsoCodes = rs.toStringList(false)
 
                 val allKnownIsoCodes = Language.languages().map { it.iso6391Code }.toList()
@@ -24,9 +24,9 @@ internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestB
                 assertThat(dbIsoCodes).size().isEqualTo(24)
             },
 
-            DynamicTest.dynamicTest("should have English language but no Concept nor ConceptTranslation relations") {
+            dynamicTest("should have English language but no Concept nor ConceptTranslation relations") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         L.IsoCode AS LanguageIsoCode,
@@ -55,9 +55,9 @@ internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestB
                 )
             },
 
-            DynamicTest.dynamicTest("should have Owner") {
+            dynamicTest("should have Owner") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         O.OwnerName,
@@ -71,7 +71,7 @@ internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestB
                     """
                 )
 
-                if (ctx.mode == DbInitMode.DICTIONARY_CREATE) {
+                if (initMode == DbInitMode.DICTIONARY_CREATE) {
                     assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                         "#OwnerName, #OwnerNamespace, #OwnerLocation, #OwnerPrefix, #OwnerCopyright, #ParentOwnerID, #ConceptID",
                         "FixName, FixNSpace, FixLoc, FixPrfx, FixCop, nil, nil",
@@ -79,7 +79,7 @@ internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestB
                     )
                 }
 
-                if (ctx.mode == DbInitMode.DICTIONARY_REPLACE) {
+                if (initMode == DbInitMode.DICTIONARY_REPLACE) {
                     assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                         "#OwnerName, #OwnerNamespace, #OwnerLocation, #OwnerPrefix, #OwnerCopyright, #ParentOwnerID, #ConceptID",
                         "FixName, FixNSpace_Existing_In_DB, FixLoc, FixPrfx, FixCop, nil, nil",
@@ -88,9 +88,9 @@ internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestB
                 }
             },
 
-            DynamicTest.dynamicTest("should produce proper context events") {
+            dynamicTest("should produce proper context events") {
 
-                assertThat(ctx.diagnosticCollector.eventsString()).contains(
+                assertThat(diagnosticCollector.eventsString()).contains(
                     "ENTER [SQLiteDbWriter]",
                     "EXIT [SQLiteDbWriter]"
                 )

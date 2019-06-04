@@ -9,13 +9,13 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 @DisplayName("SQLite DPM DB content: metrics")
 internal class DpmDbWriter_ContentMetric_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Metrics with Member relation") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         MEM.MemberCode,

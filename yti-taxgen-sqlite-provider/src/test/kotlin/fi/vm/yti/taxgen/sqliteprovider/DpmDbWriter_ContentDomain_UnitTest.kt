@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test
 @DisplayName("SQLite DPM DB content: domains")
 internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Domains with Concept and Owner relation") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         D.DomainCode,
@@ -47,7 +47,7 @@ internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestB
 
             dynamicTest("should have ConceptTranslations for Domains") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         D.DomainCode,
@@ -81,9 +81,9 @@ internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestB
 
     @Test
     fun `should have ConceptTranslations with EN label fallback to FI content for Domains`() {
-        val ctx = initDbViaDictionaryCreate(FixtureVariety.NO_EN_TRANSLATIONS)
+        setupDbViaDictionaryCreate(FixtureVariety.NO_EN_TRANSLATIONS)
 
-        val rs = ctx.dbConnection.createStatement().executeQuery(
+        val rs = dbConnection.createStatement().executeQuery(
             """
             SELECT
                 D.DomainCode,

@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -11,12 +12,12 @@ import org.junit.jupiter.api.Test
 @DisplayName("SQLite DPM DB content: hierarchies")
 internal class DpmDbWriter_ContentHierarchy_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Hierarchy with Domain, Concept and Owner relation") {
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         H.HierarchyCode,
@@ -45,7 +46,7 @@ internal class DpmDbWriter_ContentHierarchy_UnitTest : DpmDbWriter_ContentUnitTe
 
             dynamicTest("should have ConceptTranslations for DPM Hierarchy") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                 SELECT
                     H.HierarchyCode,
@@ -75,11 +76,13 @@ internal class DpmDbWriter_ContentHierarchy_UnitTest : DpmDbWriter_ContentUnitTe
 
     @Test
     fun `should detect when multiple HierarchyNodes refer same Member`() {
-        val context = initDbViaDictionaryCreate(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
+        val throwable = catchThrowable {
+            setupDbViaDictionaryCreate(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
+        }
 
-        assertThat(context.dbWriteException).isInstanceOf(HaltException::class.java)
+        assertThat(throwable).isInstanceOf(HaltException::class.java)
 
-        assertThat(context.diagnosticCollector.eventsString()).contains(
+        assertThat(diagnosticCollector.eventsString()).contains(
             "FATAL",
             "UNIQUE constraint failed",
             "mHierarchyNode.HierarchyID, mHierarchyNode.MemberID"

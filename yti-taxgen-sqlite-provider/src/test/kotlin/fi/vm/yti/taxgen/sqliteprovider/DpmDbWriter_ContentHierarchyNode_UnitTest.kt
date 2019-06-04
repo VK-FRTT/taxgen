@@ -9,13 +9,13 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 @DisplayName("SQLite DPM DB content: hierarchy nodes")
 internal class DpmDbWriter_ContentHierarchyNode_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have correct HierarchyNode structure") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         H.HierarchyCode,
@@ -50,7 +50,7 @@ internal class DpmDbWriter_ContentHierarchyNode_UnitTest : DpmDbWriter_ContentUn
 
             dynamicTest("should have HierarchyNodes with Member, Concept and Owner relation") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         H.HierarchyCode,
@@ -90,7 +90,7 @@ internal class DpmDbWriter_ContentHierarchyNode_UnitTest : DpmDbWriter_ContentUn
             },
 
             dynamicTest("should have ConceptTranslations for HierarchyNode") {
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         N.HierarchyNodeLabel,

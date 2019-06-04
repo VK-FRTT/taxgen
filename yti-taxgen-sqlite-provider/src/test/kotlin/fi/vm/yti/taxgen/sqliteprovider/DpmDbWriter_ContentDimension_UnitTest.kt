@@ -9,12 +9,12 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 @DisplayName("SQLite DPM DB content: dimensions")
 internal class DpmDbWriter_ContentDimension_UnitTest : DpmDbWriter_ContentUnitTestBase() {
 
-    override fun createDynamicTests(ctx: TestContext): List<DynamicNode> {
+    override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Dimensions with Concept and Owner relation") {
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         D.DimensionCode,
@@ -47,7 +47,7 @@ internal class DpmDbWriter_ContentDimension_UnitTest : DpmDbWriter_ContentUnitTe
 
             dynamicTest("should have ConceptTranslations for Dimensions") {
 
-                val rs = ctx.dbConnection.createStatement().executeQuery(
+                val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
                         D.DimensionCode,

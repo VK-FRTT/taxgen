@@ -18,16 +18,12 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         DICTIONARY_REPLACE
     }
 
-    data class TestContext(
-        val mode: DbInitMode,
-        val dbWriteException: Throwable?,
-        val dbConnection: Connection,
-        val diagnosticCollector: DiagnosticCollector
-    )
+    protected lateinit var initMode: DbInitMode
+    protected lateinit var diagnosticCollector: DiagnosticCollector
+    protected lateinit var diagnosticContext: DiagnosticBridge
+    protected lateinit var dbConnection: Connection
 
     private lateinit var tempFolder: TempFolder
-    private lateinit var dictionaryCreateDbConnection: Connection
-    private lateinit var dictionaryReplaceDbConnection: Connection
 
     @BeforeEach
     fun baseInit() {
@@ -36,12 +32,8 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
 
     @AfterEach
     fun baseTeardown() {
-        if (::dictionaryCreateDbConnection.isInitialized) {
-            dictionaryCreateDbConnection.close()
-        }
-
-        if (::dictionaryReplaceDbConnection.isInitialized) {
-            dictionaryReplaceDbConnection.close()
+        if (::dbConnection.isInitialized) {
+            dbConnection.close()
         }
 
         tempFolder.close()
@@ -49,81 +41,58 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
 
     @TestFactory
     fun `When dictionary is created`(): List<DynamicNode> {
-        return createDynamicTests(initDbViaDictionaryCreate())
+        setupDbViaDictionaryCreate()
+
+        return createDynamicTests()
     }
 
     @TestFactory
     fun `When dictionary is replaced`(): List<DynamicNode> {
-        return createDynamicTests(initDbViaDictionaryReplace())
+        setupDbViaDictionaryReplace()
+
+        return createDynamicTests()
     }
 
-    abstract fun createDynamicTests(ctx: TestContext): List<DynamicNode>
+    abstract fun createDynamicTests(): List<DynamicNode>
 
-    fun initDbViaDictionaryCreate(variety: FixtureVariety = FixtureVariety.NONE): TestContext {
+    fun setupDbViaDictionaryCreate(variety: FixtureVariety = FixtureVariety.NONE) {
+        initMode = DbInitMode.DICTIONARY_CREATE
+        diagnosticCollector = DiagnosticCollector()
+        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+
         val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
-
-        val diagnosticCollector = DiagnosticCollector()
-        val diagnosticContext = DiagnosticBridge(diagnosticCollector)
-
         val model = dpmModelFixture(variety)
 
-        val dbWriteException = catchException {
-            val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
-                dbPath,
-                false,
-                diagnosticContext
-            )
-
-            dbWriter.writeModel(model)
-        }
-
-        dictionaryCreateDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
-
-        return TestContext(
-            mode = DbInitMode.DICTIONARY_CREATE,
-            dbWriteException = dbWriteException,
-            dbConnection = dictionaryCreateDbConnection,
-            diagnosticCollector = diagnosticCollector
+        val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
+            dbPath,
+            false,
+            diagnosticContext
         )
+
+        dbWriter.writeModel(model)
+
+        dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
     }
 
-    fun initDbViaDictionaryReplace(): TestContext {
+    fun setupDbViaDictionaryReplace(variety: FixtureVariety = FixtureVariety.NONE) {
+        initMode = DbInitMode.DICTIONARY_REPLACE
+        diagnosticCollector = DiagnosticCollector()
+        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+
         val dbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
 
         val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
         Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
 
-        val diagnosticCollector = DiagnosticCollector()
-        val diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        val model = dpmModelFixture(variety)
 
-        val model = dpmModelFixture(FixtureVariety.NONE)
-
-        val dbWriteException = catchException {
-            val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
-                dbPath,
-                diagnosticContext
-            )
-
-            dbWriter.writeModel(model)
-        }
-
-        dictionaryReplaceDbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
-
-        return TestContext(
-            mode = DbInitMode.DICTIONARY_REPLACE,
-            dbWriteException = dbWriteException,
-            dbConnection = dictionaryReplaceDbConnection,
-            diagnosticCollector = diagnosticCollector
+        val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
+            dbPath,
+            diagnosticContext
         )
-    }
 
-    private fun catchException(action: () -> Unit): Throwable? {
-        try {
-            action()
-        } catch (throwable: Throwable) {
-            return throwable
-        }
+        dbWriter.writeModel(model)
 
-        return null
+        dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
     }
 }
