@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
@@ -22,7 +23,8 @@ object DbDictionaries {
     fun writeDictionaryBaseParts(
         dictionary: DpmDictionary,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        diagnosticContext: DiagnosticContext
     ): DpmDictionaryLookupItem {
         val explicitDomainLookupItem = dictionary.explicitDomains.map { explicitDomain ->
 
@@ -30,7 +32,8 @@ object DbDictionaries {
                 explicitDomain,
                 dictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                diagnosticContext
             )
 
             val hierarchyLookupItems = DbHierarchies.writeHierarchiesAndAndNodes(
@@ -38,7 +41,8 @@ object DbDictionaries {
                 explicitDomainId,
                 ownerId,
                 languageIds,
-                memberLookupItems
+                memberLookupItems,
+                diagnosticContext
             )
 
             DomainLookupItem(
@@ -54,7 +58,8 @@ object DbDictionaries {
                 typedDomain,
                 dictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                diagnosticContext
             )
 
             DomainLookupItem(
@@ -73,7 +78,8 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                domainLookupItems
+                domainLookupItems,
+                diagnosticContext
             )
         }
 
@@ -83,7 +89,8 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                domainLookupItems
+                domainLookupItems,
+                diagnosticContext
             )
         }
 
@@ -100,7 +107,8 @@ object DbDictionaries {
         dpmDictionary: DpmDictionary,
         languageIds: Map<Language, EntityID<Int>>,
         dpmDictionaryLookupItem: DpmDictionaryLookupItem,
-        metricDomainId: EntityID<Int>
+        metricDomainId: EntityID<Int>,
+        diagnosticContext: DiagnosticContext
     ): Pair<List<MemberLookupItem>, List<HierarchyLookupItem>> {
 
         val lookupItems: List<Pair<List<MemberLookupItem>, List<HierarchyLookupItem>>> =
@@ -112,7 +120,8 @@ object DbDictionaries {
                     metricDomainId,
                     dpmDictionaryLookupItem.ownerId,
                     languageIds,
-                    dpmDictionaryLookupItem.domainLookupItems
+                    dpmDictionaryLookupItem.domainLookupItems,
+                    diagnosticContext
                 )
 
                 val hierarchyLookupItems = DbHierarchies.writeHierarchiesAndAndNodes(
@@ -120,7 +129,8 @@ object DbDictionaries {
                     metricDomainId,
                     dpmDictionaryLookupItem.ownerId,
                     languageIds,
-                    memberLookupItems
+                    memberLookupItems,
+                    diagnosticContext
                 )
 
                 Pair(memberLookupItems, hierarchyLookupItems)

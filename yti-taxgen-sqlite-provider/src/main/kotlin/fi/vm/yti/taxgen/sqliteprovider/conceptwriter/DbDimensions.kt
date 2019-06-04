@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -18,13 +19,15 @@ object DbDimensions {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        domainLookupItems: List<DomainLookupItem>
+        domainLookupItems: List<DomainLookupItem>,
+        diagnostic: Diagnostic
     ): DimensionLookupItem {
         return transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
                 dimension,
                 ownerId,
-                languageIds
+                languageIds,
+                diagnostic
             )
 
             val (dimensionId, dimensionXbrlCode) = insertExplicitDimension(
@@ -46,13 +49,15 @@ object DbDimensions {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        domainLookupItems: List<DomainLookupItem>
+        domainLookupItems: List<DomainLookupItem>,
+        diagnostic: Diagnostic
     ): DimensionLookupItem {
         return transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
                 dimension,
                 ownerId,
-                languageIds
+                languageIds,
+                diagnostic
             )
 
             val (dimensionId, dimensionXbrlCode) = insertTypedDimension(

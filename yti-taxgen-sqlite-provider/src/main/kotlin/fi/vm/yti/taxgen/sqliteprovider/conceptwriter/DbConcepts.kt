@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
@@ -10,7 +12,6 @@ import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
-import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
@@ -38,22 +39,45 @@ object DbConcepts {
         TypedDimension::class to ConceptType.DIMENSION
     )
 
-    private val requiredLabelLang by lazy { Language.byIso6391CodeOrFail("en") }
-    private val fallbackCandidateLangs by lazy {
+    //sqliteDb.mandatoryLabelTranslationLanguage
+    //sqliteDb.mandatoryLabelTranslationSourceLanguages
+    //sqliteDb.dpmElementUriLabelTranslationLanguage
+
+    private val mandatoryLabelTranslationLanguage by lazy { Language.byIso6391CodeOrFail("en") }
+    private val mandatoryLabelTranslationSourceLanguages by lazy {
         listOf(
             Language.byIso6391CodeOrFail("fi"),
             Language.byIso6391CodeOrFail("sv")
         )
     }
 
+    private val dpmElementUriLabelTranslationLanguage by lazy { Language.byIso6391CodeOrFail("pl") }
+
     fun writeConceptAndTranslations(
         dpmElement: DpmElement,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        diagnostic: Diagnostic
     ): EntityID<Int> {
 
         val conceptType = DPM_ELEMENT_TYPE_TO_CONCEPT_TYPE[dpmElement::class]
             ?: thisShouldNeverHappen("No concept type mapping for class ${dpmElement::class}")
+
+        val labelTranslations = dpmElement.concept.label.translations
+            .let {
+                injectMandatoryLabelTranslation(
+                    it,
+                    mandatoryLabelTranslationLanguage,
+                    mandatoryLabelTranslationSourceLanguages
+                )
+            }.let {
+                injectDpmElementUriToLabelTranslation(
+                    it,
+                    dpmElementUriLabelTranslationLanguage,
+                    dpmElement.uri,
+                    diagnostic
+                )
+            }
 
         val conceptId = insertConcept(
             dpmElement.concept,
@@ -61,29 +85,13 @@ object DbConcepts {
             ownerId
         )
 
-        dpmElement.concept.label.translations.forEach { (language, text) ->
+        labelTranslations.forEach { (language, text) ->
             insertConceptTranslation(
                 languageIds,
                 conceptId,
                 ConceptTranslationRole.LABEL,
                 language,
                 text
-            )
-        }
-
-        val fallbackTranslation = selectFallbackTranslationTextOrNull(
-            dpmElement.concept.label,
-            requiredLabelLang,
-            fallbackCandidateLangs
-        )
-
-        if (fallbackTranslation != null) {
-            insertConceptTranslation(
-                languageIds,
-                conceptId,
-                ConceptTranslationRole.LABEL,
-                requiredLabelLang,
-                fallbackTranslation
             )
         }
 
@@ -111,21 +119,40 @@ object DbConcepts {
         ConceptTable.deleteWhere { ConceptTable.conceptTypeCol eq conceptTypeString }
     }
 
-    private fun selectFallbackTranslationTextOrNull(
-        translatedText: TranslatedText,
-        requiredLang: Language,
-        fallbackCandidateLangs: List<Language>
-    ): String? {
-        if (translatedText.translations.containsKey(requiredLang)) {
-            return null
+    private fun injectMandatoryLabelTranslation(
+        translations: Map<Language, String>,
+        mandatoryTranslationLanguage: Language,
+        sourceTranslationLanguages: List<Language>
+    ): Map<Language, String> {
+        if (!translations.containsKey(mandatoryTranslationLanguage)) {
+            val sourceLanguage = sourceTranslationLanguages.find { translations.containsKey(it) }
+
+            if (sourceLanguage != null) {
+                val mutableTranslations = translations.toMutableMap()
+                mutableTranslations[mandatoryTranslationLanguage] = translations.getValue(sourceLanguage)
+
+                return mutableTranslations
+            }
         }
 
-        fallbackCandidateLangs.forEach { candidateLang ->
-            val text = translatedText.translations[candidateLang]
-            if (text != null) return text
+        return translations
+    }
+
+    private fun injectDpmElementUriToLabelTranslation(
+        translations: Map<Language, String>,
+        uriTranslationLanguage: Language,
+        uri: String,
+        diagnostic: Diagnostic
+    ): Map<Language, String> {
+
+        if (translations.containsKey(uriTranslationLanguage)) {
+            diagnostic.info("DPM Element URI overwrites existing translation: ${translations[uriTranslationLanguage]} (${uriTranslationLanguage.iso6391Code})")
         }
 
-        return null
+        val mutableTranslations = translations.toMutableMap()
+        mutableTranslations[uriTranslationLanguage] = uri
+
+        return mutableTranslations
     }
 
     private fun insertConcept(

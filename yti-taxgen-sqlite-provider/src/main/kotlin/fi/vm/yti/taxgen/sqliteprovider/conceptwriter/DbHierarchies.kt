@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
@@ -20,7 +21,8 @@ object DbHierarchies {
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        memberLookupItems: List<MemberLookupItem>
+        memberLookupItems: List<MemberLookupItem>,
+        diagnostic: Diagnostic
     ): List<HierarchyLookupItem> {
 
         return hierarchies.map { hierarchy ->
@@ -29,7 +31,8 @@ object DbHierarchies {
                 domainId,
                 ownerId,
                 languageIds,
-                memberLookupItems
+                memberLookupItems,
+                diagnostic
             )
         }
     }
@@ -39,14 +42,16 @@ object DbHierarchies {
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        memberLookupItems: List<MemberLookupItem>
+        memberLookupItems: List<MemberLookupItem>,
+        diagnostic: Diagnostic
     ): HierarchyLookupItem {
 
         return transaction {
             val hierarchyConceptId = DbConcepts.writeConceptAndTranslations(
                 hierarchy,
                 ownerId,
-                languageIds
+                languageIds,
+                diagnostic
             )
 
             val hierarchyId = insertHierarchy(
@@ -62,7 +67,8 @@ object DbHierarchies {
                 val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
                     currentNode,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    diagnostic
                 )
 
                 insertHierarchyNode(

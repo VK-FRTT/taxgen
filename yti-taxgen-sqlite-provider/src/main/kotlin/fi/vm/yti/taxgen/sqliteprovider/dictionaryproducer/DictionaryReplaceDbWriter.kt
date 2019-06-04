@@ -47,7 +47,8 @@ class DictionaryReplaceDbWriter(
                 DbDictionaries.writeDictionaryBaseParts(
                     it,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    diagnosticContext
                 )
             }
 
@@ -64,7 +65,8 @@ class DictionaryReplaceDbWriter(
                             dictionary,
                             languageIds,
                             dictionaryLookupItem,
-                            fixedEntitiesLookupItem.metricDomainId
+                            fixedEntitiesLookupItem.metricDomainId,
+                            diagnosticContext
                         )
                     }.reduce { accumulator, element ->
                         Pair(

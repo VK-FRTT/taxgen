@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
@@ -22,7 +23,8 @@ object DbMetric {
         metricDomainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        domainLookupItems: List<DomainLookupItem>
+        domainLookupItems: List<DomainLookupItem>,
+        diagnostic: Diagnostic
     ): List<MemberLookupItem> {
 
         return transaction {
@@ -32,7 +34,8 @@ object DbMetric {
                 val metricMemberConceptId = DbConcepts.writeConceptAndTranslations(
                     metric,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    diagnostic
                 )
 
                 val (metricMemberId, memberXbrlCode) = insertMetricMember(
