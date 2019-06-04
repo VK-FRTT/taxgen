@@ -6,7 +6,6 @@ import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
@@ -23,8 +22,7 @@ object DbDomains {
 
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
-                domain.concept,
-                ConceptType.DOMAIN,
+                domain,
                 ownerId,
                 languageIds
             )
@@ -38,8 +36,7 @@ object DbDomains {
             val memberLookupItems = domain.members.map { member ->
 
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
-                    member.concept,
-                    ConceptType.MEMBER,
+                    member,
                     ownerId,
                     languageIds
                 )
@@ -72,8 +69,7 @@ object DbDomains {
     ): EntityID<Int> {
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
-                domain.concept,
-                ConceptType.DOMAIN,
+                domain,
                 ownerId,
                 languageIds
             )

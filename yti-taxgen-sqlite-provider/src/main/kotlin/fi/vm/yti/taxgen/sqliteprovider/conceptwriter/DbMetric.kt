@@ -7,7 +7,6 @@ import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MetricTable
 import org.jetbrains.exposed.dao.EntityID
@@ -31,8 +30,7 @@ object DbMetric {
             metricDomain.metrics.map { metric ->
 
                 val metricMemberConceptId = DbConcepts.writeConceptAndTranslations(
-                    metric.concept,
-                    ConceptType.MEMBER,
+                    metric,
                     ownerId,
                     languageIds
                 )

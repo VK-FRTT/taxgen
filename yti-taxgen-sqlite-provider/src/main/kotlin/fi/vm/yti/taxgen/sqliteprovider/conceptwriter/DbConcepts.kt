@@ -2,8 +2,17 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
+import fi.vm.yti.taxgen.dpmmodel.DpmElement
+import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
+import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
+import fi.vm.yti.taxgen.dpmmodel.Hierarchy
+import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.Member
+import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
+import fi.vm.yti.taxgen.dpmmodel.TypedDimension
+import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTimeOrNull
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable
@@ -18,6 +27,17 @@ import org.jetbrains.exposed.sql.select
 
 object DbConcepts {
 
+    private val DPM_ELEMENT_TYPE_TO_CONCEPT_TYPE = mapOf(
+        ExplicitDomain::class to ConceptType.DOMAIN,
+        TypedDomain::class to ConceptType.DOMAIN,
+        Member::class to ConceptType.MEMBER,
+        Metric::class to ConceptType.MEMBER,
+        Hierarchy::class to ConceptType.HIERARCHY,
+        HierarchyNode::class to ConceptType.HIERARCHY_NODE,
+        ExplicitDimension::class to ConceptType.DIMENSION,
+        TypedDimension::class to ConceptType.DIMENSION
+    )
+
     private val requiredLabelLang by lazy { Language.byIso6391CodeOrFail("en") }
     private val fallbackCandidateLangs by lazy {
         listOf(
@@ -27,19 +47,21 @@ object DbConcepts {
     }
 
     fun writeConceptAndTranslations(
-        concept: Concept,
-        conceptType: ConceptType,
+        dpmElement: DpmElement,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>
     ): EntityID<Int> {
 
+        val conceptType = DPM_ELEMENT_TYPE_TO_CONCEPT_TYPE[dpmElement::class]
+            ?: thisShouldNeverHappen("No concept type mapping for class ${dpmElement::class}")
+
         val conceptId = insertConcept(
-            concept,
+            dpmElement.concept,
             conceptType,
             ownerId
         )
 
-        concept.label.translations.forEach { (language, text) ->
+        dpmElement.concept.label.translations.forEach { (language, text) ->
             insertConceptTranslation(
                 languageIds,
                 conceptId,
@@ -50,7 +72,7 @@ object DbConcepts {
         }
 
         val fallbackTranslation = selectFallbackTranslationTextOrNull(
-            concept.label,
+            dpmElement.concept.label,
             requiredLabelLang,
             fallbackCandidateLangs
         )
@@ -65,7 +87,7 @@ object DbConcepts {
             )
         }
 
-        concept.description.translations.forEach { (language, text) ->
+        dpmElement.concept.description.translations.forEach { (language, text) ->
             insertConceptTranslation(
                 languageIds,
                 conceptId,

@@ -7,7 +7,6 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -23,8 +22,7 @@ object DbDimensions {
     ): DimensionLookupItem {
         return transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
-                dimension.concept,
-                ConceptType.DIMENSION,
+                dimension,
                 ownerId,
                 languageIds
             )
@@ -52,8 +50,7 @@ object DbDimensions {
     ): DimensionLookupItem {
         return transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
-                dimension.concept,
-                ConceptType.DIMENSION,
+                dimension,
                 ownerId,
                 languageIds
             )

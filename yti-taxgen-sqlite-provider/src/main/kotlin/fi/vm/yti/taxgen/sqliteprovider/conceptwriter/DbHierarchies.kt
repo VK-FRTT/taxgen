@@ -6,7 +6,6 @@ import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.HierarchyLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
 import org.jetbrains.exposed.dao.EntityID
@@ -45,8 +44,7 @@ object DbHierarchies {
 
         return transaction {
             val hierarchyConceptId = DbConcepts.writeConceptAndTranslations(
-                hierarchy.concept,
-                ConceptType.HIERARCHY,
+                hierarchy,
                 ownerId,
                 languageIds
             )
@@ -62,8 +60,7 @@ object DbHierarchies {
                 order++
 
                 val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
-                    currentNode.concept,
-                    ConceptType.HIERARCHY_NODE,
+                    currentNode,
                     ownerId,
                     languageIds
                 )
