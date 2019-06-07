@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -41,58 +42,75 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
 
     @TestFactory
     fun `When dictionary is created`(): List<DynamicNode> {
-        setupDbViaDictionaryCreate()
+        setupDbViaDictionaryCreate( false, FixtureVariety.NONE)
 
         return createDynamicTests()
     }
 
     @TestFactory
     fun `When dictionary is replaced`(): List<DynamicNode> {
-        setupDbViaDictionaryReplace()
+        setupDbViaDictionaryReplace(false, FixtureVariety.NONE)
 
         return createDynamicTests()
     }
 
     abstract fun createDynamicTests(): List<DynamicNode>
 
-    fun setupDbViaDictionaryCreate(variety: FixtureVariety = FixtureVariety.NONE) {
-        initMode = DbInitMode.DICTIONARY_CREATE
-        diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+    fun setupDbViaDictionaryCreate(exceptionIsExpected: Boolean, variety: FixtureVariety) {
+        withHaltExceptionHarness(exceptionIsExpected) {
+            initMode = DbInitMode.DICTIONARY_CREATE
 
-        val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
-        val model = dpmModelFixture(variety)
+            diagnosticCollector = DiagnosticCollector()
+            diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
-            dbPath,
-            false,
-            diagnosticContext
-        )
+            val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
+            val model = dpmModelFixture(variety)
 
-        dbWriter.writeModel(model)
+            val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
+                dbPath,
+                false,
+                diagnosticContext
+            )
 
-        dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+            dbWriter.writeModel(model)
+
+            dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+        }
     }
 
-    fun setupDbViaDictionaryReplace(variety: FixtureVariety = FixtureVariety.NONE) {
-        initMode = DbInitMode.DICTIONARY_REPLACE
-        diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+    fun setupDbViaDictionaryReplace(exceptionIsExpected: Boolean, variety: FixtureVariety) {
+        withHaltExceptionHarness(exceptionIsExpected) {
+            initMode = DbInitMode.DICTIONARY_REPLACE
+            diagnosticCollector = DiagnosticCollector()
+            diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val dbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
+            val dbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
 
-        val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
-        Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
+            val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
+            Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
 
-        val model = dpmModelFixture(variety)
+            val model = dpmModelFixture(variety)
 
-        val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
-            dbPath,
-            diagnosticContext
-        )
+            val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
+                dbPath,
+                diagnosticContext
+            )
 
-        dbWriter.writeModel(model)
+            dbWriter.writeModel(model)
 
-        dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+            dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+        }
+    }
+
+    private fun withHaltExceptionHarness(exceptionIsExpected: Boolean, action: () -> Unit) {
+        return try {
+            action()
+        } catch (exception: HaltException) {
+            if (!exceptionIsExpected) {
+                println(diagnosticCollector.eventsString())
+            }
+
+            throw exception
+        }
     }
 }

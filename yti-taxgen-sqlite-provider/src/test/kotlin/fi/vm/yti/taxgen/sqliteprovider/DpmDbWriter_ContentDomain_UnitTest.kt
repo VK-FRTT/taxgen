@@ -80,8 +80,8 @@ internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestB
     }
 
     @Test
-    fun `should have ConceptTranslations with EN label fallback to FI content for Domains`() {
-        setupDbViaDictionaryCreate(FixtureVariety.NO_EN_TRANSLATIONS)
+    fun `should have ConceptTranslation with EN label fallbacking to FI content for Domains`() {
+        setupDbViaDictionaryCreate(false, FixtureVariety.NO_EN_TRANSLATIONS)
 
         val rs = dbConnection.createStatement().executeQuery(
             """
