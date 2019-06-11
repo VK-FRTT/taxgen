@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
@@ -24,6 +25,7 @@ object DbMetric {
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
         domainLookupItems: List<DomainLookupItem>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): List<MemberLookupItem> {
 
@@ -35,6 +37,7 @@ object DbMetric {
                     metric,
                     ownerId,
                     languageIds,
+                    modelOptions,
                     diagnostic
                 )
 

@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
@@ -42,21 +43,33 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
 
     @TestFactory
     fun `When dictionary is created`(): List<DynamicNode> {
-        setupDbViaDictionaryCreate( false, FixtureVariety.NONE)
+        setupDbViaDictionaryCreate(
+            false,
+            FixtureVariety.NONE,
+            emptyMap()
+        )
 
         return createDynamicTests()
     }
 
     @TestFactory
     fun `When dictionary is replaced`(): List<DynamicNode> {
-        setupDbViaDictionaryReplace(false, FixtureVariety.NONE)
+        setupDbViaDictionaryReplace(
+            false,
+            FixtureVariety.NONE,
+            emptyMap()
+        )
 
         return createDynamicTests()
     }
 
-    abstract fun createDynamicTests(): List<DynamicNode>
+    open fun createDynamicTests(): List<DynamicNode> = emptyList()
 
-    fun setupDbViaDictionaryCreate(exceptionIsExpected: Boolean, variety: FixtureVariety) {
+    fun setupDbViaDictionaryCreate(
+        exceptionIsExpected: Boolean,
+        variety: FixtureVariety,
+        modelOptions: Map<DpmModelOptions, Any>
+    ) {
         withHaltExceptionHarness(exceptionIsExpected) {
             initMode = DbInitMode.DICTIONARY_CREATE
 
@@ -64,7 +77,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
             val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
-            val model = dpmModelFixture(variety)
+            val model = dpmModelFixture(variety, modelOptions)
 
             val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
                 dbPath,
@@ -78,7 +91,11 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
         }
     }
 
-    fun setupDbViaDictionaryReplace(exceptionIsExpected: Boolean, variety: FixtureVariety) {
+    fun setupDbViaDictionaryReplace(
+        exceptionIsExpected: Boolean,
+        variety: FixtureVariety,
+        modelOptions: Map<DpmModelOptions, Any>
+    ) {
         withHaltExceptionHarness(exceptionIsExpected) {
             initMode = DbInitMode.DICTIONARY_REPLACE
             diagnosticCollector = DiagnosticCollector()
@@ -89,7 +106,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
             Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
 
-            val model = dpmModelFixture(variety)
+            val model = dpmModelFixture(variety, modelOptions)
 
             val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
                 dbPath,

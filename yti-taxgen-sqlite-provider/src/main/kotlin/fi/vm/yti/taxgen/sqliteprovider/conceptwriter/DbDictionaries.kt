@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
@@ -24,6 +25,7 @@ object DbDictionaries {
         dictionary: DpmDictionary,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnosticContext: DiagnosticContext
     ): DpmDictionaryLookupItem {
         val explicitDomainLookupItem = dictionary.explicitDomains.map { explicitDomain ->
@@ -33,6 +35,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
+                modelOptions,
                 diagnosticContext
             )
 
@@ -42,6 +45,7 @@ object DbDictionaries {
                 ownerId,
                 languageIds,
                 memberLookupItems,
+                modelOptions,
                 diagnosticContext
             )
 
@@ -59,6 +63,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
+                modelOptions,
                 diagnosticContext
             )
 
@@ -79,6 +84,7 @@ object DbDictionaries {
                 ownerId,
                 languageIds,
                 domainLookupItems,
+                modelOptions,
                 diagnosticContext
             )
         }
@@ -90,6 +96,7 @@ object DbDictionaries {
                 ownerId,
                 languageIds,
                 domainLookupItems,
+                modelOptions,
                 diagnosticContext
             )
         }
@@ -108,6 +115,7 @@ object DbDictionaries {
         languageIds: Map<Language, EntityID<Int>>,
         dpmDictionaryLookupItem: DpmDictionaryLookupItem,
         metricDomainId: EntityID<Int>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnosticContext: DiagnosticContext
     ): Pair<List<MemberLookupItem>, List<HierarchyLookupItem>> {
 
@@ -121,6 +129,7 @@ object DbDictionaries {
                     dpmDictionaryLookupItem.ownerId,
                     languageIds,
                     dpmDictionaryLookupItem.domainLookupItems,
+                    modelOptions,
                     diagnosticContext
                 )
 
@@ -130,6 +139,7 @@ object DbDictionaries {
                     dpmDictionaryLookupItem.ownerId,
                     languageIds,
                     memberLookupItems,
+                    modelOptions,
                     diagnosticContext
                 )
 

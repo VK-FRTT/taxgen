@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -39,24 +39,11 @@ object DbConcepts {
         TypedDimension::class to ConceptType.DIMENSION
     )
 
-    //sqliteDb.mandatoryLabelTranslationLanguage
-    //sqliteDb.mandatoryLabelTranslationSourceLanguages
-    //sqliteDb.dpmElementUriLabelTranslationLanguage
-
-    private val mandatoryLabelTranslationLanguage by lazy { Language.byIso6391CodeOrFail("en") }
-    private val mandatoryLabelTranslationSourceLanguages by lazy {
-        listOf(
-            Language.byIso6391CodeOrFail("fi"),
-            Language.byIso6391CodeOrFail("sv")
-        )
-    }
-
-    private val dpmElementUriLabelTranslationLanguage by lazy { Language.byIso6391CodeOrFail("pl") }
-
     fun writeConceptAndTranslations(
         dpmElement: DpmElement,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): EntityID<Int> {
 
@@ -67,14 +54,13 @@ object DbConcepts {
             .let {
                 injectMandatoryLabelTranslation(
                     it,
-                    mandatoryLabelTranslationLanguage,
-                    mandatoryLabelTranslationSourceLanguages
+                    modelOptions
                 )
             }.let {
                 injectDpmElementUriToLabelTranslation(
                     it,
-                    dpmElementUriLabelTranslationLanguage,
                     dpmElement.uri,
+                    modelOptions,
                     diagnostic
                 )
             }
@@ -121,17 +107,26 @@ object DbConcepts {
 
     private fun injectMandatoryLabelTranslation(
         translations: Map<Language, String>,
-        mandatoryTranslationLanguage: Language,
-        sourceTranslationLanguages: List<Language>
+        modelOptions: Map<DpmModelOptions, Any>
     ): Map<Language, String> {
-        if (!translations.containsKey(mandatoryTranslationLanguage)) {
-            val sourceLanguage = sourceTranslationLanguages.find { translations.containsKey(it) }
 
-            if (sourceLanguage != null) {
-                val mutableTranslations = translations.toMutableMap()
-                mutableTranslations[mandatoryTranslationLanguage] = translations.getValue(sourceLanguage)
+        val targetLanguage =
+            modelOptions[DpmModelOptions.SqliteDb_MandatoryLabelTranslation_TargetLanguage] as Language?
 
-                return mutableTranslations
+        val sourceLanguages =
+            modelOptions[DpmModelOptions.SqliteDb_MandatoryLabelTranslation_SourceLanguages] as List<Language>?
+
+        if (targetLanguage != null && sourceLanguages != null) {
+
+            if (!translations.containsKey(targetLanguage)) {
+                val sourceLanguage = sourceLanguages.find { translations.containsKey(it) }
+
+                if (sourceLanguage != null) {
+                    val mutableTranslations = translations.toMutableMap()
+                    mutableTranslations[targetLanguage] = translations.getValue(sourceLanguage)
+
+                    return mutableTranslations
+                }
             }
         }
 
@@ -140,19 +135,29 @@ object DbConcepts {
 
     private fun injectDpmElementUriToLabelTranslation(
         translations: Map<Language, String>,
-        uriTranslationLanguage: Language,
         uri: String,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): Map<Language, String> {
 
-        if (translations.containsKey(uriTranslationLanguage)) {
-            diagnostic.info("DPM Element URI overwrites existing translation: ${translations[uriTranslationLanguage]} (${uriTranslationLanguage.iso6391Code})")
+        val uriStorageLanguage =
+            modelOptions[DpmModelOptions.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage] as Language?
+
+        if (uriStorageLanguage != null) {
+
+            if (translations.containsKey(uriStorageLanguage)) {
+
+                //TODO - make message as warning
+                diagnostic.info("DPM Element URI overwrites existing translation: ${translations[uriStorageLanguage]} (${uriStorageLanguage.iso6391Code})")
+            }
+
+            val mutableTranslations = translations.toMutableMap()
+            mutableTranslations[uriStorageLanguage] = uri
+
+            return mutableTranslations
         }
 
-        val mutableTranslations = translations.toMutableMap()
-        mutableTranslations[uriTranslationLanguage] = uri
-
-        return mutableTranslations
+        return translations
     }
 
     private fun insertConcept(

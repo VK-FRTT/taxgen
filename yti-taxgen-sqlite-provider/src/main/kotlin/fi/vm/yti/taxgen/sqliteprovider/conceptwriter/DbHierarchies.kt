@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -22,6 +23,7 @@ object DbHierarchies {
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
         memberLookupItems: List<MemberLookupItem>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): List<HierarchyLookupItem> {
 
@@ -32,6 +34,7 @@ object DbHierarchies {
                 ownerId,
                 languageIds,
                 memberLookupItems,
+                modelOptions,
                 diagnostic
             )
         }
@@ -43,6 +46,7 @@ object DbHierarchies {
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
         memberLookupItems: List<MemberLookupItem>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): HierarchyLookupItem {
 
@@ -51,6 +55,7 @@ object DbHierarchies {
                 hierarchy,
                 ownerId,
                 languageIds,
+                modelOptions,
                 diagnostic
             )
 
@@ -68,6 +73,7 @@ object DbHierarchies {
                     currentNode,
                     ownerId,
                     languageIds,
+                    modelOptions,
                     diagnostic
                 )
 

@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
@@ -19,6 +20,7 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): Pair<EntityID<Int>, List<MemberLookupItem>> {
 
@@ -27,6 +29,7 @@ object DbDomains {
                 domain,
                 ownerId,
                 languageIds,
+                modelOptions,
                 diagnostic
             )
 
@@ -42,6 +45,7 @@ object DbDomains {
                     member,
                     ownerId,
                     languageIds,
+                    modelOptions,
                     diagnostic
                 )
 
@@ -70,6 +74,7 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
         diagnostic: Diagnostic
     ): EntityID<Int> {
         return transaction {
@@ -77,6 +82,7 @@ object DbDomains {
                 domain,
                 ownerId,
                 languageIds,
+                modelOptions,
                 diagnostic
             )
 

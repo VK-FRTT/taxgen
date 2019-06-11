@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Test
 
 @DisplayName("SQLite DPM DB content: domains")
 internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestBase() {
@@ -76,38 +75,6 @@ internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestB
                     "TypDom-1-Code, Domain, description, fi, TypDom-Desc-Fi"
                 )
             }
-        )
-    }
-
-    @Test
-    fun `should have ConceptTranslation with EN label fallbacking to FI content for Domains`() {
-        setupDbViaDictionaryCreate(false, FixtureVariety.NO_EN_TRANSLATIONS)
-
-        val rs = dbConnection.createStatement().executeQuery(
-            """
-            SELECT
-                D.DomainCode,
-                C.ConceptType,
-                T.Role,
-                TL.IsoCode,
-                T.Text
-            FROM mDomain AS D
-            INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
-            INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
-            INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
-            ORDER BY D.DomainCode, T.Role DESC, TL.IsoCode
-            """
-        )
-
-        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
-            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-Fi",
-            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
-            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi",
-            "MET, Domain, label, en, Metrics",
-            "TypDom-1-Code, Domain, label, en, TypDom-Lbl-Fi",
-            "TypDom-1-Code, Domain, label, fi, TypDom-Lbl-Fi",
-            "TypDom-1-Code, Domain, description, fi, TypDom-Desc-Fi"
         )
     }
 }

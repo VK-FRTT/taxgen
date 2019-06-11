@@ -45,7 +45,10 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
             diagnosticContext
         )
 
-        val model = dpmModelFixture(FixtureVariety.NONE)
+        val model = dpmModelFixture(
+            FixtureVariety.NONE,
+            emptyMap()
+            )
 
         dbWriter.writeModel(model)
     }

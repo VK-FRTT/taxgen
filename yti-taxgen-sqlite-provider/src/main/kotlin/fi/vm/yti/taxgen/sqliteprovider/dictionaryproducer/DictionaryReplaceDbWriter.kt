@@ -48,6 +48,7 @@ class DictionaryReplaceDbWriter(
                     it,
                     ownerId,
                     languageIds,
+                    dpmModel.modelOptions,
                     diagnosticContext
                 )
             }
@@ -66,6 +67,7 @@ class DictionaryReplaceDbWriter(
                             languageIds,
                             dictionaryLookupItem,
                             fixedEntitiesLookupItem.metricDomainId,
+                            dpmModel.modelOptions,
                             diagnosticContext
                         )
                     }.reduce { accumulator, element ->

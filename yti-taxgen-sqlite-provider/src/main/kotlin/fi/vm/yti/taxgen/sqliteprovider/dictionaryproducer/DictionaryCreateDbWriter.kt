@@ -46,6 +46,7 @@ class DictionaryCreateDbWriter(
                     it,
                     ownerId,
                     languageIds,
+                    dpmModel.modelOptions,
                     diagnosticContext
                 )
             }
@@ -63,6 +64,7 @@ class DictionaryCreateDbWriter(
                         languageIds,
                         dictionaryLookupItem,
                         fixedEntitiesLookupItem.metricDomainId,
+                        dpmModel.modelOptions,
                         diagnosticContext
                     )
                 }
