@@ -37,7 +37,7 @@ class DictionaryReplaceDbWriter(
             val languageIds = DbLanguages.resolveLanguageIds()
 
             val ordinateCategorisationBinder =
-                OrdinateCategorisationBinder.rememberInitialCategorizations(diagnosticContext)
+                OrdinateCategorisationIntegrator.loadInitialState(diagnosticContext)
 
             DbDictionaries.purgeDictionaryContent()
 
