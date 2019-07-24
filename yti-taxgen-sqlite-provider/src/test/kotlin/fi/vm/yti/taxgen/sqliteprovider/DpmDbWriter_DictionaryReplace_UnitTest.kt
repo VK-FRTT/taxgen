@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
@@ -60,11 +61,11 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
     }
 
     @Test
-    fun `should fail when target DB is missing eurofiling owner`() {
+    fun `should fail when target DB is missing required Eurofiling owner`() {
         dbConnection.createStatement().executeUpdate(
+        """
+            DELETE FROM mOwner WHERE mOwner.OwnerPrefix = "eu"
             """
-                DELETE FROM mOwner WHERE mOwner.OwnerPrefix = "eu"
-                """
         )
 
         val thrown = catchThrowable { replaceDictionaryInDb() }
@@ -79,9 +80,9 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
     @Test
     fun `should fail when target DB is missing owner of the dictionary`() {
         dbConnection.createStatement().executeUpdate(
+        """
+            DELETE FROM mOwner WHERE mOwner.OwnerPrefix = "FixPrfx"
             """
-                DELETE FROM mOwner WHERE mOwner.OwnerPrefix = "FixPrfx"
-                """
         )
 
         val thrown = catchThrowable { replaceDictionaryInDb() }
@@ -93,171 +94,179 @@ internal class DpmDbWriter_DictionaryReplace_UnitTest {
         )
     }
 
-    @Test
-    fun `should fail when ordinate categorisation DPS has extra parentheses`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code((FixPrfx_ExpDom-1-Code:Mbr-1-Code))")
-            """
-        )
+    @Nested
+    inner class OrdinateCategorisationIntegration {
 
-        val thrown = catchThrowable { replaceDictionaryInDb() }
+        @Test
+        fun `ordinate categorisation referring explicit dimension and explicit domain member should get updated`() {
+            dbConnection.createStatement().executeUpdate(
+                """
+                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
+                """.trimIndent()
+            )
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+            replaceDictionaryInDb()
 
-        assertThat(diagnosticCollector.events).contains(
-            "MESSAGE [FATAL] [Unsupported DPS structure]"
-        )
-    }
+            assertThat(diagnosticCollector.events).containsExactly(
+                "ENTER [SQLiteDbWriter] []",
+                "EXIT [SQLiteDbWriter]"
+            )
 
-    @Test
-    fun `should fail when ordinate categorisation signature has extra trailing part`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)(foo)")
-            """
-        )
+            val rs = dbConnection.createStatement().executeQuery(
+                """
+                SELECT * FROM mOrdinateCategorisation
+                """.trimIndent()
+            )
 
-        val thrown = catchThrowable { replaceDictionaryInDb() }
+            assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+                "1122, 1, 1, signature, source, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)"
+            )
+        }
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+        @Test
+        fun `ordinate categorisation referring typed dimension and open member should get updated`() {
+            dbConnection.createStatement().executeUpdate(
+                """
+                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:TypDim-1-Code(*)")
+                """.trimIndent()
+            )
 
-        assertThat(diagnosticCollector.eventsString()).contains(
-            "MESSAGE [FATAL] [Unsupported DPS structure]"
-        )
-    }
+            replaceDictionaryInDb()
 
-    @Test
-    fun `should fail when ordinate categorisation signature refers to unknown dimension`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
-            """
-        )
+            assertThat(diagnosticCollector.events).contains(
+                "ENTER [SQLiteDbWriter] []",
+                "EXIT [SQLiteDbWriter]"
+            )
 
-        val thrown = catchThrowable { replaceDictionaryInDb() }
+            val rs = dbConnection.createStatement().executeQuery(
+                """
+                SELECT * FROM mOrdinateCategorisation
+                """.trimIndent()
+            )
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+            assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+                "1122, 2, 9999, signature, source, FixPrfx_dim:TypDim-1-Code(*)"
+            )
+        }
 
-        assertThat(diagnosticCollector.events).containsSubsequence(
-            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
-            "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]"
-        )
-    }
+        @Nested
+        inner class DpsValueErrors {
 
-    @Test
-    fun `should fail when ordinate categorisation signature is blank`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", " (FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
-            """
-        )
+            @Test
+            fun `ordinate categorisation DPS structure - extra parentheses around member reference should cause error`() {
+                dbConnection.createStatement().executeUpdate(
+                    """
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code((FixPrfx_ExpDom-1-Code:Mbr-1-Code))")
+                    """.trimIndent()
+                )
 
-        val thrown = catchThrowable { replaceDictionaryInDb() }
+                val thrown = catchThrowable { replaceDictionaryInDb() }
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+                assertThat(thrown).isInstanceOf(HaltException::class.java)
 
-        assertThat(diagnosticCollector.events).containsSubsequence(
-            "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
-            "VALIDATION [OrdinateCategorisationBindingData.dimensionId: does not have value]",
-            "VALIDATION [OrdinateCategorisationBindingData.dpsDimensionXbrlCode: is blank]"
-        )
-    }
+                assertThat(diagnosticCollector.events).contains(
+                    "MESSAGE [FATAL] [Unsupported DPS structure]"
+                )
+            }
 
-    @Test
-    fun `should fail when ordinate categorisation signature refers to unknown member`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)")
-            """
-        )
+            @Test
+            fun `ordinate categorisation DPS structure - extra trailing part should cause error`() {
+                dbConnection.createStatement().executeUpdate(
+                    """
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)(foo)")
+                    """.trimIndent()
+                )
 
-        val thrown = catchThrowable { replaceDictionaryInDb() }
+                val thrown = catchThrowable { replaceDictionaryInDb() }
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+                assertThat(thrown).isInstanceOf(HaltException::class.java)
 
-        assertThat(diagnosticCollector.events).contains(
-            "VALIDATION [OrdinateCategorisationBindingData.memberId: does not have value]"
-        )
-    }
+                assertThat(diagnosticCollector.eventsString()).contains(
+                    "MESSAGE [FATAL] [Unsupported DPS structure]"
+                )
+            }
 
-    @Test
-    fun `should fail when ordinate categorisation signature member is blank`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code( )")
-            """
-        )
+            @Test
+            fun `ordinate categorisation DPS dimension reference - unknown dimension should cause error`() {
+                dbConnection.createStatement().executeUpdate(
+                    """
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
+                    """.trimIndent()
+                )
 
-        val thrown = catchThrowable { replaceDictionaryInDb() }
+                val thrown = catchThrowable { replaceDictionaryInDb() }
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+                assertThat(thrown).isInstanceOf(HaltException::class.java)
 
-        assertThat(diagnosticCollector.events).contains(
-            "VALIDATION [OrdinateCategorisationBindingData.dpsMemberXbrlCode: is blank]",
-            "VALIDATION [OrdinateCategorisationBindingData.memberId: does not have value]"
-        )
-    }
+                assertThat(diagnosticCollector.events).containsSubsequence(
+                    "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+                    "VALIDATION [OrdinateCategorisationSnapshot.dimensionId: does not have value]"
+                )
+            }
 
-    @Test
-    fun `should update simple ordinate categorisation`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
-            """.trimIndent()
-        )
+            @Test
+            fun `ordinate categorisation DPS dimension reference - blank dimension should cause error`() {
+                dbConnection.createStatement().executeUpdate(
+                    """
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (1122, 3344, 5566, "signature", "source", " (FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
+                    """.trimIndent()
+                )
 
-        replaceDictionaryInDb()
+                val thrown = catchThrowable { replaceDictionaryInDb() }
 
-        assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [SQLiteDbWriter] []",
-            "EXIT [SQLiteDbWriter]"
-        )
+                assertThat(thrown).isInstanceOf(HaltException::class.java)
 
-        val rs = dbConnection.createStatement().executeQuery(
-            """
-            SELECT * FROM mOrdinateCategorisation
-            """
-        )
+                assertThat(diagnosticCollector.events).containsSubsequence(
+                    "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 1122, DPS:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+                    "VALIDATION [OrdinateCategorisationSnapshot.dimensionId: does not have value]",
+                    "VALIDATION [OrdinateCategorisationSnapshot.dpsDimensionXbrlCode: is blank]"
+                )
+            }
 
-        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-            "1122, 1, 1, signature, source, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)"
-        )
-    }
+            @Test
+            fun `ordinate categorisation DPS member reference - unknown member should cause error`() {
+                dbConnection.createStatement().executeUpdate(
+                    """
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)")
+                    """.trimIndent()
+                )
 
-    @Test
-    fun `should update typed dimension with open member ordinate categorisation`() {
-        dbConnection.createStatement().executeUpdate(
-            """
-            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-            VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:TypDim-1-Code(*)")
-            """.trimIndent()
-        )
+                val thrown = catchThrowable { replaceDictionaryInDb() }
 
-        replaceDictionaryInDb()
+                assertThat(thrown).isInstanceOf(HaltException::class.java)
 
-        assertThat(diagnosticCollector.events).contains(
-            "ENTER [SQLiteDbWriter] []",
-            "EXIT [SQLiteDbWriter]"
-        )
+                assertThat(diagnosticCollector.events).contains(
+                    "VALIDATION [OrdinateCategorisationSnapshot.memberId: does not have value]"
+                )
+            }
 
-        val rs = dbConnection.createStatement().executeQuery(
-            """
-            SELECT * FROM mOrdinateCategorisation
-            """
-        )
+            @Test
+            fun `ordinate categorisation DPS member reference - blank member should cause error`() {
+                dbConnection.createStatement().executeUpdate(
+                    """
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (1122, 3344, 5566, "signature", "source", "FixPrfx_dim:ExpDim-1-Code( )")
+                    """.trimIndent()
+                )
 
-        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-            "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-            "1122, 2, 9999, signature, source, FixPrfx_dim:TypDim-1-Code(*)"
-        )
+                val thrown = catchThrowable { replaceDictionaryInDb() }
+
+                assertThat(thrown).isInstanceOf(HaltException::class.java)
+
+                assertThat(diagnosticCollector.events).contains(
+                    "VALIDATION [OrdinateCategorisationSnapshot.dpsMemberXbrlCode: is blank]",
+                    "VALIDATION [OrdinateCategorisationSnapshot.memberId: does not have value]"
+                )
+            }
+        }
     }
 }

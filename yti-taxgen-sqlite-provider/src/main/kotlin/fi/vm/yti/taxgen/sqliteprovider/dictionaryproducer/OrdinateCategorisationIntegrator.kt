@@ -11,20 +11,20 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class OrdinateCategorisationBinder(
-    val categorisationBindings: List<OrdinateCategorisationBindingData>,
+class OrdinateCategorisationIntegrator(
+    val categorisationBindings: List<OrdinateCategorisationSnapshot>,
     val diagnostic: Diagnostic
 ) {
     companion object {
-        private val DIMENSION_MEMBER_SIGNATURE_PATTERN = "\\A([^\\(\\)]+)\\(([^\\(\\)]+)\\)\\z".toRegex()
+        private val SIGNATURE_PATTERN = "\\A([^\\(\\)]+)\\(([^\\(\\)]+)\\)\\z".toRegex()
         private const val OPEN_MEMBER_MARKER = "*"
 
-        fun rememberInitialCategorizations(diagnostic: Diagnostic): OrdinateCategorisationBinder {
+        fun loadInitialState(diagnostic: Diagnostic): OrdinateCategorisationIntegrator {
 
-            fun tokenizeDps(dps: String?): List<String> {
+            fun tokenizeSignature(dps: String?): List<String> {
                 dps ?: diagnostic.fatal("Empty DPS")
 
-                val match = DIMENSION_MEMBER_SIGNATURE_PATTERN.matchEntire(dps)
+                val match = SIGNATURE_PATTERN.matchEntire(dps)
                     ?: diagnostic.fatal("Unsupported DPS structure")
 
                 return listOf(match.groupValues[1], match.groupValues[2])
@@ -35,9 +35,9 @@ class OrdinateCategorisationBinder(
                     .selectAll()
                     .map { row ->
                         val dps = row[OrdinateCategorisationTable.dpsCol]
-                        val (dimensionXbrlCode, memberXbrlCode) = tokenizeDps(dps)
+                        val (dimensionXbrlCode, memberXbrlCode) = tokenizeSignature(dps)
 
-                        OrdinateCategorisationBindingData(
+                        OrdinateCategorisationSnapshot(
                             ordinateId = row[OrdinateCategorisationTable.ordinateIdCol],
                             dimensionMemberSignature = row[OrdinateCategorisationTable.dimensionMemberSignatureCol],
                             source = row[OrdinateCategorisationTable.sourceCol],
@@ -52,7 +52,7 @@ class OrdinateCategorisationBinder(
                     }
             }
 
-            return OrdinateCategorisationBinder(categorisationBindings, diagnostic)
+            return OrdinateCategorisationIntegrator(categorisationBindings, diagnostic)
         }
     }
 
@@ -128,7 +128,7 @@ class OrdinateCategorisationBinder(
         }.toMap()
     }
 
-    private fun insertOrdinateCategorisation(categorisationBinding: OrdinateCategorisationBindingData) {
+    private fun insertOrdinateCategorisation(categorisationBinding: OrdinateCategorisationSnapshot) {
         OrdinateCategorisationTable.insert {
             it[ordinateIdCol] = categorisationBinding.ordinateId
             it[dimensionIdCol] = categorisationBinding.dimensionId

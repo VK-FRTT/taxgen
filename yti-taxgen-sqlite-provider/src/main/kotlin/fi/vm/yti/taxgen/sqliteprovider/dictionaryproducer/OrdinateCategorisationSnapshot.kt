@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateNonBlank
 import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
 import org.jetbrains.exposed.dao.EntityID
 
-data class OrdinateCategorisationBindingData(
+data class OrdinateCategorisationSnapshot(
     val ordinateId: EntityID<Int>?,
     val dimensionMemberSignature: String?,
     val source: String?,
@@ -24,25 +24,25 @@ data class OrdinateCategorisationBindingData(
         validateNonBlank(
             validationResults = validationResults,
             instance = this,
-            property = OrdinateCategorisationBindingData::dpsDimensionXbrlCode
+            property = OrdinateCategorisationSnapshot::dpsDimensionXbrlCode
         )
 
         validateNonBlank(
             validationResults = validationResults,
             instance = this,
-            property = OrdinateCategorisationBindingData::dpsMemberXbrlCode
+            property = OrdinateCategorisationSnapshot::dpsMemberXbrlCode
         )
 
         validateNonNull(
             validationResults = validationResults,
             instance = this,
-            property = OrdinateCategorisationBindingData::dimensionId
+            property = OrdinateCategorisationSnapshot::dimensionId
         )
 
         validateNonNull(
             validationResults = validationResults,
             instance = this,
-            property = OrdinateCategorisationBindingData::memberId
+            property = OrdinateCategorisationSnapshot::memberId
         )
     }
 }
