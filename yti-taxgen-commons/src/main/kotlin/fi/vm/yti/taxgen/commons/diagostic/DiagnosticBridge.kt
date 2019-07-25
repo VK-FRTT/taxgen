@@ -10,6 +10,8 @@ import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.Severity.INFO
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.util.LinkedList
 
 class DiagnosticBridge(
@@ -51,7 +53,9 @@ class DiagnosticBridge(
         } catch (failEx: FailException) {
             throw failEx
         } catch (ex: Exception) {
-            fatal(ex.message ?: ex.javaClass.simpleName)
+            val sw = StringWriter()
+            ex.printStackTrace(PrintWriter(sw))
+            fatal("Internal error. $sw")
         }
     }
 
