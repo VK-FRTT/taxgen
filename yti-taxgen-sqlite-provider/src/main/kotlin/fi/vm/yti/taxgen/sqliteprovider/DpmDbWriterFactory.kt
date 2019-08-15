@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer.DictionaryCreateDbWriter
-import fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer.DictionaryReplaceDbWriter
+import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.DictionaryReplaceDbWriter
 import java.nio.file.Path
 
 object DpmDbWriterFactory {

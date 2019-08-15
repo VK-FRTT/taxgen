@@ -8,7 +8,8 @@ fun validateDpmElements(
     elements: List<DpmElement>
 ) {
     elements.forEach {
-        val context = it.validationContextInfo()
-        diagnostic.validate(it, context)
+        diagnostic.validate(it) {
+            it.validationContextInfo()
+        }
     }
 }

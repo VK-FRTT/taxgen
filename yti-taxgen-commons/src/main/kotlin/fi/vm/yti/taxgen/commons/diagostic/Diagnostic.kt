@@ -12,8 +12,12 @@ interface Diagnostic {
     fun info(message: String)
 
     fun validate(
+        validatable: Validatable
+    )
+
+    fun validate(
         validatable: Validatable,
-        validatableInfo: ValidatableInfo? = null
+        infoProvider: () -> ValidatableInfo
     )
 
     fun haltIfUnrecoverableErrors(messageProvider: () -> String)

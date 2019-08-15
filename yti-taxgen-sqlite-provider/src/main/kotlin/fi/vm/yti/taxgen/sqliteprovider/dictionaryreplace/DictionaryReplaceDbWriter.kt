@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer
+package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace
 
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
@@ -9,6 +9,7 @@ import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
+import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform.OrdinateCategorisationTransform
 import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
@@ -36,8 +37,10 @@ class DictionaryReplaceDbWriter(
             DbLanguages.configureLanguages()
             val languageIds = DbLanguages.resolveLanguageIds()
 
-            val ordinateCategorisationBinder =
-                OrdinateCategorisationIntegrator.loadInitialState(diagnosticContext)
+            val ordinateCategorisationTransform =
+                OrdinateCategorisationTransform.loadInitialState(
+                    diagnosticContext
+                )
 
             DbDictionaries.purgeDictionaryContent()
 
@@ -91,7 +94,7 @@ class DictionaryReplaceDbWriter(
                 ownerId = fixedEntitiesLookupItem.metricDomainOwnerId
             )
 
-            ordinateCategorisationBinder.rebindAndWriteCategorisations(
+            ordinateCategorisationTransform.transformAndWriteCategorisations(
                 dictionaryLookupItems + metricDictionaryLookupItem,
                 fixedEntitiesLookupItem
             )
@@ -101,6 +104,7 @@ class DictionaryReplaceDbWriter(
     private fun failIfDbConnectionFails() {
         try {
             val dbConnection = DriverManager.getConnection("jdbc:sqlite:$targetDbPath")
+            dbConnection.createStatement().executeQuery("SELECT * FROM mOwner")
             dbConnection.close()
         } catch (sqlEx: SQLException) {
             diagnosticContext.fatal("Target database file open failed: ${sqlEx.message}")

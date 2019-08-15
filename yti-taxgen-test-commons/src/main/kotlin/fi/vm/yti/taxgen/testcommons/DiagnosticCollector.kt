@@ -37,6 +37,8 @@ class DiagnosticCollector : DiagnosticConsumer {
         validatableInfo: ValidatableInfo,
         validationResults: List<ValidationResultInfo>
     ) {
+        //TODO - Event should be: VALIDATION [SubjectType] [SubjectIdentifier] [Input] [Explanation]
+
         events.add("VALIDATED OBJECT [${validatableInfo.objectKind}] [${validatableInfo.objectAddress}]")
 
         validationResults.forEach {
@@ -47,5 +49,13 @@ class DiagnosticCollector : DiagnosticConsumer {
 
     fun eventsString(): String {
         return events.joinToString(separator = "\n")
+    }
+
+    fun reset() {
+        events.clear()
+
+        fatalCount = 0
+        errorCount = 0
+        validationCount = 0
     }
 }

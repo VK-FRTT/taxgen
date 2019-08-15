@@ -93,8 +93,19 @@ class DiagnosticBridge(
     }
 
     override fun validate(
+        validatable: Validatable
+    ) {
+        validate(validatable) {
+            ValidatableInfo(
+                objectKind = validatable.javaClass.simpleName,
+                objectAddress = ""
+            )
+        }
+    }
+
+    override fun validate(
         validatable: Validatable,
-        validatableInfo: ValidatableInfo?
+        infoProvider: () -> ValidatableInfo
     ) {
         val collector = ValidationCollector()
         validatable.validate(collector)
@@ -103,11 +114,7 @@ class DiagnosticBridge(
 
         if (results.any()) {
             incrementCounter(ERROR)
-            val info = validatableInfo ?: ValidatableInfo(
-                objectKind = validatable.javaClass.simpleName,
-                objectAddress = ""
-            )
-
+            val info = infoProvider()
             consumer.validationResults(info, results)
         }
     }

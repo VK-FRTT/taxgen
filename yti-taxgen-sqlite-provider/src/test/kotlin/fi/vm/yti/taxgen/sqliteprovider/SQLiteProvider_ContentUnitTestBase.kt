@@ -1,8 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicNode
@@ -12,7 +14,7 @@ import java.nio.file.StandardCopyOption
 import java.sql.Connection
 import java.sql.DriverManager
 
-internal abstract class DpmDbWriter_ContentUnitTestBase {
+internal abstract class SQLiteProvider_ContentUnitTestBase {
     enum class DbInitMode {
         DICTIONARY_CREATE,
         DICTIONARY_REPLACE
@@ -27,7 +29,7 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
 
     @BeforeEach
     fun baseInit() {
-        tempFolder = TempFolder("sqliteprovider_content")
+        tempFolder = TempFolder(javaClass.simpleName)
     }
 
     @AfterEach
@@ -69,7 +71,15 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             diagnosticContext
         )
 
-        dbWriter.writeModel(model)
+        val thrown = catchThrowable { dbWriter.writeModel(model) }
+
+        if (thrown is HaltException) {
+            println(diagnosticCollector.eventsString())
+        }
+
+        if (thrown != null) {
+            throw thrown
+        }
 
         dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
     }
@@ -91,7 +101,15 @@ internal abstract class DpmDbWriter_ContentUnitTestBase {
             diagnosticContext
         )
 
-        dbWriter.writeModel(model)
+        val thrown = catchThrowable { dbWriter.writeModel(model) }
+
+        if (thrown is HaltException) {
+            println(diagnosticCollector.eventsString())
+        }
+
+        if (thrown != null) {
+            throw thrown
+        }
 
         dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
     }

@@ -22,7 +22,6 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -41,8 +40,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 
-@DisplayName("SQLite DPM DB: table structure")
-internal class DpmDbWriter_TableStructure_UnitTest {
+internal class SQLiteProvider_TableStructure_UnitTest {
 
     enum class StructureInitMode {
         SELF_INITIALIZED,

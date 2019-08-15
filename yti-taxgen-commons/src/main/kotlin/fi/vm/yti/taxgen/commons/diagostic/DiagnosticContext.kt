@@ -32,8 +32,12 @@ interface DiagnosticContext : Diagnostic {
     override fun info(message: String)
 
     override fun validate(
+        validatable: Validatable
+    )
+
+    override fun validate(
         validatable: Validatable,
-        validatableInfo: ValidatableInfo?
+        infoProvider: () -> ValidatableInfo
     )
 
     override fun haltIfUnrecoverableErrors(messageProvider: () -> String)

@@ -4,13 +4,11 @@ import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 
-@DisplayName("SQLite DPM DB content: hierarchies")
-internal class DpmDbWriter_ContentHierarchy_UnitTest : DpmDbWriter_ContentUnitTestBase() {
+internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_ContentUnitTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 

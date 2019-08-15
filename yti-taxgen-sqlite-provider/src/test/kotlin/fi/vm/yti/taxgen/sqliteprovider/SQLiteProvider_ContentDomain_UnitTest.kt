@@ -2,13 +2,11 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 
-@DisplayName("SQLite DPM DB content: domains")
-internal class DpmDbWriter_ContentDomain_UnitTest : DpmDbWriter_ContentUnitTestBase() {
+internal class SQLiteProvider_ContentDomain_UnitTest : SQLiteProvider_ContentUnitTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 

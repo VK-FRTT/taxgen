@@ -3,12 +3,10 @@ package fi.vm.yti.taxgen.sqliteprovider
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-@DisplayName("SQLite DPM DB content: common")
-internal class DpmDbWriter_ContentCommon_UnitTest : DpmDbWriter_ContentUnitTestBase() {
+internal class SQLiteProvider_ContentCommon_UnitTest : SQLiteProvider_ContentUnitTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
