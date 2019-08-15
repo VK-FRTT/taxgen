@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
@@ -89,7 +90,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "FATAL: org.sqlite.SQLiteException: [SQLITE_NOTADB]  File opened that is not a database file (file is not a database)"
+                "FATAL: Target database file open failed: [SQLITE_NOTADB]  File opened that is not a database file (file is not a database)"
             )
 
             assertThat(targetDbPath).exists().isRegularFile()
@@ -197,6 +198,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should replace dictionary within database from DPM source config`() {
         val args = arrayOf(
@@ -235,6 +237,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should report error when DPM source config has Metrics without referenced ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
@@ -261,6 +264,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should replace dictionary within database from DPM source config having Metrics and ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
@@ -299,6 +303,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should replace dictionary within database from DPM source config having ExpDoms only`() {
 
@@ -338,6 +343,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should replace dictionary within database from DPM source config having TypDoms only`() {
 
@@ -377,6 +383,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should replace dictionary within database from DPM source config having ExpDims and ExpDoms`() {
 
@@ -416,6 +423,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should replace dictionary within database from DPM source config having TypDims and TypDoms`() {
 

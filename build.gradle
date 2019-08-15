@@ -48,11 +48,17 @@ allprojects { subproj ->
     }
 
     test {
-        useJUnitPlatform()
-
-        beforeTest { TestDescriptor descriptor ->
-            logger.lifecycle("==> ${descriptor.className}: ${descriptor.name}")
+        useJUnitPlatform {
+            excludeTags 'e2etest'
         }
+    }
+
+    task e2eTest(type: Test) {
+        useJUnitPlatform {
+            includeTags 'e2etest'
+        }
+        check.dependsOn it
+        shouldRunAfter test
     }
 }
 

@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.cli
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
@@ -43,6 +44,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should capture DPM sources to folder from DPM source config`() {
         val args = arrayOf(

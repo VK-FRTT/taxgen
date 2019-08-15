@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
@@ -236,6 +237,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should produce database from DPM source config`() {
         val args = arrayOf(
@@ -274,6 +276,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should report error when DPM source config has Metrics without referenced ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
@@ -300,6 +303,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should produce database from DPM source config having Metrics and ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
@@ -338,6 +342,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should produce database from DPM source config having ExpDoms only`() {
 
@@ -377,6 +382,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should produce database from DPM source config having TypDoms only`() {
 
@@ -416,6 +422,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should produce database from DPM source config having ExpDims and ExpDoms`() {
 
@@ -455,6 +462,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should produce database from DPM source config having TypDims and TypDoms`() {
 
