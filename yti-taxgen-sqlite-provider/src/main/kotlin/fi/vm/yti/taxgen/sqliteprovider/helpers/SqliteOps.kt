@@ -10,6 +10,7 @@ internal object SqliteOps {
     fun connectDatabase(targetDbPath: Path) {
         val dbUrl = "jdbc:sqlite:$targetDbPath"
         Database.connect(dbUrl, "org.sqlite.JDBC")
+        TransactionManager.resetCurrent(null)
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
     }
 }
