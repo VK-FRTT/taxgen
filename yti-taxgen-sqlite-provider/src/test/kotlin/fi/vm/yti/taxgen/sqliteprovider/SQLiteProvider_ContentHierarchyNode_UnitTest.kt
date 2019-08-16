@@ -33,11 +33,11 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
 
                 assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                     "#HierarchyCode, #HierarchyNodeLabel, #MemberCode, #ParentMemberCode, #ParentMemberLabel, #Level, #Order, #Path",
-                    "ExpDomHier-1-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 1, 1, nil",
-                    "ExpDomHier-1-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, nil, nil, 1, 2, nil",
-                    "ExpDomHier-1-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 3, nil",
-                    "ExpDomHier-1-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, Mbr-3-Code, Mbr-3-Lbl-Fi, 3, 4, nil",
-                    "ExpDomHier-1-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 5, nil",
+                    "ExpDomHier-3-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 1, 1, nil",
+                    "ExpDomHier-3-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, nil, nil, 1, 2, nil",
+                    "ExpDomHier-3-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 3, nil",
+                    "ExpDomHier-3-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, Mbr-3-Code, Mbr-3-Lbl-Fi, 3, 4, nil",
+                    "ExpDomHier-3-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 5, nil",
                     "MetHier-1-Code, MetHierNode-1-Lbl-Fi, ed1, nil, nil, 1, 1, nil",
                     "MetHier-1-Code, MetHierNode-2-Lbl-Fi, bd2, nil, nil, 1, 2, nil",
                     "MetHier-1-Code, MetHierNode-2.1-Lbl-Fi, di3, bd2, Met-2-Lbl-Fi, 2, 3, nil",
@@ -74,11 +74,11 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
 
                 assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                     "#HierarchyCode, #HierarchyNodeLabel, #MemberCode, #ComparisonOperator, #UnaryOperator, #IsAbstract, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #OwnerName",
-                    "ExpDomHier-1-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-                    "ExpDomHier-1-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, =, +, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-                    "ExpDomHier-1-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, =, +, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-                    "ExpDomHier-1-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-                    "ExpDomHier-1-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDomHier-3-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDomHier-3-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, =, +, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDomHier-3-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, =, +, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDomHier-3-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDomHier-3-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "MetHier-1-Code, MetHierNode-1-Lbl-Fi, ed1, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "MetHier-1-Code, MetHierNode-2-Lbl-Fi, bd2, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "MetHier-1-Code, MetHierNode-2.1-Lbl-Fi, di3, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",

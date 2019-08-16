@@ -1,8 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform
 
+import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.FixedEntitiesLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
@@ -27,6 +26,21 @@ class OrdinateCategorisationTransform(
                     }
             }
 
+            baselineCategorisations.forEach {
+                diagnostic.validate(it) {
+                    ValidatableInfo(
+                        objectKind = "BaselineOrdinateCategorisation",
+                        objectAddress = "OrdinateID: ${it.ordinateId}"
+                    )
+                }
+
+                //TODO
+                //validateSignatureRelationEquality(
+                //    it.databaseIdSignature,
+                //    it.xbrlCodeSignature
+                //)
+            }
+
             diagnostic.haltIfUnrecoverableErrors {
                 "OrdinateCategorisation baseline loading failed"
             }
@@ -38,25 +52,20 @@ class OrdinateCategorisationTransform(
         }
     }
 
-    fun transformAndWriteCategorisations(
-        dpmDictionaryLookupItems: List<DpmDictionaryLookupItem>,
-        fixedEntitiesLookupItem: FixedEntitiesLookupItem
-    ) {
-        // Transformation can be based on XBRL codes.
-        // XBRL code contains owner prefix and thus is unique DB wide.
-        //
-        // Dimension XBRL Code: {owner.prefix}_dim:{dimension.dimensionCode}
-        // Member XBRL Code: {owner.prefix}_{domain.domainCode}:{member.memberCode}
-
-        val transformationContext =
-            TransformationContext.fromLookupItems(dpmDictionaryLookupItems, fixedEntitiesLookupItem)
-
+    fun transformAndWriteCategorisations() {
         val finalCategorisations = baselineCategorisations.map { baseline ->
             FinalOrdinateCategorisation.fromBaseline(
-                baseline,
-                transformationContext,
-                diagnostic
+                baseline
             )
+        }
+
+        finalCategorisations.forEach {
+            diagnostic.validate(it) {
+                ValidatableInfo(
+                    objectKind = "FinalOrdinateCategorisation",
+                    objectAddress = "OrdinateID: ${it.ordinateId}"
+                )
+            }
         }
 
         diagnostic.haltIfUnrecoverableErrors {
@@ -75,11 +84,11 @@ class OrdinateCategorisationTransform(
     private fun insertOrdinateCategorisation(categorisation: FinalOrdinateCategorisation) {
         OrdinateCategorisationTable.insert {
             it[ordinateIdCol] = categorisation.ordinateId
-            it[dimensionIdCol] = categorisation.dimensionId
-            it[memberIdCol] = categorisation.memberId
-            it[dimensionMemberSignatureCol] = categorisation.databaseIdSignatureLiteral
+            it[dimensionIdCol] = categorisation.relationships.dimensionId
+            it[memberIdCol] = categorisation.relationships.memberId
+            it[dimensionMemberSignatureCol] = categorisation.databaseIdSignature
             it[sourceCol] = categorisation.source
-            it[dpsCol] = categorisation.xbrlCodeSignatureLiteral
+            it[dpsCol] = categorisation.xbrlCodeSignature
         }
     }
 }

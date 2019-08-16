@@ -1,7 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
 
 /**
  * Represents a node in a hierarchy of members, specifying how members relate to each other,
@@ -67,4 +70,9 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
 
     //Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
     val pathCol = varchar("Path", 3999).nullable()
+
+    fun rowWhereHierarchyIdAndMemberCode(hierarchyId: EntityID<Int>, memberCode: String) =
+        (HierarchyNodeTable innerJoin MemberTable).select {
+            HierarchyNodeTable.hierarchyIdCol.eq(hierarchyId) and MemberTable.memberCodeCol.eq(memberCode)
+        }.firstOrNull()
 }

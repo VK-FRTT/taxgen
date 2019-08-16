@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.validators.validateNonBlank
 import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
@@ -19,19 +19,65 @@ data class BaselineOrdinateCategorisation(
     val source: String?
 ) : Validatable {
 
-    data class OpenAxisValueRestrictionSignature(
-        val rawSignature: String?,
-        val hierarchyIdentifier: String,
-        val hierarchyStartingMemberIdentifier: String,
-        val startingMemberIncluded: Boolean
-    )
-
     data class Signature(
-        val rawSignature: String?,
         val dimensionIdentifier: String,
         val memberIdentifier: String,
         val openAxisValueRestrictionSignature: OpenAxisValueRestrictionSignature?
-    )
+    ) {
+        fun validate(validationResults: ValidationResults) {
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = Signature::dimensionIdentifier
+            )
+
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = Signature::memberIdentifier
+            )
+
+            openAxisValueRestrictionSignature?.validate(validationResults)
+        }
+    }
+
+    data class OpenAxisValueRestrictionSignature(
+        val hierarchyIdentifier: String,
+        val hierarchyStartingMemberIdentifier: String,
+        val startingMemberIncluded: String
+    ) {
+        companion object {
+            val VALID_STARTING_MEMBER_INCLUDED_VALUES = listOf("0", "1")
+        }
+
+        fun validate(validationResults: ValidationResults) {
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = OpenAxisValueRestrictionSignature::hierarchyIdentifier
+            )
+
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = OpenAxisValueRestrictionSignature::hierarchyStartingMemberIdentifier
+            )
+
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = OpenAxisValueRestrictionSignature::startingMemberIncluded
+            )
+
+            validateConditionTruthy(
+                validationResults = validationResults,
+                instance = this,
+                property = OpenAxisValueRestrictionSignature::startingMemberIncluded,
+                condition = { VALID_STARTING_MEMBER_INCLUDED_VALUES.contains(startingMemberIncluded) },
+                message = { "unsupported IsStartingMemberIncluded value '$startingMemberIncluded'" }
+            )
+        }
+    }
 
     companion object {
 
@@ -52,24 +98,12 @@ data class BaselineOrdinateCategorisation(
                 diagnostic
             )
 
-            // TODO - derive + validate equality with original xbrlCodeSignature
-            // val derivedXbrlCodeSignature = deriveXbrlCodeSignatureFromDatabaseIdSignature(databaseIdSignature)
-
-            val baselineCategorisation = BaselineOrdinateCategorisation(
+            return BaselineOrdinateCategorisation(
                 ordinateId = row[OrdinateCategorisationTable.ordinateIdCol],
                 databaseIdSignature = databaseIdSignature,
                 xbrlCodeSignature = xbrlCodeSignature,
                 source = row[OrdinateCategorisationTable.sourceCol]
             )
-
-            diagnostic.validate(baselineCategorisation) {
-                ValidatableInfo(
-                    objectKind = "BaselineOrdinateCategorisation",
-                    objectAddress = "OrdinateID: ${baselineCategorisation.ordinateId}, DPS: ${baselineCategorisation.xbrlCodeSignature.rawSignature}"
-                )
-            }
-
-            return baselineCategorisation
         }
 
         private fun tokenizeSignature(
@@ -82,21 +116,26 @@ data class BaselineOrdinateCategorisation(
             val signatureMatch = SIGNATURE_PATTERN.matchEntire(rawSignature)
                 ?: diagnostic.fatal("Unsupported signature in OrdinateCategorisation.${column.name}: $rawSignature")
 
-            val signatureMatchGroups = signatureMatch.groups as MatchNamedGroupCollection
+            fun optionalSignatureComponent(partName: String) =
+                (signatureMatch.groups as MatchNamedGroupCollection)[partName]?.value
 
-            return if (signatureMatchGroups["dim"] != null) {
+            fun signaturePart(partName: String) = optionalSignatureComponent(partName)!!
+
+            return if (optionalSignatureComponent("dim") != null) {
                 BaselineOrdinateCategorisation.Signature(
-                    rawSignature = rawSignature,
-                    dimensionIdentifier = signatureMatchGroups["dim"]!!.value,
-                    memberIdentifier = signatureMatchGroups["mem"]!!.value,
+                    dimensionIdentifier = signaturePart("dim"),
+                    memberIdentifier = signaturePart("mem"),
                     openAxisValueRestrictionSignature = null
                 )
             } else {
                 BaselineOrdinateCategorisation.Signature(
-                    rawSignature = rawSignature,
-                    dimensionIdentifier = signatureMatchGroups["dim2"]!!.value,
-                    memberIdentifier = signatureMatchGroups["mem2"]!!.value,
-                    openAxisValueRestrictionSignature = null
+                    dimensionIdentifier = signaturePart("dimOa"),
+                    memberIdentifier = signaturePart("memOa"),
+                    openAxisValueRestrictionSignature = OpenAxisValueRestrictionSignature(
+                        hierarchyIdentifier = signaturePart("hierOa"),
+                        hierarchyStartingMemberIdentifier = signaturePart("startmemOa"),
+                        startingMemberIncluded = signaturePart("startMemberInclOa")
+                    )
                 )
             }
         }
@@ -112,15 +151,15 @@ data class BaselineOrdinateCategorisation(
 
             |
 
-            (?<dim2>[^\(\)]+)
+            (?<dimOa>[^\(\)]+)
                 \(
-                (?<mem2>[^\(\)\[\]]+)
+                (?<memOa>[^\(\)\[\]]+)
                     \[
-                    (?<hier2>[^\(\)\[\];]+)
+                    (?<hierOa>[^\(\)\[\];]+)
                     ;
-                    (?<startmem2>[^\(\)\[\];]+)
+                    (?<startmemOa>[^\(\)\[\];]+)
                     ;
-                    (?<isincl2>[^\(\)\[\];]+)
+                    (?<startMemberInclOa>[^\(\)\[\];]+)
                     \]
                 \)
             \z
@@ -128,28 +167,7 @@ data class BaselineOrdinateCategorisation(
     }
 
     override fun validate(validationResults: ValidationResults) {
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = databaseIdSignature,
-            property = Signature::dimensionIdentifier
-        )
-
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = databaseIdSignature,
-            property = Signature::memberIdentifier
-        )
-
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = xbrlCodeSignature,
-            property = Signature::dimensionIdentifier
-        )
-
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = xbrlCodeSignature,
-            property = Signature::memberIdentifier
-        )
+        databaseIdSignature.validate(validationResults)
+        xbrlCodeSignature.validate(validationResults)
     }
 }

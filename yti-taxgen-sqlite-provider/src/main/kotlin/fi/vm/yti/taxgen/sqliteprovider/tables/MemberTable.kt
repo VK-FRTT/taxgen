@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.tables
 
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.select
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -28,4 +29,12 @@ object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
     val memberXBRLCodeCol = text("MemberXBRLCode").nullable()
     val isDefaultMemberCol = bool("IsDefaultMember").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    fun rowWhereXbrlCode(xbrlCode: String) = select {
+        MemberTable.memberXBRLCodeCol.eq(xbrlCode)
+    }.firstOrNull()
+
+    fun openMemberRow() = select {
+        MemberTable.id.eq(9999)
+    }.firstOrNull()
 }

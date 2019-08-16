@@ -116,11 +116,11 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
             dbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)")
+                VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-2-Code)", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-2-Code)")
                 """.trimIndent()
             )
 
-            replaceDictionaryInDb()
+            dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsExactly(
                 "ENTER [SQLiteDbWriter] []",
@@ -131,7 +131,7 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
 
             assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                 "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                "111, 1, 1, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code), source, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)"
+                "111, 1, 2, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-2-Code), source, FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-2-Code)"
             )
         }
 
@@ -140,9 +140,9 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
             dumpDiagnosticsWhenThrown {
                 dbConnection.createStatement().executeUpdate(
                     """
-                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, 222, 333, "FixPrfx_dim:TypDim-1-Code(*)", "source", "FixPrfx_dim:TypDim-1-Code(*)")
-                """.trimIndent()
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (111, 222, 333, "FixPrfx_dim:TypDim-1-Code(*)", "source", "FixPrfx_dim:TypDim-1-Code(*)")
+                    """.trimIndent()
                 )
 
                 replaceDictionaryInDb()
@@ -166,9 +166,9 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
             dumpDiagnosticsWhenThrown {
                 dbConnection.createStatement().executeUpdate(
                     """
-                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, 222, 333, "fi_dim:PAL(*[444;555;666])", "source", "FixPrfx_dim:ExpDim-1-Code(*[PA1;x0;0])")
-                """.trimIndent()
+                    INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                    VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-1-Code(*[444;555;1])", "source", "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code;0])")
+                    """.trimIndent()
                 )
 
                 replaceDictionaryInDb()
@@ -177,7 +177,7 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
 
                 assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                     "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                    "111, 1, 9999, fi_dim:PAL(*[444;555;666]), source, FixPrfx_dim:ExpDim-1-Code(*[PA1;x0;0])"
+                    "111, 1, 9999, FixPrfx_dim:ExpDim-1-Code(*[3;2;0]), source, FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code;0])"
                 )
             }
         }
@@ -265,15 +265,15 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                 }
 
                 @Test
-                fun `blank dimension part should cause error`() {
+                fun `blank dimension value should cause error`() {
                     val faultySignature = " (FixPrfx_ExpDom-1-Code:Mbr-1-Code)"
 
                     //DimensionMemberSignature
                     insertCategorisationWithDimensionMemberSignature(faultySignature)
                     ensureHaltThrown { replaceDictionaryInDb() }
 
-                    assertThat(diagnosticCollector.events).contains(
-                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111, DPS: FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                         "VALIDATION [Signature.dimensionIdentifier: is blank]"
                     )
 
@@ -281,22 +281,22 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     insertCategorisationWithDps(faultySignature)
                     ensureHaltThrown { replaceDictionaryInDb() }
 
-                    assertThat(diagnosticCollector.events).contains(
-                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111, DPS:  (FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                         "VALIDATION [Signature.dimensionIdentifier: is blank]"
                     )
                 }
 
                 @Test
-                fun `blank member should cause error`() {
+                fun `blank member value should cause error`() {
                     val faultySignature = "FixPrfx_dim:ExpDim-1-Code( )"
 
                     //DimensionMemberSignature
                     insertCategorisationWithDimensionMemberSignature(faultySignature)
                     ensureHaltThrown { replaceDictionaryInDb() }
 
-                    assertThat(diagnosticCollector.events).contains(
-                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111, DPS: FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                         "VALIDATION [Signature.memberIdentifier: is blank]"
                     )
 
@@ -304,9 +304,78 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     insertCategorisationWithDps(faultySignature)
                     ensureHaltThrown { replaceDictionaryInDb() }
 
-                    assertThat(diagnosticCollector.events).contains(
-                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111, DPS: FixPrfx_dim:ExpDim-1-Code( )]",
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                         "VALIDATION [Signature.memberIdentifier: is blank]"
+                    )
+                }
+
+                @Test
+                fun `blank hierarchy value should cause error`() {
+                    val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*[ ;x0;0])"
+
+                    //DimensionMemberSignature
+                    insertCategorisationWithDimensionMemberSignature(faultySignature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyIdentifier: is blank]"
+                    )
+
+                    //DPS
+                    insertCategorisationWithDps(faultySignature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyIdentifier: is blank]"
+                    )
+                }
+
+                @Test
+                fun `blank hierarchy starting member value should cause error`() {
+                    val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code; ;0])"
+
+                    //DimensionMemberSignature
+                    insertCategorisationWithDimensionMemberSignature(faultySignature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier: is blank]"
+                    )
+
+                    //DPS
+                    insertCategorisationWithDps(faultySignature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier: is blank]"
+                    )
+                }
+
+                @Test
+                fun `blank starting member inclusion marker should cause error`() {
+                    val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code; ])"
+
+                    //DimensionMemberSignature
+                    insertCategorisationWithDimensionMemberSignature(faultySignature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: is blank]"
+                    )
+
+                    //DPS
+                    insertCategorisationWithDps(faultySignature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: is blank]"
                     )
                 }
             }
@@ -332,8 +401,8 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     ensureHaltThrown { replaceDictionaryInDb() }
 
                     assertThat(diagnosticCollector.events).containsSubsequence(
-                        "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 111, DPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-1-Code)]",
-                        "VALIDATION [FinalOrdinateCategorisation.dimensionId: does not have value]"
+                        "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [Relationships.dimensionId: does not have value]"
                     )
                 }
 
@@ -355,8 +424,78 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     ensureHaltThrown { replaceDictionaryInDb() }
 
                     assertThat(diagnosticCollector.events).containsSubsequence(
-                        "VALIDATED OBJECT [OrdinateCategorisation] [OrdinateID: 111, DPS: FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)]",
-                        "VALIDATION [FinalOrdinateCategorisation.memberId: does not have value]"
+                        "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [Relationships.memberId: does not have value]"
+                    )
+                }
+
+                @Test
+                fun `unknown hierarchy in DPS should cause error`() {
+                    val signature = "FixPrfx_dim:ExpDim-1-Code(*[NonExistingHierarchy;Mbr-2-Code;0])"
+
+                    //DimensionMemberSignature
+                    insertCategorisationWithDimensionMemberSignature(signature)
+                    replaceDictionaryInDb()
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "ENTER [SQLiteDbWriter] []",
+                        "EXIT [SQLiteDbWriter]"
+                    )
+
+                    //DPS
+                    insertCategorisationWithDps(signature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSequence(
+                        "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionRelationships.hierarchyId: does not have value]",
+                        "VALIDATION [OpenAxisValueRestrictionRelationships.hierarchyStartingMemberId: does not have value]"
+                    )
+                }
+
+                @Test
+                fun `unknown hierarchy starting member in DPS should cause error`() {
+                    val signature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;NonExistingMember;0])"
+
+                    //DimensionMemberSignature
+                    insertCategorisationWithDimensionMemberSignature(signature)
+                    replaceDictionaryInDb()
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "ENTER [SQLiteDbWriter] []",
+                        "EXIT [SQLiteDbWriter]"
+                    )
+
+                    //DPS
+                    insertCategorisationWithDps(signature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSequence(
+                        "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionRelationships.hierarchyStartingMemberId: does not have value]"
+                    )
+                }
+
+                @Test
+                fun `unsupported starting member inclusion marker should cause error`() {
+                    val signature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code;XYZ])"
+
+                    //DimensionMemberSignature
+                    insertCategorisationWithDimensionMemberSignature(signature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSubsequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
+                    )
+
+                    //DPS
+                    insertCategorisationWithDps(signature)
+                    ensureHaltThrown { replaceDictionaryInDb() }
+
+                    assertThat(diagnosticCollector.events).containsSequence(
+                        "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                        "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
                     )
                 }
             }

@@ -11,9 +11,6 @@ import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
 import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform.OrdinateCategorisationTransform
 import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DpmDictionaryLookupItem
 import java.nio.file.Path
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -59,7 +56,6 @@ class DictionaryReplaceDbWriter(
                 diagnosticContext
             )
 
-            val (memberLookupItems, hierarchyLookupItems) =
                 dpmModel.dictionaries
                     .zip(dictionaryLookupItems)
                     .map { (dictionary, dictionaryLookupItem) ->
@@ -76,28 +72,7 @@ class DictionaryReplaceDbWriter(
                         )
                     }
 
-            val metricDictionaryLookupItem = DpmDictionaryLookupItem(
-                domainLookupItems = listOf(
-                    DomainLookupItem(
-                        domainCode = fixedEntitiesLookupItem.metricDomainCode,
-                        memberLookupItems = memberLookupItems,
-                        hierarchyLookupItems = hierarchyLookupItems,
-                        domainId = fixedEntitiesLookupItem.metricDomainId
-                    )
-                ),
-                dimensionLookupItems = listOf(
-                    DimensionLookupItem(
-                        dimensionXbrlCode = fixedEntitiesLookupItem.metricDimensionXbrlCode,
-                        dimensionId = fixedEntitiesLookupItem.metricDimensionId
-                    )
-                ),
-                ownerId = fixedEntitiesLookupItem.metricDomainOwnerId
-            )
-
-            ordinateCategorisationTransform.transformAndWriteCategorisations(
-                dictionaryLookupItems + metricDictionaryLookupItem,
-                fixedEntitiesLookupItem
-            )
+            ordinateCategorisationTransform.transformAndWriteCategorisations()
         }
     }
 

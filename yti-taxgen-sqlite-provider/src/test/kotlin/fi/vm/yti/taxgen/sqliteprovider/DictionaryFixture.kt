@@ -182,6 +182,18 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 uri = "ExpDomHier-1-Uri",
                 concept = concept("ExpDomHier"),
                 hierarchyCode = "ExpDomHier-1-Code",
+                rootNodes = emptyList()
+            ),
+            Hierarchy(
+                uri = "ExpDomHier-2-Uri",
+                concept = concept("ExpDomHier"),
+                hierarchyCode = "ExpDomHier-2-Code",
+                rootNodes = emptyList()
+            ),
+            Hierarchy(
+                uri = "ExpDomHier-3-Uri",
+                concept = concept("ExpDomHier"),
+                hierarchyCode = "ExpDomHier-3-Code",
                 rootNodes = hierarchyNodes
             )
         )

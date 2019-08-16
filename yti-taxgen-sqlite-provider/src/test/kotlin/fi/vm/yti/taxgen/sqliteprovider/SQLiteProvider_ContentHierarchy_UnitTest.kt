@@ -38,6 +38,8 @@ internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_Content
                 assertThat(rs.toStringList()).containsExactly(
                     "#HierarchyCode, #HierarchyLabel, #HierarchyDescription, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #DomainCode, #OwnerName",
                     "ExpDomHier-1-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
+                    "ExpDomHier-2-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
+                    "ExpDomHier-3-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
                     "MetHier-1-Code, MetHier-Lbl-Fi, MetHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, MET, FixName"
                 )
             },

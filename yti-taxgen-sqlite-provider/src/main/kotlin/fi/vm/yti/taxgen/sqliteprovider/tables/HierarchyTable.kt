@@ -1,7 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
 
 /**
  * Hierarchies specify how members relate to each other,
@@ -41,4 +44,8 @@ object HierarchyTable : IntIdTable(name = "mHierarchy", columnName = "HierarchyI
 
     // Reference to concept (change, owner and translation) information
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    fun rowWhereDomainIdAndHierarchyCode(domainId: EntityID<Int>, hierachyCode: String) = select {
+        HierarchyTable.domainIdCol.eq(domainId) and HierarchyTable.hierarchyCodeCol.eq(hierachyCode)
+    }.firstOrNull()
 }

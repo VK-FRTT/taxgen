@@ -2,6 +2,8 @@ package fi.vm.yti.taxgen.sqliteprovider.tables
 
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.select
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -30,4 +32,8 @@ object DimensionTable : IntIdTable(name = "mDimension", columnName = "DimensionI
     val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
     val isTypedDimensionCol = bool("IsTypedDimension").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    fun rowWhereXbrlCode(xbrlCode: String): ResultRow? = select {
+        DimensionTable.dimensionXBRLCodeCol.eq(xbrlCode)
+    }.firstOrNull()
 }
