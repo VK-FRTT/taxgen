@@ -1,24 +1,22 @@
 {
-  "id": "5d0ddb13-ac77-407a-9e6b-c308bfef3146",
-  "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/EDA-H1",
-  "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1",
-  "membersUrl": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1/members/",
-  "members": [],
-  "codeValue": "EDA-H1",
-  "status": "DRAFT",
-  "startDate": "2018-12-31",
-  "created": "2019-01-22T14:20:48.000Z",
-  "modified": "2019-01-22T14:20:48.000Z",
-  "prefLabel": {
-    "fi": "DOME hierarchy duplicating EDA code"
+  "id" : "5d0ddb13-ac77-407a-9e6b-c308bfef3146",
+  "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/EDA-H1",
+  "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1",
+  "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1/members/",
+  "codeValue" : "EDA-H1",
+  "status" : "DRAFT",
+  "startDate" : "2018-12-31",
+  "created" : "2019-01-22T14:20:48.000Z",
+  "modified" : "2019-01-22T14:20:48.000Z",
+  "prefLabel" : {
+    "fi" : "DOME hierarchy duplicating EDA code"
   },
-  "parentCodeScheme": {
-    "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
-    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
+  "parentCodeScheme" : {
+    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
+    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
   },
-  "codeSchemes": [],
-  "propertyType": {
-    "url": "https://koodistot-dev.suomi.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
-    "uri": "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  "propertyType" : {
+    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri" : "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
   }
 }
