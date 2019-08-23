@@ -541,6 +541,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should report error when source config links to non existing DPM code list`() {
         val args = arrayOf(
@@ -561,6 +562,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should report error when source config links to unresolvable DPM host name`() {
         val args = arrayOf(
@@ -581,6 +583,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should report error when source config has URI with bad protocol`() {
         val args = arrayOf(
@@ -601,6 +604,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2etest")
     @Test
     fun `Should report error when source config URI points to non-responsive host IP`() {
         val args = arrayOf(
@@ -617,6 +621,27 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                 "Codelist",
                 "Content URLs",
                 "FATAL: Could not connect the server"
+            )
+        }
+    }
+
+    @Tag("e2etest")
+    @Test
+    fun `Should report error when source config URI points to non-responsive host domain`() {
+        val args = arrayOf(
+            "--create-dictionary-to-new-dpm-db",
+            "$targetDbPath",
+            "--source-config",
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_domain.json").toString()
+        )
+
+        executeCliAndExpectSuccess(args) { outText ->
+
+            assertThat(outText).containsSubsequence(
+                "DPM dictionary", "codelist_uri_non_responsive_host_domain",
+                "Codelist",
+                "Content URLs",
+                "FATAL: The server communication failed. Network is unreachable (connect failed)"
             )
         }
     }

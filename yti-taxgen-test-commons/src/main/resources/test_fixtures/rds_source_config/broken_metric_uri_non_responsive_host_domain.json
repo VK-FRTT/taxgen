@@ -1,0 +1,34 @@
+{
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "codelist_uri_non_responsive_host_domain",
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
+        "languages": [
+          "en",
+          "fi",
+          "sv"
+        ],
+        "defaultLanguage": "en"
+      },
+      "metrics": {
+        "uri": "https://koodistot-dev.suomi.fi/codelist/yti-xbrl/tf_comprehensive_codelist"
+      },
+      "explicitDomainsAndHierarchies": {
+        "uri": null
+      },
+      "explicitDimensions": {
+        "uri": null
+      },
+      "typedDomains": {
+        "uri": null
+      },
+      "typedDimensions": {
+        "uri": null
+      }
+    }
+  ]
+}
