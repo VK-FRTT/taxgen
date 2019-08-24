@@ -22,7 +22,9 @@ import java.time.LocalDate
 
 enum class FixtureVariety {
     NONE,
-    SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER,
+    TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
+    THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
+    THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
     NO_EN_TRANSLATIONS
 }
 
@@ -116,7 +118,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                referencedMemberUri = "Mbr-1-Uri",
+                referencedElementCode = "Mbr-1-Code",
                 childNodes = emptyList()
             ),
 
@@ -126,7 +128,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 abstract = false,
                 comparisonOperator = "=",
                 unaryOperator = "+",
-                referencedMemberUri = "Mbr-2-Uri",
+                referencedElementCode = "Mbr-2-Code",
                 childNodes = listOf(
 
                     HierarchyNode(
@@ -135,7 +137,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                         abstract = false,
                         comparisonOperator = "=",
                         unaryOperator = "+",
-                        referencedMemberUri = "Mbr-3-Uri",
+                        referencedElementCode = "Mbr-3-Code",
                         childNodes = listOf(
 
                             HierarchyNode(
@@ -144,7 +146,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
-                                referencedMemberUri = "Mbr-4-Uri",
+                                referencedElementCode = "Mbr-4-Code",
                                 childNodes = emptyList()
                             )
                         )
@@ -156,14 +158,14 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        referencedMemberUri = "Mbr-5-Uri",
+                        referencedElementCode = "Mbr-5-Code",
                         childNodes = emptyList()
                     )
                 )
             )
         )
 
-        if (variety == FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
+        if (variety == FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER) {
             hierarchyNodes.add(
                 HierarchyNode(
                     uri = "HierNode-SecondReferringSameMember-Uri",
@@ -171,7 +173,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                     abstract = false,
                     comparisonOperator = null,
                     unaryOperator = null,
-                    referencedMemberUri = "Mbr-1-Uri",
+                    referencedElementCode = "Mbr-1-Code",
                     childNodes = emptyList()
                 )
             )
@@ -198,7 +200,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
             )
         )
 
-        return listOf(
+        val explicitDomains = mutableListOf(
             ExplicitDomain(
                 uri = "ExpDom-1-Uri",
                 concept = concept("ExpDom"),
@@ -207,6 +209,32 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 hierarchies = hierarchies
             )
         )
+
+        if (variety == FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES ||
+            variety == FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES
+        ) {
+            explicitDomains.add(
+                ExplicitDomain(
+                    uri = "ExpDom-2-Uri",
+                    concept = concept("ExpDom"),
+                    domainCode = "ExpDom-2-Code",
+                    members = members,
+                    hierarchies = hierarchies
+                )
+            )
+
+            explicitDomains.add(
+                ExplicitDomain(
+                    uri = "ExpDom-3-Uri",
+                    concept = concept("ExpDom"),
+                    domainCode = "ExpDom-3-Code",
+                    members = members,
+                    hierarchies = hierarchies
+                )
+            )
+        }
+
+        return explicitDomains
     }
 
     fun typedDomains(): List<TypedDomain> {
@@ -221,7 +249,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
     }
 
     fun explicitDimensions(): List<ExplicitDimension> {
-        return listOf(
+        val explicitDimensions = mutableListOf(
             ExplicitDimension(
                 uri = "ExpDim-1-Uri",
                 concept = concept("ExpDim"),
@@ -229,6 +257,28 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 referencedDomainCode = "ExpDom-1-Code"
             )
         )
+
+        if (variety == FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES) {
+            explicitDimensions.add(
+                ExplicitDimension(
+                    uri = "ExpDim-2-Uri",
+                    concept = concept("ExpDim"),
+                    dimensionCode = "ExpDim-2-Code",
+                    referencedDomainCode = "ExpDom-2-Code"
+                )
+            )
+
+            explicitDimensions.add(
+                ExplicitDimension(
+                    uri = "ExpDim-3-Uri",
+                    concept = concept("ExpDim"),
+                    dimensionCode = "ExpDim-3-Code",
+                    referencedDomainCode = "ExpDom-3-Code"
+                )
+            )
+        }
+
+        return explicitDimensions
     }
 
     fun typedDimensions(): List<TypedDimension> {
@@ -303,7 +353,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                referencedMemberUri = "Met-1-Uri",
+                referencedElementCode = "ed1",
                 childNodes = emptyList()
             ),
 
@@ -313,7 +363,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                referencedMemberUri = "Met-2-Uri",
+                referencedElementCode = "bd2",
                 childNodes = listOf(
 
                     HierarchyNode(
@@ -322,7 +372,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        referencedMemberUri = "Met-3-Uri",
+                        referencedElementCode = "di3",
                         childNodes = emptyList()
                     ),
 
@@ -332,7 +382,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
-                        referencedMemberUri = "Met-4-Uri",
+                        referencedElementCode = "ii4",
                         childNodes = emptyList()
                     )
                 )
@@ -344,7 +394,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 abstract = false,
                 comparisonOperator = null,
                 unaryOperator = null,
-                referencedMemberUri = "Met-5-Uri",
+                referencedElementCode = "p5",
                 childNodes = emptyList()
             )
         )
@@ -382,7 +432,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
         dictionaries = listOf(dictionary)
     )
 
-    if (variety != FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER) {
+    if (variety != FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER) {
         validateModelContents(model)
     }
 
@@ -423,5 +473,7 @@ private fun validateModelContents(dpmModel: DpmModel) {
 
     dpmModel.validate(collecor)
 
+    //NOTE: When this assert triggers, it means that most likely something
+    //is broken within this test fixture internal relations
     assertThat(collecor.compileResultsToSimpleStrings()).isEmpty()
 }

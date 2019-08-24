@@ -10,7 +10,7 @@ data class HierarchyNode(
     val abstract: Boolean,
     val comparisonOperator: String?,
     val unaryOperator: String?,
-    val referencedMemberUri: String, //Plain Member.memberCode can't be used in binding, as there can be duplicate memberCodes
+    val referencedElementCode: String,
     val childNodes: List<HierarchyNode>
 ) : DpmElement {
 
@@ -45,9 +45,9 @@ data class HierarchyNode(
         validateLength(
             validationResults = validationResults,
             instance = this,
-            property = HierarchyNode::referencedMemberUri,
+            property = HierarchyNode::referencedElementCode,
             minLength = 1,
-            maxLength = 500
+            maxLength = 50
         )
     }
 

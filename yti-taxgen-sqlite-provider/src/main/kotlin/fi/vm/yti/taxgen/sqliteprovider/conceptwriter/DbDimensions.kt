@@ -5,11 +5,10 @@ import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DimensionLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
+import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.insertAndGetId
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbDimensions {
@@ -17,26 +16,19 @@ object DbDimensions {
         dimension: ExplicitDimension,
         owner: Owner,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>,
-        domainLookupItems: List<DomainLookupItem>
-    ): DimensionLookupItem {
-        return transaction {
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
+        transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
                 dimension,
                 ownerId,
                 languageIds
             )
 
-            val (dimensionId, dimensionXbrlCode) = insertExplicitDimension(
+            insertExplicitDimension(
                 dimension,
                 owner,
-                dimensionConceptId,
-                domainLookupItems
-            )
-
-            DimensionLookupItem(
-                dimensionXbrlCode = dimensionXbrlCode,
-                dimensionId = dimensionId
+                dimensionConceptId
             )
         }
     }
@@ -45,26 +37,19 @@ object DbDimensions {
         dimension: TypedDimension,
         owner: Owner,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>,
-        domainLookupItems: List<DomainLookupItem>
-    ): DimensionLookupItem {
-        return transaction {
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
+        transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
                 dimension,
                 ownerId,
                 languageIds
             )
 
-            val (dimensionId, dimensionXbrlCode) = insertTypedDimension(
+            insertTypedDimension(
                 dimension,
                 owner,
-                dimensionConceptId,
-                domainLookupItems
-            )
-
-            DimensionLookupItem(
-                dimensionXbrlCode = dimensionXbrlCode,
-                dimensionId = dimensionId
+                dimensionConceptId
             )
         }
     }
@@ -72,46 +57,42 @@ object DbDimensions {
     private fun insertExplicitDimension(
         dimension: ExplicitDimension,
         owner: Owner,
-        dimensionConceptId: EntityID<Int>,
-        domainLookupItems: List<DomainLookupItem>
-    ): Pair<EntityID<Int>, String> {
+        dimensionConceptId: EntityID<Int>
+    ) {
         val dimensionXbrlCode = "${owner.prefix}_dim:${dimension.dimensionCode}"
-        val referencedDomainItem = domainLookupItems.find { it.domainCode == dimension.referencedDomainCode }
+
+        val domainRow = DomainTable.rowWhereDomainCode(dimension.referencedDomainCode)
             ?: thisShouldNeverHappen("No Domain matching Dimension.ReferencedDomainCode: ${dimension.referencedDomainCode}")
 
-        val dimensionId = DimensionTable.insertAndGetId {
+        DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
             it[dimensionLabelCol] = dimension.concept.label.defaultTranslationOrNull()
             it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslationOrNull()
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
-            it[domainIdCol] = referencedDomainItem.domainId
+            it[domainIdCol] = domainRow[DomainTable.id]
             it[isTypedDimensionCol] = false
             it[conceptIdCol] = dimensionConceptId
         }
-
-        return Pair(dimensionId, dimensionXbrlCode)
     }
 
     private fun insertTypedDimension(
         dimension: TypedDimension,
         owner: Owner,
-        dimensionConceptId: EntityID<Int>,
-        domainLookupItems: List<DomainLookupItem>
-    ): Pair<EntityID<Int>, String> {
+        dimensionConceptId: EntityID<Int>
+    ) {
         val dimensionXbrlCode = "${owner.prefix}_dim:${dimension.dimensionCode}"
-        val referencedDomainItem = domainLookupItems.find { it.domainCode == dimension.referencedDomainCode }
+
+        val domainRow = DomainTable.rowWhereDomainCode(dimension.referencedDomainCode)
             ?: thisShouldNeverHappen("No Domain matching Dimension.ReferencedDomainCode: ${dimension.referencedDomainCode}")
 
-        val dimensionId = DimensionTable.insertAndGetId {
+        DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
             it[dimensionLabelCol] = dimension.concept.label.defaultTranslationOrNull()
             it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslationOrNull()
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
-            it[domainIdCol] = referencedDomainItem.domainId
+            it[domainIdCol] = domainRow[DomainTable.id]
             it[isTypedDimensionCol] = true
             it[conceptIdCol] = dimensionConceptId
         }
-
-        return Pair(dimensionId, dimensionXbrlCode)
     }
 }

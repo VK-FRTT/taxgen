@@ -70,10 +70,13 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
                 diagnostic
             )
 
+            val memberCodesByUri = members.map { it.uri to it.memberCode }.toMap()
+
             val hierarchies = mapAndValidateHierarchies(
                 subCodeListSource,
                 listOf(RdsExtensionType.DefinitionHierarchy, RdsExtensionType.CalculationHierarchy),
                 owner,
+                memberCodesByUri,
                 diagnostic
             )
 

@@ -38,8 +38,8 @@ data class Hierarchy(
             instance = this,
             instancePropertyName = "rootNodes",
             iterable = allNodes(),
-            valueSelector = { it.referencedMemberUri },
-            valueDescription = "referencedMemberUri"
+            valueSelector = { it.referencedElementCode },
+            valueDescription = "referencedElementCode"
         )
     }
 

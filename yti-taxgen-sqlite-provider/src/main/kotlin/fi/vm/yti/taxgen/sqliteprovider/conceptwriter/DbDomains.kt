@@ -5,10 +5,10 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -18,7 +18,7 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>
-    ): Pair<EntityID<Int>, List<MemberLookupItem>> {
+    ): EntityID<Int> {
 
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
@@ -33,7 +33,7 @@ object DbDomains {
                 owner
             )
 
-            val memberLookupItems = domain.members.map { member ->
+            domain.members.forEach { member ->
 
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
                     member,
@@ -41,23 +41,16 @@ object DbDomains {
                     languageIds
                 )
 
-                val (memberId, memberXbrlCode) = insertMember(
+                insertMember(
                     domain,
                     domainId,
                     member,
                     memberConceptId,
                     owner
                 )
-
-                MemberLookupItem(
-                    memberUri = member.uri,
-                    memberXbrlCode = memberXbrlCode,
-                    defaultLabelText = member.concept.label.defaultTranslationOrNull(),
-                    memberId = memberId
-                )
             }
 
-            Pair(domainId, memberLookupItems)
+            domainId
         }
     }
 
@@ -126,10 +119,10 @@ object DbDomains {
         member: Member,
         memberConceptId: EntityID<Int>,
         owner: Owner
-    ): Pair<EntityID<Int>, String> {
+    ) {
         val memberXbrlCode = "${owner.prefix}_${domain.domainCode}:${member.memberCode}"
 
-        val memberId = MemberTable.insertAndGetId {
+        MemberTable.insert {
             it[memberCodeCol] = member.memberCode
             it[memberLabelCol] = member.concept.label.defaultTranslationOrNull()
             it[memberXBRLCodeCol] = memberXbrlCode
@@ -137,7 +130,5 @@ object DbDomains {
             it[conceptIdCol] = memberConceptId
             it[domainIdCol] = domainId
         }
-
-        return Pair(memberId, memberXbrlCode)
     }
 }

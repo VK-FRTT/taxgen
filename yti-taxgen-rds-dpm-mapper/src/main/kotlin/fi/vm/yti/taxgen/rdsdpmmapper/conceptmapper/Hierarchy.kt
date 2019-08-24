@@ -15,6 +15,7 @@ internal fun mapAndValidateHierarchies(
     codeListSource: CodeListSourceReader,
     acceptedExtensionTypes: List<RdsExtensionType>,
     owner: Owner,
+    elementCodesByUri: Map<String, String>,
     diagnostic: Diagnostic
 ): List<Hierarchy> {
     val hierarchies = mutableListOf<Hierarchy>()
@@ -26,6 +27,7 @@ internal fun mapAndValidateHierarchies(
             val rootNodes = mapAndValidateHierarchyNodes(
                 extensionSource,
                 owner,
+                elementCodesByUri,
                 diagnostic
             )
 
@@ -49,18 +51,26 @@ internal fun mapAndValidateHierarchies(
 private fun mapAndValidateHierarchyNodes(
     extensionSource: ExtensionSourceReader,
     owner: Owner,
+    elementCodesByUri: Map<String, String>,
     diagnostic: Diagnostic
 ): List<HierarchyNode> {
+
     val candidateNodes = mutableListOf<HierarchyNodeItem>()
 
     extensionSource.eachExtensionMember { extensionMember ->
 
+        val extensionMemberUri = extensionMember.validUri(diagnostic)
+        val extensionMemberCodeUri = extensionMember.validCodeUri(diagnostic)
+
+        val referencedElementCode = elementCodesByUri[extensionMemberCodeUri]
+            ?: diagnostic.fatal("RDS Extension Member $extensionMemberUri refers to Code $extensionMemberCodeUri which is not in scope")
+
         val nodeItem = HierarchyNodeItem(
-            uri = extensionMember.validUri(diagnostic),
+            uri = extensionMemberUri,
             concept = extensionMember.dpmConcept(owner),
             comparisonOperator = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.ComparisonOperator),
             unaryOperator = extensionMember.nonEmptyStringValueOrNull(RdsMemberValueType.UnaryOperator),
-            referencedMemberUri = extensionMember.validCodeUri(diagnostic),
+            referencedElementCode = referencedElementCode,
             parentMemberUri = extensionMember.relatedMember?.uri,
             order = extensionMember.validOrder(diagnostic)
         )

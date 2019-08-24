@@ -23,7 +23,7 @@ internal class HierarchyNode_UnitTest :
         "abstract,              required",
         "comparisonOperator,    optional",
         "unaryOperator,         optional",
-        "referencedMemberUri,   required",
+        "referencedElementCode, required",
         "childNodes,            required"
     )
     fun testPropertyOptionality(
@@ -41,8 +41,8 @@ internal class HierarchyNode_UnitTest :
     @CsvSource(
         "uri,                    minLength,      1",
         "uri,                    maxLength,      500",
-        "referencedMemberUri,    minLength,      1",
-        "referencedMemberUri,    maxLength,      500"
+        "referencedElementCode,  minLength,      1",
+        "referencedElementCode,  maxLength,      50"
     )
     fun testPropertyLengthValidation(
         propertyName: String,

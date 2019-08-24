@@ -41,7 +41,7 @@ class DictionaryReplaceDbWriter(
 
             DbDictionaries.purgeDictionaryContent()
 
-            val dictionaryLookupItems = dpmModel.dictionaries.map {
+            val dictionaryAndOwnerIds = dpmModel.dictionaries.map {
                 val ownerId = DbOwners.lookupOwnerIdByPrefix(it.owner, diagnosticContext)
 
                 DbDictionaries.writeDictionaryBaseParts(
@@ -49,6 +49,8 @@ class DictionaryReplaceDbWriter(
                     ownerId,
                     languageIds
                 )
+
+                Pair(it, ownerId)
             }
 
             val fixedEntitiesLookupItem = DbFixedEntities.writeFixedEntities(
@@ -56,21 +58,14 @@ class DictionaryReplaceDbWriter(
                 diagnosticContext
             )
 
-                dpmModel.dictionaries
-                    .zip(dictionaryLookupItems)
-                    .map { (dictionary, dictionaryLookupItem) ->
-                        DbDictionaries.writeDictionaryMetricsToFixedDomain(
-                            dictionary,
-                            languageIds,
-                            dictionaryLookupItem,
-                            fixedEntitiesLookupItem.metricDomainId
-                        )
-                    }.reduce { accumulator, element ->
-                        Pair(
-                            accumulator.first + element.first,
-                            accumulator.second + element.second
-                        )
-                    }
+            dictionaryAndOwnerIds.forEach { (dictionary, ownerId) ->
+                DbDictionaries.writeDictionaryMetricsToFixedDomain(
+                    dictionary,
+                    ownerId,
+                    fixedEntitiesLookupItem.metricDomainId,
+                    languageIds
+                )
+            }
 
             ordinateCategorisationTransform.transformAndWriteCategorisations()
         }

@@ -1,13 +1,13 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.HierarchyLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
+import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -17,32 +17,32 @@ object DbHierarchies {
 
     fun writeHierarchiesAndAndNodes(
         hierarchies: List<Hierarchy>,
+        referencedElementConceptsByCode: Map<String, Concept>,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>,
-        memberLookupItems: List<MemberLookupItem>
-    ): List<HierarchyLookupItem> {
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
 
-        return hierarchies.map { hierarchy ->
+        hierarchies.forEach { hierarchy ->
             DbHierarchies.writeHierarchyAndAndNodes(
                 hierarchy,
+                referencedElementConceptsByCode,
                 domainId,
                 ownerId,
-                languageIds,
-                memberLookupItems
+                languageIds
             )
         }
     }
 
     private fun writeHierarchyAndAndNodes(
         hierarchy: Hierarchy,
+        referencedElementConceptsByCode: Map<String, Concept>,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>,
-        memberLookupItems: List<MemberLookupItem>
-    ): HierarchyLookupItem {
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
 
-        return transaction {
+        transaction {
             val hierarchyConceptId = DbConcepts.writeConceptAndTranslations(
                 hierarchy,
                 ownerId,
@@ -70,16 +70,13 @@ object DbHierarchies {
                     hierarchyId,
                     parentNode,
                     currentNode,
+                    domainId,
                     currentLevel,
                     order,
-                    memberLookupItems
+                    referencedElementConceptsByCode[currentNode.referencedElementCode]
+                        ?: thisShouldNeverHappen("No Concept found for ReferencedElementCode: ${currentNode.referencedElementCode}")
                 )
             }
-
-            HierarchyLookupItem(
-                hierarchyCode = hierarchy.hierarchyCode,
-                hierarchyId = hierarchyId
-            )
         }
     }
 
@@ -105,34 +102,39 @@ object DbHierarchies {
         hierarchyId: EntityID<Int>,
         parentNode: HierarchyNode?,
         currentNode: HierarchyNode,
+        memberDomainId: EntityID<Int>,
         currentLevel: Int,
         order: Int,
-        memberLookupItems: List<MemberLookupItem>
+        referencedElementConcept: Concept
     ) {
-        val memberLookupItem =
-            memberLookupItems.find { it.memberUri == currentNode.referencedMemberUri }
-                ?: thisShouldNeverHappen("No Member matching CurrentNode.ReferencedMemberUri: ${currentNode.referencedMemberUri}")
+        val memberRow = MemberTable.rowWhereDomainIdAndMemberCode(memberDomainId, currentNode.referencedElementCode)
+            ?: thisShouldNeverHappen("No Member matching CurrentNode.referencedElementCode: ${currentNode.referencedElementCode}")
 
-        val parentMemberLookupItem =
+        val memberId = memberRow[MemberTable.id]
+
+        val parentMemberRow =
             if (parentNode == null) {
                 null
             } else {
-                memberLookupItems.find { it.memberUri == parentNode.referencedMemberUri }
-                    ?: thisShouldNeverHappen("No Member matching ParentNode.ReferencedMemberUri: ${parentNode.referencedMemberUri}")
+                MemberTable.rowWhereDomainIdAndMemberCode(memberDomainId, parentNode.referencedElementCode)
+                    ?: thisShouldNeverHappen("No Member matching ParentNode.referencedElementCode: ${parentNode.referencedElementCode}")
             }
 
-        val defaultLabel = currentNode.concept.label.defaultTranslationOrNull() ?: memberLookupItem.defaultLabelText
+        val parentMemberId = parentMemberRow?.get(MemberTable.id)
+
+        val nodeDefaultLabel = currentNode.concept.label.defaultTranslationOrNull()
+            ?: referencedElementConcept.label.defaultTranslationOrNull()
 
         HierarchyNodeTable.insert {
             it[hierarchyIdCol] = hierarchyId
-            it[memberIdCol] = memberLookupItem.memberId
+            it[memberIdCol] = memberId
             it[isAbstractCol] = currentNode.abstract
             it[comparisonOperatorCol] = currentNode.comparisonOperator
             it[unaryOperatorCol] = currentNode.unaryOperator
             it[orderCol] = order
             it[levelCol] = currentLevel
-            it[parentMemberID] = parentMemberLookupItem?.memberId?.value
-            it[hierarchyNodeLabel] = defaultLabel
+            it[parentMemberID] = parentMemberId?.value
+            it[hierarchyNodeLabel] = nodeDefaultLabel
             it[conceptIdCol] = hierarchyNodeConceptId
             it[pathCol] = null
         }

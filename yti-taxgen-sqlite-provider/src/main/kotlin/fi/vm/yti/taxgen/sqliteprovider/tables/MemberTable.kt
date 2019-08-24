@@ -1,7 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 
 /**
@@ -32,6 +34,10 @@ object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
 
     fun rowWhereXbrlCode(xbrlCode: String) = select {
         MemberTable.memberXBRLCodeCol.eq(xbrlCode)
+    }.firstOrNull()
+
+    fun rowWhereDomainIdAndMemberCode(domainId: EntityID<Int>, memberCode: String) = select {
+        MemberTable.domainIdCol.eq(domainId) and MemberTable.memberCodeCol.eq(memberCode)
     }.firstOrNull()
 
     fun openMemberRow() = select {

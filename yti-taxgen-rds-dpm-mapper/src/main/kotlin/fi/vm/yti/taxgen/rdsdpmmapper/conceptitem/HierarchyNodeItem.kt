@@ -9,7 +9,7 @@ internal data class HierarchyNodeItem(
     val concept: Concept,
     val comparisonOperator: String?,
     val unaryOperator: String?,
-    val referencedMemberUri: String,
+    val referencedElementCode: String,
     val parentMemberUri: String?,
     val order: Int,
     private val children: MutableList<HierarchyNodeItem> = mutableListOf()
@@ -44,7 +44,7 @@ internal data class HierarchyNodeItem(
             abstract = false,
             comparisonOperator = comparisonOperator,
             unaryOperator = unaryOperator,
-            referencedMemberUri = referencedMemberUri,
+            referencedElementCode = referencedElementCode,
             childNodes = children.map { it.createAndValidateHierarchyNode(diagnostic) }
         )
 

@@ -124,51 +124,51 @@ internal class Hierarchy_UnitTest :
         }
 
         @Test
-        fun `rootNodes should have unique referencedMemberUris {within flat root}`() {
+        fun `rootNodes should have unique referencedElementCodes {within flat root}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
-                    hierarchyNode("hn_1", "member_m_1_uri"),
-                    hierarchyNode("hn_2", "member_m_2_uri"),
-                    hierarchyNode("hn_3", "member_m_2_uri"),
-                    hierarchyNode("hn_4", "member_m_4_uri")
+                    hierarchyNode("hn_1", "member_m_1_code"),
+                    hierarchyNode("hn_2", "member_m_2_code"),
+                    hierarchyNode("hn_3", "member_m_2_code"),
+                    hierarchyNode("hn_4", "member_m_4_code")
                 )
             )
 
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate referencedMemberUri value 'member_m_2_uri'"
+                    "Hierarchy.rootNodes: duplicate referencedElementCode value 'member_m_2_code'"
                 )
         }
 
         @Test
-        fun `rootNodes should have unique referencedMemberUris {within hierarchy}`() {
+        fun `rootNodes should have unique referencedElementCodes {within hierarchy}`() {
             attributeOverrides(
                 "rootNodes" to listOf(
 
                     hierarchyNode(
                         "hn_1",
-                        "member_m_1_uri"
+                        "member_m_1_code"
                     ),
 
                     hierarchyNode(
                         "hn_2",
-                        "member_m_2_uri",
+                        "member_m_2_code",
 
                         hierarchyNode(
                             "hn_3",
-                            "member_m_3_uri",
+                            "member_m_3_code",
 
                             hierarchyNode(
                                 "hn_4",
-                                "member_m_4_uri"
+                                "member_m_4_code"
                             )
                         )
                     ),
 
                     hierarchyNode(
                         "hn_5",
-                        "member_m_4_uri"
+                        "member_m_4_code"
                     )
                 )
             )
@@ -176,7 +176,7 @@ internal class Hierarchy_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "Hierarchy.rootNodes: duplicate referencedMemberUri value 'member_m_4_uri'"
+                    "Hierarchy.rootNodes: duplicate referencedElementCode value 'member_m_4_code'"
                 )
         }
     }

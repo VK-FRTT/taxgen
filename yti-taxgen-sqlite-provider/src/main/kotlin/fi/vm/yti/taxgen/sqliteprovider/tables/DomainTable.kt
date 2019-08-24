@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.tables
 
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.select
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -38,4 +39,8 @@ object DomainTable : IntIdTable(name = "mDomain", columnName = "DomainID") {
     val dataTypeCol = text("DataType").nullable()
     val isTypedDomainCol = bool("IsTypedDomain").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    fun rowWhereDomainCode(domainCode: String) = select {
+        DomainTable.domainCodeCol.eq(domainCode)
+    }.firstOrNull()
 }

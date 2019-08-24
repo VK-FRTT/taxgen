@@ -53,13 +53,13 @@ data class MetricDomain(
             instance = this,
             propertyName = "hierarchies",
             validate = { messages ->
-                val domainMetricUris = metrics.map { it.uri }.toSet()
+                val domainMetricCodes = metrics.map { it.metricCode }.toSet()
 
                 hierarchies.forEach { hierarchy ->
                     hierarchy.allNodes().forEach { node ->
-                        if (!domainMetricUris.contains(node.referencedMemberUri)) {
+                        if (!domainMetricCodes.contains(node.referencedElementCode)) {
                             messages.add(
-                                "DPM HierarchyNode ${node.uri} refers to DPM Metric ${node.referencedMemberUri} which is not part of the containing DPM MetricDomain."
+                                "DPM HierarchyNode ${node.uri} refers to DPM Metric ${node.referencedElementCode} which is not part of the containing DPM MetricDomain."
                             )
                         }
                     }

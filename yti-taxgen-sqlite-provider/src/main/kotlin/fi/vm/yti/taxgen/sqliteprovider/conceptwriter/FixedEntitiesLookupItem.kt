@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.sqliteprovider.lookupitem
+package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import org.jetbrains.exposed.dao.EntityID
 

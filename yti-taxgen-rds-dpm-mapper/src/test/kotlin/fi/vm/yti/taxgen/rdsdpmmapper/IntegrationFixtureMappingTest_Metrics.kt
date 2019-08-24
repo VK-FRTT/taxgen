@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
-import java.util.regex.Pattern
 
 @DisplayName("Mapping Integration Fixture to DPM model - Metrics")
 internal class IntegrationFixtureMappingTest_Metrics
@@ -333,7 +332,7 @@ internal class IntegrationFixtureMappingTest_Metrics
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
-                        assertThat(it.uri).containsPattern(Pattern.compile("http:\\/\\/uri\\.suomi\\.fi\\/codelist\\/taxgen-dm-integration-fixture\\/metrics-2018-1\\/extension\\/MET1\\/member\\/[a-f0-9-]{36}\$"))
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/1")
                         assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -352,7 +351,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                         assertThat(it.comparisonOperator).isNull()
                         assertThat(it.unaryOperator).isNull()
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/9")
+                        assertThat(it.referencedElementCode).isEqualTo("s9")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -361,7 +360,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Decimal)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/10")
+                        assertThat(it.referencedElementCode).isEqualTo("d10")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -370,7 +369,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Lei)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/11")
+                        assertThat(it.referencedElementCode).isEqualTo("l11")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -379,7 +378,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Isin)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/12")
+                        assertThat(it.referencedElementCode).isEqualTo("i12")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -388,7 +387,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Enumeration: EDA)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/3")
+                        assertThat(it.referencedElementCode).isEqualTo("e3")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -397,7 +396,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Date)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/16")
+                        assertThat(it.referencedElementCode).isEqualTo("d16")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -406,7 +405,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Boolean)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/4")
+                        assertThat(it.referencedElementCode).isEqualTo("b4")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -415,7 +414,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Integer)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/6")
+                        assertThat(it.referencedElementCode).isEqualTo("i6")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -424,7 +423,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Monetary)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/7")
+                        assertThat(it.referencedElementCode).isEqualTo("m7")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -433,7 +432,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Percentage)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/8")
+                        assertThat(it.referencedElementCode).isEqualTo("p8")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -458,7 +457,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Boolean)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/4")
+                        assertThat(it.referencedElementCode).isEqualTo("b4")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -467,7 +466,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Enumeration: EDA)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/3")
+                        assertThat(it.referencedElementCode).isEqualTo("e3")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -476,10 +475,10 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Date)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/16")
-                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/9")
-                        assertThat(it.childNodes[1].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/13")
-                        assertThat(it.childNodes[2].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/7")
+                        assertThat(it.referencedElementCode).isEqualTo("d16")
+                        assertThat(it.childNodes[0].referencedElementCode).isEqualTo("s9")
+                        assertThat(it.childNodes[1].referencedElementCode).isEqualTo("si13")
+                        assertThat(it.childNodes[2].referencedElementCode).isEqualTo("m7")
                         assertThat(it.childNodes.size).isEqualTo(3)
                     }
 
@@ -488,7 +487,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (String)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/9")
+                        assertThat(it.referencedElementCode).isEqualTo("s9")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -497,8 +496,8 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (String, Instant, Credit)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/13")
-                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/14")
+                        assertThat(it.referencedElementCode).isEqualTo("si13")
+                        assertThat(it.childNodes[0].referencedElementCode).isEqualTo("sd14")
                         assertThat(it.childNodes.size).isEqualTo(1)
                     }
 
@@ -507,7 +506,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (String, Duration, Debit)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/14")
+                        assertThat(it.referencedElementCode).isEqualTo("sd14")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -516,11 +515,11 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Monetary)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/7")
-                        assertThat(it.childNodes[0].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/11")
-                        assertThat(it.childNodes[1].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/8")
-                        assertThat(it.childNodes[2].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/12")
-                        assertThat(it.childNodes[3].referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/10")
+                        assertThat(it.referencedElementCode).isEqualTo("m7")
+                        assertThat(it.childNodes[0].referencedElementCode).isEqualTo("l11")
+                        assertThat(it.childNodes[1].referencedElementCode).isEqualTo("p8")
+                        assertThat(it.childNodes[2].referencedElementCode).isEqualTo("i12")
+                        assertThat(it.childNodes[3].referencedElementCode).isEqualTo("d10")
                         assertThat(it.childNodes.size).isEqualTo(4)
                     }
 
@@ -529,7 +528,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Lei)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/11")
+                        assertThat(it.referencedElementCode).isEqualTo("l11")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -538,7 +537,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Percentage)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/8")
+                        assertThat(it.referencedElementCode).isEqualTo("p8")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -547,7 +546,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Isin)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/12")
+                        assertThat(it.referencedElementCode).isEqualTo("i12")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -556,7 +555,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Decimal)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/10")
+                        assertThat(it.referencedElementCode).isEqualTo("d10")
                         assertThat(it.childNodes).isEmpty()
                     }
 
@@ -565,7 +564,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                             entry(fi, "MET member (Integer)")
                         )
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/6")
+                        assertThat(it.referencedElementCode).isEqualTo("i6")
                         assertThat(it.childNodes).isEmpty()
                     }
                 }
@@ -582,7 +581,7 @@ internal class IntegrationFixtureMappingTest_Metrics
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
-                        assertThat(it.uri).containsPattern(Pattern.compile("http:\\/\\/uri\\.suomi\\.fi\\/codelist\\/taxgen-dm-integration-fixture\\/metrics-2018-1\\/extension\\/METHIER\\/member\\/[a-f0-9-]{36}\$"))
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/METHIER/member/1")
                         assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -601,7 +600,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                         assertThat(it.comparisonOperator).isNull()
                         assertThat(it.unaryOperator).isNull()
 
-                        assertThat(it.referencedMemberUri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/1")
+                        assertThat(it.referencedElementCode).isEqualTo("b1")
                         assertThat(it.childNodes).isEmpty()
                     }
                 }

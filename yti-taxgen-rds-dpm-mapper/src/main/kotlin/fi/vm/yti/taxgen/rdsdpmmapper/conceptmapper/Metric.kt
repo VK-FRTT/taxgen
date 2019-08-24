@@ -25,10 +25,13 @@ internal fun mapAndValidateMetricDomain(
         diagnostic
     )
 
+    val metricCodesByUri = metrics.map { it.uri to it.metricCode }.toMap()
+
     val hierarchies = mapAndValidateHierarchies(
         codeListSource,
         listOf(RdsExtensionType.DefinitionHierarchy),
         owner,
+        metricCodesByUri,
         diagnostic
     )
 

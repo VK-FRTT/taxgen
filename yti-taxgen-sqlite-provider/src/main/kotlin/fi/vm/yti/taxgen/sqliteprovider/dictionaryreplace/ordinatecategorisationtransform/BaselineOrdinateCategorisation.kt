@@ -119,22 +119,22 @@ data class BaselineOrdinateCategorisation(
             fun optionalSignatureComponent(partName: String) =
                 (signatureMatch.groups as MatchNamedGroupCollection)[partName]?.value
 
-            fun signaturePart(partName: String) = optionalSignatureComponent(partName)!!
+            fun signatureComponent(partName: String) = optionalSignatureComponent(partName)!!
 
-            return if (optionalSignatureComponent("dim") != null) {
+            return if (optionalSignatureComponent("dimension") != null) {
                 BaselineOrdinateCategorisation.Signature(
-                    dimensionIdentifier = signaturePart("dim"),
-                    memberIdentifier = signaturePart("mem"),
+                    dimensionIdentifier = signatureComponent("dimension"),
+                    memberIdentifier = signatureComponent("member"),
                     openAxisValueRestrictionSignature = null
                 )
             } else {
                 BaselineOrdinateCategorisation.Signature(
-                    dimensionIdentifier = signaturePart("dimOa"),
-                    memberIdentifier = signaturePart("memOa"),
+                    dimensionIdentifier = signatureComponent("oaDimension"),
+                    memberIdentifier = signatureComponent("oaMember"),
                     openAxisValueRestrictionSignature = OpenAxisValueRestrictionSignature(
-                        hierarchyIdentifier = signaturePart("hierOa"),
-                        hierarchyStartingMemberIdentifier = signaturePart("startmemOa"),
-                        startingMemberIncluded = signaturePart("startMemberInclOa")
+                        hierarchyIdentifier = signatureComponent("oaHierarchy"),
+                        hierarchyStartingMemberIdentifier = signatureComponent("oaStartMember"),
+                        startingMemberIncluded = signatureComponent("oaStartMemberIncluded")
                     )
                 )
             }
@@ -144,22 +144,22 @@ data class BaselineOrdinateCategorisation(
             """
             \A
 
-            (?<dim>[^\(\)]+)
+            (?<dimension>[^\(\)]+)
                 \(
-                (?<mem>[^\(\)\[\]]+)
+                (?<member>[^\(\)\[\]]+)
                 \)
 
             |
 
-            (?<dimOa>[^\(\)]+)
+            (?<oaDimension>[^\(\)]+)
                 \(
-                (?<memOa>[^\(\)\[\]]+)
+                (?<oaMember>[^\(\)\[\]]+)
                     \[
-                    (?<hierOa>[^\(\)\[\];]+)
+                    (?<oaHierarchy>[^\(\)\[\];]+)
                     ;
-                    (?<startmemOa>[^\(\)\[\];]+)
+                    (?<oaStartMember>[^\(\)\[\];]+)
                     ;
-                    (?<startMemberInclOa>[^\(\)\[\];]+)
+                    (?<oaStartMemberIncluded>[^\(\)\[\];]+)
                     \]
                 \)
             \z

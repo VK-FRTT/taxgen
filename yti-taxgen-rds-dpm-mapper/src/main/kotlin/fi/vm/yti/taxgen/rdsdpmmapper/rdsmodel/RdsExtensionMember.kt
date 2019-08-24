@@ -20,8 +20,7 @@ internal data class RdsExtensionMember(
 ) : RdsEntity() {
 
     fun validCodeUri(diagnostic: Diagnostic): String {
-        if (code == null) diagnostic.fatal("RDS Extension Member not having valid Code element")
-        return code.validUri(diagnostic)
+        return validCode(diagnostic).validUri(diagnostic)
     }
 
     fun stringValueOrEmpty(valueType: RdsMemberValueType): String {
@@ -40,6 +39,10 @@ internal data class RdsExtensionMember(
 
     private fun memberValueOfType(typeUri: String): RdsMemberValue? {
         return memberValues?.find { it.valueType?.uri == typeUri }
+    }
+
+    private fun validCode(diagnostic: Diagnostic): RdsCode {
+        return code ?: diagnostic.fatal("RDS Extension Member not having valid Code element")
     }
 }
 

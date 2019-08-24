@@ -59,7 +59,7 @@ internal class RdsClient(
             diagnostic.fatal("Could not connect the server. Url: $url")
         } catch (e: java.net.SocketTimeoutException) {
             diagnostic.fatal("The server communication timeout. Url: $url")
-        } catch (e: java.net.SocketException){
+        } catch (e: java.net.SocketException) {
             diagnostic.fatal("The server communication failed. ${e.message} Url: $url")
         }
 

@@ -77,7 +77,7 @@ internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_Content
     @Test
     fun `should detect when multiple HierarchyNodes refer same Member`() {
         val throwable = catchThrowable {
-            setupDbViaDictionaryCreate(FixtureVariety.SECOND_HIERARCHY_NODE_REFERS_SAME_MEMBER)
+            setupDbViaDictionaryCreate(FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER)
         }
 
         assertThat(throwable).isInstanceOf(HaltException::class.java)

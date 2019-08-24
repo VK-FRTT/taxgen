@@ -5,8 +5,8 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.DomainLookupItem
-import fi.vm.yti.taxgen.sqliteprovider.lookupitem.MemberLookupItem
+import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
+import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MetricTable
 import org.jetbrains.exposed.dao.EntityID
@@ -18,16 +18,15 @@ object DbMetric {
 
     fun writeMetricDomainMembers(
         metricDomain: MetricDomain,
-        owner: Owner,
         metricDomainId: EntityID<Int>,
+        owner: Owner,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>,
-        domainLookupItems: List<DomainLookupItem>
-    ): List<MemberLookupItem> {
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
 
-        return transaction {
+        transaction {
 
-            metricDomain.metrics.map { metric ->
+            metricDomain.metrics.forEach { metric ->
 
                 val metricMemberConceptId = DbConcepts.writeConceptAndTranslations(
                     metric,
@@ -35,7 +34,7 @@ object DbMetric {
                     languageIds
                 )
 
-                val (metricMemberId, memberXbrlCode) = insertMetricMember(
+                val metricMemberId = insertMetricMember(
                     metric,
                     owner,
                     metricMemberConceptId,
@@ -44,15 +43,7 @@ object DbMetric {
 
                 insertMetric(
                     metric,
-                    metricMemberId,
-                    domainLookupItems
-                )
-
-                MemberLookupItem(
-                    memberUri = metric.uri,
-                    memberXbrlCode = memberXbrlCode,
-                    defaultLabelText = metric.concept.label.defaultTranslationOrNull(),
-                    memberId = metricMemberId
+                    metricMemberId
                 )
             }
         }
@@ -63,7 +54,7 @@ object DbMetric {
         owner: Owner,
         metricMemberConceptId: EntityID<Int>,
         metricDomainId: EntityID<Int>
-    ): Pair<EntityID<Int>, String> {
+    ): EntityID<Int> {
         val memberXbrlCode = "${owner.prefix}_met:${metric.metricCode}"
 
         val memberId = MemberTable.insertAndGetId {
@@ -75,39 +66,33 @@ object DbMetric {
             it[domainIdCol] = metricDomainId
         }
 
-        return Pair(memberId, memberXbrlCode)
+        return memberId
     }
 
     private fun insertMetric(
         metric: Metric,
-        metricMemberId: EntityID<Int>,
-        domainLookupItems: List<DomainLookupItem>
+        metricMemberId: EntityID<Int>
     ) {
-        val (referencedDomainItem, referencedHierarchyItem) =
-            if (metric.referencedDomainCode != null) {
+        val referencedRows = metric.referencedDomainCode?.let { referencedDomainCode ->
 
-                val rdi = domainLookupItems.find { it.domainCode == metric.referencedDomainCode }
-                    ?: thisShouldNeverHappen("No Domain matching Metric.ReferencedDomainCode: ${metric.referencedDomainCode}")
+            val domainRow = DomainTable.rowWhereDomainCode(referencedDomainCode)
+                ?: thisShouldNeverHappen("No Domain matching Metric.ReferencedDomainCode: $referencedDomainCode")
 
-                val rhi = if (metric.referencedHierarchyCode != null) {
-                    rdi.hierarchyLookupItems.find { it.hierarchyCode == metric.referencedHierarchyCode }
-                        ?: thisShouldNeverHappen("No Hierarchy matching Metric.ReferencedHierarchyCode: ${metric.referencedHierarchyCode}")
-                } else {
-                    null
-                }
-
-                Pair(rdi, rhi)
-            } else {
-                Pair(null, null)
+            val hierarchyRow = metric.referencedHierarchyCode?.let { referencedHierarchyCode ->
+                HierarchyTable.rowWhereDomainIdAndHierarchyCode(domainRow[DomainTable.id], referencedHierarchyCode)
+                    ?: thisShouldNeverHappen("No Hierarchy matching Metric.ReferencedHierarchyCode: $referencedHierarchyCode")
             }
+
+            Pair(domainRow, hierarchyRow)
+        }
 
         MetricTable.insert {
             it[correspondingMemberCol] = metricMemberId
             it[dataTypeCol] = metric.dataType
             it[flowTypeCol] = metric.flowType
             it[balanceTypeCol] = metric.balanceType
-            it[referencedDomainCol] = referencedDomainItem?.domainId
-            it[referencedHierarchyCol] = referencedHierarchyItem?.hierarchyId
+            it[referencedDomainCol] = referencedRows?.first?.get(DomainTable.id)
+            it[referencedHierarchyCol] = referencedRows?.second?.get(HierarchyTable.id)
             it[hierarchyStartingMemberCol] = null
             it[isStartingMemberIncludedCol] = null
         }

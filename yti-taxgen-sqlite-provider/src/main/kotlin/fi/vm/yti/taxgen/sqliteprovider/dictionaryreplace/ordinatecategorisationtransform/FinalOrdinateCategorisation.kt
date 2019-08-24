@@ -85,28 +85,28 @@ data class FinalOrdinateCategorisation(
         private fun resolveRelationships(
             baseline: BaselineOrdinateCategorisation
         ): FinalOrdinateCategorisation.Relationships {
-            val signature = baseline.xbrlCodeSignature
+            val xbrlCodeSignature = baseline.xbrlCodeSignature
 
             return transaction {
-                val dimensionRow = DimensionTable.rowWhereXbrlCode(signature.dimensionIdentifier)
+                val dimensionRow = DimensionTable.rowWhereXbrlCode(xbrlCodeSignature.dimensionIdentifier)
                 val dimensionId = dimensionRow?.get(DimensionTable.id)
 
-                val memberRow = if (signature.memberIdentifier == OPEN_MEMBER_MARKER) {
+                val memberRow = if (xbrlCodeSignature.memberIdentifier == OPEN_MEMBER_MARKER) {
                     MemberTable.openMemberRow()
                 } else {
-                    MemberTable.rowWhereXbrlCode(signature.memberIdentifier)
+                    MemberTable.rowWhereXbrlCode(xbrlCodeSignature.memberIdentifier)
                 }
                 val memberId = memberRow?.get(MemberTable.id)
 
                 val openAxisValueRestrictionRelationships =
-                    signature.openAxisValueRestrictionSignature?.let { signature ->
+                    xbrlCodeSignature.openAxisValueRestrictionSignature?.run {
 
-                        val scopeDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
+                        val scopingDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
 
-                        val hierarchyRow = scopeDomainId?.run {
+                        val hierarchyRow = scopingDomainId?.run {
                             HierarchyTable.rowWhereDomainIdAndHierarchyCode(
-                                scopeDomainId,
-                                signature.hierarchyIdentifier
+                                scopingDomainId,
+                                xbrlCodeSignature.openAxisValueRestrictionSignature.hierarchyIdentifier
                             )
                         }
 
@@ -115,7 +115,7 @@ data class FinalOrdinateCategorisation(
                         val hierarchyNodeRow = hierarchyId?.run {
                             HierarchyNodeTable.rowWhereHierarchyIdAndMemberCode(
                                 hierarchyId,
-                                signature.hierarchyStartingMemberIdentifier
+                                xbrlCodeSignature.openAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier
                             )
                         }
 

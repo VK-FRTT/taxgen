@@ -111,7 +111,7 @@ internal open class DpmModel_UnitTestBase<T : Any>(
 
     protected fun hierarchyNode(
         baseId: String,
-        referencedMemberUri: String,
+        referencedElementCode: String,
         vararg children: HierarchyNode
     ): HierarchyNode {
         return HierarchyNode(
@@ -120,7 +120,7 @@ internal open class DpmModel_UnitTestBase<T : Any>(
             abstract = false,
             comparisonOperator = "=",
             unaryOperator = "+",
-            referencedMemberUri = referencedMemberUri,
+            referencedElementCode = referencedElementCode,
             childNodes = children.toList()
         )
     }

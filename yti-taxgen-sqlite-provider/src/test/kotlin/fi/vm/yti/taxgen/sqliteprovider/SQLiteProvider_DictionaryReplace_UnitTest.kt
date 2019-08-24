@@ -38,14 +38,14 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
         diagnosticCollector = DiagnosticCollector()
     }
 
-    private fun replaceDictionaryInDb() {
+    private fun replaceDictionaryInDb(variety: FixtureVariety = FixtureVariety.NONE) {
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
         val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
             dbPath,
             diagnosticContext
         )
 
-        val model = dpmModelFixture(FixtureVariety.NONE)
+        val model = dpmModelFixture(variety)
 
         dbWriter.writeModel(model)
     }
@@ -167,17 +167,19 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                 dbConnection.createStatement().executeUpdate(
                     """
                     INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                    VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-1-Code(*[444;555;1])", "source", "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code;0])")
+                    VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*[444;555;1])", "source", "FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-3-Code;Mbr-2-Code;0])")
                     """.trimIndent()
                 )
 
-                replaceDictionaryInDb()
+                dumpDiagnosticsWhenThrown {
+                    replaceDictionaryInDb( FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+                }
 
                 val rs = readAllOrdinateCategorisations()
 
                 assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                     "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                    "111, 1, 9999, FixPrfx_dim:ExpDim-1-Code(*[3;2;0]), source, FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code;0])"
+                    "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*[6;7;0]), source, FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-3-Code;Mbr-2-Code;0])"
                 )
             }
         }
@@ -391,7 +393,11 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     insertCategorisationWithDimensionMemberSignature(signature)
                     replaceDictionaryInDb()
 
-                    assertThat(diagnosticCollector.events).containsSubsequence(
+                    assertThat(diagnosticCollector.events).doesNotContain(
+                        "fail"
+                    )
+
+                    assertThat(diagnosticCollector.events).containsSequence(
                         "ENTER [SQLiteDbWriter] []",
                         "EXIT [SQLiteDbWriter]"
                     )
@@ -413,6 +419,10 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     //DimensionMemberSignature
                     insertCategorisationWithDimensionMemberSignature(signature)
                     replaceDictionaryInDb()
+
+                    assertThat(diagnosticCollector.events).doesNotContain(
+                        "fail"
+                    )
 
                     assertThat(diagnosticCollector.events).containsSubsequence(
                         "ENTER [SQLiteDbWriter] []",
@@ -437,6 +447,10 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     insertCategorisationWithDimensionMemberSignature(signature)
                     replaceDictionaryInDb()
 
+                    assertThat(diagnosticCollector.events).doesNotContain(
+                        "fail"
+                    )
+
                     assertThat(diagnosticCollector.events).containsSubsequence(
                         "ENTER [SQLiteDbWriter] []",
                         "EXIT [SQLiteDbWriter]"
@@ -460,6 +474,10 @@ internal class SQLiteProvider_DictionaryReplace_UnitTest {
                     //DimensionMemberSignature
                     insertCategorisationWithDimensionMemberSignature(signature)
                     replaceDictionaryInDb()
+
+                    assertThat(diagnosticCollector.events).doesNotContain(
+                        "fail"
+                    )
 
                     assertThat(diagnosticCollector.events).containsSubsequence(
                         "ENTER [SQLiteDbWriter] []",
