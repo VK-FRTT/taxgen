@@ -9,6 +9,7 @@ import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
+import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestrictiontransform.OpenAxisValueRestrictionTransform
 import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform.OrdinateCategorisationTransform
 import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
 import java.nio.file.Path
@@ -36,6 +37,11 @@ class DictionaryReplaceDbWriter(
 
             val ordinateCategorisationTransform =
                 OrdinateCategorisationTransform.loadInitialState(
+                    diagnosticContext
+                )
+
+            val openAxisValueRestrictionTransform =
+                OpenAxisValueRestrictionTransform.loadInitialState(
                     diagnosticContext
                 )
 
@@ -68,6 +74,7 @@ class DictionaryReplaceDbWriter(
             }
 
             ordinateCategorisationTransform.transformAndWriteCategorisations()
+            openAxisValueRestrictionTransform.transformAndWriteRestrictions()
         }
     }
 

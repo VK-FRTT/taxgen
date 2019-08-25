@@ -45,6 +45,10 @@ object HierarchyTable : IntIdTable(name = "mHierarchy", columnName = "HierarchyI
     // Reference to concept (change, owner and translation) information
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 
+    fun rowWhereHierarchyId(hierarchyId: EntityID<Int>) = select {
+        HierarchyTable.id.eq(hierarchyId)
+    }.firstOrNull()
+
     fun rowWhereDomainIdAndHierarchyCode(domainId: EntityID<Int>, hierachyCode: String) = select {
         HierarchyTable.domainIdCol.eq(domainId) and HierarchyTable.hierarchyCodeCol.eq(hierachyCode)
     }.firstOrNull()

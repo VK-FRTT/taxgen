@@ -94,7 +94,7 @@ data class FinalOrdinateCategorisation(
                 val memberRow = if (xbrlCodeSignature.memberIdentifier == OPEN_MEMBER_MARKER) {
                     MemberTable.openMemberRow()
                 } else {
-                    MemberTable.rowWhereXbrlCode(xbrlCodeSignature.memberIdentifier)
+                    MemberTable.rowWhereMemberXbrlCode(xbrlCodeSignature.memberIdentifier)
                 }
                 val memberId = memberRow?.get(MemberTable.id)
 

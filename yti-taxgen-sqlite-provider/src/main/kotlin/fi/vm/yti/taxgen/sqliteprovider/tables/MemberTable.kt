@@ -32,7 +32,11 @@ object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
     val isDefaultMemberCol = bool("IsDefaultMember").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 
-    fun rowWhereXbrlCode(xbrlCode: String) = select {
+    fun rowWhereMemberId(memberId: EntityID<Int>) = select {
+        MemberTable.id.eq(memberId)
+    }.firstOrNull()
+
+    fun rowWhereMemberXbrlCode(xbrlCode: String) = select {
         MemberTable.memberXBRLCodeCol.eq(xbrlCode)
     }.firstOrNull()
 

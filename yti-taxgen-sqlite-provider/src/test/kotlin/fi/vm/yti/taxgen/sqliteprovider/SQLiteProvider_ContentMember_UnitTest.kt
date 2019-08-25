@@ -41,6 +41,7 @@ internal class SQLiteProvider_ContentMember_UnitTest : SQLiteProvider_ContentUni
                     "Mbr-3-Code, Mbr-3-Lbl-Fi, FixPrfx_ExpDom-1-Code:Mbr-3-Code, 0, ExpDom-1-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "Mbr-4-Code, Mbr-4-Lbl-Fi, FixPrfx_ExpDom-1-Code:Mbr-4-Code, 0, ExpDom-1-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "Mbr-5-Code, Mbr-5-Lbl-Fi, FixPrfx_ExpDom-1-Code:Mbr-5-Code, 0, ExpDom-1-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "Mbr-6-Code, Mbr-6-Lbl-Fi, FixPrfx_ExpDom-1-Code:Mbr-6-Code, 0, ExpDom-1-Code, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "ed1, Met-1-Lbl-Fi, FixPrfx_met:ed1, 0, MET, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "bd2, Met-2-Lbl-Fi, FixPrfx_met:bd2, 0, MET, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "di3, Met-3-Lbl-Fi, FixPrfx_met:di3, 0, MET, Member, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",

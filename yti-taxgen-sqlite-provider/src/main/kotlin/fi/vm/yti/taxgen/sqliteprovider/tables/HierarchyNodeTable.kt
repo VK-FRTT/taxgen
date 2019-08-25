@@ -75,4 +75,8 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
         (HierarchyNodeTable innerJoin MemberTable).select {
             HierarchyNodeTable.hierarchyIdCol.eq(hierarchyId) and MemberTable.memberCodeCol.eq(memberCode)
         }.firstOrNull()
+
+    fun rowWhereHierarchyIdAndMemberId(hierarchyId: EntityID<Int>, memberId: EntityID<Int>) = select {
+        HierarchyNodeTable.hierarchyIdCol.eq(hierarchyId) and HierarchyNodeTable.memberIdCol.eq(memberId)
+    }.firstOrNull()
 }

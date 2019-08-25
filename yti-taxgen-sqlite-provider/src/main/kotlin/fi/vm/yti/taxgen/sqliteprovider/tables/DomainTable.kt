@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.select
@@ -40,7 +41,15 @@ object DomainTable : IntIdTable(name = "mDomain", columnName = "DomainID") {
     val isTypedDomainCol = bool("IsTypedDomain").nullable()
     val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
 
+    fun rowWhereDomainId(domainId: EntityID<Int>) = select {
+        DomainTable.id.eq(domainId)
+    }.firstOrNull()
+
     fun rowWhereDomainCode(domainCode: String) = select {
         DomainTable.domainCodeCol.eq(domainCode)
+    }.firstOrNull()
+
+    fun rowWhereDomainXbrlCode(domainXbrlCode: String) = select {
+        DomainTable.domainXBRLCodeCol.eq(domainXbrlCode)
     }.firstOrNull()
 }

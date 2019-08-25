@@ -18,5 +18,7 @@ data class DpmModel(
             valueSelector = { it: DpmDictionary -> it.owner.prefix },
             valueDescription = "owner.prefix"
         )
+
+        //TODO - validate that Domain codes unique within all Dictionaries
     }
 }

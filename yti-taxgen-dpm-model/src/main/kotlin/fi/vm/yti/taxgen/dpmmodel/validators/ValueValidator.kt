@@ -6,11 +6,18 @@ import kotlin.reflect.KProperty1
 fun <I : Any> validateNonBlank(
     validationResults: ValidationResults,
     instance: I,
-    property: KProperty1<I, String>
+    property: KProperty1<I, String?>
 ) {
-    val value: String = property.getter.call(instance)
+    val value: String? = property.getter.call(instance)
 
-    if (value.isBlank())
+    if (value == null)
+        validationResults.addError(
+            instance = instance,
+            propertyName = property.name,
+            message = "does not have value"
+        )
+
+    else if (value.isBlank())
         validationResults.addError(
             instance = instance,
             propertyName = property.name,

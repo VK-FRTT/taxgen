@@ -108,6 +108,12 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 concept = concept("Mbr-5"),
                 memberCode = "Mbr-5-Code",
                 defaultMember = false
+            ),
+            Member(
+                uri = "Mbr-6-Uri",
+                concept = concept("Mbr-6"),
+                memberCode = "Mbr-6-Code",
+                defaultMember = false
             )
         )
 
@@ -190,13 +196,13 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 uri = "ExpDomHier-2-Uri",
                 concept = concept("ExpDomHier"),
                 hierarchyCode = "ExpDomHier-2-Code",
-                rootNodes = emptyList()
+                rootNodes = hierarchyNodes
             ),
             Hierarchy(
                 uri = "ExpDomHier-3-Uri",
                 concept = concept("ExpDomHier"),
                 hierarchyCode = "ExpDomHier-3-Code",
-                rootNodes = hierarchyNodes
+                rootNodes = emptyList()
             )
         )
 
