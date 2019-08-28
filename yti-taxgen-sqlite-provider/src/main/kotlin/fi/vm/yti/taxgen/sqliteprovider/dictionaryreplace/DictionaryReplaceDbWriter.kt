@@ -9,8 +9,7 @@ import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
-import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestrictiontransform.OpenAxisValueRestrictionTransform
-import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform.OrdinateCategorisationTransform
+import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestrictiontransform.FrameworksTransform
 import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
 import java.nio.file.Path
 import java.sql.DriverManager
@@ -35,15 +34,9 @@ class DictionaryReplaceDbWriter(
             DbLanguages.configureLanguages()
             val languageIds = DbLanguages.resolveLanguageIds()
 
-            val ordinateCategorisationTransform =
-                OrdinateCategorisationTransform.loadInitialState(
-                    diagnosticContext
-                )
-
-            val openAxisValueRestrictionTransform =
-                OpenAxisValueRestrictionTransform.loadInitialState(
-                    diagnosticContext
-                )
+            val frameworksTransform = FrameworksTransform.loadInitialState(
+                diagnosticContext
+            )
 
             DbDictionaries.purgeDictionaryContent()
 
@@ -73,8 +66,7 @@ class DictionaryReplaceDbWriter(
                 )
             }
 
-            ordinateCategorisationTransform.transformAndWriteCategorisations()
-            openAxisValueRestrictionTransform.transformAndWriteRestrictions()
+            frameworksTransform.transformFrameworkEntities()
         }
     }
 
