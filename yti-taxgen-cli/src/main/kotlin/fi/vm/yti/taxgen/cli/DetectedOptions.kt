@@ -7,28 +7,29 @@ data class DetectedOptions(
     val cmdShowHelp: Boolean,
     val cmdShowVersion: Boolean,
 
-    val cmdCreateDictionaryToNewDpmDb: Path?,
-    val cmdReplaceDictionaryInDpmDb: Path?,
-    val cmdCaptureDpmSourcesToFolder: Path?,
-    val cmdCaptureDpmSourcesToZip: Path?,
-
-    val forceOverwrite: Boolean,
+    val cmdCreateDictionaryToNewDpmDb: Boolean,
+    val cmdReplaceDictionaryInDpmDb: Boolean,
+    val cmdCaptureDpmSourcesToFolder: Boolean,
+    val cmdCaptureDpmSourcesToZip: Boolean,
 
     val sourceConfigFile: Path?,
     val sourceFolder: Path?,
-    val sourceZipFile: Path?
+    val sourceZipFile: Path?,
+
+    val output: Path?,
+    val forceOverwrite: Boolean
 ) {
 
     fun ensureSingleCommandGiven() {
-        val commandCount = listOf<Any?>(
+        val commandCount = listOf(
             cmdCreateDictionaryToNewDpmDb,
             cmdReplaceDictionaryInDpmDb,
             cmdCaptureDpmSourcesToFolder,
             cmdCaptureDpmSourcesToZip
-        ).count { it != null }
+        ).count { it }
 
         if (commandCount != 1) {
-            throwFail("Single command with proper argument must be given")
+            throwFail("Single command must be given")
         }
     }
 
@@ -41,6 +42,12 @@ data class DetectedOptions(
 
         if (sourceOptionCount != 1) {
             throwFail("Single source with proper argument must be given")
+        }
+    }
+
+    fun ensureOutputGiven() {
+        if (output == null) {
+            throwFail("Output must be given")
         }
     }
 }

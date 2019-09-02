@@ -24,10 +24,11 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should capture DPM sources to zip file from existing capture`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "$targetZipPath",
             "--source-folder",
-            "$dpmSourceCapturePath"
-        )
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetZipPath"
+            )
 
         executeCliAndExpectSuccess(args) { outText ->
 
@@ -47,10 +48,11 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should capture DPM sources to zip file from DPM source config`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "$targetZipPath",
             "--source-config",
-            "$dpmSourceConfigPath"
-        )
+            "$dpmSourceConfigPath",
+            "--output",
+            "$targetZipPath"
+            )
 
         executeCliAndExpectSuccess(args) { outText ->
 
@@ -71,10 +73,11 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "$targetZipPath",
-            "--force-overwrite",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetZipPath",
+            "--force-overwrite"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -91,7 +94,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should fail when target zip filename is not given`() {
+    fun `Should fail when output option is not given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
@@ -100,11 +103,33 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         executeCliAndExpectFail(args) { outText, errText ->
 
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources"
+            )
+
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Output must be given"
+            )
+        }
+    }
+
+    @Test
+    fun `Should fail when output option without filepath is given`() {
+        val args = arrayOf(
+            "--capture-dpm-sources-to-zip",
+            "--source-folder",
+            "$dpmSourceCapturePath",
+            "--output"
+        )
+
+        executeCliAndExpectFail(args) { outText, errText ->
+
             assertThat(outText).isBlank()
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Single command with proper argument must be given"
+                "Option output requires an argument"
             )
         }
     }
@@ -115,9 +140,10 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "$targetZipPath",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetZipPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -136,9 +162,10 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should report error when given target zip file path points to folder`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "${tempFolder.path()}",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "${tempFolder.path()}"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -155,6 +182,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
+            "--output",
             "$targetZipPath"
         )
 
@@ -175,6 +203,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
+            "--output",
             "$targetZipPath",
             "--source-folder"
         )
@@ -194,10 +223,11 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "$targetZipPath",
             "--source-folder",
-            "${tempFolder.resolve("non_existing_folder")}"
-        )
+            "${tempFolder.resolve("non_existing_folder")}",
+            "--output",
+            "$targetZipPath"
+            )
 
         executeCliAndExpectFail(args) { outText, errText ->
 
@@ -214,11 +244,12 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
-            "$targetZipPath",
             "--source-folder",
             "$dpmSourceCapturePath",
             "--source-config",
-            "$dpmSourceConfigPath"
+            "$dpmSourceConfigPath",
+            "--output",
+            "$targetZipPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->

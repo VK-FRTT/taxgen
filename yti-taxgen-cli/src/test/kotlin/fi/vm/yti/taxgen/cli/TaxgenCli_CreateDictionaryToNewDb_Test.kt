@@ -26,9 +26,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should produce database from DPM source capture`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -57,15 +58,16 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should overwrite target database file when force option is given`() {
+    fun `Should overwrite output database file when force option is given`() {
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
-            "--force-overwrite",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetDbPath",
+            "--force-overwrite"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -80,7 +82,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should fail when target database filename is not given`() {
+    fun `Should fail when no output option is given`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
             "--source-folder",
@@ -89,24 +91,47 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         executeCliAndExpectFail(args) { outText, errText ->
 
-            assertThat(outText).isBlank()
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database"
+            )
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Single command with proper argument must be given"
+                "Output must be given"
             )
         }
     }
 
     @Test
-    fun `Should report error when target database file already exists`() {
+    fun `Should fail when output option is given without filename`() {
+        val args = arrayOf(
+            "--create-dictionary-to-new-dpm-db",
+            "--source-folder",
+            "$dpmSourceCapturePath",
+            "--output"
+        )
+
+        executeCliAndExpectFail(args) { outText, errText ->
+
+            assertThat(outText).isBlank()
+
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option output requires an argument"
+            )
+        }
+    }
+
+    @Test
+    fun `Should report error when output database file already exists`() {
         Files.write(targetDbPath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -121,12 +146,13 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when given target database path points to folder`() {
+    fun `Should report error when given output database path points to folder`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "${tempFolder.path()}",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "${tempFolder.path()}"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -142,6 +168,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
+            "--output",
             "$targetDbPath"
         )
 
@@ -162,6 +189,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
+            "--output",
             "$targetDbPath",
             "--source-folder"
         )
@@ -181,9 +209,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-folder",
-            "${tempFolder.resolve("non_existing_folder")}"
+            "${tempFolder.resolve("non_existing_folder")}",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -201,11 +230,12 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-folder",
             "$dpmSourceCapturePath",
             "--source-config",
-            "$dpmSourceConfigPath"
+            "$dpmSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -226,9 +256,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should fail when source capture folder is empty`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-folder",
-            "${tempFolder.path()}"
+            "${tempFolder.path()}",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -242,9 +273,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should produce database from DPM source config`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$dpmSourceConfigPath"
+            "$dpmSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -287,9 +319,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$partialSourceConfigPath"
+            "$partialSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -314,9 +347,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$partialSourceConfigPath"
+            "$partialSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -354,9 +388,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$partialSourceConfigPath"
+            "$partialSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -394,9 +429,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$partialSourceConfigPath"
+            "$partialSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -434,9 +470,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$partialSourceConfigPath"
+            "$partialSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -474,9 +511,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "$partialSourceConfigPath"
+            "$partialSourceConfigPath",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -506,9 +544,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should report error when source config file is broken JSON`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_source_config_json.json").toString()
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_source_config_json.json").toString(),
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -525,9 +564,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should fail when source config file does not exist`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            "${tempFolder.resolve("non_existing_config.json")}"
+            "${tempFolder.resolve("non_existing_config.json")}",
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -546,9 +586,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should report error when source config links to non existing DPM code list`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString()
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString(),
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -567,9 +608,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should report error when source config links to unresolvable DPM host name`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json").toString()
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json").toString(),
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -588,9 +630,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should report error when source config has URI with bad protocol`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json").toString()
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json").toString(),
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -609,9 +652,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should report error when source config URI points to non-responsive host IP`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json").toString()
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json").toString(),
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -630,9 +674,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should report error when source config URI points to non-responsive host domain`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "$targetDbPath",
             "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_domain.json").toString()
+            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_domain.json").toString(),
+            "--output",
+            "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->

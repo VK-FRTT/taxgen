@@ -57,14 +57,14 @@ class TaxgenCli(
 
             detectedOptions.ensureSingleCommandGiven()
 
-            if (detectedOptions.cmdCaptureDpmSourcesToFolder != null ||
-                detectedOptions.cmdCaptureDpmSourcesToZip != null
+            if (detectedOptions.cmdCaptureDpmSourcesToFolder ||
+                detectedOptions.cmdCaptureDpmSourcesToZip
             ) {
                 captureDpmSources(detectedOptions)
             }
 
-            if (detectedOptions.cmdCreateDictionaryToNewDpmDb != null ||
-                detectedOptions.cmdReplaceDictionaryInDpmDb != null
+            if (detectedOptions.cmdCreateDictionaryToNewDpmDb ||
+                detectedOptions.cmdReplaceDictionaryInDpmDb
             ) {
                 writeDictionaryToDpmDb(detectedOptions)
             }
@@ -96,6 +96,7 @@ class TaxgenCli(
             contextType = DiagnosticContextType.CmdWriteDictionariesToDpmDb
         ) {
             detectedOptions.ensureSingleSourceGiven()
+            detectedOptions.ensureOutputGiven()
 
             val sourceProvider = resolveSourceProvider(detectedOptions)
 
@@ -118,6 +119,7 @@ class TaxgenCli(
             contextType = DiagnosticContextType.CmdCaptureDpmSources
         ) {
             detectedOptions.ensureSingleSourceGiven()
+            detectedOptions.ensureOutputGiven()
 
             val sourceProvider = resolveSourceProvider(detectedOptions)
             val recorder = resolveRdsSourceRecorder(detectedOptions)
@@ -161,17 +163,17 @@ class TaxgenCli(
         detectedOptions: DetectedOptions
     ): DpmSourceRecorder {
 
-        if (detectedOptions.cmdCaptureDpmSourcesToFolder != null) {
+        if (detectedOptions.cmdCaptureDpmSourcesToFolder) {
             return ProviderFactory.folderRecorder(
-                baseFolderPath = detectedOptions.cmdCaptureDpmSourcesToFolder,
+                baseFolderPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
         }
 
-        if (detectedOptions.cmdCaptureDpmSourcesToZip != null) {
+        if (detectedOptions.cmdCaptureDpmSourcesToZip) {
             return ProviderFactory.zipRecorder(
-                zipFilePath = detectedOptions.cmdCaptureDpmSourcesToZip,
+                zipFilePath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
@@ -184,17 +186,17 @@ class TaxgenCli(
         detectedOptions: DetectedOptions
     ): DpmDbWriter {
 
-        if (detectedOptions.cmdCreateDictionaryToNewDpmDb != null) {
+        if (detectedOptions.cmdCreateDictionaryToNewDpmDb) {
             return DpmDbWriterFactory.dictionaryCreateWriter(
-                targetDbPath = detectedOptions.cmdCreateDictionaryToNewDpmDb,
+                targetDbPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
         }
 
-        if (detectedOptions.cmdReplaceDictionaryInDpmDb != null) {
+        if (detectedOptions.cmdReplaceDictionaryInDpmDb) {
             return DpmDbWriterFactory.dictionaryReplaceWriter(
-                targetDbPath = detectedOptions.cmdReplaceDictionaryInDpmDb,
+                targetDbPath = detectedOptions.output!!,
                 diagnosticContext = diagnosticContext
             )
         }

@@ -18,15 +18,16 @@ class DefinedOptions {
 
     private val cmdShowHelp: OptionSpec<Void>
     private val cmdShowVersion: OptionSpec<Void>
-    private val cmdCreateDictionaryToNewDpmDb: OptionSpec<Path>
-    private val cmdReplaceDictionaryInDpmDb: OptionSpec<Path>
-    private val cmdCaptureDpmSourcesToFolder: OptionSpec<Path>
-    private val cmdCaptureDpmSourcesToZip: OptionSpec<Path>
+    private val cmdCreateDictionaryToNewDpmDb: OptionSpec<Void>
+    private val cmdReplaceDictionaryInDpmDb: OptionSpec<Void>
+    private val cmdCaptureDpmSourcesToFolder: OptionSpec<Void>
+    private val cmdCaptureDpmSourcesToZip: OptionSpec<Void>
 
     private val sourceConfigFile: OptionSpec<Path>
     private val sourceFolder: OptionSpec<Path>
     private val sourceZipFile: OptionSpec<Path>
 
+    private val output: OptionSpec<Path>
     private val forceOverwrite: OptionSpec<Void>
 
     init {
@@ -47,37 +48,23 @@ class DefinedOptions {
                 "create-dictionary-to-new-dpm-db",
                 "create dictionary to new DPM database from given sources"
             )
-            .withOptionalArg()
-            .withValuesConvertedBy(PathConverter())
 
         cmdReplaceDictionaryInDpmDb = optionParser
             .accepts(
                 "replace-dictionary-in-dpm-db",
                 "replace dictionary in DPM database from given sources"
             )
-            .withOptionalArg()
-            .withValuesConvertedBy(PathConverter())
 
         cmdCaptureDpmSourcesToFolder = optionParser
             .accepts(
                 "capture-dpm-sources-to-folder",
                 "capture DPM sources to folder"
             )
-            .withOptionalArg()
-            .withValuesConvertedBy(PathConverter())
 
         cmdCaptureDpmSourcesToZip = optionParser
             .accepts(
                 "capture-dpm-sources-to-zip",
                 "capture DPM sources to zip file"
-            )
-            .withOptionalArg()
-            .withValuesConvertedBy(PathConverter())
-
-        forceOverwrite = optionParser
-            .accepts(
-                "force-overwrite",
-                "silently overwrites the possibly existing target file(s)"
             )
 
         sourceConfigFile = optionParser
@@ -103,6 +90,20 @@ class DefinedOptions {
             )
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
+
+        output = optionParser
+            .accepts(
+                "output",
+                "file or folder where to write command output"
+            )
+            .withRequiredArg()
+            .withValuesConvertedBy(PathConverter())
+
+        forceOverwrite = optionParser
+            .accepts(
+                "force-overwrite",
+                "silently overwrites the possibly existing target file(s)"
+            )
     }
 
     fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {
@@ -134,16 +135,17 @@ class DefinedOptions {
         return DetectedOptions(
             cmdShowHelp = optionSet.has(this.cmdShowHelp),
             cmdShowVersion = optionSet.has(this.cmdShowVersion),
-            cmdCreateDictionaryToNewDpmDb = optionSet.valueOf(this.cmdCreateDictionaryToNewDpmDb),
-            cmdReplaceDictionaryInDpmDb = optionSet.valueOf(this.cmdReplaceDictionaryInDpmDb),
-            cmdCaptureDpmSourcesToFolder = optionSet.valueOf(this.cmdCaptureDpmSourcesToFolder),
-            cmdCaptureDpmSourcesToZip = optionSet.valueOf(this.cmdCaptureDpmSourcesToZip),
-
-            forceOverwrite = optionSet.has(this.forceOverwrite),
+            cmdCreateDictionaryToNewDpmDb = optionSet.has(this.cmdCreateDictionaryToNewDpmDb),
+            cmdReplaceDictionaryInDpmDb = optionSet.has(this.cmdReplaceDictionaryInDpmDb),
+            cmdCaptureDpmSourcesToFolder = optionSet.has(this.cmdCaptureDpmSourcesToFolder),
+            cmdCaptureDpmSourcesToZip = optionSet.has(this.cmdCaptureDpmSourcesToZip),
 
             sourceConfigFile = optionSet.valueOf(this.sourceConfigFile),
             sourceFolder = optionSet.valueOf(this.sourceFolder),
-            sourceZipFile = optionSet.valueOf(this.sourceZipFile)
+            sourceZipFile = optionSet.valueOf(this.sourceZipFile),
+
+            output = optionSet.valueOf(this.output),
+            forceOverwrite = optionSet.has(this.forceOverwrite)
         )
     }
 

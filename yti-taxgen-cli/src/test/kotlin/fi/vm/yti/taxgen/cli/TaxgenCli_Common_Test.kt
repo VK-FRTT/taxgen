@@ -30,19 +30,17 @@ internal class TaxgenCli_Common_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should fail when multiple commands with valid arguments are given`() {
+    fun `Should fail when multiple commands are given`() {
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "${tempFolder.resolve("output_dpm.db")}",
-            "--capture-dpm-sources-to-folder",
-            "${tempFolder.resolve("output_capture")}"
+            "--capture-dpm-sources-to-folder"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Single command with proper argument must be given"
+                "Single command must be given"
             )
             assertThat(outText).isBlank()
         }

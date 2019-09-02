@@ -21,10 +21,11 @@ internal class TaxgenCli_Help_Test : TaxgenCli_TestBase(
                 "--create-dictionary-to-new-dpm-db",
                 "--capture-dpm-sources-to-folder",
                 "--capture-dpm-sources-to-zip",
-                "--force-overwrite",
                 "--source-config",
                 "--source-folder",
-                "--source-zip"
+                "--source-zip",
+                "--output <Path>",
+                "--force-overwrite"
             )
         }
     }

@@ -25,9 +25,10 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     fun `Should capture DPM sources to folder from existing capture`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            "$targetFolderPath",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetFolderPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -49,9 +50,10 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     fun `Should capture DPM sources to folder from DPM source config`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            "$targetFolderPath",
             "--source-config",
-            "$dpmSourceConfigPath"
+            "$dpmSourceConfigPath",
+            "--output",
+            "$targetFolderPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -69,16 +71,17 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should overwrite existing files in target folder when force option is given`() {
+    fun `Should overwrite existing files in output folder when force option is given`() {
         Files.createDirectories(targetFolderMetaConfigFilePath.parent)
         Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            "$targetFolderPath",
-            "--force-overwrite",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetFolderPath",
+            "--force-overwrite"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -96,7 +99,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should fail when target folder path is not given`() {
+    fun `Should fail when output option is not given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
@@ -105,25 +108,48 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
         executeCliAndExpectFail(args) { outText, errText ->
 
-            assertThat(outText).isBlank()
+            assertThat(outText).containsSubsequence(
+                "Capturing DPM sources"
+            )
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Single command with proper argument must be given"
+                "Output must be given"
             )
         }
     }
 
     @Test
-    fun `Should report error when target folder contains conflicting file`() {
+    fun `Should fail when output option without filepath is given`() {
+        val args = arrayOf(
+            "--capture-dpm-sources-to-folder",
+            "--source-folder",
+            "$dpmSourceCapturePath",
+            "--output"
+        )
+
+        executeCliAndExpectFail(args) { outText, errText ->
+
+            assertThat(outText).isBlank()
+
+            assertThat(errText).containsSubsequence(
+                "yti-taxgen:",
+                "Option output requires an argument"
+            )
+        }
+    }
+
+    @Test
+    fun `Should report error when output folder contains conflicting file`() {
         Files.createDirectories(targetFolderMetaConfigFilePath.parent)
         Files.write(targetFolderMetaConfigFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            "$targetFolderPath",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            "$targetFolderPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -141,15 +167,16 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when given target folder path points to existing file`() {
+    fun `Should report error when given output folder path points to existing file`() {
         val workFolderFilePath = tempFolder.resolve("file.txt")
         Files.write(workFolderFilePath, "Existing file".toByteArray())
 
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            workFolderFilePath.toString(),
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$dpmSourceCapturePath",
+            "--output",
+            workFolderFilePath.toString()
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -166,6 +193,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     fun `Should fail when no source option is given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
+            "--output",
             "$targetFolderPath"
         )
 
@@ -186,6 +214,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     fun `Should fail when source option without filepath is given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
+            "--output",
             "$targetFolderPath",
             "--source-folder"
         )
@@ -205,9 +234,10 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     fun `Should fail when given source filepath does not exist`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            "$targetFolderPath",
             "--source-folder",
-            "${tempFolder.resolve("non_existing_folder")}"
+            "${tempFolder.resolve("non_existing_folder")}",
+            "--output",
+            "$targetFolderPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -225,11 +255,12 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
     fun `Should fail when more than one source option is given`() {
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
-            "$targetFolderPath",
             "--source-folder",
             "$dpmSourceCapturePath",
             "--source-config",
-            "$dpmSourceConfigPath"
+            "$dpmSourceConfigPath",
+            "--output",
+            "$targetFolderPath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
