@@ -8,23 +8,27 @@ import java.nio.file.Path
 object DpmDbWriterFactory {
 
     fun dictionaryCreateWriter(
-        targetDbPath: Path,
+        outputDbPath: Path,
         forceOverwrite: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmDbWriter {
         return DictionaryCreateDbWriter(
-            targetDbPath = targetDbPath,
+            outputDbPath = outputDbPath,
             forceOverwrite = forceOverwrite,
             diagnosticContext = diagnosticContext
         )
     }
 
     fun dictionaryReplaceWriter(
-        targetDbPath: Path,
+        baselineDbPath: Path,
+        outputDbPath: Path,
+        forceOverwrite: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmDbWriter {
         return DictionaryReplaceDbWriter(
-            targetDbPath = targetDbPath,
+            baselineDbPath = baselineDbPath,
+            outputDbPath = outputDbPath,
+            forceOverwrite = forceOverwrite,
             diagnosticContext = diagnosticContext
         )
     }

@@ -27,6 +27,8 @@ class DefinedOptions {
     private val sourceFolder: OptionSpec<Path>
     private val sourceZipFile: OptionSpec<Path>
 
+    private val baselineDb: OptionSpec<Path>
+
     private val output: OptionSpec<Path>
     private val forceOverwrite: OptionSpec<Void>
 
@@ -91,6 +93,14 @@ class DefinedOptions {
             .withRequiredArg()
             .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
 
+        baselineDb = optionParser
+            .accepts(
+                "baseline-db",
+                "database to use as baseline in dictionary replace"
+            )
+            .withRequiredArg()
+            .withValuesConvertedBy(PathConverter(PathProperties.FILE_EXISTING, PathProperties.READABLE))
+
         output = optionParser
             .accepts(
                 "output",
@@ -143,6 +153,8 @@ class DefinedOptions {
             sourceConfigFile = optionSet.valueOf(this.sourceConfigFile),
             sourceFolder = optionSet.valueOf(this.sourceFolder),
             sourceZipFile = optionSet.valueOf(this.sourceZipFile),
+
+            baselineDb = optionSet.valueOf(this.baselineDb),
 
             output = optionSet.valueOf(this.output),
             forceOverwrite = optionSet.has(this.forceOverwrite)

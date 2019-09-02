@@ -165,7 +165,7 @@ class TaxgenCli(
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder) {
             return ProviderFactory.folderRecorder(
-                baseFolderPath = detectedOptions.output!!,
+                outputFolderPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
@@ -173,7 +173,7 @@ class TaxgenCli(
 
         if (detectedOptions.cmdCaptureDpmSourcesToZip) {
             return ProviderFactory.zipRecorder(
-                zipFilePath = detectedOptions.output!!,
+                outputZipPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
@@ -188,15 +188,19 @@ class TaxgenCli(
 
         if (detectedOptions.cmdCreateDictionaryToNewDpmDb) {
             return DpmDbWriterFactory.dictionaryCreateWriter(
-                targetDbPath = detectedOptions.output!!,
+                outputDbPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
         }
 
         if (detectedOptions.cmdReplaceDictionaryInDpmDb) {
+            detectedOptions.ensureBaselineDpmDbGiven()
+
             return DpmDbWriterFactory.dictionaryReplaceWriter(
-                targetDbPath = detectedOptions.output!!,
+                baselineDbPath = detectedOptions.baselineDb!!,
+                outputDbPath = detectedOptions.output!!,
+                forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
         }

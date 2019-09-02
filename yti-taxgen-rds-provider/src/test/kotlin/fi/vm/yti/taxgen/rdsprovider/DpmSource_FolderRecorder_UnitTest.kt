@@ -28,7 +28,7 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
             val diagnosticContext: DiagnosticContext = DiagnosticBridge(diagnosticCollector)
 
             ProviderFactory.folderRecorder(
-                baseFolderPath = emptyTargetFolder.path(),
+                outputFolderPath = emptyTargetFolder.path(),
                 forceOverwrite = false,
                 diagnosticContext = diagnosticContext
             ).use {

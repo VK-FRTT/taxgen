@@ -14,19 +14,19 @@ import java.nio.file.Path
 import java.time.Instant
 
 internal class DpmSourceRecorderFolderAdapter(
-    baseFolderPath: Path,
+    outputFolderPath: Path,
     private val forceOverwrite: Boolean,
     private val diagnostic: Diagnostic
 ) : DpmSourceRecorder {
 
-    private val baseFolderPath = baseFolderPath.toAbsolutePath().normalize()
+    private val outputFolderPath = outputFolderPath.toAbsolutePath().normalize()
 
     override fun contextLabel(): String = "folder"
-    override fun contextIdentifier(): String = baseFolderPath.toString()
+    override fun contextIdentifier(): String = outputFolderPath.toString()
 
     override fun captureSources(sourceProvider: SourceProvider) {
         val pathStack = PathStack(
-            baseFolderPath = baseFolderPath,
+            baseFolderPath = outputFolderPath,
             createFileSystemPaths = true,
             diagnostic = diagnostic
         )

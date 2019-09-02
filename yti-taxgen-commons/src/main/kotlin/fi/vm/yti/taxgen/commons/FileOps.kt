@@ -14,25 +14,25 @@ object FileOps {
     private val fileCharset = StandardCharsets.UTF_8
 
     //Create
-    fun createIntermediateFolders(targetPath: Path) {
-        Files.createDirectories(targetPath.parent)
+    fun createIntermediateFolders(path: Path) {
+        Files.createDirectories(path.parent)
     }
 
-    fun failIfTargetFileExists(
-        targetPath: Path,
+    fun failIfOutputFileExists(
+        path: Path,
         diagnostic: Diagnostic
     ) {
-        if (Files.exists(targetPath)) {
-            diagnostic.fatal("Target file '$targetPath' already exists")
+        if (Files.exists(path)) {
+            diagnostic.fatal("Output file '$path' already exists")
         }
     }
 
-    fun failIfTargetFileMissing(
-        targetPath: Path,
+    fun failIfOutputFileMissing(
+        path: Path,
         diagnostic: Diagnostic
     ) {
-        if (!Files.exists(targetPath)) {
-            diagnostic.fatal("Target file '$targetPath' not found")
+        if (!Files.exists(path)) {
+            diagnostic.fatal("Output file '$path' not found")
         }
     }
 
@@ -115,12 +115,12 @@ object FileOps {
     }
 
     //Delete
-    fun deleteConflictingTargetFileIfAllowed(
-        targetPath: Path,
+    fun deleteConflictingOutputFileIfAllowed(
+        path: Path,
         allowed: Boolean
     ) {
-        if (allowed && Files.isRegularFile(targetPath)) {
-            Files.delete(targetPath)
+        if (allowed && Files.isRegularFile(path)) {
+            Files.delete(path)
         }
     }
 }

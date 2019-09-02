@@ -59,7 +59,7 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
     @TestFactory
     fun `Folder adapter with loopback data`(): List<DynamicNode> {
         ProviderFactory.folderRecorder(
-            baseFolderPath = loopbackTempFolder.path(),
+            outputFolderPath = loopbackTempFolder.path(),
             forceOverwrite = false,
             diagnosticContext = diagnosticContext
         ).use {
@@ -88,7 +88,7 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
         val targetZipPath = zipLoopbackTempFolder.resolve("file.zip")
 
         ProviderFactory.zipRecorder(
-            zipFilePath = targetZipPath,
+            outputZipPath = targetZipPath,
             forceOverwrite = false,
             diagnosticContext = diagnosticContext
         ).use {

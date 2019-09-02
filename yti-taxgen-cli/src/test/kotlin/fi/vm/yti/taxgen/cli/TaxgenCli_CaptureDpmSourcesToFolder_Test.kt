@@ -114,7 +114,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Output must be given"
+                "Option output must be given"
             )
         }
     }
@@ -205,7 +205,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Single source with proper argument must be given"
+                "One source option with proper argument must be given"
             )
         }
     }
@@ -271,7 +271,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
 
             assertThat(errText).containsSubsequence(
                 "yti-taxgen:",
-                "Single source with proper argument must be given"
+                "One source option with proper argument must be given"
             )
         }
     }

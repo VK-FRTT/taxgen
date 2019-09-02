@@ -78,12 +78,12 @@ object ProviderFactory {
     }
 
     fun folderRecorder(
-        baseFolderPath: Path,
+        outputFolderPath: Path,
         forceOverwrite: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmSourceRecorder {
         val dpmSourceRecorder = DpmSourceRecorderFolderAdapter(
-            baseFolderPath = baseFolderPath,
+            outputFolderPath = outputFolderPath,
             forceOverwrite = forceOverwrite,
             diagnostic = diagnosticContext
         )
@@ -95,12 +95,12 @@ object ProviderFactory {
     }
 
     fun zipRecorder(
-        zipFilePath: Path,
+        outputZipPath: Path,
         forceOverwrite: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmSourceRecorder {
         val dpmSourceRecorder = DpmSourceRecorderZipFileAdapter(
-            targetZipPath = zipFilePath,
+            outputZipPath = outputZipPath,
             forceOverwrite = forceOverwrite,
             diagnostic = diagnosticContext
         )

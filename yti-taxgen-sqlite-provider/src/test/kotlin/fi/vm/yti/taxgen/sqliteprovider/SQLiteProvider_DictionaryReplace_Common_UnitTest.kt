@@ -10,7 +10,7 @@ internal class SQLiteProvider_DictionaryReplace_Common_UnitTest :
 
     @Test
     fun `should fail when target DB is missing required Eurofiling owner`() {
-        dbConnection.createStatement().executeUpdate(
+        baselineDbConnection.createStatement().executeUpdate(
             """
             DELETE FROM mOwner WHERE mOwner.OwnerPrefix = "eu"
             """
@@ -27,7 +27,7 @@ internal class SQLiteProvider_DictionaryReplace_Common_UnitTest :
 
     @Test
     fun `should fail when target DB is missing owner of the dictionary`() {
-        dbConnection.createStatement().executeUpdate(
+        baselineDbConnection.createStatement().executeUpdate(
             """
             DELETE FROM mOwner WHERE mOwner.OwnerPrefix = "FixPrfx"
             """

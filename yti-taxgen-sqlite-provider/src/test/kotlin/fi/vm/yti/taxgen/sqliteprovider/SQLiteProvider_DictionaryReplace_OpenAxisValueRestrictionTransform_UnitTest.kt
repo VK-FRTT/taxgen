@@ -11,9 +11,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
     @Test
     fun `OpenAxisValueRestriction should get updated`() {
-        insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+        insertCommonBaselineFixtures()
 
-        dbConnection.createStatement().executeUpdate(
+        baselineDbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
             (
@@ -45,9 +45,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `NULL AxisID should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (null, 5232, 5202, 1);
@@ -65,9 +65,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `HierarchyID having non existing ID should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 444, 5202, 1);
@@ -87,9 +87,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `HierarchyStartingMemberID having non existing ID should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5232, 555, 1);
@@ -108,9 +108,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `HierarchyStartingMemberID referring to member not part of hierarchy should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5132, 5101, 1);
@@ -128,9 +128,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `NULL IsStartingMemberIncluded should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5232, 5202, null);
@@ -152,9 +152,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `Hierarchy Domain missing from replaced dictionary should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5431, 5401, 1);
@@ -175,9 +175,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `Hierarchy missing from replaced dictionary should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5134, 5102, 1);
@@ -196,9 +196,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `Member missing from replaced dictionary should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5132, 5104, 1);
@@ -217,9 +217,9 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
 
         @Test
         fun `Member not belonging to hierarchy should cause error`() {
-            insertRelatedDomainAndMembersAndHierarchiesAndNodes()
+            insertCommonBaselineFixtures()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
                 (101, 5132, 5106, 1);
@@ -237,15 +237,15 @@ internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransfor
     }
 
     private fun readAllOpenAxisValueRestrictions(): ResultSet {
-        return dbConnection.createStatement().executeQuery(
+        return outputDbConnection.createStatement().executeQuery(
             """
             SELECT * FROM mOpenAxisValueRestriction
             """.trimIndent()
         )
     }
 
-    private fun insertRelatedDomainAndMembersAndHierarchiesAndNodes() {
-        dbConnection.createStatement().executeUpdate(
+    private fun insertCommonBaselineFixtures() {
+        baselineDbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mDomain(DomainID, DomainCode, DomainXBRLCode, IsTypedDomain) VALUES
             (51, "ExpDom-1-Code", "FixPrfx_exp:ExpDom-1-Code", 0),

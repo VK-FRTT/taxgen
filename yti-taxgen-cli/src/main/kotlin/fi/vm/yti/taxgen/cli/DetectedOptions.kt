@@ -16,6 +16,8 @@ data class DetectedOptions(
     val sourceFolder: Path?,
     val sourceZipFile: Path?,
 
+    val baselineDb: Path?,
+
     val output: Path?,
     val forceOverwrite: Boolean
 ) {
@@ -41,13 +43,19 @@ data class DetectedOptions(
         ).count { it != null }
 
         if (sourceOptionCount != 1) {
-            throwFail("Single source with proper argument must be given")
+            throwFail("One source option with proper argument must be given")
         }
     }
 
     fun ensureOutputGiven() {
         if (output == null) {
-            throwFail("Output must be given")
+            throwFail("Option output must be given")
+        }
+    }
+
+    fun ensureBaselineDpmDbGiven() {
+        if (baselineDb == null) {
+            throwFail("Option baseline-db must be given")
         }
     }
 }

@@ -11,20 +11,20 @@ import java.nio.file.FileSystems
 import java.nio.file.Path
 
 internal class DpmSourceRecorderZipFileAdapter(
-    targetZipPath: Path,
+    outputZipPath: Path,
     private val forceOverwrite: Boolean,
     private val diagnostic: Diagnostic
 ) : DpmSourceRecorder {
 
-    private val targetZipPath = targetZipPath.toAbsolutePath().normalize()
-    private var zipFileSystem: FileSystem? = null
+    private val outputZipPath = outputZipPath.toAbsolutePath().normalize()
+    private var outputZipFileSystem: FileSystem? = null
     private var folderStructureRecorder: DpmSourceRecorder? = null
 
     override fun contextLabel(): String = "ZIP file"
-    override fun contextIdentifier(): String = targetZipPath.toString()
+    override fun contextIdentifier(): String = outputZipPath.toString()
 
     override fun captureSources(sourceProvider: SourceProvider) {
-        val fs = createTargetZipFileSystem().also { zipFileSystem = it }
+        val fs = createTargetZipFileSystem().also { outputZipFileSystem = it }
         val baseFolderPath = fs.getPath("/")
         val recorder = createFolderStructureRecorder(baseFolderPath).also { folderStructureRecorder = it }
 
@@ -33,27 +33,27 @@ internal class DpmSourceRecorderZipFileAdapter(
 
     override fun close() {
         folderStructureRecorder?.close()
-        zipFileSystem?.close()
+        outputZipFileSystem?.close()
     }
 
     private fun createTargetZipFileSystem(): FileSystem {
-        FileOps.deleteConflictingTargetFileIfAllowed(targetZipPath, forceOverwrite)
-        FileOps.failIfTargetFileExists(targetZipPath, diagnostic)
-        FileOps.createIntermediateFolders(targetZipPath)
+        FileOps.deleteConflictingOutputFileIfAllowed(outputZipPath, forceOverwrite)
+        FileOps.failIfOutputFileExists(outputZipPath, diagnostic)
+        FileOps.createIntermediateFolders(outputZipPath)
 
         return FileSystems.newFileSystem(
-            targetZipUri(),
+            outputZipUri(),
             zipOptions()
         )
     }
 
-    private fun targetZipUri() = URI.create("jar:file:$targetZipPath")
+    private fun outputZipUri() = URI.create("jar:file:$outputZipPath")
 
     private fun zipOptions() = mapOf("create" to "true")
 
     private fun createFolderStructureRecorder(baseFolderPath: Path): DpmSourceRecorder {
         return DpmSourceRecorderFolderAdapter(
-            baseFolderPath = baseFolderPath,
+            outputFolderPath = baseFolderPath,
             forceOverwrite = false,
             diagnostic = diagnostic
         )

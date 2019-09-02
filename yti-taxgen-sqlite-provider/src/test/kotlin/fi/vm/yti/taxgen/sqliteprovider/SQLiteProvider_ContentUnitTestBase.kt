@@ -89,16 +89,19 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
         diagnosticCollector = DiagnosticCollector()
         diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-        val dbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
+        val baselineDbPath = tempFolder.resolve("baseline_plain_dictionary.db")
+        val outputDbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
 
         val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
-        Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(stream, baselineDbPath, StandardCopyOption.REPLACE_EXISTING)
 
         val model = dpmModelFixture(variety)
 
         val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
-            dbPath,
-            diagnosticContext
+            baselineDbPath = baselineDbPath,
+            outputDbPath = outputDbPath,
+            forceOverwrite = false,
+            diagnosticContext = diagnosticContext
         )
 
         val thrown = catchThrowable { dbWriter.writeModel(model) }
@@ -111,6 +114,6 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
             throw thrown
         }
 
-        dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+        dbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
     }
 }

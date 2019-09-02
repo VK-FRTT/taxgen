@@ -11,7 +11,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
     @Test
     fun `ordinate categorisation referring explicit dimension and explicit domain member should get updated`() {
-        dbConnection.createStatement().executeUpdate(
+        baselineDbConnection.createStatement().executeUpdate(
             """
             INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
             VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-2-Code)", "source", "FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:Mbr-2-Code)")
@@ -36,7 +36,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
     @Test
     fun `ordinate categorisation referring typed dimension and open member should get updated`() {
         dumpDiagnosticsWhenThrown {
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
                 VALUES (111, 222, 333, "FixPrfx_dim:TypDim-1-Code(*)", "source", "FixPrfx_dim:TypDim-1-Code(*)")
@@ -62,7 +62,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
     @Test
     fun `ordinate categorisation having OpenAxisValueRestriction should get updated`() {
         dumpDiagnosticsWhenThrown {
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
                 VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*[444;555;1])", "source", "FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-2-Code;Mbr-2-Code;0])")
@@ -83,7 +83,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
     }
 
     private fun readAllOrdinateCategorisations(): ResultSet {
-        return dbConnection.createStatement().executeQuery(
+        return outputDbConnection.createStatement().executeQuery(
             """
             SELECT * FROM mOrdinateCategorisation
             """.trimIndent()
@@ -96,7 +96,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
         private fun insertCategorisationWithDimensionMemberSignature(dmsValue: String) {
             diagnosticCollector.reset()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 DELETE FROM mOrdinateCategorisation;
 
@@ -109,7 +109,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
         private fun insertCategorisationWithDps(dpsValue: String) {
             diagnosticCollector.reset()
 
-            dbConnection.createStatement().executeUpdate(
+            baselineDbConnection.createStatement().executeUpdate(
                 """
                 DELETE FROM mOrdinateCategorisation;
 

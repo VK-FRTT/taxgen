@@ -17,27 +17,37 @@ import java.sql.DriverManager
 internal open class SQLiteProvider_DictionaryReplaceUnitTestBase {
 
     private lateinit var tempFolder: TempFolder
-    private lateinit var dbPath: Path
-    protected lateinit var dbConnection: Connection
+
+    private lateinit var baselineDbPath: Path
+    protected lateinit var baselineDbConnection: Connection
+
+    private lateinit var outputDbPath: Path
+    protected lateinit var outputDbConnection: Connection
+
     protected lateinit var diagnosticCollector: DiagnosticCollector
 
     @BeforeEach
     fun baseInit() {
         tempFolder = TempFolder("sqliteprovider_replace")
-        dbPath = tempFolder.resolve("replace_dpm_dictionary.db")
+        baselineDbPath = tempFolder.resolve("baseline_plain_dictionary.db")
+        outputDbPath = tempFolder.resolve("replace_dpm_dictionary.db")
 
         val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
-        Files.copy(stream, dbPath, StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(stream, baselineDbPath, StandardCopyOption.REPLACE_EXISTING)
 
-        dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
+        baselineDbConnection = DriverManager.getConnection("jdbc:sqlite:$baselineDbPath")
 
         diagnosticCollector = DiagnosticCollector()
     }
 
     @AfterEach
     fun baseTeardown() {
-        if (::dbConnection.isInitialized) {
-            dbConnection.close()
+        if (::baselineDbConnection.isInitialized) {
+            baselineDbConnection.close()
+        }
+
+        if (::outputDbConnection.isInitialized) {
+            outputDbConnection.close()
         }
 
         tempFolder.close()
@@ -46,13 +56,17 @@ internal open class SQLiteProvider_DictionaryReplaceUnitTestBase {
     protected fun replaceDictionaryInDb(variety: FixtureVariety = FixtureVariety.NONE) {
         val diagnosticContext = DiagnosticBridge(diagnosticCollector)
         val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
-            dbPath,
-            diagnosticContext
+            baselineDbPath = baselineDbPath,
+            outputDbPath = outputDbPath,
+            forceOverwrite = true,
+            diagnosticContext = diagnosticContext
         )
 
         val model = dpmModelFixture(variety)
 
         dbWriter.writeModel(model)
+
+        outputDbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
     }
 
     protected fun dumpDiagnosticsWhenThrown(action: () -> Unit) {

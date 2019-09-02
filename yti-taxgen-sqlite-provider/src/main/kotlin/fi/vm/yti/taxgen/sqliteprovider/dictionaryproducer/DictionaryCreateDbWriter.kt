@@ -15,24 +15,24 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
 class DictionaryCreateDbWriter(
-    targetDbPath: Path,
+    outputDbPath: Path,
     private val forceOverwrite: Boolean,
     private val diagnosticContext: DiagnosticContext
 ) : DpmDbWriter {
-    private val targetDbPath: Path = targetDbPath.toAbsolutePath().normalize()
+    private val outputDbPath: Path = outputDbPath.toAbsolutePath().normalize()
 
     override fun writeModel(dpmModel: DpmModel) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.SQLiteDbWriter,
-            contextIdentifier = targetDbPath.toString()
+            contextIdentifier = outputDbPath.toString()
         ) {
-            FileOps.deleteConflictingTargetFileIfAllowed(targetDbPath, forceOverwrite)
-            FileOps.failIfTargetFileExists(targetDbPath, diagnosticContext)
-            FileOps.createIntermediateFolders(targetDbPath)
+            FileOps.deleteConflictingOutputFileIfAllowed(outputDbPath, forceOverwrite)
+            FileOps.failIfOutputFileExists(outputDbPath, diagnosticContext)
+            FileOps.createIntermediateFolders(outputDbPath)
 
-            initDbFileFromSeed(targetDbPath)
+            initDbFileFromSeed(outputDbPath)
 
-            SqliteOps.connectDatabase(targetDbPath)
+            SqliteOps.connectDatabase(outputDbPath)
 
             DbLanguages.configureLanguages()
             val languageIds = DbLanguages.resolveLanguageIds()
