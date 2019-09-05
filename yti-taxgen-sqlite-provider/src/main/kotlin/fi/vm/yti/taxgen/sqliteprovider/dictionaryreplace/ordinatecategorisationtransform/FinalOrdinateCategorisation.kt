@@ -3,17 +3,12 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisation
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
-import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
-import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
-import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
-import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.transactions.transaction
 
 data class FinalOrdinateCategorisation(
     val ordinateId: EntityID<Int>?,
 
-    val relationships: FinalOrdinateCategorisation.Relationships,
+    val dbReferences: OrdinateCategorisationDbReferences,
 
     val databaseIdSignature: String,
     val xbrlCodeSignature: String,
@@ -21,156 +16,70 @@ data class FinalOrdinateCategorisation(
     val source: String?
 ) : Validatable {
 
-    data class Relationships(
-        val dimensionId: EntityID<Int>?,
-        val memberId: EntityID<Int>?,
-        val openAxisValueRestrictionRelationships: OpenAxisValueRestrictionRelationships?
-    ) {
-        fun validate(validationResults: ValidationResults) {
-
-            validateNonNull(
-                validationResults = validationResults,
-                instance = this,
-                property = Relationships::dimensionId
-            )
-
-            validateNonNull(
-                validationResults = validationResults,
-                instance = this,
-                property = Relationships::memberId
-            )
-
-            openAxisValueRestrictionRelationships?.validate(validationResults)
-        }
-    }
-
-    data class OpenAxisValueRestrictionRelationships(
-        val hierarchyId: EntityID<Int>?,
-        val hierarchyStartingMemberId: EntityID<Int>?
-    ) {
-        fun validate(validationResults: ValidationResults) {
-
-            validateNonNull(
-                validationResults = validationResults,
-                instance = this,
-                property = OpenAxisValueRestrictionRelationships::hierarchyId
-            )
-
-            validateNonNull(
-                validationResults = validationResults,
-                instance = this,
-                property = OpenAxisValueRestrictionRelationships::hierarchyStartingMemberId
-            )
-        }
-    }
-
     companion object {
-
-        private const val OPEN_MEMBER_MARKER = "*"
 
         fun fromBaseline(
             baseline: BaselineOrdinateCategorisation
         ): FinalOrdinateCategorisation {
-            val relationships = resolveRelationships(baseline)
+            val dbReferences =
+                OrdinateCategorisationDbReferences.fromOrdinateCategorisationXbrlCodeSignature(
+                    baseline.xbrlCodeSignature
+                )
 
             return FinalOrdinateCategorisation(
                 ordinateId = baseline.ordinateId,
                 source = baseline.source,
-                relationships = relationships,
-                databaseIdSignature = composeDatabaseIdSignature(baseline, relationships),
-                xbrlCodeSignature = composeXbrlCodeSignature(baseline)
-            )
-        }
-
-        private fun resolveRelationships(
-            baseline: BaselineOrdinateCategorisation
-        ): FinalOrdinateCategorisation.Relationships {
-            val xbrlCodeSignature = baseline.xbrlCodeSignature
-
-            return transaction {
-                val dimensionRow = DimensionTable.rowWhereXbrlCode(xbrlCodeSignature.dimensionIdentifier)
-                val dimensionId = dimensionRow?.get(DimensionTable.id)
-
-                val memberRow = if (xbrlCodeSignature.memberIdentifier == OPEN_MEMBER_MARKER) {
-                    MemberTable.openMemberRow()
-                } else {
-                    MemberTable.rowWhereMemberXbrlCode(xbrlCodeSignature.memberIdentifier)
-                }
-                val memberId = memberRow?.get(MemberTable.id)
-
-                val openAxisValueRestrictionRelationships =
-                    xbrlCodeSignature.openAxisValueRestrictionSignature?.run {
-
-                        val scopingDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
-
-                        val hierarchyRow = scopingDomainId?.run {
-                            HierarchyTable.rowWhereDomainIdAndHierarchyCode(
-                                scopingDomainId,
-                                xbrlCodeSignature.openAxisValueRestrictionSignature.hierarchyIdentifier
-                            )
-                        }
-
-                        val hierarchyId = hierarchyRow?.get(HierarchyTable.id)
-
-                        val hierarchyNodeRow = hierarchyId?.run {
-                            HierarchyNodeTable.rowWhereHierarchyIdAndMemberCode(
-                                hierarchyId,
-                                xbrlCodeSignature.openAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier
-                            )
-                        }
-
-                        val hierarchyStartingMemberId = hierarchyNodeRow?.get(HierarchyNodeTable.memberIdCol)
-
-                        OpenAxisValueRestrictionRelationships(
-                            hierarchyId = hierarchyId,
-                            hierarchyStartingMemberId = hierarchyStartingMemberId
-                        )
-                    }
-
-                FinalOrdinateCategorisation.Relationships(
-                    dimensionId = dimensionId,
-                    memberId = memberId,
-                    openAxisValueRestrictionRelationships = openAxisValueRestrictionRelationships
+                dbReferences = dbReferences,
+                databaseIdSignature = composeDbIdSignatureLiteral(
+                    baseline.xbrlCodeSignature,
+                    dbReferences
+                ),
+                xbrlCodeSignature = composeXbrlCodeSignatureLiteral(
+                    baseline.xbrlCodeSignature
                 )
-            }
-        }
-
-        private fun composeDatabaseIdSignature(
-            baseline: BaselineOrdinateCategorisation,
-            relationships: FinalOrdinateCategorisation.Relationships
-        ): String {
-            return doComposeSignature(
-                dimension = baseline.xbrlCodeSignature.dimensionIdentifier,
-                member = baseline.xbrlCodeSignature.memberIdentifier,
-                openAxisValueRestrictionPresent = (relationships.openAxisValueRestrictionRelationships != null),
-                hierarchy = relationships.openAxisValueRestrictionRelationships?.hierarchyId,
-                startingMember = relationships.openAxisValueRestrictionRelationships?.hierarchyStartingMemberId,
-                startingMemberIncluded = baseline.xbrlCodeSignature.openAxisValueRestrictionSignature?.startingMemberIncluded
             )
         }
 
-        private fun composeXbrlCodeSignature(
-            baseline: BaselineOrdinateCategorisation
+        private fun composeDbIdSignatureLiteral(
+            signature: OrdinateCategorisationSignature,
+            dbReferences: OrdinateCategorisationDbReferences
         ): String {
-            return doComposeSignature(
-                dimension = baseline.xbrlCodeSignature.dimensionIdentifier,
-                member = baseline.xbrlCodeSignature.memberIdentifier,
-                openAxisValueRestrictionPresent = (baseline.xbrlCodeSignature.openAxisValueRestrictionSignature != null),
-                hierarchy = baseline.xbrlCodeSignature.openAxisValueRestrictionSignature?.hierarchyIdentifier,
-                startingMember = baseline.xbrlCodeSignature.openAxisValueRestrictionSignature?.hierarchyStartingMemberIdentifier,
-                startingMemberIncluded = baseline.xbrlCodeSignature.openAxisValueRestrictionSignature?.startingMemberIncluded
+            require(signature.type == OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE)
+
+            return doComposeSignatureLiteral(
+                dimension = signature.dimensionIdentifier,
+                member = signature.memberIdentifier,
+                hasOpenAxisValueRestriction = (dbReferences.openAxisValueRestrictionDbReferences != null),
+                hierarchy = dbReferences.openAxisValueRestrictionDbReferences?.hierarchyId,
+                startingMember = dbReferences.openAxisValueRestrictionDbReferences?.hierarchyStartingMemberId,
+                startingMemberIncluded = signature.openAxisValueRestrictionSignature?.startingMemberIncluded
             )
         }
 
-        private fun doComposeSignature(
+        private fun composeXbrlCodeSignatureLiteral(
+            signature: OrdinateCategorisationSignature
+        ): String {
+            require(signature.type == OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE)
+
+            return doComposeSignatureLiteral(
+                dimension = signature.dimensionIdentifier,
+                member = signature.memberIdentifier,
+                hasOpenAxisValueRestriction = (signature.openAxisValueRestrictionSignature != null),
+                hierarchy = signature.openAxisValueRestrictionSignature?.hierarchyIdentifier,
+                startingMember = signature.openAxisValueRestrictionSignature?.hierarchyStartingMemberIdentifier,
+                startingMemberIncluded = signature.openAxisValueRestrictionSignature?.startingMemberIncluded
+            )
+        }
+
+        private fun doComposeSignatureLiteral(
             dimension: String,
             member: String,
-            openAxisValueRestrictionPresent: Boolean,
+            hasOpenAxisValueRestriction: Boolean,
             hierarchy: Any?,
             startingMember: Any?,
             startingMemberIncluded: Any?
         ): String {
-            return if (openAxisValueRestrictionPresent) {
+            return if (hasOpenAxisValueRestriction) {
                 "$dimension($member[$hierarchy;$startingMember;$startingMemberIncluded])"
             } else {
                 "$dimension($member)"
@@ -186,6 +95,6 @@ data class FinalOrdinateCategorisation(
             property = FinalOrdinateCategorisation::ordinateId
         )
 
-        relationships.validate(validationResults)
+        dbReferences.validate(validationResults)
     }
 }

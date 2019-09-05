@@ -38,6 +38,7 @@ class DiagnosticCollector : DiagnosticConsumer {
         validationResults: List<ValidationResultInfo>
     ) {
         //TODO - Event should be: VALIDATION [SubjectType] [SubjectIdentifier] [Input] [Explanation]
+        //Input should be: Array<InputName, InputValue>
 
         events.add("VALIDATED OBJECT [${validatableInfo.objectKind}] [${validatableInfo.objectAddress}]")
 

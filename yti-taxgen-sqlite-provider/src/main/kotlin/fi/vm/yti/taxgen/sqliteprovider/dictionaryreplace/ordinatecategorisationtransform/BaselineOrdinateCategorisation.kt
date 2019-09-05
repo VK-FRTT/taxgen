@@ -2,9 +2,9 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisation
 
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
+import fi.vm.yti.taxgen.commons.datavalidation.validateCustom
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.dpmmodel.validators.validateNonBlank
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Column
@@ -13,71 +13,11 @@ import org.jetbrains.exposed.sql.ResultRow
 data class BaselineOrdinateCategorisation(
     val ordinateId: EntityID<Int>?,
 
-    val databaseIdSignature: BaselineOrdinateCategorisation.Signature,
-    val xbrlCodeSignature: BaselineOrdinateCategorisation.Signature,
+    val databaseIdSignature: OrdinateCategorisationSignature,
+    val xbrlCodeSignature: OrdinateCategorisationSignature,
 
     val source: String?
 ) : Validatable {
-
-    data class Signature(
-        val dimensionIdentifier: String,
-        val memberIdentifier: String,
-        val openAxisValueRestrictionSignature: OpenAxisValueRestrictionSignature?
-    ) {
-        fun validate(validationResults: ValidationResults) {
-            validateNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = Signature::dimensionIdentifier
-            )
-
-            validateNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = Signature::memberIdentifier
-            )
-
-            openAxisValueRestrictionSignature?.validate(validationResults)
-        }
-    }
-
-    data class OpenAxisValueRestrictionSignature(
-        val hierarchyIdentifier: String,
-        val hierarchyStartingMemberIdentifier: String,
-        val startingMemberIncluded: String
-    ) {
-        companion object {
-            val VALID_STARTING_MEMBER_INCLUDED_VALUES = listOf("0", "1")
-        }
-
-        fun validate(validationResults: ValidationResults) {
-            validateNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OpenAxisValueRestrictionSignature::hierarchyIdentifier
-            )
-
-            validateNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OpenAxisValueRestrictionSignature::hierarchyStartingMemberIdentifier
-            )
-
-            validateNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OpenAxisValueRestrictionSignature::startingMemberIncluded
-            )
-
-            validateConditionTruthy(
-                validationResults = validationResults,
-                instance = this,
-                property = OpenAxisValueRestrictionSignature::startingMemberIncluded,
-                condition = { VALID_STARTING_MEMBER_INCLUDED_VALUES.contains(startingMemberIncluded) },
-                message = { "unsupported IsStartingMemberIncluded value '$startingMemberIncluded'" }
-            )
-        }
-    }
 
     companion object {
 
@@ -89,12 +29,14 @@ data class BaselineOrdinateCategorisation(
             val databaseIdSignature = tokenizeSignature(
                 row,
                 OrdinateCategorisationTable.dimensionMemberSignatureCol,
+                OrdinateCategorisationSignature.Type.DATABASE_ID_SIGNATURE,
                 diagnostic
             )
 
             val xbrlCodeSignature = tokenizeSignature(
                 row,
                 OrdinateCategorisationTable.dpsCol,
+                OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE,
                 diagnostic
             )
 
@@ -109,34 +51,45 @@ data class BaselineOrdinateCategorisation(
         private fun tokenizeSignature(
             row: ResultRow,
             column: Column<String?>,
+            type: OrdinateCategorisationSignature.Type,
             diagnostic: Diagnostic
-        ): BaselineOrdinateCategorisation.Signature {
-            val rawSignature = row[column] ?: diagnostic.fatal("Empty OrdinateCategorisation signature")
+        ): OrdinateCategorisationSignature {
+            val signatureLiteral = row[column] ?: diagnostic.fatal("Empty OrdinateCategorisation signature")
 
-            val signatureMatch = SIGNATURE_PATTERN.matchEntire(rawSignature)
-                ?: diagnostic.fatal("Unsupported signature in OrdinateCategorisation.${column.name}: $rawSignature")
+            val signatureMatch = SIGNATURE_PATTERN.matchEntire(signatureLiteral)
+                ?: diagnostic.fatal("Unsupported signature in OrdinateCategorisation.${column.name}: $signatureLiteral")
 
-            fun optionalSignatureComponent(partName: String) =
+            fun optionalSignatureElement(partName: String) =
                 (signatureMatch.groups as MatchNamedGroupCollection)[partName]?.value
 
-            fun signatureComponent(partName: String) = optionalSignatureComponent(partName)!!
+            fun mandatorySignatureElement(partName: String) = optionalSignatureElement(partName)!!
 
-            return if (optionalSignatureComponent("dimension") != null) {
-                BaselineOrdinateCategorisation.Signature(
-                    dimensionIdentifier = signatureComponent("dimension"),
-                    memberIdentifier = signatureComponent("member"),
-                    openAxisValueRestrictionSignature = null
-                )
-            } else {
-                BaselineOrdinateCategorisation.Signature(
-                    dimensionIdentifier = signatureComponent("oaDimension"),
-                    memberIdentifier = signatureComponent("oaMember"),
-                    openAxisValueRestrictionSignature = OpenAxisValueRestrictionSignature(
-                        hierarchyIdentifier = signatureComponent("oaHierarchy"),
-                        hierarchyStartingMemberIdentifier = signatureComponent("oaStartMember"),
-                        startingMemberIncluded = signatureComponent("oaStartMemberIncluded")
+            return when {
+                optionalSignatureElement("dimension") != null -> {
+                    OrdinateCategorisationSignature(
+                        type = type,
+                        dimensionIdentifier = mandatorySignatureElement("dimension"),
+                        memberIdentifier = mandatorySignatureElement("member"),
+                        openAxisValueRestrictionSignature = null
                     )
-                )
+                }
+
+                (optionalSignatureElement("oaDimension") != null) -> {
+                    OrdinateCategorisationSignature(
+                        type = type,
+                        dimensionIdentifier = mandatorySignatureElement("oaDimension"),
+                        memberIdentifier = mandatorySignatureElement("oaMember"),
+                        openAxisValueRestrictionSignature = OpenAxisValueRestrictionSignature(
+                            hierarchyIdentifier = mandatorySignatureElement("oaHierarchy"),
+                            hierarchyStartingMemberIdentifier = mandatorySignatureElement("oaStartMember"),
+                            startingMemberIncluded = mandatorySignatureElement("oaStartMemberIncluded")
+                        )
+                    )
+                }
+
+                else -> {
+                    thisShouldNeverHappen("Signature matching mismatch.")
+                }
             }
         }
 
@@ -169,5 +122,69 @@ data class BaselineOrdinateCategorisation(
     override fun validate(validationResults: ValidationResults) {
         databaseIdSignature.validate(validationResults)
         xbrlCodeSignature.validate(validationResults)
+
+        validateCustom(
+            validationResults = validationResults,
+            instance = this,
+            propertyName = "signatures",
+            validate = { messages ->
+                val mismatchDescriptions = emptyList<String>() //checkSignaturesMatching()
+
+                if (mismatchDescriptions.any()) {
+                    messages.add(
+                        "OrdinateCategorisation signatures do not match. ${mismatchDescriptions.joinToString()}"
+                    )
+                }
+            }
+        )
+    }
+
+    private fun checkSignaturesMatching(): List<String> {
+        val descriptions = mutableListOf<String>()
+
+        if (databaseIdSignature.memberIdentifier != xbrlCodeSignature.memberIdentifier) {
+            descriptions.add("Members not same")
+        }
+
+        if (databaseIdSignature.dimensionIdentifier != xbrlCodeSignature.dimensionIdentifier) {
+            descriptions.add("Dimensions not same")
+        }
+
+        if (databaseIdSignature.hasOpenAxisValueRestrictionSignature() xor
+            xbrlCodeSignature.hasOpenAxisValueRestrictionSignature()
+        ) {
+            descriptions.add("OpenAxisValueRestriction parts not matching")
+        }
+
+        if (databaseIdSignature.openAxisValueRestrictionSignature != null &&
+            xbrlCodeSignature.openAxisValueRestrictionSignature != null
+        ) {
+            val xbrlCodeDbReferences =
+                OrdinateCategorisationDbReferences.fromOrdinateCategorisationXbrlCodeSignature(
+                    xbrlCodeSignature
+                )
+
+            require(xbrlCodeDbReferences.openAxisValueRestrictionDbReferences != null)
+
+            if (databaseIdSignature.openAxisValueRestrictionSignature.hierarchyIdentifier !=
+                xbrlCodeDbReferences.openAxisValueRestrictionDbReferences.hierarchyId.toString()
+            ) {
+                descriptions.add("Hierarchies not same")
+            }
+
+            if (databaseIdSignature.openAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier !=
+                xbrlCodeDbReferences.openAxisValueRestrictionDbReferences.hierarchyStartingMemberId.toString()
+            ) {
+                descriptions.add("Hierarchy starting members not same")
+            }
+
+            if (databaseIdSignature.openAxisValueRestrictionSignature.startingMemberIncluded !=
+                xbrlCodeSignature.openAxisValueRestrictionSignature.startingMemberIncluded
+            ) {
+                descriptions.add("Starting member inclusion not same")
+            }
+        }
+
+        return descriptions
     }
 }

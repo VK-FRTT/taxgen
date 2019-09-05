@@ -174,7 +174,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [Signature.dimensionIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
                 )
 
                 //DPS
@@ -183,7 +183,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [Signature.dimensionIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
                 )
             }
 
@@ -197,7 +197,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [Signature.memberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
                 )
 
                 //DPS
@@ -206,7 +206,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [Signature.memberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
                 )
             }
 
@@ -306,7 +306,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [Relationships.dimensionId: does not have value]"
+                    "VALIDATION [OrdinateCategorisationDbReferences.dimensionId: does not have value]"
                 )
             }
 
@@ -333,7 +333,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [Relationships.memberId: does not have value]"
+                    "VALIDATION [OrdinateCategorisationDbReferences.memberId: does not have value]"
                 )
             }
 
@@ -343,7 +343,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(signature)
-                replaceDictionaryInDb()
+                dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).doesNotContain(
                     "fail"
@@ -360,8 +360,8 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionRelationships.hierarchyId: does not have value]",
-                    "VALIDATION [OpenAxisValueRestrictionRelationships.hierarchyStartingMemberId: does not have value]"
+                    "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyId: does not have value]",
+                    "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyStartingMemberId: does not have value]"
                 )
             }
 
@@ -388,7 +388,7 @@ internal class SQLiteProvider_DictionaryReplace_OrdinateCategorisationTransform_
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionRelationships.hierarchyStartingMemberId: does not have value]"
+                    "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyStartingMemberId: does not have value]"
                 )
             }
 

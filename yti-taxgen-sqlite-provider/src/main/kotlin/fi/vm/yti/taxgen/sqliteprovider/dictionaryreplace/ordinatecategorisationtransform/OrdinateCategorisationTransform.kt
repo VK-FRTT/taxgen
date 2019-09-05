@@ -33,12 +33,6 @@ class OrdinateCategorisationTransform(
                         objectAddress = "OrdinateID: ${it.ordinateId}"
                     )
                 }
-
-                //TODO
-                //validateSignatureRelationEquality(
-                //    it.databaseIdSignature,
-                //    it.xbrlCodeSignature
-                //)
             }
 
             diagnostic.haltIfUnrecoverableErrors {
@@ -84,8 +78,8 @@ class OrdinateCategorisationTransform(
     private fun insertOrdinateCategorisation(categorisation: FinalOrdinateCategorisation) {
         OrdinateCategorisationTable.insert {
             it[ordinateIdCol] = categorisation.ordinateId
-            it[dimensionIdCol] = categorisation.relationships.dimensionId
-            it[memberIdCol] = categorisation.relationships.memberId
+            it[dimensionIdCol] = categorisation.dbReferences.dimensionId
+            it[memberIdCol] = categorisation.dbReferences.memberId
             it[dimensionMemberSignatureCol] = categorisation.databaseIdSignature
             it[sourceCol] = categorisation.source
             it[dpsCol] = categorisation.xbrlCodeSignature
