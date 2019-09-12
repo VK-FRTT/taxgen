@@ -1,6 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
@@ -18,7 +20,9 @@ object DbDictionaries {
     fun writeDictionaryBaseParts(
         dictionary: DpmDictionary,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
+        diagnostic: Diagnostic
     ) {
         dictionary.explicitDomains.forEach { explicitDomain ->
 
@@ -26,7 +30,9 @@ object DbDictionaries {
                 explicitDomain,
                 dictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
 
             DbHierarchies.writeHierarchiesAndAndNodes(
@@ -34,7 +40,9 @@ object DbDictionaries {
                 explicitDomain.members.map { it.memberCode to it.concept }.toMap(),
                 explicitDomainId,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
         }
 
@@ -43,7 +51,9 @@ object DbDictionaries {
                 typedDomain,
                 dictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
         }
 
@@ -52,7 +62,9 @@ object DbDictionaries {
                 explicitDimension,
                 dictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
         }
 
@@ -61,7 +73,9 @@ object DbDictionaries {
                 typedDimension,
                 dictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
         }
     }
@@ -70,7 +84,9 @@ object DbDictionaries {
         dpmDictionary: DpmDictionary,
         ownerId: EntityID<Int>,
         metricDomainId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
+        diagnostic: Diagnostic
     ) {
         dpmDictionary.metricDomains.forEach { metricDomain ->
 
@@ -79,7 +95,9 @@ object DbDictionaries {
                 metricDomainId,
                 dpmDictionary.owner,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
 
             DbHierarchies.writeHierarchiesAndAndNodes(
@@ -87,7 +105,9 @@ object DbDictionaries {
                 metricDomain.metrics.map { it.metricCode to it.concept }.toMap(),
                 metricDomainId,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
         }
     }

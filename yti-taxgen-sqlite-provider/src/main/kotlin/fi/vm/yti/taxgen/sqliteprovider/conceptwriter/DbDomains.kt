@@ -1,5 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
@@ -17,14 +19,18 @@ object DbDomains {
         domain: ExplicitDomain,
         owner: Owner,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
+        diagnostic: Diagnostic
     ): EntityID<Int> {
 
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
                 domain,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
 
             val domainId = insertExplicitDomain(
@@ -38,7 +44,9 @@ object DbDomains {
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
                     member,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    modelOptions,
+                    diagnostic
                 )
 
                 insertMember(
@@ -58,13 +66,17 @@ object DbDomains {
         domain: TypedDomain,
         owner: Owner,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
+        diagnostic: Diagnostic
     ): EntityID<Int> {
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
                 domain,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
 
             insertTypedDomain(

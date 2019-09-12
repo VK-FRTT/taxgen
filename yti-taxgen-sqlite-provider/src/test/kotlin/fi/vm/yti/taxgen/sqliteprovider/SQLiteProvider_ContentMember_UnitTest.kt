@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-internal class SQLiteProvider_ContentMember_UnitTest : SQLiteProvider_ContentUnitTestBase() {
+internal class SQLiteProvider_ContentMember_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 

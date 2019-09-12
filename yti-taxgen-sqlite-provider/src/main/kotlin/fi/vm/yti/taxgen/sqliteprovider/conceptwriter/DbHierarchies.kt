@@ -1,7 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -20,7 +22,9 @@ object DbHierarchies {
         referencedElementConceptsByCode: Map<String, Concept>,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
+        diagnostic: Diagnostic
     ) {
 
         hierarchies.forEach { hierarchy ->
@@ -29,7 +33,9 @@ object DbHierarchies {
                 referencedElementConceptsByCode,
                 domainId,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
         }
     }
@@ -39,14 +45,18 @@ object DbHierarchies {
         referencedElementConceptsByCode: Map<String, Concept>,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>
+        languageIds: Map<Language, EntityID<Int>>,
+        modelOptions: Map<DpmModelOptions, Any>,
+        diagnostic: Diagnostic
     ) {
 
         transaction {
             val hierarchyConceptId = DbConcepts.writeConceptAndTranslations(
                 hierarchy,
                 ownerId,
-                languageIds
+                languageIds,
+                modelOptions,
+                diagnostic
             )
 
             val hierarchyId = insertHierarchy(
@@ -62,7 +72,9 @@ object DbHierarchies {
                 val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
                     currentNode,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    modelOptions,
+                    diagnostic
                 )
 
                 insertHierarchyNode(

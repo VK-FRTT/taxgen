@@ -1,0 +1,7 @@
+package fi.vm.yti.taxgen.dpmmodel
+
+enum class DpmModelOptions {
+	SqliteDb_MandatoryLabelTranslationLanguage,
+	SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages,
+	SqliteDb_DpmElementUriStorage_LabelTranslationLanguage
+}

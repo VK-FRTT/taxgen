@@ -55,7 +55,9 @@ class DictionaryReplaceDbWriter(
                 DbDictionaries.writeDictionaryBaseParts(
                     it,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    dpmModel.modelOptions,
+                    diagnosticContext
                 )
 
                 Pair(it, ownerId)
@@ -71,7 +73,9 @@ class DictionaryReplaceDbWriter(
                     dictionary,
                     ownerId,
                     fixedEntitiesLookupItem.metricDomainId,
-                    languageIds
+                    languageIds,
+                    dpmModel.modelOptions,
+                    diagnosticContext
                 )
             }
 

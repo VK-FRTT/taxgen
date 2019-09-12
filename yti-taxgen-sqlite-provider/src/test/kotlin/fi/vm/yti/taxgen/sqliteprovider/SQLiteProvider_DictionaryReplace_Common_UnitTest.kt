@@ -5,8 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 
-internal class SQLiteProvider_DictionaryReplace_Common_UnitTest :
-    SQLiteProvider_DictionaryReplaceUnitTestBase() {
+internal class SQLiteProvider_DictionaryReplace_Common_UnitTest : SQLiteProvider_DictionaryReplaceUnitTestBase() {
 
     @Test
     fun `should fail when target DB is missing required Eurofiling owner`() {

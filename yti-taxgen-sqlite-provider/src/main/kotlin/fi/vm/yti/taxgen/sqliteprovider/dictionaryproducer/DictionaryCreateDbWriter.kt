@@ -45,7 +45,9 @@ class DictionaryCreateDbWriter(
                 DbDictionaries.writeDictionaryBaseParts(
                     it,
                     ownerId,
-                    languageIds
+                    languageIds,
+                    dpmModel.modelOptions,
+                    diagnosticContext
                 )
 
                 Pair(it, ownerId)
@@ -61,7 +63,9 @@ class DictionaryCreateDbWriter(
                     dictionary,
                     ownerId,
                     fixedEntitiesLookupItem.metricDomainId,
-                    languageIds
+                    languageIds,
+                    dpmModel.modelOptions,
+                    diagnosticContext
                 )
             }
         }

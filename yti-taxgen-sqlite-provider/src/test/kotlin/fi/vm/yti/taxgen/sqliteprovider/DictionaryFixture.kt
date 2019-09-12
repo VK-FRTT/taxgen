@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -25,10 +26,14 @@ enum class FixtureVariety {
     TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
     THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
     THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
-    NO_EN_TRANSLATIONS
+    TRANSLATIONS_FI_ONLY,
+    TRANSLATIONS_FI_SV
 }
 
-fun dpmModelFixture(variety: FixtureVariety): DpmModel {
+fun dpmModelFixture(
+    variety: FixtureVariety,
+    modelOptions: Map<DpmModelOptions, Any>
+): DpmModel {
     fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
     val dpmOwner = Owner(
@@ -37,7 +42,7 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
         prefix = "FixPrfx",
         location = "FixLoc",
         copyright = "FixCop",
-        languageCodes = listOf("en", "fi"),
+        languageCodes = listOf("en", "fi", "sv"),
         defaultLanguageCode = "fi"
     )
 
@@ -48,9 +53,15 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
                 basename == null ->
                     emptyMap()
 
-                variety == FixtureVariety.NO_EN_TRANSLATIONS ->
+                variety == FixtureVariety.TRANSLATIONS_FI_ONLY ->
                     listOf(
                         Pair(language("fi"), "$basename-$kind-Fi")
+                    ).toMap()
+
+                variety == FixtureVariety.TRANSLATIONS_FI_SV ->
+                    listOf(
+                        Pair(language("fi"), "$basename-$kind-Fi"),
+                        Pair(language("sv"), "$basename-$kind-Sv")
                     ).toMap()
 
                 else ->
@@ -435,7 +446,8 @@ fun dpmModelFixture(variety: FixtureVariety): DpmModel {
     )
 
     val model = DpmModel(
-        dictionaries = listOf(dictionary)
+        dictionaries = listOf(dictionary),
+        modelOptions = modelOptions
     )
 
     if (variety != FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER) {

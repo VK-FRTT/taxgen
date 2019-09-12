@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 
-internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_ContentUnitTestBase() {
+internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
@@ -123,7 +123,11 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
 
     @Test
     fun `should bind HierarchyNodes to Members from same Explicit Domain`() {
-        setupDbViaDictionaryCreate(FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+        setupDbViaDictionaryCreate(
+            false,
+            FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
+            emptyMap()
+        )
 
         //Verify that data is properly setup
         val membersRs = dbConnection.createStatement().executeQuery(

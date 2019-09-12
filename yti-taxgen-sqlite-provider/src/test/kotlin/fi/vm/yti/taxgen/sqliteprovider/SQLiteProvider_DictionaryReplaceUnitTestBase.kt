@@ -62,7 +62,10 @@ internal open class SQLiteProvider_DictionaryReplaceUnitTestBase {
             diagnosticContext = diagnosticContext
         )
 
-        val model = dpmModelFixture(variety)
+        val model = dpmModelFixture(
+            variety,
+            emptyMap()
+        )
 
         dbWriter.writeModel(model)
 
