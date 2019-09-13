@@ -28,5 +28,4 @@ internal abstract class SQLiteProvider_ContentDynamicUnitTestBase : SQLiteProvid
     }
 
     abstract fun createDynamicTests(): List<DynamicNode>
-
 }

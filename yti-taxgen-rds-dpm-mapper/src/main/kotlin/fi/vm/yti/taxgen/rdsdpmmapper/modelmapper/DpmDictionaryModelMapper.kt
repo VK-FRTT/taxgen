@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.sourcereader
+package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.config.OwnerConfig
 
-internal class DpmDictionarySourceReader(
+internal class DpmDictionaryModelMapper(
     private val dpmDictionarySource: DpmDictionarySource,
     private val diagnostic: Diagnostic
 ) {
@@ -23,44 +23,44 @@ internal class DpmDictionarySourceReader(
         }
     }
 
-    fun metricsSource(action: (CodeListSourceReader?) -> Unit) {
+    fun metricsCodeListModelMapper(action: (CodeListModelMapper?) -> Unit) {
         dpmDictionarySource.metricsSource {
-            action(codeListSourceMapperForSource(it))
+            action(codeListModelMapperForSource(it))
         }
     }
 
-    fun explicitDomainsAndHierarchiesSource(action: (CodeListSourceReader?) -> Unit) {
+    fun explicitDomainsAndHierarchiesCodeListModelMapper(action: (CodeListModelMapper?) -> Unit) {
         dpmDictionarySource.explicitDomainsAndHierarchiesSource {
-            action(codeListSourceMapperForSource(it))
+            action(codeListModelMapperForSource(it))
         }
     }
 
-    fun explicitDimensionsSource(action: (CodeListSourceReader?) -> Unit) {
+    fun explicitDimensionsCodeListModelMapper(action: (CodeListModelMapper?) -> Unit) {
         dpmDictionarySource.explicitDimensionsSource {
-            action(codeListSourceMapperForSource(it))
+            action(codeListModelMapperForSource(it))
         }
     }
 
-    fun typedDomainsSource(action: (CodeListSourceReader?) -> Unit) {
+    fun typedDomainsCodeListModelMapper(action: (CodeListModelMapper?) -> Unit) {
         dpmDictionarySource.typedDomainsSource {
-            action(codeListSourceMapperForSource(it))
+            action(codeListModelMapperForSource(it))
         }
     }
 
-    fun typedDimensionsSource(action: (CodeListSourceReader?) -> Unit) {
+    fun typedDimensionsCodeListModelMapper(action: (CodeListModelMapper?) -> Unit) {
         dpmDictionarySource.typedDimensionsSource {
-            action(codeListSourceMapperForSource(it))
+            action(codeListModelMapperForSource(it))
         }
     }
 
-    private fun codeListSourceMapperForSource(
+    private fun codeListModelMapperForSource(
         codeListSource: CodeListSource?
-    ): CodeListSourceReader? {
+    ): CodeListModelMapper? {
         if (codeListSource == null) {
             return null
         }
 
-        val reader = CodeListSourceReader(codeListSource, diagnostic)
+        val reader = CodeListModelMapper(codeListSource, diagnostic)
 
         diagnostic.updateCurrentContextDetails(
             label = reader.codeListMeta().diagnosticLabel()

@@ -219,7 +219,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         useCustomisedHttpClient()
         configureHoverflySimulation()
 
-        val sourceProvider = ProviderFactory.providerForConfigFile(
+        val sourceHolder = SourceFactory.sourceForConfigFile(
             configFilePath = configFilePath,
             diagnosticContext = diagnosticContext
         )
@@ -230,7 +230,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             dpmSourceContextIdentifier = "config file: " + configFilePath.toString()
         )
 
-        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
+        return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
     }
 
     @ParameterizedTest(

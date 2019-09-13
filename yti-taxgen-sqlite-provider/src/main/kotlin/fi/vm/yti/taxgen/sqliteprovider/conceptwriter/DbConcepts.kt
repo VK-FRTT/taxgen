@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -43,7 +43,7 @@ object DbConcepts {
         dpmElement: DpmElement,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOptions, Any>,
+        modelOptions: Map<DpmModelOption, Any>,
         diagnostic: Diagnostic
     ): EntityID<Int> {
 
@@ -107,15 +107,15 @@ object DbConcepts {
 
     private fun injectMandatoryLabelTranslation(
         translations: Map<Language, String>,
-        modelOptions: Map<DpmModelOptions, Any>
+        modelOptions: Map<DpmModelOption, Any>
     ): Map<Language, String> {
 
         val targetLanguage =
-            modelOptions[DpmModelOptions.SqliteDb_MandatoryLabelTranslationLanguage] as Language?
+            modelOptions[DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language] as Language?
 
         @Suppress("UNCHECKED_CAST")
         val sourceLanguages =
-            modelOptions[DpmModelOptions.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages] as List<Language>?
+            modelOptions[DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages] as List<Language>?
 
         if (targetLanguage != null && sourceLanguages != null) {
 
@@ -137,12 +137,12 @@ object DbConcepts {
     private fun injectDpmElementUriToLabelTranslation(
         translations: Map<Language, String>,
         uri: String,
-        modelOptions: Map<DpmModelOptions, Any>,
+        modelOptions: Map<DpmModelOption, Any>,
         diagnostic: Diagnostic
     ): Map<Language, String> {
 
         val uriStorageLanguage =
-            modelOptions[DpmModelOptions.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage] as Language?
+            modelOptions[DpmModelOption.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage] as Language?
 
         if (uriStorageLanguage != null) {
 

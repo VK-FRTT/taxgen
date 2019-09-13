@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
@@ -24,7 +24,7 @@ object DbMetric {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOptions, Any>,
+        modelOptions: Map<DpmModelOption, Any>,
         diagnostic: Diagnostic
 
     ) {

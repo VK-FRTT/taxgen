@@ -6,43 +6,43 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 
 internal class DpmDictionarySourceContextDecorator(
-    private val dpmDictionarySource: DpmDictionarySource,
+    private val realDpmDictionarySource: DpmDictionarySource,
     private val diagnosticContext: DiagnosticContext
 ) : DpmDictionarySource {
 
-    override fun contextLabel(): String = dpmDictionarySource.contextLabel()
-    override fun contextIdentifier(): String = dpmDictionarySource.contextIdentifier()
+    override fun contextLabel(): String = realDpmDictionarySource.contextLabel()
+    override fun contextIdentifier(): String = realDpmDictionarySource.contextIdentifier()
 
     override fun dpmOwnerConfigData(action: (String) -> Unit) {
-        dpmDictionarySource.dpmOwnerConfigData(action)
+        realDpmDictionarySource.dpmOwnerConfigData(action)
     }
 
     override fun metricsSource(action: (CodeListSource?) -> Unit) {
-        dpmDictionarySource.metricsSource { codeListSource ->
+        realDpmDictionarySource.metricsSource { codeListSource ->
             decorateAndPerformAction(codeListSource, action)
         }
     }
 
     override fun explicitDomainsAndHierarchiesSource(action: (CodeListSource?) -> Unit) {
-        dpmDictionarySource.explicitDomainsAndHierarchiesSource { codeListSource ->
+        realDpmDictionarySource.explicitDomainsAndHierarchiesSource { codeListSource ->
             decorateAndPerformAction(codeListSource, action)
         }
     }
 
     override fun explicitDimensionsSource(action: (CodeListSource?) -> Unit) {
-        dpmDictionarySource.explicitDimensionsSource { codeListSource ->
+        realDpmDictionarySource.explicitDimensionsSource { codeListSource ->
             decorateAndPerformAction(codeListSource, action)
         }
     }
 
     override fun typedDomainsSource(action: (CodeListSource?) -> Unit) {
-        dpmDictionarySource.typedDomainsSource { codeListSource ->
+        realDpmDictionarySource.typedDomainsSource { codeListSource ->
             decorateAndPerformAction(codeListSource, action)
         }
     }
 
     override fun typedDimensionsSource(action: (CodeListSource?) -> Unit) {
-        dpmDictionarySource.typedDimensionsSource { codeListSource ->
+        realDpmDictionarySource.typedDimensionsSource { codeListSource ->
             decorateAndPerformAction(codeListSource, action)
         }
     }
@@ -54,7 +54,10 @@ internal class DpmDictionarySourceContextDecorator(
         val decoratedSource = if (codeListSource == null) {
             null
         } else {
-            CodeListSourceContextDecorator(codeListSource, diagnosticContext)
+            CodeListSourceContextDecorator(
+                realCodeListSource = codeListSource,
+                diagnosticContext = diagnosticContext
+            )
         }
 
         diagnosticContext.withContext(

@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.sourcereader
+package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
@@ -7,7 +7,7 @@ import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsCodeListMeta
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsCodePage
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 
-internal class CodeListSourceReader(
+internal class CodeListModelMapper(
     private val codeListSource: CodeListSource,
     private val diagnostic: Diagnostic
 
@@ -27,27 +27,33 @@ internal class CodeListSourceReader(
         }
     }
 
-    fun eachExtensionSource(action: (ExtensionSourceReader) -> Unit) {
+    fun eachExtensionModelMapper(action: (ExtensionModelMapper) -> Unit) {
         codeListSource.eachExtensionSource { extensionSource ->
-            val reader = ExtensionSourceReader(extensionSource, diagnostic)
-
-            diagnostic.updateCurrentContextDetails(
-                label = reader.extensionMetaData().diagnosticLabel()
+            val extensionModelMapper = ExtensionModelMapper(
+                extensionSource = extensionSource,
+                diagnostic = diagnostic
             )
 
-            action(reader)
+            diagnostic.updateCurrentContextDetails(
+                label = extensionModelMapper.extensionMetaData().diagnosticLabel()
+            )
+
+            action(extensionModelMapper)
         }
     }
 
-    fun eachSubCodeListSource(action: (CodeListSourceReader) -> Unit) {
+    fun eachSubCodeListModelMapper(action: (CodeListModelMapper) -> Unit) {
         codeListSource.eachSubCodeListSource { subCodeListSource ->
-            val reader = CodeListSourceReader(subCodeListSource, diagnostic)
-
-            diagnostic.updateCurrentContextDetails(
-                label = reader.codeListMeta().diagnosticLabel()
+            val codeListModelMapper = CodeListModelMapper(
+                codeListSource = subCodeListSource,
+                diagnostic = diagnostic
             )
 
-            action(reader)
+            diagnostic.updateCurrentContextDetails(
+                label = codeListModelMapper.codeListMeta().diagnosticLabel()
+            )
+
+            action(codeListModelMapper)
         }
     }
 }

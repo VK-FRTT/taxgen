@@ -27,12 +27,12 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
             val diagnosticCollector = DiagnosticCollector()
             val diagnosticContext: DiagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-            ProviderFactory.folderRecorder(
+            SourceFactory.folderRecorder(
                 outputFolderPath = emptyTargetFolder.path(),
                 forceOverwrite = false,
                 diagnosticContext = diagnosticContext
             ).use {
-                val (source, _) = sourceProviderFolderAdapterFromReferenceData(diagnosticContext)
+                val (source, _) = sourceFolderAdapterFromReferenceData(diagnosticContext)
                 it.captureSources(source)
             }
 

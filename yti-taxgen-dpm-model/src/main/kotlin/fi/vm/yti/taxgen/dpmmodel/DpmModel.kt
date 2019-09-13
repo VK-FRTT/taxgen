@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
 
 data class DpmModel(
     val dictionaries: List<DpmDictionary>,
-    val modelOptions: Map<DpmModelOptions, Any> = emptyMap()
+    val modelOptions: Map<DpmModelOption, Any>
 ) : Validatable {
 
     override fun validate(validationResults: ValidationResults) {

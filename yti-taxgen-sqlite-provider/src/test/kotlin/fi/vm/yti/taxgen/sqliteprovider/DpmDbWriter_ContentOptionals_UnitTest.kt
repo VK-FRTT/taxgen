@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
@@ -36,10 +36,10 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
                 false,
                 FixtureVariety.TRANSLATIONS_FI_ONLY,
                 mapOf(
-                    DpmModelOptions.SqliteDb_MandatoryLabelTranslationLanguage to
+                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language to
                         Language.byIso6391CodeOrFail("en"),
 
-                    DpmModelOptions.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
+                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
                         listOf(
                             Language.byIso6391CodeOrFail("fi"),
                             Language.byIso6391CodeOrFail("sv")
@@ -63,10 +63,10 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
                 false,
                 FixtureVariety.TRANSLATIONS_FI_SV,
                 mapOf(
-                    DpmModelOptions.SqliteDb_MandatoryLabelTranslationLanguage to
+                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language to
                         Language.byIso6391CodeOrFail("en"),
 
-                    DpmModelOptions.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
+                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
                         listOf(
                             Language.byIso6391CodeOrFail("fr"),
                             Language.byIso6391CodeOrFail("sv"),
@@ -93,10 +93,10 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
                 false,
                 FixtureVariety.TRANSLATIONS_FI_ONLY,
                 mapOf(
-                    DpmModelOptions.SqliteDb_MandatoryLabelTranslationLanguage to
+                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language to
                         Language.byIso6391CodeOrFail("en"),
 
-                    DpmModelOptions.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
+                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
                         listOf(
                             Language.byIso6391CodeOrFail("fr"),
                             Language.byIso6391CodeOrFail("sv")
@@ -123,7 +123,7 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
                 false,
                 FixtureVariety.NONE,
                 mapOf(
-                    DpmModelOptions.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage to
+                    DpmModelOption.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage to
                         Language.byIso6391CodeOrFail("pl")
                 )
             )
@@ -146,7 +146,7 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
                 false,
                 FixtureVariety.NONE,
                 mapOf(
-                    DpmModelOptions.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage to
+                    DpmModelOption.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage to
                         Language.byIso6391CodeOrFail("fi")
                 )
             )

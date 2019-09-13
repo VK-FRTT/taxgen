@@ -16,15 +16,15 @@ import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetricDomain
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateOwner
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDomains
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.DpmDictionarySourceReader
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.DpmSourceReader
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.DpmDictionaryModelMapper
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.DpmSourceModelMapper
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 
 class RdsToDpmMapper(
     private val diagnosticContext: DiagnosticContext
 ) {
     fun extractDpmModelFromSource(
-        sourceProvider: SourceProvider
+        sourceHolder: SourceHolder
     ): DpmModel {
 
         return diagnosticContext.withContext(
@@ -33,17 +33,22 @@ class RdsToDpmMapper(
         ) {
             val dictionaries = mutableListOf<DpmDictionary>()
 
-            sourceProvider.withDpmSource { dpmSource ->
-                val reader = DpmSourceReader(dpmSource, diagnosticContext)
+            sourceHolder.withDpmSource { dpmSource ->
 
-                reader.eachDpmDictionarySource {
+                val sourceModelMapper = DpmSourceModelMapper(
+                    dpmSource = dpmSource,
+                    diagnostic = diagnosticContext
+                )
+
+                sourceModelMapper.eachDpmDictionaryModelMapper {
                     val dictionary = mapAndValidateDpmDictionary(it)
                     dictionaries.add(dictionary)
                 }
             }
 
             val model = DpmModel(
-                dictionaries = dictionaries
+                dictionaries = dictionaries,
+                modelOptions = emptyMap() //TODO
             )
 
             diagnosticContext.validate(model)
@@ -53,7 +58,7 @@ class RdsToDpmMapper(
     }
 
     private fun mapAndValidateDpmDictionary(
-        dpmDictionarySource: DpmDictionarySourceReader
+        dictionaryModelMapper: DpmDictionaryModelMapper
     ): DpmDictionary {
         lateinit var owner: Owner
         lateinit var explicitDomains: List<ExplicitDomain>
@@ -62,27 +67,27 @@ class RdsToDpmMapper(
         lateinit var typedDimensions: List<TypedDimension>
         lateinit var metricDomains: List<MetricDomain>
 
-        dpmDictionarySource.dpmOwnerConfig {
+        dictionaryModelMapper.dpmOwnerConfig {
             owner = mapAndValidateOwner(it, diagnosticContext)
         }
 
-        dpmDictionarySource.explicitDomainsAndHierarchiesSource {
+        dictionaryModelMapper.explicitDomainsAndHierarchiesCodeListModelMapper {
             explicitDomains = mapAndValidateExplicitDomainsAndHierarchies(it, owner, diagnosticContext)
         }
 
-        dpmDictionarySource.typedDomainsSource {
+        dictionaryModelMapper.typedDomainsCodeListModelMapper {
             typedDomains = mapAndValidateTypedDomains(it, owner, diagnosticContext)
         }
 
-        dpmDictionarySource.explicitDimensionsSource {
+        dictionaryModelMapper.explicitDimensionsCodeListModelMapper {
             explicitDimensions = mapAndValidateExplicitDimensions(it, owner, diagnosticContext)
         }
 
-        dpmDictionarySource.typedDimensionsSource {
+        dictionaryModelMapper.typedDimensionsCodeListModelMapper {
             typedDimensions = mapAndValidateTypedDimensions(it, owner, diagnosticContext)
         }
 
-        dpmDictionarySource.metricsSource {
+        dictionaryModelMapper.metricsCodeListModelMapper {
             metricDomains = mapAndValidateMetricDomain(it, owner, diagnosticContext)
         }
 

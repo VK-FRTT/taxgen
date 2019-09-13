@@ -10,10 +10,10 @@ import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateMetricDomain(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<MetricDomain> {
@@ -51,7 +51,7 @@ internal fun mapAndValidateMetricDomain(
 }
 
 private fun mapMetrics(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<Metric> {
@@ -76,7 +76,7 @@ private fun mapMetrics(
     }
 
     //Extension based details
-    codeListSource.eachExtensionSource { extensionSource ->
+    codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 
         if (extensionMetadata.isType(RdsExtensionType.DpmMetric)) {

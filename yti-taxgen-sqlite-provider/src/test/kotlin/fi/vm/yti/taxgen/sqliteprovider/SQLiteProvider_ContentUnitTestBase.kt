@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
@@ -42,7 +42,7 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
     fun setupDbViaDictionaryCreate(
         exceptionIsExpected: Boolean,
         variety: FixtureVariety,
-        modelOptions: Map<DpmModelOptions, Any>
+        modelOptions: Map<DpmModelOption, Any>
     ) {
         withHaltExceptionHarness(exceptionIsExpected) {
             initMode = DbInitMode.DICTIONARY_CREATE
@@ -67,7 +67,7 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
     fun setupDbViaDictionaryReplace(
         exceptionIsExpected: Boolean,
         variety: FixtureVariety = FixtureVariety.NONE,
-        modelOptions: Map<DpmModelOptions, Any>
+        modelOptions: Map<DpmModelOption, Any>
     ) {
         withHaltExceptionHarness(exceptionIsExpected) {
             initMode = DbInitMode.DICTIONARY_REPLACE

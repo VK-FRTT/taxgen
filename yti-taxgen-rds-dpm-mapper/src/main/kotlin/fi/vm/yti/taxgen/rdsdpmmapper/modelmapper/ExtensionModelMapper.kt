@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.rdsdpmmapper.sourcereader
+package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
 import fi.vm.yti.taxgen.commons.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
@@ -7,7 +7,7 @@ import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMembersPage
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMeta
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 
-internal class ExtensionSourceReader(
+internal class ExtensionModelMapper(
     private val extensionSource: ExtensionSource,
     private val diagnostic: Diagnostic
 ) {

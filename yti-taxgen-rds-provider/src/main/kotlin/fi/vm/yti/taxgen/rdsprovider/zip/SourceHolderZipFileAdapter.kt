@@ -1,12 +1,12 @@
 package fi.vm.yti.taxgen.rdsprovider.zip
 
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import java.nio.file.Path
 
-class SourceProviderZipFileAdapter(
+class SourceHolderZipFileAdapter(
     private val sourceZipPath: Path
-) : SourceProvider {
+) : SourceHolder {
 
     private val dpmSource: DpmSourceZipFileAdapter by lazy {
         DpmSourceZipFileAdapter(sourceZipPath)

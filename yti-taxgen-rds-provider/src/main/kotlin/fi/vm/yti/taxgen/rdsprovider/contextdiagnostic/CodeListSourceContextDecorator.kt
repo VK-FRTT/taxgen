@@ -7,19 +7,19 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 
 internal class CodeListSourceContextDecorator(
-    private val codeListSource: CodeListSource,
+    private val realCodeListSource: CodeListSource,
     private val diagnosticContext: DiagnosticContext
 ) : CodeListSource {
 
-    override fun blueprint(): CodeListBlueprint = codeListSource.blueprint()
+    override fun blueprint(): CodeListBlueprint = realCodeListSource.blueprint()
 
-    override fun contextLabel(): String = codeListSource.contextLabel()
-    override fun contextIdentifier(): String = codeListSource.contextIdentifier()
+    override fun contextLabel(): String = realCodeListSource.contextLabel()
+    override fun contextIdentifier(): String = realCodeListSource.contextIdentifier()
 
-    override fun codeListMetaData(): String = codeListSource.codeListMetaData()
+    override fun codeListMetaData(): String = realCodeListSource.codeListMetaData()
 
     override fun eachCodePageData(action: (String) -> Unit) {
-        codeListSource.eachCodePageData { pageData ->
+        realCodeListSource.eachCodePageData { pageData ->
             diagnosticContext.withContext(
                 contextType = DiagnosticContextType.RdsCodesPage,
                 contextDetails = null
@@ -30,8 +30,11 @@ internal class CodeListSourceContextDecorator(
     }
 
     override fun eachExtensionSource(action: (ExtensionSource) -> Unit) {
-        codeListSource.eachExtensionSource { extensionSource ->
-            val decoratedExtension = ExtensionSourceContextDecorator(extensionSource, diagnosticContext)
+        realCodeListSource.eachExtensionSource { extensionSource ->
+            val decoratedExtension = ExtensionSourceContextDecorator(
+                realExtensionSource = extensionSource,
+                diagnosticContext = diagnosticContext
+            )
 
             diagnosticContext.withContext(
                 contextType = DiagnosticContextType.RdsExtension,
@@ -43,8 +46,11 @@ internal class CodeListSourceContextDecorator(
     }
 
     override fun eachSubCodeListSource(action: (CodeListSource) -> Unit) {
-        codeListSource.eachSubCodeListSource { subCodeListSource ->
-            val decoratedSubCodeListSource = CodeListSourceContextDecorator(subCodeListSource, diagnosticContext)
+        realCodeListSource.eachSubCodeListSource { subCodeListSource ->
+            val decoratedSubCodeListSource = CodeListSourceContextDecorator(
+                realCodeListSource = subCodeListSource,
+                diagnosticContext = diagnosticContext
+            )
 
             diagnosticContext.withContext(
                 contextType = DiagnosticContextType.RdsCodeList,

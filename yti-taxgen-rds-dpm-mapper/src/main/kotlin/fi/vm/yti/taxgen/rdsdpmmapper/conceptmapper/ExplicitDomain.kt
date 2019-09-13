@@ -9,10 +9,10 @@ import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.MemberItem
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateExplicitDomainsAndHierarchies(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<ExplicitDomain> {
@@ -37,7 +37,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
     }
 
     //Extension based details
-    codeListSource.eachExtensionSource { extensionSource ->
+    codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 
         if (extensionMetadata.isType(RdsExtensionType.DpmExplicitDomain)) {
@@ -58,7 +58,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
     }
 
     //SubCodeList based details
-    codeListSource.eachSubCodeListSource { subCodeListSource ->
+    codeListSource.eachSubCodeListModelMapper { subCodeListSource ->
         val subCodeListUri = subCodeListSource.codeListMeta().validUri(diagnostic)
         val domain = explicitDomainItems.find { it.subCodeListUri == subCodeListUri }
 
@@ -99,7 +99,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
 }
 
 private fun mapAndValidateExplicitDomainMembers(
-    codeListSource: CodeListSourceReader,
+    codeListSource: CodeListModelMapper,
     owner: Owner,
     memberPrefix: String?,
     diagnostic: Diagnostic

@@ -9,8 +9,8 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.ProviderFactory
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsprovider.SourceFactory
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriterFactory
 import java.io.BufferedWriter
@@ -98,11 +98,11 @@ class TaxgenCli(
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
 
-            val sourceProvider = resolveSourceProvider(detectedOptions)
+            val sourceHolder = resolveSource(detectedOptions)
 
-            val dpmModel = sourceProvider.use {
+            val dpmModel = sourceHolder.use {
                 val dpmMapper = RdsToDpmMapper(diagnosticContext)
-                dpmMapper.extractDpmModelFromSource(sourceProvider)
+                dpmMapper.extractDpmModelFromSource(it)
             }
 
             diagnosticContext.haltIfUnrecoverableErrors {
@@ -121,11 +121,11 @@ class TaxgenCli(
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
 
-            val sourceProvider = resolveSourceProvider(detectedOptions)
-            val recorder = resolveRdsSourceRecorder(detectedOptions)
+            val sourceHolder = resolveSource(detectedOptions)
+            val recorder = resolveSourceRecorder(detectedOptions)
 
-            recorder.use { rdsSourceRecorder ->
-                rdsSourceRecorder.captureSources(sourceProvider)
+            recorder.use {
+                it.captureSources(sourceHolder)
             }
         }
 
@@ -134,23 +134,23 @@ class TaxgenCli(
         }
     }
 
-    private fun resolveSourceProvider(detectedOptions: DetectedOptions): SourceProvider {
+    private fun resolveSource(detectedOptions: DetectedOptions): SourceHolder {
         if (detectedOptions.sourceConfigFile != null) {
-            return ProviderFactory.providerForConfigFile(
+            return SourceFactory.sourceForConfigFile(
                 configFilePath = detectedOptions.sourceConfigFile,
                 diagnosticContext = diagnosticContext
             )
         }
 
         if (detectedOptions.sourceFolder != null) {
-            return ProviderFactory.folderProvider(
+            return SourceFactory.sourceForFolder(
                 sourceRootPath = detectedOptions.sourceFolder,
                 diagnosticContext = diagnosticContext
             )
         }
 
         if (detectedOptions.sourceZipFile != null) {
-            return ProviderFactory.zipFileProvider(
+            return SourceFactory.sourceForZipFile(
                 zipFilePath = detectedOptions.sourceZipFile,
                 diagnosticContext = diagnosticContext
             )
@@ -159,12 +159,12 @@ class TaxgenCli(
         thisShouldNeverHappen("No suitable source given")
     }
 
-    private fun resolveRdsSourceRecorder(
+    private fun resolveSourceRecorder(
         detectedOptions: DetectedOptions
     ): DpmSourceRecorder {
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder) {
-            return ProviderFactory.folderRecorder(
+            return SourceFactory.folderRecorder(
                 outputFolderPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
@@ -172,7 +172,7 @@ class TaxgenCli(
         }
 
         if (detectedOptions.cmdCaptureDpmSourcesToZip) {
-            return ProviderFactory.zipRecorder(
+            return SourceFactory.zipRecorder(
                 outputZipPath = detectedOptions.output!!,
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext

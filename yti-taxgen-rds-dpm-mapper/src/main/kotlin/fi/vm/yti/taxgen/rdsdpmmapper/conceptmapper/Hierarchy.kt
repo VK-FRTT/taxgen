@@ -8,11 +8,11 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.HierarchyNodeItem
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.ExtensionSourceReader
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.ExtensionModelMapper
 
 internal fun mapAndValidateHierarchies(
-    codeListSource: CodeListSourceReader,
+    codeListSource: CodeListModelMapper,
     acceptedExtensionTypes: List<RdsExtensionType>,
     owner: Owner,
     elementCodesByUri: Map<String, String>,
@@ -20,7 +20,7 @@ internal fun mapAndValidateHierarchies(
 ): List<Hierarchy> {
     val hierarchies = mutableListOf<Hierarchy>()
 
-    codeListSource.eachExtensionSource { extensionSource ->
+    codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 
         if (acceptedExtensionTypes.any { extensionMetadata.isType(it) }) {
@@ -49,7 +49,7 @@ internal fun mapAndValidateHierarchies(
 }
 
 private fun mapAndValidateHierarchyNodes(
-    extensionSource: ExtensionSourceReader,
+    extensionSource: ExtensionModelMapper,
     owner: Owner,
     elementCodesByUri: Map<String, String>,
     diagnostic: Diagnostic

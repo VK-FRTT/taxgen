@@ -6,18 +6,22 @@ import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 
 internal class DpmSourceContextDecorator(
-    private val dpmSource: DpmSource,
+    private val realDpmSource: DpmSource,
     private val diagnosticContext: DiagnosticContext
 ) : DpmSource {
 
-    override fun contextLabel() = dpmSource.contextLabel()
-    override fun contextIdentifier() = dpmSource.contextIdentifier()
-    override fun sourceConfigData(): String = dpmSource.sourceConfigData()
+    override fun contextLabel() = realDpmSource.contextLabel()
+    override fun contextIdentifier() = realDpmSource.contextIdentifier()
+    override fun sourceConfigData(): String = realDpmSource.sourceConfigData()
 
     override fun eachDpmDictionarySource(action: (DpmDictionarySource) -> Unit) {
-        dpmSource.eachDpmDictionarySource { dictionarySource ->
 
-            val decoratedSource = DpmDictionarySourceContextDecorator(dictionarySource, diagnosticContext)
+        realDpmSource.eachDpmDictionarySource { dictionarySource ->
+
+            val decoratedSource = DpmDictionarySourceContextDecorator(
+                realDpmDictionarySource = dictionarySource,
+                diagnosticContext = diagnosticContext
+            )
 
             diagnosticContext.withContext(
                 contextType = DiagnosticContextType.DpmDictionary,

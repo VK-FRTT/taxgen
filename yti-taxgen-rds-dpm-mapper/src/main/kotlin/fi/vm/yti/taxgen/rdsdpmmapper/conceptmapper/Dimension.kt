@@ -8,10 +8,10 @@ import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.DimensionItem
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateTypedDimensions(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<TypedDimension> {
@@ -23,7 +23,7 @@ internal fun mapAndValidateTypedDimensions(
 }
 
 internal fun mapAndValidateExplicitDimensions(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<ExplicitDimension> {
@@ -35,7 +35,7 @@ internal fun mapAndValidateExplicitDimensions(
 }
 
 private fun mapDimensions(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<DimensionItem> {
@@ -56,7 +56,7 @@ private fun mapDimensions(
     }
 
     //Extension based details
-    codeListSource.eachExtensionSource { extensionSource ->
+    codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 
         if (extensionMetadata.isType(RdsExtensionType.DpmDimension)) {

@@ -8,10 +8,10 @@ import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.sourcereader.CodeListSourceReader
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateTypedDomains(
-    codeListSource: CodeListSourceReader?,
+    codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
 ): List<TypedDomain> {
@@ -32,7 +32,7 @@ internal fun mapAndValidateTypedDomains(
     }
 
     //Extension based details
-    codeListSource.eachExtensionSource { extensionSource ->
+    codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 
         if (extensionMetadata.isType(RdsExtensionType.DpmTypedDomain)) {

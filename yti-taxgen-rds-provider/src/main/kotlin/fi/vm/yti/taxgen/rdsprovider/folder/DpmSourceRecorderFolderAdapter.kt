@@ -9,7 +9,7 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import java.nio.file.Path
 import java.time.Instant
 
@@ -24,14 +24,14 @@ internal class DpmSourceRecorderFolderAdapter(
     override fun contextLabel(): String = "folder"
     override fun contextIdentifier(): String = outputFolderPath.toString()
 
-    override fun captureSources(sourceProvider: SourceProvider) {
+    override fun captureSources(sourceHolder: SourceHolder) {
         val pathStack = PathStack(
             baseFolderPath = outputFolderPath,
             createFileSystemPaths = true,
             diagnostic = diagnostic
         )
 
-        sourceProvider.withDpmSource { dpmSource ->
+        sourceHolder.withDpmSource { dpmSource ->
             captureDpmSource(dpmSource, pathStack)
         }
     }

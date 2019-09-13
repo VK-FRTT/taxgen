@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider.zip
 import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
 import java.net.URI
 import java.nio.file.FileSystem
@@ -23,12 +23,12 @@ internal class DpmSourceRecorderZipFileAdapter(
     override fun contextLabel(): String = "ZIP file"
     override fun contextIdentifier(): String = outputZipPath.toString()
 
-    override fun captureSources(sourceProvider: SourceProvider) {
+    override fun captureSources(sourceHolder: SourceHolder) {
         val fs = createTargetZipFileSystem().also { outputZipFileSystem = it }
         val baseFolderPath = fs.getPath("/")
         val recorder = createFolderStructureRecorder(baseFolderPath).also { folderStructureRecorder = it }
 
-        recorder.captureSources(sourceProvider)
+        recorder.captureSources(sourceHolder)
     }
 
     override fun close() {

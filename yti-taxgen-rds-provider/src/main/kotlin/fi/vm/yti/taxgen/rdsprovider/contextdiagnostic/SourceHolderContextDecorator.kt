@@ -3,17 +3,18 @@ package fi.vm.yti.taxgen.rdsprovider.contextdiagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 
-internal class SourceProviderContextDecorator(
-    private val sourceProvider: SourceProvider,
+internal class SourceHolderContextDecorator(
+    private val realSourceHolder: SourceHolder,
     private val diagnosticContext: DiagnosticContext
-) : SourceProvider {
+) : SourceHolder {
 
     override fun withDpmSource(action: (DpmSource) -> Unit) {
-        sourceProvider.withDpmSource { dpmSource ->
+
+        realSourceHolder.withDpmSource { dpmSource ->
             val decoratedDpmSource = DpmSourceContextDecorator(
-                dpmSource = dpmSource,
+                realDpmSource = dpmSource,
                 diagnosticContext = diagnosticContext
             )
 
@@ -26,5 +27,5 @@ internal class SourceProviderContextDecorator(
         }
     }
 
-    override fun close() = sourceProvider.close()
+    override fun close() = realSourceHolder.close()
 }

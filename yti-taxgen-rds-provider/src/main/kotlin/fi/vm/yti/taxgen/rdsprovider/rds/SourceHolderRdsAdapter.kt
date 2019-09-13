@@ -2,13 +2,13 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.SourceProvider
+import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfig
 
-class SourceProviderRdsAdapter(
+class SourceHolderRdsAdapter(
     private val dpmSourceConfig: DpmSourceConfig,
     private val diagnostic: Diagnostic
-) : SourceProvider {
+) : SourceHolder {
 
     override fun withDpmSource(action: (DpmSource) -> Unit) {
         val dpmSource = DpmSourceRdsAdapter(dpmSourceConfig, diagnostic)

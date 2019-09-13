@@ -32,7 +32,7 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
 
     @TestFactory
     fun `Folder adapter with static reference data`(): List<DynamicNode> {
-        val (sourceProvider, rootPath) = sourceProviderFolderAdapterFromReferenceData()
+        val (sourceHolder, rootPath) = sourceFolderAdapterFromReferenceData()
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
@@ -40,12 +40,12 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = rootPath.toString()
         )
 
-        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
+        return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
     }
 
     @TestFactory
     fun `Context decorated folder adapter with static reference data`(): List<DynamicNode> {
-        val (sourceProvider, rootPath) = sourceProviderFolderAdapterFromReferenceData(diagnosticContext)
+        val (sourceHolder, rootPath) = sourceFolderAdapterFromReferenceData(diagnosticContext)
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
@@ -53,23 +53,23 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = rootPath.toString()
         )
 
-        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
+        return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
     }
 
     @TestFactory
     fun `Folder adapter with loopback data`(): List<DynamicNode> {
-        ProviderFactory.folderRecorder(
+        SourceFactory.folderRecorder(
             outputFolderPath = loopbackTempFolder.path(),
             forceOverwrite = false,
             diagnosticContext = diagnosticContext
         ).use {
-            val (source, _) = sourceProviderFolderAdapterFromReferenceData(
+            val (source, _) = sourceFolderAdapterFromReferenceData(
                 diagnosticContext = diagnosticContext
             )
             it.captureSources(source)
         }
 
-        val sourceProvider = ProviderFactory.folderProvider(
+        val sourceHolder = SourceFactory.sourceForFolder(
             sourceRootPath = loopbackTempFolder.path(),
             diagnosticContext = diagnosticContext
         )
@@ -80,24 +80,24 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = loopbackTempFolder.path().toString()
         )
 
-        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
+        return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
     }
 
     @TestFactory
     fun `Folder adapter with zip-loopback data`(): List<DynamicNode> {
         val targetZipPath = zipLoopbackTempFolder.resolve("file.zip")
 
-        ProviderFactory.zipRecorder(
+        SourceFactory.zipRecorder(
             outputZipPath = targetZipPath,
             forceOverwrite = false,
             diagnosticContext = diagnosticContext
         ).use {
-            val (source, _) = sourceProviderFolderAdapterFromReferenceData(
+            val (source, _) = sourceFolderAdapterFromReferenceData(
                 diagnosticContext = diagnosticContext)
             it.captureSources(source)
         }
 
-        val sourceProvider = ProviderFactory.zipFileProvider(
+        val sourceHolder = SourceFactory.sourceForZipFile(
             zipFilePath = targetZipPath,
             diagnosticContext = diagnosticContext
         )
@@ -108,6 +108,6 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             dpmSourceContextIdentifier = targetZipPath.toString()
         )
 
-        return createAdapterConformanceTestCases(sourceProvider, expectedDetails)
+        return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
     }
 }

@@ -4,35 +4,35 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.DpmSourceRecorderContextDecorator
-import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceProviderContextDecorator
+import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceHolderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.folder.SourceProviderFolderAdapter
-import fi.vm.yti.taxgen.rdsprovider.rds.SourceProviderRdsAdapter
+import fi.vm.yti.taxgen.rdsprovider.folder.SourceHolderFolderAdapter
+import fi.vm.yti.taxgen.rdsprovider.rds.SourceHolderRdsAdapter
 import fi.vm.yti.taxgen.rdsprovider.zip.DpmSourceRecorderZipFileAdapter
-import fi.vm.yti.taxgen.rdsprovider.zip.SourceProviderZipFileAdapter
+import fi.vm.yti.taxgen.rdsprovider.zip.SourceHolderZipFileAdapter
 import java.nio.file.Path
 
-object ProviderFactory {
+object SourceFactory {
 
-    fun providerForConfigFile(
+    fun sourceForConfigFile(
         configFilePath: Path,
         diagnosticContext: DiagnosticContext
-    ): SourceProvider {
-        val sourceProvider = resolveSourceProviderForConfigFile(
+    ): SourceHolder {
+        val sourceHolder = resolveSourceHolderForConfigFile(
             configFilePath,
             diagnosticContext
         )
 
-        return SourceProviderContextDecorator(
-            sourceProvider = sourceProvider,
+        return SourceHolderContextDecorator(
+            realSourceHolder = sourceHolder,
             diagnosticContext = diagnosticContext
         )
     }
 
-    private fun resolveSourceProviderForConfigFile(
+    private fun resolveSourceHolderForConfigFile(
         configFilePath: Path,
         diagnosticContext: DiagnosticContext
-    ): SourceProvider {
+    ): SourceHolder {
         return diagnosticContext.withContext(
             contextType = DiagnosticContextType.InitConfiguration,
             contextIdentifier = configFilePath.fileName.toString()
@@ -42,37 +42,37 @@ object ProviderFactory {
                 diagnosticContext
             ) ?: diagnosticContext.fatal("Unsupported config file: $configFilePath")
 
-            SourceProviderRdsAdapter(
+            SourceHolderRdsAdapter(
                 dpmSourceConfig = dpmSourceConfig,
                 diagnostic = diagnosticContext
             )
         }
     }
 
-    fun folderProvider(
+    fun sourceForFolder(
         sourceRootPath: Path,
         diagnosticContext: DiagnosticContext
-    ): SourceProvider {
-        val sourceProvider = SourceProviderFolderAdapter(
+    ): SourceHolder {
+        val sourceHolder = SourceHolderFolderAdapter(
             dpmSourceRootPath = sourceRootPath
         )
 
-        return SourceProviderContextDecorator(
-            sourceProvider = sourceProvider,
+        return SourceHolderContextDecorator(
+            realSourceHolder = sourceHolder,
             diagnosticContext = diagnosticContext
         )
     }
 
-    fun zipFileProvider(
+    fun sourceForZipFile(
         zipFilePath: Path,
         diagnosticContext: DiagnosticContext
-    ): SourceProvider {
-        val sourceProvider = SourceProviderZipFileAdapter(
+    ): SourceHolder {
+        val sourceHolder = SourceHolderZipFileAdapter(
             sourceZipPath = zipFilePath
         )
 
-        return SourceProviderContextDecorator(
-            sourceProvider = sourceProvider,
+        return SourceHolderContextDecorator(
+            realSourceHolder = sourceHolder,
             diagnosticContext = diagnosticContext
         )
     }
@@ -89,7 +89,7 @@ object ProviderFactory {
         )
 
         return DpmSourceRecorderContextDecorator(
-            dpmSourceRecorder = dpmSourceRecorder,
+            realDpmSourceRecorder = dpmSourceRecorder,
             diagnosticContext = diagnosticContext
         )
     }
@@ -106,7 +106,7 @@ object ProviderFactory {
         )
 
         return DpmSourceRecorderContextDecorator(
-            dpmSourceRecorder = dpmSourceRecorder,
+            realDpmSourceRecorder = dpmSourceRecorder,
             diagnosticContext = diagnosticContext
         )
     }

@@ -47,12 +47,12 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
     }
 
     protected fun createAdapterConformanceTestCases(
-        sourceProvider: SourceProvider,
+        sourceHolder: SourceHolder,
         expectedDetails: ExpectedDetails
     ): List<DynamicNode> {
 
         val dpmSource = grab<DpmSource> {
-            sourceProvider.withDpmSource(it)
+            sourceHolder.withDpmSource(it)
         }
 
         return listOf(

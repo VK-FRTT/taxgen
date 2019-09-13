@@ -4,5 +4,5 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextDetails
 import java.io.Closeable
 
 interface DpmSourceRecorder : Closeable, DiagnosticContextDetails {
-    fun captureSources(sourceProvider: SourceProvider)
+    fun captureSources(sourceHolder: SourceHolder)
 }

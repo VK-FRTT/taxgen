@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -32,7 +32,7 @@ enum class FixtureVariety {
 
 fun dpmModelFixture(
     variety: FixtureVariety,
-    modelOptions: Map<DpmModelOptions, Any>
+    modelOptions: Map<DpmModelOption, Any>
 ): DpmModel {
     fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
