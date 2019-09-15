@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -80,7 +81,7 @@ internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_Content
             setupDbViaDictionaryCreate(
                 true,
                 FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
-                emptyMap()
+                ProcessingOptions.empty()
             )
         }
 

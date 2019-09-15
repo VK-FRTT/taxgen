@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicNode
@@ -126,7 +127,7 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
         setupDbViaDictionaryCreate(
             false,
             FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
-            emptyMap()
+            ProcessingOptions.empty()
         )
 
         //Verify that data is properly setup

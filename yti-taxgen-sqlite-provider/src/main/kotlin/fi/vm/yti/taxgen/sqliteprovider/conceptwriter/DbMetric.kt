@@ -2,11 +2,11 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -24,7 +24,7 @@ object DbMetric {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
 
     ) {
@@ -36,7 +36,7 @@ object DbMetric {
                     metric,
                     ownerId,
                     languageIds,
-                    modelOptions,
+                    processingOptions,
                     diagnostic
                 )
 

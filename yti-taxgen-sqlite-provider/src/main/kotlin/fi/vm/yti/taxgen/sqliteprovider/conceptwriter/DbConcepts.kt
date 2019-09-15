@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
@@ -12,6 +11,7 @@ import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
@@ -43,7 +43,7 @@ object DbConcepts {
         dpmElement: DpmElement,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ): EntityID<Int> {
 
@@ -54,13 +54,13 @@ object DbConcepts {
             .let {
                 injectMandatoryLabelTranslation(
                     it,
-                    modelOptions
+                    processingOptions
                 )
             }.let {
                 injectDpmElementUriToLabelTranslation(
                     it,
                     dpmElement.uri,
-                    modelOptions,
+                    processingOptions,
                     diagnostic
                 )
             }
@@ -107,15 +107,11 @@ object DbConcepts {
 
     private fun injectMandatoryLabelTranslation(
         translations: Map<Language, String>,
-        modelOptions: Map<DpmModelOption, Any>
+        processingOptions: ProcessingOptions
     ): Map<Language, String> {
 
-        val targetLanguage =
-            modelOptions[DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language] as Language?
-
-        @Suppress("UNCHECKED_CAST")
-        val sourceLanguages =
-            modelOptions[DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages] as List<Language>?
+        val targetLanguage = processingOptions.sqliteDbMandatoryLabelTranslationLanguage
+        val sourceLanguages = processingOptions.sqliteDbMandatoryLabelTranslationSourceCandidateLanguages
 
         if (targetLanguage != null && sourceLanguages != null) {
 
@@ -137,13 +133,11 @@ object DbConcepts {
     private fun injectDpmElementUriToLabelTranslation(
         translations: Map<Language, String>,
         uri: String,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ): Map<Language, String> {
 
-        val uriStorageLanguage =
-            modelOptions[DpmModelOption.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage] as Language?
-
+        val uriStorageLanguage = processingOptions.sqliteDbDpmElementUriStorageLabelTranslationLanguage
         if (uriStorageLanguage != null) {
 
             if (translations.containsKey(uriStorageLanguage)) {

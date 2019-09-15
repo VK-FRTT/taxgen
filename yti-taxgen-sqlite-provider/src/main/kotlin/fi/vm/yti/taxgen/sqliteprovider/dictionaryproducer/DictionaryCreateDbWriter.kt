@@ -1,9 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer
 
-import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
@@ -21,7 +22,10 @@ class DictionaryCreateDbWriter(
 ) : DpmDbWriter {
     private val outputDbPath: Path = outputDbPath.toAbsolutePath().normalize()
 
-    override fun writeModel(dpmModel: DpmModel) {
+    override fun writeModel(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions
+    ) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.SQLiteDbWriter,
             contextIdentifier = outputDbPath.toString()
@@ -46,7 +50,7 @@ class DictionaryCreateDbWriter(
                     it,
                     ownerId,
                     languageIds,
-                    dpmModel.modelOptions,
+                    processingOptions,
                     diagnosticContext
                 )
 
@@ -64,7 +68,7 @@ class DictionaryCreateDbWriter(
                     ownerId,
                     fixedEntitiesLookupItem.metricDomainId,
                     languageIds,
-                    dpmModel.modelOptions,
+                    processingOptions,
                     diagnosticContext
                 )
             }

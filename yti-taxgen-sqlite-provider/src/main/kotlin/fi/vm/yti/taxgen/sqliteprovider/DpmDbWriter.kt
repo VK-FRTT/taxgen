@@ -1,8 +1,12 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 
 interface DpmDbWriter {
 
-    fun writeModel(dpmModel: DpmModel)
+    fun writeModel(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions
+    )
 }

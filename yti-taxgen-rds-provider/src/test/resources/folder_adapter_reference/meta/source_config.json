@@ -1,3 +1,42 @@
 {
-  "marker": "meta/source_config"
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "dpm_dictionary_0/dpm_owner",
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
+        "languages": [
+          "en",
+          "fi",
+          "sv"
+        ],
+        "defaultLanguage": "en"
+      },
+      "metrics": {
+        "uri": null
+      },
+      "explicitDomainsAndHierarchies": {
+        "uri": null
+      },
+      "explicitDimensions": {
+        "uri": null
+      },
+      "typedDomains": {
+        "uri": null
+      },
+      "typedDimensions": {
+        "uri": null
+      }
+    }
+  ],
+  "processingOptions": {
+    "sqliteDbMandatoryLabelTranslationLanguage": "en",
+    "sqliteDbMandatoryLabelTranslationSourceCandidateLanguages": [
+      "fi",
+      "sv"
+    ],
+    "sqliteDbDpmElementUriStorageLabelTranslationLanguage": "pl"
+  }
 }

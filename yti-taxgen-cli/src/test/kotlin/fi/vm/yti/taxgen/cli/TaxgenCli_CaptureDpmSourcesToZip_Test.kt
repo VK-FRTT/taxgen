@@ -34,8 +34,8 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Capturing DPM sources",
-                "DPM source recorder: ZIP file",
                 "DPM source: folder",
+                "DPM source recorder: ZIP file",
                 "Capturing DPM sources: OK"
             )
 
@@ -58,8 +58,8 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Capturing DPM sources",
-                "DPM source recorder: ZIP file",
                 "DPM source: Reference Data service",
+                "DPM source recorder: ZIP file",
                 "Capturing DPM sources: OK"
             )
 
@@ -84,8 +84,8 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Capturing DPM sources",
-                "DPM source recorder: ZIP file",
                 "DPM source: folder",
+                "DPM source recorder: ZIP file",
                 "Capturing DPM sources: OK"
             )
 

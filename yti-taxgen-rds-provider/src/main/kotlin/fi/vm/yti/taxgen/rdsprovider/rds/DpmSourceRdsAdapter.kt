@@ -3,23 +3,23 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfig
+import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfigHolder
 
 internal class DpmSourceRdsAdapter(
-    private val dpmSourceConfig: DpmSourceConfig,
+    private val configHolder: DpmSourceConfigHolder,
     private val diagnostic: Diagnostic
 ) : DpmSource {
 
     private val rdsClient = RdsClient(diagnostic)
 
     override fun contextLabel(): String = "Reference Data service"
-    override fun contextIdentifier(): String = "config file: ${dpmSourceConfig.configFilePath}"
-    override fun sourceConfigData(): String = dpmSourceConfig.rawConfigData
+    override fun contextIdentifier(): String = "config file: ${configHolder.configFilePath}"
+    override fun config(): DpmSourceConfigHolder = configHolder
 
     override fun eachDpmDictionarySource(action: (DpmDictionarySource) -> Unit) {
-        dpmSourceConfig.dpmDictionaries.forEach { config ->
+        configHolder.dpmSourceConfig.dpmDictionaryConfigs.forEach { dictionaryConfig ->
             val dictionarySource = DpmDictionarySourceRdsAdapter(
-                config,
+                dictionaryConfig,
                 rdsClient,
                 diagnostic
             )

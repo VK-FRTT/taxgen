@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
@@ -31,9 +32,15 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
                 outputFolderPath = emptyTargetFolder.path(),
                 forceOverwrite = false,
                 diagnosticContext = diagnosticContext
-            ).use {
-                val (source, _) = sourceFolderAdapterFromReferenceData(diagnosticContext)
-                it.captureSources(source)
+            ).use { sourceRecorder ->
+                val (sourceHolder, _) = sourceHolderFolderAdapterForBundledReferenceData(
+                    diagnosticContext,
+                    true
+                )
+
+                sourceHolder.withDpmSource {
+                    sourceRecorder.captureSources(it)
+                }
             }
 
             emptyTargetEvents = diagnosticCollector.events
@@ -57,12 +64,26 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
             expectedFile: String,
             expectedMarker: String
         ) {
+            assertTargetFolderHavingJsonFileWithMarkerAt(
+                expectedFile = expectedFile,
+                expectedMarker = expectedMarker,
+                markerLocation = "/marker"
+            )
+        }
+
+        private fun assertTargetFolderHavingJsonFileWithMarkerAt(
+            expectedFile: String,
+            expectedMarker: String,
+            markerLocation: String
+        ) {
             val expectedFilePath = emptyTargetFolder.resolve("$expectedFile.json")
             assertThat(Files.isRegularFile(expectedFilePath)).isTrue()
 
             val json = objectMapper.readTree(expectedFilePath.toFile())
             assertThat(json.isObject).isTrue()
-            assertThat(json.get("marker").textValue()).isEqualTo(expectedMarker)
+            val markerValue = json.nonBlankTextOrNullAt(markerLocation)
+
+            assertThat(markerValue).isEqualTo(expectedMarker)
         }
 
         @Test
@@ -77,22 +98,26 @@ internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
 
         @Test
         fun `Should have source config at root`() {
-            assertTargetFolderHavingJsonFileWithMarker(
+            assertTargetFolderHavingJsonFileWithMarkerAt(
                 expectedFile = "meta/source_config",
-                expectedMarker = "meta/source_config"
+                expectedMarker = "dpm_dictionary_0/dpm_owner",
+                markerLocation = "/dpmDictionaries/0/owner/name"
             )
         }
 
         @Test
         fun `Should have owner config`() {
-            assertTargetFolderHavingJsonFileWithMarker(
+            assertTargetFolderHavingJsonFileWithMarkerAt(
                 expectedFile = "dpm_dictionary_0/dpm_owner_config",
-                expectedMarker = "dpm_dictionary_0/dpm_owner_config"
+                expectedMarker = "dpm_dictionary_0/dpm_owner",
+                markerLocation = "/name"
+
             )
 
-            assertTargetFolderHavingJsonFileWithMarker(
+            assertTargetFolderHavingJsonFileWithMarkerAt(
                 expectedFile = "dpm_dictionary_1/dpm_owner_config",
-                expectedMarker = "dpm_dictionary_1/dpm_owner_config"
+                expectedMarker = "dpm_dictionary_1/dpm_owner",
+                markerLocation = "/name"
             )
         }
 

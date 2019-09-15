@@ -85,8 +85,8 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "Writing dictionaries to DPM database",
                 "Configuration file: (dm_integration_fixture.json)",
                 "Configuration file: OK",
-                "RDS to DPM mapper",
                 "DPM source: Reference Data service",
+                "RDS to DPM mapper",
                 "Writing dictionaries to DPM database: OK"
             )
 

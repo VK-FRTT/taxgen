@@ -195,8 +195,7 @@ fun dpmTestData(): Set<DataDefinition> {
         DataDefinition(
             kClass = DpmModel::class,
             attributes = mapOf(
-                "dictionaries" to listOf(dynamicAttribute { it.instantiate<DpmDictionary>() }),
-                "modelOptions" to emptyMap<DpmModelOption, Any>()
+                "dictionaries" to listOf(dynamicAttribute { it.instantiate<DpmDictionary>() })
             )
         )
     )

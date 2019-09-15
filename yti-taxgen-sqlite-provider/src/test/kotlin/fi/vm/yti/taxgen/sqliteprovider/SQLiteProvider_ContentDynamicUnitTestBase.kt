@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.TestFactory
 
@@ -10,7 +11,7 @@ internal abstract class SQLiteProvider_ContentDynamicUnitTestBase : SQLiteProvid
         setupDbViaDictionaryCreate(
             false,
             FixtureVariety.NONE,
-            emptyMap()
+            ProcessingOptions.empty()
         )
 
         return createDynamicTests()
@@ -21,7 +22,7 @@ internal abstract class SQLiteProvider_ContentDynamicUnitTestBase : SQLiteProvid
         setupDbViaDictionaryReplace(
             false,
             FixtureVariety.NONE,
-            emptyMap()
+            ProcessingOptions.empty()
         )
 
         return createDynamicTests()

@@ -1,15 +1,14 @@
 package fi.vm.yti.taxgen.rdsprovider.folder
 
-import fi.vm.yti.taxgen.commons.FileOps
-import fi.vm.yti.taxgen.commons.JsonOps
-import fi.vm.yti.taxgen.commons.PathStack
+import fi.vm.yti.taxgen.commons.ops.FileOps
+import fi.vm.yti.taxgen.commons.ops.JsonOps
+import fi.vm.yti.taxgen.commons.ops.PathStack
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.CaptureInfo
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import java.nio.file.Path
 import java.time.Instant
 
@@ -24,16 +23,14 @@ internal class DpmSourceRecorderFolderAdapter(
     override fun contextLabel(): String = "folder"
     override fun contextIdentifier(): String = outputFolderPath.toString()
 
-    override fun captureSources(sourceHolder: SourceHolder) {
+    override fun captureSources(dpmSource: DpmSource) {
         val pathStack = PathStack(
             baseFolderPath = outputFolderPath,
             createFileSystemPaths = true,
             diagnostic = diagnostic
         )
 
-        sourceHolder.withDpmSource { dpmSource ->
-            captureDpmSource(dpmSource, pathStack)
-        }
+        captureDpmSource(dpmSource, pathStack)
     }
 
     private fun captureDpmSource(
@@ -51,7 +48,7 @@ internal class DpmSourceRecorderFolderAdapter(
             )
 
             FileOps.writeTextFile(
-                dpmSource.sourceConfigData(),
+                dpmSource.config().configData,
                 pathStack,
                 "source_config.json",
                 forceOverwrite,

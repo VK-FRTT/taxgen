@@ -2,8 +2,8 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
@@ -21,7 +21,7 @@ object DbDictionaries {
         dictionary: DpmDictionary,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
         dictionary.explicitDomains.forEach { explicitDomain ->
@@ -31,7 +31,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 
@@ -41,7 +41,7 @@ object DbDictionaries {
                 explicitDomainId,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
         }
@@ -52,7 +52,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
         }
@@ -63,7 +63,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
         }
@@ -74,7 +74,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
         }
@@ -85,7 +85,7 @@ object DbDictionaries {
         ownerId: EntityID<Int>,
         metricDomainId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
         dpmDictionary.metricDomains.forEach { metricDomain ->
@@ -96,7 +96,7 @@ object DbDictionaries {
                 dpmDictionary.owner,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 
@@ -106,7 +106,7 @@ object DbDictionaries {
                 metricDomainId,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
         }

@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.commons.JsonOps
+import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.commons.datavalidation.Validatable
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults

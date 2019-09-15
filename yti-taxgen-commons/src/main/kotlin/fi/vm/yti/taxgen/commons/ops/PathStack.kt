@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons
+package fi.vm.yti.taxgen.commons.ops
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import java.nio.file.Files

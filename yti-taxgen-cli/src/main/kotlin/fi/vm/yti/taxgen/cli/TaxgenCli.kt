@@ -7,6 +7,8 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 import fi.vm.yti.taxgen.rdsprovider.SourceFactory
@@ -98,11 +100,17 @@ class TaxgenCli(
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
 
-            val sourceHolder = resolveSource(detectedOptions)
+            lateinit var processingOptions: ProcessingOptions
+            lateinit var dpmModel: DpmModel
 
-            val dpmModel = sourceHolder.use {
-                val dpmMapper = RdsToDpmMapper(diagnosticContext)
-                dpmMapper.extractDpmModelFromSource(it)
+            resolveSource(detectedOptions).use { sourceHolder ->
+                sourceHolder.withDpmSource { dpmSource ->
+
+                    processingOptions = dpmSource.config().processingOptions
+
+                    val dpmMapper = RdsToDpmMapper(diagnosticContext)
+                    dpmModel = dpmMapper.extractDpmModel(dpmSource)
+                }
             }
 
             diagnosticContext.haltIfUnrecoverableErrors {
@@ -110,7 +118,10 @@ class TaxgenCli(
             }
 
             val dbWriter = resolveDpmDbWriter(detectedOptions)
-            dbWriter.writeModel(dpmModel)
+            dbWriter.writeModel(
+                dpmModel,
+                processingOptions
+            )
         }
     }
 
@@ -121,11 +132,13 @@ class TaxgenCli(
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
 
-            val sourceHolder = resolveSource(detectedOptions)
-            val recorder = resolveSourceRecorder(detectedOptions)
+            resolveSource(detectedOptions).use { sourceHolder ->
+                sourceHolder.withDpmSource { dpmSource ->
 
-            recorder.use {
-                it.captureSources(sourceHolder)
+                    resolveSourceRecorder(detectedOptions).use { sourceRecorder ->
+                        sourceRecorder.captureSources(dpmSource)
+                    }
+                }
             }
         }
 

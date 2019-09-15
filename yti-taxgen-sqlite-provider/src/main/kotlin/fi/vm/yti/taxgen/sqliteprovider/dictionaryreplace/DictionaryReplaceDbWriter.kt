@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace
 
-import fi.vm.yti.taxgen.commons.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
@@ -26,7 +27,10 @@ class DictionaryReplaceDbWriter(
     private val baselineDbPath: Path = baselineDbPath.toAbsolutePath().normalize()
     private val outputDbPath: Path = outputDbPath.toAbsolutePath().normalize()
 
-    override fun writeModel(dpmModel: DpmModel) {
+    override fun writeModel(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions
+    ) {
         diagnosticContext.withContext(
             contextType = DiagnosticContextType.SQLiteDbWriter,
             contextIdentifier = baselineDbPath.toString()
@@ -56,7 +60,7 @@ class DictionaryReplaceDbWriter(
                     it,
                     ownerId,
                     languageIds,
-                    dpmModel.modelOptions,
+                    processingOptions,
                     diagnosticContext
                 )
 
@@ -74,7 +78,7 @@ class DictionaryReplaceDbWriter(
                     ownerId,
                     fixedEntitiesLookupItem.metricDomainId,
                     languageIds,
-                    dpmModel.modelOptions,
+                    processingOptions,
                     diagnosticContext
                 )
             }

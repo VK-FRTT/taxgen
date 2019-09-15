@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
+import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -42,15 +42,16 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
     fun setupDbViaDictionaryCreate(
         exceptionIsExpected: Boolean,
         variety: FixtureVariety,
-        modelOptions: Map<DpmModelOption, Any>
+        processingOptions: ProcessingOptions
     ) {
-        withHaltExceptionHarness(exceptionIsExpected) {
-            initMode = DbInitMode.DICTIONARY_CREATE
-            diagnosticCollector = DiagnosticCollector()
-            diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        initMode = DbInitMode.DICTIONARY_CREATE
+        diagnosticCollector = DiagnosticCollector()
+        diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-            val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
-            val model = dpmModelFixture(variety, modelOptions)
+        val dbPath = tempFolder.resolve("created_dpm_dictionary.db")
+
+        withHaltExceptionHarness(diagnosticCollector, exceptionIsExpected) {
+            val model = dpmModelFixture(variety)
 
             val dbWriter = DpmDbWriterFactory.dictionaryCreateWriter(
                 dbPath,
@@ -58,7 +59,7 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
                 diagnosticContext
             )
 
-            dbWriter.writeModel(model)
+            dbWriter.writeModel(model, processingOptions)
 
             dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
         }
@@ -67,20 +68,21 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
     fun setupDbViaDictionaryReplace(
         exceptionIsExpected: Boolean,
         variety: FixtureVariety = FixtureVariety.NONE,
-        modelOptions: Map<DpmModelOption, Any>
+        processingOptions: ProcessingOptions
     ) {
-        withHaltExceptionHarness(exceptionIsExpected) {
-            initMode = DbInitMode.DICTIONARY_REPLACE
-            diagnosticCollector = DiagnosticCollector()
-            diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        initMode = DbInitMode.DICTIONARY_REPLACE
+        diagnosticCollector = DiagnosticCollector()
+        diagnosticContext = DiagnosticBridge(diagnosticCollector)
 
-            val baselineDbPath = tempFolder.resolve("baseline_plain_dictionary.db")
-            val outputDbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
+        val baselineDbPath = tempFolder.resolve("baseline_plain_dictionary.db")
+        val outputDbPath = tempFolder.resolve("replaced_dpm_dictionary.db")
 
-            val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
-            Files.copy(stream, baselineDbPath, StandardCopyOption.REPLACE_EXISTING)
+        val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
+        Files.copy(stream, baselineDbPath, StandardCopyOption.REPLACE_EXISTING)
 
-            val model = dpmModelFixture(variety, modelOptions)
+        withHaltExceptionHarness(diagnosticCollector, exceptionIsExpected) {
+
+            val model = dpmModelFixture(variety)
 
             val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
                 baselineDbPath = baselineDbPath,
@@ -89,23 +91,8 @@ internal abstract class SQLiteProvider_ContentUnitTestBase {
                 diagnosticContext = diagnosticContext
             )
 
-            dbWriter.writeModel(model)
+            dbWriter.writeModel(model, processingOptions)
             dbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
-        }
-    }
-
-    private fun withHaltExceptionHarness(
-        exceptionIsExpected: Boolean,
-        action: () -> Unit
-    ) {
-        return try {
-            action()
-        } catch (exception: HaltException) {
-            if (!exceptionIsExpected) {
-                println(diagnosticCollector.eventsString())
-            }
-
-            throw exception
         }
     }
 }

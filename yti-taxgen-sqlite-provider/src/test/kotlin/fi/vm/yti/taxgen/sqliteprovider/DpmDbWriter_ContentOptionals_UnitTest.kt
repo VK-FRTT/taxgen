@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -35,15 +35,13 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
             setupDbViaDictionaryCreate(
                 false,
                 FixtureVariety.TRANSLATIONS_FI_ONLY,
-                mapOf(
-                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language to
-                        Language.byIso6391CodeOrFail("en"),
-
-                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
-                        listOf(
-                            Language.byIso6391CodeOrFail("fi"),
-                            Language.byIso6391CodeOrFail("sv")
-                        )
+                ProcessingOptions(
+                    sqliteDbMandatoryLabelTranslationLanguage = Language.byIso6391CodeOrFail("en"),
+                    sqliteDbMandatoryLabelTranslationSourceCandidateLanguages = listOf(
+                        Language.byIso6391CodeOrFail("fi"),
+                        Language.byIso6391CodeOrFail("sv")
+                    ),
+                    sqliteDbDpmElementUriStorageLabelTranslationLanguage = null
                 )
             )
 
@@ -62,16 +60,14 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
             setupDbViaDictionaryCreate(
                 false,
                 FixtureVariety.TRANSLATIONS_FI_SV,
-                mapOf(
-                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language to
-                        Language.byIso6391CodeOrFail("en"),
-
-                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
-                        listOf(
-                            Language.byIso6391CodeOrFail("fr"),
-                            Language.byIso6391CodeOrFail("sv"),
-                            Language.byIso6391CodeOrFail("fi")
-                        )
+                ProcessingOptions(
+                    sqliteDbMandatoryLabelTranslationLanguage = Language.byIso6391CodeOrFail("en"),
+                    sqliteDbMandatoryLabelTranslationSourceCandidateLanguages = listOf(
+                        Language.byIso6391CodeOrFail("fr"),
+                        Language.byIso6391CodeOrFail("sv"),
+                        Language.byIso6391CodeOrFail("fi")
+                    ),
+                    sqliteDbDpmElementUriStorageLabelTranslationLanguage = null
                 )
             )
 
@@ -92,15 +88,13 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
             setupDbViaDictionaryCreate(
                 false,
                 FixtureVariety.TRANSLATIONS_FI_ONLY,
-                mapOf(
-                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_Language to
-                        Language.byIso6391CodeOrFail("en"),
-
-                    DpmModelOption.SqliteDb_MandatoryLabelTranslation_SourceCandidateLanguages to
-                        listOf(
-                            Language.byIso6391CodeOrFail("fr"),
-                            Language.byIso6391CodeOrFail("sv")
-                        )
+                ProcessingOptions(
+                    sqliteDbMandatoryLabelTranslationLanguage = Language.byIso6391CodeOrFail("en"),
+                    sqliteDbMandatoryLabelTranslationSourceCandidateLanguages = listOf(
+                        Language.byIso6391CodeOrFail("fr"),
+                        Language.byIso6391CodeOrFail("sv")
+                    ),
+                    sqliteDbDpmElementUriStorageLabelTranslationLanguage = null
                 )
             )
 
@@ -122,9 +116,10 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
             setupDbViaDictionaryCreate(
                 false,
                 FixtureVariety.NONE,
-                mapOf(
-                    DpmModelOption.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage to
-                        Language.byIso6391CodeOrFail("pl")
+                ProcessingOptions(
+                    sqliteDbMandatoryLabelTranslationLanguage = null,
+                    sqliteDbMandatoryLabelTranslationSourceCandidateLanguages = null,
+                    sqliteDbDpmElementUriStorageLabelTranslationLanguage = Language.byIso6391CodeOrFail("pl")
                 )
             )
 
@@ -145,9 +140,10 @@ internal class DpmDbWriter_ContentOptionals_UnitTest : SQLiteProvider_ContentUni
             setupDbViaDictionaryCreate(
                 false,
                 FixtureVariety.NONE,
-                mapOf(
-                    DpmModelOption.SqliteDb_DpmElementUriStorage_LabelTranslationLanguage to
-                        Language.byIso6391CodeOrFail("fi")
+                ProcessingOptions(
+                    sqliteDbMandatoryLabelTranslationLanguage = null,
+                    sqliteDbMandatoryLabelTranslationSourceCandidateLanguages = null,
+                    sqliteDbDpmElementUriStorageLabelTranslationLanguage = Language.byIso6391CodeOrFail("fi")
                 )
             )
 

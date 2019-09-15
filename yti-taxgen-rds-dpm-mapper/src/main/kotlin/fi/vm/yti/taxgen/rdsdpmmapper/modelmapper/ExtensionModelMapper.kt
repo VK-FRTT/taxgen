@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
-import fi.vm.yti.taxgen.commons.JsonOps
+import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMembersPage

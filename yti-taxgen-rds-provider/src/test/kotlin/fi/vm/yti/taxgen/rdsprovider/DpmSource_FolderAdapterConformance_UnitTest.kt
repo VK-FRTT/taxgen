@@ -32,12 +32,16 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
 
     @TestFactory
     fun `Folder adapter with static reference data`(): List<DynamicNode> {
-        val (sourceHolder, rootPath) = sourceFolderAdapterFromReferenceData()
+        val (sourceHolder, rootPath) = sourceHolderFolderAdapterForBundledReferenceData(
+            diagnosticContext,
+            false
+        )
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "folder",
-            dpmSourceContextIdentifier = rootPath.toString()
+            dpmSourceContextIdentifier = rootPath.toString(),
+            dpmSourceConfigFilePath = "$rootPath/meta/source_config.json"
         )
 
         return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
@@ -45,12 +49,16 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
 
     @TestFactory
     fun `Context decorated folder adapter with static reference data`(): List<DynamicNode> {
-        val (sourceHolder, rootPath) = sourceFolderAdapterFromReferenceData(diagnosticContext)
+        val (sourceHolder, rootPath) = sourceHolderFolderAdapterForBundledReferenceData(
+            diagnosticContext,
+            true
+        )
 
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "folder",
-            dpmSourceContextIdentifier = rootPath.toString()
+            dpmSourceContextIdentifier = rootPath.toString(),
+            dpmSourceConfigFilePath = "$rootPath/meta/source_config.json"
         )
 
         return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
@@ -62,11 +70,14 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             outputFolderPath = loopbackTempFolder.path(),
             forceOverwrite = false,
             diagnosticContext = diagnosticContext
-        ).use {
-            val (source, _) = sourceFolderAdapterFromReferenceData(
-                diagnosticContext = diagnosticContext
+        ).use { sourceRecorder ->
+            val (sourceHolder, _) = sourceHolderFolderAdapterForBundledReferenceData(
+                diagnosticContext = diagnosticContext,
+                contextDecorateSource = false
             )
-            it.captureSources(source)
+            sourceHolder.withDpmSource {
+                sourceRecorder.captureSources(it)
+            }
         }
 
         val sourceHolder = SourceFactory.sourceForFolder(
@@ -77,7 +88,8 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "folder",
-            dpmSourceContextIdentifier = loopbackTempFolder.path().toString()
+            dpmSourceContextIdentifier = loopbackTempFolder.path().toString(),
+            dpmSourceConfigFilePath = "${loopbackTempFolder.path()}/meta/source_config.json"
         )
 
         return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
@@ -91,10 +103,15 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
             outputZipPath = targetZipPath,
             forceOverwrite = false,
             diagnosticContext = diagnosticContext
-        ).use {
-            val (source, _) = sourceFolderAdapterFromReferenceData(
-                diagnosticContext = diagnosticContext)
-            it.captureSources(source)
+        ).use { sourceRecorder ->
+            val (sourceHolder, _) = sourceHolderFolderAdapterForBundledReferenceData(
+                diagnosticContext = diagnosticContext,
+                contextDecorateSource = false
+            )
+
+            sourceHolder.withDpmSource {
+                sourceRecorder.captureSources(it)
+            }
         }
 
         val sourceHolder = SourceFactory.sourceForZipFile(
@@ -105,7 +122,8 @@ internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_Conforman
         val expectedDetails = ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "ZIP file",
-            dpmSourceContextIdentifier = targetZipPath.toString()
+            dpmSourceContextIdentifier = targetZipPath.toString(),
+            dpmSourceConfigFilePath = "/meta/source_config.json"
         )
 
         return createAdapterConformanceTestCases(sourceHolder, expectedDetails)

@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.folder
 
-import fi.vm.yti.taxgen.commons.FileOps
+import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.rdsprovider.helpers.SortOps
 import java.nio.file.Path
 

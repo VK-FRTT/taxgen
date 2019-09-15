@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
+import fi.vm.yti.taxgen.rdsprovider.config.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.rds.HttpClientHolder
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -95,12 +95,10 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         private fun rdsDpmSourceConfig(): String {
             val config = """
             {
-              "marker": "meta/source_config",
               "dpmDictionaries": [
                 {
                   "owner": {
-                    "marker":"dpm_dictionary_0/dpm_owner_config",
-                    "name": "Name_0",
+                    "name": "dpm_dictionary_0/dpm_owner",
                     "namespace": "Namespace_0",
                     "prefix": "Prefix_0",
                     "location": "Location_0",
@@ -130,8 +128,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                 },
                 {
                   "owner": {
-                    "marker":"dpm_dictionary_1/dpm_owner_config",
-                    "name": "Name_1",
+                    "name": "dpm_dictionary_1/dpm_owner",
                     "namespace": "Namespace_1",
                     "prefix": "Prefix_1",
                     "location": "Location_1",
@@ -160,30 +157,36 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                   }
                 },
 
-                ${blankDpmDictionaryConfig("dpm_dictionary_2/dpm_owner_config", "2")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_3/dpm_owner_config", "3")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_4/dpm_owner_config", "4")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_5/dpm_owner_config", "5")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_6/dpm_owner_config", "6")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_7/dpm_owner_config", "7")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_8/dpm_owner_config", "8")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_9/dpm_owner_config", "9")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_10/dpm_owner_config", "10")},
-                ${blankDpmDictionaryConfig("dpm_dictionary_11/dpm_owner_config", "11")}
-              ]
+                ${blankDpmDictionaryConfig("2")},
+                ${blankDpmDictionaryConfig("3")},
+                ${blankDpmDictionaryConfig("4")},
+                ${blankDpmDictionaryConfig("5")},
+                ${blankDpmDictionaryConfig("6")},
+                ${blankDpmDictionaryConfig("7")},
+                ${blankDpmDictionaryConfig("8")},
+                ${blankDpmDictionaryConfig("9")},
+                ${blankDpmDictionaryConfig("10")},
+                ${blankDpmDictionaryConfig("11")}
+              ],
+              "processingOptions": {
+                "sqliteDbMandatoryLabelTranslationLanguage": "en",
+                "sqliteDbMandatoryLabelTranslationSourceCandidateLanguages": [
+                  "fi",
+                  "sv"
+                ],
+                "sqliteDbDpmElementUriStorageLabelTranslationLanguage": "pl"
+              }
             }
             """.trimIndent()
             return config
         }
 
         private fun blankDpmDictionaryConfig(
-            markerValue: String,
             tag: String
         ): String {
             return """{
                   "owner": {
-                    "marker":"$markerValue",
-                    "name": "Name_$tag",
+                    "name": "dpm_dictionary_$tag/dpm_owner",
                     "namespace": "Namespace_$tag",
                     "prefix": "Prefix_$tag",
                     "location": "Location_$tag",
@@ -227,7 +230,8 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
         val expectedDetails = DpmSource_ConformanceUnitTestBase.ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "Reference Data service",
-            dpmSourceContextIdentifier = "config file: " + configFilePath.toString()
+            dpmSourceContextIdentifier = "config file: " + configFilePath.toString(),
+            dpmSourceConfigFilePath = configFilePath.toString()
         )
 
         return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
@@ -250,19 +254,19 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             )
         )
 
-        val dpmSourceConfig = DpmSourceConfigInput.tryReadAndValidateConfig(
+        val dpmSourceConfig = ConfigFactory.configFromFile(
             configFilePath,
             diagnosticContext
-        )!!
+        )
 
         val source = DpmSourceRdsAdapter(dpmSourceConfig, diagnosticContext)
 
         var progress = "INIT"
 
         val thrown = catchThrowable {
-            val dictionarySource = grabList<DpmDictionarySource> { source.eachDpmDictionarySource(it) }.first()
+            val dictionarySource = collectListOf<DpmDictionarySource> { source.eachDpmDictionarySource(it) }.first()
 
-            val codeListSource = grabNullable<CodeListSource?> {
+            val codeListSource = collectNullable<CodeListSource?> {
                 dictionarySource.explicitDomainsAndHierarchiesSource(it)
             }!!
 
@@ -272,7 +276,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             codeListSource.eachCodePageData {}
             progress = "CODE_PAGES_DONE"
 
-            val extensionSources = grabList<ExtensionSource> {
+            val extensionSources = collectListOf<ExtensionSource> {
                 codeListSource.eachExtensionSource(it)
             }
 

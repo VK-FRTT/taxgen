@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
+import fi.vm.yti.taxgen.rdsprovider.config.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.DpmSourceRecorderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceHolderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
@@ -37,13 +37,13 @@ object SourceFactory {
             contextType = DiagnosticContextType.InitConfiguration,
             contextIdentifier = configFilePath.fileName.toString()
         ) {
-            val dpmSourceConfig = DpmSourceConfigInput.tryReadAndValidateConfig(
+            val configHolder = ConfigFactory.configFromFile(
                 configFilePath,
                 diagnosticContext
-            ) ?: diagnosticContext.fatal("Unsupported config file: $configFilePath")
+            )
 
             SourceHolderRdsAdapter(
-                dpmSourceConfig = dpmSourceConfig,
+                configHolder = configHolder,
                 diagnostic = diagnosticContext
             )
         }
@@ -54,7 +54,8 @@ object SourceFactory {
         diagnosticContext: DiagnosticContext
     ): SourceHolder {
         val sourceHolder = SourceHolderFolderAdapter(
-            dpmSourceRootPath = sourceRootPath
+            dpmSourceRootPath = sourceRootPath,
+            diagnostic = diagnosticContext
         )
 
         return SourceHolderContextDecorator(
@@ -68,7 +69,8 @@ object SourceFactory {
         diagnosticContext: DiagnosticContext
     ): SourceHolder {
         val sourceHolder = SourceHolderZipFileAdapter(
-            sourceZipPath = zipFilePath
+            sourceZipPath = zipFilePath,
+            diagnostic = diagnosticContext
         )
 
         return SourceHolderContextDecorator(

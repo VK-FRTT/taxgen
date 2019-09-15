@@ -1,6 +1,7 @@
-package fi.vm.yti.taxgen.commons
+package fi.vm.yti.taxgen.commons.ops
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import java.io.BufferedWriter
 import java.nio.charset.StandardCharsets
 import java.nio.file.DirectoryStream
@@ -27,15 +28,6 @@ object FileOps {
         }
     }
 
-    fun failIfOutputFileMissing(
-        path: Path,
-        diagnostic: Diagnostic
-    ) {
-        if (!Files.exists(path)) {
-            diagnostic.fatal("Output file '$path' not found")
-        }
-    }
-
     fun writeTextFile(
         content: String,
         pathStack: PathStack,
@@ -44,7 +36,8 @@ object FileOps {
         diagnostic: Diagnostic
     ) {
 
-        val writer = newBufferedWriter(pathStack, filename, forceOverwrite, diagnostic)
+        val writer =
+            newBufferedWriter(pathStack, filename, forceOverwrite, diagnostic)
 
         writer.use {
             it.write(content)
@@ -88,7 +81,8 @@ object FileOps {
 
     //List
     fun listSubFoldersMatching(parentFolderPath: Path, subFolderGlob: String): List<Path> {
-        val adjustedGlob = adjustGlobToFileSystem(subFolderGlob, parentFolderPath.fileSystem)
+        val adjustedGlob =
+            adjustGlobToFileSystem(subFolderGlob, parentFolderPath.fileSystem)
         val directoryStream = newDirectoryStream(parentFolderPath, adjustedGlob)
 
         return directoryStream.use { it.filter { path -> Files.isDirectory(path) } }

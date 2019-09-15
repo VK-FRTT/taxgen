@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
@@ -63,11 +64,13 @@ internal open class SQLiteProvider_DictionaryReplaceUnitTestBase {
         )
 
         val model = dpmModelFixture(
-            variety,
-            emptyMap()
+            variety
         )
 
-        dbWriter.writeModel(model)
+        dbWriter.writeModel(
+            model,
+            ProcessingOptions.empty()
+        )
 
         outputDbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
     }

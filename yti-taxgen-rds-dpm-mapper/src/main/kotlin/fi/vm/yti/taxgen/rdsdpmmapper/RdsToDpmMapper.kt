@@ -18,42 +18,36 @@ import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDomains
 import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.DpmDictionaryModelMapper
 import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.DpmSourceModelMapper
-import fi.vm.yti.taxgen.rdsprovider.SourceHolder
+import fi.vm.yti.taxgen.rdsprovider.DpmSource
 
 class RdsToDpmMapper(
     private val diagnosticContext: DiagnosticContext
 ) {
-    fun extractDpmModelFromSource(
-        sourceHolder: SourceHolder
-    ): DpmModel {
+    fun extractDpmModel(dpmSource: DpmSource): DpmModel {
 
         return diagnosticContext.withContext(
             contextType = DiagnosticContextType.RdsToDpmMapper,
             contextLabel = "RDS source data to DPM model"
         ) {
-            val dictionaries = mutableListOf<DpmDictionary>()
-
-            sourceHolder.withDpmSource { dpmSource ->
-
-                val sourceModelMapper = DpmSourceModelMapper(
-                    dpmSource = dpmSource,
-                    diagnostic = diagnosticContext
-                )
-
-                sourceModelMapper.eachDpmDictionaryModelMapper {
-                    val dictionary = mapAndValidateDpmDictionary(it)
-                    dictionaries.add(dictionary)
-                }
-            }
-
-            val model = DpmModel(
-                dictionaries = dictionaries,
-                modelOptions = emptyMap() //TODO
+            val sourceModelMapper = DpmSourceModelMapper(
+                dpmSource = dpmSource,
+                diagnostic = diagnosticContext
             )
 
-            diagnosticContext.validate(model)
+            val dictionaries = mutableListOf<DpmDictionary>()
 
-            model
+            sourceModelMapper.eachDpmDictionaryModelMapper {
+                val dictionary = mapAndValidateDpmDictionary(it)
+                dictionaries.add(dictionary)
+            }
+
+            val dpmModel = DpmModel(
+                dictionaries = dictionaries
+            )
+
+            diagnosticContext.validate(dpmModel)
+
+            dpmModel
         }
     }
 

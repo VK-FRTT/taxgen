@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.rdsprovider.zip
 
-import fi.vm.yti.taxgen.commons.FileOps
+import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
 import java.net.URI
 import java.nio.file.FileSystem
@@ -18,21 +18,21 @@ internal class DpmSourceRecorderZipFileAdapter(
 
     private val outputZipPath = outputZipPath.toAbsolutePath().normalize()
     private var outputZipFileSystem: FileSystem? = null
-    private var folderStructureRecorder: DpmSourceRecorder? = null
+    private var folderRecorder: DpmSourceRecorder? = null
 
     override fun contextLabel(): String = "ZIP file"
     override fun contextIdentifier(): String = outputZipPath.toString()
 
-    override fun captureSources(sourceHolder: SourceHolder) {
+    override fun captureSources(dpmSource: DpmSource) {
         val fs = createTargetZipFileSystem().also { outputZipFileSystem = it }
         val baseFolderPath = fs.getPath("/")
-        val recorder = createFolderStructureRecorder(baseFolderPath).also { folderStructureRecorder = it }
+        val recorder = createDpmSourceRecorderFolderAdapter(baseFolderPath).also { folderRecorder = it }
 
-        recorder.captureSources(sourceHolder)
+        recorder.captureSources(dpmSource)
     }
 
     override fun close() {
-        folderStructureRecorder?.close()
+        folderRecorder?.close()
         outputZipFileSystem?.close()
     }
 
@@ -51,7 +51,7 @@ internal class DpmSourceRecorderZipFileAdapter(
 
     private fun zipOptions() = mapOf("create" to "true")
 
-    private fun createFolderStructureRecorder(baseFolderPath: Path): DpmSourceRecorder {
+    private fun createDpmSourceRecorderFolderAdapter(baseFolderPath: Path): DpmSourceRecorder {
         return DpmSourceRecorderFolderAdapter(
             outputFolderPath = baseFolderPath,
             forceOverwrite = false,

@@ -3,10 +3,10 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -23,7 +23,7 @@ object DbHierarchies {
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
 
@@ -34,7 +34,7 @@ object DbHierarchies {
                 domainId,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
         }
@@ -46,7 +46,7 @@ object DbHierarchies {
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
 
@@ -55,7 +55,7 @@ object DbHierarchies {
                 hierarchy,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 
@@ -73,7 +73,7 @@ object DbHierarchies {
                     currentNode,
                     ownerId,
                     languageIds,
-                    modelOptions,
+                    processingOptions,
                     diagnostic
                 )
 

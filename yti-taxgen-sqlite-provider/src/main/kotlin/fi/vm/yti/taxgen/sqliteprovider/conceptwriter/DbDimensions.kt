@@ -2,10 +2,10 @@ package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
@@ -19,7 +19,7 @@ object DbDimensions {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
         transaction {
@@ -27,7 +27,7 @@ object DbDimensions {
                 dimension,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 
@@ -44,7 +44,7 @@ object DbDimensions {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
         transaction {
@@ -52,7 +52,7 @@ object DbDimensions {
                 dimension,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 

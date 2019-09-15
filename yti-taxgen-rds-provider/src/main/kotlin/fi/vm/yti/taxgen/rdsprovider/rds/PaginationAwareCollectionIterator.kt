@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
 import com.fasterxml.jackson.databind.JsonNode
-import fi.vm.yti.taxgen.commons.JsonOps
+import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import okhttp3.HttpUrl

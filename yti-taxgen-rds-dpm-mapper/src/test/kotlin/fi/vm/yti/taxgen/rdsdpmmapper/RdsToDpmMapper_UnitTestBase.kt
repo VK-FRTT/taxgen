@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.rdsdpmmapper
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.rdsprovider.SourceFactory
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
@@ -37,12 +38,15 @@ internal open class RdsToDpmMapper_UnitTestBase {
 
     protected fun performMappingAndGetAllDictionaries(fixtureName: String): List<DpmDictionary> {
         val fixturePath = TestFixture.pathOf(RDS_CAPTURE, fixtureName)
-        val sourceHolder = SourceFactory.sourceForFolder(fixturePath, diagnosticContext)
-        val mapper = RdsToDpmMapper(diagnosticContext)
 
-        val model = mapper.extractDpmModelFromSource(sourceHolder)
+        lateinit var model: DpmModel
 
-        sourceHolder.close()
+        SourceFactory.sourceForFolder(fixturePath, diagnosticContext).use { sourceHolder ->
+            sourceHolder.withDpmSource { dpmSource ->
+                val mapper = RdsToDpmMapper(diagnosticContext)
+                model = mapper.extractDpmModel(dpmSource)
+            }
+        }
 
         return model.dictionaries
     }

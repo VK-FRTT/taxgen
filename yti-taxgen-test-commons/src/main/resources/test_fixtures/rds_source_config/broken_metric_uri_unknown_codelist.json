@@ -7,7 +7,11 @@
         "prefix": "prefix",
         "location": "location",
         "copyright": "copyright",
-        "languages": ["en", "fi", "sv"],
+        "languages": [
+          "en",
+          "fi",
+          "sv"
+        ],
         "defaultLanguage": "en"
       },
       "metrics": {
@@ -25,7 +29,8 @@
       "typedDimensions": {
         "uri": null
       }
-
     }
-  ]
+  ],
+  "processingOptions": {
+  }
 }

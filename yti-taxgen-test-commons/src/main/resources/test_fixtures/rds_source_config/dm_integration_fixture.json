@@ -30,5 +30,7 @@
         "uri": "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1?env=awsdev"
       }
     }
-  ]
+  ],
+  "processingOptions": {
+  }
 }

@@ -1,11 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.dpmmodel.DpmModelOption
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
@@ -20,7 +20,7 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ): EntityID<Int> {
 
@@ -29,7 +29,7 @@ object DbDomains {
                 domain,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 
@@ -45,7 +45,7 @@ object DbDomains {
                     member,
                     ownerId,
                     languageIds,
-                    modelOptions,
+                    processingOptions,
                     diagnostic
                 )
 
@@ -67,7 +67,7 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        modelOptions: Map<DpmModelOption, Any>,
+        processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ): EntityID<Int> {
         return transaction {
@@ -75,7 +75,7 @@ object DbDomains {
                 domain,
                 ownerId,
                 languageIds,
-                modelOptions,
+                processingOptions,
                 diagnostic
             )
 
