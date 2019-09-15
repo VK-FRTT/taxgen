@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.config.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.DpmSourceRecorderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceHolderContextDecorator
@@ -33,20 +32,15 @@ object SourceFactory {
         configFilePath: Path,
         diagnosticContext: DiagnosticContext
     ): SourceHolder {
-        return diagnosticContext.withContext(
-            contextType = DiagnosticContextType.InitConfiguration,
-            contextIdentifier = configFilePath.fileName.toString()
-        ) {
-            val configHolder = ConfigFactory.configFromFile(
-                configFilePath,
-                diagnosticContext
-            )
+        val configHolder = ConfigFactory.configFromFile(
+            configFilePath,
+            diagnosticContext
+        )
 
-            SourceHolderRdsAdapter(
-                configHolder = configHolder,
-                diagnostic = diagnosticContext
-            )
-        }
+        return SourceHolderRdsAdapter(
+            configHolder = configHolder,
+            diagnostic = diagnosticContext
+        )
     }
 
     fun sourceForFolder(
@@ -55,7 +49,7 @@ object SourceFactory {
     ): SourceHolder {
         val sourceHolder = SourceHolderFolderAdapter(
             dpmSourceRootPath = sourceRootPath,
-            diagnostic = diagnosticContext
+            diagnosticContext = diagnosticContext
         )
 
         return SourceHolderContextDecorator(
@@ -70,7 +64,7 @@ object SourceFactory {
     ): SourceHolder {
         val sourceHolder = SourceHolderZipFileAdapter(
             sourceZipPath = zipFilePath,
-            diagnostic = diagnosticContext
+            diagnosticContext = diagnosticContext
         )
 
         return SourceHolderContextDecorator(

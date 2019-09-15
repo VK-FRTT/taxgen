@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.config
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.rdsprovider.config.input.DpmSourceConfigInput
@@ -10,20 +11,30 @@ object ConfigFactory {
 
     fun configFromFile(
         configFilePath: Path,
-        diagnostic: Diagnostic
+        diagnosticContext: DiagnosticContext
     ): DpmSourceConfigHolder {
-        val configData = FileOps.readTextFile(configFilePath)
+        return diagnosticContext.withContext(
+            contextType = DiagnosticContextType.InitConfiguration,
+            contextIdentifier = configFilePath.fileName.toString()
+        ) {
+            val configData = FileOps.readTextFile(configFilePath)
 
-        val configInput = JsonOps.readValue<DpmSourceConfigInput>(
-            configData,
-            diagnostic
-        )
+            val configInput = JsonOps.readValue<DpmSourceConfigInput>(
+                configData,
+                diagnosticContext
+            )
 
-        return DpmSourceConfigHolder(
-            configFilePath = configFilePath.toString(),
-            configData = configData,
-            dpmSourceConfig = configInput.toDpmSourceConfig(diagnostic),
-            processingOptions = configInput.toProcessingOptions(diagnostic)
-        )
+            val dpmSourceConfig = configInput.toDpmSourceConfig(diagnosticContext)
+            val processingOptions = configInput.toProcessingOptions(diagnosticContext)
+
+            processingOptions.emitDiagnostics(diagnosticContext)
+
+            DpmSourceConfigHolder(
+                configFilePath = configFilePath.toString(),
+                configData = configData,
+                dpmSourceConfig = dpmSourceConfig,
+                processingOptions = processingOptions
+            )
+        }
     }
 }

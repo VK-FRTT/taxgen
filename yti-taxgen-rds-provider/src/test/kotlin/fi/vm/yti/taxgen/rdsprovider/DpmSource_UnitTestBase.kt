@@ -43,7 +43,7 @@ open class DpmSource_UnitTestBase {
 
             val sourceHolder = SourceHolderFolderAdapter(
                 dpmSourceRootPath = dpmSourceRootPath,
-                diagnostic = diagnosticContext
+                diagnosticContext = diagnosticContext
             ).let {
                 if (contextDecorateSource) {
                     SourceHolderContextDecorator(

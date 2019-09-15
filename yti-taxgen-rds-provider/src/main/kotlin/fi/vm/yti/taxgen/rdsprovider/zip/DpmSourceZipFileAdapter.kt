@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.zip
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfigHolder
@@ -12,7 +12,7 @@ import java.nio.file.Path
 
 internal class DpmSourceZipFileAdapter(
     sourceZipPath: Path,
-    private val diagnostic: Diagnostic
+    private val diagnosticContext: DiagnosticContext
 ) : DpmSource {
 
     private val sourceZipPath = sourceZipPath.toAbsolutePath().normalize()
@@ -44,7 +44,7 @@ internal class DpmSourceZipFileAdapter(
     private fun createDpmSourceFolderAdapter(): DpmSource {
         return DpmSourceFolderAdapter(
             dpmSourceRootPath = rootPathWithinZip(),
-            diagnostic = diagnostic
+            diagnosticContext = diagnosticContext
         )
     }
 

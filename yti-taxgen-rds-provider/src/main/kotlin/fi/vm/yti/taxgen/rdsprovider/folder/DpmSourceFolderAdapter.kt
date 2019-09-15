@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.folder
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
@@ -11,7 +11,7 @@ import java.nio.file.Path
 
 internal class DpmSourceFolderAdapter(
     dpmSourceRootPath: Path,
-    val diagnostic: Diagnostic
+    val diagnosticContext: DiagnosticContext
 ) : DpmSource {
 
     private val dpmSourceRootPath = dpmSourceRootPath.toAbsolutePath().normalize()
@@ -19,7 +19,7 @@ internal class DpmSourceFolderAdapter(
     private val dpmSourceConfigHolder: DpmSourceConfigHolder by lazy {
         ConfigFactory.configFromFile(
             dpmSourceRootPath.resolve("meta/source_config.json"),
-            diagnostic
+            diagnosticContext
         )
     }
 
