@@ -62,7 +62,7 @@ data class BaselineOrdinateCategorisation(
             fun optionalSignatureElement(partName: String) =
                 (signatureMatch.groups as MatchNamedGroupCollection)[partName]?.value
 
-            fun mandatorySignatureElement(partName: String) = optionalSignatureElement(partName)!!
+            fun mandatorySignatureElement(partName: String) = optionalSignatureElement(partName) ?: thisShouldNeverHappen("SignaturePattern configuration mismatch")
 
             return when {
                 optionalSignatureElement("dimension") != null -> {

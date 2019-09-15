@@ -178,7 +178,7 @@ class TaxgenCli(
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder) {
             return SourceFactory.folderRecorder(
-                outputFolderPath = detectedOptions.output!!,
+                outputFolderPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
@@ -186,7 +186,7 @@ class TaxgenCli(
 
         if (detectedOptions.cmdCaptureDpmSourcesToZip) {
             return SourceFactory.zipRecorder(
-                outputZipPath = detectedOptions.output!!,
+                outputZipPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
@@ -201,7 +201,7 @@ class TaxgenCli(
 
         if (detectedOptions.cmdCreateDictionaryToNewDpmDb) {
             return DpmDbWriterFactory.dictionaryCreateWriter(
-                outputDbPath = detectedOptions.output!!,
+                outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
@@ -211,13 +211,17 @@ class TaxgenCli(
             detectedOptions.ensureBaselineDpmDbGiven()
 
             return DpmDbWriterFactory.dictionaryReplaceWriter(
-                baselineDbPath = detectedOptions.baselineDb!!,
-                outputDbPath = detectedOptions.output!!,
+                baselineDbPath = requiredOption(detectedOptions.baselineDb),
+                outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticContext
             )
         }
 
         thisShouldNeverHappen("No suitable DB writer given")
+    }
+
+    private fun <T : Any> requiredOption(value: T?): T {
+        return value ?: thisShouldNeverHappen("Command precondition mismatch.")
     }
 }

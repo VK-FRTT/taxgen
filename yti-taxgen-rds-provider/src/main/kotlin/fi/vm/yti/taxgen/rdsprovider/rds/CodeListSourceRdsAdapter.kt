@@ -53,6 +53,8 @@ internal class CodeListSourceRdsAdapter(
     }
 
     override fun eachSubCodeListSource(action: (CodeListSource) -> Unit) {
+        blueprint.subCodeListBlueprint ?: return
+
         if (subCodeListUris == null) {
             eachCodePageData {}
         }
@@ -60,7 +62,7 @@ internal class CodeListSourceRdsAdapter(
         subCodeListUris?.forEach { uri ->
             val codelistSource = CodeListSourceRdsAdapter(
                 codeListUri = contentAddressResolver.decorateUriWithInheritedParams(uri),
-                blueprint = blueprint.subCodeListBlueprint!!,
+                blueprint = blueprint.subCodeListBlueprint,
                 rdsClient = rdsClient,
                 diagnostic = diagnostic
             )

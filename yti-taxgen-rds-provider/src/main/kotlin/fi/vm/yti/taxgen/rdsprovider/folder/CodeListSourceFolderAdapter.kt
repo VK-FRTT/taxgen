@@ -39,11 +39,13 @@ internal class CodeListSourceFolderAdapter(
     }
 
     override fun eachSubCodeListSource(action: (CodeListSource) -> Unit) {
+        blueprint.subCodeListBlueprint ?: return
+
         val paths = FileOps.listSubFoldersMatching(codeListRootPath, "sub_code_list_*")
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
 
         sortedPaths.forEach { path ->
-            val codeListSource = CodeListSourceFolderAdapter(path, blueprint.subCodeListBlueprint!!)
+            val codeListSource = CodeListSourceFolderAdapter(path, blueprint.subCodeListBlueprint)
 
             action(codeListSource)
         }
