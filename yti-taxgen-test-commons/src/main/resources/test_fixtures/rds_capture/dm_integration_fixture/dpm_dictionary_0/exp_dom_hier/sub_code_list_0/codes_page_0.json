@@ -7,35 +7,35 @@
     "totalResults" : 2
   },
   "results" : [ {
-    "id" : "65316531-cc3e-437c-97b1-0be06c698afd",
+    "id" : "b8de6ed6-4461-433f-bd28-d117499ebf41",
     "codeValue" : "EDA-x1",
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/EDA-x1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/EDA-x1",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/EDA-x1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/EDA-x1",
     "status" : "DRAFT",
     "order" : 1,
     "hierarchyLevel" : 1,
     "startDate" : "2018-12-31",
-    "created" : "2019-01-22T14:20:47.887Z",
-    "modified" : "2019-01-22T14:20:47.887Z",
+    "created" : "2019-09-18T14:20:53.816Z",
+    "modified" : "2019-09-18T14:20:53.816Z",
     "prefLabel" : {
       "fi" : "DOME member duplicating EDA code"
     },
     "codeScheme" : {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
     },
-    "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/EDA-x1/members/"
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/EDA-x1/members/"
   }, {
-    "id" : "d87630e8-d994-454b-9c0f-3768da41a2d0",
+    "id" : "b8887fac-bca8-408f-8f84-6755e0e4370e",
     "codeValue" : "MEM",
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/MEM",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM",
     "status" : "DRAFT",
     "order" : 2,
     "hierarchyLevel" : 1,
     "startDate" : "2018-10-31",
-    "created" : "2019-01-22T14:20:47.907Z",
-    "modified" : "2019-01-22T14:20:47.907Z",
+    "created" : "2019-09-18T14:20:53.830Z",
+    "modified" : "2019-09-18T14:20:53.830Z",
     "prefLabel" : {
       "fi" : "Member (fi, label)"
     },
@@ -43,9 +43,9 @@
       "fi" : "Member (fi, description)"
     },
     "codeScheme" : {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
     },
-    "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM/members/"
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM/members/"
   } ]
 }

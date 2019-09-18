@@ -126,7 +126,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
         assertThat(diagnosticCollector.eventsString()).contains(
             "Corrupted source data.",
             "Codelist Extension has Members, which position in DPM Hierarchy could not be determined:",
-            "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/extension/EDA-H1/member/d547f3e7-114f-4589-a31f-a93f849c32e1 (EDA member 5)"
+            "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H1/member/3 (EDA hierarchy node 5)"
         )
     }
 }

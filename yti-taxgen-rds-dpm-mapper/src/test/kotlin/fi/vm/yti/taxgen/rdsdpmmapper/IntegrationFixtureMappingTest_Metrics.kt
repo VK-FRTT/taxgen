@@ -51,7 +51,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                     0 -> {
                         assertThat(it.metricCode).isEqualTo("b1")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1")
                         assertThat(it.type).isEqualTo("Metric")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -261,7 +261,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                     0 -> {
                         assertThat(it.hierarchyCode).isEqualTo("MET1")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1")
                         assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -280,7 +280,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                     1 -> {
                         assertThat(it.hierarchyCode).isEqualTo("MET10")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET10")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10")
                         assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -299,7 +299,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                     2 -> {
                         assertThat(it.hierarchyCode).isEqualTo("METHIER")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/METHIER")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER")
                         assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -332,7 +332,7 @@ internal class IntegrationFixtureMappingTest_Metrics
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/MET1/member/1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1/member/1")
                         assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -342,7 +342,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                         assertThat(it.concept.applicableUntil).isNull()
 
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (String)")
+                            entry(fi, "MET hierarchy node (String)")
                         )
 
                         assertThat(it.concept.description.translations).isEmpty()
@@ -357,7 +357,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     1 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Decimal)")
+                            entry(fi, "MET hierarchy node (Decimal)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("d10")
@@ -366,7 +366,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     2 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Lei)")
+                            entry(fi, "MET hierarchy node (Lei)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("l11")
@@ -375,7 +375,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     3 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Isin)")
+                            entry(fi, "MET hierarchy node (Isin)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("i12")
@@ -384,7 +384,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     4 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Enumeration: EDA)")
+                            entry(fi, "MET hierarchy node (Enumeration: EDA)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("e3")
@@ -393,7 +393,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     5 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Date)")
+                            entry(fi, "MET hierarchy node (Date)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("d16")
@@ -402,7 +402,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     6 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Boolean)")
+                            entry(fi, "MET hierarchy node (Boolean)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("b4")
@@ -411,7 +411,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     7 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Integer)")
+                            entry(fi, "MET hierarchy node (Integer)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("i6")
@@ -420,7 +420,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     8 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Monetary)")
+                            entry(fi, "MET hierarchy node (Monetary)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("m7")
@@ -429,7 +429,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     9 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Percentage)")
+                            entry(fi, "MET hierarchy node (Percentage)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("p8")
@@ -454,7 +454,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                 when (index) {
                     0 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Boolean)")
+                            entry(fi, "MET hierarchy node (Boolean)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("b4")
@@ -463,7 +463,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     1 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Enumeration: EDA)")
+                            entry(fi, "MET hierarchy node (Enumeration: EDA)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("e3")
@@ -472,7 +472,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     2 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Date)")
+                            entry(fi, "MET hierarchy node (Date)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("d16")
@@ -484,7 +484,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     3 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (String)")
+                            entry(fi, "MET hierarchy node (String)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("s9")
@@ -493,7 +493,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     4 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (String, Instant, Credit)")
+                            entry(fi, "MET hierarchy node (String, Instant, Credit)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("si13")
@@ -503,7 +503,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     5 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (String, Duration, Debit)")
+                            entry(fi, "MET hierarchy node (String, Duration, Debit)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("sd14")
@@ -512,7 +512,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     6 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Monetary)")
+                            entry(fi, "MET hierarchy node (Monetary)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("m7")
@@ -525,7 +525,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     7 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Lei)")
+                            entry(fi, "MET hierarchy node (Lei)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("l11")
@@ -534,7 +534,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     8 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Percentage)")
+                            entry(fi, "MET hierarchy node (Percentage)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("p8")
@@ -543,7 +543,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     9 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Isin)")
+                            entry(fi, "MET hierarchy node (Isin)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("i12")
@@ -552,7 +552,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     10 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Decimal)")
+                            entry(fi, "MET hierarchy node (Decimal)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("d10")
@@ -561,7 +561,7 @@ internal class IntegrationFixtureMappingTest_Metrics
 
                     11 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "MET member (Integer)")
+                            entry(fi, "MET hierarchy node (Integer)")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("i6")
@@ -581,7 +581,7 @@ internal class IntegrationFixtureMappingTest_Metrics
             hierarchy.allNodes().forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/METHIER/member/1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER/member/1")
                         assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -591,7 +591,7 @@ internal class IntegrationFixtureMappingTest_Metrics
                         assertThat(it.concept.applicableUntil).isNull()
 
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "Metric member (fi, label)")
+                            entry(fi, "Metric hierarchy node (fi, label)")
                         )
 
                         assertThat(it.concept.description.translations).isEmpty()

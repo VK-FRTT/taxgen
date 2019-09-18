@@ -1,22 +1,22 @@
 {
-  "id" : "c266dd5b-a76b-4ad3-b735-c17651affc60",
-  "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/extension/EDA-H10",
-  "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H10",
-  "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H10/members/",
+  "id" : "76b41e36-ba71-43c2-84c6-898dacdd843a",
+  "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10",
+  "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H10",
+  "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H10/members/",
   "codeValue" : "EDA-H10",
   "status" : "DRAFT",
   "startDate" : "2018-10-31",
-  "created" : "2019-01-23T17:51:43.784Z",
-  "modified" : "2019-01-23T17:51:43.784Z",
+  "created" : "2019-09-18T14:22:06.516Z",
+  "modified" : "2019-09-18T14:22:06.516Z",
   "prefLabel" : {
     "fi" : "EDA hierarchy 10"
   },
   "parentCodeScheme" : {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/EDA-2018-1"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1"
   },
   "propertyType" : {
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
     "uri" : "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
   }
 }

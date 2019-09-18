@@ -7,58 +7,58 @@
     "totalResults" : 2
   },
   "results" : [ {
-    "id" : "833dda2a-145f-439f-9e26-7235914121fa",
+    "id" : "56843db2-1331-4f96-bfd1-9dbb4aa417d0",
     "codeValue" : "TDB-D1",
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/code/TDB-D1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D1",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D1",
     "status" : "DRAFT",
     "order" : 1,
     "hierarchyLevel" : 1,
     "startDate" : "2018-10-31",
-    "created" : "2019-01-22T14:30:00.424Z",
-    "modified" : "2019-01-22T14:30:00.424Z",
+    "created" : "2019-09-18T14:25:59.065Z",
+    "modified" : "2019-09-18T14:25:59.065Z",
     "prefLabel" : {
       "fi" : "TDB dimension 1"
     },
     "codeScheme" : {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1"
     },
-    "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D1/members/",
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D1/members/",
     "members" : [ {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/1",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/1"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/1"
     } ],
     "codeExtensions" : [ {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension"
     } ]
   }, {
-    "id" : "2ecb13a0-83b3-442e-86a3-01549ed7d78d",
+    "id" : "f52af210-65e8-4395-8332-b8ab2588644b",
     "codeValue" : "TDB-D2",
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/code/TDB-D2",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D2",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D2",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D2",
     "status" : "DRAFT",
     "order" : 2,
     "hierarchyLevel" : 1,
     "startDate" : "2018-10-31",
-    "created" : "2019-01-22T14:30:00.428Z",
-    "modified" : "2019-01-22T14:30:00.428Z",
+    "created" : "2019-09-18T14:25:59.077Z",
+    "modified" : "2019-09-18T14:25:59.077Z",
     "prefLabel" : {
       "fi" : "TDB dimension 2"
     },
     "codeScheme" : {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1"
     },
-    "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D2/members/",
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D2/members/",
     "members" : [ {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/2",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/2"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/2",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/2"
     } ],
     "codeExtensions" : [ {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension"
     } ]
   } ]
 }

@@ -7,41 +7,22 @@
     "totalResults" : 1
   },
   "results" : [ {
-    "id" : "bbbab95b-e3cf-43fc-9cf5-aecb8105f1d9",
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/1",
+    "id" : "5b0f1033-0fd4-46b7-8c64-045da5652a9d",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/1",
     "code" : {
-      "id" : "d87630e8-d994-454b-9c0f-3768da41a2d0",
-      "codeValue" : "MEM",
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM",
-      "status" : "DRAFT",
-      "order" : 2,
-      "hierarchyLevel" : 1,
-      "startDate" : "2018-10-31",
-      "created" : "2019-01-22T14:20:47.907Z",
-      "modified" : "2019-01-22T14:20:47.907Z",
-      "prefLabel" : {
-        "fi" : "Member (fi, label)"
-      },
-      "description" : {
-        "fi" : "Member (fi, description)"
-      },
-      "codeScheme" : {
-        "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1",
-        "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1"
-      },
-      "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM/members/"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/MEM",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM"
     },
     "prefLabel" : {
-      "fi" : "Member (fi, label)"
+      "fi" : "Hierarchy node (fi, label)"
     },
-    "created" : "2019-01-22T14:20:48.057Z",
-    "modified" : "2019-01-22T14:20:48.057Z",
+    "created" : "2019-09-18T14:20:54.123Z",
+    "modified" : "2019-09-18T14:20:54.123Z",
     "order" : 1,
     "extension" : {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER"
     },
     "sequenceId" : 1
   } ]

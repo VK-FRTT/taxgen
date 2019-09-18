@@ -7,41 +7,22 @@
     "totalResults" : 1
   },
   "results" : [ {
-    "id" : "8f35fc06-38b4-4af5-a0dd-7aed92ee3de1",
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/METHIER/member/1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER/members/1",
+    "id" : "b3b96f3a-c419-40f0-a9c0-81c2f40395b7",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER/members/1",
     "code" : {
-      "id" : "05956cfd-731e-4474-b942-c94bcbbe9c77",
-      "codeValue" : "1",
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/code/1",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/codes/1",
-      "status" : "DRAFT",
-      "order" : 1,
-      "hierarchyLevel" : 1,
-      "startDate" : "2018-10-31",
-      "created" : "2019-01-23T17:53:00.858Z",
-      "modified" : "2019-01-23T17:53:00.858Z",
-      "prefLabel" : {
-        "fi" : "Metric member (fi, label)"
-      },
-      "description" : {
-        "fi" : "Metric member (fi, description)"
-      },
-      "codeScheme" : {
-        "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1",
-        "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1"
-      },
-      "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/codes/1/members/"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/1"
     },
     "prefLabel" : {
-      "fi" : "Metric member (fi, label)"
+      "fi" : "Metric hierarchy node (fi, label)"
     },
-    "created" : "2019-01-23T17:53:01.252Z",
-    "modified" : "2019-01-23T17:53:01.252Z",
+    "created" : "2019-09-18T14:25:32.579Z",
+    "modified" : "2019-09-18T14:25:32.579Z",
     "order" : 1,
     "extension" : {
-      "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/metrics-2018-1/extension/METHIER",
-      "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER"
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER"
     },
     "sequenceId" : 1
   } ]

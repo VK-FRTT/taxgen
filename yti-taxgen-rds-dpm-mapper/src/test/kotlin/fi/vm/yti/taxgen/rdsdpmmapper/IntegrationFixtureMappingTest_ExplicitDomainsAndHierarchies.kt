@@ -21,7 +21,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
             when (index) {
                 0 -> {
                     assertThat(it.domainCode).isEqualTo("DOME")
-                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/DOME")
+                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/DOME")
                     assertThat(it.type).isEqualTo("ExplicitDomain")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -41,7 +41,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                 1 -> {
                     assertThat(it.domainCode).isEqualTo("EDA")
-                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/exp-doms-2018-1/code/EDA")
+                    assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA")
                     assertThat(it.type).isEqualTo("ExplicitDomain")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -117,7 +117,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.memberCode).isEqualTo("EDA-x1")
                         assertThat(it.defaultMember).isFalse()
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/EDA-x1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/EDA-x1")
                         assertThat(it.type).isEqualTo("Member")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -135,7 +135,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.memberCode).isEqualTo("MEM")
                         assertThat(it.defaultMember).isFalse()
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/code/MEM")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/MEM")
                         assertThat(it.type).isEqualTo("Member")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -171,7 +171,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                     0 -> {
                         assertThat(it.hierarchyCode).isEqualTo("EDA-H1")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/EDA-H1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/EDA-H1")
                         assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -190,7 +190,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                     1 -> {
                         assertThat(it.hierarchyCode).isEqualTo("HIER")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER")
                         assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -223,7 +223,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
             hierarchy.rootNodes.forEachIndexed { index, it ->
                 when (index) {
                     0 -> {
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/DOME-2018-1/extension/HIER/member/1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER/member/1")
                         assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -233,7 +233,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.concept.applicableUntil).isNull()
 
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "Member (fi, label)")
+                            entry(fi, "Hierarchy node (fi, label)")
                         )
 
                         assertThat(it.concept.description.translations).isEmpty()
@@ -279,7 +279,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                         assertThat(it.memberCode).isEqualTo("EDA-x1")
                         assertThat(it.defaultMember).isFalse()
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/code/EDA-x1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x1")
                         assertThat(it.type).isEqualTo("Member")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -364,7 +364,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                     0 -> {
                         assertThat(it.hierarchyCode).isEqualTo("EDA-H1")
 
-                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/EDA-2018-1/extension/EDA-H1")
+                        assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H1")
                         assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -412,7 +412,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                 when (index) {
                     0 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 7")
+                            entry(fi, "EDA hierarchy node 7")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x20")
@@ -421,7 +421,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     1 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 4")
+                            entry(fi, "EDA hierarchy node 4")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x9")
@@ -432,7 +432,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     2 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 5")
+                            entry(fi, "EDA hierarchy node 5")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x10")
@@ -441,7 +441,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     3 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 6")
+                            entry(fi, "EDA hierarchy node 6")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x19")
@@ -450,7 +450,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     4 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 2")
+                            entry(fi, "EDA hierarchy node 2")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x2")
@@ -461,7 +461,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     5 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 1")
+                            entry(fi, "EDA hierarchy node 1")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x1")
@@ -470,7 +470,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     6 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 3")
+                            entry(fi, "EDA hierarchy node 3")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x3")
@@ -479,7 +479,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     7 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member 8")
+                            entry(fi, "EDA hierarchy node 8")
                         )
 
                         assertThat(it.referencedElementCode).isEqualTo("EDA-x21")
@@ -504,7 +504,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
                 when (index) {
                     0 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member (=, 1)")
+                            entry(fi, "EDA hierarchy node (=, 1)")
                         )
                         assertThat(it.unaryOperator).isEqualTo("+")
                         assertThat(it.comparisonOperator).isEqualTo("=")
@@ -513,7 +513,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     1 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member (>, 2)")
+                            entry(fi, "EDA hierarchy node (>, 2)")
                         )
                         assertThat(it.unaryOperator).isNull()
                         assertThat(it.comparisonOperator).isEqualTo(">")
@@ -522,7 +522,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     2 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member (<, 0)")
+                            entry(fi, "EDA hierarchy node (<, 0)")
                         )
                         assertThat(it.unaryOperator).isNull()
                         assertThat(it.comparisonOperator).isEqualTo("<")
@@ -531,7 +531,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     3 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member (>=, -1)")
+                            entry(fi, "EDA hierarchy node (>=, -1)")
                         )
                         assertThat(it.unaryOperator).isEqualTo("-")
                         assertThat(it.comparisonOperator).isEqualTo(">=")
@@ -540,7 +540,7 @@ internal class IntegrationFixtureMappingTest_ExplicitDomainsAndHierarchies
 
                     4 -> {
                         assertThat(it.concept.label.translations).containsOnly(
-                            entry(fi, "EDA member (<=, -2)")
+                            entry(fi, "EDA hierarchy node (<=, -2)")
                         )
                         assertThat(it.unaryOperator).isNull()
                         assertThat(it.comparisonOperator).isEqualTo("<=")

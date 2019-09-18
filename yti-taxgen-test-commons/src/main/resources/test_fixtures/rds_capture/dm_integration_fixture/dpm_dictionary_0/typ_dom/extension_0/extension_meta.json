@@ -1,43 +1,43 @@
 {
-  "id" : "8134f246-8059-4435-a4d2-06cc1ce088e1",
-  "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
-  "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain",
-  "membersUrl" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/",
+  "id" : "4eac6323-a1b0-400f-9c63-b4503a058690",
+  "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+  "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain",
+  "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/",
   "members" : [ {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/7",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/7"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/6",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/6"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/4",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/4"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/1"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/3",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/3"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/5",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/5"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/1"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/2",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/2"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/2",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/2"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/3",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/3"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/6",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/6"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/4",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/4"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/5",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/5"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/8",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/8"
   }, {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/8",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/8"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/7",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/7"
   } ],
   "codeValue" : "dpmTypedDomain",
   "status" : "DRAFT",
-  "created" : "2019-01-22T14:26:56.896Z",
-  "modified" : "2019-01-22T14:26:56.896Z",
+  "created" : "2019-09-18T14:26:29.994Z",
+  "modified" : "2019-09-18T14:26:29.994Z",
   "parentCodeScheme" : {
-    "uri" : "http://uri.suomi.fi/codelist/taxgen-dm-integration-fixture/typ-doms-2018-1",
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/taxgen-dm-integration-fixture/codeschemes/typ-doms-2018-1"
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1"
   },
   "propertyType" : {
-    "url" : "https://koodistot.dev.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/44d0ec0e-e767-4f59-8276-b055da510fe8",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/44d0ec0e-e767-4f59-8276-b055da510fe8",
     "uri" : "http://uri.suomi.fi/datamodel/ns/code#dpmTypedDomain"
   }
 }

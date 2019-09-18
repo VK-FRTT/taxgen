@@ -686,7 +686,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                 "DPM dictionary", "codelist_uri_non_responsive_host_domain",
                 "Codelist",
                 "Content URLs",
-                "FATAL: The server communication failed. Network is unreachable (connect failed)"
+                "FATAL"
             )
         }
     }
