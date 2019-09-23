@@ -5,8 +5,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.sql.ResultSet
 
-internal class SQLiteProvider_DictionaryReplace_TableCellTransform_UnitTest :
-    SQLiteProvider_DictionaryReplaceUnitTestBase() {
+internal class DpmDbWriter_DictionaryReplace_TableCellTransform_ModuleTest :
+    DpmDbWriter_DictionaryReplaceModuleTestBase() {
 
     @Test
     fun `TableCell signature values should get NULL`() {

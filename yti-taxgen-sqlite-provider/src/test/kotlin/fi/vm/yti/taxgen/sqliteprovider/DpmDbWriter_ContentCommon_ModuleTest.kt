@@ -6,12 +6,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-internal class SQLiteProvider_ContentCommon_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
+internal class DpmDbWriter_ContentCommon_ModuleTest : DpmDbWriter_ContentModuleTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
             dynamicTest("should have all configured languages") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery("SELECT IsoCode FROM mLanguage")
                 val dbIsoCodes = rs.toStringList(false)
@@ -23,6 +24,7 @@ internal class SQLiteProvider_ContentCommon_UnitTest : SQLiteProvider_ContentDyn
             },
 
             dynamicTest("should have English language but no Concept nor ConceptTranslation relations") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """
@@ -54,6 +56,7 @@ internal class SQLiteProvider_ContentCommon_UnitTest : SQLiteProvider_ContentDyn
             },
 
             dynamicTest("should have Owner") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """
@@ -87,6 +90,7 @@ internal class SQLiteProvider_ContentCommon_UnitTest : SQLiteProvider_ContentDyn
             },
 
             dynamicTest("should produce proper context events") {
+                executeDpmDbWriterWithDefaults()
 
                 assertThat(diagnosticCollector.eventsString()).contains(
                     "ENTER [SQLiteDbWriter]",

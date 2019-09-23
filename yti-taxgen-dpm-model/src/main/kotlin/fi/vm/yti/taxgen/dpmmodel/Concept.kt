@@ -30,11 +30,6 @@ data class Concept(
             )
     }
 
-    init {
-        label.defaultLanguage = owner.defaultLanguage
-        description.defaultLanguage = owner.defaultLanguage
-    }
-
     fun validateConcept(
         validationResults: ValidationResults,
         minLabelLangCount: Int

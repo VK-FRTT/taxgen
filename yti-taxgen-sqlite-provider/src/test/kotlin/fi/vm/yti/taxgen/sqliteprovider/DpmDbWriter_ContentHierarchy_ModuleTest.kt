@@ -1,21 +1,21 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Test
 
-internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
+internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModuleTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Hierarchy with Domain, Concept and Owner relation") {
+                executeDpmDbWriterWithDefaults()
+
                 val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
@@ -46,6 +46,7 @@ internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_Content
             },
 
             dynamicTest("should have ConceptTranslations for DPM Hierarchy") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """
@@ -71,26 +72,25 @@ internal class SQLiteProvider_ContentHierarchy_UnitTest : SQLiteProvider_Content
                     "ExpDomHier-1-Code, Hierarchy, description, en, ExpDomHier-Desc-En",
                     "ExpDomHier-1-Code, Hierarchy, description, fi, ExpDomHier-Desc-Fi"
                 )
+            },
+
+            dynamicTest("should detect when multiple HierarchyNodes refer same Member") {
+                val throwable = catchThrowable {
+                    executeDpmDbWriter(
+                        true,
+                        FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
+                        processingOptionsWithInherentTextLanguageFi()
+                    )
+                }
+
+                assertThat(throwable).isInstanceOf(HaltException::class.java)
+
+                assertThat(diagnosticCollector.eventsString()).contains(
+                    "FATAL",
+                    "UNIQUE constraint failed",
+                    "mHierarchyNode.HierarchyID, mHierarchyNode.MemberID"
+                )
             }
-        )
-    }
-
-    @Test
-    fun `should detect when multiple HierarchyNodes refer same Member`() {
-        val throwable = catchThrowable {
-            setupDbViaDictionaryCreate(
-                true,
-                FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
-                ProcessingOptions.empty()
-            )
-        }
-
-        assertThat(throwable).isInstanceOf(HaltException::class.java)
-
-        assertThat(diagnosticCollector.eventsString()).contains(
-            "FATAL",
-            "UNIQUE constraint failed",
-            "mHierarchyNode.HierarchyID, mHierarchyNode.MemberID"
         )
     }
 }

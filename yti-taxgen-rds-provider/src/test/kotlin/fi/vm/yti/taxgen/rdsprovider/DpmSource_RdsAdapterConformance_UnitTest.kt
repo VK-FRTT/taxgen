@@ -107,8 +107,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                       "en",
                       "fi",
                       "sv"
-                    ],
-                    "defaultLanguage": "en"
+                    ]
                   },
                   "metrics": {
                     "uri": "http://uri.suomi.fi/codelist/dpm_dictionary_0/met"
@@ -137,8 +136,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                       "en",
                       "fi",
                       "sv"
-                    ],
-                    "defaultLanguage": "en"
+                    ]
                   },
                   "metrics": {
                     "uri": null
@@ -169,12 +167,13 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                 ${blankDpmDictionaryConfig("11")}
               ],
               "processingOptions": {
-                "sqliteDbMandatoryLabelTranslationLanguage": "en",
-                "sqliteDbMandatoryLabelTranslationSourceCandidateLanguages": [
+                "sqliteDbDpmElementInherentTextLanguage": "en",
+                "sqliteDbMandatoryLabelLanguage": "en",
+                "sqliteDbMandatoryLabelSourceLanguages": [
                   "fi",
                   "sv"
                 ],
-                "sqliteDbDpmElementUriStorageLabelTranslationLanguage": "pl"
+                "sqliteDbDpmElementUriStorageLabelLanguage": "pl"
               }
             }
             """.trimIndent()
@@ -195,8 +194,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
                       "en",
                       "fi",
                       "sv"
-                    ],
-                    "defaultLanguage": "en"
+                    ]
                   },
                   "metrics": {
                     "uri": null

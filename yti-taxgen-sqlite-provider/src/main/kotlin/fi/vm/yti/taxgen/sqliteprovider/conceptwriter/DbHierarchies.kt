@@ -62,7 +62,8 @@ object DbHierarchies {
             val hierarchyId = insertHierarchy(
                 hierarchy,
                 hierarchyConceptId,
-                domainId
+                domainId,
+                processingOptions
             )
 
             var order = 0
@@ -86,7 +87,8 @@ object DbHierarchies {
                     currentLevel,
                     order,
                     referencedElementConceptsByCode[currentNode.referencedElementCode]
-                        ?: thisShouldNeverHappen("No Concept found for ReferencedElementCode: ${currentNode.referencedElementCode}")
+                        ?: thisShouldNeverHappen("No Concept found for ReferencedElementCode: ${currentNode.referencedElementCode}"),
+                    processingOptions
                 )
             }
         }
@@ -95,13 +97,14 @@ object DbHierarchies {
     private fun insertHierarchy(
         hierarchy: Hierarchy,
         hierarchyConceptId: EntityID<Int>,
-        domainId: EntityID<Int>
+        domainId: EntityID<Int>,
+        processingOptions: ProcessingOptions
     ): EntityID<Int> {
 
         val hierarchyId = HierarchyTable.insertAndGetId {
             it[hierarchyCodeCol] = hierarchy.hierarchyCode
-            it[hierarchyLabelCol] = hierarchy.concept.label.defaultTranslationOrNull()
-            it[hierarchyDescriptionCol] = hierarchy.concept.description.defaultTranslationOrNull()
+            it[hierarchyLabelCol] = hierarchy.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[hierarchyDescriptionCol] = hierarchy.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[domainIdCol] = domainId
             it[conceptIdCol] = hierarchyConceptId
         }
@@ -117,7 +120,8 @@ object DbHierarchies {
         memberDomainId: EntityID<Int>,
         currentLevel: Int,
         order: Int,
-        referencedElementConcept: Concept
+        referencedElementConcept: Concept,
+        processingOptions: ProcessingOptions
     ) {
         val memberRow = MemberTable.rowWhereDomainIdAndMemberCode(memberDomainId, currentNode.referencedElementCode)
             ?: thisShouldNeverHappen("No Member matching CurrentNode.referencedElementCode: ${currentNode.referencedElementCode}")
@@ -134,8 +138,8 @@ object DbHierarchies {
 
         val parentMemberId = parentMemberRow?.get(MemberTable.id)
 
-        val nodeDefaultLabel = currentNode.concept.label.defaultTranslationOrNull()
-            ?: referencedElementConcept.label.defaultTranslationOrNull()
+        val nodeDefaultLabel = currentNode.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            ?: referencedElementConcept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
 
         HierarchyNodeTable.insert {
             it[hierarchyIdCol] = hierarchyId

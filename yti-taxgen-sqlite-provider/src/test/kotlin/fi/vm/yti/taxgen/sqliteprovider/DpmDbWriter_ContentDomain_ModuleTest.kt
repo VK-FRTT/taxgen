@@ -5,13 +5,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-internal class SQLiteProvider_ContentDomain_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
+internal class DpmDbWriter_ContentDomain_ModuleTest : DpmDbWriter_ContentModuleTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Domains with Concept and Owner relation") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """
@@ -43,6 +44,7 @@ internal class SQLiteProvider_ContentDomain_UnitTest : SQLiteProvider_ContentDyn
             },
 
             dynamicTest("should have ConceptTranslations for Domains") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """

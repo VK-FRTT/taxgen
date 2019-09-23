@@ -40,7 +40,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 
-internal class SQLiteProvider_TableStructure_UnitTest {
+internal class DpmDbWriter_TableStructure_ModuleTest {
 
     enum class StructureInitMode {
         SELF_INITIALIZED,

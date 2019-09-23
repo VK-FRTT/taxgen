@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.sql.ResultSet
 
-internal class SQLiteProvider_DictionaryReplace_OpenAxisValueRestrictionTransform_UnitTest :
-    SQLiteProvider_DictionaryReplaceUnitTestBase() {
+internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_ModuleTest :
+    DpmDbWriter_DictionaryReplaceModuleTestBase() {
 
     @Test
     fun `OpenAxisValueRestriction should get updated`() {

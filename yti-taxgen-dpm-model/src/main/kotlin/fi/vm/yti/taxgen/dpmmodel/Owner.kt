@@ -13,12 +13,10 @@ data class Owner(
     val prefix: String,
     val location: String,
     val copyright: String,
-    val languageCodes: List<String>,
-    val defaultLanguageCode: String
+    val languageCodes: List<String>
 ) : Validatable {
 
     val languages: Set<Language> by lazy { languageCodes.mapNotNull { Language.findByIso6391Code(it) }.toSet() }
-    val defaultLanguage: Language by lazy { Language.findByIso6391Code(defaultLanguageCode)!! }
 
     override fun validate(validationResults: ValidationResults) {
 
@@ -56,17 +54,6 @@ data class Owner(
                     if (Language.findByIso6391Code(code) == null) {
                         messages.add("unsupported language '$code'")
                     }
-                }
-            }
-        )
-
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "defaultLanguage",
-            validate = { messages ->
-                if (Language.findByIso6391Code(defaultLanguageCode) == null) {
-                    messages.add("unsupported default language '$defaultLanguageCode'")
                 }
             }
         )

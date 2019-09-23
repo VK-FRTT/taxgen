@@ -122,8 +122,7 @@ Here is shown the source configuration file structure. Configuration defines the
         "languages": [
           "<List of languages, identified by their ISO 6391 codes>",
           "<Localized texts are copied from the Reference Data tool to DPM Concept Translations only for here listed languages>"
-        ],
-        "defaultLanguage": "<ISO 6391 code, selects which Concept Translation label is used as default label in DPM elements>"
+        ]
       },
       "metrics": {
         "uri": "<Metrics Codelist URI>"

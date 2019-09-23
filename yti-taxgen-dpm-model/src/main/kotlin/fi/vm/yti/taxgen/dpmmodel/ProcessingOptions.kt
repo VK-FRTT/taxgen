@@ -4,14 +4,11 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import kotlin.reflect.KProperty0
 
 data class ProcessingOptions(
-    val sqliteDbMandatoryLabelTranslationLanguage: Language?,
-    val sqliteDbMandatoryLabelTranslationSourceCandidateLanguages: List<Language>?,
-    val sqliteDbDpmElementUriStorageLabelTranslationLanguage: Language?
+    val sqliteDbDpmElementInherentTextLanguage: Language?,
+    val sqliteDbMandatoryLabelLanguage: Language?,
+    val sqliteDbMandatoryLabelSourceLanguages: List<Language>?,
+    val sqliteDbDpmElementUriStorageLabelLanguage: Language?
 ) {
-    companion object {
-        fun empty() = ProcessingOptions(null, null, null)
-    }
-
     fun emitDiagnostics(diagnostic: Diagnostic) {
 
         fun emitLanguageOption(property: KProperty0<Language?>) {
@@ -22,8 +19,9 @@ data class ProcessingOptions(
             diagnostic.info("ProcessingOption: ${property.name} [${property.get()?.map { it.iso6391Code }?.joinToString() ?: "-"}]")
         }
 
-        emitLanguageOption(this::sqliteDbMandatoryLabelTranslationLanguage)
-        emitLanguageListOption(this::sqliteDbMandatoryLabelTranslationSourceCandidateLanguages)
-        emitLanguageOption(this::sqliteDbDpmElementUriStorageLabelTranslationLanguage)
+        emitLanguageOption(this::sqliteDbDpmElementInherentTextLanguage)
+        emitLanguageOption(this::sqliteDbMandatoryLabelLanguage)
+        emitLanguageListOption(this::sqliteDbMandatoryLabelSourceLanguages)
+        emitLanguageOption(this::sqliteDbDpmElementUriStorageLabelLanguage)
     }
 }

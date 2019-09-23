@@ -5,9 +5,10 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 
 data class ProcessingOptionsConfigInput(
-    val sqliteDbMandatoryLabelTranslationLanguage: String?,
-    val sqliteDbMandatoryLabelTranslationSourceCandidateLanguages: List<String?>?,
-    val sqliteDbDpmElementUriStorageLabelTranslationLanguage: String?
+    val sqliteDbDpmElementInherentTextLanguage: String?,
+    val sqliteDbMandatoryLabelLanguage: String?,
+    val sqliteDbMandatoryLabelSourceLanguages: List<String?>?,
+    val sqliteDbDpmElementUriStorageLabelLanguage: String?
 ) {
     fun toProcessingOptions(diagnostic: Diagnostic): ProcessingOptions {
 
@@ -32,15 +33,19 @@ data class ProcessingOptionsConfigInput(
         }
 
         return ProcessingOptions(
-            sqliteDbMandatoryLabelTranslationLanguage = toOptionalLanguage(
-                sqliteDbMandatoryLabelTranslationLanguage
-            ),
-            sqliteDbMandatoryLabelTranslationSourceCandidateLanguages = toOptionalLanguages(
-                sqliteDbMandatoryLabelTranslationSourceCandidateLanguages
+            sqliteDbDpmElementInherentTextLanguage = toOptionalLanguage(
+                sqliteDbDpmElementInherentTextLanguage
             ),
 
-            sqliteDbDpmElementUriStorageLabelTranslationLanguage = toOptionalLanguage(
-                sqliteDbDpmElementUriStorageLabelTranslationLanguage
+            sqliteDbMandatoryLabelLanguage = toOptionalLanguage(
+                sqliteDbMandatoryLabelLanguage
+            ),
+            sqliteDbMandatoryLabelSourceLanguages = toOptionalLanguages(
+                sqliteDbMandatoryLabelSourceLanguages
+            ),
+
+            sqliteDbDpmElementUriStorageLabelLanguage = toOptionalLanguage(
+                sqliteDbDpmElementUriStorageLabelLanguage
             )
         )
     }

@@ -34,7 +34,8 @@ object DbDimensions {
             insertExplicitDimension(
                 dimension,
                 owner,
-                dimensionConceptId
+                dimensionConceptId,
+                processingOptions
             )
         }
     }
@@ -59,7 +60,8 @@ object DbDimensions {
             insertTypedDimension(
                 dimension,
                 owner,
-                dimensionConceptId
+                dimensionConceptId,
+                processingOptions
             )
         }
     }
@@ -67,7 +69,8 @@ object DbDimensions {
     private fun insertExplicitDimension(
         dimension: ExplicitDimension,
         owner: Owner,
-        dimensionConceptId: EntityID<Int>
+        dimensionConceptId: EntityID<Int>,
+        processingOptions: ProcessingOptions
     ) {
         val dimensionXbrlCode = "${owner.prefix}_dim:${dimension.dimensionCode}"
 
@@ -76,8 +79,8 @@ object DbDimensions {
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
-            it[dimensionLabelCol] = dimension.concept.label.defaultTranslationOrNull()
-            it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslationOrNull()
+            it[dimensionLabelCol] = dimension.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[dimensionDescriptionCol] = dimension.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
             it[domainIdCol] = domainRow[DomainTable.id]
             it[isTypedDimensionCol] = false
@@ -88,7 +91,8 @@ object DbDimensions {
     private fun insertTypedDimension(
         dimension: TypedDimension,
         owner: Owner,
-        dimensionConceptId: EntityID<Int>
+        dimensionConceptId: EntityID<Int>,
+        processingOptions: ProcessingOptions
     ) {
         val dimensionXbrlCode = "${owner.prefix}_dim:${dimension.dimensionCode}"
 
@@ -97,8 +101,8 @@ object DbDimensions {
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
-            it[dimensionLabelCol] = dimension.concept.label.defaultTranslationOrNull()
-            it[dimensionDescriptionCol] = dimension.concept.description.defaultTranslationOrNull()
+            it[dimensionLabelCol] = dimension.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[dimensionDescriptionCol] = dimension.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
             it[domainIdCol] = domainRow[DomainTable.id]
             it[isTypedDimensionCol] = true

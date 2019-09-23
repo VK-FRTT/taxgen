@@ -11,8 +11,7 @@
           "en",
           "fi",
           "sv"
-        ],
-        "defaultLanguage": "en"
+        ]
       },
       "metrics": {
         "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1?env=awstest"

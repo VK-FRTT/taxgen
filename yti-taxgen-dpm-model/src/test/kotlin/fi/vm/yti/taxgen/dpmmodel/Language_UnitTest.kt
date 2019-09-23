@@ -109,46 +109,6 @@ internal class Language_UnitTest :
             assertThat(Language.languages()).isNotEmpty
         }
 
-        @DisplayName("prioritized languages")
-        @ParameterizedTest(name = "`{1}` should be the highest priority language from `{0}`")
-        @CsvSource(
-            "'de, pl, sv, fi, en, es',      fi",
-            "'de, pl, sv, en, es',          sv",
-            "'de, pl, en, es',              en",
-            "'de, pl, es',                  pl",
-            "'de, es',                       "
-        )
-        fun testPrioritizedLanguages(
-            candidateIsoCodes: String,
-            expectedResultIsoCode: String?
-        ) {
-            val candidateLanguages =
-                candidateIsoCodes
-                    .split(",")
-                    .map { Language.byIso6391CodeOrFail(it.trim()) }
-                    .toSet()
-
-            val selectedPriorityLanguage = Language.findHighestPriorityLanguage(candidateLanguages)
-
-            if (expectedResultIsoCode != null) {
-                assertThat(selectedPriorityLanguage).isNotNull()
-                assertThat(selectedPriorityLanguage!!.iso6391Code).isEqualTo(expectedResultIsoCode)
-            } else {
-                assertThat(selectedPriorityLanguage).isNull()
-            }
-        }
-
-        @Test
-        fun `loading language configuration without default language should fail`() {
-            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "default_language_en_missing.json")
-
-            val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
-
-            assertThat(thrown)
-                .isInstanceOf(FailException::class.java)
-                .hasMessage("Language configuration missing mandatory default language 'en'")
-        }
-
         @Test
         fun `loading language configuration with unsupported translation language should fail`() {
             val languageConfigPath: Path =

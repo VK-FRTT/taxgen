@@ -40,8 +40,7 @@ fun dpmModelFixture(
         prefix = "FixPrfx",
         location = "FixLoc",
         copyright = "FixCop",
-        languageCodes = listOf("en", "fi", "sv"),
-        defaultLanguageCode = "fi"
+        languageCodes = listOf("en", "fi", "sv")
     )
 
     fun concept(label: String?, description: String?): Concept {

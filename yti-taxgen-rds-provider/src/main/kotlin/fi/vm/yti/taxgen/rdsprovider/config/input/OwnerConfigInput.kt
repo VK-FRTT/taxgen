@@ -10,8 +10,7 @@ data class OwnerConfigInput(
     val prefix: String?,
     val location: String?,
     val copyright: String?,
-    val languages: List<String?>?,
-    val defaultLanguage: String?
+    val languages: List<String?>?
 ) {
 
     fun toConfig(diagnostic: Diagnostic): OwnerConfig {
@@ -21,18 +20,16 @@ data class OwnerConfigInput(
         validateValueNotNull(this::location, diagnostic)
         validateValueNotNull(this::copyright, diagnostic)
         validateValueNotNull(this::languages, diagnostic)
-        validateValueNotNull(this::defaultLanguage, diagnostic)
         validateListElementsNotNull(this::languages, diagnostic)
 
         @Suppress("UNCHECKED_CAST")
-        return OwnerConfig(
+        return OwnerConfig( //TODO - Is OwnerConfig obsolete actually?
             name = name!!,
             namespace = namespace!!,
             prefix = prefix!!,
             location = location!!,
             copyright = copyright!!,
-            languages = languages!! as List<String>,
-            defaultLanguage = defaultLanguage!!
+            languages = languages!! as List<String>
         )
     }
 }

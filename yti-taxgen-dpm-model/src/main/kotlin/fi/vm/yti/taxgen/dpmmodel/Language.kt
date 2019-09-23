@@ -64,7 +64,6 @@ class Language constructor(
         )
 
         private val languages = loadLanguages()
-        private val prioritizedLanguages = resolvePrioritizedLanguages()
 
         fun languages() = languages
 
@@ -77,10 +76,6 @@ class Language constructor(
                 ?: throwFail("Language configuration missing requested language '$iso6391Code'")
         }
 
-        fun findHighestPriorityLanguage(candidates: Set<Language>): Language? {
-            return prioritizedLanguages.find { candidates.contains(it) }
-        }
-
         internal fun loadLanguages(configPath: Path? = null): Set<Language> {
             val configUrl = resolveConfigUrl(configPath, "languages/languages.json")
 
@@ -88,28 +83,13 @@ class Language constructor(
 
             val languages = initLanguages(configs)
 
-            val defaultLabelLanguage = selectDefaultLabelLanguage(languages.keys)
-
-            configureLanguageLabels(languages, defaultLabelLanguage)
+            configureLanguageLabels(languages)
 
             val plainLanguages = languages.keys
 
             validateLanguages(plainLanguages)
 
             return plainLanguages.sortedBy { it.iso6391Code }.toSet()
-        }
-
-        internal fun resolvePrioritizedLanguages(configPath: Path? = null): Set<Language> {
-            val configUrl = resolveConfigUrl(configPath, "languages/prioritized.json")
-
-            val priorityConfig: List<String> = loadPriorityConfig(configUrl)
-
-            return priorityConfig
-                .map { prioritizedIsoCode ->
-                    languages.find { it.iso6391Code == prioritizedIsoCode }
-                        ?: throwFail("Language priorities: No Language found for iso6391Code '$prioritizedIsoCode'")
-                }
-                .toSet()
         }
 
         private fun resolveConfigUrl(languageConfigPath: Path?, fallbackResourceName: String): URL =
@@ -128,14 +108,6 @@ class Language constructor(
             }
         }
 
-        private fun loadPriorityConfig(configUrl: URL): List<String> {
-            try {
-                return JsonOps.lenientObjectMapper.readValue(configUrl)
-            } catch (e: JsonProcessingException) {
-                throwFail("Language priority configuration loading failed: ${e.message}")
-            }
-        }
-
         private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> {
             fun initLanguage(iso6391Code: String) = Language(iso6391Code, TranslatedText(mutableMapOf()))
 
@@ -144,13 +116,8 @@ class Language constructor(
                 .toMap()
         }
 
-        private fun selectDefaultLabelLanguage(languages: Set<Language>): Language =
-            languages.find { it.iso6391Code == "en" }
-                ?: throwFail("Language configuration missing mandatory default language 'en'")
-
         private fun configureLanguageLabels(
-            languages: Map<Language, LanguageConfig>,
-            defaultLabelLanguage: Language
+            languages: Map<Language, LanguageConfig>
         ) {
             val languageSet = languages.keys
 
@@ -164,7 +131,6 @@ class Language constructor(
                 }.toMap()
 
                 (language.label.translations as MutableMap).putAll(translations)
-                language.label.defaultLanguage = defaultLabelLanguage
             }
         }
 

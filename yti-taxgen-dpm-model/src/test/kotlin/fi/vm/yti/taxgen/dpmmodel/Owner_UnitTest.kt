@@ -21,8 +21,7 @@ internal class Owner_UnitTest :
         "prefix,                required",
         "location,              required",
         "copyright,             required",
-        "languageCodes,         required",
-        "defaultLanguageCode,   required"
+        "languageCodes,         required"
     )
     fun testPropertyOptionality(
         propertyName: String,
@@ -103,31 +102,6 @@ internal class Owner_UnitTest :
             instantiateAndValidate()
             assertThat(instance!!.languages.map { it.iso6391Code })
                 .containsExactly("fi", "sv", "en")
-        }
-    }
-
-    @Nested
-    inner class DefaultLanguageCodeProp {
-
-        @Test
-        fun `defaultLanguageCode should detect unknown codes`() {
-            attributeOverrides(
-                "defaultLanguageCode" to "foobar"
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Owner.defaultLanguage: unsupported default language 'foobar'")
-        }
-
-        @Test
-        fun `defaultLanguageCode should be mapped to language`() {
-            attributeOverrides(
-                "defaultLanguageCode" to "sv"
-            )
-
-            instantiateAndValidate()
-            assertThat(instance!!.defaultLanguage.iso6391Code).isEqualTo("sv")
         }
     }
 }

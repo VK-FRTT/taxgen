@@ -6,6 +6,5 @@ data class OwnerConfig(
     val prefix: String?,
     val location: String?,
     val copyright: String?,
-    val languages: List<String?>?,
-    val defaultLanguage: String?
+    val languages: List<String?>?
 )

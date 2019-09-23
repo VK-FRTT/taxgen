@@ -86,7 +86,7 @@ private fun mapAndValidateHierarchyNodes(
     //Normally there should be no leftover nodes from tree building
     //However, RDS API responses have contained occasionally faulty parent references and thus tree building has failed
     if (candidateNodes.any()) {
-        val orphanNodeUris = candidateNodes.map { "${it.uri} (${it.concept.label.highestPriorityTranslationOrNull()})" }
+        val orphanNodeUris = candidateNodes.map { "${it.uri} (${it.concept.label.translationWithPostixForAnyLangOrNull(owner.languages)})" }
 
         diagnostic.fatal("Corrupted source data. Codelist Extension has Members, which position in DPM Hierarchy could not be determined: ${orphanNodeUris.joinToString()}")
     }

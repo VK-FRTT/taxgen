@@ -13,7 +13,7 @@ internal class DpmDictionaryModelMapper(
     fun dpmOwnerConfig(action: (OwnerConfig) -> Unit) {
 
         dpmDictionarySource.dpmOwnerConfigData { data ->
-            val ownerConfig = JsonOps.readValue<OwnerConfig>(data, diagnostic)
+            val ownerConfig = JsonOps.readValue<OwnerConfig>(data, diagnostic)  //TODO
 
             diagnostic.updateCurrentContextDetails(
                 label = ownerConfig.name

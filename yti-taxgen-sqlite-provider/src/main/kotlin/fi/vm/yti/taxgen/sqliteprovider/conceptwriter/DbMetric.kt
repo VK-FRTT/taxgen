@@ -44,7 +44,8 @@ object DbMetric {
                     metric,
                     owner,
                     metricMemberConceptId,
-                    metricDomainId
+                    metricDomainId,
+                    processingOptions
                 )
 
                 insertMetric(
@@ -59,13 +60,14 @@ object DbMetric {
         metric: Metric,
         owner: Owner,
         metricMemberConceptId: EntityID<Int>,
-        metricDomainId: EntityID<Int>
+        metricDomainId: EntityID<Int>,
+        processingOptions: ProcessingOptions
     ): EntityID<Int> {
         val memberXbrlCode = "${owner.prefix}_met:${metric.metricCode}"
 
         val memberId = MemberTable.insertAndGetId {
             it[memberCodeCol] = metric.metricCode
-            it[memberLabelCol] = metric.concept.label.defaultTranslationOrNull()
+            it[memberLabelCol] = metric.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[memberXBRLCodeCol] = memberXbrlCode
             it[isDefaultMemberCol] = false
             it[conceptIdCol] = metricMemberConceptId

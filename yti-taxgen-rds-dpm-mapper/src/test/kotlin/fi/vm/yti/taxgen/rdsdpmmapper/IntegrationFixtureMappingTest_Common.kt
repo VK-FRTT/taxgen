@@ -19,7 +19,6 @@ internal class IntegrationFixtureMappingTest_Common : RdsToDpmMapper_UnitTestBas
         assertThat(owner.location).isEqualTo("location")
         assertThat(owner.copyright).isEqualTo("copyright")
         assertThat(owner.languages).isEqualTo(hashSetOf(en, fi, sv))
-        assertThat(owner.defaultLanguage).isEqualTo(en)
     }
 
     @Test

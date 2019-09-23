@@ -5,13 +5,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
-internal class SQLiteProvider_ContentMetric_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
+internal class DpmDbWriter_ContentMetric_ModuleTest : DpmDbWriter_ContentModuleTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have Metrics with Member relation") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """

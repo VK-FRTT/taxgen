@@ -39,8 +39,7 @@ fun dpmTestData(): Set<DataDefinition> {
                 "prefix" to "ns_prefix",
                 "location" to "official_location",
                 "copyright" to "Lorem ipsum",
-                "languageCodes" to listOf("en", "fi"),
-                "defaultLanguageCode" to "fi"
+                "languageCodes" to listOf("en", "fi")
             )
         )
     )

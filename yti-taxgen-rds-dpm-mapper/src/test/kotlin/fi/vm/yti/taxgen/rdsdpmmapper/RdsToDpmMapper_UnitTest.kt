@@ -35,7 +35,6 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
             assertThat(location).isEqualTo("location")
             assertThat(copyright).isEqualTo("copyright")
             assertThat(languages).isEqualTo(hashSetOf(en))
-            assertThat(defaultLanguage).isEqualTo(en)
         }
 
         dpmDictionaries[1].owner.apply {
@@ -45,7 +44,6 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
             assertThat(location).isEqualTo("location")
             assertThat(copyright).isEqualTo("copyright")
             assertThat(languages).isEqualTo(hashSetOf(fi))
-            assertThat(defaultLanguage).isEqualTo(en)
         }
 
         dpmDictionaries[2].owner.apply {
@@ -55,7 +53,6 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
             assertThat(location).isEqualTo("location")
             assertThat(copyright).isEqualTo("copyright")
             assertThat(languages).isEqualTo(hashSetOf(sv))
-            assertThat(defaultLanguage).isEqualTo(en)
         }
     }
 
@@ -126,7 +123,7 @@ internal class RdsToDpmMapper_UnitTest : RdsToDpmMapper_UnitTestBase() {
         assertThat(diagnosticCollector.eventsString()).contains(
             "Corrupted source data.",
             "Codelist Extension has Members, which position in DPM Hierarchy could not be determined:",
-            "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H1/member/3 (EDA hierarchy node 5)"
+            "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H1/member/3 (EDA hierarchy node 5 (fi))"
         )
     }
 }

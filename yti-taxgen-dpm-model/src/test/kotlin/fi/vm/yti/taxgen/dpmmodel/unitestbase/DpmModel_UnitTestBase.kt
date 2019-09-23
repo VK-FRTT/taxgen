@@ -169,8 +169,7 @@ internal open class DpmModel_UnitTestBase<T : Any>(
             prefix = "prefix_$baseId",
             location = "location_$baseId",
             copyright = "copyright_$baseId",
-            languageCodes = listOf("en"),
-            defaultLanguageCode = "en"
+            languageCodes = listOf("en")
         )
     }
 

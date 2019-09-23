@@ -110,8 +110,8 @@ object DbConcepts {
         processingOptions: ProcessingOptions
     ): Map<Language, String> {
 
-        val targetLanguage = processingOptions.sqliteDbMandatoryLabelTranslationLanguage
-        val sourceLanguages = processingOptions.sqliteDbMandatoryLabelTranslationSourceCandidateLanguages
+        val targetLanguage = processingOptions.sqliteDbMandatoryLabelLanguage
+        val sourceLanguages = processingOptions.sqliteDbMandatoryLabelSourceLanguages
 
         if (targetLanguage != null && sourceLanguages != null) {
 
@@ -137,7 +137,7 @@ object DbConcepts {
         diagnostic: Diagnostic
     ): Map<Language, String> {
 
-        val uriStorageLanguage = processingOptions.sqliteDbDpmElementUriStorageLabelTranslationLanguage
+        val uriStorageLanguage = processingOptions.sqliteDbDpmElementUriStorageLabelLanguage
         if (uriStorageLanguage != null) {
 
             if (translations.containsKey(uriStorageLanguage)) {

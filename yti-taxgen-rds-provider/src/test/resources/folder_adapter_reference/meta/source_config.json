@@ -11,8 +11,7 @@
           "en",
           "fi",
           "sv"
-        ],
-        "defaultLanguage": "en"
+        ]
       },
       "metrics": {
         "uri": null
@@ -32,11 +31,11 @@
     }
   ],
   "processingOptions": {
-    "sqliteDbMandatoryLabelTranslationLanguage": "en",
-    "sqliteDbMandatoryLabelTranslationSourceCandidateLanguages": [
+    "sqliteDbMandatoryLabelLanguage": "en",
+    "sqliteDbMandatoryLabelSourceLanguages": [
       "fi",
       "sv"
     ],
-    "sqliteDbDpmElementUriStorageLabelTranslationLanguage": "pl"
+    "sqliteDbDpmElementUriStorageLabelLanguage": "pl"
   }
 }

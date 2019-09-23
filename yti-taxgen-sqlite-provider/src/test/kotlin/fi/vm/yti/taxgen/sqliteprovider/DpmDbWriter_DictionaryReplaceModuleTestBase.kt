@@ -15,7 +15,7 @@ import java.nio.file.StandardCopyOption
 import java.sql.Connection
 import java.sql.DriverManager
 
-internal open class SQLiteProvider_DictionaryReplaceUnitTestBase {
+internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
 
     private lateinit var tempFolder: TempFolder
 
@@ -67,9 +67,11 @@ internal open class SQLiteProvider_DictionaryReplaceUnitTestBase {
             variety
         )
 
+        val processingOptions = ProcessingOptions(null, null, null, null)
+
         dbWriter.writeModel(
             model,
-            ProcessingOptions.empty()
+            processingOptions
         )
 
         outputDbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")

@@ -1,19 +1,18 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Test
 
-internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_ContentDynamicUnitTestBase() {
+internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_ContentModuleTestBase() {
 
     override fun createDynamicTests(): List<DynamicNode> {
 
         return listOf(
 
             dynamicTest("should have correct HierarchyNode structure") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """
@@ -49,6 +48,7 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
             },
 
             dynamicTest("should have HierarchyNodes with Member, Concept and Owner relation") {
+                executeDpmDbWriterWithDefaults()
 
                 val rs = dbConnection.createStatement().executeQuery(
                     """
@@ -90,6 +90,8 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
             },
 
             dynamicTest("should have ConceptTranslations for HierarchyNode") {
+                executeDpmDbWriterWithDefaults()
+
                 val rs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
@@ -118,21 +120,18 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
                     "MetHierNode-1-Lbl-Fi, HierarchyNode, description, en, MetHierNode-1-Desc-En",
                     "MetHierNode-1-Lbl-Fi, HierarchyNode, description, fi, MetHierNode-1-Desc-Fi"
                 )
-            }
-        )
-    }
+            },
 
-    @Test
-    fun `should bind HierarchyNodes to Members from same Explicit Domain`() {
-        setupDbViaDictionaryCreate(
-            false,
-            FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
-            ProcessingOptions.empty()
-        )
+            dynamicTest("should bind HierarchyNodes to Members from same Explicit Domain") {
+                executeDpmDbWriter(
+                    false,
+                    FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
+                    processingOptionsWithInherentTextLanguageFi()
+                )
 
-        //Verify that data is properly setup
-        val membersRs = dbConnection.createStatement().executeQuery(
-            """
+                //Verify that data is properly setup
+                val membersRs = dbConnection.createStatement().executeQuery(
+                    """
             SELECT
                 M.MemberCode,
                 M.MemberXBRLCode,
@@ -142,18 +141,18 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
             INNER JOIN mDomain AS D on M.DomainID = D.DomainID
             WHERE M.MemberCode = "Mbr-1-Code"
             """
-        )
+                )
 
-        assertThat(membersRs.toStringList()).containsExactlyInAnyOrder(
-            "#MemberCode, #MemberXBRLCode, #DomainCode, #DomainXBRLCode",
-            "Mbr-1-Code, FixPrfx_ExpDom-1-Code:Mbr-1-Code, ExpDom-1-Code, FixPrfx_exp:ExpDom-1-Code",
-            "Mbr-1-Code, FixPrfx_ExpDom-2-Code:Mbr-1-Code, ExpDom-2-Code, FixPrfx_exp:ExpDom-2-Code",
-            "Mbr-1-Code, FixPrfx_ExpDom-3-Code:Mbr-1-Code, ExpDom-3-Code, FixPrfx_exp:ExpDom-3-Code"
-        )
+                assertThat(membersRs.toStringList()).containsExactlyInAnyOrder(
+                    "#MemberCode, #MemberXBRLCode, #DomainCode, #DomainXBRLCode",
+                    "Mbr-1-Code, FixPrfx_ExpDom-1-Code:Mbr-1-Code, ExpDom-1-Code, FixPrfx_exp:ExpDom-1-Code",
+                    "Mbr-1-Code, FixPrfx_ExpDom-2-Code:Mbr-1-Code, ExpDom-2-Code, FixPrfx_exp:ExpDom-2-Code",
+                    "Mbr-1-Code, FixPrfx_ExpDom-3-Code:Mbr-1-Code, ExpDom-3-Code, FixPrfx_exp:ExpDom-3-Code"
+                )
 
-        //Verify that Member linked to HierarchyNode is from same ExplicitDomain where the HierarchyNode belongs to
-        val nodeRs = dbConnection.createStatement().executeQuery(
-            """
+                //Verify that Member linked to HierarchyNode is from same ExplicitDomain where the HierarchyNode belongs to
+                val nodeRs = dbConnection.createStatement().executeQuery(
+                    """
             SELECT
                 H.HierarchyCode,
                 N.HierarchyNodeLabel,
@@ -168,27 +167,29 @@ internal class SQLiteProvider_ContentHierarchyNode_UnitTest : SQLiteProvider_Con
 			WHERE H.HierarchyCode = "ExpDomHier-2-Code"
             ORDER BY HD.DomainCode ASC
             """
-        )
+                )
 
-        assertThat(nodeRs.toStringList()).containsExactlyInAnyOrder(
-            "#HierarchyCode, #HierarchyNodeLabel, #MemberCode, #Hierarchy.DomainCode, #Member.DomainCode",
-            "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-1-Code, ExpDom-1-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-1-Code, ExpDom-1-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-1-Code, ExpDom-1-Code",
-            "ExpDomHier-2-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, ExpDom-1-Code, ExpDom-1-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-1-Code, ExpDom-1-Code",
+                assertThat(nodeRs.toStringList()).containsExactlyInAnyOrder(
+                    "#HierarchyCode, #HierarchyNodeLabel, #MemberCode, #Hierarchy.DomainCode, #Member.DomainCode",
+                    "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-1-Code, ExpDom-1-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-1-Code, ExpDom-1-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-1-Code, ExpDom-1-Code",
+                    "ExpDomHier-2-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, ExpDom-1-Code, ExpDom-1-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-1-Code, ExpDom-1-Code",
 
-            "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-2-Code, ExpDom-2-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-2-Code, ExpDom-2-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-2-Code, ExpDom-2-Code",
-            "ExpDomHier-2-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, ExpDom-2-Code, ExpDom-2-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-2-Code, ExpDom-2-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-2-Code, ExpDom-2-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-2-Code, ExpDom-2-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-2-Code, ExpDom-2-Code",
+                    "ExpDomHier-2-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, ExpDom-2-Code, ExpDom-2-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-2-Code, ExpDom-2-Code",
 
-            "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-3-Code, ExpDom-3-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-3-Code, ExpDom-3-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-3-Code, ExpDom-3-Code",
-            "ExpDomHier-2-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, ExpDom-3-Code, ExpDom-3-Code",
-            "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-3-Code, ExpDom-3-Code"
+                    "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-3-Code, ExpDom-3-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-3-Code, ExpDom-3-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-3-Code, ExpDom-3-Code",
+                    "ExpDomHier-2-Code, Mbr-4-Lbl-Fi, Mbr-4-Code, ExpDom-3-Code, ExpDom-3-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-3-Code, ExpDom-3-Code"
+                )
+            }
         )
     }
 }

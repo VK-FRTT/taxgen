@@ -53,19 +53,19 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                         ).isEqualTo("dpm_dictionary_0/dpm_owner")
 
                         assertThat(
-                            dpmSource.config().processingOptions.sqliteDbMandatoryLabelTranslationLanguage!!.iso6391Code
+                            dpmSource.config().processingOptions.sqliteDbMandatoryLabelLanguage!!.iso6391Code
                         ).isEqualTo("en")
 
                         assertThat(
-                            dpmSource.config().processingOptions.sqliteDbMandatoryLabelTranslationSourceCandidateLanguages!![0].iso6391Code
+                            dpmSource.config().processingOptions.sqliteDbMandatoryLabelSourceLanguages!![0].iso6391Code
                         ).isEqualTo("fi")
 
                         assertThat(
-                            dpmSource.config().processingOptions.sqliteDbMandatoryLabelTranslationSourceCandidateLanguages!![1].iso6391Code
+                            dpmSource.config().processingOptions.sqliteDbMandatoryLabelSourceLanguages!![1].iso6391Code
                         ).isEqualTo("sv")
 
                         assertThat(
-                            dpmSource.config().processingOptions.sqliteDbDpmElementUriStorageLabelTranslationLanguage!!.iso6391Code
+                            dpmSource.config().processingOptions.sqliteDbDpmElementUriStorageLabelLanguage!!.iso6391Code
                         ).isEqualTo("pl")
                     }
                 )

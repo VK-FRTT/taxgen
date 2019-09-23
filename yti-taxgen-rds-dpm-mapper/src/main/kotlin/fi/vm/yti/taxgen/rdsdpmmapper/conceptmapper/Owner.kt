@@ -15,8 +15,7 @@ internal fun mapAndValidateOwner(
         prefix = ownerConfig.prefix ?: "",
         location = ownerConfig.location ?: "",
         copyright = ownerConfig.copyright ?: "",
-        languageCodes = ownerConfig.languages?.map { it ?: "" } ?: emptyList(),
-        defaultLanguageCode = ownerConfig.defaultLanguage ?: ""
+        languageCodes = ownerConfig.languages?.map { it ?: "" } ?: emptyList()
     )
 
     diagnostic.validate(owner)
