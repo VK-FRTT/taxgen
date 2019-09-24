@@ -87,10 +87,37 @@ open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
                         assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
                     },
 
-                    dynamicTest("Should have owner config") {
+                    dynamicTest("Should have owner objects") {
+                        val markers = collectListOf<String> {
+                            dpmSource.eachDpmDictionarySource { dictionarySource ->
+                                dictionarySource.dpmOwner { ownerHolder ->
+                                    it(ownerHolder.owner.name)
+                                }
+                            }
+                        }
+
+                        assertThat(markers).containsExactly(
+                            "dpm_dictionary_0/dpm_owner",
+                            "dpm_dictionary_1/dpm_owner",
+                            "dpm_dictionary_2/dpm_owner",
+                            "dpm_dictionary_3/dpm_owner",
+                            "dpm_dictionary_4/dpm_owner",
+                            "dpm_dictionary_5/dpm_owner",
+                            "dpm_dictionary_6/dpm_owner",
+                            "dpm_dictionary_7/dpm_owner",
+                            "dpm_dictionary_8/dpm_owner",
+                            "dpm_dictionary_9/dpm_owner",
+                            "dpm_dictionary_10/dpm_owner",
+                            "dpm_dictionary_11/dpm_owner"
+                        )
+                    },
+
+                    dynamicTest("Should have owner config data") {
                         val markers = collectMarkerValueFromEachJsonDataAt("/name") { markerExtractAction ->
                             dpmSource.eachDpmDictionarySource { dictionarySource ->
-                                dictionarySource.dpmOwnerConfigData(markerExtractAction)
+                                dictionarySource.dpmOwner { ownerHolder ->
+                                    markerExtractAction(ownerHolder.configData)
+                                }
                             }
                         }
 

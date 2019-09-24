@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.rdsprovider.config.ConfigFactory
+import fi.vm.yti.taxgen.rdsprovider.configinput.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.DpmSourceRecorderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceHolderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
@@ -32,7 +32,7 @@ object SourceFactory {
         configFilePath: Path,
         diagnosticContext: DiagnosticContext
     ): SourceHolder {
-        val configHolder = ConfigFactory.configFromFile(
+        val configHolder = ConfigFactory.dpmSourceConfigFromFile(
             configFilePath,
             diagnosticContext
         )

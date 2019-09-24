@@ -1,3 +1,12 @@
 {
-  "name": "dpm_dictionary_6/dpm_owner"
+  "name": "dpm_dictionary_6/dpm_owner",
+  "namespace": "Namespace_6",
+  "prefix": "Prefix_6",
+  "location": "Location_6",
+  "copyright": "Copyright_6",
+  "languages": [
+    "en",
+    "fi",
+    "sv"
+  ]
 }

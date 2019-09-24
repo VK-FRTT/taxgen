@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
+import fi.vm.yti.taxgen.rdsprovider.OwnerHolder
 
 internal class DpmDictionarySourceContextDecorator(
     private val realDpmDictionarySource: DpmDictionarySource,
@@ -13,8 +14,8 @@ internal class DpmDictionarySourceContextDecorator(
     override fun contextLabel(): String = realDpmDictionarySource.contextLabel()
     override fun contextIdentifier(): String = realDpmDictionarySource.contextIdentifier()
 
-    override fun dpmOwnerConfigData(action: (String) -> Unit) {
-        realDpmDictionarySource.dpmOwnerConfigData(action)
+    override fun dpmOwner(action: (OwnerHolder) -> Unit) {
+        realDpmDictionarySource.dpmOwner(action)
     }
 
     override fun metricsSource(action: (CodeListSource?) -> Unit) {

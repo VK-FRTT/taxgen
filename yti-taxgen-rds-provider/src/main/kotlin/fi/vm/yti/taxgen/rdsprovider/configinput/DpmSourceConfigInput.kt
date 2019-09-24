@@ -1,8 +1,8 @@
-package fi.vm.yti.taxgen.rdsprovider.config.input
+package fi.vm.yti.taxgen.rdsprovider.configinput
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
-import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfig
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfig
 
 @Suppress("MemberVisibilityCanBePrivate")
 data class DpmSourceConfigInput(

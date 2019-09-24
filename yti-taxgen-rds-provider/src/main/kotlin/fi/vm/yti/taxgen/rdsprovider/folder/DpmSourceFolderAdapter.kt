@@ -4,8 +4,8 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.config.ConfigFactory
-import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfigHolder
+import fi.vm.yti.taxgen.rdsprovider.configinput.ConfigFactory
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
 import fi.vm.yti.taxgen.rdsprovider.helpers.SortOps
 import java.nio.file.Path
 
@@ -17,7 +17,7 @@ internal class DpmSourceFolderAdapter(
     private val dpmSourceRootPath = dpmSourceRootPath.toAbsolutePath().normalize()
 
     private val dpmSourceConfigHolder: DpmSourceConfigHolder by lazy {
-        ConfigFactory.configFromFile(
+        ConfigFactory.dpmSourceConfigFromFile(
             dpmSourceRootPath.resolve("meta/source_config.json"),
             diagnosticContext
         )
@@ -32,7 +32,7 @@ internal class DpmSourceFolderAdapter(
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
 
         return sortedPaths.forEach { path ->
-            val dictionarySource = DpmDictionarySourceFolderAdapter(path)
+            val dictionarySource = DpmDictionarySourceFolderAdapter(path, diagnosticContext)
             action(dictionarySource)
         }
     }

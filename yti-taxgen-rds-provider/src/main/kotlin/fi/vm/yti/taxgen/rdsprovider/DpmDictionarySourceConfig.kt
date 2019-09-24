@@ -1,7 +1,9 @@
-package fi.vm.yti.taxgen.rdsprovider.config
+package fi.vm.yti.taxgen.rdsprovider
+
+import fi.vm.yti.taxgen.dpmmodel.Owner
 
 data class DpmDictionarySourceConfig(
-    val owner: OwnerConfig,
+    val owner: Owner,
     val metrics: CodeListConfig,
     val explicitDomainsAndHierarchies: CodeListConfig,
     val explicitDimensions: CodeListConfig,

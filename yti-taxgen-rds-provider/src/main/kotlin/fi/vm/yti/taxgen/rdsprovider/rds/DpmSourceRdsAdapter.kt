@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfigHolder
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
 
 internal class DpmSourceRdsAdapter(
     private val configHolder: DpmSourceConfigHolder,

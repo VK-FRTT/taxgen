@@ -75,9 +75,9 @@ internal class DpmSourceRecorderFolderAdapter(
     ) {
         pathStack.withSubfolder("dpm_dictionary_$dictionaryIndex") {
 
-            dictionarySource.dpmOwnerConfigData {
+            dictionarySource.dpmOwner { ownerHolder ->
                 FileOps.writeTextFile(
-                    it,
+                    ownerHolder.configData,
                     pathStack,
                     "dpm_owner_config.json",
                     forceOverwrite,

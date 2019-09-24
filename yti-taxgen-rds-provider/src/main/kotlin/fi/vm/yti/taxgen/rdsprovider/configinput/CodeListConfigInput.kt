@@ -1,7 +1,7 @@
-package fi.vm.yti.taxgen.rdsprovider.config.input
+package fi.vm.yti.taxgen.rdsprovider.configinput
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.rdsprovider.config.CodeListConfig
+import fi.vm.yti.taxgen.rdsprovider.CodeListConfig
 
 data class CodeListConfigInput(
     val uri: String?

@@ -1,25 +1,22 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
-import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
-import fi.vm.yti.taxgen.rdsprovider.config.OwnerConfig
 
 internal class DpmDictionaryModelMapper(
     private val dpmDictionarySource: DpmDictionarySource,
     private val diagnostic: Diagnostic
 ) {
-    fun dpmOwnerConfig(action: (OwnerConfig) -> Unit) {
-
-        dpmDictionarySource.dpmOwnerConfigData { data ->
-            val ownerConfig = JsonOps.readValue<OwnerConfig>(data, diagnostic)  //TODO
+    fun dpmOwner(action: (Owner) -> Unit) {
+        dpmDictionarySource.dpmOwner { ownerHolder ->
 
             diagnostic.updateCurrentContextDetails(
-                label = ownerConfig.name
+                label = ownerHolder.owner.name
             )
 
-            action(ownerConfig)
+            action(ownerHolder.owner)
         }
     }
 

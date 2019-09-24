@@ -5,7 +5,8 @@ import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
-import fi.vm.yti.taxgen.rdsprovider.config.DpmDictionarySourceConfig
+import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySourceConfig
+import fi.vm.yti.taxgen.rdsprovider.OwnerHolder
 
 internal class DpmDictionarySourceRdsAdapter(
     private val config: DpmDictionarySourceConfig,
@@ -16,8 +17,13 @@ internal class DpmDictionarySourceRdsAdapter(
     override fun contextLabel(): String = ""
     override fun contextIdentifier(): String = ""
 
-    override fun dpmOwnerConfigData(action: (String) -> Unit) {
-        action(JsonOps.writeAsJsonString(config.owner))
+    override fun dpmOwner(action: (OwnerHolder) -> Unit) {
+        val ownerHolder = OwnerHolder(
+            configData = JsonOps.writeAsJsonString(config.owner),
+            owner = config.owner
+        )
+
+        action(ownerHolder)
     }
 
     override fun metricsSource(action: (CodeListSource?) -> Unit) {

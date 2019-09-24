@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.rdsprovider.config.ConfigFactory
+import fi.vm.yti.taxgen.rdsprovider.configinput.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.rds.HttpClientHolder
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -252,7 +252,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             )
         )
 
-        val dpmSourceConfig = ConfigFactory.configFromFile(
+        val dpmSourceConfig = ConfigFactory.dpmSourceConfigFromFile(
             configFilePath,
             diagnosticContext
         )

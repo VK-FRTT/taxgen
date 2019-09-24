@@ -1,7 +1,7 @@
-package fi.vm.yti.taxgen.rdsprovider.config.input
+package fi.vm.yti.taxgen.rdsprovider.configinput
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.rdsprovider.config.DpmDictionarySourceConfig
+import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySourceConfig
 
 @Suppress("MemberVisibilityCanBePrivate")
 data class DpmDictionarySourceConfigInput(
@@ -21,7 +21,7 @@ data class DpmDictionarySourceConfigInput(
         validateValueNotNull(this::typedDimensions, diagnostic)
 
         return DpmDictionarySourceConfig(
-            owner = owner!!.toConfig(diagnostic),
+            owner = owner!!.toOwner(diagnostic),
             metrics = metrics!!.toConfig(diagnostic),
             explicitDomainsAndHierarchies = explicitDomainsAndHierarchies!!.toConfig(diagnostic),
             explicitDimensions = explicitDimensions!!.toConfig(diagnostic),

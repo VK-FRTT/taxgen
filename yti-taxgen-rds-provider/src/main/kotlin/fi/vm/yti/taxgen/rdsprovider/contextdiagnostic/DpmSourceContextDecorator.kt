@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.config.DpmSourceConfigHolder
+import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
 
 internal class DpmSourceContextDecorator(
     private val realDpmSource: DpmSource,

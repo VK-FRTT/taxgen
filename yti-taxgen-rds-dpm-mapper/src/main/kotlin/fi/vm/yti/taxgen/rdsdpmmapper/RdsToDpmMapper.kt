@@ -13,7 +13,6 @@ import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDomainsAndHierarchies
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetricDomain
-import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateOwner
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateTypedDomains
 import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.DpmDictionaryModelMapper
@@ -61,8 +60,8 @@ class RdsToDpmMapper(
         lateinit var typedDimensions: List<TypedDimension>
         lateinit var metricDomains: List<MetricDomain>
 
-        dictionaryModelMapper.dpmOwnerConfig {
-            owner = mapAndValidateOwner(it, diagnosticContext)
+        dictionaryModelMapper.dpmOwner {
+            owner = it
         }
 
         dictionaryModelMapper.explicitDomainsAndHierarchiesCodeListModelMapper {
