@@ -283,7 +283,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "Configuration file: (dm_integration_fixture.json)",
+                "Configuration file: (integration_fixture.json)",
                 "Configuration file: OK",
                 "DPM source: Reference Data service",
                 "RDS to DPM mapper",

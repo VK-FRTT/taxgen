@@ -18,7 +18,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,10 +26,9 @@ import org.junit.jupiter.params.provider.EnumSource
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 
-@DisplayName("Test RDS source adapter conformance")
 @ExtendWith(HoverflyExtension::class)
-internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Hoverfly) :
-    DpmSource_ConformanceUnitTestBase() {
+internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val hoverfly: Hoverfly) :
+    DpmSource_FunctionalConformance_ModuleTestBase() {
 
     internal enum class SimulationPhase {
         URL_RESOLUTION_URI_REDIRECT,
@@ -225,7 +223,7 @@ internal class DpmSource_RdsAdapterConformance_UnitTest(private val hoverfly: Ho
             diagnosticContext = diagnosticContext
         )
 
-        val expectedDetails = DpmSource_ConformanceUnitTestBase.ExpectedDetails(
+        val expectedDetails = DpmSource_FunctionalConformance_ModuleTestBase.ExpectedDetails(
             dpmSourceContextType = DiagnosticContextType.DpmSource,
             dpmSourceContextLabel = "Reference Data service",
             dpmSourceContextIdentifier = "config file: " + configFilePath.toString(),

@@ -4,12 +4,10 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.TestFactory
 
-@DisplayName("Test folder source adapter conformance")
-internal class DpmSource_FolderAdapterConformance_UnitTest : DpmSource_ConformanceUnitTestBase() {
+internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSource_FunctionalConformance_ModuleTestBase() {
 
     companion object {
         lateinit var loopbackTempFolder: TempFolder

@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-@DisplayName("Test RDS source recording to folder")
-internal class DpmSource_FolderRecorder_UnitTest : DpmSource_UnitTestBase() {
+internal class DpmSource_FolderRecorder_ModuleTest : DpmSource_ModuleTestBase() {
 
     companion object {
         lateinit var emptyTargetFolder: TempFolder

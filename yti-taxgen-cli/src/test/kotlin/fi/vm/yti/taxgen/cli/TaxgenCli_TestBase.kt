@@ -36,8 +36,8 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        dpmSourceCapturePath = cloneTestFixtureToTemp(RDS_CAPTURE, "dm_integration_fixture").toString()
-        dpmSourceConfigPath = cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "dm_integration_fixture.json").toString()
+        dpmSourceCapturePath = cloneTestFixtureToTemp(RDS_CAPTURE, "integration_fixture").toString()
+        dpmSourceConfigPath = cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "integration_fixture.json").toString()
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)

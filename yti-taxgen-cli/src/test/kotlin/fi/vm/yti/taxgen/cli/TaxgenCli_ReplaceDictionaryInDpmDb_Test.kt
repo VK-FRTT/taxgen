@@ -23,7 +23,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     fun init() {
         baselineDpmDbPath = cloneTestFixtureToTemp(
             TestFixture.Type.DPM_DB,
-            "dm_integration_fixture_pre_filled.db"
+            "integration_fixture_pre_filled.db"
         )
 
         outputPath = tempFolder.resolve("replace_output.db")
@@ -83,7 +83,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "Configuration file: (dm_integration_fixture.json)",
+                "Configuration file: (integration_fixture.json)",
                 "Configuration file: OK",
                 "DPM source: Reference Data service",
                 "RDS to DPM mapper",

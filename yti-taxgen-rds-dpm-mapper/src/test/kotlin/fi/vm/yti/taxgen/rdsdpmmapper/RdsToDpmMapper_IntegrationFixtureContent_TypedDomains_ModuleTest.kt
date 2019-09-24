@@ -2,17 +2,15 @@ package fi.vm.yti.taxgen.rdsdpmmapper
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 
-@DisplayName("Mapping Integration Fixture to DPM model - TypedDomains")
-internal class IntegrationFixtureMappingTest_TypedDomains
-    : RdsToDpmMapper_UnitTestBase() {
+internal class RdsToDpmMapper_IntegrationFixtureContent_TypedDomains_ModuleTest
+    : RdsToDpmMapper_ModuleTestBase() {
 
     @Test
     fun `8 Typed Domains`() {
-        val dpmDictionary = performMappingFromIntegrationFixture()
+        val dpmDictionary = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
 
         assertThat(dpmDictionary.typedDomains.size).isEqualTo(8)
 

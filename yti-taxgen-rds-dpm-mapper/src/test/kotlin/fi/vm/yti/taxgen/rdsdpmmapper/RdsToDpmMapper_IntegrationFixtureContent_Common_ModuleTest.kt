@@ -1,15 +1,13 @@
 package fi.vm.yti.taxgen.rdsdpmmapper
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("Mapping Integration Fixture to DPM model - Common")
-internal class IntegrationFixtureMappingTest_Common : RdsToDpmMapper_UnitTestBase() {
+internal class RdsToDpmMapper_IntegrationFixtureContent_Common_ModuleTest : RdsToDpmMapper_ModuleTestBase() {
 
     @Test
     fun `should produce DPM Dictionary with proper Owner`() {
-        val dpmDictionary = performMappingFromIntegrationFixture()
+        val dpmDictionary = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
 
         val owner = dpmDictionary.owner
 
@@ -23,7 +21,7 @@ internal class IntegrationFixtureMappingTest_Common : RdsToDpmMapper_UnitTestBas
 
     @Test
     fun `should produce correct diagnostic context events`() {
-        performMappingFromIntegrationFixture()
+        executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
 
         assertThat(diagnosticCollector.events).contains(
             "ENTER [RdsToDpmMapper] [RDS source data to DPM model]"

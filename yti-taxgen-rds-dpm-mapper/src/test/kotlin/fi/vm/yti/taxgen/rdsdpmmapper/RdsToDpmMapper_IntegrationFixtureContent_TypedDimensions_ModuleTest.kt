@@ -2,17 +2,15 @@ package fi.vm.yti.taxgen.rdsdpmmapper
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 
-@DisplayName("Mapping Integration Fixture to DPM model - TypedDimensions")
-internal class IntegrationFixtureMappingTest_TypedDimensions
-    : RdsToDpmMapper_UnitTestBase() {
+internal class RdsToDpmMapper_IntegrationFixtureContent_TypedDimensions_ModuleTest
+    : RdsToDpmMapper_ModuleTestBase() {
 
     @Test
     fun `2 Typed Dimensions`() {
-        val dpmDictionary = performMappingFromIntegrationFixture()
+        val dpmDictionary = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
 
         assertThat(dpmDictionary.typedDimensions.size).isEqualTo(2)
 

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 import java.nio.file.Paths
 
-open class DpmSource_UnitTestBase {
+open class DpmSource_ModuleTestBase {
 
     protected lateinit var diagnosticCollector: DiagnosticCollector
     protected lateinit var diagnosticContext: DiagnosticContext

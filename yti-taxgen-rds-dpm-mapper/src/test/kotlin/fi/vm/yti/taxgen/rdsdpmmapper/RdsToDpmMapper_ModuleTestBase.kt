@@ -13,7 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 
-internal open class RdsToDpmMapper_UnitTestBase {
+internal open class RdsToDpmMapper_ModuleTestBase {
 
     protected lateinit var diagnosticCollector: DiagnosticCollector
     protected lateinit var diagnosticContext: DiagnosticContext
@@ -36,7 +36,7 @@ internal open class RdsToDpmMapper_UnitTestBase {
     fun afterEach() {
     }
 
-    protected fun performMappingAndGetAllDictionaries(fixtureName: String): List<DpmDictionary> {
+    protected fun executeRdsToDpmMapperAndGetDictionariesFrom(fixtureName: String): List<DpmDictionary> {
         val fixturePath = TestFixture.pathOf(RDS_CAPTURE, fixtureName)
 
         lateinit var model: DpmModel
@@ -51,8 +51,8 @@ internal open class RdsToDpmMapper_UnitTestBase {
         return model.dictionaries
     }
 
-    protected fun performMappingFromIntegrationFixture(): DpmDictionary {
-        val dictionary = performMappingAndGetAllDictionaries("dm_integration_fixture").first()
+    protected fun executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture(): DpmDictionary {
+        val dictionary = executeRdsToDpmMapperAndGetDictionariesFrom("integration_fixture").first()
 
         val fails = diagnosticCollector.run { fatalCount + errorCount + validationCount }
 

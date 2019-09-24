@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 
 //TODO - Test with multiple code & extension member pages
 
-open class DpmSource_ConformanceUnitTestBase : DpmSource_UnitTestBase() {
+open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTestBase() {
 
     data class ExpectedDetails(
         val dpmSourceContextType: DiagnosticContextType,
