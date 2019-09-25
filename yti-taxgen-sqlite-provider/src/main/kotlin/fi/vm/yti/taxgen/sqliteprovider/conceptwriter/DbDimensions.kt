@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -19,16 +18,13 @@ object DbDimensions {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ) {
         transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
                 dimension,
                 ownerId,
-                languageIds,
-                processingOptions,
-                diagnostic
+                languageIds
             )
 
             insertExplicitDimension(
@@ -45,16 +41,13 @@ object DbDimensions {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ) {
         transaction {
             val dimensionConceptId = DbConcepts.writeConceptAndTranslations(
                 dimension,
                 ownerId,
-                languageIds,
-                processingOptions,
-                diagnostic
+                languageIds
             )
 
             insertTypedDimension(
@@ -79,8 +72,10 @@ object DbDimensions {
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
-            it[dimensionLabelCol] = dimension.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[dimensionDescriptionCol] = dimension.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[dimensionLabelCol] =
+                dimension.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[dimensionDescriptionCol] =
+                dimension.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
             it[domainIdCol] = domainRow[DomainTable.id]
             it[isTypedDimensionCol] = false
@@ -101,8 +96,10 @@ object DbDimensions {
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
-            it[dimensionLabelCol] = dimension.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[dimensionDescriptionCol] = dimension.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[dimensionLabelCol] =
+                dimension.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[dimensionDescriptionCol] =
+                dimension.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[dimensionXBRLCodeCol] = dimensionXbrlCode
             it[domainIdCol] = domainRow[DomainTable.id]
             it[isTypedDimensionCol] = true

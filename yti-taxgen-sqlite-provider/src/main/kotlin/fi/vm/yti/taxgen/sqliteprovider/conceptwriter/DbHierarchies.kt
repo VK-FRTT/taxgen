@@ -1,8 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -19,44 +17,36 @@ object DbHierarchies {
 
     fun writeHierarchiesAndAndNodes(
         hierarchies: List<Hierarchy>,
-        referencedElementConceptsByCode: Map<String, Concept>,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ) {
 
         hierarchies.forEach { hierarchy ->
             DbHierarchies.writeHierarchyAndAndNodes(
                 hierarchy,
-                referencedElementConceptsByCode,
                 domainId,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
         }
     }
 
     private fun writeHierarchyAndAndNodes(
         hierarchy: Hierarchy,
-        referencedElementConceptsByCode: Map<String, Concept>,
         domainId: EntityID<Int>,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ) {
 
         transaction {
             val hierarchyConceptId = DbConcepts.writeConceptAndTranslations(
                 hierarchy,
                 ownerId,
-                languageIds,
-                processingOptions,
-                diagnostic
+                languageIds
             )
 
             val hierarchyId = insertHierarchy(
@@ -73,9 +63,7 @@ object DbHierarchies {
                 val hierarchyNodeConceptId = DbConcepts.writeConceptAndTranslations(
                     currentNode,
                     ownerId,
-                    languageIds,
-                    processingOptions,
-                    diagnostic
+                    languageIds
                 )
 
                 insertHierarchyNode(
@@ -86,8 +74,6 @@ object DbHierarchies {
                     domainId,
                     currentLevel,
                     order,
-                    referencedElementConceptsByCode[currentNode.referencedElementCode]
-                        ?: thisShouldNeverHappen("No Concept found for ReferencedElementCode: ${currentNode.referencedElementCode}"),
                     processingOptions
                 )
             }
@@ -120,7 +106,6 @@ object DbHierarchies {
         memberDomainId: EntityID<Int>,
         currentLevel: Int,
         order: Int,
-        referencedElementConcept: Concept,
         processingOptions: ProcessingOptions
     ) {
         val memberRow = MemberTable.rowWhereDomainIdAndMemberCode(memberDomainId, currentNode.referencedElementCode)
@@ -138,9 +123,6 @@ object DbHierarchies {
 
         val parentMemberId = parentMemberRow?.get(MemberTable.id)
 
-        val nodeDefaultLabel = currentNode.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            ?: referencedElementConcept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-
         HierarchyNodeTable.insert {
             it[hierarchyIdCol] = hierarchyId
             it[memberIdCol] = memberId
@@ -150,7 +132,7 @@ object DbHierarchies {
             it[orderCol] = order
             it[levelCol] = currentLevel
             it[parentMemberID] = parentMemberId?.value
-            it[hierarchyNodeLabel] = nodeDefaultLabel
+            it[hierarchyNodeLabel] = currentNode.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[conceptIdCol] = hierarchyNodeConceptId
             it[pathCol] = null
         }

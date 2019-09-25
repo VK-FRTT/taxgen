@@ -20,7 +20,6 @@ object DbOwners {
                 it[ownerLocationCol] = owner.location
                 it[ownerPrefixCol] = owner.prefix
                 it[ownerCopyrightCol] = owner.copyright
-
                 it[parentOwnerIdCol] = null
                 it[conceptIdCol] = null
             }

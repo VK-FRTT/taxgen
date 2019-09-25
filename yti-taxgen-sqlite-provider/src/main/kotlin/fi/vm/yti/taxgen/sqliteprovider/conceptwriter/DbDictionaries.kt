@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
@@ -21,8 +20,7 @@ object DbDictionaries {
         dictionary: DpmDictionary,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ) {
         dictionary.explicitDomains.forEach { explicitDomain ->
 
@@ -31,18 +29,15 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
 
             DbHierarchies.writeHierarchiesAndAndNodes(
                 explicitDomain.hierarchies,
-                explicitDomain.members.map { it.memberCode to it.concept }.toMap(),
                 explicitDomainId,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
         }
 
@@ -52,8 +47,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
         }
 
@@ -63,8 +57,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
         }
 
@@ -74,8 +67,7 @@ object DbDictionaries {
                 dictionary.owner,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
         }
     }
@@ -85,8 +77,7 @@ object DbDictionaries {
         ownerId: EntityID<Int>,
         metricDomainId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ) {
         dpmDictionary.metricDomains.forEach { metricDomain ->
 
@@ -96,18 +87,16 @@ object DbDictionaries {
                 dpmDictionary.owner,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
 
             DbHierarchies.writeHierarchiesAndAndNodes(
                 metricDomain.hierarchies,
-                metricDomain.metrics.map { it.metricCode to it.concept }.toMap(),
+
                 metricDomainId,
                 ownerId,
                 languageIds,
-                processingOptions,
-                diagnostic
+                processingOptions
             )
         }
     }

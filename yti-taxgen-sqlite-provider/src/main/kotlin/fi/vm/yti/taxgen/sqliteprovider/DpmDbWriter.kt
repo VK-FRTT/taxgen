@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
+import java.nio.file.Path
 
 interface DpmDbWriter {
 
@@ -9,4 +10,6 @@ interface DpmDbWriter {
         dpmModel: DpmModel,
         processingOptions: ProcessingOptions
     )
+
+    fun outputPath(): Path
 }

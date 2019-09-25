@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
@@ -20,17 +19,14 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ): EntityID<Int> {
 
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
                 domain,
                 ownerId,
-                languageIds,
-                processingOptions,
-                diagnostic
+                languageIds
             )
 
             val domainId = insertExplicitDomain(
@@ -45,9 +41,7 @@ object DbDomains {
                 val memberConceptId = DbConcepts.writeConceptAndTranslations(
                     member,
                     ownerId,
-                    languageIds,
-                    processingOptions,
-                    diagnostic
+                    languageIds
                 )
 
                 insertMember(
@@ -69,16 +63,13 @@ object DbDomains {
         owner: Owner,
         ownerId: EntityID<Int>,
         languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        processingOptions: ProcessingOptions
     ): EntityID<Int> {
         return transaction {
             val domainConceptId = DbConcepts.writeConceptAndTranslations(
                 domain,
                 ownerId,
-                languageIds,
-                processingOptions,
-                diagnostic
+                languageIds
             )
 
             insertTypedDomain(
@@ -100,8 +91,10 @@ object DbDomains {
 
         val domainId = DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] = domain.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[domainDescriptionCol] = domain.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[domainLabelCol] =
+                domain.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[domainDescriptionCol] =
+                domain.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[domainXBRLCodeCol] = domainXbrlCode
             it[dataTypeCol] = null
             it[isTypedDomainCol] = false
@@ -121,8 +114,10 @@ object DbDomains {
 
         return DomainTable.insertAndGetId {
             it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] = domain.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[domainDescriptionCol] = domain.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[domainLabelCol] =
+                domain.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[domainDescriptionCol] =
+                domain.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[domainXBRLCodeCol] = domainXbrlCode
             it[dataTypeCol] = domain.dataType
             it[isTypedDomainCol] = true
@@ -142,7 +137,8 @@ object DbDomains {
 
         MemberTable.insert {
             it[memberCodeCol] = member.memberCode
-            it[memberLabelCol] = member.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
+            it[memberLabelCol] =
+                member.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
             it[memberXBRLCodeCol] = memberXbrlCode
             it[isDefaultMemberCol] = member.defaultMember
             it[conceptIdCol] = memberConceptId

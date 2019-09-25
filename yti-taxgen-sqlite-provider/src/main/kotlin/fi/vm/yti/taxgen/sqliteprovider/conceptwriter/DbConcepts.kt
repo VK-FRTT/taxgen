@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
@@ -11,7 +10,6 @@ import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.ext.java.toJodaDateTime
@@ -42,28 +40,11 @@ object DbConcepts {
     fun writeConceptAndTranslations(
         dpmElement: DpmElement,
         ownerId: EntityID<Int>,
-        languageIds: Map<Language, EntityID<Int>>,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
+        languageIds: Map<Language, EntityID<Int>>
     ): EntityID<Int> {
 
         val conceptType = DPM_ELEMENT_TYPE_TO_CONCEPT_TYPE[dpmElement::class]
             ?: thisShouldNeverHappen("No concept type mapping for class ${dpmElement::class}")
-
-        val labelTranslations = dpmElement.concept.label.translations
-            .let {
-                injectMandatoryLabelTranslation(
-                    it,
-                    processingOptions
-                )
-            }.let {
-                injectDpmElementUriToLabelTranslation(
-                    it,
-                    dpmElement.uri,
-                    processingOptions,
-                    diagnostic
-                )
-            }
 
         val conceptId = insertConcept(
             dpmElement.concept,
@@ -71,7 +52,7 @@ object DbConcepts {
             ownerId
         )
 
-        labelTranslations.forEach { (language, text) ->
+        dpmElement.concept.label.translations.forEach { (language, text) ->
             insertConceptTranslation(
                 languageIds,
                 conceptId,
@@ -103,56 +84,6 @@ object DbConcepts {
 
         ConceptTranslationTable.deleteWhere { ConceptTranslationTable.conceptIdCol inList matchingConceptIds }
         ConceptTable.deleteWhere { ConceptTable.conceptTypeCol eq conceptTypeString }
-    }
-
-    private fun injectMandatoryLabelTranslation(
-        translations: Map<Language, String>,
-        processingOptions: ProcessingOptions
-    ): Map<Language, String> {
-
-        val targetLanguage = processingOptions.sqliteDbMandatoryLabelLanguage
-        val sourceLanguages = processingOptions.sqliteDbMandatoryLabelSourceLanguages
-
-        if (targetLanguage != null && sourceLanguages != null) {
-
-            if (!translations.containsKey(targetLanguage)) {
-                val sourceLanguage = sourceLanguages.find { translations.containsKey(it) }
-
-                if (sourceLanguage != null) {
-                    val mutableTranslations = translations.toMutableMap()
-                    mutableTranslations[targetLanguage] = translations.getValue(sourceLanguage)
-
-                    return mutableTranslations
-                }
-            }
-        }
-
-        return translations
-    }
-
-    private fun injectDpmElementUriToLabelTranslation(
-        translations: Map<Language, String>,
-        uri: String,
-        processingOptions: ProcessingOptions,
-        diagnostic: Diagnostic
-    ): Map<Language, String> {
-
-        val uriStorageLanguage = processingOptions.sqliteDbDpmElementUriStorageLabelLanguage
-        if (uriStorageLanguage != null) {
-
-            if (translations.containsKey(uriStorageLanguage)) {
-
-                //TODO - make message as warning
-                diagnostic.info("DPM Element URI overwrites existing translation: ${translations[uriStorageLanguage]} (${uriStorageLanguage.iso6391Code})")
-            }
-
-            val mutableTranslations = translations.toMutableMap()
-            mutableTranslations[uriStorageLanguage] = uri
-
-            return mutableTranslations
-        }
-
-        return translations
     }
 
     private fun insertConcept(

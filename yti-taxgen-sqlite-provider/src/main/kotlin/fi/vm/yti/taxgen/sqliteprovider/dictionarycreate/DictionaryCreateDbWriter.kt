@@ -1,7 +1,6 @@
-package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace
+package fi.vm.yti.taxgen.sqliteprovider.dictionarycreate
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
@@ -10,21 +9,17 @@ import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbLanguages
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbOwners
-import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestrictiontransform.FrameworksTransform
 import fi.vm.yti.taxgen.sqliteprovider.helpers.ModelTransformer
 import fi.vm.yti.taxgen.sqliteprovider.helpers.SqliteOps
 import java.nio.file.Files
 import java.nio.file.Path
-import java.sql.DriverManager
-import java.sql.SQLException
+import java.nio.file.StandardCopyOption
 
-class DictionaryReplaceDbWriter(
-    baselineDbPath: Path,
+class DictionaryCreateDbWriter(
     outputDbPath: Path,
     private val forceOverwrite: Boolean,
-    private val diagnosticContext: DiagnosticContext
+    private val diagnostic: Diagnostic
 ) : DpmDbWriter {
-    private val baselineDbPath: Path = baselineDbPath.toAbsolutePath().normalize()
     private val outputDbPath: Path = outputDbPath.toAbsolutePath().normalize()
 
     override fun writeModel(
@@ -34,7 +29,7 @@ class DictionaryReplaceDbWriter(
         val updatedDpmModel = ModelTransformer.transformDpmModelByProcessingOptions(
             dpmModel,
             processingOptions,
-            diagnosticContext
+            diagnostic
         )
 
         initOutputDbFile()
@@ -48,12 +43,11 @@ class DictionaryReplaceDbWriter(
 
     private fun initOutputDbFile() {
         FileOps.deleteConflictingOutputFileIfAllowed(outputDbPath, forceOverwrite)
-        FileOps.failIfOutputFileExists(outputDbPath, diagnosticContext)
+        FileOps.failIfOutputFileExists(outputDbPath, diagnostic)
         FileOps.createIntermediateFolders(outputDbPath)
 
-        ensureBaselineDbUsable(baselineDbPath, diagnosticContext)
-
-        Files.copy(baselineDbPath, outputDbPath)
+        val stream = this::class.java.getResourceAsStream("/dm_database_seed.db")
+        Files.copy(stream, outputDbPath, StandardCopyOption.REPLACE_EXISTING)
     }
 
     private fun doWriteModel(
@@ -63,14 +57,10 @@ class DictionaryReplaceDbWriter(
         DbLanguages.configureLanguages()
         val languageIds = DbLanguages.resolveLanguageIds()
 
-        val frameworksTransform = FrameworksTransform.loadInitialState(
-            diagnosticContext
-        )
-
         DbDictionaries.purgeDictionaryContent()
 
         val dictionaryAndOwnerIds = dpmModel.dictionaries.map {
-            val ownerId = DbOwners.lookupOwnerIdByPrefix(it.owner, diagnosticContext)
+            val ownerId = DbOwners.writeOwner(it.owner)
 
             DbDictionaries.writeDictionaryBaseParts(
                 it,
@@ -84,7 +74,7 @@ class DictionaryReplaceDbWriter(
 
         val fixedEntitiesLookupItem = DbFixedEntities.writeFixedEntities(
             languageIds,
-            diagnosticContext
+            diagnostic
         )
 
         dictionaryAndOwnerIds.forEach { (dictionary, ownerId) ->
@@ -95,23 +85,6 @@ class DictionaryReplaceDbWriter(
                 languageIds,
                 processingOptions
             )
-        }
-
-        frameworksTransform.transformFrameworkEntities()
-    }
-
-    companion object {
-        private fun ensureBaselineDbUsable(
-            baselineDpmDbPath: Path,
-            diagnostic: Diagnostic
-        ) {
-            try {
-                val dbConnection = DriverManager.getConnection("jdbc:sqlite:$baselineDpmDbPath")
-                dbConnection.createStatement().executeQuery("SELECT * FROM mOwner")
-                dbConnection.close()
-            } catch (sqlEx: SQLException) {
-                diagnostic.fatal("Baseline-db file open failed: ${sqlEx.message}")
-            }
         }
     }
 }

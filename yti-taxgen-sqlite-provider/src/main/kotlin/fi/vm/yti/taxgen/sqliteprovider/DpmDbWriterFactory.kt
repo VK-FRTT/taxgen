@@ -1,7 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.sqliteprovider.dictionaryproducer.DictionaryCreateDbWriter
+import fi.vm.yti.taxgen.sqliteprovider.contextdiagnostic.DpmDbWriterContextDecorator
+import fi.vm.yti.taxgen.sqliteprovider.dictionarycreate.DictionaryCreateDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.DictionaryReplaceDbWriter
 import java.nio.file.Path
 
@@ -12,9 +13,14 @@ object DpmDbWriterFactory {
         forceOverwrite: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmDbWriter {
-        return DictionaryCreateDbWriter(
+        val writer = DictionaryCreateDbWriter(
             outputDbPath = outputDbPath,
             forceOverwrite = forceOverwrite,
+            diagnostic = diagnosticContext
+        )
+
+        return DpmDbWriterContextDecorator(
+            realDpmDbWriter = writer,
             diagnosticContext = diagnosticContext
         )
     }
@@ -25,10 +31,15 @@ object DpmDbWriterFactory {
         forceOverwrite: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmDbWriter {
-        return DictionaryReplaceDbWriter(
+        val writer = DictionaryReplaceDbWriter(
             baselineDbPath = baselineDbPath,
             outputDbPath = outputDbPath,
             forceOverwrite = forceOverwrite,
+            diagnosticContext = diagnosticContext
+        )
+
+        return DpmDbWriterContextDecorator(
+            realDpmDbWriter = writer,
             diagnosticContext = diagnosticContext
         )
     }
