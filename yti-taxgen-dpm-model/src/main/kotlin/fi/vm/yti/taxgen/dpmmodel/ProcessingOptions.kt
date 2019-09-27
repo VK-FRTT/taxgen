@@ -5,9 +5,14 @@ import kotlin.reflect.KProperty0
 
 data class ProcessingOptions(
     val sqliteDbDpmElementInherentTextLanguage: Language?,
+
     val sqliteDbMandatoryLabelLanguage: Language?,
     val sqliteDbMandatoryLabelSourceLanguages: List<Language>?,
-    val sqliteDbDpmElementUriStorageLabelLanguage: Language?
+
+    val sqliteDbDpmElementUriStorageLabelLanguage: Language?,
+
+    val sqliteDbHierarchyNodeLabelCompositionLanguages: List<Language>?,
+    val sqliteDbHierarchyNodeLabelCompositionNodeFallbackLanguage: Language?
 ) {
     fun emitDiagnostics(diagnostic: Diagnostic) {
 
@@ -20,8 +25,13 @@ data class ProcessingOptions(
         }
 
         emitLanguageOption(this::sqliteDbDpmElementInherentTextLanguage)
+
         emitLanguageOption(this::sqliteDbMandatoryLabelLanguage)
         emitLanguageListOption(this::sqliteDbMandatoryLabelSourceLanguages)
+
         emitLanguageOption(this::sqliteDbDpmElementUriStorageLabelLanguage)
+
+        emitLanguageListOption(this::sqliteDbHierarchyNodeLabelCompositionLanguages)
+        emitLanguageOption(this::sqliteDbHierarchyNodeLabelCompositionNodeFallbackLanguage)
     }
 }

@@ -112,6 +112,8 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
         sqliteDbDpmElementInherentTextLanguage = Language.byIso6391CodeOrFail("fi"),
         sqliteDbMandatoryLabelLanguage = null,
         sqliteDbMandatoryLabelSourceLanguages = null,
-        sqliteDbDpmElementUriStorageLabelLanguage = null
+        sqliteDbDpmElementUriStorageLabelLanguage = null,
+        sqliteDbHierarchyNodeLabelCompositionLanguages = null,
+        sqliteDbHierarchyNodeLabelCompositionNodeFallbackLanguage = null
     )
 }

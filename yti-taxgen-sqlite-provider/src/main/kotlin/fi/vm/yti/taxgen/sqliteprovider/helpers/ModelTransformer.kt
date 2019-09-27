@@ -222,14 +222,14 @@ internal object ModelTransformer {
             context.processingOptions
         )
 
-        injectDpmElementUriAsLabelWhenRequested(
+        injectDpmElementUriAsTranslationWhenRequested(
             labelTranslations,
             dpmElement.uri,
             context.processingOptions,
             context.diagnostic
         )
 
-        injectComposedHierarchyNodeLabelsWhenRequested(
+        injectComposedHierarchyNodeTranslationsWhenRequested(
             labelTranslations,
             dpmElement,
             context.referencedElementConceptsByCode,
@@ -260,13 +260,14 @@ internal object ModelTransformer {
         }
     }
 
-    private fun injectDpmElementUriAsLabelWhenRequested(
+    private fun injectDpmElementUriAsTranslationWhenRequested(
         translations: MutableMap<Language, String>,
         uri: String,
         processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
     ) {
         val uriStorageLanguage = processingOptions.sqliteDbDpmElementUriStorageLabelLanguage
+
         if (uriStorageLanguage != null) {
 
             if (translations.containsKey(uriStorageLanguage)) {
@@ -279,26 +280,87 @@ internal object ModelTransformer {
         }
     }
 
-    private fun injectComposedHierarchyNodeLabelsWhenRequested(
+    private fun injectComposedHierarchyNodeTranslationsWhenRequested(
         translations: MutableMap<Language, String>,
         dpmElement: DpmElement,
         referencedElementConceptsByCode: Map<String, Concept>,
         processingOptions: ProcessingOptions
     ) {
-        val inherentTextLanguage = processingOptions.sqliteDbDpmElementInherentTextLanguage
+        val hierarchyNodeLabelCompositionLanguages = processingOptions.sqliteDbHierarchyNodeLabelCompositionLanguages
 
-        if (dpmElement is HierarchyNode && inherentTextLanguage != null) {
+        if (dpmElement is HierarchyNode &&
+            hierarchyNodeLabelCompositionLanguages != null
+        ) {
+            doInjectComposedTranslations(
+                translations = translations,
+                referencedElementLabelTranslations = selectReferencedElementLabelTranslations(
+                    referencedElementConceptsByCode,
+                    dpmElement.referencedElementCode
+                ),
+                compositionLanguages = hierarchyNodeLabelCompositionLanguages,
+                fallbackTranslationLanguage = processingOptions.sqliteDbHierarchyNodeLabelCompositionNodeFallbackLanguage
+            )
+        }
+    }
 
-            if (translations[inherentTextLanguage] == null) {
+    private fun selectReferencedElementLabelTranslations(
+        referencedElementConceptsByCode: Map<String, Concept>,
+        referencedElementCode: String
+    ): Map<Language, String> {
+        val referencedElementConcept = referencedElementConceptsByCode[referencedElementCode]
+            ?: thisShouldNeverHappen("No Concept found for ReferencedElementCode: $referencedElementCode")
 
-                val referencedConcept = referencedElementConceptsByCode[dpmElement.referencedElementCode]
-                    ?: thisShouldNeverHappen("No Concept found for ReferencedElementCode: ${dpmElement.referencedElementCode}")
+        return referencedElementConcept.label.translations
+    }
 
-                val translation = referencedConcept.label.translationForLangOrNull(inherentTextLanguage)
+    private fun doInjectComposedTranslations(
+        translations: MutableMap<Language, String>,
+        referencedElementLabelTranslations: Map<Language, String>,
+        compositionLanguages: List<Language>,
+        fallbackTranslationLanguage: Language?
+    ) {
+        val composedTranslations = compositionLanguages.map { language ->
 
-                if (translation != null) {
-                    translations[inherentTextLanguage] = translation
-                }
+            val composedTranslation = composeTranslation(
+                translation = translations[language],
+                referencedElementTranslation = referencedElementLabelTranslations[language],
+                fallbackTranslation = translations[fallbackTranslationLanguage]
+            )
+
+            Pair(language, composedTranslation)
+        }
+
+        translations.putAll(composedTranslations)
+    }
+
+    private fun composeTranslation(
+        translation: String?,
+        referencedElementTranslation: String?,
+        fallbackTranslation: String?
+    ): String {
+
+        val leadingPart = translation ?: fallbackTranslation
+
+        return when {
+
+            leadingPart != null && referencedElementTranslation != null -> {
+                "$leadingPart $referencedElementTranslation"
+            }
+
+            leadingPart != null && referencedElementTranslation == null -> {
+                leadingPart
+            }
+
+            leadingPart == null && referencedElementTranslation != null -> {
+                referencedElementTranslation
+            }
+
+            leadingPart == null && referencedElementTranslation == null -> {
+                ""
+            }
+
+            else -> {
+                thisShouldNeverHappen("Composition logic mismatch")
             }
         }
     }

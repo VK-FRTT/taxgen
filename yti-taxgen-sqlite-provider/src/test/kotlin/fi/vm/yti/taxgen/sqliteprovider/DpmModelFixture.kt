@@ -43,7 +43,7 @@ fun dpmModelFixture(
         languageCodes = listOf("en", "fi", "sv")
     )
 
-    fun concept(label: String?, description: String?): Concept {
+    fun concept(basename: String): Concept {
 
         fun makeTranslations(basename: String?, kind: String): Map<Language, String> =
             when {
@@ -68,8 +68,8 @@ fun dpmModelFixture(
                     ).toMap()
             }
 
-        val labelTranslations = makeTranslations(label, "Lbl")
-        val descriptionTranslations = makeTranslations(description, "Desc")
+        val labelTranslations = makeTranslations(basename, "Lbl")
+        val descriptionTranslations = makeTranslations(basename, "Desc")
 
         return Concept(
             createdAt = Instant.parse("2018-09-03T10:12:25.763Z"),
@@ -81,8 +81,6 @@ fun dpmModelFixture(
             owner = dpmOwner
         )
     }
-
-    fun concept(name: String) = concept(name, name)
 
     fun explicitDomains(): List<ExplicitDomain> {
 
@@ -156,7 +154,13 @@ fun dpmModelFixture(
 
                             HierarchyNode(
                                 uri = "ExpDomHierNode-2.1.1-Uri",
-                                concept = concept(null, "ExpDomHierNode-2.1.1"),
+                                concept = concept("ExpDomHierNode-2.1.1").let {
+                                    val translations = it.label.translations.toMutableMap()
+                                    translations.remove(Language.byIso6391CodeOrFail("fi"))
+                                    it.copy(
+                                        label = TranslatedText(translations)
+                                    )
+                                },
                                 abstract = false,
                                 comparisonOperator = null,
                                 unaryOperator = null,
