@@ -125,6 +125,7 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
             dynamicTest("should bind HierarchyNodes to Members from same Explicit Domain") {
                 executeDpmDbWriter(
                     false,
+                    false,
                     FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
                     processingOptionsWithInherentTextLanguageFi()
                 )

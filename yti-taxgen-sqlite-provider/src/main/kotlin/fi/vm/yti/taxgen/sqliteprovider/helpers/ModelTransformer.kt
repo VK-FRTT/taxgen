@@ -271,9 +271,7 @@ internal object ModelTransformer {
         if (uriStorageLanguage != null) {
 
             if (translations.containsKey(uriStorageLanguage)) {
-
-                //TODO - make message as warning
-                diagnostic.info("DPM Element URI overwrites existing translation: ${translations[uriStorageLanguage]} (${uriStorageLanguage.iso6391Code})")
+                diagnostic.warning("DPM Element URI overwrites existing translation: ${translations[uriStorageLanguage]} (${uriStorageLanguage.iso6391Code})")
             }
 
             translations[uriStorageLanguage] = uri

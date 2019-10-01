@@ -8,6 +8,7 @@ import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
 import fi.vm.yti.taxgen.commons.diagostic.Severity.ERROR
 import fi.vm.yti.taxgen.commons.diagostic.Severity.FATAL
 import fi.vm.yti.taxgen.commons.diagostic.Severity.INFO
+import fi.vm.yti.taxgen.commons.diagostic.Severity.WARNING
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
 import java.io.PrintWriter
@@ -85,6 +86,11 @@ class DiagnosticBridge(
     override fun error(message: String) {
         incrementCounter(ERROR)
         consumer.message(ERROR, message)
+    }
+
+    override fun warning(message: String) {
+        incrementCounter(WARNING)
+        consumer.message(WARNING, message)
     }
 
     override fun info(message: String) {

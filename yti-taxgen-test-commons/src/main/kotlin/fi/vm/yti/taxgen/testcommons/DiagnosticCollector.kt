@@ -12,6 +12,8 @@ class DiagnosticCollector : DiagnosticConsumer {
 
     var fatalCount = 0
     var errorCount = 0
+    var warningCount = 0
+    var infoCount = 0
     var validationCount = 0
 
     override fun contextEnter(contextStack: List<ContextInfo>) {
@@ -28,9 +30,12 @@ class DiagnosticCollector : DiagnosticConsumer {
 
     override fun message(severity: Severity, message: String) {
         events.add("MESSAGE [$severity] [$message]")
-
-        if (severity == Severity.FATAL) fatalCount++
-        if (severity == Severity.ERROR) errorCount++
+        when (severity) {
+            Severity.FATAL -> fatalCount++
+            Severity.ERROR -> errorCount++
+            Severity.WARNING -> warningCount++
+            Severity.INFO -> infoCount++
+        }
     }
 
     override fun validationResults(
@@ -57,6 +62,13 @@ class DiagnosticCollector : DiagnosticConsumer {
 
         fatalCount = 0
         errorCount = 0
+        warningCount = 0
+        infoCount = 0
         validationCount = 0
     }
+
+    fun allMessagesCount() = criticalMessagesCount() + informalMessagesCount() + validationMessagesCount()
+    fun criticalMessagesCount() = fatalCount + errorCount
+    fun informalMessagesCount() = warningCount + infoCount
+    fun validationMessagesCount() = validationCount
 }

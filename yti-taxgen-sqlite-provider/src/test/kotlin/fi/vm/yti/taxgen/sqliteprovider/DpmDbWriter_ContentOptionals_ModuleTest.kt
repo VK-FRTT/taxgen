@@ -127,6 +127,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should produce inherent texts for requested lang when such label exists") {
                         executeDpmDbWriter(
                             false,
+                            false,
                             FixtureVariety.TRANSLATIONS_FI_ONLY,
                             inherentTextLanguageProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("fi")
@@ -144,6 +145,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should not produce inherent texts when no label exists for requested language") {
                         executeDpmDbWriter(
                             false,
+                            false,
                             FixtureVariety.TRANSLATIONS_FI_ONLY,
                             inherentTextLanguageProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en")
@@ -160,6 +162,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                     dynamicTest("should not produce inherent texts when config is null") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.TRANSLATIONS_FI_ONLY,
                             inherentTextLanguageProcessingOptions(
@@ -184,6 +187,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should support configurable Mandatory Language and Source Candidate Languages (FI injected to EN)") {
                         executeDpmDbWriter(
                             false,
+                            false,
                             FixtureVariety.TRANSLATIONS_FI_ONLY,
                             mandatoryLabelLanguageProcessingOptions(
                                 mandatoryLabelLanguage = Language.byIso6391CodeOrFail("en"),
@@ -206,6 +210,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                     dynamicTest("should treat Source Candidate Languages as prioritized list (SV injected to EN)") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.TRANSLATIONS_FI_SV,
                             mandatoryLabelLanguageProcessingOptions(
@@ -232,6 +237,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                     dynamicTest("should not produce Mandatory Language translation when no suitable Source Candidate Languages is found") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.TRANSLATIONS_FI_ONLY,
                             mandatoryLabelLanguageProcessingOptions(
@@ -260,6 +266,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should support configurable URI Storage Language (URI stored as PL)") {
                         executeDpmDbWriter(
                             false,
+                            false,
                             FixtureVariety.NONE,
                             uriStorageProcessingOptions(
                                 uriStorageLabelLanguage = Language.byIso6391CodeOrFail("pl")
@@ -281,6 +288,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should produce diagnostic event when target language already has a translation (URI stored as FI)") {
                         executeDpmDbWriter(
                             false,
+                            true,
                             FixtureVariety.NONE,
                             uriStorageProcessingOptions(
                                 uriStorageLabelLanguage = Language.byIso6391CodeOrFail("fi")
@@ -298,7 +306,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         )
 
                         assertThat(diagnosticCollector.eventsString()).contains(
-                            "MESSAGE [INFO] [DPM Element URI overwrites existing translation: ExpDom-Lbl-Fi (fi)]"
+                            "MESSAGE [WARNING] [DPM Element URI overwrites existing translation: ExpDom-Lbl-Fi (fi)]"
                         )
                     }
                 )
@@ -309,6 +317,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                 listOf(
                     dynamicTest("should not produce composite labels when config is NULL") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
@@ -338,6 +347,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                     dynamicTest("should produce composite labels only for requested language") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
@@ -370,6 +380,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                     dynamicTest("should do composition for all requested languages") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
@@ -404,6 +415,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should select hierarchy node translation from given fallback language when translation for actual composition language is missing (Mbr-4-Code FI label)") {
                         executeDpmDbWriter(
                             false,
+                            false,
                             FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
@@ -437,6 +449,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                     dynamicTest("should produce translation with plain Member label when no HierarchyNode translation found for given fallback language (Mbr-4-Code SV label)") {
                         executeDpmDbWriter(
                             false,
+                            false,
                             FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
@@ -469,6 +482,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                     dynamicTest("should produce composite labels only for HierarchyNodes, not for other DPM Elements") {
                         executeDpmDbWriter(
+                            false,
                             false,
                             FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(

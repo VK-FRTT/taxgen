@@ -78,6 +78,7 @@ internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModu
                 val throwable = catchThrowable {
                     executeDpmDbWriter(
                         true,
+                        false,
                         FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
                         processingOptionsWithInherentTextLanguageFi()
                     )

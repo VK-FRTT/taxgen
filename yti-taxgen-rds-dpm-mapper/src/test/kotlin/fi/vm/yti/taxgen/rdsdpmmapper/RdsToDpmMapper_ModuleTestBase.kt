@@ -54,15 +54,11 @@ internal open class RdsToDpmMapper_ModuleTestBase {
     protected fun executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture(): DpmDictionary {
         val dictionary = executeRdsToDpmMapperAndGetDictionariesFrom("integration_fixture").first()
 
-        val fails = diagnosticCollector.run { fatalCount + errorCount + validationCount }
-
-        if (fails != 0) {
+        if (diagnosticCollector.allMessagesCount() != 0) {
             println(diagnosticCollector.eventsString())
         }
 
-        assertThat(diagnosticCollector.fatalCount).isEqualTo(0)
-        assertThat(diagnosticCollector.errorCount).isEqualTo(0)
-        assertThat(diagnosticCollector.validationCount).isEqualTo(0)
+        assertThat(diagnosticCollector.allMessagesCount()).isEqualTo(0)
 
         return dictionary
     }

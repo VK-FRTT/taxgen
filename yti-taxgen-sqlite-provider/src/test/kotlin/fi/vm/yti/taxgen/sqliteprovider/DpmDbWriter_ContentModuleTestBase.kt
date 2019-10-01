@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.TestFactory
@@ -57,6 +58,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
     fun executeDpmDbWriterWithDefaults() {
         executeDpmDbWriter(
             exceptionIsExpected = false,
+            diagnosticMessagesAreExpected = false,
             variety = FixtureVariety.NONE,
             processingOptions = processingOptionsWithInherentTextLanguageFi()
         )
@@ -64,6 +66,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
 
     fun executeDpmDbWriter(
         exceptionIsExpected: Boolean,
+        diagnosticMessagesAreExpected: Boolean,
         variety: FixtureVariety,
         processingOptions: ProcessingOptions
     ) {
@@ -104,7 +107,12 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
 
             val model = dpmModelFixture(variety)
             dpmDbWriter.writeModel(model, processingOptions)
+
             dbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
+        }
+
+        if (!diagnosticMessagesAreExpected) {
+            assertThat(diagnosticCollector.allMessagesCount()).isEqualTo(0)
         }
     }
 
