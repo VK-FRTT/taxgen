@@ -173,7 +173,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
                 )
 
@@ -182,7 +182,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
                 )
             }
@@ -196,7 +196,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
                 )
 
@@ -205,7 +205,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
                 )
             }
@@ -219,7 +219,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyIdentifier: is blank]"
                 )
 
@@ -228,7 +228,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyIdentifier: is blank]"
                 )
             }
@@ -242,7 +242,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier: is blank]"
                 )
 
@@ -251,7 +251,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier: is blank]"
                 )
             }
@@ -265,7 +265,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: is blank]"
                 )
 
@@ -274,7 +274,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: is blank]"
                 )
             }
@@ -305,7 +305,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OrdinateCategorisationDbReferences.dimensionId: does not have value]"
                 )
             }
@@ -332,7 +332,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OrdinateCategorisationDbReferences.memberId: does not have value]"
                 )
             }
@@ -359,7 +359,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSequence(
-                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyId: does not have value]",
                     "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyStartingMemberId: does not have value]"
                 )
@@ -387,7 +387,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSequence(
-                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyStartingMemberId: does not have value]"
                 )
             }
@@ -401,7 +401,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
                 )
 
@@ -410,7 +410,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 ensureHaltThrown { replaceDictionaryInDb() }
 
                 assertThat(diagnosticCollector.events).containsSequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
                     "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
                 )
             }

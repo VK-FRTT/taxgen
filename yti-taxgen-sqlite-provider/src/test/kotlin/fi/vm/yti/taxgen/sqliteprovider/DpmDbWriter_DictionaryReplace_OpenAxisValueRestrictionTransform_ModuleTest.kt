@@ -57,7 +57,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: null]",
+                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: null]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.axisId: does not have value]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction baseline loading failed]"
             )
@@ -77,7 +77,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.domainXbrlCode: does not have value]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.hierarchyCode: does not have value]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.isStartingMemberPartOfHierarchy: is not part of hierarchy]",
@@ -99,7 +99,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.isStartingMemberPartOfHierarchy: is not part of hierarchy]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.startingMemberXbrlCode: does not have value]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction baseline loading failed]"
@@ -120,7 +120,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.isStartingMemberPartOfHierarchy: is not part of hierarchy]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction baseline loading failed]"
             )
@@ -140,7 +140,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [BaselineOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [BaselineOpenAxisValueRestriction.isStartingMemberIncluded: does not have value]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction baseline loading failed]"
             )
@@ -164,7 +164,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [FinalOpenAxisValueRestriction.domainId: does not have value]",
                 "VALIDATION [FinalOpenAxisValueRestriction.hierarchyId: does not have value]",
                 "VALIDATION [FinalOpenAxisValueRestriction.hierarchyStartingMemberId: does not have value]",
@@ -187,7 +187,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [FinalOpenAxisValueRestriction.hierarchyId: does not have value]",
                 "VALIDATION [FinalOpenAxisValueRestriction.isStartingMemberPartOfHierarchy: is not part of hierarchy]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction transformation failed]"
@@ -208,7 +208,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [FinalOpenAxisValueRestriction.hierarchyStartingMemberId: does not have value]",
                 "VALIDATION [FinalOpenAxisValueRestriction.isStartingMemberPartOfHierarchy: is not part of hierarchy]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction transformation failed]"
@@ -229,7 +229,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             ensureHaltThrown { replaceDictionaryInDb() }
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
+                "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
                 "VALIDATION [FinalOpenAxisValueRestriction.isStartingMemberPartOfHierarchy: is not part of hierarchy]",
                 "MESSAGE [INFO] [OpenAxisValueRestriction transformation failed]"
             )
