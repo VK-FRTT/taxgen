@@ -60,7 +60,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
     }
 
     @Test
-    fun `ordinate categorisation having OpenAxisValueRestriction should get updated`() {
+    fun `ordinate categorisation having full OpenAxisValueRestriction should get updated`() {
         dumpDiagnosticsWhenThrown {
             baselineDbConnection.createStatement().executeUpdate(
                 """
@@ -78,6 +78,29 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                 "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
                 "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*[5;8;0]), source, FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-2-Code;Mbr-2-Code;0])"
+            )
+        }
+    }
+
+    @Test
+    fun `ordinate categorisation having partial OpenAxisValueRestriction should get updated`() {
+        dumpDiagnosticsWhenThrown {
+            baselineDbConnection.createStatement().executeUpdate(
+                """
+                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*?[444])", "source", "FixPrfx_dim:ExpDim-2-Code(*?[ExpDomHier-2-Code])")
+                """.trimIndent()
+            )
+
+            dumpDiagnosticsWhenThrown {
+                replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+            }
+
+            val rs = readAllOrdinateCategorisations()
+
+            assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+                "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*?[5]), source, FixPrfx_dim:ExpDim-2-Code(*?[ExpDomHier-2-Code])"
             )
         }
     }
@@ -211,7 +234,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             }
 
             @Test
-            fun `blank hierarchy value should cause error`() {
+            fun `blank hierarchy value in full OpenAxisValueRestriction should cause error`() {
                 val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*[ ;x0;0])"
 
                 //DimensionMemberSignature
@@ -220,7 +243,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
                 )
 
                 //DPS
@@ -229,12 +252,12 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
                 )
             }
 
             @Test
-            fun `blank hierarchy starting member value should cause error`() {
+            fun `blank hierarchy starting member value in full OpenAxisValueRestriction should cause error`() {
                 val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code; ;0])"
 
                 //DimensionMemberSignature
@@ -243,7 +266,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.hierarchyStartingMemberIdentifier: is blank]"
                 )
 
                 //DPS
@@ -252,12 +275,12 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.hierarchyStartingMemberIdentifier: is blank]"
                 )
             }
 
             @Test
-            fun `blank starting member inclusion marker should cause error`() {
+            fun `blank starting member inclusion marker in full OpenAxisValueRestriction should cause error`() {
                 val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code; ])"
 
                 //DimensionMemberSignature
@@ -266,7 +289,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: is blank]"
                 )
 
                 //DPS
@@ -275,7 +298,30 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: is blank]"
+                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: is blank]"
+                )
+            }
+
+            @Test
+            fun `blank hierarchy value in partial OpenAxisValueRestriction should cause error`() {
+                val faultySignature = "FixPrfx_dim:ExpDim-1-Code(*?[ ])"
+
+                //DimensionMemberSignature
+                insertCategorisationWithDimensionMemberSignature(faultySignature)
+                ensureHaltThrown { replaceDictionaryInDb() }
+
+                assertThat(diagnosticCollector.events).containsSubsequence(
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
+                )
+
+                //DPS
+                insertCategorisationWithDps(faultySignature)
+                ensureHaltThrown { replaceDictionaryInDb() }
+
+                assertThat(diagnosticCollector.events).containsSubsequence(
+                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
                 )
             }
         }
@@ -338,7 +384,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             }
 
             @Test
-            fun `unknown hierarchy in DPS should cause error`() {
+            fun `unknown hierarchy in DPS in full OpenAxisValueRestriction should cause error`() {
                 val signature = "FixPrfx_dim:ExpDim-1-Code(*[NonExistingHierarchy;Mbr-2-Code;0])"
 
                 //DimensionMemberSignature
@@ -360,13 +406,13 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyId: does not have value]",
-                    "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyStartingMemberId: does not have value]"
+                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyId: does not have value]",
+                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyStartingMemberId: does not have value]"
                 )
             }
 
             @Test
-            fun `unknown hierarchy starting member in DPS should cause error`() {
+            fun `unknown hierarchy starting member in DPS in full OpenAxisValueRestriction should cause error`() {
                 val signature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;NonExistingMember;0])"
 
                 //DimensionMemberSignature
@@ -388,12 +434,12 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionDbReferences.hierarchyStartingMemberId: does not have value]"
+                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyStartingMemberId: does not have value]"
                 )
             }
 
             @Test
-            fun `unsupported starting member inclusion marker should cause error`() {
+            fun `unsupported starting member inclusion marker in full OpenAxisValueRestriction should cause error`() {
                 val signature = "FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-3-Code;Mbr-2-Code;XYZ])"
 
                 //DimensionMemberSignature
@@ -402,7 +448,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
+                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
                 )
 
                 //DPS
@@ -411,7 +457,34 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OpenAxisValueRestrictionSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
+                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
+                )
+            }
+
+            @Test
+            fun `unknown hierarchy in DPS in partial OpenAxisValueRestriction should cause error`() {
+                val signature = "FixPrfx_dim:ExpDim-1-Code(*?[NonExistingHierarchy])"
+
+                //DimensionMemberSignature
+                insertCategorisationWithDimensionMemberSignature(signature)
+                dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
+
+                assertThat(diagnosticCollector.events).doesNotContain(
+                    "fail"
+                )
+
+                assertThat(diagnosticCollector.events).containsSubsequence(
+                    "ENTER [SQLiteDbWriter] []",
+                    "EXIT [SQLiteDbWriter]"
+                )
+
+                //DPS
+                insertCategorisationWithDps(signature)
+                ensureHaltThrown { replaceDictionaryInDb() }
+
+                assertThat(diagnosticCollector.events).containsSequence(
+                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
+                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyId: does not have value]"
                 )
             }
         }

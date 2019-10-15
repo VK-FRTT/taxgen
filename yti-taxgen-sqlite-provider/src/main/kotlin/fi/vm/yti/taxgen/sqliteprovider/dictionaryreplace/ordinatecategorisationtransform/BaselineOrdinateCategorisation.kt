@@ -29,14 +29,14 @@ data class BaselineOrdinateCategorisation(
             val databaseIdSignature = tokenizeSignature(
                 row,
                 OrdinateCategorisationTable.dimensionMemberSignatureCol,
-                OrdinateCategorisationSignature.Type.DATABASE_ID_SIGNATURE,
+                OrdinateCategorisationSignature.IdentifierKind.DATABASE_ID,
                 diagnostic
             )
 
             val xbrlCodeSignature = tokenizeSignature(
                 row,
                 OrdinateCategorisationTable.dpsCol,
-                OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE,
+                OrdinateCategorisationSignature.IdentifierKind.XBRL_CODE,
                 diagnostic
             )
 
@@ -51,7 +51,7 @@ data class BaselineOrdinateCategorisation(
         private fun tokenizeSignature(
             row: ResultRow,
             column: Column<String?>,
-            type: OrdinateCategorisationSignature.Type,
+            identifierKind: OrdinateCategorisationSignature.IdentifierKind,
             diagnostic: Diagnostic
         ): OrdinateCategorisationSignature {
             val signatureLiteral = row[column] ?: diagnostic.fatal("Empty OrdinateCategorisation signature")
@@ -59,36 +59,51 @@ data class BaselineOrdinateCategorisation(
             val signatureMatch = SIGNATURE_PATTERN.matchEntire(signatureLiteral)
                 ?: diagnostic.fatal("Unsupported signature in OrdinateCategorisation.${column.name}: $signatureLiteral")
 
-            fun optionalSignatureElement(partName: String) =
+            fun signatureElementValueOrNull(partName: String) =
                 (signatureMatch.groups as MatchNamedGroupCollection)[partName]?.value
 
-            fun mandatorySignatureElement(partName: String) = optionalSignatureElement(partName) ?: thisShouldNeverHappen("SignaturePattern configuration mismatch")
+            fun signatureElementValue(partName: String) = signatureElementValueOrNull(partName)
+                ?: thisShouldNeverHappen("SignaturePattern configuration mismatch")
 
             return when {
-                optionalSignatureElement("dimension") != null -> {
+                signatureElementValueOrNull("dimension") != null -> {
                     OrdinateCategorisationSignature(
-                        type = type,
-                        dimensionIdentifier = mandatorySignatureElement("dimension"),
-                        memberIdentifier = mandatorySignatureElement("member"),
-                        openAxisValueRestrictionSignature = null
+                        identifierKind = identifierKind,
+                        signatureStructure = OrdinateCategorisationSignatureStructure.NO_OPEN_AXIS_VALUE_RESTRICTION,
+                        dimensionIdentifier = signatureElementValue("dimension"),
+                        memberIdentifier = signatureElementValue("member"),
+                        hierarchyIdentifier = null,
+                        hierarchyStartingMemberIdentifier = null,
+                        startingMemberIncluded = null
                     )
                 }
 
-                (optionalSignatureElement("oaDimension") != null) -> {
+                (signatureElementValueOrNull("partialOavrDimension") != null) -> {
                     OrdinateCategorisationSignature(
-                        type = type,
-                        dimensionIdentifier = mandatorySignatureElement("oaDimension"),
-                        memberIdentifier = mandatorySignatureElement("oaMember"),
-                        openAxisValueRestrictionSignature = OpenAxisValueRestrictionSignature(
-                            hierarchyIdentifier = mandatorySignatureElement("oaHierarchy"),
-                            hierarchyStartingMemberIdentifier = mandatorySignatureElement("oaStartMember"),
-                            startingMemberIncluded = mandatorySignatureElement("oaStartMemberIncluded")
-                        )
+                        identifierKind = identifierKind,
+                        signatureStructure = OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION,
+                        dimensionIdentifier = signatureElementValue("partialOavrDimension"),
+                        memberIdentifier = signatureElementValue("partialOavrMember"),
+                        hierarchyIdentifier = signatureElementValue("partialOavrHierarchy"),
+                        hierarchyStartingMemberIdentifier = null,
+                        startingMemberIncluded = null
+                    )
+                }
+
+                (signatureElementValueOrNull("oavrDimension") != null) -> {
+                    OrdinateCategorisationSignature(
+                        identifierKind = identifierKind,
+                        signatureStructure = OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION,
+                        dimensionIdentifier = signatureElementValue("oavrDimension"),
+                        memberIdentifier = signatureElementValue("oavrMember"),
+                        hierarchyIdentifier = signatureElementValue("oavrHierarchy"),
+                        hierarchyStartingMemberIdentifier = signatureElementValue("oavrStartMember"),
+                        startingMemberIncluded = signatureElementValue("oavrStartMemberIncluded")
                     )
                 }
 
                 else -> {
-                    thisShouldNeverHappen("Signature matching mismatch.")
+                    thisShouldNeverHappen("Signature tokenizer mismatch.")
                 }
             }
         }
@@ -104,15 +119,24 @@ data class BaselineOrdinateCategorisation(
 
             |
 
-            (?<oaDimension>[^\(\)]+)
+            (?<oavrDimension>[^\(\)]+)
                 \(
-                (?<oaMember>[^\(\)\[\]]+)
+                (?<oavrMember>[^\(\)\[\]]+)
                     \[
-                    (?<oaHierarchy>[^\(\)\[\];]+)
+                    (?<oavrHierarchy>[^\(\)\[\];]+)
                     ;
-                    (?<oaStartMember>[^\(\)\[\];]+)
+                    (?<oavrStartMember>[^\(\)\[\];]+)
                     ;
-                    (?<oaStartMemberIncluded>[^\(\)\[\];]+)
+                    (?<oavrStartMemberIncluded>[^\(\)\[\];]+)
+                    \]
+                \)
+            |
+
+            (?<partialOavrDimension>[^\(\)]+)
+                \(
+                (?<partialOavrMember>[^\(\)\[\]\?]+)
+                    \?\[
+                    (?<partialOavrHierarchy>[^\(\)\[\]]+)
                     \]
                 \)
             \z
@@ -141,6 +165,9 @@ data class BaselineOrdinateCategorisation(
 
     private fun checkSignaturesMatching(): List<String> {
         val descriptions = mutableListOf<String>()
+
+        /*
+        TODO - fix + integrate to use
 
         if (databaseIdSignature.memberIdentifier != xbrlCodeSignature.memberIdentifier) {
             descriptions.add("Members not same")
@@ -184,6 +211,7 @@ data class BaselineOrdinateCategorisation(
                 descriptions.add("Starting member inclusion not same")
             }
         }
+        */
 
         return descriptions
     }

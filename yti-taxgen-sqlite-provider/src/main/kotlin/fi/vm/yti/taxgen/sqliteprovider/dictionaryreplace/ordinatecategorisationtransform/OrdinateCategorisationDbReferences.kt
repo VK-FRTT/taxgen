@@ -11,9 +11,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 data class OrdinateCategorisationDbReferences(
 
+    val signatureStructure: OrdinateCategorisationSignatureStructure,
+
     val dimensionId: EntityID<Int>?,
     val memberId: EntityID<Int>?,
-    val openAxisValueRestrictionDbReferences: OpenAxisValueRestrictionDbReferences?
+
+    val hierarchyId: EntityID<Int>?,
+    val hierarchyStartingMemberId: EntityID<Int>?
 ) {
     companion object {
         private const val OPEN_MEMBER_MARKER = "*"
@@ -22,52 +26,45 @@ data class OrdinateCategorisationDbReferences(
             signature: OrdinateCategorisationSignature
         ): OrdinateCategorisationDbReferences {
 
-            require(signature.type == OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE)
+            require(signature.identifierKind == OrdinateCategorisationSignature.IdentifierKind.XBRL_CODE)
 
             return transaction {
                 val dimensionRow = DimensionTable.rowWhereXbrlCode(signature.dimensionIdentifier)
-                val dimensionId = dimensionRow?.get(DimensionTable.id)
 
                 val memberRow = if (signature.memberIdentifier == OPEN_MEMBER_MARKER) {
                     MemberTable.openMemberRow()
                 } else {
                     MemberTable.rowWhereMemberXbrlCode(signature.memberIdentifier)
                 }
-                val memberId = memberRow?.get(MemberTable.id)
 
-                val openAxisValueRestrictionRelationships =
-                    signature.openAxisValueRestrictionSignature?.run {
+                val hierarchyRow = signature.hierarchyIdentifier?.run {
+                    val scopingDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
 
-                        val scopingDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
-
-                        val hierarchyRow = scopingDomainId?.run {
-                            HierarchyTable.rowWhereDomainIdAndHierarchyCode(
-                                scopingDomainId,
-                                signature.openAxisValueRestrictionSignature.hierarchyIdentifier
-                            )
-                        }
-
-                        val hierarchyId = hierarchyRow?.get(HierarchyTable.id)
-
-                        val hierarchyNodeRow = hierarchyId?.run {
-                            HierarchyNodeTable.rowWhereHierarchyIdAndMemberCode(
-                                hierarchyId,
-                                signature.openAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier
-                            )
-                        }
-
-                        val hierarchyStartingMemberId = hierarchyNodeRow?.get(HierarchyNodeTable.memberIdCol)
-
-                        OpenAxisValueRestrictionDbReferences(
-                            hierarchyId = hierarchyId,
-                            hierarchyStartingMemberId = hierarchyStartingMemberId
+                    scopingDomainId?.run {
+                        HierarchyTable.rowWhereDomainIdAndHierarchyCode(
+                            scopingDomainId,
+                            signature.hierarchyIdentifier
                         )
                     }
+                }
+
+                val hierarchyNodeRow = signature.hierarchyStartingMemberIdentifier?.run {
+                    val hierarchyId = hierarchyRow?.get(HierarchyTable.id)
+
+                    hierarchyId?.run {
+                        HierarchyNodeTable.rowWhereHierarchyIdAndMemberCode(
+                            hierarchyId,
+                            signature.hierarchyStartingMemberIdentifier
+                        )
+                    }
+                }
 
                 OrdinateCategorisationDbReferences(
-                    dimensionId = dimensionId,
-                    memberId = memberId,
-                    openAxisValueRestrictionDbReferences = openAxisValueRestrictionRelationships
+                    signatureStructure = signature.signatureStructure,
+                    dimensionId = dimensionRow?.get(DimensionTable.id),
+                    memberId = memberRow?.get(MemberTable.id),
+                    hierarchyId = hierarchyRow?.get(HierarchyTable.id),
+                    hierarchyStartingMemberId = hierarchyNodeRow?.get(HierarchyNodeTable.memberIdCol)
                 )
             }
         }
@@ -87,6 +84,23 @@ data class OrdinateCategorisationDbReferences(
             property = OrdinateCategorisationDbReferences::memberId
         )
 
-        openAxisValueRestrictionDbReferences?.validate(validationResults)
+        if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
+            signatureStructure == OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        ) {
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = OrdinateCategorisationDbReferences::hierarchyId
+            )
+        }
+
+        if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION
+        ) {
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = OrdinateCategorisationDbReferences::hierarchyStartingMemberId
+            )
+        }
     }
 }

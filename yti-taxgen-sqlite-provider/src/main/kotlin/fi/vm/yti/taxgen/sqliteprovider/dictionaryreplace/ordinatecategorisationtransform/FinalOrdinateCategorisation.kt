@@ -44,45 +44,51 @@ data class FinalOrdinateCategorisation(
             signature: OrdinateCategorisationSignature,
             dbReferences: OrdinateCategorisationDbReferences
         ): String {
-            require(signature.type == OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE)
+            require(signature.identifierKind == OrdinateCategorisationSignature.IdentifierKind.XBRL_CODE)
 
             return doComposeSignatureLiteral(
+                signatureStructure = signature.signatureStructure,
                 dimension = signature.dimensionIdentifier,
                 member = signature.memberIdentifier,
-                hasOpenAxisValueRestriction = (dbReferences.openAxisValueRestrictionDbReferences != null),
-                hierarchy = dbReferences.openAxisValueRestrictionDbReferences?.hierarchyId,
-                startingMember = dbReferences.openAxisValueRestrictionDbReferences?.hierarchyStartingMemberId,
-                startingMemberIncluded = signature.openAxisValueRestrictionSignature?.startingMemberIncluded
+                hierarchy = dbReferences.hierarchyId,
+                startingMember = dbReferences.hierarchyStartingMemberId,
+                startingMemberIncluded = signature.startingMemberIncluded
             )
         }
 
         private fun composeXbrlCodeSignatureLiteral(
             signature: OrdinateCategorisationSignature
         ): String {
-            require(signature.type == OrdinateCategorisationSignature.Type.XBRL_CODE_SIGNATURE)
+            require(signature.identifierKind == OrdinateCategorisationSignature.IdentifierKind.XBRL_CODE)
 
             return doComposeSignatureLiteral(
+                signatureStructure = signature.signatureStructure,
                 dimension = signature.dimensionIdentifier,
                 member = signature.memberIdentifier,
-                hasOpenAxisValueRestriction = (signature.openAxisValueRestrictionSignature != null),
-                hierarchy = signature.openAxisValueRestrictionSignature?.hierarchyIdentifier,
-                startingMember = signature.openAxisValueRestrictionSignature?.hierarchyStartingMemberIdentifier,
-                startingMemberIncluded = signature.openAxisValueRestrictionSignature?.startingMemberIncluded
+                hierarchy = signature.hierarchyIdentifier,
+                startingMember = signature.hierarchyStartingMemberIdentifier,
+                startingMemberIncluded = signature.startingMemberIncluded
             )
         }
 
         private fun doComposeSignatureLiteral(
+            signatureStructure: OrdinateCategorisationSignatureStructure,
             dimension: String,
             member: String,
-            hasOpenAxisValueRestriction: Boolean,
             hierarchy: Any?,
             startingMember: Any?,
             startingMemberIncluded: Any?
         ): String {
-            return if (hasOpenAxisValueRestriction) {
-                "$dimension($member[$hierarchy;$startingMember;$startingMemberIncluded])"
-            } else {
-                "$dimension($member)"
+            return when (signatureStructure) {
+                OrdinateCategorisationSignatureStructure.NO_OPEN_AXIS_VALUE_RESTRICTION -> {
+                    "$dimension($member)"
+                }
+                OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION -> {
+                    "$dimension($member?[$hierarchy])"
+                }
+                OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION -> {
+                    "$dimension($member[$hierarchy;$startingMember;$startingMemberIncluded])"
+                }
             }
         }
     }

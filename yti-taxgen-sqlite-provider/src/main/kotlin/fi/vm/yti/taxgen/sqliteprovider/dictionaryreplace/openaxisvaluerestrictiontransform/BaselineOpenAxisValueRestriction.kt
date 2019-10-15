@@ -14,6 +14,8 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 
 data class BaselineOpenAxisValueRestriction(
+    val restrictionStructure: OpenAxisValueRestrictionStructure,
+
     val axisId: EntityID<Int>?,
 
     val domainXbrlCode: String?,
@@ -32,6 +34,13 @@ data class BaselineOpenAxisValueRestriction(
             openAxisValueRestrictionRow: ResultRow
         ): BaselineOpenAxisValueRestriction {
 
+            val restrictionStructure =
+                if (openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.hierarchyStartingMemberIdCol] != null) {
+                    OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION
+                } else {
+                    OpenAxisValueRestrictionStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+                }
+
             val hierarchyId = openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.hierarchyIdCol]
             val hierarchyRow = hierarchyId?.let { HierarchyTable.rowWhereHierarchyId(it) }
 
@@ -49,6 +58,7 @@ data class BaselineOpenAxisValueRestriction(
             val domainRow = domainId?.let { DomainTable.rowWhereDomainId(it) }
 
             return BaselineOpenAxisValueRestriction(
+                restrictionStructure = restrictionStructure,
                 axisId = openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.axisIdCol],
                 domainXbrlCode = domainRow?.get(DomainTable.domainXBRLCodeCol),
                 hierarchyCode = hierarchyRow?.get(HierarchyTable.hierarchyCodeCol),
@@ -60,42 +70,48 @@ data class BaselineOpenAxisValueRestriction(
     }
 
     override fun validate(validationResults: ValidationResults) {
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = BaselineOpenAxisValueRestriction::axisId
-        )
+        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
+            restrictionStructure == OpenAxisValueRestrictionStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        ) {
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = BaselineOpenAxisValueRestriction::axisId
+            )
 
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = BaselineOpenAxisValueRestriction::domainXbrlCode
-        )
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = BaselineOpenAxisValueRestriction::domainXbrlCode
+            )
 
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = BaselineOpenAxisValueRestriction::hierarchyCode
-        )
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = BaselineOpenAxisValueRestriction::hierarchyCode
+            )
+        }
 
-        validateNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = BaselineOpenAxisValueRestriction::startingMemberXbrlCode
-        )
+        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
+            validateNonBlank(
+                validationResults = validationResults,
+                instance = this,
+                property = BaselineOpenAxisValueRestriction::startingMemberXbrlCode
+            )
 
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = BaselineOpenAxisValueRestriction::isStartingMemberIncluded
-        )
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = BaselineOpenAxisValueRestriction::isStartingMemberIncluded
+            )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = BaselineOpenAxisValueRestriction::isStartingMemberPartOfHierarchy,
-            condition = { isStartingMemberPartOfHierarchy },
-            message = { "is not part of hierarchy" }
-        )
+            validateConditionTruthy(
+                validationResults = validationResults,
+                instance = this,
+                property = BaselineOpenAxisValueRestriction::isStartingMemberPartOfHierarchy,
+                condition = { isStartingMemberPartOfHierarchy },
+                message = { "is not part of hierarchy" }
+            )
+        }
     }
 }

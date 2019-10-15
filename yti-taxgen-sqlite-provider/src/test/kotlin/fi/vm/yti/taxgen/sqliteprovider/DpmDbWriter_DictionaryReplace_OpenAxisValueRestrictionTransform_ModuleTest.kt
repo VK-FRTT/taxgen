@@ -10,7 +10,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
     DpmDbWriter_DictionaryReplaceModuleTestBase() {
 
     @Test
-    fun `OpenAxisValueRestriction should get updated`() {
+    fun `Full OpenAxisValueRestriction should get updated`() {
         insertCommonBaselineFixtures()
 
         baselineDbConnection.createStatement().executeUpdate(
@@ -37,6 +37,37 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "#AxisID, #HierarchyID, #HierarchyStartingMemberID, #IsStartingMemberIncluded",
             "101, 5, 8, 1"
+        )
+    }
+
+    @Test
+    fun `Partial OpenAxisValueRestriction should get updated`() {
+        insertCommonBaselineFixtures()
+
+        baselineDbConnection.createStatement().executeUpdate(
+            """
+            INSERT INTO mOpenAxisValueRestriction(AxisID, HierarchyID, HierarchyStartingMemberID, IsStartingMemberIncluded) VALUES
+            (
+            101,   -- AxisID should remain as-is
+            5232,  -- Refers to Hierarchy "ExpDomHier-2-Code" within Domain "ExpDom-2-Code" => Hierarchy gets ID 5 from DictionaryFixture
+            null,  -- HierarchyStartingMemberID remains as-is
+            0      -- IsStartingMemberIncluded should remain as-is
+            );
+            """.trimIndent()
+        )
+
+        dumpDiagnosticsWhenThrown { replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES) }
+
+        assertThat(diagnosticCollector.events).containsExactly(
+            "ENTER [SQLiteDbWriter] []",
+            "EXIT [SQLiteDbWriter]"
+        )
+
+        val rs = readAllOpenAxisValueRestrictions()
+
+        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+            "#AxisID, #HierarchyID, #HierarchyStartingMemberID, #IsStartingMemberIncluded",
+            "101, 5, nil, 0"
         )
     }
 

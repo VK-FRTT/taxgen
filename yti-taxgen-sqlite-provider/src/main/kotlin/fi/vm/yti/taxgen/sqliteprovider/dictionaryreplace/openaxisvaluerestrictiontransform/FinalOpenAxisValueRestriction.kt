@@ -11,6 +11,8 @@ import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
 
 data class FinalOpenAxisValueRestriction(
+    val restrictionStructure: OpenAxisValueRestrictionStructure,
+
     val axisId: EntityID<Int>?,
     val domainId: EntityID<Int>?,
     val hierarchyId: EntityID<Int>?,
@@ -28,6 +30,7 @@ data class FinalOpenAxisValueRestriction(
             val (domainId, hierarchyId, hierarchyStartingMemberId) = resolveIds(baseline)
 
             return FinalOpenAxisValueRestriction(
+                restrictionStructure = baseline.restrictionStructure,
                 axisId = baseline.axisId,
                 domainId = domainId,
                 hierarchyId = hierarchyId,
@@ -96,42 +99,48 @@ data class FinalOpenAxisValueRestriction(
     }
 
     override fun validate(validationResults: ValidationResults) {
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOpenAxisValueRestriction::axisId
-        )
+        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
+            restrictionStructure == OpenAxisValueRestrictionStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        ) {
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = FinalOpenAxisValueRestriction::axisId
+            )
 
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOpenAxisValueRestriction::domainId
-        )
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = FinalOpenAxisValueRestriction::domainId
+            )
 
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOpenAxisValueRestriction::hierarchyId
-        )
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = FinalOpenAxisValueRestriction::hierarchyId
+            )
+        }
 
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOpenAxisValueRestriction::hierarchyStartingMemberId
-        )
+        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = FinalOpenAxisValueRestriction::hierarchyStartingMemberId
+            )
 
-        validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOpenAxisValueRestriction::isStartingMemberIncluded
-        )
+            validateNonNull(
+                validationResults = validationResults,
+                instance = this,
+                property = FinalOpenAxisValueRestriction::isStartingMemberIncluded
+            )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOpenAxisValueRestriction::isStartingMemberPartOfHierarchy,
-            condition = { isStartingMemberPartOfHierarchy },
-            message = { "is not part of hierarchy" }
-        )
+            validateConditionTruthy(
+                validationResults = validationResults,
+                instance = this,
+                property = FinalOpenAxisValueRestriction::isStartingMemberPartOfHierarchy,
+                condition = { isStartingMemberPartOfHierarchy },
+                message = { "is not part of hierarchy" }
+            )
+        }
     }
 }
