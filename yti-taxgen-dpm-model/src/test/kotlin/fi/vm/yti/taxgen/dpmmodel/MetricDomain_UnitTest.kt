@@ -195,9 +195,9 @@ internal class MetricDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Metric met_m_3_code which is not part of the containing DPM MetricDomain.",
-                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Metric met_m_4_code which is not part of the containing DPM MetricDomain.",
-                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Metric met_m_5_code which is not part of the containing DPM MetricDomain."
+                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Metric which is not present in DPM MetricDomain.",
+                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Metric which is not present in DPM MetricDomain.",
+                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Metric which is not present in DPM MetricDomain."
                 )
         }
     }

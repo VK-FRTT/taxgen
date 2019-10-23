@@ -212,9 +212,9 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Member member_m_3_code which is not part of the containing DPM ExplicitDomain.",
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Member member_m_4_code which is not part of the containing DPM ExplicitDomain.",
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Member member_m_5_code which is not part of the containing DPM ExplicitDomain."
+                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Member which is not present in DPM ExplicitDomain.",
+                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Member which is not present in DPM ExplicitDomain.",
+                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Member which is not present in DPM ExplicitDomain."
                 )
         }
     }

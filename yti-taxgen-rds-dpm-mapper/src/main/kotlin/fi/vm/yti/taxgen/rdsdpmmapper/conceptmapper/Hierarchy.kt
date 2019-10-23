@@ -61,9 +61,7 @@ private fun mapAndValidateHierarchyNodes(
 
         val extensionMemberUri = extensionMember.validUri(diagnostic)
         val extensionMemberCodeUri = extensionMember.validCodeUri(diagnostic)
-
-        val referencedElementCode = elementCodesByUri[extensionMemberCodeUri]
-            ?: diagnostic.fatal("RDS Extension Member $extensionMemberUri refers to Code $extensionMemberCodeUri which is not in scope")
+        val referencedElementCode = elementCodesByUri[extensionMemberCodeUri] ?: ""
 
         val nodeItem = HierarchyNodeItem(
             uri = extensionMemberUri,

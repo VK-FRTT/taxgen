@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 0,
+    "totalResults": 0
+  },
+  "results": [
+    {
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10/member/1",
+      "created": "2019-10-23T12:11:59.781Z",
+      "modified": "2019-10-23T12:11:59.781Z",
+      "order": 1,
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/UriReferringExternalCode"
+      }
+    }
+  ]
+}

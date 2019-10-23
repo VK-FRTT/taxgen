@@ -114,6 +114,8 @@ data class DpmDictionary(
             validate = { messages ->
                 metricDomains.forEach { metricDomain ->
                     metricDomain.metrics.forEach { metric ->
+
+                        //TODO - move this particular validation to Metric
                         if (metric.referencedDomainCode == null && metric.referencedHierarchyCode != null) {
                             messages.add("Metric ${metric.uri} has Hierarchy reference '${metric.referencedHierarchyCode}' without ExplicitDomain reference")
                         }

@@ -51,4 +51,14 @@ internal class RdsToDpmMapper_VariousContent_ModuleTest : RdsToDpmMapper_ModuleT
             assertThat(it.memberCode.startsWith("code-prefix-")).isTrue()
         }
     }
+
+    @Test
+    fun `should detect if HierarchyNode refers Member which is not present in ExplicitDomain`() {
+        executeRdsToDpmMapperAndGetDictionariesFrom("explicit_domain_with_node_ref_to_external_member")
+
+        assertThat(diagnosticCollector.eventsString()).contains(
+            "VALIDATED OBJECT [ExplicitDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA]",
+            "VALIDATION [ExplicitDomain.hierarchies: DPM HierarchyNode http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10/member/1 refers to DPM Member which is not present in DPM ExplicitDomain.]"
+        )
+    }
 }

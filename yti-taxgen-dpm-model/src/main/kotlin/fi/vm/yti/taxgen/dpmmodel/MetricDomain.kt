@@ -59,7 +59,7 @@ data class MetricDomain(
                     hierarchy.allNodes().forEach { node ->
                         if (!domainMetricCodes.contains(node.referencedElementCode)) {
                             messages.add(
-                                "DPM HierarchyNode ${node.uri} refers to DPM Metric ${node.referencedElementCode} which is not part of the containing DPM MetricDomain."
+                                "DPM HierarchyNode ${node.uri} refers to DPM Metric which is not present in DPM MetricDomain."
                             )
                         }
                     }

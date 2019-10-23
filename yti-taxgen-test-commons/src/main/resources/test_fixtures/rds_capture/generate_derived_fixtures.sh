@@ -82,3 +82,14 @@ echo "non-json-content" > "nonvalid_codes_page_json/dpm_dictionary_0/exp_dim/cod
 clone_from_integration_fixture "explicit_domain_with_member_code_prefix" "exp_dom_hier"
 set_object_in_json "explicit_domain_with_member_code_prefix/dpm_dictionary_0/exp_dom_hier/extension_0/members_page_0.json" ".results[0]"  '{ "code" : { "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA" }, "memberValues" : [ { "value" : "code-prefix-", "valueType" : { "uri" : "http://uri.suomi.fi/datamodel/ns/code#dpmMemberXBRLCodePrefix" } } ] }'
 
+# ExplicitDomain with HierarchyNode refering to external Member
+clone_from_integration_fixture "explicit_domain_with_node_ref_to_external_member" "exp_dom_hier"
+set_object_in_json "explicit_domain_with_node_ref_to_external_member/dpm_dictionary_0/exp_dom_hier/sub_code_list_6/extension_2/members_page_0.json" ".results[0]"  '{
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10/member/1",
+    "created" : "2019-10-23T12:11:59.781Z",
+    "modified" : "2019-10-23T12:11:59.781Z",
+    "order" : 1,
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/UriReferringExternalCode"
+    }
+  }'
