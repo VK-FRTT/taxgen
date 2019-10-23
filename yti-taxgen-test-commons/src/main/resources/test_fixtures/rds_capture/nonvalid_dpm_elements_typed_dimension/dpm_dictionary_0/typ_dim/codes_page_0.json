@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 2,
+    "totalResults": 2
+  },
+  "results": [
+    {
+      "id": "56843db2-1331-4f96-bfd1-9dbb4aa417d0",
+      "codeValue": "TDB-D1-TooLongCode-1234567890123456789012345678901234567890",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D1",
+      "status": "DRAFT",
+      "order": 1,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:59.065Z",
+      "modified": "2019-09-18T14:25:59.065Z",
+      "prefLabel": {
+        "fi": "TDB dimension 1"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D1/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/1",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/1"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension"
+        }
+      ]
+    },
+    {
+      "id": "f52af210-65e8-4395-8332-b8ab2588644b",
+      "codeValue": "TDB-D2",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D2",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D2",
+      "status": "DRAFT",
+      "order": 2,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:59.077Z",
+      "modified": "2019-09-18T14:25:59.077Z",
+      "prefLabel": {
+        "fi": "TDB dimension 2"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/codes/TDB-D2/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension/member/2",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension/members/2"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/extension/dpmDimension",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-dims-2018-1/extensions/dpmDimension"
+        }
+      ]
+    }
+  ]
+}

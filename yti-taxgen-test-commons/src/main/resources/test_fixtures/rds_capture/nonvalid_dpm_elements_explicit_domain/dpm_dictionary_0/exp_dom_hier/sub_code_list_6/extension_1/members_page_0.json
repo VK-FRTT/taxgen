@@ -1,0 +1,191 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 5,
+    "totalResults": 5
+  },
+  "results": [
+    {
+      "id": "22677cf7-9d23-4f87-ad1a-1e35b2813fdb",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2/member/1",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2/members/1",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x4",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/codes/EDA-x4"
+      },
+      "prefLabel": {
+        "fi": "EDA hierarchy node (=, 1)"
+      },
+      "created": "2019-09-18T14:22:06.645Z",
+      "modified": "2019-09-18T14:22:06.645Z",
+      "memberValues": [
+        {
+          "id": "fa4d51e7-86a2-48b9-ad98-da9748f9f4d6",
+          "value": "UnsupportedComparisonOp",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-09-18T14:22:06.651Z",
+          "modified": "2019-09-18T14:22:06.651Z"
+        },
+        {
+          "id": "d5439803-8382-45f6-abc4-9b2b9a9ae855",
+          "value": "+",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/6534a9e9-5246-4d7e-965c-fd8e64a5d704",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#unaryOperator"
+          },
+          "created": "2019-09-18T14:22:06.649Z",
+          "modified": "2019-09-18T14:22:06.649Z"
+        }
+      ],
+      "order": 1,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      },
+      "sequenceId": 1
+    },
+    {
+      "id": "c777565b-11ee-41c8-8750-9cfc1a85ab38",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2/member/2",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2/members/2",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x5",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/codes/EDA-x5"
+      },
+      "prefLabel": {
+        "fi": "EDA hierarchy node (>, 2)"
+      },
+      "created": "2019-09-18T14:22:06.651Z",
+      "modified": "2019-09-18T14:22:06.651Z",
+      "memberValues": [
+        {
+          "id": "2a1650aa-85be-4e5c-9dd1-88dd1c42b2cd",
+          "value": ">",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-09-18T14:22:06.654Z",
+          "modified": "2019-09-18T14:22:06.654Z"
+        }
+      ],
+      "order": 2,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      },
+      "sequenceId": 2
+    },
+    {
+      "id": "b775fa91-d343-4630-915a-b3525b7216af",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2/member/3",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2/members/3",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x6",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/codes/EDA-x6"
+      },
+      "prefLabel": {
+        "fi": "EDA hierarchy node (<, 0)"
+      },
+      "created": "2019-09-18T14:22:06.654Z",
+      "modified": "2019-09-18T14:22:06.654Z",
+      "memberValues": [
+        {
+          "id": "8462e443-813f-4244-9bad-a12cb631210a",
+          "value": "<",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-09-18T14:22:06.658Z",
+          "modified": "2019-09-18T14:22:06.658Z"
+        }
+      ],
+      "order": 3,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      },
+      "sequenceId": 3
+    },
+    {
+      "id": "a36117f3-9419-4a14-bcec-d8a0a4914674",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2/member/4",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2/members/4",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x7",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/codes/EDA-x7"
+      },
+      "prefLabel": {
+        "fi": "EDA hierarchy node (>=, -1)"
+      },
+      "created": "2019-09-18T14:22:06.658Z",
+      "modified": "2019-09-18T14:22:06.658Z",
+      "memberValues": [
+        {
+          "id": "71ead8ff-b6e7-43fa-89d8-18072c8ee9fd",
+          "value": "-",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/6534a9e9-5246-4d7e-965c-fd8e64a5d704",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#unaryOperator"
+          },
+          "created": "2019-09-18T14:22:06.663Z",
+          "modified": "2019-09-18T14:22:06.663Z"
+        },
+        {
+          "id": "9dca828b-0fb3-4879-b57c-4531a26dfaf6",
+          "value": ">=",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-09-18T14:22:06.662Z",
+          "modified": "2019-09-18T14:22:06.662Z"
+        }
+      ],
+      "order": 4,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      },
+      "sequenceId": 4
+    },
+    {
+      "id": "b4f9e321-8c99-4d2f-821e-ef23fecebf24",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2/member/5",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2/members/5",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x8",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/codes/EDA-x8"
+      },
+      "prefLabel": {
+        "fi": "EDA hierarchy node (<=, -2)"
+      },
+      "created": "2019-09-18T14:22:06.663Z",
+      "modified": "2019-09-18T14:22:06.663Z",
+      "memberValues": [
+        {
+          "id": "f4ebabc1-2bd3-48b2-a2b4-0febdafd273b",
+          "value": "<=",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/2057650b-88b8-4a72-80fb-076007aa4ec1",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#comparisonOperator"
+          },
+          "created": "2019-09-18T14:22:06.667Z",
+          "modified": "2019-09-18T14:22:06.667Z"
+        }
+      ],
+      "order": 5,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1/extensions/EDA-H2"
+      },
+      "sequenceId": 5
+    }
+  ]
+}

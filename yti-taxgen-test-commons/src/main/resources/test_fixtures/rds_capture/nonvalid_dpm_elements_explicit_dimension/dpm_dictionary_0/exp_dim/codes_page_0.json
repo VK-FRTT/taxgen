@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 4,
+    "totalResults": 4
+  },
+  "results": [
+    {
+      "id": "3ea54723-d700-4353-98bc-9ec43e7bdfa8",
+      "codeValue": "DIM-TooLongCode-1234567890123456789012345678901234567890",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/DIM",
+      "status": "DRAFT",
+      "order": 1,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:24:41.389Z",
+      "modified": "2019-09-18T14:24:41.389Z",
+      "prefLabel": {
+        "fi": "Dimension (fi, label)"
+      },
+      "description": {
+        "fi": "Dimension (fi, description)"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/DIM/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension/member/1",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension/members/1"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension"
+        }
+      ]
+    },
+    {
+      "id": "9604a336-d57d-442e-813e-988e468d2cf5",
+      "codeValue": "EDA-D1",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D1",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/EDA-D1",
+      "status": "DRAFT",
+      "order": 2,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:24:41.404Z",
+      "modified": "2019-09-18T14:24:41.404Z",
+      "prefLabel": {
+        "fi": "EDA dimension 1"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/EDA-D1/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension/member/2",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension/members/2"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension"
+        }
+      ]
+    },
+    {
+      "id": "5d7d2f24-6986-45ce-8ed7-660442997643",
+      "codeValue": "EDA-D2",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D2",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/EDA-D2",
+      "status": "DRAFT",
+      "order": 3,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:24:41.418Z",
+      "modified": "2019-09-18T14:24:41.418Z",
+      "prefLabel": {
+        "fi": "EDA dimension 2"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/EDA-D2/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension/member/3",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension/members/3"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension"
+        }
+      ]
+    },
+    {
+      "id": "13da0734-aaf7-426e-9a8d-c8bc102481c4",
+      "codeValue": "EDA-D10",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D10",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/EDA-D10",
+      "status": "DRAFT",
+      "order": 4,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:24:41.432Z",
+      "modified": "2019-09-18T14:24:41.432Z",
+      "prefLabel": {
+        "fi": "EDA dimension 10"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/codes/EDA-D10/members/",
+      "members": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension/member/4",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension/members/4"
+        }
+      ],
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/extension/dpmDimension",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-dims-2018-1/extensions/dpmDimension"
+        }
+      ]
+    }
+  ]
+}

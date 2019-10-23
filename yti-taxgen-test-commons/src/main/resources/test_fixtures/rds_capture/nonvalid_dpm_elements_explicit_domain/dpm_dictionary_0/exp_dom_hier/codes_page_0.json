@@ -1,0 +1,225 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 7,
+    "totalResults": 7
+  },
+  "results": [
+    {
+      "id": "9c159c69-307c-42f7-a146-9b8d940b064f",
+      "codeValue": "DOME-TooLongCode-1234567890123456789012345678901234567890",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/DOME",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/DOME",
+      "status": "DRAFT",
+      "order": 1,
+      "hierarchyLevel": 1,
+      "startDate": "2018-12-31",
+      "endDate": "2019-05-30",
+      "created": "2019-09-18T14:25:05.742Z",
+      "modified": "2019-09-18T14:25:05.742Z",
+      "prefLabel": {
+        "fi": "Explicit domain (fi, label)"
+      },
+      "description": {
+        "fi": "Explicit domain (fi, description)"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/DOME/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
+      }
+    },
+    {
+      "id": "750f8958-8106-4f72-bff6-62ec413eeb7c",
+      "codeValue": "EDA",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA",
+      "status": "DRAFT",
+      "order": 2,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:05.762Z",
+      "modified": "2019-09-18T14:25:05.762Z",
+      "prefLabel": {
+        "fi": "Explicit domain A"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA-2018-1"
+      }
+    },
+    {
+      "id": "27cb809b-3fa5-487a-bacc-db636bddda1a",
+      "codeValue": "EDA1",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA1",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA1",
+      "status": "DRAFT",
+      "order": 3,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:05.782Z",
+      "modified": "2019-09-18T14:25:05.782Z",
+      "prefLabel": {
+        "fi": "Explicit domain A1"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA1/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA1-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA1-2018-1"
+      }
+    },
+    {
+      "id": "4959b7dc-56d3-4d29-80bf-c4c4788d42ce",
+      "codeValue": "EDA9",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA9",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA9",
+      "status": "DRAFT",
+      "order": 4,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:05.802Z",
+      "modified": "2019-09-18T14:25:05.802Z",
+      "prefLabel": {
+        "fi": "Explicit domain A9"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA9/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA9-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA9-2018-1"
+      }
+    },
+    {
+      "id": "b2b7ae8c-3d91-4e8c-84a2-cccd538874fb",
+      "codeValue": "EDA10",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA10",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA10",
+      "status": "DRAFT",
+      "order": 5,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:05.821Z",
+      "modified": "2019-09-18T14:25:05.821Z",
+      "prefLabel": {
+        "fi": "Explicit domain A10"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA10/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA10-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA10-2018-1"
+      }
+    },
+    {
+      "id": "a3b3d2ee-1a83-4e12-9edb-819c2cbcbc16",
+      "codeValue": "EDA11",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA11",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA11",
+      "status": "DRAFT",
+      "order": 6,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:05.841Z",
+      "modified": "2019-09-18T14:25:05.841Z",
+      "prefLabel": {
+        "fi": "Explicit domain A11"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA11/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA11-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA11-2018-1"
+      }
+    },
+    {
+      "id": "d3628223-4b6a-4055-982c-32b04c45f38b",
+      "codeValue": "EDA20",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA20",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA20",
+      "status": "DRAFT",
+      "order": 7,
+      "hierarchyLevel": 1,
+      "startDate": "2018-10-31",
+      "created": "2019-09-18T14:25:05.861Z",
+      "modified": "2019-09-18T14:25:05.861Z",
+      "prefLabel": {
+        "fi": "Explicit domain A20"
+      },
+      "codeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1"
+      },
+      "membersUrl": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/codes/EDA20/members/",
+      "codeExtensions": [
+        {
+          "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/extension/dpmExplicitDomain",
+          "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1/extensions/dpmExplicitDomain"
+        }
+      ],
+      "subCodeScheme": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA20-2018-1",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/EDA20-2018-1"
+      }
+    }
+  ]
+}

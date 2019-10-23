@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 0,
+    "totalResults": 0
+  },
+  "results": [
+    {
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA"
+      },
+      "memberValues": [
+        {
+          "value": "code-prefix-",
+          "valueType": {
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmMemberXBRLCodePrefix"
+          }
+        }
+      ]
+    }
+  ]
+}

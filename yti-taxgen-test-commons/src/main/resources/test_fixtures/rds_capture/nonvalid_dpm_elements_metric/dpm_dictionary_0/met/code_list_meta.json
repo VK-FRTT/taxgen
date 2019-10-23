@@ -1,0 +1,109 @@
+{
+  "id" : "844f0784-55df-4ec8-89a9-6e7e57740756",
+  "codeValue" : "metrics-2018-1",
+  "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1",
+  "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1",
+  "codesUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/",
+  "extensionsUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/",
+  "extensions" : [ {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET1"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/dpmMetric",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/dpmMetric"
+  } ],
+  "prefLabel" : {
+    "fi" : "Metrics 2018-1"
+  },
+  "description" : {
+    "fi" : "Lista Metriceistä."
+  },
+  "created" : "2019-09-18T14:25:31.894Z",
+  "modified" : "2019-09-18T14:25:31.894Z",
+  "status" : "DRAFT",
+  "infoDomains" : [ {
+    "id" : "6a6040a7-f500-4b1d-af09-d9bb8d38ef55",
+    "codeValue" : "P14",
+    "uri" : "http://uri.suomi.fi/codelist/jupo/serviceclassification/code/P14",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P14",
+    "status" : "VALID",
+    "order" : 126,
+    "hierarchyLevel" : 1,
+    "created" : "2018-01-01T00:00:00.000Z",
+    "modified" : "2018-01-01T00:00:00.000Z",
+    "prefLabel" : {
+      "fi" : "Verotus ja julkinen talous",
+      "sv" : "Beskattning och offentlig ekonomi",
+      "en" : "Taxation and public finance"
+    },
+    "description" : {
+      "fi" : "Tässä palveluluokassa käsitellään keskeisiin henkilö- ja yritysverotuksen lajeihin sekä valtion ja kuntien talouteen liittyviä asioita palvelujen näkökulmasta."
+    },
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/jupo/codeschemes/serviceclassification/codes/P14/members/"
+  } ],
+  "languageCodes" : [ {
+    "id" : "931ea36d-b2e9-409b-bf86-87ff85708c75",
+    "codeValue" : "sv",
+    "uri" : "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/sv",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv",
+    "status" : "VALID",
+    "order" : 1433,
+    "hierarchyLevel" : 1,
+    "created" : "2018-09-14T10:08:31.898Z",
+    "modified" : "2019-08-28T09:06:15.766Z",
+    "prefLabel" : {
+      "fi" : "ruotsi",
+      "sv" : "svenska",
+      "en" : "Swedish"
+    },
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/sv/members/"
+  }, {
+    "id" : "1cc15c8d-256e-4235-b1cc-071e5b750a08",
+    "codeValue" : "en",
+    "uri" : "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/en",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en",
+    "status" : "VALID",
+    "order" : 883,
+    "hierarchyLevel" : 1,
+    "created" : "2018-09-14T10:08:38.314Z",
+    "modified" : "2019-08-28T09:05:56.078Z",
+    "prefLabel" : {
+      "fi" : "englanti",
+      "sv" : "engelska",
+      "en" : "English"
+    },
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/en/members/"
+  }, {
+    "id" : "beda08b1-c3ac-4e82-af4b-cb269d36eaf9",
+    "codeValue" : "fi",
+    "uri" : "http://uri.suomi.fi/codelist/interoperabilityplatform/languagecodes/code/fi",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi",
+    "status" : "VALID",
+    "order" : 1034,
+    "hierarchyLevel" : 1,
+    "created" : "2018-09-14T10:08:35.203Z",
+    "modified" : "2019-08-28T09:05:58.755Z",
+    "prefLabel" : {
+      "fi" : "suomi",
+      "sv" : "finska",
+      "en" : "Finnish"
+    },
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/interoperabilityplatform/codeschemes/languagecodes/codes/fi/members/"
+  } ],
+  "organizations" : [ {
+    "id" : "ba5621dd-a8c5-47cf-86f2-b33123959aec"
+  } ],
+  "cumulative" : false,
+  "codeRegistry" : {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture"
+  },
+  "totalNrOfSearchHitsCodes" : 0,
+  "totalNrOfSearchHitsExtensions" : 0
+}

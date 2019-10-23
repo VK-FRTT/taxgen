@@ -1,14 +1,7 @@
 package fi.vm.yti.taxgen.rdsdpmmapper
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-
-/*
-TODO - Things to test:
-- Member code prefix handling
-- Code & Extension Members disordered
-*/
 
 internal class RdsToDpmMapper_VariousContent_ModuleTest : RdsToDpmMapper_ModuleTestBase() {
 
@@ -16,7 +9,7 @@ internal class RdsToDpmMapper_VariousContent_ModuleTest : RdsToDpmMapper_ModuleT
     fun `should produce 3 DPM Dictionaries with proper Owners`() {
         val dpmDictionaries = executeRdsToDpmMapperAndGetDictionariesFrom("3_empty_dictionaries")
 
-        Assertions.assertThat(dpmDictionaries.size).isEqualTo(3)
+        assertThat(dpmDictionaries.size).isEqualTo(3)
 
         dpmDictionaries[0].owner.apply {
             assertThat(name).isEqualTo("Owner 1/3")
@@ -43,6 +36,19 @@ internal class RdsToDpmMapper_VariousContent_ModuleTest : RdsToDpmMapper_ModuleT
             assertThat(location).isEqualTo("location")
             assertThat(copyright).isEqualTo("copyright")
             assertThat(languages).isEqualTo(hashSetOf(sv))
+        }
+    }
+
+    @Test
+    fun `should prefix ExplicitDomain Member codes with prefix configured in ExplicitDomain`() {
+        val dpmDictionaries = executeRdsToDpmMapperAndGetDictionariesFrom("explicit_domain_with_member_code_prefix")
+        val domain = dpmDictionaries[0].explicitDomains.find { it.domainCode == "EDA" }!!
+
+        assertThat(domain.members.size).isEqualTo(13)
+        assertThat(domain.members[0].memberCode).isEqualTo("code-prefix-EDA-x1")
+
+        domain.members.forEach {
+            assertThat(it.memberCode.startsWith("code-prefix-")).isTrue()
         }
     }
 }

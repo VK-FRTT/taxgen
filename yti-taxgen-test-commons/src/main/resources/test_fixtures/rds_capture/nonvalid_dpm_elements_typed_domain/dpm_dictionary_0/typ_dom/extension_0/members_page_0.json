@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "code": 200,
+    "pageSize": 1000,
+    "from": 0,
+    "resultCount": 8,
+    "totalResults": 8
+  },
+  "results": [
+    {
+      "id": "7fa4e5ad-4da9-4b53-b42b-f0380c3f12ef",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/1",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/1",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/DOMT",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/DOMT"
+      },
+      "created": "2019-09-18T14:26:30.027Z",
+      "modified": "2019-09-18T14:26:30.027Z",
+      "memberValues": [
+        {
+          "id": "d9e3b90b-6255-41bd-a28c-c985d5ba4496",
+          "value": "UnsupportedTypeDomainDataType",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.030Z",
+          "modified": "2019-09-18T14:26:30.030Z"
+        }
+      ],
+      "order": 1,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 1
+    },
+    {
+      "id": "7e8c73a4-dfa2-4bbc-9e0f-706940713111",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/2",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/2",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDB",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDB"
+      },
+      "created": "2019-09-18T14:26:30.030Z",
+      "modified": "2019-09-18T14:26:30.030Z",
+      "memberValues": [
+        {
+          "id": "2e31e587-fc53-4705-9c12-ccc0e08a6f24",
+          "value": "Boolean",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.034Z",
+          "modified": "2019-09-18T14:26:30.034Z"
+        }
+      ],
+      "order": 2,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 2
+    },
+    {
+      "id": "2d9a6c22-9f69-4151-8205-9026278f475a",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/3",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/3",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDD",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDD"
+      },
+      "created": "2019-09-18T14:26:30.034Z",
+      "modified": "2019-09-18T14:26:30.034Z",
+      "memberValues": [
+        {
+          "id": "a728eeb5-1932-41f8-93be-73639ba1e905",
+          "value": "Date",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.038Z",
+          "modified": "2019-09-18T14:26:30.038Z"
+        }
+      ],
+      "order": 3,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 3
+    },
+    {
+      "id": "fb3ecdaf-906b-44db-9c2f-b13e0be56a96",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/4",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/4",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDI",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDI"
+      },
+      "created": "2019-09-18T14:26:30.038Z",
+      "modified": "2019-09-18T14:26:30.038Z",
+      "memberValues": [
+        {
+          "id": "08f11ef1-ff45-4c59-a96f-dc1260a6fe7b",
+          "value": "Integer",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.041Z",
+          "modified": "2019-09-18T14:26:30.041Z"
+        }
+      ],
+      "order": 4,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 4
+    },
+    {
+      "id": "d65a74a7-b24f-4510-b361-127d1f926a2d",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/5",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/5",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDM",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDM"
+      },
+      "created": "2019-09-18T14:26:30.041Z",
+      "modified": "2019-09-18T14:26:30.041Z",
+      "memberValues": [
+        {
+          "id": "eb411a22-1be4-47ac-b1d8-1600abe18291",
+          "value": "Monetary",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.044Z",
+          "modified": "2019-09-18T14:26:30.044Z"
+        }
+      ],
+      "order": 5,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 5
+    },
+    {
+      "id": "e490be9c-5d2e-4f61-95c4-082eb4cf79b2",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/6",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/6",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDP",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDP"
+      },
+      "created": "2019-09-18T14:26:30.044Z",
+      "modified": "2019-09-18T14:26:30.044Z",
+      "memberValues": [
+        {
+          "id": "4a2f9811-c929-4d44-9caf-db9c0410e045",
+          "value": "Percentage",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.048Z",
+          "modified": "2019-09-18T14:26:30.048Z"
+        }
+      ],
+      "order": 6,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 6
+    },
+    {
+      "id": "223a1a91-9294-4ef4-8dab-b9d09d6a54fc",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/7",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/7",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDR",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDR"
+      },
+      "created": "2019-09-18T14:26:30.048Z",
+      "modified": "2019-09-18T14:26:30.048Z",
+      "memberValues": [
+        {
+          "id": "291c56bd-499f-4084-8615-9a17546671ab",
+          "value": "Decimal",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.051Z",
+          "modified": "2019-09-18T14:26:30.051Z"
+        }
+      ],
+      "order": 7,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 7
+    },
+    {
+      "id": "bb1cf7cf-38db-46ee-a3c4-1044601ca3d6",
+      "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain/member/8",
+      "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain/members/8",
+      "code": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/TDS",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/codes/TDS"
+      },
+      "created": "2019-09-18T14:26:30.051Z",
+      "modified": "2019-09-18T14:26:30.051Z",
+      "memberValues": [
+        {
+          "id": "d1034fa9-bd59-4857-8308-bd747dbb7cc2",
+          "value": "String",
+          "valueType": {
+            "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/valuetypes/83fb4bfa-61ae-4692-9dc0-d58fe5630212",
+            "uri": "http://uri.suomi.fi/datamodel/ns/code#dpmDomainDataType"
+          },
+          "created": "2019-09-18T14:26:30.054Z",
+          "modified": "2019-09-18T14:26:30.054Z"
+        }
+      ],
+      "order": 8,
+      "extension": {
+        "uri": "http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/extension/dpmTypedDomain",
+        "url": "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/typ-doms-2018-1/extensions/dpmTypedDomain"
+      },
+      "sequenceId": 8
+    }
+  ]
+}

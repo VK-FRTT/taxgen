@@ -1,0 +1,29 @@
+{
+  "meta" : {
+    "code" : 200,
+    "pageSize" : 1000,
+    "from" : 0,
+    "resultCount" : 1,
+    "totalResults" : 1
+  },
+  "results" : [ {
+    "id" : "5b0f1033-0fd4-46b7-8c64-045da5652a9d",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/1",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/MEM",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM"
+    },
+    "prefLabel" : {
+      "fi" : "Hierarchy node (fi, label)"
+    },
+    "created" : "2019-09-18T14:20:54.123Z",
+    "modified" : "2019-09-18T14:20:54.123Z",
+    "order" : 1,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER"
+    },
+    "sequenceId" : 1
+  } ]
+}

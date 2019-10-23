@@ -1,0 +1,22 @@
+{
+  "id" : "4ffe9ff2-c8d2-4595-aa32-1155ac4598eb",
+  "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/EDA-H1",
+  "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1",
+  "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/EDA-H1/members/",
+  "codeValue" : "EDA-H1",
+  "status" : "DRAFT",
+  "startDate" : "2018-12-31",
+  "created" : "2019-09-18T14:20:54.100Z",
+  "modified" : "2019-09-18T14:20:54.100Z",
+  "prefLabel" : {
+    "fi" : "DOME hierarchy duplicating EDA code"
+  },
+  "parentCodeScheme" : {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
+  },
+  "propertyType" : {
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri" : "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

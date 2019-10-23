@@ -1,0 +1,59 @@
+{
+  "id" : "5ccf0133-5747-426c-b411-351eaad1925b",
+  "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+  "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10",
+  "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/",
+  "members" : [ {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/11",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/11"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/5",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/5"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/9",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/9"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/10",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/10"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/1"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/2",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/2"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/12",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/12"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/3",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/3"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/7"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/8",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/8"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/4",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/4"
+  }, {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/6",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/6"
+  } ],
+  "codeValue" : "MET10",
+  "status" : "DRAFT",
+  "startDate" : "2018-10-31",
+  "created" : "2019-09-18T14:25:32.209Z",
+  "modified" : "2019-09-18T14:25:32.209Z",
+  "prefLabel" : {
+    "fi" : "Metric hierarchy 10"
+  },
+  "parentCodeScheme" : {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1"
+  },
+  "propertyType" : {
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri" : "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

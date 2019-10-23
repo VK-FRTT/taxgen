@@ -1,0 +1,51 @@
+{
+  "meta" : {
+    "code" : 200,
+    "pageSize" : 1000,
+    "from" : 0,
+    "resultCount" : 2,
+    "totalResults" : 2
+  },
+  "results" : [ {
+    "id" : "b8de6ed6-4461-433f-bd28-d117499ebf41",
+    "codeValue" : "EDA-x1",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/EDA-x1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/EDA-x1",
+    "status" : "DRAFT",
+    "order" : 1,
+    "hierarchyLevel" : 1,
+    "startDate" : "2018-12-31",
+    "created" : "2019-09-18T14:20:53.816Z",
+    "modified" : "2019-09-18T14:20:53.816Z",
+    "prefLabel" : {
+      "fi" : "DOME member duplicating EDA code"
+    },
+    "codeScheme" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
+    },
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/EDA-x1/members/"
+  }, {
+    "id" : "b8887fac-bca8-408f-8f84-6755e0e4370e",
+    "codeValue" : "MEM",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/MEM",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM",
+    "status" : "DRAFT",
+    "order" : 2,
+    "hierarchyLevel" : 1,
+    "startDate" : "2018-10-31",
+    "created" : "2019-09-18T14:20:53.830Z",
+    "modified" : "2019-09-18T14:20:53.830Z",
+    "prefLabel" : {
+      "fi" : "Member (fi, label)"
+    },
+    "description" : {
+      "fi" : "Member (fi, description)"
+    },
+    "codeScheme" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
+    },
+    "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/codes/MEM/members/"
+  } ]
+}

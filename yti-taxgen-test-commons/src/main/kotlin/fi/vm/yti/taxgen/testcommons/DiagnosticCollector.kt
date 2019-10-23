@@ -10,11 +10,11 @@ class DiagnosticCollector : DiagnosticConsumer {
 
     val events = mutableListOf<String>()
 
-    var fatalCount = 0
-    var errorCount = 0
-    var warningCount = 0
-    var infoCount = 0
-    var validationCount = 0
+    private var fatalCount = 0
+    private var errorCount = 0
+    private var warningCount = 0
+    private var infoCount = 0
+    private var objectValidationFailureCount = 0
 
     override fun contextEnter(contextStack: List<ContextInfo>) {
         events.add("ENTER [${contextStack.firstOrNull()?.type ?: ""}] [${contextStack.firstOrNull()?.label ?: ""}]")
@@ -46,10 +46,10 @@ class DiagnosticCollector : DiagnosticConsumer {
         //Input should be: Array<InputName, InputValue>
 
         events.add("VALIDATED OBJECT [${validatableInfo.objectKind}] [${validatableInfo.objectAddress}]")
+        objectValidationFailureCount++
 
         validationResults.forEach {
             events.add("VALIDATION [${it.className.substringAfterLast(".")}.${it.propertyName}: ${it.message}]")
-            validationCount++
         }
     }
 
@@ -64,11 +64,11 @@ class DiagnosticCollector : DiagnosticConsumer {
         errorCount = 0
         warningCount = 0
         infoCount = 0
-        validationCount = 0
+        objectValidationFailureCount = 0
     }
 
-    fun allMessagesCount() = criticalMessagesCount() + informalMessagesCount() + validationMessagesCount()
+    fun allMessagesCount() = criticalMessagesCount() + informalMessagesCount() + objectValidationFailureCount()
     fun criticalMessagesCount() = fatalCount + errorCount
     fun informalMessagesCount() = warningCount + infoCount
-    fun validationMessagesCount() = validationCount
+    fun objectValidationFailureCount() = objectValidationFailureCount
 }

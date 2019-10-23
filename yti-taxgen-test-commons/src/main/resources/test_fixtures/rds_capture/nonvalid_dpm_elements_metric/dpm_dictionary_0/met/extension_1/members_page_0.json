@@ -1,0 +1,366 @@
+{
+  "meta" : {
+    "code" : 200,
+    "pageSize" : 1000,
+    "from" : 0,
+    "resultCount" : 12,
+    "totalResults" : 12
+  },
+  "results" : [ {
+    "id" : "d0e95fb4-5c6a-4111-bb71-15e66f797df1",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/1",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/4",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/4"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Boolean)"
+    },
+    "created" : "2019-09-18T14:25:32.345Z",
+    "modified" : "2019-09-18T14:25:32.345Z",
+    "order" : 1,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "sequenceId" : 1
+  }, {
+    "id" : "2e1409cd-55b3-41b6-92e0-e298bc8a2421",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/2",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/2",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/3"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Enumeration: EDA)"
+    },
+    "created" : "2019-09-18T14:25:32.347Z",
+    "modified" : "2019-09-18T14:25:32.347Z",
+    "order" : 2,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "sequenceId" : 2
+  }, {
+    "id" : "1f626e0f-7af9-4b87-b7f7-215ba2f924d9",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/3",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/3",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/16",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/16"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Date)"
+    },
+    "created" : "2019-09-18T14:25:32.349Z",
+    "modified" : "2019-09-18T14:25:32.349Z",
+    "order" : 3,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "sequenceId" : 3
+  }, {
+    "id" : "00235de1-8b1b-4c2b-b49a-a2bad7155277",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/4",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/4",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/9",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/9"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (String)"
+    },
+    "created" : "2019-09-18T14:25:32.351Z",
+    "modified" : "2019-09-18T14:25:32.351Z",
+    "order" : 4,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "1f626e0f-7af9-4b87-b7f7-215ba2f924d9",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/3",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/3",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/16",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/16"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Date)"
+      },
+      "created" : "2019-09-18T14:25:32.349Z",
+      "modified" : "2019-09-18T14:25:32.349Z",
+      "order" : 3,
+      "sequenceId" : 3
+    },
+    "sequenceId" : 4
+  }, {
+    "id" : "6e6256a3-6678-46a4-ae5a-05afed350367",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/5",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/5",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/13",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/13"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (String, Instant, Credit)"
+    },
+    "created" : "2019-09-18T14:25:32.353Z",
+    "modified" : "2019-09-18T14:25:32.353Z",
+    "order" : 5,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "1f626e0f-7af9-4b87-b7f7-215ba2f924d9",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/3",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/3",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/16",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/16"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Date)"
+      },
+      "created" : "2019-09-18T14:25:32.349Z",
+      "modified" : "2019-09-18T14:25:32.349Z",
+      "order" : 3,
+      "sequenceId" : 3
+    },
+    "sequenceId" : 5
+  }, {
+    "id" : "4513dfb3-5932-425e-ac27-22e632c88abb",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/6",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/6",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/14",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/14"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (String, Duration, Debit)"
+    },
+    "created" : "2019-09-18T14:25:32.355Z",
+    "modified" : "2019-09-18T14:25:32.355Z",
+    "order" : 6,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "6e6256a3-6678-46a4-ae5a-05afed350367",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/5",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/5",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/13",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/13"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (String, Instant, Credit)"
+      },
+      "created" : "2019-09-18T14:25:32.353Z",
+      "modified" : "2019-09-18T14:25:32.353Z",
+      "order" : 5,
+      "sequenceId" : 5
+    },
+    "sequenceId" : 6
+  }, {
+    "id" : "bec245a7-c546-4f57-9d4d-0901bd7cdcdd",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/7",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/7",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/7"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Monetary)"
+    },
+    "created" : "2019-09-18T14:25:32.357Z",
+    "modified" : "2019-09-18T14:25:32.357Z",
+    "order" : 7,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "1f626e0f-7af9-4b87-b7f7-215ba2f924d9",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/3",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/3",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/16",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/16"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Date)"
+      },
+      "created" : "2019-09-18T14:25:32.349Z",
+      "modified" : "2019-09-18T14:25:32.349Z",
+      "order" : 3,
+      "sequenceId" : 3
+    },
+    "sequenceId" : 7
+  }, {
+    "id" : "fdb18128-1e12-48da-ac87-43a6e7e26253",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/8",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/8",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/11",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/11"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Lei)"
+    },
+    "created" : "2019-09-18T14:25:32.366Z",
+    "modified" : "2019-09-18T14:25:32.366Z",
+    "order" : 8,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "bec245a7-c546-4f57-9d4d-0901bd7cdcdd",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/7",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/7",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/7"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Monetary)"
+      },
+      "created" : "2019-09-18T14:25:32.357Z",
+      "modified" : "2019-09-18T14:25:32.357Z",
+      "order" : 7,
+      "sequenceId" : 7
+    },
+    "sequenceId" : 8
+  }, {
+    "id" : "1f73ea0a-ff81-441e-bd75-b04e55bf7e48",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/9",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/9",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/8",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/8"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Percentage)"
+    },
+    "created" : "2019-09-18T14:25:32.369Z",
+    "modified" : "2019-09-18T14:25:32.369Z",
+    "order" : 9,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "bec245a7-c546-4f57-9d4d-0901bd7cdcdd",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/7",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/7",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/7"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Monetary)"
+      },
+      "created" : "2019-09-18T14:25:32.357Z",
+      "modified" : "2019-09-18T14:25:32.357Z",
+      "order" : 7,
+      "sequenceId" : 7
+    },
+    "sequenceId" : 9
+  }, {
+    "id" : "3ae8cf8a-967f-40e0-a914-fc68548c9542",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/10",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/10",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/12",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/12"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Isin)"
+    },
+    "created" : "2019-09-18T14:25:32.371Z",
+    "modified" : "2019-09-18T14:25:32.371Z",
+    "order" : 10,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "bec245a7-c546-4f57-9d4d-0901bd7cdcdd",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/7",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/7",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/7"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Monetary)"
+      },
+      "created" : "2019-09-18T14:25:32.357Z",
+      "modified" : "2019-09-18T14:25:32.357Z",
+      "order" : 7,
+      "sequenceId" : 7
+    },
+    "sequenceId" : 10
+  }, {
+    "id" : "719ae2f7-e9c7-43aa-9adf-eeb7ef7189a7",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/11",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/11",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/10"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Decimal)"
+    },
+    "created" : "2019-09-18T14:25:32.373Z",
+    "modified" : "2019-09-18T14:25:32.373Z",
+    "order" : 11,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "relatedMember" : {
+      "id" : "bec245a7-c546-4f57-9d4d-0901bd7cdcdd",
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/7",
+      "code" : {
+        "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/7",
+        "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/7"
+      },
+      "prefLabel" : {
+        "fi" : "MET hierarchy node (Monetary)"
+      },
+      "created" : "2019-09-18T14:25:32.357Z",
+      "modified" : "2019-09-18T14:25:32.357Z",
+      "order" : 7,
+      "sequenceId" : 7
+    },
+    "sequenceId" : 11
+  }, {
+    "id" : "ea6518ae-7aca-46a4-8681-4889e48291e3",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/12",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10/members/12",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/6",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/6"
+    },
+    "prefLabel" : {
+      "fi" : "MET hierarchy node (Integer)"
+    },
+    "created" : "2019-09-18T14:25:32.375Z",
+    "modified" : "2019-09-18T14:25:32.375Z",
+    "order" : 12,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/MET10"
+    },
+    "sequenceId" : 12
+  } ]
+}

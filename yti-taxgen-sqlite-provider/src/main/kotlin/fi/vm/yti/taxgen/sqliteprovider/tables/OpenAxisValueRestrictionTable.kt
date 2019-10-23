@@ -16,7 +16,7 @@ import org.jetbrains.exposed.sql.Table
  *   FOREIGN KEY(`HierarchyStartingMemberID`) REFERENCES `mMember`(`MemberID`)
  *
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
- * - TODO
+ * - None
  */
 object OpenAxisValueRestrictionTable : Table("mOpenAxisValueRestriction") {
     val axisIdCol = reference("AxisID", AxisTable, ReferenceOption.NO_ACTION).nullable().primaryKey()

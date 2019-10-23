@@ -1,0 +1,26 @@
+{
+  "id" : "bc5cc9ce-7f49-4727-a2a6-ac7c390398b0",
+  "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER",
+  "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER",
+  "membersUrl" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/",
+  "members" : [ {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1/extensions/HIER/members/1"
+  } ],
+  "codeValue" : "HIER",
+  "status" : "DRAFT",
+  "startDate" : "2018-10-31",
+  "created" : "2019-09-18T14:20:53.876Z",
+  "modified" : "2019-09-18T14:20:53.876Z",
+  "prefLabel" : {
+    "fi" : "Hierarchy (fi, label)"
+  },
+  "parentCodeScheme" : {
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/DOME-2018-1"
+  },
+  "propertyType" : {
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/propertytypes/e028725c-9276-4943-9bc9-565e6544961d",
+    "uri" : "http://uri.suomi.fi/datamodel/ns/code#definitionHierarchy"
+  }
+}

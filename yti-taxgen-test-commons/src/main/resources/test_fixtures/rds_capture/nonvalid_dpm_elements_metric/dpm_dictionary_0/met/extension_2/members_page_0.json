@@ -1,0 +1,29 @@
+{
+  "meta" : {
+    "code" : 200,
+    "pageSize" : 1000,
+    "from" : 0,
+    "resultCount" : 1,
+    "totalResults" : 1
+  },
+  "results" : [ {
+    "id" : "b3b96f3a-c419-40f0-a9c0-81c2f40395b7",
+    "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER/member/1",
+    "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER/members/1",
+    "code" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/codes/1"
+    },
+    "prefLabel" : {
+      "fi" : "Metric hierarchy node (fi, label)"
+    },
+    "created" : "2019-09-18T14:25:32.579Z",
+    "modified" : "2019-09-18T14:25:32.579Z",
+    "order" : 1,
+    "extension" : {
+      "uri" : "http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER",
+      "url" : "https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/metrics-2018-1/extensions/METHIER"
+    },
+    "sequenceId" : 1
+  } ]
+}
