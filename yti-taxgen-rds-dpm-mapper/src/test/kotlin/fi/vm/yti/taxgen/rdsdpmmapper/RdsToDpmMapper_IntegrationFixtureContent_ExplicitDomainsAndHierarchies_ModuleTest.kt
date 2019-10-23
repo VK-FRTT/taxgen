@@ -299,6 +299,7 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierar
 
                     2 -> {
                         assertThat(it.memberCode).isEqualTo("EDA-x3")
+                        assertThat(it.defaultMember).isTrue()
                     }
 
                     3 -> {
