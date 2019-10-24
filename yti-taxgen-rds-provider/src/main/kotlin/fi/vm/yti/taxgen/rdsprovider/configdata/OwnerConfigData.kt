@@ -1,10 +1,10 @@
-package fi.vm.yti.taxgen.rdsprovider.configinput
+package fi.vm.yti.taxgen.rdsprovider.configdata
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Owner
 
 @Suppress("MemberVisibilityCanBePrivate")
-data class OwnerConfigInput(
+data class OwnerConfigData(
     val name: String?,
     val namespace: String?,
     val prefix: String?,
@@ -12,6 +12,19 @@ data class OwnerConfigInput(
     val copyright: String?,
     val languages: List<String?>?
 ) {
+    companion object {
+        fun fomOwner(owner: Owner): OwnerConfigData {
+
+            return OwnerConfigData(
+                name = owner.name,
+                namespace = owner.namespace,
+                prefix = owner.prefix,
+                location = owner.location,
+                copyright = owner.copyright,
+                languages = owner.languageCodes
+            )
+        }
+    }
 
     fun toOwner(diagnostic: Diagnostic): Owner {
 

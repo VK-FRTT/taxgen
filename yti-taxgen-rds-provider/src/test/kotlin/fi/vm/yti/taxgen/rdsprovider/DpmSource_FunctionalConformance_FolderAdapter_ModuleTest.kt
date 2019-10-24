@@ -29,7 +29,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
     }
 
     @TestFactory
-    fun `Folder adapter with static reference data`(): List<DynamicNode> {
+    fun `Folder adapter with direct reference data`(): List<DynamicNode> {
         val (sourceHolder, rootPath) = sourceHolderFolderAdapterForBundledReferenceData(
             diagnosticContext,
             false
@@ -46,7 +46,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
     }
 
     @TestFactory
-    fun `Context decorated folder adapter with static reference data`(): List<DynamicNode> {
+    fun `Folder adapter with context decoration and direct reference data`(): List<DynamicNode> {
         val (sourceHolder, rootPath) = sourceHolderFolderAdapterForBundledReferenceData(
             diagnosticContext,
             true
@@ -63,7 +63,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
     }
 
     @TestFactory
-    fun `Folder adapter with loopback data`(): List<DynamicNode> {
+    fun `Folder adapter with capture from reference data`(): List<DynamicNode> {
         SourceFactory.folderRecorder(
             outputFolderPath = loopbackTempFolder.path(),
             forceOverwrite = false,
@@ -94,7 +94,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
     }
 
     @TestFactory
-    fun `Folder adapter with zip-loopback data`(): List<DynamicNode> {
+    fun `ZIP adapter with capture from reference data`(): List<DynamicNode> {
         val targetZipPath = zipLoopbackTempFolder.resolve("file.zip")
 
         SourceFactory.zipRecorder(

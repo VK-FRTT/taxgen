@@ -1,11 +1,11 @@
 package fi.vm.yti.taxgen.rdsprovider.folder
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
-import fi.vm.yti.taxgen.rdsprovider.configinput.ConfigFactory
-import fi.vm.yti.taxgen.rdsprovider.OwnerHolder
+import fi.vm.yti.taxgen.rdsprovider.configdata.ConfigFactory
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -17,7 +17,7 @@ internal class DpmDictionarySourceFolderAdapter(
     override fun contextLabel(): String = ""
     override fun contextIdentifier(): String = ""
 
-    override fun dpmOwner(action: (OwnerHolder) -> Unit) {
+    override fun dpmOwner(action: (Owner) -> Unit) {
 
         val configFilePath = dpmDictionaryRootPath.resolve("dpm_owner_config.json")
 

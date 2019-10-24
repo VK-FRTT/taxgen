@@ -1,9 +1,10 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextDetails
+import fi.vm.yti.taxgen.dpmmodel.Owner
 
 interface DpmDictionarySource : DiagnosticContextDetails {
-    fun dpmOwner(action: (OwnerHolder) -> Unit)
+    fun dpmOwner(action: (Owner) -> Unit)
     fun metricsSource(action: (CodeListSource?) -> Unit)
     fun explicitDomainsAndHierarchiesSource(action: (CodeListSource?) -> Unit)
     fun explicitDimensionsSource(action: (CodeListSource?) -> Unit)

@@ -9,6 +9,7 @@ import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
+import fi.vm.yti.taxgen.rdsprovider.configdata.ConfigFactory
 import java.nio.file.Path
 import java.time.Instant
 
@@ -75,9 +76,9 @@ internal class DpmSourceRecorderFolderAdapter(
     ) {
         pathStack.withSubfolder("dpm_dictionary_$dictionaryIndex") {
 
-            dictionarySource.dpmOwner { ownerHolder ->
+            dictionarySource.dpmOwner { owner ->
                 FileOps.writeTextFile(
-                    ownerHolder.configData,
+                    ConfigFactory.ownerToJsonString(owner),
                     pathStack,
                     "dpm_owner_config.json",
                     forceOverwrite,

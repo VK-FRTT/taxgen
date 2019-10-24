@@ -2,9 +2,9 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
-import fi.vm.yti.taxgen.rdsprovider.configinput.ConfigFactory
-import fi.vm.yti.taxgen.rdsprovider.rds.HttpClientHolder
+import fi.vm.yti.taxgen.rdsprovider.configdata.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
+import fi.vm.yti.taxgen.rdsprovider.rds.HttpClientHolder
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import io.specto.hoverfly.junit.core.Hoverfly
 import io.specto.hoverfly.junit.core.SimulationSource
@@ -74,12 +74,14 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
     )
 
     internal companion object {
+        lateinit var loopbackTempFolder: TempFolder
         lateinit var tempFolder: TempFolder
         lateinit var configFilePath: Path
 
         @BeforeAll
         @JvmStatic
         fun beforeAll() {
+            loopbackTempFolder = TempFolder("conformance_rds_loopback")
             tempFolder = TempFolder("conformance_rds_simulation")
             configFilePath = tempFolder.createFileWithContent("dpm_dictionary_config.json", rdsDpmSourceConfig())
         }
@@ -87,6 +89,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         @AfterAll
         @JvmStatic
         fun afterAll() {
+            loopbackTempFolder.close()
             tempFolder.close()
         }
 
@@ -233,6 +236,41 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
     }
 
+    @TestFactory
+    fun `Folder adapter with capture from RDS adapter with simulated HTTP responses`(): List<DynamicNode> {
+        useCustomisedHttpClient()
+        configureHoverflySimulation()
+
+        SourceFactory.folderRecorder(
+            outputFolderPath = loopbackTempFolder.path(),
+            forceOverwrite = false,
+            diagnosticContext = diagnosticContext
+        ).use { sourceRecorder ->
+            val sourceHolder = SourceFactory.sourceForConfigFile(
+                configFilePath = configFilePath,
+                diagnosticContext = diagnosticContext
+            )
+
+            sourceHolder.withDpmSource {
+                sourceRecorder.captureSources(it)
+            }
+        }
+
+        val sourceHolder = SourceFactory.sourceForFolder(
+            sourceRootPath = loopbackTempFolder.path(),
+            diagnosticContext = diagnosticContext
+        )
+
+        val expectedDetails = DpmSource_FunctionalConformance_ModuleTestBase.ExpectedDetails(
+            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextLabel = "folder",
+            dpmSourceContextIdentifier = loopbackTempFolder.path().toString(),
+            dpmSourceConfigFilePath = "${loopbackTempFolder.path()}/meta/source_config.json"
+        )
+
+        return createAdapterConformanceTestCases(sourceHolder, expectedDetails)
+    }
+
     @ParameterizedTest(
         name = "Should handle timeouts within {0}"
     )
@@ -325,7 +363,12 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
                 name = "dpm_dictionary_0",
                 codeLists = listOf(
                     CodeListSimConf(
-                        name = "met"
+                        name = "met",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
                         name = "exp_dom_hier",
@@ -533,13 +576,28 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
                         )
                     ),
                     CodeListSimConf(
-                        name = "exp_dim"
+                        name = "exp_dim",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "typ_dom"
+                        name = "typ_dom",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "typ_dim"
+                        name = "typ_dim",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
                         name = "edh_sub_code_list_0",
@@ -561,37 +619,92 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
                         )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_1"
+                        name = "edh_sub_code_list_1",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_2"
+                        name = "edh_sub_code_list_2",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_3"
+                        name = "edh_sub_code_list_3",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_4"
+                        name = "edh_sub_code_list_4",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_5"
+                        name = "edh_sub_code_list_5",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_6"
+                        name = "edh_sub_code_list_6",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_7"
+                        name = "edh_sub_code_list_7",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_8"
+                        name = "edh_sub_code_list_8",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_9"
+                        name = "edh_sub_code_list_9",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_10"
+                        name = "edh_sub_code_list_10",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     ),
                     CodeListSimConf(
-                        name = "edh_sub_code_list_11"
+                        name = "edh_sub_code_list_11",
+                        codePages = listOf(
+                            CodePageSimConf(
+                                name = "codes_page_0"
+                            )
+                        )
                     )
                 )
             ),

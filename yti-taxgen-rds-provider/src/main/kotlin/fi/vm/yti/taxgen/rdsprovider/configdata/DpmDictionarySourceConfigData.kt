@@ -1,16 +1,16 @@
-package fi.vm.yti.taxgen.rdsprovider.configinput
+package fi.vm.yti.taxgen.rdsprovider.configdata
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySourceConfig
 
 @Suppress("MemberVisibilityCanBePrivate")
-data class DpmDictionarySourceConfigInput(
-    val owner: OwnerConfigInput?,
-    val metrics: CodeListConfigInput?,
-    val explicitDomainsAndHierarchies: CodeListConfigInput?,
-    val explicitDimensions: CodeListConfigInput?,
-    val typedDomains: CodeListConfigInput?,
-    val typedDimensions: CodeListConfigInput?
+data class DpmDictionarySourceConfigData(
+    val owner: OwnerConfigData?,
+    val metrics: CodeListConfigData?,
+    val explicitDomainsAndHierarchies: CodeListConfigData?,
+    val explicitDimensions: CodeListConfigData?,
+    val typedDomains: CodeListConfigData?,
+    val typedDimensions: CodeListConfigData?
 ) {
     fun toConfig(diagnostic: Diagnostic): DpmDictionarySourceConfig {
         validateValueNotNull(this::owner, diagnostic)

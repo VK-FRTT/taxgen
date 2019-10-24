@@ -6,6 +6,7 @@ import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
+import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 
 //TODO - Test with multiple code & extension member pages
@@ -32,12 +33,12 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
             dynamicContainer(
                 "DpmSource",
                 listOf(
-                    dynamicTest("Should have diagnostic context info about RDS source") {
+                    dynamicTestWithHaltExceptionHarness("Should have diagnostic context info about RDS source") {
                         assertThat(dpmSource.contextLabel()).isEqualTo(expectedDetails.dpmSourceContextLabel)
                         assertThat(dpmSource.contextIdentifier()).isEqualTo(expectedDetails.dpmSourceContextIdentifier)
                     },
 
-                    dynamicTest("Should have source config") {
+                    dynamicTestWithHaltExceptionHarness("Should have source config") {
                         assertThat(
                             dpmSource.config().configFilePath
                         ).isEqualTo(expectedDetails.dpmSourceConfigFilePath)
@@ -75,7 +76,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                 "DpmDictionarySource",
                 listOf(
 
-                    dynamicTest("Should have diagnostic context info about DPM dictionary") {
+                    dynamicTestWithHaltExceptionHarness("Should have diagnostic context info about DPM dictionary") {
                         val dpmDictionarySources = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }
@@ -87,36 +88,11 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
                     },
 
-                    dynamicTest("Should have owner objects") {
+                    dynamicTestWithHaltExceptionHarness("Should have owner objects") {
                         val markers = collectListOf<String> {
                             dpmSource.eachDpmDictionarySource { dictionarySource ->
-                                dictionarySource.dpmOwner { ownerHolder ->
-                                    it(ownerHolder.owner.name)
-                                }
-                            }
-                        }
-
-                        assertThat(markers).containsExactly(
-                            "dpm_dictionary_0/dpm_owner",
-                            "dpm_dictionary_1/dpm_owner",
-                            "dpm_dictionary_2/dpm_owner",
-                            "dpm_dictionary_3/dpm_owner",
-                            "dpm_dictionary_4/dpm_owner",
-                            "dpm_dictionary_5/dpm_owner",
-                            "dpm_dictionary_6/dpm_owner",
-                            "dpm_dictionary_7/dpm_owner",
-                            "dpm_dictionary_8/dpm_owner",
-                            "dpm_dictionary_9/dpm_owner",
-                            "dpm_dictionary_10/dpm_owner",
-                            "dpm_dictionary_11/dpm_owner"
-                        )
-                    },
-
-                    dynamicTest("Should have owner config data") {
-                        val markers = collectMarkerValueFromEachJsonDataAt("/name") { markerExtractAction ->
-                            dpmSource.eachDpmDictionarySource { dictionarySource ->
-                                dictionarySource.dpmOwner { ownerHolder ->
-                                    markerExtractAction(ownerHolder.configData)
+                                dictionarySource.dpmOwner { owner ->
+                                    it(owner.name)
                                 }
                             }
                         }
@@ -142,7 +118,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
             dynamicContainer(
                 "Metrics CodeListSource",
                 listOf(
-                    dynamicTest("Should provide source when concept folder exists in data") {
+                    dynamicTestWithHaltExceptionHarness("Should provide source when concept folder exists in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -153,7 +129,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertMetricsBlueprint(metricsSource!!.blueprint())
                     },
 
-                    dynamicTest("Should not provide source when concept folder does not exist in data") {
+                    dynamicTestWithHaltExceptionHarness("Should not provide source when concept folder does not exist in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[2]
@@ -163,7 +139,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertThat(metricsSource).isNull()
                     },
 
-                    dynamicTest("Should have codeList") {
+                    dynamicTestWithHaltExceptionHarness("Should have codeList") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -182,7 +158,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
             dynamicContainer(
                 "ExplicitDomainsAndHierarchies CodeListSource",
                 listOf(
-                    dynamicTest("Should provide source when concept folder exists in data") {
+                    dynamicTestWithHaltExceptionHarness("Should provide source when concept folder exists in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -195,7 +171,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertExplicitDomainsAndHierarchiesBlueprint(explicitDomainsSource!!.blueprint())
                     },
 
-                    dynamicTest("Should not provide source when concept folder does not exist in data") {
+                    dynamicTestWithHaltExceptionHarness("Should not provide source when concept folder does not exist in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[2]
@@ -210,7 +186,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                     dynamicContainer(
                         "List of Domains",
                         listOf(
-                            dynamicTest("Should have codeList") {
+                            dynamicTestWithHaltExceptionHarness("Should have codeList") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -226,7 +202,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 assertThat(marker).isEqualTo("dpm_dictionary_0/exp_dom_hier/code_list_meta")
                             },
 
-                            dynamicTest("Should have diagnostic context info") {
+                            dynamicTestWithHaltExceptionHarness("Should have diagnostic context info") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -242,7 +218,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have codePages") {
+                            dynamicTestWithHaltExceptionHarness("Should have codePages") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -271,7 +247,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have extensions") {
+                            dynamicTestWithHaltExceptionHarness("Should have extensions") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -306,7 +282,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have diagnostic context info about extension") {
+                            dynamicTestWithHaltExceptionHarness("Should have diagnostic context info about extension") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -334,7 +310,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have extension members pages") {
+                            dynamicTestWithHaltExceptionHarness("Should have extension members pages") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -373,7 +349,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         "Domain Content via SubCodeLists",
                         listOf(
 
-                            dynamicTest("Should provide subCodeListSources when available") {
+                            dynamicTestWithHaltExceptionHarness("Should provide subCodeListSources when available") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -389,7 +365,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 assertThat(subCodeListSources).isNotEmpty
                             },
 
-                            dynamicTest("Should not provide subCodeListSources when not available") {
+                            dynamicTestWithHaltExceptionHarness("Should not provide subCodeListSources when not available") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[1]
@@ -405,7 +381,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 assertThat(subCodeListSources).isEmpty()
                             },
 
-                            dynamicTest("Should have subCodeLists") {
+                            dynamicTestWithHaltExceptionHarness("Should have subCodeLists") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -440,7 +416,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have diagnostic context info about subCodeLists") {
+                            dynamicTestWithHaltExceptionHarness("Should have diagnostic context info about subCodeLists") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -466,7 +442,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have codePages") {
+                            dynamicTestWithHaltExceptionHarness("Should have codePages") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -488,7 +464,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have extensions") {
+                            dynamicTestWithHaltExceptionHarness("Should have extensions") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -516,7 +492,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have diagnostic context info about extension") {
+                            dynamicTestWithHaltExceptionHarness("Should have diagnostic context info about extension") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -543,7 +519,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                 )
                             },
 
-                            dynamicTest("Should have extension members pages") {
+                            dynamicTestWithHaltExceptionHarness("Should have extension members pages") {
                                 val dictionarySource = collectListOf<DpmDictionarySource> {
                                     dpmSource.eachDpmDictionarySource(it)
                                 }[0]
@@ -577,7 +553,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                 "ExplicitDimensions CodeListSource",
                 listOf(
 
-                    dynamicTest("Should provide source when concept folder exists in data") {
+                    dynamicTestWithHaltExceptionHarness("Should provide source when concept folder exists in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -590,7 +566,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertExplicitOrTypedDimensionsBlueprint(explicitDimensionsSource!!.blueprint())
                     },
 
-                    dynamicTest("Should not provide source when concept folder does not exist in data") {
+                    dynamicTestWithHaltExceptionHarness("Should not provide source when concept folder does not exist in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[2]
@@ -602,7 +578,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertThat(explicitDimensionsSource).isNull()
                     },
 
-                    dynamicTest("Should have codeList") {
+                    dynamicTestWithHaltExceptionHarness("Should have codeList") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -624,7 +600,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                 "TypedDomains CodeListSource",
                 listOf(
 
-                    dynamicTest("Should provide source when concept folder exists in data") {
+                    dynamicTestWithHaltExceptionHarness("Should provide source when concept folder exists in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -637,7 +613,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertTypedDomainBlueprint(typedDomainsSource!!.blueprint())
                     },
 
-                    dynamicTest("Should not provide source when concept folder does not exist in data") {
+                    dynamicTestWithHaltExceptionHarness("Should not provide source when concept folder does not exist in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[2]
@@ -649,7 +625,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertThat(typedDomainsSource).isNull()
                     },
 
-                    dynamicTest("Should have codeList") {
+                    dynamicTestWithHaltExceptionHarness("Should have codeList") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -669,7 +645,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
             dynamicContainer(
                 "TypedDimensions CodeListSource",
                 listOf(
-                    dynamicTest("Should provide source when concept folder exists in data") {
+                    dynamicTestWithHaltExceptionHarness("Should provide source when concept folder exists in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -682,7 +658,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertExplicitOrTypedDimensionsBlueprint(typedDimensionsSource!!.blueprint())
                     },
 
-                    dynamicTest("Should not provide source when concept folder does not exist in data") {
+                    dynamicTestWithHaltExceptionHarness("Should not provide source when concept folder does not exist in data") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[2]
@@ -694,7 +670,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                         assertThat(typedDimensionsSource).isNull()
                     },
 
-                    dynamicTest("Should have codeList") {
+                    dynamicTestWithHaltExceptionHarness("Should have codeList") {
                         val dictionarySource = collectListOf<DpmDictionarySource> {
                             dpmSource.eachDpmDictionarySource(it)
                         }[0]
@@ -711,6 +687,17 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                 )
             )
         )
+    }
+
+    private fun dynamicTestWithHaltExceptionHarness(displayName: String, testSteps: () -> Unit): DynamicTest {
+        return dynamicTest(displayName) {
+            withHaltExceptionHarness(
+                diagnosticCollector = diagnosticCollector,
+                exceptionIsExpected = false
+            ) {
+                testSteps()
+            }
+        }
     }
 
     private fun assertMetricsBlueprint(blueprint: CodeListBlueprint) {

@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
-import fi.vm.yti.taxgen.rdsprovider.configinput.ConfigFactory
+import fi.vm.yti.taxgen.rdsprovider.configdata.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
 import fi.vm.yti.taxgen.rdsprovider.helpers.SortOps
 import java.nio.file.Path

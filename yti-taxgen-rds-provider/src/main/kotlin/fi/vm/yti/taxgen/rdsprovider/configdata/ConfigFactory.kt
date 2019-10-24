@@ -1,12 +1,12 @@
-package fi.vm.yti.taxgen.rdsprovider.configinput
+package fi.vm.yti.taxgen.rdsprovider.configdata
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.ops.JsonOps
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
-import fi.vm.yti.taxgen.rdsprovider.OwnerHolder
 import java.nio.file.Path
 
 object ConfigFactory {
@@ -19,21 +19,21 @@ object ConfigFactory {
             contextType = DiagnosticContextType.InitConfiguration,
             contextIdentifier = configFilePath.fileName.toString()
         ) {
-            val configData = FileOps.readTextFile(configFilePath)
+            val content = FileOps.readTextFile(configFilePath)
 
-            val configInput = JsonOps.readValue<DpmSourceConfigInput>(
-                configData,
+            val configData = JsonOps.readValue<DpmSourceConfigData>(
+                content,
                 diagnosticContext
             )
 
-            val dpmSourceConfig = configInput.toDpmSourceConfig(diagnosticContext)
-            val processingOptions = configInput.toProcessingOptions(diagnosticContext)
+            val dpmSourceConfig = configData.toDpmSourceConfig(diagnosticContext)
+            val processingOptions = configData.toProcessingOptions(diagnosticContext)
 
             processingOptions.emitDiagnostics(diagnosticContext)
 
             DpmSourceConfigHolder(
                 configFilePath = configFilePath.toString(),
-                configData = configData,
+                configData = content,
                 dpmSourceConfig = dpmSourceConfig,
                 processingOptions = processingOptions
             )
@@ -43,19 +43,19 @@ object ConfigFactory {
     fun ownerFromFile(
         configFilePath: Path,
         diagnostic: Diagnostic
-    ): OwnerHolder {
-        val configData = FileOps.readTextFile(configFilePath)
+    ): Owner {
+        val content = FileOps.readTextFile(configFilePath)
 
-        val configInput = JsonOps.readValue<OwnerConfigInput>(
-            configData,
+        val configData = JsonOps.readValue<OwnerConfigData>(
+            content,
             diagnostic
         )
 
-        val owner = configInput.toOwner(diagnostic)
+        return configData.toOwner(diagnostic)
+    }
 
-        return OwnerHolder(
-            configData = configData,
-            owner = owner
-        )
+    fun ownerToJsonString(owner: Owner): String {
+        val configData = OwnerConfigData.fomOwner(owner)
+        return JsonOps.writeAsJsonString(configData)
     }
 }

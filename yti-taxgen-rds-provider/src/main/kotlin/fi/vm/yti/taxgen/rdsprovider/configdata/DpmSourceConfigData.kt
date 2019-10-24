@@ -1,13 +1,13 @@
-package fi.vm.yti.taxgen.rdsprovider.configinput
+package fi.vm.yti.taxgen.rdsprovider.configdata
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfig
 
 @Suppress("MemberVisibilityCanBePrivate")
-data class DpmSourceConfigInput(
-    val dpmDictionaries: List<DpmDictionarySourceConfigInput?>?,
-    val processingOptions: ProcessingOptionsConfigInput?
+data class DpmSourceConfigData(
+    val dpmDictionaries: List<DpmDictionarySourceConfigData?>?,
+    val processingOptions: ProcessingOptionsConfigData?
 ) {
     fun toDpmSourceConfig(diagnostic: Diagnostic): DpmSourceConfig {
         validateValueNotNull(this::dpmDictionaries, diagnostic)

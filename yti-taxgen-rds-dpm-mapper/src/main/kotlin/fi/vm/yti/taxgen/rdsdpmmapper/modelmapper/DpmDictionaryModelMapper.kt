@@ -10,13 +10,13 @@ internal class DpmDictionaryModelMapper(
     private val diagnostic: Diagnostic
 ) {
     fun dpmOwner(action: (Owner) -> Unit) {
-        dpmDictionarySource.dpmOwner { ownerHolder ->
+        dpmDictionarySource.dpmOwner { owner ->
 
             diagnostic.updateCurrentContextDetails(
-                label = ownerHolder.owner.name
+                label = owner.name
             )
 
-            action(ownerHolder.owner)
+            action(owner)
         }
     }
 

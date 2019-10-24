@@ -1,11 +1,11 @@
-package fi.vm.yti.taxgen.rdsprovider.configinput
+package fi.vm.yti.taxgen.rdsprovider.configdata
 
 import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
 import kotlin.reflect.KProperty0
 
-data class ProcessingOptionsConfigInput(
+data class ProcessingOptionsConfigData(
     val sqliteDbDpmElementInherentTextLanguage: String?,
     val sqliteDbMandatoryLabelLanguage: String?,
     val sqliteDbMandatoryLabelSourceLanguages: List<String?>?,
