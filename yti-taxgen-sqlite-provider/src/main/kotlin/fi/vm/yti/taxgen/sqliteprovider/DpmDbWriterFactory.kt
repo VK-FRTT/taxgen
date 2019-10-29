@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.sqliteprovider.contextdiagnostic.DpmDbWriterContextDecorator
 import fi.vm.yti.taxgen.sqliteprovider.dictionarycreate.DictionaryCreateDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.DictionaryReplaceDbWriter

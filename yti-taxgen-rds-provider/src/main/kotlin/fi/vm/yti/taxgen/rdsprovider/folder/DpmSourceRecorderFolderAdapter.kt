@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.rdsprovider.folder
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.commons.ops.PathStack
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.CaptureInfo
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
@@ -21,7 +21,7 @@ internal class DpmSourceRecorderFolderAdapter(
 
     private val outputFolderPath = outputFolderPath.toAbsolutePath().normalize()
 
-    override fun contextLabel(): String = "folder"
+    override fun contextTitle(): String = "folder"
     override fun contextIdentifier(): String = outputFolderPath.toString()
 
     override fun captureSources(dpmSource: DpmSource) {

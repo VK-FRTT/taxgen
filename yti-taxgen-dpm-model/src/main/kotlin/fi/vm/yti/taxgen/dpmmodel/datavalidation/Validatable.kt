@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons.datavalidation
+package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
 interface Validatable {
 

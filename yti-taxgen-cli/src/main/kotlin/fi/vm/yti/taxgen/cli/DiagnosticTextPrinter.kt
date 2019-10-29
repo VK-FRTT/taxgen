@@ -1,20 +1,21 @@
 package fi.vm.yti.taxgen.cli
 
-import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
-import fi.vm.yti.taxgen.commons.diagostic.Severity
-import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticContextDescriptor
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticEventConsumer
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 import java.io.PrintWriter
 
 class DiagnosticTextPrinter(
     private val printWriter: PrintWriter
-) : DiagnosticConsumer {
+) : DiagnosticEventConsumer {
 
     private var level = 0
     private var lineHeader: String = ""
 
-    override fun contextEnter(contextStack: List<ContextInfo>) {
+    override fun contextEnter(contextStack: List<DiagnosticContextDescriptor>) {
         level = levelFromStack(contextStack)
 
         val context = contextStack.first()
@@ -23,8 +24,8 @@ class DiagnosticTextPrinter(
     }
 
     override fun contextExit(
-        contextStack: List<ContextInfo>,
-        retiredContext: ContextInfo
+        contextStack: List<DiagnosticContextDescriptor>,
+        retiredContext: DiagnosticContextDescriptor
     ) {
         printLine("OK")
 
@@ -33,8 +34,8 @@ class DiagnosticTextPrinter(
     }
 
     override fun topContextDetailsChange(
-        contextStack: List<ContextInfo>,
-        originalContext: ContextInfo
+        contextStack: List<DiagnosticContextDescriptor>,
+        originalContext: DiagnosticContextDescriptor
     ) {
         printLine(contextStack.first().contextDetailsForUpdate(originalContext))
     }
@@ -48,55 +49,61 @@ class DiagnosticTextPrinter(
         validationResults: List<ValidationResultInfo>
     ) {
         validationResults.forEach {
-            message(Severity.ERROR, "${validatableInfo.objectKind} (${validatableInfo.objectAddress}) => ${it.propertyName}: ${it.message}")
+            message(
+                Severity.ERROR,
+                "${validatableInfo.objectKind} (${validatableInfo.objectAddress}) => ${it.propertyName}: ${it.message}"
+            )
         }
     }
 
-    private fun levelFromStack(contextStack: List<ContextInfo>) = (contextStack.size - 1).coerceAtLeast(0)
+    private fun levelFromStack(contextStack: List<DiagnosticContextDescriptor>) =
+        (contextStack.size - 1).coerceAtLeast(0)
 
     private fun printLine(message: String) {
         printWriter.println("${"   ".repeat(level)}$lineHeader $message")
     }
 
-    private fun ContextInfo.contextHeader(): String {
-        return if (type.recurring) {
-            "${type.displayName} #$recurrenceIndex:"
+    private fun DiagnosticContextDescriptor.contextHeader(): String {
+        val contextTypeEnum = DiagnosticContexts.valueOf(contextType.typeName)
+
+        return if (this.contextType.recurringContext) {
+            "${contextTypeEnum.displayName} #$recurrenceIndex:"
         } else {
-            "${type.displayName}:"
+            "${contextTypeEnum.displayName}:"
         }
     }
 
-    private fun ContextInfo.contextDetails(): String {
+    private fun DiagnosticContextDescriptor.contextDetails(): String {
         val separatorValue = " "
         var separator = ""
         var details = ""
 
-        if (label.isNotBlank()) {
+        if (contextTitle.isNotBlank()) {
             separator = separatorValue
-            details += "$label"
+            details += "$contextTitle"
         }
 
-        if (identifier.isNotBlank()) {
+        if (contextIdentifier.isNotBlank()) {
             details += separator
-            details += "($identifier)"
+            details += "($contextIdentifier)"
         }
 
         return details
     }
 
-    private fun ContextInfo.contextDetailsForUpdate(original: ContextInfo): String {
+    private fun DiagnosticContextDescriptor.contextDetailsForUpdate(original: DiagnosticContextDescriptor): String {
         val separatorValue = " "
         var separator = ""
         var details = ""
 
-        if (label.isNotBlank() && label != original.label) {
+        if (contextTitle.isNotBlank() && contextTitle != original.contextTitle) {
             separator = separatorValue
-            details += "$label"
+            details += "$contextTitle"
         }
 
-        if (identifier.isNotBlank() && identifier != original.identifier) {
+        if (contextIdentifier.isNotBlank() && contextIdentifier != original.contextIdentifier) {
             details += separator
-            details += "($identifier)"
+            details += "($contextIdentifier)"
         }
 
         return details

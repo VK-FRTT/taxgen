@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable

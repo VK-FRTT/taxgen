@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.validators.validateElementPropertyValuesUnique
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLengths
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementPropertyValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
 
 data class MetricDomain(
     override val uri: String,

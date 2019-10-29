@@ -1,7 +1,6 @@
-package fi.vm.yti.taxgen.dpmmodel.validators
+package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import kotlin.reflect.KProperty1
 
 fun <T : Any, P : Any> validateLengths(
@@ -105,7 +104,7 @@ private fun <T : Any, P : Any> unsupportedTargetDataType(
     instance: T,
     property: KProperty1<T, P>
 ) {
-    thisShouldNeverHappen(
+    throwIllegalDpmModelState(
         "$validatorName: Unsupported data type ${value::class.simpleName} for ${instance.javaClass.simpleName}::${property.name}"
     )
 }

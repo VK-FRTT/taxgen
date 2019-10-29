@@ -1,6 +1,6 @@
-package fi.vm.yti.taxgen.commons.diagostic
+package fi.vm.yti.taxgen.dpmmodel.diagnostic
 
 interface DiagnosticContextDetails {
-    fun contextLabel(): String
+    fun contextTitle(): String
     fun contextIdentifier(): String
 }

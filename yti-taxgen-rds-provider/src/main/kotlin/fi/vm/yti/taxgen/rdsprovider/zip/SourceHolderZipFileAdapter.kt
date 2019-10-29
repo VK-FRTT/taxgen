@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.zip
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import java.nio.file.Path

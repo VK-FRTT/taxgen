@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.contextdiagnostic
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 
@@ -10,12 +10,12 @@ internal class DpmSourceRecorderContextDecorator(
     private val diagnosticContext: DiagnosticContext
 ) : DpmSourceRecorder {
 
-    override fun contextLabel(): String = realDpmSourceRecorder.contextLabel()
+    override fun contextTitle(): String = realDpmSourceRecorder.contextTitle()
     override fun contextIdentifier(): String = realDpmSourceRecorder.contextIdentifier()
 
     override fun captureSources(dpmSource: DpmSource) {
         diagnosticContext.withContext(
-            contextType = DiagnosticContextType.DpmSourceRecorder,
+            contextType = DiagnosticContexts.DpmSourceRecorder.toType(),
             contextDetails = this
         ) {
             realDpmSourceRecorder.captureSources(dpmSource)

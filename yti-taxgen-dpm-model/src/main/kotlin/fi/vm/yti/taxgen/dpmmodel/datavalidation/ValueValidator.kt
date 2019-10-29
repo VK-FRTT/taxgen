@@ -1,6 +1,5 @@
-package fi.vm.yti.taxgen.dpmmodel.validators
+package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
 fun <I : Any> validateNonBlank(
@@ -16,7 +15,6 @@ fun <I : Any> validateNonBlank(
             propertyName = property.name,
             message = "does not have value"
         )
-
     else if (value.isBlank())
         validationResults.addError(
             instance = instance,

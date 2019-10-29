@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.configdata
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import kotlin.reflect.KProperty0
 
 fun <T : Any?> validateValueNotNull(property: KProperty0<T>, diagnostic: Diagnostic) {

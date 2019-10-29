@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -74,7 +75,8 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
 
         tempFolder = TempFolder(javaClass.simpleName)
         diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        diagnosticContext =
+            DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
         outputDbPath = tempFolder.resolve("${initMode.name.toLowerCase()}.db")
 
         withHaltExceptionHarness(diagnosticCollector, exceptionIsExpected) {

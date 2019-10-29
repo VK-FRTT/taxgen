@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
@@ -55,7 +56,8 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
     }
 
     protected fun replaceDictionaryInDb(variety: FixtureVariety = FixtureVariety.NONE) {
-        val diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        val diagnosticContext =
+            DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
         val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
             baselineDbPath = baselineDbPath,
             outputDbPath = outputDbPath,
@@ -67,7 +69,8 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
             variety
         )
 
-        val processingOptions = ProcessingOptions(null, null, null, null, null, null)
+        val processingOptions =
+            ProcessingOptions(null, null, null, null, null, null)
 
         dbWriter.writeModel(
             model,

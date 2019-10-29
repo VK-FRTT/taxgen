@@ -8,7 +8,7 @@ internal class ExtensionSourceFolderAdapter(
     private val extensionPath: Path
 ) : ExtensionSource {
 
-    override fun contextLabel(): String = ""
+    override fun contextTitle(): String = ""
     override fun contextIdentifier(): String = extensionPath.toString()
 
     override fun extensionMetaData(): String {

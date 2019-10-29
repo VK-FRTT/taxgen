@@ -1,12 +1,11 @@
 package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
-import fi.vm.yti.taxgen.commons.ext.kotlin.chainToString
-import fi.vm.yti.taxgen.commons.ext.kotlin.getPropertyValue
-import fi.vm.yti.taxgen.commons.ext.kotlin.rootExceptionOfClass
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
-import fi.vm.yti.taxgen.testcommons.assertFail
-import fi.vm.yti.taxgen.testcommons.shouldBeNullException
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.ext.kotlin.chainToString
+import fi.vm.yti.taxgen.dpmmodel.ext.kotlin.getPropertyValue
+import fi.vm.yti.taxgen.dpmmodel.ext.kotlin.rootExceptionOfClass
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 
@@ -37,7 +36,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
         "required" -> shouldBeRequiredPropertyValueMissingException(exception, propertyName)
         "optional" -> shouldBeNullException(exception)
 
-        else -> thisShouldNeverHappen("PropertyOptionalityTemplate does not support given optionality: $expectedOptionality")
+        else -> throwIllegalDpmModelState("PropertyOptionalityTemplate does not support given optionality: $expectedOptionality")
     }
 }
 
@@ -68,4 +67,18 @@ private fun shouldBeRequiredPropertyValueMissingException(
             )
         }
     }
+}
+
+private fun shouldBeNullException(exception: Throwable?) {
+    if (exception == null) return
+
+    assertFail(
+        message = "Unexpected exception with chain: ${exception.chainToString()}",
+        cause = exception
+    )
+}
+
+private fun assertFail(message: String, cause: Throwable? = null): Nothing {
+    Assertions.fail(message, cause)
+    throwIllegalDpmModelState("Unreachable")
 }

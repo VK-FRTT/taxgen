@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.tablecelltransform
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 

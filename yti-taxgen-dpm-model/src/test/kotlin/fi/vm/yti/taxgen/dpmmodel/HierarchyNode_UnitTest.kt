@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
@@ -114,7 +114,7 @@ internal class HierarchyNode_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.comparisonOperator: unsupported arithmetical relationship (comparison operator) '$comparisonOperator'")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
     }
@@ -145,7 +145,7 @@ internal class HierarchyNode_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.unaryOperator: unsupported arithmetical sign (unary operator) '$unaryOperator'")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
     }

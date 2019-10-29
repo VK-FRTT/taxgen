@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 
 data class Hierarchy(
     override val uri: String,

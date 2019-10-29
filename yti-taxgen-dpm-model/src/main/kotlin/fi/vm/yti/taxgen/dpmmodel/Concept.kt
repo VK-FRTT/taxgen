@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.validators.validateTimestamp
-import fi.vm.yti.taxgen.dpmmodel.validators.validateTranslatedText
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTimestamp
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTranslatedText
 import java.time.Instant
 import java.time.LocalDate
 

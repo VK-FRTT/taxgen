@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import org.assertj.core.api.Assertions.assertThat
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.createType
@@ -71,7 +71,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
             messageComposer = { className -> "$className.$propertyName: is too long (maximum $expectedLimit elements)" }
         }
 
-        else -> thisShouldNeverHappen("PropertyLengthValidationTemplate does not support given validation type '$validationType'")
+        else -> throwIllegalDpmModelState("PropertyLengthValidationTemplate does not support given validation type '$validationType'")
     }
 
     //Valid value
@@ -108,7 +108,7 @@ private fun <T : Any> DpmModel_UnitTestBase<T>.stringOverrideAttributeForProp(
         return mapOf(propertyName to List(length) { index -> index.toString() })
     }
 
-    thisShouldNeverHappen("Can not build value for '$propertyName' property with length $length")
+    throwIllegalDpmModelState("Can not build value for '$propertyName' property with length $length")
 }
 
 private fun <T : Any> DpmModel_UnitTestBase<T>.customOverrideAttributesForProp(
@@ -120,13 +120,13 @@ private fun <T : Any> DpmModel_UnitTestBase<T>.customOverrideAttributesForProp(
         ?: throw IllegalArgumentException("No property found for name: $propertyName from class: ${kClass.simpleName}")
 
     if (customValueBuilder == null) {
-        thisShouldNeverHappen("CustomValueBuilder not provided for '$propertyName' property")
+        throwIllegalDpmModelState("CustomValueBuilder not provided for '$propertyName' property")
     }
 
     val attributes = customValueBuilder(property, length)
 
     if (!attributes.containsKey(propertyName)) {
-        thisShouldNeverHappen("CustomValueBuilder did not build value for '$propertyName' property with length $length")
+        throwIllegalDpmModelState("CustomValueBuilder did not build value for '$propertyName' property with length $length")
     }
 
     return attributes

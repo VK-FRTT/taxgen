@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.zip
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
@@ -19,7 +19,7 @@ internal class DpmSourceZipFileAdapter(
     private val zipFileSystem = createSourceZipFileSystem()
     private val folderAdapter = createDpmSourceFolderAdapter()
 
-    override fun contextLabel(): String = "ZIP file"
+    override fun contextTitle(): String = "ZIP file"
     override fun contextIdentifier(): String = sourceZipPath.toString()
 
     override fun config(): DpmSourceConfigHolder = folderAdapter.config()

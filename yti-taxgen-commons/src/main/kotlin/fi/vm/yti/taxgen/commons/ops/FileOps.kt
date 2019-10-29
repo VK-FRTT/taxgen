@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.commons.ops
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import java.io.BufferedWriter
 import java.nio.charset.StandardCharsets

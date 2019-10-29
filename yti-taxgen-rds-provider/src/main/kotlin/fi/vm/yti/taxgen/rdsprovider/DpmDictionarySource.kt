@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextDetails
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetails
 import fi.vm.yti.taxgen.dpmmodel.Owner
 
 interface DpmDictionarySource : DiagnosticContextDetails {

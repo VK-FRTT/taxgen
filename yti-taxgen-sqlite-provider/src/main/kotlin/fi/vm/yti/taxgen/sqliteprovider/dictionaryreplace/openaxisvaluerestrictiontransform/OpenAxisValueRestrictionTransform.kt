@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestrictiontransform
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.tables.OpenAxisValueRestrictionTable
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
@@ -32,7 +32,7 @@ class OpenAxisValueRestrictionTransform(
                 }
             }
 
-            diagnostic.haltIfUnrecoverableErrors {
+            diagnostic.stopIfSignificantErrorsReceived {
                 "OpenAxisValueRestriction baseline loading failed"
             }
 
@@ -61,7 +61,7 @@ class OpenAxisValueRestrictionTransform(
             }
         }
 
-        diagnostic.haltIfUnrecoverableErrors {
+        diagnostic.stopIfSignificantErrorsReceived {
             "OpenAxisValueRestriction transformation failed"
         }
 

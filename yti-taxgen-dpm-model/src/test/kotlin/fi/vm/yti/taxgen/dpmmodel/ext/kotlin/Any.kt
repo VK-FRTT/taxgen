@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons.ext.kotlin
+package fi.vm.yti.taxgen.dpmmodel.ext.kotlin
 
 import kotlin.reflect.full.memberProperties
 

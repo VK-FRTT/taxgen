@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 
 internal data class RdsExtensionMember(
     //uri

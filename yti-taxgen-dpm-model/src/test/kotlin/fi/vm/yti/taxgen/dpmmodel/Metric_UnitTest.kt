@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
@@ -113,7 +113,7 @@ internal class Metric_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).contains("Metric.metricCode: metric code does not match required pattern '$metricCode'")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
     }
@@ -187,7 +187,7 @@ internal class Metric_UnitTest :
                     assertThat(Metric.codeTagFromDataType(dataType)).isEqualTo("?")
                 }
 
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
 
@@ -239,7 +239,7 @@ internal class Metric_UnitTest :
                     assertThat(validationErrors).containsExactly("Metric.flowType: unsupported flow type '$flowType'")
                     assertThat(Metric.codeTagFromFlowType(flowType)).isEqualTo("?")
                 }
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
     }
@@ -270,7 +270,7 @@ internal class Metric_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("Metric.balanceType: unsupported balance type '$balanceType'")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
     }
@@ -299,7 +299,7 @@ internal class Metric_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedDomainCode: empty or blank id")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
 
@@ -353,7 +353,7 @@ internal class Metric_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedHierarchyCode: empty or blank id")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
 

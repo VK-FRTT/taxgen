@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmCodeContent
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateDpmCodeContent
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 
 data class Metric(
     override val uri: String,

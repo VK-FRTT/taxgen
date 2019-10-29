@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.folder
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
@@ -23,7 +23,7 @@ internal class DpmSourceFolderAdapter(
         )
     }
 
-    override fun contextLabel(): String = "folder"
+    override fun contextTitle(): String = "folder"
     override fun contextIdentifier(): String = dpmSourceRootPath.toString()
     override fun config(): DpmSourceConfigHolder = dpmSourceConfigHolder
 

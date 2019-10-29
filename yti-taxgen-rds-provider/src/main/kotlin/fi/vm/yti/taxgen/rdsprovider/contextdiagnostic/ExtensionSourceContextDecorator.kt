@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.contextdiagnostic
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 
 internal class ExtensionSourceContextDecorator(
@@ -9,7 +9,7 @@ internal class ExtensionSourceContextDecorator(
     private val diagnosticContext: DiagnosticContext
 ) : ExtensionSource {
 
-    override fun contextLabel(): String = realExtensionSource.contextLabel()
+    override fun contextTitle(): String = realExtensionSource.contextTitle()
     override fun contextIdentifier(): String = realExtensionSource.contextIdentifier()
 
     override fun extensionMetaData(): String = realExtensionSource.extensionMetaData()
@@ -17,7 +17,7 @@ internal class ExtensionSourceContextDecorator(
     override fun eachExtensionMemberPageData(action: (String) -> Unit) {
         realExtensionSource.eachExtensionMemberPageData { pageData ->
             diagnosticContext.withContext(
-                contextType = DiagnosticContextType.RdsExtensionMembersPage,
+                contextType = DiagnosticContexts.RdsExtensionMembersPage.toType(),
                 contextDetails = null
             ) {
                 action(pageData)

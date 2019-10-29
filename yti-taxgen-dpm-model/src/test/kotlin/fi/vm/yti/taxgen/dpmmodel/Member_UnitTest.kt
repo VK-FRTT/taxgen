@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
@@ -115,7 +115,7 @@ internal class Member_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("Member.memberCode: is illegal DPM Code")
-                else -> thisShouldNeverHappen("Unsupported expected validity $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expected validity $expectedValidity")
             }
         }
     }

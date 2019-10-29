@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNull
 import org.jetbrains.exposed.dao.EntityID
 
 data class FinalOrdinateCategorisation(

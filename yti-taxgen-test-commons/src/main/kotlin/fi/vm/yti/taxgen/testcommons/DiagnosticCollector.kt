@@ -1,12 +1,12 @@
 package fi.vm.yti.taxgen.testcommons
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.commons.diagostic.ContextInfo
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticConsumer
-import fi.vm.yti.taxgen.commons.diagostic.Severity
-import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticContextDescriptor
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticEventConsumer
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 
-class DiagnosticCollector : DiagnosticConsumer {
+class DiagnosticCollector : DiagnosticEventConsumer {
 
     val events = mutableListOf<String>()
 
@@ -16,16 +16,26 @@ class DiagnosticCollector : DiagnosticConsumer {
     private var infoCount = 0
     private var objectValidationFailureCount = 0
 
-    override fun contextEnter(contextStack: List<ContextInfo>) {
-        events.add("ENTER [${contextStack.firstOrNull()?.type ?: ""}] [${contextStack.firstOrNull()?.label ?: ""}]")
+    override fun contextEnter(contextStack: List<DiagnosticContextDescriptor>) {
+        val topContext = contextStack.firstOrNull()
+
+        events.add(
+            "ENTER [${topContext?.contextType?.typeName ?: ""}] [${topContext?.contextTitle ?: ""}]"
+        )
     }
 
-    override fun contextExit(contextStack: List<ContextInfo>, retiredContext: ContextInfo) {
-        events.add("EXIT [${retiredContext.type}]")
+    override fun contextExit(
+        contextStack: List<DiagnosticContextDescriptor>,
+        retiredContext: DiagnosticContextDescriptor
+    ) {
+        events.add("EXIT [${retiredContext.contextType.typeName}]")
     }
 
-    override fun topContextDetailsChange(contextStack: List<ContextInfo>, originalContext: ContextInfo) {
-        events.add("UPDATE [${originalContext.type}]")
+    override fun topContextDetailsChange(
+        contextStack: List<DiagnosticContextDescriptor>,
+        originalContext: DiagnosticContextDescriptor
+    ) {
+        events.add("UPDATE [${originalContext.contextType.typeName}]")
     }
 
     override fun message(severity: Severity, message: String) {

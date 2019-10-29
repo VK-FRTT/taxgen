@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -36,7 +36,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
         )
 
         val expectedDetails = ExpectedDetails(
-            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextType = DiagnosticContexts.DpmSource.toType(),
             dpmSourceContextLabel = "folder",
             dpmSourceContextIdentifier = rootPath.toString(),
             dpmSourceConfigFilePath = "$rootPath/meta/source_config.json"
@@ -53,7 +53,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
         )
 
         val expectedDetails = ExpectedDetails(
-            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextType = DiagnosticContexts.DpmSource.toType(),
             dpmSourceContextLabel = "folder",
             dpmSourceContextIdentifier = rootPath.toString(),
             dpmSourceConfigFilePath = "$rootPath/meta/source_config.json"
@@ -84,7 +84,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
         )
 
         val expectedDetails = ExpectedDetails(
-            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextType = DiagnosticContexts.DpmSource.toType(),
             dpmSourceContextLabel = "folder",
             dpmSourceContextIdentifier = loopbackTempFolder.path().toString(),
             dpmSourceConfigFilePath = "${loopbackTempFolder.path()}/meta/source_config.json"
@@ -118,7 +118,7 @@ internal class DpmSource_FunctionalConformance_FolderAdapter_ModuleTest : DpmSou
         )
 
         val expectedDetails = ExpectedDetails(
-            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextType = DiagnosticContexts.DpmSource.toType(),
             dpmSourceContextLabel = "ZIP file",
             dpmSourceContextIdentifier = targetZipPath.toString(),
             dpmSourceConfigFilePath = "/meta/source_config.json"

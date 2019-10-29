@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.contextdiagnostic
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 
@@ -19,7 +19,7 @@ internal class SourceHolderContextDecorator(
             )
 
             diagnosticContext.withContext(
-                contextType = DiagnosticContextType.DpmSource,
+                contextType = DiagnosticContexts.DpmSource.toType(),
                 contextDetails = decoratedDpmSource
             ) {
                 action(decoratedDpmSource)

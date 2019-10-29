@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
@@ -13,7 +13,7 @@ internal class DpmDictionaryModelMapper(
         dpmDictionarySource.dpmOwner { owner ->
 
             diagnostic.updateCurrentContextDetails(
-                label = owner.name
+                contextTitle = owner.name
             )
 
             action(owner)
@@ -60,7 +60,7 @@ internal class DpmDictionaryModelMapper(
         val reader = CodeListModelMapper(codeListSource, diagnostic)
 
         diagnostic.updateCurrentContextDetails(
-            label = reader.codeListMeta().diagnosticLabel()
+            contextTitle = reader.codeListMeta().diagnosticLabel()
         )
 
         return reader

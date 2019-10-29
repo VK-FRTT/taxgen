@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestrictiontransform
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.validators.validateNonBlank
-import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonBlank
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNull
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable

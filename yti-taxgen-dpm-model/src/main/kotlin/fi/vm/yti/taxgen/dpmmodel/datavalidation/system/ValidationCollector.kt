@@ -1,6 +1,6 @@
-package fi.vm.yti.taxgen.commons.datavalidation
+package fi.vm.yti.taxgen.dpmmodel.datavalidation.system
 
-import fi.vm.yti.taxgen.commons.diagostic.ValidationResultInfo
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 
 class ValidationCollector : ValidationResults {
 

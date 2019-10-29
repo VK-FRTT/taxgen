@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
@@ -116,7 +115,6 @@ internal class Language_UnitTest :
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
-                .isInstanceOf(FailException::class.java)
                 .hasMessage("Language configuration missing language 'sv' used for label 'engelska'")
         }
 
@@ -127,7 +125,6 @@ internal class Language_UnitTest :
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
-                .isInstanceOf(FailException::class.java)
                 .hasMessageStartingWith("Language configuration loading failed: ")
         }
 
@@ -138,7 +135,6 @@ internal class Language_UnitTest :
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
-                .isInstanceOf(FailException::class.java)
                 .hasMessage("Language configuration not valid. [Language #1 (fi): [Language.label: has too few translations (minimum 1)]]")
         }
     }

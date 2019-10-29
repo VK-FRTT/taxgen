@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
@@ -13,7 +13,7 @@ internal class DpmDictionarySourceRdsAdapter(
     private val diagnostic: Diagnostic
 ) : DpmDictionarySource {
 
-    override fun contextLabel(): String = ""
+    override fun contextTitle(): String = ""
     override fun contextIdentifier(): String = ""
 
     override fun dpmOwner(action: (Owner) -> Unit) {

@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.rdsdpmmapper
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.rdsprovider.SourceFactory
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TestFixture
@@ -25,7 +26,9 @@ internal open class RdsToDpmMapper_ModuleTestBase {
     @BeforeEach
     fun beforeEach() {
         diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        diagnosticContext = DiagnosticBridge(
+            diagnosticCollector, DiagnosticHaltPolicy()
+        )
 
         en = Language.findByIso6391Code("en")!!
         fi = Language.findByIso6391Code("fi")!!

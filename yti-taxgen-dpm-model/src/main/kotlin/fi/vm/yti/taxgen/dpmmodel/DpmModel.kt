@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.validators.validateElementValueUnique
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
 
 data class DpmModel(
     val dictionaries: List<DpmDictionary>

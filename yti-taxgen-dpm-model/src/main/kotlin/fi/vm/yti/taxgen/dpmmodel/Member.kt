@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmCodeContent
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateDpmCodeContent
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 
 data class Member(
     override val uri: String,

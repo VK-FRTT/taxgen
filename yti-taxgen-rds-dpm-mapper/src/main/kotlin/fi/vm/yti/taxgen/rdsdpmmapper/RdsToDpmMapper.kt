@@ -1,7 +1,8 @@
 package fi.vm.yti.taxgen.rdsdpmmapper
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
@@ -25,8 +26,8 @@ class RdsToDpmMapper(
     fun extractDpmModel(dpmSource: DpmSource): DpmModel {
 
         return diagnosticContext.withContext(
-            contextType = DiagnosticContextType.RdsToDpmMapper,
-            contextLabel = "RDS source data to DPM model"
+            contextType = DiagnosticContexts.RdsToDpmMapper.toType(),
+            contextDetails = DiagnosticContextDetailsData.withContextTitle("RDS source data to DPM model")
         ) {
             val sourceModelMapper = DpmSourceModelMapper(
                 dpmSource = dpmSource,

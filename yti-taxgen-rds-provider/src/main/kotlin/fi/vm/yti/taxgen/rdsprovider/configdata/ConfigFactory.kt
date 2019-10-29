@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.rdsprovider.configdata
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.dpmmodel.Owner
@@ -16,8 +17,8 @@ object ConfigFactory {
         diagnosticContext: DiagnosticContext
     ): DpmSourceConfigHolder {
         return diagnosticContext.withContext(
-            contextType = DiagnosticContextType.InitConfiguration,
-            contextIdentifier = configFilePath.fileName.toString()
+            contextType = DiagnosticContexts.InitConfiguration.toType(),
+            contextDetails = DiagnosticContextDetailsData.withContextIdentifier(configFilePath.fileName.toString())
         ) {
             val content = FileOps.readTextFile(configFilePath)
 

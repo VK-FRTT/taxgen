@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceHolderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.folder.SourceHolderFolderAdapter
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
@@ -19,7 +20,8 @@ open class DpmSource_ModuleTestBase {
     @BeforeEach
     fun baseInit() {
         diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector)
+        diagnosticContext =
+            DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
     }
 
     @AfterEach

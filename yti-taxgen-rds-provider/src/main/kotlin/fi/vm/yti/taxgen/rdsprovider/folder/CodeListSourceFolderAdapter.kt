@@ -12,7 +12,7 @@ internal class CodeListSourceFolderAdapter(
     private val blueprint: CodeListBlueprint
 ) : CodeListSource {
 
-    override fun contextLabel(): String = ""
+    override fun contextTitle(): String = ""
     override fun contextIdentifier(): String = codeListRootPath.toString()
 
     override fun blueprint(): CodeListBlueprint = blueprint

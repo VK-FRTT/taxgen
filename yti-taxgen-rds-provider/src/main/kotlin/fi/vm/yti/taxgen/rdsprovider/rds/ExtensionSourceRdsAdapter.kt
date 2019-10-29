@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
 
 internal class ExtensionSourceRdsAdapter(
@@ -9,7 +9,7 @@ internal class ExtensionSourceRdsAdapter(
     private val diagnostic: Diagnostic
 ) : ExtensionSource {
 
-    override fun contextLabel(): String = ""
+    override fun contextTitle(): String = ""
     override fun contextIdentifier(): String = extensionAddress.extensionUri
 
     override fun extensionMetaData(): String {

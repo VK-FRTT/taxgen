@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.contextdiagnostic
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.ExtensionSource
@@ -13,7 +13,7 @@ internal class CodeListSourceContextDecorator(
 
     override fun blueprint(): CodeListBlueprint = realCodeListSource.blueprint()
 
-    override fun contextLabel(): String = realCodeListSource.contextLabel()
+    override fun contextTitle(): String = realCodeListSource.contextTitle()
     override fun contextIdentifier(): String = realCodeListSource.contextIdentifier()
 
     override fun codeListMetaData(): String = realCodeListSource.codeListMetaData()
@@ -21,7 +21,7 @@ internal class CodeListSourceContextDecorator(
     override fun eachCodePageData(action: (String) -> Unit) {
         realCodeListSource.eachCodePageData { pageData ->
             diagnosticContext.withContext(
-                contextType = DiagnosticContextType.RdsCodesPage,
+                contextType = DiagnosticContexts.RdsCodesPage.toType(),
                 contextDetails = null
             ) {
                 action(pageData)
@@ -37,7 +37,7 @@ internal class CodeListSourceContextDecorator(
             )
 
             diagnosticContext.withContext(
-                contextType = DiagnosticContextType.RdsExtension,
+                contextType = DiagnosticContexts.RdsExtension.toType(),
                 contextDetails = decoratedExtension
             ) {
                 action(decoratedExtension)
@@ -53,7 +53,7 @@ internal class CodeListSourceContextDecorator(
             )
 
             diagnosticContext.withContext(
-                contextType = DiagnosticContextType.RdsCodeList,
+                contextType = DiagnosticContexts.RdsCodeList.toType(),
                 contextDetails = decoratedSubCodeListSource
             ) {
                 action(decoratedSubCodeListSource)

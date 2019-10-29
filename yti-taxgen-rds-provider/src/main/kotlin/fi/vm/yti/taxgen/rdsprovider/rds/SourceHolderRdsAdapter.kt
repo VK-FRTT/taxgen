@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.SourceHolder
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder

@@ -10,6 +10,7 @@ dependencies {
     implementation libs.assertjCore
 
     implementation(project(':yti-taxgen-commons'))
+    implementation(project(':yti-taxgen-dpm-model'))
 
     testRuntimeOnly libs.junitJupiterEngine
 }

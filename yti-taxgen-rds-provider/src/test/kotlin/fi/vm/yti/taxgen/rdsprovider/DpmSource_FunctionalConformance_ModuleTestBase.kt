@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import org.assertj.core.api.Assertions.assertThat
@@ -34,7 +34,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                 "DpmSource",
                 listOf(
                     dynamicTestWithHaltExceptionHarness("Should have diagnostic context info about RDS source") {
-                        assertThat(dpmSource.contextLabel()).isEqualTo(expectedDetails.dpmSourceContextLabel)
+                        assertThat(dpmSource.contextTitle()).isEqualTo(expectedDetails.dpmSourceContextLabel)
                         assertThat(dpmSource.contextIdentifier()).isEqualTo(expectedDetails.dpmSourceContextIdentifier)
                     },
 
@@ -83,7 +83,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
 
                         assertThat(dpmDictionarySources.size).isEqualTo(12)
 
-                        assertThat(dpmDictionarySources[0].contextLabel()).isEqualTo("")
+                        assertThat(dpmDictionarySources[0].contextTitle()).isEqualTo("")
                         assertThat(dpmDictionarySources[0].contextIdentifier()).isEqualTo("")
                         assertThat(dpmDictionarySources[11].contextIdentifier()).isEqualTo("")
                     },
@@ -211,7 +211,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
                                     dictionarySource.explicitDomainsAndHierarchiesSource(it)
                                 }!!
 
-                                assertThat(explicitDomainsSource.contextLabel()).isEqualTo("")
+                                assertThat(explicitDomainsSource.contextTitle()).isEqualTo("")
                                 assertThat(explicitDomainsSource.contextIdentifier()).contains(
                                     "dpm_dictionary_0",
                                     "exp_dom_hier"
@@ -297,7 +297,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
 
                                 assertThat(extensionSources.size).isEqualTo(12)
 
-                                assertThat(extensionSources[0].contextLabel()).isEqualTo("")
+                                assertThat(extensionSources[0].contextTitle()).isEqualTo("")
                                 assertThat(extensionSources[0].contextIdentifier()).contains(
                                     "dpm_dictionary_0",
                                     "exp_dom_hier",
@@ -431,7 +431,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
 
                                 assertThat(subCodeListSources.size).isEqualTo(12)
 
-                                assertThat(subCodeListSources[0].contextLabel()).isEqualTo("")
+                                assertThat(subCodeListSources[0].contextTitle()).isEqualTo("")
                                 assertThat(subCodeListSources[0].contextIdentifier()).contains(
                                     "dpm_dictionary_0",
                                     "sub_code_list_0"
@@ -511,7 +511,7 @@ open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTest
 
                                 assertThat(extensionSources.size).isEqualTo(1)
 
-                                assertThat(extensionSources[0].contextLabel()).isEqualTo("")
+                                assertThat(extensionSources[0].contextTitle()).isEqualTo("")
                                 assertThat(extensionSources[0].contextIdentifier()).contains(
                                     "dpm_dictionary_0",
                                     "sub_code_list_0",

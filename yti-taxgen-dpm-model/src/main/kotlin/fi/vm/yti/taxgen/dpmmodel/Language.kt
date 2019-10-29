@@ -1,14 +1,16 @@
 package fi.vm.yti.taxgen.dpmmodel
 
 import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.commons.ops.JsonOps
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationCollector
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.throwFail
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
-import fi.vm.yti.taxgen.dpmmodel.validators.validateTranslatedText
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTranslatedText
 import java.net.URL
 import java.nio.file.Path
 
@@ -73,7 +75,7 @@ class Language constructor(
 
         fun byIso6391CodeOrFail(iso6391Code: String): Language {
             return findByIso6391Code(iso6391Code)
-                ?: throwFail("Language configuration missing requested language '$iso6391Code'")
+                ?: throwIllegalDpmModelState("Language configuration missing requested language '$iso6391Code'")
         }
 
         internal fun loadLanguages(configPath: Path? = null): Set<Language> {
@@ -102,10 +104,19 @@ class Language constructor(
 
         private fun loadLanguageConfigs(configUrl: URL): List<LanguageConfig> {
             try {
-                return JsonOps.lenientObjectMapper.readValue(configUrl)
+                return jacksonObjectMapper().readValue(configUrl)
             } catch (e: JsonProcessingException) {
-                throwFail("Language configuration loading failed: ${e.message}")
+                throwIllegalDpmModelState("Language configuration loading failed: ${e.message}")
             }
+        }
+
+        private fun jacksonObjectMapper(): ObjectMapper {
+            val mapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+            mapper.registerModule(JavaTimeModule())
+
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+
+            return mapper
         }
 
         private fun initLanguages(configs: List<LanguageConfig>): Map<Language, LanguageConfig> {
@@ -125,7 +136,7 @@ class Language constructor(
 
                 val translations = config.label.map { (langCode, text) ->
                     val translationLanguage = languageSet.find { it.iso6391Code == langCode }
-                        ?: throwFail("Language configuration missing language '$langCode' used for label '$text'")
+                        ?: throwIllegalDpmModelState("Language configuration missing language '$langCode' used for label '$text'")
 
                     Pair(translationLanguage, text)
                 }.toMap()
@@ -151,7 +162,7 @@ class Language constructor(
 
             validationMessages
                 .takeIf { it.any() }
-                ?.let { throwFail("Language configuration not valid. $it") }
+                ?.let { throwIllegalDpmModelState("Language configuration not valid. $it") }
         }
     }
 }

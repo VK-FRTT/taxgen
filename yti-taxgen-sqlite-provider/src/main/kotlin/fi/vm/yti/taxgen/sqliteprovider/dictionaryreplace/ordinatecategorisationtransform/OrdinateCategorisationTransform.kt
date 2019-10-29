@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
@@ -35,7 +35,7 @@ class OrdinateCategorisationTransform(
                 }
             }
 
-            diagnostic.haltIfUnrecoverableErrors {
+            diagnostic.stopIfSignificantErrorsReceived {
                 "OrdinateCategorisation baseline loading failed"
             }
 
@@ -62,7 +62,7 @@ class OrdinateCategorisationTransform(
             }
         }
 
-        diagnostic.haltIfUnrecoverableErrors {
+        diagnostic.stopIfSignificantErrorsReceived {
             "OrdinateCategorisation transformation failed"
         }
 

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
@@ -101,7 +101,7 @@ internal class TypedDomain_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("TypedDomain.dataType: unsupported data type '$dataType'")
-                else -> thisShouldNeverHappen("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
             }
         }
     }

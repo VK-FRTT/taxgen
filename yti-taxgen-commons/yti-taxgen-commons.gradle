@@ -6,6 +6,7 @@ dependencies {
     implementation libs.kotlinReflect
     implementation libs.jacksonKotlin
     implementation libs.jacksonJsr310
+    implementation(project(':yti-taxgen-dpm-model'))
 
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams

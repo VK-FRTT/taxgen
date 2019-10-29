@@ -1,6 +1,5 @@
-package fi.vm.yti.taxgen.dpmmodel.validators
+package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import java.time.Instant
 import kotlin.reflect.KProperty1
 

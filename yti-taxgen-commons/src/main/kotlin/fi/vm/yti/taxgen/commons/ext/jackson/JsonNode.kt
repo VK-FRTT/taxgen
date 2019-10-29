@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.commons.ext.jackson
 
 import com.fasterxml.jackson.databind.JsonNode
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 
 fun JsonNode.nonBlankTextOrNullAt(jsonPtrExpr: String): String? {
     val node = at(jsonPtrExpr) ?: return null

@@ -1,7 +1,8 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -25,7 +26,8 @@ internal class DpmSource_FolderRecorder_ModuleTest : DpmSource_ModuleTestBase() 
             emptyTargetFolder = TempFolder("empty_target_folder")
 
             val diagnosticCollector = DiagnosticCollector()
-            val diagnosticContext: DiagnosticContext = DiagnosticBridge(diagnosticCollector)
+            val diagnosticContext: DiagnosticContext =
+                DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
 
             SourceFactory.folderRecorder(
                 outputFolderPath = emptyTargetFolder.path(),

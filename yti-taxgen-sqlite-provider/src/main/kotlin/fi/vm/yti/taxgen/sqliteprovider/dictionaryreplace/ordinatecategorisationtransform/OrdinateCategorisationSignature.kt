@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.validators.validateNonBlank
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonBlank
 
 data class OrdinateCategorisationSignature(
     val identifierKind: IdentifierKind,

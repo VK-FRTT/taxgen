@@ -2,13 +2,13 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.commons.HaltException
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticBridge
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
-import fi.vm.yti.taxgen.dpmmodel.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 import fi.vm.yti.taxgen.rdsprovider.SourceFactory
@@ -35,8 +35,9 @@ class TaxgenCli(
     private val outWriter = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)), true)
     private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
-    private val dtp = DiagnosticTextPrinter(outWriter)
-    private val diagnosticContext: DiagnosticContext = DiagnosticBridge(dtp)
+    private val eventConsumer = DiagnosticTextPrinter(outWriter)
+    private val stoppingPolicy = DiagnosticHaltPolicy()
+    private val diagnosticBridge = DiagnosticBridge(eventConsumer, stoppingPolicy)
 
     override fun close() {
         outWriter.close()
@@ -94,8 +95,9 @@ class TaxgenCli(
     }
 
     private fun writeDictionaryToDpmDb(detectedOptions: DetectedOptions) {
-        diagnosticContext.withContext(
-            contextType = DiagnosticContextType.CmdWriteDictionariesToDpmDb
+        diagnosticBridge.withContext(
+            contextType = DiagnosticContexts.CmdWriteDictionariesToDpmDb.toType(),
+            contextDetails = null
         ) {
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
@@ -108,12 +110,12 @@ class TaxgenCli(
 
                     processingOptions = dpmSource.config().processingOptions
 
-                    val dpmMapper = RdsToDpmMapper(diagnosticContext)
+                    val dpmMapper = RdsToDpmMapper(diagnosticBridge)
                     dpmModel = dpmMapper.extractDpmModel(dpmSource)
                 }
             }
 
-            diagnosticContext.haltIfUnrecoverableErrors {
+            diagnosticBridge.stopIfSignificantErrorsReceived {
                 "Mapping failed due content errors"
             }
 
@@ -126,8 +128,9 @@ class TaxgenCli(
     }
 
     private fun captureDpmSources(detectedOptions: DetectedOptions) {
-        diagnosticContext.withContext(
-            contextType = DiagnosticContextType.CmdCaptureDpmSources
+        diagnosticBridge.withContext(
+            contextType = DiagnosticContexts.CmdCaptureDpmSources.toType(),
+            contextDetails = null
         ) {
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
@@ -142,7 +145,7 @@ class TaxgenCli(
             }
         }
 
-        diagnosticContext.haltIfUnrecoverableErrors {
+        diagnosticBridge.stopIfSignificantErrorsReceived {
             "Capturing failed"
         }
     }
@@ -151,21 +154,21 @@ class TaxgenCli(
         if (detectedOptions.sourceConfigFile != null) {
             return SourceFactory.sourceForConfigFile(
                 configFilePath = detectedOptions.sourceConfigFile,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 
         if (detectedOptions.sourceFolder != null) {
             return SourceFactory.sourceForFolder(
                 sourceRootPath = detectedOptions.sourceFolder,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 
         if (detectedOptions.sourceZipFile != null) {
             return SourceFactory.sourceForZipFile(
                 zipFilePath = detectedOptions.sourceZipFile,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 
@@ -180,7 +183,7 @@ class TaxgenCli(
             return SourceFactory.folderRecorder(
                 outputFolderPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 
@@ -188,7 +191,7 @@ class TaxgenCli(
             return SourceFactory.zipRecorder(
                 outputZipPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 
@@ -203,7 +206,7 @@ class TaxgenCli(
             return DpmDbWriterFactory.dictionaryCreateWriter(
                 outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 
@@ -214,7 +217,7 @@ class TaxgenCli(
                 baselineDbPath = requiredOption(detectedOptions.baselineDb),
                 outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
-                diagnosticContext = diagnosticContext
+                diagnosticContext = diagnosticBridge
             )
         }
 

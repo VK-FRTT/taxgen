@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.rdsprovider.configdata.ConfigFactory
 import fi.vm.yti.taxgen.rdsprovider.rds.DpmSourceRdsAdapter
 import fi.vm.yti.taxgen.rdsprovider.rds.HttpClientHolder
@@ -227,7 +227,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         )
 
         val expectedDetails = DpmSource_FunctionalConformance_ModuleTestBase.ExpectedDetails(
-            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextType = DiagnosticContexts.DpmSource.toType(),
             dpmSourceContextLabel = "Reference Data service",
             dpmSourceContextIdentifier = "config file: " + configFilePath.toString(),
             dpmSourceConfigFilePath = configFilePath.toString()
@@ -262,7 +262,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         )
 
         val expectedDetails = DpmSource_FunctionalConformance_ModuleTestBase.ExpectedDetails(
-            dpmSourceContextType = DiagnosticContextType.DpmSource,
+            dpmSourceContextType = DiagnosticContexts.DpmSource.toType(),
             dpmSourceContextLabel = "folder",
             dpmSourceContextIdentifier = loopbackTempFolder.path().toString(),
             dpmSourceConfigFilePath = "${loopbackTempFolder.path()}/meta/source_config.json"

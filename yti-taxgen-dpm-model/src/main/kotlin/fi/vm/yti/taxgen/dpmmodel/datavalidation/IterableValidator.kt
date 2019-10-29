@@ -1,6 +1,5 @@
-package fi.vm.yti.taxgen.dpmmodel.validators
+package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
 import kotlin.reflect.KProperty1
 
 fun <I : Any, P : Iterable<E>, E : Any, K : Any> validateElementPropertyValuesUnique(

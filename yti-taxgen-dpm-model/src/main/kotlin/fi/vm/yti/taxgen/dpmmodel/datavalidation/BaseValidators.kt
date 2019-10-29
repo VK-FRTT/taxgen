@@ -1,4 +1,4 @@
-package fi.vm.yti.taxgen.commons.datavalidation
+package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
 import kotlin.reflect.KProperty1
 

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.contextdiagnostic
 
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
@@ -11,7 +11,7 @@ internal class DpmSourceContextDecorator(
     private val diagnosticContext: DiagnosticContext
 ) : DpmSource {
 
-    override fun contextLabel() = realDpmSource.contextLabel()
+    override fun contextTitle() = realDpmSource.contextTitle()
     override fun contextIdentifier() = realDpmSource.contextIdentifier()
     override fun config(): DpmSourceConfigHolder = realDpmSource.config()
 
@@ -25,7 +25,7 @@ internal class DpmSourceContextDecorator(
             )
 
             diagnosticContext.withContext(
-                contextType = DiagnosticContextType.DpmDictionary,
+                contextType = DiagnosticContexts.DpmDictionary.toType(),
                 contextDetails = decoratedSource
             ) {
                 action(decoratedSource)

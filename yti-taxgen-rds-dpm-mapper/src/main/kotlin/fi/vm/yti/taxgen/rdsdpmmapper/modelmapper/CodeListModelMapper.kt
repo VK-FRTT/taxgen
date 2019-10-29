@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.modelmapper
 
 import fi.vm.yti.taxgen.commons.ops.JsonOps
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsCode
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsCodeListMeta
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsCodePage
@@ -35,7 +35,7 @@ internal class CodeListModelMapper(
             )
 
             diagnostic.updateCurrentContextDetails(
-                label = extensionModelMapper.extensionMetaData().diagnosticLabel()
+                contextTitle = extensionModelMapper.extensionMetaData().diagnosticLabel()
             )
 
             action(extensionModelMapper)
@@ -50,7 +50,7 @@ internal class CodeListModelMapper(
             )
 
             diagnostic.updateCurrentContextDetails(
-                label = codeListModelMapper.codeListMeta().diagnosticLabel()
+                contextTitle = codeListModelMapper.codeListMeta().diagnosticLabel()
             )
 
             action(codeListModelMapper)

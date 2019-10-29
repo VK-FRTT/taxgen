@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.zip
 
 import fi.vm.yti.taxgen.commons.ops.FileOps
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsprovider.DpmSource
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
 import fi.vm.yti.taxgen.rdsprovider.folder.DpmSourceRecorderFolderAdapter
@@ -20,7 +20,7 @@ internal class DpmSourceRecorderZipFileAdapter(
     private var outputZipFileSystem: FileSystem? = null
     private var folderRecorder: DpmSourceRecorder? = null
 
-    override fun contextLabel(): String = "ZIP file"
+    override fun contextTitle(): String = "ZIP file"
     override fun contextIdentifier(): String = outputZipPath.toString()
 
     override fun captureSources(dpmSource: DpmSource) {

@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.commons.datavalidation.Validatable
-import fi.vm.yti.taxgen.commons.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.commons.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.validators.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 
@@ -47,7 +47,7 @@ interface DpmElement : Validatable {
 
             require(kClass.isSubclassOf(DpmElement::class), { "Expecting a DpmElement based class" })
 
-            return kClass.simpleName ?: thisShouldNeverHappen("Anonymous DpmElement")
+            return kClass.simpleName ?: throwIllegalDpmModelState("Anonymous DpmElement")
         }
     }
 }

@@ -1,6 +1,8 @@
-package fi.vm.yti.taxgen.commons.diagostic
+package fi.vm.yti.taxgen.commons.diagnostic
 
-enum class DiagnosticContextType(val recurring: Boolean, val displayName: String) {
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
+
+enum class DiagnosticContexts(val recurringContext: Boolean, val displayName: String) {
     CmdWriteDictionariesToDpmDb(false, "Writing dictionaries to DPM database"),
     CmdCaptureDpmSources(false, "Capturing DPM sources"),
 
@@ -17,5 +19,10 @@ enum class DiagnosticContextType(val recurring: Boolean, val displayName: String
     RdsCodeList(true, "Codelist"),
     RdsCodesPage(true, "Codes Page"),
     RdsExtension(true, "Extension"),
-    RdsExtensionMembersPage(true, "Extension members page"),
+    RdsExtensionMembersPage(true, "Extension members page");
+
+    fun toType() = DiagnosticContextType(
+        typeName = this.name,
+        recurringContext = this.recurringContext
+    )
 }

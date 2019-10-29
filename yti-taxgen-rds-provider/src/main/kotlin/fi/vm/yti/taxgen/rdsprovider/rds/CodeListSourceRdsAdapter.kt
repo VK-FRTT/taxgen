@@ -1,9 +1,10 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
 import com.fasterxml.jackson.databind.JsonNode
-import fi.vm.yti.taxgen.commons.diagostic.Diagnostic
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContext
-import fi.vm.yti.taxgen.commons.diagostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.ext.jackson.arrayAt
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
@@ -21,7 +22,7 @@ internal class CodeListSourceRdsAdapter(
     private val contentAddressResolver: CodeListContentAddressResolver by lazy(this::resolveContentAddress)
     private var subCodeListUris: List<String>? = null
 
-    override fun contextLabel(): String = ""
+    override fun contextTitle(): String = ""
     override fun contextIdentifier(): String = codeListUri
 
     override fun blueprint(): CodeListBlueprint = blueprint
@@ -72,9 +73,9 @@ internal class CodeListSourceRdsAdapter(
     }
 
     private fun resolveContentAddress(): CodeListContentAddressResolver {
-        return (diagnostic as DiagnosticContext).withContext(
-            contextType = DiagnosticContextType.InitContentAddress,
-            contextIdentifier = codeListUri
+        return (diagnostic as DiagnosticContext).withContext( //TODO - remove cast
+            contextType = DiagnosticContexts.InitContentAddress.toType(),
+            contextDetails = DiagnosticContextDetailsData.withContextIdentifier(codeListUri)
         ) {
             CodeListContentAddressResolver(
                 codeLisUri = codeListUri,
