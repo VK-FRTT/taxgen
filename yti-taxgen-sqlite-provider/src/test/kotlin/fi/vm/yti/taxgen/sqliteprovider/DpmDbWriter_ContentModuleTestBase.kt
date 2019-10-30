@@ -119,6 +119,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
     }
 
     fun processingOptionsWithInherentTextLanguageFi() = ProcessingOptions(
+        diagnosticSourceLanguages = emptyList(),
         sqliteDbDpmElementInherentTextLanguage = Language.byIso6391CodeOrFail("fi"),
         sqliteDbMandatoryLabelLanguage = null,
         sqliteDbMandatoryLabelSourceLanguages = null,

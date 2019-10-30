@@ -73,6 +73,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
     fun inherentTextLanguageProcessingOptions(
         inherentTextLanguage: Language?
     ) = ProcessingOptions(
+        diagnosticSourceLanguages = emptyList(),
         sqliteDbDpmElementInherentTextLanguage = inherentTextLanguage,
         sqliteDbMandatoryLabelLanguage = null,
         sqliteDbMandatoryLabelSourceLanguages = null,
@@ -85,6 +86,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
         mandatoryLabelLanguage: Language?,
         mandatoryLabelSourceLanguages: List<Language>?
     ) = ProcessingOptions(
+        diagnosticSourceLanguages = emptyList(),
         sqliteDbDpmElementInherentTextLanguage = null,
         sqliteDbMandatoryLabelLanguage = mandatoryLabelLanguage,
         sqliteDbMandatoryLabelSourceLanguages = mandatoryLabelSourceLanguages,
@@ -96,6 +98,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
     fun uriStorageProcessingOptions(
         uriStorageLabelLanguage: Language?
     ) = ProcessingOptions(
+        diagnosticSourceLanguages = emptyList(),
         sqliteDbDpmElementInherentTextLanguage = null,
         sqliteDbMandatoryLabelLanguage = null,
         sqliteDbMandatoryLabelSourceLanguages = null,
@@ -109,6 +112,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
         compositionLanguages: List<Language>?,
         fallbackLanguage: Language?
     ) = ProcessingOptions(
+        diagnosticSourceLanguages = emptyList(),
         sqliteDbDpmElementInherentTextLanguage = inherentTextLanguage,
         sqliteDbMandatoryLabelLanguage = null,
         sqliteDbMandatoryLabelSourceLanguages = null,

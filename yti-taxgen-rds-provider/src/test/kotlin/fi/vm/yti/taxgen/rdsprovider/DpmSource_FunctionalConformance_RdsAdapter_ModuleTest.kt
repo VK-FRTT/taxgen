@@ -168,6 +168,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
                 ${blankDpmDictionaryConfig("11")}
               ],
               "processingOptions": {
+                "diagnosticSourceLanguages": ["fi"],
                 "sqliteDbDpmElementInherentTextLanguage": "en",
                 "sqliteDbMandatoryLabelLanguage": "en",
                 "sqliteDbMandatoryLabelSourceLanguages": [

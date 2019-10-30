@@ -110,6 +110,10 @@ class TaxgenCli(
 
                     processingOptions = dpmSource.config().processingOptions
 
+                    diagnosticBridge.setDiagnosticSourceLanguages(
+                        processingOptions.diagnosticSourceLanguages
+                    )
+
                     val dpmMapper = RdsToDpmMapper(diagnosticBridge)
                     dpmModel = dpmMapper.extractDpmModel(dpmSource)
                 }
@@ -137,6 +141,12 @@ class TaxgenCli(
 
             resolveSource(detectedOptions).use { sourceHolder ->
                 sourceHolder.withDpmSource { dpmSource ->
+
+                    val processingOptions = dpmSource.config().processingOptions
+
+                    diagnosticBridge.setDiagnosticSourceLanguages(
+                        processingOptions.diagnosticSourceLanguages
+                    )
 
                     resolveSourceRecorder(detectedOptions).use { sourceRecorder ->
                         sourceRecorder.captureSources(dpmSource)

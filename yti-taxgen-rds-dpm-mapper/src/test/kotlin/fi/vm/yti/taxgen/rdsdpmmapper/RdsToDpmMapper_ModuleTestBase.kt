@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.rdsprovider.SourceFactory
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
@@ -17,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 internal open class RdsToDpmMapper_ModuleTestBase {
 
     protected lateinit var diagnosticCollector: DiagnosticCollector
-    protected lateinit var diagnosticContext: DiagnosticContext
+    protected lateinit var diagnosticBridge: DiagnosticBridge
 
     protected lateinit var en: Language
     protected lateinit var fi: Language
@@ -26,13 +25,17 @@ internal open class RdsToDpmMapper_ModuleTestBase {
     @BeforeEach
     fun beforeEach() {
         diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(
+        diagnosticBridge = DiagnosticBridge(
             diagnosticCollector, DiagnosticHaltPolicy()
         )
 
         en = Language.findByIso6391Code("en")!!
         fi = Language.findByIso6391Code("fi")!!
         sv = Language.findByIso6391Code("sv")!!
+
+        diagnosticBridge.setDiagnosticSourceLanguages(
+            listOf(fi)
+        )
     }
 
     @AfterEach
@@ -44,9 +47,9 @@ internal open class RdsToDpmMapper_ModuleTestBase {
 
         lateinit var model: DpmModel
 
-        SourceFactory.sourceForFolder(fixturePath, diagnosticContext).use { sourceHolder ->
+        SourceFactory.sourceForFolder(fixturePath, diagnosticBridge).use { sourceHolder ->
             sourceHolder.withDpmSource { dpmSource ->
-                val mapper = RdsToDpmMapper(diagnosticContext)
+                val mapper = RdsToDpmMapper(diagnosticBridge)
                 model = mapper.extractDpmModel(dpmSource)
             }
         }

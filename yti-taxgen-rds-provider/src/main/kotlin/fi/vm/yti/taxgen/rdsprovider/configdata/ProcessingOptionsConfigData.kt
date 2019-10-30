@@ -1,11 +1,12 @@
 package fi.vm.yti.taxgen.rdsprovider.configdata
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
-import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import kotlin.reflect.KProperty0
 
 data class ProcessingOptionsConfigData(
+    val diagnosticSourceLanguages: List<String?>?,
     val sqliteDbDpmElementInherentTextLanguage: String?,
     val sqliteDbMandatoryLabelLanguage: String?,
     val sqliteDbMandatoryLabelSourceLanguages: List<String?>?,
@@ -16,10 +17,17 @@ data class ProcessingOptionsConfigData(
     fun toProcessingOptions(diagnostic: Diagnostic): ProcessingOptions {
 
         fun toLanguage(iso6391Code: String?, propertyName: String): Language {
-            iso6391Code ?: diagnostic.fatal("$propertyName: NULL Language code")
+            return iso6391Code?.run { Language.findByIso6391Code(iso6391Code) }
+                ?: diagnostic.fatal("$propertyName: Unsupported Language code '$iso6391Code'")
+        }
 
-            return Language.findByIso6391Code(iso6391Code)
-                ?: diagnostic.fatal("$propertyName: No Language for code '$iso6391Code'")
+        fun toLanguages(iso6391CodesProperty: KProperty0<List<String?>?>): List<Language> {
+            val propertyName = iso6391CodesProperty.name
+            val iso6391Codes = iso6391CodesProperty.get() ?: diagnostic.fatal("$propertyName: Language codes list is NULL")
+
+            return iso6391Codes.map { iso6391Code ->
+                toLanguage(iso6391Code, propertyName)
+            }
         }
 
         fun toOptionalLanguage(iso6391CodeProperty: KProperty0<String?>): Language? {
@@ -38,6 +46,10 @@ data class ProcessingOptionsConfigData(
         }
 
         return ProcessingOptions(
+            diagnosticSourceLanguages = toLanguages(
+                this::diagnosticSourceLanguages
+            ),
+
             sqliteDbDpmElementInherentTextLanguage = toOptionalLanguage(
                 this::sqliteDbDpmElementInherentTextLanguage
             ),

@@ -31,6 +31,7 @@
     }
   ],
   "processingOptions": {
+    "diagnosticSourceLanguages": ["en", "fi", "sv"],
     "sqliteDbMandatoryLabelLanguage": "en",
     "sqliteDbMandatoryLabelSourceLanguages": [
       "fi",

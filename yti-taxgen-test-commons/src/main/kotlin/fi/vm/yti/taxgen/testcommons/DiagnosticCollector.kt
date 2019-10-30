@@ -35,7 +35,9 @@ class DiagnosticCollector : DiagnosticEventConsumer {
         contextStack: List<DiagnosticContextDescriptor>,
         originalContext: DiagnosticContextDescriptor
     ) {
-        events.add("UPDATE [${originalContext.contextType.typeName}]")
+        val topContext = contextStack.firstOrNull()
+
+        events.add("UPDATE [${originalContext.contextType.typeName}] [${topContext?.contextTitle ?: ""}]")
     }
 
     override fun message(severity: Severity, message: String) {

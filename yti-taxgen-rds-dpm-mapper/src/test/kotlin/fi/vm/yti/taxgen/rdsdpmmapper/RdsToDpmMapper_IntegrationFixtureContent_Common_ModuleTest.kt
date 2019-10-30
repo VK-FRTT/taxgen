@@ -20,11 +20,100 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_Common_ModuleTest : RdsT
     }
 
     @Test
-    fun `should produce correct diagnostic context events`() {
+    fun `should produce correct diagnostic events with configured source language titles`() {
+        diagnosticBridge.setDiagnosticSourceLanguages(
+            listOf(en, fi, sv)
+        )
+
         executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
 
         assertThat(diagnosticCollector.events).contains(
-            "ENTER [RdsToDpmMapper] [RDS source data to DPM model]"
+            "ENTER [RdsCodeList] []",
+            "UPDATE [RdsCodeList] [Explicit domain A 2018-1]",
+            "ENTER [RdsCodesPage] []",
+            "EXIT [RdsCodesPage]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] [EDA hierarchy 1]",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] [EDA hierarchy 2]",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] [EDA hierarchy 10]",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "EXIT [RdsCodeList]"
+        )
+    }
+
+    @Test
+    fun `should produce diagnostic context events with empty titles when no source language is configured`() {
+
+        diagnosticBridge.setDiagnosticSourceLanguages(
+            emptyList()
+        )
+
+        executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
+
+        assertThat(diagnosticCollector.events).contains(
+            "ENTER [RdsCodeList] []",
+            "UPDATE [RdsCodeList] []",
+            "ENTER [RdsCodesPage] []",
+            "EXIT [RdsCodesPage]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] []",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] []",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] []",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "EXIT [RdsCodeList]"
+        )
+    }
+
+    @Test
+    fun `should produce diagnostic context events with empty titles when no matching source language is configured`() {
+
+        diagnosticBridge.setDiagnosticSourceLanguages(
+            listOf(en)
+        )
+
+        executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
+
+        assertThat(diagnosticCollector.events).contains(
+            "ENTER [RdsCodeList] []",
+            "UPDATE [RdsCodeList] []",
+            "ENTER [RdsCodesPage] []",
+            "EXIT [RdsCodesPage]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] []",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] []",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "ENTER [RdsExtension] []",
+            "UPDATE [RdsExtension] []",
+            "ENTER [RdsExtensionMembersPage] []",
+            "EXIT [RdsExtensionMembersPage]",
+            "EXIT [RdsExtension]",
+            "EXIT [RdsCodeList]"
         )
     }
 }

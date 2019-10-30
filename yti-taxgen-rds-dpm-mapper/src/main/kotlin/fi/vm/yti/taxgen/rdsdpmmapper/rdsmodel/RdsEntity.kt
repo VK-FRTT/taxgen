@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import java.time.Instant
 import java.time.LocalDate
 
@@ -22,9 +22,16 @@ abstract class RdsEntity {
 
     val order: Int? = null
 
-    //TODO - select label by language preference
-    fun diagnosticLabel(): String {
-        return prefLabel?.entries?.firstOrNull { it.value.isNotBlank() }?.value ?: ""
+    fun diagnosticContextTitleFromLabel(
+        diagnosticSourceLanguages: List<Language>
+    ): String {
+        prefLabel ?: return ""
+
+        return diagnosticSourceLanguages
+            .map { prefLabel[it.iso6391Code] }
+            .filterNotNull()
+            .firstOrNull()
+            ?: ""
     }
 
     fun validUri(diagnostic: Diagnostic): String {

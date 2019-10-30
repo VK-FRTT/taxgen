@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel.diagnostic
 
+import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 
@@ -25,6 +26,8 @@ interface DiagnosticContext : Diagnostic {
         validatable: Validatable,
         infoProvider: () -> ValidatableInfo
     )
+
+    override fun diagnosticSourceLanguages(): List<Language>
 
     override fun stopIfSignificantErrorsReceived(messageProvider: () -> String)
 }

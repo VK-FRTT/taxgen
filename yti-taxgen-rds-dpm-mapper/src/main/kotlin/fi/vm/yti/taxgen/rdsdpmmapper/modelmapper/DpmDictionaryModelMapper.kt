@@ -60,7 +60,9 @@ internal class DpmDictionaryModelMapper(
         val reader = CodeListModelMapper(codeListSource, diagnostic)
 
         diagnostic.updateCurrentContextDetails(
-            contextTitle = reader.codeListMeta().diagnosticLabel()
+            contextTitle = reader.codeListMeta().diagnosticContextTitleFromLabel(
+                diagnostic.diagnosticSourceLanguages()
+            )
         )
 
         return reader

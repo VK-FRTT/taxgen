@@ -5,6 +5,8 @@ import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import kotlin.reflect.KProperty0
 
 data class ProcessingOptions(
+    val diagnosticSourceLanguages: List<Language>,
+
     val sqliteDbDpmElementInherentTextLanguage: Language?,
 
     val sqliteDbMandatoryLabelLanguage: Language?,
@@ -26,6 +28,8 @@ data class ProcessingOptions(
                 "ProcessingOption: ${property.name} [${property.get()?.map { it.iso6391Code }?.joinToString() ?: "-"}]"
             )
         }
+
+        emitLanguageListOption(this::diagnosticSourceLanguages)
 
         emitLanguageOption(this::sqliteDbDpmElementInherentTextLanguage)
 

@@ -70,7 +70,7 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
         )
 
         val processingOptions =
-            ProcessingOptions(null, null, null, null, null, null)
+            ProcessingOptions(emptyList(), null, null, null, null, null, null)
 
         dbWriter.writeModel(
             model,

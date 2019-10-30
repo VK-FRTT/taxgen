@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel.diagnostic.system
 
+import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
@@ -19,6 +20,7 @@ class DiagnosticBridge(
     private val contextStack = LinkedList<DiagnosticContextDescriptor>()
     private var previousRetiredContext: DiagnosticContextDescriptor? = null
     private val counters = Severity.values().map { it -> Pair(it, 0) }.toMap().toMutableMap()
+    private var diagnosticSourceLanguages = emptyList<Language>()
 
     override fun <R> withContext(
         contextType: DiagnosticContextType,
@@ -117,6 +119,8 @@ class DiagnosticBridge(
         }
     }
 
+    override fun diagnosticSourceLanguages(): List<Language> = diagnosticSourceLanguages
+
     override fun stopIfSignificantErrorsReceived(messageProvider: () -> String) {
         if (counters[FATAL] != 0 || counters[ERROR] != 0) {
             val message = messageProvider()
@@ -124,6 +128,10 @@ class DiagnosticBridge(
 
             stoppingPolicy.stopProcessing()
         }
+    }
+
+    fun setDiagnosticSourceLanguages(sourceLanguages: List<Language>) {
+        diagnosticSourceLanguages = sourceLanguages.toCollection(mutableListOf())
     }
 
     private fun incrementCounter(severity: Severity) {

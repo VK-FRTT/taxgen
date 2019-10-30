@@ -35,7 +35,9 @@ internal class CodeListModelMapper(
             )
 
             diagnostic.updateCurrentContextDetails(
-                contextTitle = extensionModelMapper.extensionMetaData().diagnosticLabel()
+                contextTitle = extensionModelMapper.extensionMetaData().diagnosticContextTitleFromLabel(
+                    diagnostic.diagnosticSourceLanguages()
+                )
             )
 
             action(extensionModelMapper)
@@ -50,7 +52,9 @@ internal class CodeListModelMapper(
             )
 
             diagnostic.updateCurrentContextDetails(
-                contextTitle = codeListModelMapper.codeListMeta().diagnosticLabel()
+                contextTitle = codeListModelMapper.codeListMeta().diagnosticContextTitleFromLabel(
+                    diagnostic.diagnosticSourceLanguages()
+                )
             )
 
             action(codeListModelMapper)

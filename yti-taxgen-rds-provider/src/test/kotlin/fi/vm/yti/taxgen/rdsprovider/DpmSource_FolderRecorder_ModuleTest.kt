@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.rdsprovider
 
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
+import fi.vm.yti.taxgen.testcommons.ExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
@@ -18,7 +19,7 @@ internal class DpmSource_FolderRecorder_ModuleTest : DpmSource_ModuleTestBase() 
 
     companion object {
         lateinit var emptyTargetFolder: TempFolder
-        lateinit var emptyTargetEvents: List<String>
+        lateinit var emptyTargetDiagnosticEvents: List<String>
 
         @BeforeAll
         @JvmStatic
@@ -29,31 +30,31 @@ internal class DpmSource_FolderRecorder_ModuleTest : DpmSource_ModuleTestBase() 
             val diagnosticContext: DiagnosticContext =
                 DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
 
-            SourceFactory.folderRecorder(
-                outputFolderPath = emptyTargetFolder.path(),
-                forceOverwrite = false,
-                diagnosticContext = diagnosticContext
-            ).use { sourceRecorder ->
-                val (sourceHolder, _) = sourceHolderFolderAdapterForBundledReferenceData(
-                    diagnosticContext,
-                    true
-                )
+            ExceptionHarness.withHaltExceptionHarness(diagnosticCollector, false) {
+                SourceFactory.folderRecorder(
+                    outputFolderPath = emptyTargetFolder.path(),
+                    forceOverwrite = false,
+                    diagnosticContext = diagnosticContext
+                ).use { sourceRecorder ->
+                    val (sourceHolder, _) = sourceHolderFolderAdapterForBundledReferenceData(
+                        diagnosticContext,
+                        true
+                    )
 
-                sourceHolder.withDpmSource {
-                    sourceRecorder.captureSources(it)
+                    sourceHolder.withDpmSource {
+                        sourceRecorder.captureSources(it)
+                    }
                 }
             }
 
-            emptyTargetEvents = diagnosticCollector.events
-
-            println(emptyTargetEvents.joinToString(separator = "\n"))
+            emptyTargetDiagnosticEvents = diagnosticCollector.events
         }
 
         @AfterAll
         @JvmStatic
         fun afterAll() {
             emptyTargetFolder.close()
-            emptyTargetEvents = emptyList()
+            emptyTargetDiagnosticEvents = emptyList()
         }
     }
 
@@ -89,7 +90,7 @@ internal class DpmSource_FolderRecorder_ModuleTest : DpmSource_ModuleTestBase() 
 
         @Test
         fun `Should produce correct diagnostic events`() {
-            assertThat(emptyTargetEvents).contains(
+            assertThat(emptyTargetDiagnosticEvents).contains(
                 "ENTER [DpmSourceRecorder] [folder]",
                 "ENTER [DpmSource] [folder]",
                 "ENTER [DpmDictionary] []",
