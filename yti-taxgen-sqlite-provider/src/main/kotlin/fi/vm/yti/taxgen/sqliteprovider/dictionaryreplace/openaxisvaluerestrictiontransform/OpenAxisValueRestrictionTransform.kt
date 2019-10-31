@@ -32,10 +32,6 @@ class OpenAxisValueRestrictionTransform(
                 }
             }
 
-            diagnostic.stopIfSignificantErrorsReceived {
-                "OpenAxisValueRestriction baseline loading failed"
-            }
-
             return OpenAxisValueRestrictionTransform(
                 baselineRestrictions,
                 diagnostic
@@ -59,10 +55,6 @@ class OpenAxisValueRestrictionTransform(
                     objectAddress = "AxisID: ${it.axisId}"
                 )
             }
-        }
-
-        diagnostic.stopIfSignificantErrorsReceived {
-            "OpenAxisValueRestriction transformation failed"
         }
 
         transaction {
