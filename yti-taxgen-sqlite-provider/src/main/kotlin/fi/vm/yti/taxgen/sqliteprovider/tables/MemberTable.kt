@@ -25,12 +25,28 @@ import org.jetbrains.exposed.sql.select
  * - None
  */
 object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
-    val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
+
+    val domainIdCol = reference(
+        name = "DomainID",
+        foreign = DomainTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val memberCodeCol = text("MemberCode").nullable()
+
     val memberLabelCol = text("MemberLabel").nullable()
+
     val memberXBRLCodeCol = text("MemberXBRLCode").nullable()
+
     val isDefaultMemberCol = bool("IsDefaultMember").nullable()
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 
     fun rowWhereMemberId(memberId: EntityID<Int>) = select {
         MemberTable.id.eq(memberId)

@@ -27,10 +27,23 @@ enum class ConceptTranslationRole(val value: String) {
  * - T4U defines additional column: OwnerID(INTEGER)
  * - T4U does not define column: Role(TEXT)
  */
-object ConceptTranslationTable : Table("mConceptTranslation") {
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
-    val languageIdCol = reference("LanguageID", LanguageTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
+object ConceptTranslationTable : Table(name = "mConceptTranslation") {
+
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
+
+    val languageIdCol = reference(
+        name = "LanguageID",
+        foreign = LanguageTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
 
     val textCol = text("Text").nullable()
+
     val roleCol = text("Role").nullable().primaryKey()
 }

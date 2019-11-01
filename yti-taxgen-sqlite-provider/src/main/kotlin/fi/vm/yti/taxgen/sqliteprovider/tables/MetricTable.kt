@@ -38,12 +38,40 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - In T4U spec DataType is integer
  */
 object MetricTable : IntIdTable(name = "mMetric", columnName = "MetricID") {
-    val correspondingMemberCol = reference("CorrespondingMemberID", MemberTable, ReferenceOption.NO_ACTION).nullable()
+
+    val correspondingMemberCol = reference(
+        name = "CorrespondingMemberID",
+        foreign = MemberTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val dataTypeCol = text("DataType")
+
     val flowTypeCol = text("FlowType").nullable()
+
     val balanceTypeCol = text("BalanceType").nullable()
-    val referencedDomainCol = reference("ReferencedDomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
-    val referencedHierarchyCol = reference("ReferencedHierarchyID", HierarchyTable, ReferenceOption.NO_ACTION).nullable()
-    val hierarchyStartingMemberCol = reference("HierarchyStartingMemberID", MemberTable, ReferenceOption.NO_ACTION).nullable()
+
+    val referencedDomainCol = reference(
+        name = "ReferencedDomainID",
+        foreign = DomainTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
+    val referencedHierarchyCol = reference(
+        name = "ReferencedHierarchyID",
+        foreign = HierarchyTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
+    val hierarchyStartingMemberCol = reference(
+        name = "HierarchyStartingMemberID",
+        foreign = MemberTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val isStartingMemberIncludedCol = bool("IsStartingMemberIncluded").nullable()
 }

@@ -19,9 +19,28 @@ import org.jetbrains.exposed.sql.Table
  * - None
  */
 object OpenAxisValueRestrictionTable : Table("mOpenAxisValueRestriction") {
-    val axisIdCol = reference("AxisID", AxisTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
-    val hierarchyIdCol = reference("HierarchyID", HierarchyTable, ReferenceOption.NO_ACTION).nullable()
+
+    val axisIdCol = reference(
+        name = "AxisID",
+        foreign = AxisTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
+
+    val hierarchyIdCol = reference(
+        name = "HierarchyID",
+        foreign = HierarchyTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val hierarchyStartingMemberIdCol =
-        reference("HierarchyStartingMemberID", MemberTable, ReferenceOption.NO_ACTION).nullable()
+        reference(
+            "HierarchyStartingMemberID",
+            foreign = MemberTable,
+            onDelete = ReferenceOption.NO_ACTION,
+            onUpdate = ReferenceOption.NO_ACTION
+        ).nullable()
+
     val isStartingMemberIncluded = bool("IsStartingMemberIncluded").nullable()
 }

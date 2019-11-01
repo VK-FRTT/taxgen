@@ -18,9 +18,18 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U):
  * - None
  */
-object LanguageTable : IntIdTable("mLanguage", "LanguageID") {
+object LanguageTable : IntIdTable(name = "mLanguage", columnName = "LanguageID") {
+
     val languageNameCol = text("LanguageName").nullable()
+
     val englishNameCol = text("EnglishName").nullable()
+
     val isoCodeCol = text("IsoCode").nullable()
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 }

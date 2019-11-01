@@ -37,13 +37,23 @@ object HierarchyTable : IntIdTable(name = "mHierarchy", columnName = "HierarchyI
     val hierarchyLabelCol = text("HierarchyLabel").nullable()
 
     // Domain this hierarchy relates to
-    val domainIdCol = reference("DomainID", DomainTable, ReferenceOption.NO_ACTION).nullable()
+    val domainIdCol = reference(
+        name = "DomainID",
+        foreign = DomainTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 
     // Longer description (English)
     val hierarchyDescriptionCol = text("HierarchyDescription").nullable()
 
     // Reference to concept (change, owner and translation) information
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 
     fun rowWhereHierarchyId(hierarchyId: EntityID<Int>) = select {
         HierarchyTable.id.eq(hierarchyId)

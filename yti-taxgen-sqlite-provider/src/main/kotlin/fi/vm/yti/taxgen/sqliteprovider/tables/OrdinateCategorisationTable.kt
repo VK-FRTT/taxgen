@@ -24,10 +24,31 @@ import org.jetbrains.exposed.sql.Table
  * - None
  */
 object OrdinateCategorisationTable : Table("mOrdinateCategorisation") {
-    val ordinateIdCol: Column<EntityID<Int>?> = reference("OrdinateID", AxisOrdinateTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
-    val dimensionIdCol: Column<EntityID<Int>?> = reference("DimensionID", DimensionTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
-    val memberIdCol: Column<EntityID<Int>?> = reference("MemberID", MemberTable, ReferenceOption.NO_ACTION).nullable()
+
+    val ordinateIdCol: Column<EntityID<Int>?> = reference(
+        name = "OrdinateID",
+        foreign = AxisOrdinateTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
+
+    val dimensionIdCol: Column<EntityID<Int>?> = reference(
+        name = "DimensionID",
+        foreign = DimensionTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
+
+    val memberIdCol: Column<EntityID<Int>?> = reference(
+        name = "MemberID",
+        foreign = MemberTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val dimensionMemberSignatureCol: Column<String?> = text("DimensionMemberSignature").nullable()
+
     val sourceCol = text("Source").nullable()
+
     val dpsCol = text("DPS").nullable()
 }

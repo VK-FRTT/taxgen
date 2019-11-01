@@ -23,12 +23,28 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - None
  */
 object OwnerTable : IntIdTable(name = "mOwner", columnName = "OwnerID") {
+
     val ownerNameCol = text("OwnerName").nullable()
+
     val ownerNamespaceCol = text("OwnerNamespace").nullable()
+
     val ownerLocationCol = text("OwnerLocation").nullable()
+
     val ownerPrefixCol = text("OwnerPrefix").nullable()
+
     val ownerCopyrightCol = text("OwnerCopyright").nullable()
 
-    val parentOwnerIdCol = reference("ParentOwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+    val parentOwnerIdCol = reference(
+        name = "ParentOwnerID",
+        foreign = OwnerTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 }

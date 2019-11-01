@@ -27,16 +27,43 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object AxisOrdinateTable : IntIdTable("mAxisOrdinate", "OrdinateID") { //NOTE: In reference DDL OrdinateID is a second column
-    val axisIdCol = reference("AxisID", AxisTable, ReferenceOption.NO_ACTION).nullable()
+object AxisOrdinateTable : IntIdTable(name = "mAxisOrdinate", columnName = "OrdinateID") {
+    //NOTE: In reference DDL OrdinateID is a second column
+
+    val axisIdCol = reference(
+        name = "AxisID",
+        foreign = AxisTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val ordinateLabelCol = text("OrdinateLabel").nullable()
+
     val ordinateCodeCol = text("OrdinateCode").nullable()
+
     val isDisplayBeforeChildrenCol = bool("IsDisplayBeforeChildren").nullable()
+
     val isAbstractHeaderCol = bool("IsAbstractHeader").nullable()
+
     val isRowKeyCol = bool("IsRowKey").nullable()
+
     val levelCol = integer("Level").nullable()
+
     val orderCol = integer("Order").nullable()
-    val parentOrdinateIdCol = reference("ParentOrdinateID", AxisOrdinateTable, ReferenceOption.NO_ACTION).nullable()
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    val parentOrdinateIdCol = reference(
+        name = "ParentOrdinateID",
+        foreign = AxisOrdinateTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
+
     val typeOfKeyCol = text("TypeOfKey").nullable()
 }

@@ -17,8 +17,12 @@ import org.jetbrains.exposed.dao.IntIdTable
  * - None
  */
 object AxisTable : IntIdTable(name = "mAxis", columnName = "AxisID") {
+
     val axisOrientationCol = text("AxisOrientation").nullable()
+
     val axisLabelCol = text("AxisLabel").nullable()
+
     val isOpenAxisCol = bool("IsOpenAxis").nullable()
+
     val conceptIdCol = integer("ConceptID").nullable() //Note: In DM database column type is plain integer instead reference
 }

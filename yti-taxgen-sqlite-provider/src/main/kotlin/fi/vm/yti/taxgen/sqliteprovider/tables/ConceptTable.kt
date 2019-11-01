@@ -43,14 +43,22 @@ enum class ConceptType(val value: String) {
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object ConceptTable : IntIdTable("mConcept", "ConceptID") {
+object ConceptTable : IntIdTable(name = "mConcept", columnName = "ConceptID") {
+
     val conceptTypeCol = text("ConceptType").nullable()
 
-    val ownerIdCol = reference("OwnerID", OwnerTable, ReferenceOption.NO_ACTION).nullable()
+    val ownerIdCol = reference(
+        name = "OwnerID",
+        foreign = OwnerTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 
     val creationDateCol = sqliteDateTime("CreationDate").nullable()
+
     val modificationDateCol = sqliteDateTime("ModificationDate").nullable()
 
     val fromDateCol = sqliteDate("FromDate").nullable()
+
     val toDateCol = sqliteDate("ToDate").nullable()
 }

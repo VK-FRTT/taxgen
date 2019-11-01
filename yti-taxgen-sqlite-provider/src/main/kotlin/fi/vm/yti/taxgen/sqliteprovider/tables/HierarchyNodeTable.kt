@@ -37,10 +37,20 @@ import org.jetbrains.exposed.sql.select
 object HierarchyNodeTable : Table(name = "mHierarchyNode") {
 
     //Hierarchy to which this node belongs
-    val hierarchyIdCol = reference("HierarchyID", HierarchyTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
+    val hierarchyIdCol = reference(
+        name = "HierarchyID",
+        foreign = HierarchyTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
 
     //Member this node represents
-    val memberIdCol = reference("MemberID", MemberTable, ReferenceOption.NO_ACTION).nullable().primaryKey()
+    val memberIdCol = reference(
+        name = "MemberID",
+        foreign = MemberTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable().primaryKey()
 
     //
     val isAbstractCol = bool("IsAbstract").nullable()
@@ -66,7 +76,12 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
     val hierarchyNodeLabel = text("HierarchyNodeLabel").nullable()
 
     //
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 
     //Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
     val pathCol = varchar("Path", 3999).nullable()

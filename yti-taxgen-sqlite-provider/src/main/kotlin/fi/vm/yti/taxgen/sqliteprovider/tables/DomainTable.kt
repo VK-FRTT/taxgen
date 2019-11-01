@@ -33,13 +33,25 @@ import org.jetbrains.exposed.sql.select
  * - T4U defines DataType as INTEGER (most likely error in spec)
  */
 object DomainTable : IntIdTable(name = "mDomain", columnName = "DomainID") {
+
     val domainCodeCol = text("DomainCode").nullable()
+
     val domainLabelCol = text("DomainLabel").nullable()
+
     val domainDescriptionCol = text("DomainDescription").nullable()
+
     val domainXBRLCodeCol = text("DomainXBRLCode").nullable()
+
     val dataTypeCol = text("DataType").nullable()
+
     val isTypedDomainCol = bool("IsTypedDomain").nullable()
-    val conceptIdCol = reference("ConceptID", ConceptTable, ReferenceOption.NO_ACTION).nullable()
+
+    val conceptIdCol = reference(
+        name = "ConceptID",
+        foreign = ConceptTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    ).nullable()
 
     fun rowWhereDomainId(domainId: EntityID<Int>) = select {
         DomainTable.id.eq(domainId)
