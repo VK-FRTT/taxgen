@@ -39,9 +39,9 @@ internal class DpmDbWriter_ContentDimension_ModuleTest : DpmDbWriter_ContentModu
 
                 assertThat(rs.toStringList()).containsExactly(
                     "#DimensionCode, #DimensionLabel, #DimensionDescription, #DimensionXBRLCode, #IsTypedDimension, #DomainCode, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #OwnerName",
-                    "ExpDim-1-Code, ExpDim-Lbl-Fi, ExpDim-Desc-Fi, FixPrfx_dim:ExpDim-1-Code, 0, ExpDom-1-Code, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDim-1-Code, ExpDim-1-Lbl-Fi, ExpDim-1-Desc-Fi, FixPrfx_dim:ExpDim-1-Code, 0, ExpDom-1-Code, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "MET, Metric dimension, nil, MET, 0, MET, Dimension, nil, nil, nil, nil, EuroFiling",
-                    "TypDim-1-Code, TypDim-Lbl-Fi, TypDim-Desc-Fi, FixPrfx_dim:TypDim-1-Code, 1, TypDom-1-Code, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
+                    "TypDim-1-Code, TypDim-1-Lbl-Fi, TypDim-1-Desc-Fi, FixPrfx_dim:TypDim-1-Code, 1, TypDom-1-Code, Dimension, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName"
                 )
             },
 
@@ -66,15 +66,15 @@ internal class DpmDbWriter_ContentDimension_ModuleTest : DpmDbWriter_ContentModu
 
                 assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                     "#DimensionCode, #ConceptType, #Role, #IsoCode, #Text",
-                    "ExpDim-1-Code, Dimension, label, en, ExpDim-Lbl-En",
-                    "ExpDim-1-Code, Dimension, label, fi, ExpDim-Lbl-Fi",
-                    "ExpDim-1-Code, Dimension, description, en, ExpDim-Desc-En",
-                    "ExpDim-1-Code, Dimension, description, fi, ExpDim-Desc-Fi",
+                    "ExpDim-1-Code, Dimension, label, en, ExpDim-1-Lbl-En",
+                    "ExpDim-1-Code, Dimension, label, fi, ExpDim-1-Lbl-Fi",
+                    "ExpDim-1-Code, Dimension, description, en, ExpDim-1-Desc-En",
+                    "ExpDim-1-Code, Dimension, description, fi, ExpDim-1-Desc-Fi",
                     "MET, Dimension, label, en, Metric dimension",
-                    "TypDim-1-Code, Dimension, label, en, TypDim-Lbl-En",
-                    "TypDim-1-Code, Dimension, label, fi, TypDim-Lbl-Fi",
-                    "TypDim-1-Code, Dimension, description, en, TypDim-Desc-En",
-                    "TypDim-1-Code, Dimension, description, fi, TypDim-Desc-Fi"
+                    "TypDim-1-Code, Dimension, label, en, TypDim-1-Lbl-En",
+                    "TypDim-1-Code, Dimension, label, fi, TypDim-1-Lbl-Fi",
+                    "TypDim-1-Code, Dimension, description, en, TypDim-1-Desc-En",
+                    "TypDim-1-Code, Dimension, description, fi, TypDim-1-Desc-Fi"
                 )
             }
         )

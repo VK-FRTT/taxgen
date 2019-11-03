@@ -18,7 +18,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             """.trimIndent()
         )
 
-        dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
+        replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).containsExactly(
             "ENTER [SQLiteDbWriter] []",
@@ -35,74 +35,64 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
     @Test
     fun `ordinate categorisation referring typed dimension and open member should get updated`() {
-        dumpDiagnosticsWhenThrown {
-            baselineDbConnection.createStatement().executeUpdate(
-                """
-                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, 222, 333, "FixPrfx_dim:TypDim-1-Code(*)", "source", "FixPrfx_dim:TypDim-1-Code(*)")
-                """.trimIndent()
-            )
+        baselineDbConnection.createStatement().executeUpdate(
+            """
+            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+            VALUES (111, 222, 333, "FixPrfx_dim:TypDim-1-Code(*)", "source", "FixPrfx_dim:TypDim-1-Code(*)")
+            """.trimIndent()
+        )
 
-            replaceDictionaryInDb()
+        replaceDictionaryInDb()
 
-            assertThat(diagnosticCollector.events).contains(
-                "ENTER [SQLiteDbWriter] []",
-                "EXIT [SQLiteDbWriter]"
-            )
+        assertThat(diagnosticCollector.events).contains(
+            "ENTER [SQLiteDbWriter] []",
+            "EXIT [SQLiteDbWriter]"
+        )
 
-            val rs = readAllOrdinateCategorisations()
+        val rs = readAllOrdinateCategorisations()
 
-            assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                "111, 2, 9999, FixPrfx_dim:TypDim-1-Code(*), source, FixPrfx_dim:TypDim-1-Code(*)"
-            )
-        }
+        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+            "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+            "111, 2, 9999, FixPrfx_dim:TypDim-1-Code(*), source, FixPrfx_dim:TypDim-1-Code(*)"
+        )
     }
 
     @Test
     fun `ordinate categorisation having full OpenAxisValueRestriction should get updated`() {
-        dumpDiagnosticsWhenThrown {
-            baselineDbConnection.createStatement().executeUpdate(
-                """
-                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*[444;555;1])", "source", "FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-2-Code;Mbr-2-Code;0])")
-                """.trimIndent()
-            )
+        baselineDbConnection.createStatement().executeUpdate(
+            """
+            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+            VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*[444;555;1])", "source", "FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-2-Code;Mbr-2-Code;0])")
+            """.trimIndent()
+        )
 
-            dumpDiagnosticsWhenThrown {
-                replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
-            }
+        replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
 
-            val rs = readAllOrdinateCategorisations()
+        val rs = readAllOrdinateCategorisations()
 
-            assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*[5;8;0]), source, FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-2-Code;Mbr-2-Code;0])"
-            )
-        }
+        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+            "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+            "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*[5;8;0]), source, FixPrfx_dim:ExpDim-2-Code(*[ExpDomHier-2-Code;Mbr-2-Code;0])"
+        )
     }
 
     @Test
     fun `ordinate categorisation having partial OpenAxisValueRestriction should get updated`() {
-        dumpDiagnosticsWhenThrown {
-            baselineDbConnection.createStatement().executeUpdate(
-                """
-                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*?[444])", "source", "FixPrfx_dim:ExpDim-2-Code(*?[ExpDomHier-2-Code])")
-                """.trimIndent()
-            )
+        baselineDbConnection.createStatement().executeUpdate(
+            """
+            INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+            VALUES (111, 222, 333, "FixPrfx_dim:ExpDim-2-Code(*?[444])", "source", "FixPrfx_dim:ExpDim-2-Code(*?[ExpDomHier-2-Code])")
+            """.trimIndent()
+        )
 
-            dumpDiagnosticsWhenThrown {
-                replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
-            }
+        replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
 
-            val rs = readAllOrdinateCategorisations()
+        val rs = readAllOrdinateCategorisations()
 
-            assertThat(rs.toStringList()).containsExactlyInAnyOrder(
-                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*?[5]), source, FixPrfx_dim:ExpDim-2-Code(*?[ExpDomHier-2-Code])"
-            )
-        }
+        assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+            "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+            "111, 2, 9999, FixPrfx_dim:ExpDim-2-Code(*?[5]), source, FixPrfx_dim:ExpDim-2-Code(*?[ExpDomHier-2-Code])"
+        )
     }
 
     private fun readAllOrdinateCategorisations(): ResultSet {
@@ -193,7 +183,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -202,7 +192,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -216,7 +206,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -225,7 +215,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -239,7 +229,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -248,7 +238,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -262,7 +252,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -271,7 +261,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -285,7 +275,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -294,7 +284,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -308,7 +298,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -317,7 +307,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(faultySignature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -348,7 +338,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
@@ -375,7 +365,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
@@ -389,7 +379,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(signature)
-                dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).doesNotContain(
                     "fail"
@@ -402,7 +392,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
@@ -430,7 +420,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",
@@ -444,7 +434,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -453,7 +443,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
@@ -467,7 +457,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DimensionMemberSignature
                 insertCategorisationWithDimensionMemberSignature(signature)
-                dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).doesNotContain(
                     "fail"
@@ -480,7 +470,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 //DPS
                 insertCategorisationWithDps(signature)
-                ensureHaltThrown { replaceDictionaryInDb() }
+                replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSequence(
                     "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 111]",

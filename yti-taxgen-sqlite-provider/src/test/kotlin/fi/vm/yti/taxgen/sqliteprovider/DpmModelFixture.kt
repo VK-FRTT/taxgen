@@ -243,7 +243,7 @@ fun dpmModelFixture(
                 val hierarchies = mutableListOf(
                     Hierarchy(
                         uri = "ExpDomHier-1-Uri",
-                        concept = concept("ExpDomHier"),
+                        concept = concept("ExpDomHier-1"),
                         hierarchyCode = "ExpDomHier-1-Code",
                         rootNodes = emptyList()
                     )
@@ -254,14 +254,14 @@ fun dpmModelFixture(
                         listOf(
                             Hierarchy(
                                 uri = "ExpDomHier-2-Uri",
-                                concept = concept("ExpDomHier"),
+                                concept = concept("ExpDomHier-2"),
                                 hierarchyCode = "ExpDomHier-2-Code",
                                 rootNodes = hierarchyNodes()
                             ),
 
                             Hierarchy(
                                 uri = "ExpDomHier-3-Uri",
-                                concept = concept("ExpDomHier"),
+                                concept = concept("ExpDomHier-3"),
                                 hierarchyCode = "ExpDomHier-3-Code",
                                 rootNodes = emptyList()
                             )
@@ -278,7 +278,7 @@ fun dpmModelFixture(
             val explicitDomains = mutableListOf(
                 ExplicitDomain(
                     uri = "ExpDom-1-Uri",
-                    concept = concept("ExpDom"),
+                    concept = concept("ExpDom-1"),
                     domainCode = "ExpDom-1-Code",
                     members = members,
                     hierarchies = hierarchies
@@ -292,7 +292,7 @@ fun dpmModelFixture(
                 explicitDomains.add(
                     ExplicitDomain(
                         uri = "ExpDom-2-Uri",
-                        concept = concept("ExpDom"),
+                        concept = concept("ExpDom-2"),
                         domainCode = "ExpDom-2-Code",
                         members = members,
                         hierarchies = hierarchies
@@ -302,7 +302,7 @@ fun dpmModelFixture(
                 explicitDomains.add(
                     ExplicitDomain(
                         uri = "ExpDom-3-Uri",
-                        concept = concept("ExpDom"),
+                        concept = concept("ExpDom-3"),
                         domainCode = "ExpDom-3-Code",
                         members = members,
                         hierarchies = hierarchies
@@ -317,7 +317,7 @@ fun dpmModelFixture(
             return listOf(
                 TypedDomain(
                     uri = "TypDom-1-Uri",
-                    concept = concept("TypDom"),
+                    concept = concept("TypDom-1"),
                     domainCode = "TypDom-1-Code",
                     dataType = "Boolean"
                 )
@@ -328,7 +328,7 @@ fun dpmModelFixture(
             val explicitDimensions = mutableListOf(
                 ExplicitDimension(
                     uri = "ExpDim-1-Uri",
-                    concept = concept("ExpDim"),
+                    concept = concept("ExpDim-1"),
                     dimensionCode = "ExpDim-1-Code",
                     referencedDomainCode = "ExpDom-1-Code"
                 )
@@ -338,7 +338,7 @@ fun dpmModelFixture(
                 explicitDimensions.add(
                     ExplicitDimension(
                         uri = "ExpDim-2-Uri",
-                        concept = concept("ExpDim"),
+                        concept = concept("ExpDim-2"),
                         dimensionCode = "ExpDim-2-Code",
                         referencedDomainCode = "ExpDom-2-Code"
                     )
@@ -347,7 +347,7 @@ fun dpmModelFixture(
                 explicitDimensions.add(
                     ExplicitDimension(
                         uri = "ExpDim-3-Uri",
-                        concept = concept("ExpDim"),
+                        concept = concept("ExpDim-3"),
                         dimensionCode = "ExpDim-3-Code",
                         referencedDomainCode = "ExpDom-3-Code"
                     )
@@ -361,7 +361,7 @@ fun dpmModelFixture(
             return listOf(
                 TypedDimension(
                     uri = "TypDim-1-Uri",
-                    concept = concept("TypDim"),
+                    concept = concept("TypDim-1"),
                     dimensionCode = "TypDim-1-Code",
                     referencedDomainCode = "TypDom-1-Code"
                 )
@@ -478,7 +478,7 @@ fun dpmModelFixture(
             val metricHierarchies = listOf(
                 Hierarchy(
                     uri = "MetHier-1-Uri",
-                    concept = concept("MetHier"),
+                    concept = concept("MetHier-1"),
                     hierarchyCode = "MetHier-1-Code",
                     rootNodes = metricHierarchyNodes
                 )
@@ -487,7 +487,7 @@ fun dpmModelFixture(
             return listOf(
                 MetricDomain(
                     uri = "MetDom-1-Uri",
-                    concept = concept("MetDom"),
+                    concept = concept("MetDom-1"),
                     domainCode = "MetDom-1-Code",
                     metrics = metrics,
                     hierarchies = metricHierarchies

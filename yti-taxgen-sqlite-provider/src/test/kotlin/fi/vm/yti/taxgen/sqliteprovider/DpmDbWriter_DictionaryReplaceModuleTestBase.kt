@@ -2,9 +2,10 @@ package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
+import fi.vm.yti.taxgen.testcommons.ExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -34,7 +35,7 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
         baselineDbPath = tempFolder.resolve("baseline_plain_dictionary.db")
         outputDbPath = tempFolder.resolve("replace_dpm_dictionary.db")
 
-        val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
+        val stream = this::class.java.getResourceAsStream("/db_fixture/dpm_model_fixture_generated.db")
         Files.copy(stream, baselineDbPath, StandardCopyOption.REPLACE_EXISTING)
 
         baselineDbConnection = DriverManager.getConnection("jdbc:sqlite:$baselineDbPath")
@@ -55,38 +56,37 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
         tempFolder.close()
     }
 
-    protected fun replaceDictionaryInDb(variety: FixtureVariety = FixtureVariety.NONE) {
-        val diagnosticContext =
-            DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
-        val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
-            baselineDbPath = baselineDbPath,
-            outputDbPath = outputDbPath,
-            forceOverwrite = true,
-            diagnosticContext = diagnosticContext
-        )
+    protected fun replaceDictionaryInDb(
+        vararg varieties: FixtureVariety = arrayOf(FixtureVariety.NONE),
+        exceptionIsExpected: Boolean = false
+    ) {
+        ExceptionHarness.withHaltExceptionHarness(
+            diagnosticCollector = diagnosticCollector,
+            exceptionIsExpected = exceptionIsExpected
+        ) {
+            val diagnosticContext =
+                DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
 
-        val model = dpmModelFixture(
-            variety
-        )
+            val dbWriter = DpmDbWriterFactory.dictionaryReplaceWriter(
+                baselineDbPath = baselineDbPath,
+                outputDbPath = outputDbPath,
+                forceOverwrite = true,
+                diagnosticContext = diagnosticContext
+            )
 
-        val processingOptions =
-            ProcessingOptions(emptyList(), null, null, null, null, null, null)
+            val model = dpmModelFixture(
+                *varieties
+            )
 
-        dbWriter.writeModel(
-            model,
-            processingOptions
-        )
+            val processingOptions =
+                ProcessingOptions(emptyList(), null, null, null, null, null, null)
 
-        outputDbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
-    }
+            dbWriter.writeModel(
+                model,
+                processingOptions
+            )
 
-    protected fun dumpDiagnosticsWhenThrown(action: () -> Unit) {
-
-        val thrown = catchThrowable { action() }
-
-        if (thrown != null) {
-            println(diagnosticCollector.events)
-            throw thrown
+            outputDbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
         }
     }
 

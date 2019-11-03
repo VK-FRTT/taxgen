@@ -38,10 +38,10 @@ internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModu
 
                 assertThat(rs.toStringList()).containsExactly(
                     "#HierarchyCode, #HierarchyLabel, #HierarchyDescription, #ConceptType, #CreationDate, #ModificationDate, #FromDate, #ToDate, #DomainCode, #OwnerName",
-                    "ExpDomHier-1-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
-                    "ExpDomHier-2-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
-                    "ExpDomHier-3-Code, ExpDomHier-Lbl-Fi, ExpDomHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
-                    "MetHier-1-Code, MetHier-Lbl-Fi, MetHier-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, MET, FixName"
+                    "ExpDomHier-1-Code, ExpDomHier-1-Lbl-Fi, ExpDomHier-1-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
+                    "ExpDomHier-2-Code, ExpDomHier-2-Lbl-Fi, ExpDomHier-2-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
+                    "ExpDomHier-3-Code, ExpDomHier-3-Lbl-Fi, ExpDomHier-3-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, ExpDom-1-Code, FixName",
+                    "MetHier-1-Code, MetHier-1-Lbl-Fi, MetHier-1-Desc-Fi, Hierarchy, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, MET, FixName"
                 )
             },
 
@@ -67,10 +67,10 @@ internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModu
 
                 assertThat(rs.toStringList()).containsExactly(
                     "#HierarchyCode, #ConceptType, #Role, #IsoCode, #Text",
-                    "ExpDomHier-1-Code, Hierarchy, label, en, ExpDomHier-Lbl-En",
-                    "ExpDomHier-1-Code, Hierarchy, label, fi, ExpDomHier-Lbl-Fi",
-                    "ExpDomHier-1-Code, Hierarchy, description, en, ExpDomHier-Desc-En",
-                    "ExpDomHier-1-Code, Hierarchy, description, fi, ExpDomHier-Desc-Fi"
+                    "ExpDomHier-1-Code, Hierarchy, label, en, ExpDomHier-1-Lbl-En",
+                    "ExpDomHier-1-Code, Hierarchy, label, fi, ExpDomHier-1-Lbl-Fi",
+                    "ExpDomHier-1-Code, Hierarchy, description, en, ExpDomHier-1-Desc-En",
+                    "ExpDomHier-1-Code, Hierarchy, description, fi, ExpDomHier-1-Desc-Fi"
                 )
             },
 

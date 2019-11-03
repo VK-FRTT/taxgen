@@ -27,7 +27,7 @@ internal open class DpmDbWriter_CreateFixtureDbTest {
     @BeforeEach
     fun baseInit() {
         tempFolder = TempFolder("sqliteprovider_created_fixture_db")
-        outputDbPath = tempFolder.resolve("fixture_generated.db")
+        outputDbPath = tempFolder.resolve("dpm_model_fixture_generated.db")
 
         diagnosticCollector = DiagnosticCollector()
         diagnosticContext = DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())

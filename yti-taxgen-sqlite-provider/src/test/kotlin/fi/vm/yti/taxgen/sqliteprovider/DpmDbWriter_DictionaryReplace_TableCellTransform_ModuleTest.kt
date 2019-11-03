@@ -17,7 +17,7 @@ internal class DpmDbWriter_DictionaryReplace_TableCellTransform_ModuleTest :
             """.trimIndent()
         )
 
-        dumpDiagnosticsWhenThrown { replaceDictionaryInDb() }
+        replaceDictionaryInDb()
 
         assertThat(diagnosticCollector.events).containsExactly(
             "ENTER [SQLiteDbWriter] []",

@@ -95,7 +95,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
 
                     val baselineDbPath = tempFolder.resolve("baseline_plain_dictionary.db")
 
-                    val stream = this::class.java.getResourceAsStream("/db_fixture/plain_dictionary.db")
+                    val stream = this::class.java.getResourceAsStream("/db_fixture/dpm_model_fixture_generated.db")
                     Files.copy(stream, baselineDbPath, StandardCopyOption.REPLACE_EXISTING)
 
                     DpmDbWriterFactory.dictionaryReplaceWriter(

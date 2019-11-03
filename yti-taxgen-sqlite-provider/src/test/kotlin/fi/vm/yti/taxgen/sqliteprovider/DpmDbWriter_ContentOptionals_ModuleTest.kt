@@ -56,7 +56,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
         ORDER BY H.HierarchyLabel ASC, M.MemberCode ASC, T.Role DESC, TL.IsoCode ASC
         """
 
-    val allFiLabelTranslations =
+    val allFiLabelTranslationsQuery =
         """
         SELECT
             C.ConceptType,
@@ -142,7 +142,7 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#DomainCode, #DomainLabel, #DomainDescription",
-                            "ExpDom-1-Code, ExpDom-Lbl-Fi, ExpDom-Desc-Fi"
+                            "ExpDom-1-Code, ExpDom-1-Lbl-Fi, ExpDom-1-Desc-Fi"
                         )
                     },
 
@@ -206,9 +206,9 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
-                            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-Fi",
-                            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
-                            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi"
+                            "ExpDom-1-Code, Domain, label, en, ExpDom-1-Lbl-Fi",
+                            "ExpDom-1-Code, Domain, label, fi, ExpDom-1-Lbl-Fi",
+                            "ExpDom-1-Code, Domain, description, fi, ExpDom-1-Desc-Fi"
                         )
                     },
 
@@ -231,11 +231,11 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
-                            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-Sv",
-                            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
-                            "ExpDom-1-Code, Domain, label, sv, ExpDom-Lbl-Sv",
-                            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi",
-                            "ExpDom-1-Code, Domain, description, sv, ExpDom-Desc-Sv"
+                            "ExpDom-1-Code, Domain, label, en, ExpDom-1-Lbl-Sv",
+                            "ExpDom-1-Code, Domain, label, fi, ExpDom-1-Lbl-Fi",
+                            "ExpDom-1-Code, Domain, label, sv, ExpDom-1-Lbl-Sv",
+                            "ExpDom-1-Code, Domain, description, fi, ExpDom-1-Desc-Fi",
+                            "ExpDom-1-Code, Domain, description, sv, ExpDom-1-Desc-Sv"
                         )
                     },
 
@@ -257,8 +257,8 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
-                            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
-                            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi"
+                            "ExpDom-1-Code, Domain, label, fi, ExpDom-1-Lbl-Fi",
+                            "ExpDom-1-Code, Domain, description, fi, ExpDom-1-Desc-Fi"
                         )
                     }
                 )
@@ -281,11 +281,11 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
-                            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-En",
-                            "ExpDom-1-Code, Domain, label, fi, ExpDom-Lbl-Fi",
+                            "ExpDom-1-Code, Domain, label, en, ExpDom-1-Lbl-En",
+                            "ExpDom-1-Code, Domain, label, fi, ExpDom-1-Lbl-Fi",
                             "ExpDom-1-Code, Domain, label, pl, ExpDom-1-Uri",
-                            "ExpDom-1-Code, Domain, description, en, ExpDom-Desc-En",
-                            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi"
+                            "ExpDom-1-Code, Domain, description, en, ExpDom-1-Desc-En",
+                            "ExpDom-1-Code, Domain, description, fi, ExpDom-1-Desc-Fi"
                         )
                     },
 
@@ -303,14 +303,14 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#DomainCode, #ConceptType, #Role, #IsoCode, #Text",
-                            "ExpDom-1-Code, Domain, label, en, ExpDom-Lbl-En",
+                            "ExpDom-1-Code, Domain, label, en, ExpDom-1-Lbl-En",
                             "ExpDom-1-Code, Domain, label, fi, ExpDom-1-Uri",
-                            "ExpDom-1-Code, Domain, description, en, ExpDom-Desc-En",
-                            "ExpDom-1-Code, Domain, description, fi, ExpDom-Desc-Fi"
+                            "ExpDom-1-Code, Domain, description, en, ExpDom-1-Desc-En",
+                            "ExpDom-1-Code, Domain, description, fi, ExpDom-1-Desc-Fi"
                         )
 
                         assertThat(diagnosticCollector.eventsString()).contains(
-                            "MESSAGE [WARNING] [DPM Element URI overwrites existing translation: ExpDom-Lbl-Fi (fi)]"
+                            "MESSAGE [WARNING] [DPM Element URI overwrites existing translation: ExpDom-1-Lbl-Fi (fi)]"
                         )
                     }
                 )
@@ -335,17 +335,17 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#ConceptType, #HierarchyLabel, #MemberCode, #HierarchyNodeLabel, #Role, #IsoCode, #Text",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, en, MetHierNode-1-Lbl-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, en, MetHierNode-1-Lbl-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
                         )
                     },
 
@@ -367,18 +367,18 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#ConceptType, #HierarchyLabel, #MemberCode, #HierarchyNodeLabel, #Role, #IsoCode, #Text",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, label, fi, Mbr-4-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, en, MetHierNode-1-Lbl-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, label, fi, Mbr-4-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, en, MetHierNode-1-Lbl-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
                         )
                     },
 
@@ -401,18 +401,18 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#ConceptType, #HierarchyLabel, #MemberCode, #HierarchyNodeLabel, #Role, #IsoCode, #Text",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, fi, Mbr-4-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, en, MetHierNode-1-Lbl-En Met-1-Lbl-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, fi, Mbr-4-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, en, MetHierNode-1-Lbl-En Met-1-Lbl-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
                         )
                     },
 
@@ -435,18 +435,18 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#ConceptType, #HierarchyLabel, #MemberCode, #HierarchyNodeLabel, #Role, #IsoCode, #Text",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, fi, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, en, MetHierNode-1-Lbl-En Met-1-Lbl-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, fi, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, en, MetHierNode-1-Lbl-En Met-1-Lbl-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
                         )
                     },
 
@@ -469,18 +469,18 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
 
                         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                             "#ConceptType, #HierarchyLabel, #MemberCode, #HierarchyNodeLabel, #Role, #IsoCode, #Text",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, fi, Mbr-4-Lbl-Fi",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
-                            "HierarchyNode, ExpDomHier-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, en, MetHierNode-1-Lbl-En Met-1-Lbl-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
-                            "HierarchyNode, MetHier-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, en, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, en, ExpDomHierNode-1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-1-Code, ExpDomHierNode-1-Lbl-En Mbr-1-Lbl-En, description, fi, ExpDomHierNode-1-Desc-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, en, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, label, fi, Mbr-4-Lbl-Fi",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, en, ExpDomHierNode-2.1.1-Desc-En",
+                            "HierarchyNode, ExpDomHier-2-Lbl-En, Mbr-4-Code, ExpDomHierNode-2.1.1-Lbl-En Mbr-4-Lbl-En, description, fi, ExpDomHierNode-2.1.1-Desc-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, en, MetHierNode-1-Lbl-En Met-1-Lbl-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, en, MetHierNode-1-Desc-En",
+                            "HierarchyNode, MetHier-1-Lbl-En, ed1, MetHierNode-1-Lbl-En Met-1-Lbl-En, description, fi, MetHierNode-1-Desc-Fi"
                         )
                     },
 
@@ -498,16 +498,16 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                             )
                         )
 
-                        val rs = dbConnection.createStatement().executeQuery(allFiLabelTranslations)
+                        val rs = dbConnection.createStatement().executeQuery(allFiLabelTranslationsQuery)
 
                         assertThat(rs.toStringList()).contains(
                             "#ConceptType, #Role, #IsoCode, #Text",
-                            "Dimension, label, fi, ExpDim-Lbl-Fi",
-                            "Dimension, label, fi, TypDim-Lbl-Fi",
-                            "Domain, label, fi, ExpDom-Lbl-Fi",
-                            "Domain, label, fi, TypDom-Lbl-Fi",
-                            "Hierarchy, label, fi, ExpDomHier-Lbl-Fi",
-                            "Hierarchy, label, fi, MetHier-Lbl-Fi",
+                            "Dimension, label, fi, ExpDim-1-Lbl-Fi",
+                            "Dimension, label, fi, TypDim-1-Lbl-Fi",
+                            "Domain, label, fi, ExpDom-1-Lbl-Fi",
+                            "Domain, label, fi, TypDom-1-Lbl-Fi",
+                            "Hierarchy, label, fi, ExpDomHier-1-Lbl-Fi",
+                            "Hierarchy, label, fi, MetHier-1-Lbl-Fi",
                             "HierarchyNode, label, fi, ExpDomHierNode-1-Lbl-Fi Mbr-1-Lbl-Fi",
                             "HierarchyNode, label, fi, MetHierNode-1-Lbl-Fi Met-1-Lbl-Fi",
                             "Member, label, fi, Mbr-1-Lbl-Fi"
