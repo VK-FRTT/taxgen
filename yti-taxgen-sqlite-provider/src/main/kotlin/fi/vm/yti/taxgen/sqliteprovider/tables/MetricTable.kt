@@ -1,7 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.Metric
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.insert
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -74,4 +78,33 @@ object MetricTable : IntIdTable(name = "mMetric", columnName = "MetricID") {
     ).nullable()
 
     val isStartingMemberIncludedCol = bool("IsStartingMemberIncluded").nullable()
+
+    fun insertMetric(
+        metric: Metric,
+        metricMemberId: EntityID<Int>
+    ) {
+        val referencedRows = metric.referencedDomainCode?.let { referencedDomainCode ->
+
+            val domainRow = DomainTable.rowWhereDomainCode(referencedDomainCode)
+                ?: thisShouldNeverHappen("No Domain matching Metric.ReferencedDomainCode: $referencedDomainCode")
+
+            val hierarchyRow = metric.referencedHierarchyCode?.let { referencedHierarchyCode ->
+                HierarchyTable.rowWhereDomainIdAndHierarchyCode(domainRow[DomainTable.id], referencedHierarchyCode)
+                    ?: thisShouldNeverHappen("No Hierarchy matching Metric.ReferencedHierarchyCode: $referencedHierarchyCode")
+            }
+
+            Pair(domainRow, hierarchyRow)
+        }
+
+        MetricTable.insert {
+            it[correspondingMemberCol] = metricMemberId
+            it[dataTypeCol] = metric.dataType
+            it[flowTypeCol] = metric.flowType
+            it[balanceTypeCol] = metric.balanceType
+            it[referencedDomainCol] = referencedRows?.first?.get(DomainTable.id)
+            it[referencedHierarchyCol] = referencedRows?.second?.get(HierarchyTable.id)
+            it[hierarchyStartingMemberCol] = null
+            it[isStartingMemberIncludedCol] = null
+        }
+    }
 }

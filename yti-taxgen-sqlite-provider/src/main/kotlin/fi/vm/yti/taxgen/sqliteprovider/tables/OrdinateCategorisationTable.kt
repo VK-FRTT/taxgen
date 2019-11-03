@@ -4,6 +4,7 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -51,4 +52,22 @@ object OrdinateCategorisationTable : Table("mOrdinateCategorisation") {
     val sourceCol = text("Source").nullable()
 
     val dpsCol = text("DPS").nullable()
+
+    fun insertOrdinateCategorisation(
+        ordinateId: EntityID<Int>?,
+        dimensionId: EntityID<Int>?,
+        memberId: EntityID<Int>?,
+        dimensionMemberSignature: String?,
+        source: String?,
+        dps: String?
+    ) {
+        OrdinateCategorisationTable.insert {
+            it[ordinateIdCol] = ordinateId
+            it[dimensionIdCol] = dimensionId
+            it[memberIdCol] = memberId
+            it[dimensionMemberSignatureCol] = dimensionMemberSignature
+            it[sourceCol] = source
+            it[dpsCol] = dps
+        }
+    }
 }

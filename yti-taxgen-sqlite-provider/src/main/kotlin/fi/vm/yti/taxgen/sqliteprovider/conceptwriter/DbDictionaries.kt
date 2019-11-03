@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptType
 import fi.vm.yti.taxgen.sqliteprovider.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
@@ -105,20 +106,20 @@ object DbDictionaries {
         transaction {
 
             HierarchyNodeTable.deleteAll()
-            DbConcepts.deleteAllConceptsAndTranslations(ConceptType.HIERARCHY_NODE)
+            ConceptTable.deleteConceptsAndTranslationsOfType(ConceptType.HIERARCHY_NODE)
 
             HierarchyTable.deleteAll()
-            DbConcepts.deleteAllConceptsAndTranslations(ConceptType.HIERARCHY)
+            ConceptTable.deleteConceptsAndTranslationsOfType(ConceptType.HIERARCHY)
 
             MetricTable.deleteAll()
             MemberTable.deleteAll()
-            DbConcepts.deleteAllConceptsAndTranslations(ConceptType.MEMBER)
+            ConceptTable.deleteConceptsAndTranslationsOfType(ConceptType.MEMBER)
 
             DomainTable.deleteAll()
-            DbConcepts.deleteAllConceptsAndTranslations(ConceptType.DOMAIN)
+            ConceptTable.deleteConceptsAndTranslationsOfType(ConceptType.DOMAIN)
 
             DimensionTable.deleteAll()
-            DbConcepts.deleteAllConceptsAndTranslations(ConceptType.DIMENSION)
+            ConceptTable.deleteConceptsAndTranslationsOfType(ConceptType.DIMENSION)
         }
     }
 }

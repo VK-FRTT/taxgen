@@ -1,7 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.dpmmodel.Language
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.update
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -32,4 +36,20 @@ object LanguageTable : IntIdTable(name = "mLanguage", columnName = "LanguageID")
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable()
+
+    fun updateLanguageName(languageEntityId: EntityID<Int>, language: Language) {
+        LanguageTable.update({ LanguageTable.id.eq(languageEntityId) }) {
+            it[languageNameCol] = language.label.translations[language]
+            it[englishNameCol] = language.label.translationForIso6391CodeOrNull("en")
+        }
+    }
+
+    fun insertLanguage(language: Language) {
+        LanguageTable.insert {
+            it[languageNameCol] = language.label.translations[language]
+            it[englishNameCol] = language.label.translationForIso6391CodeOrNull("en")
+            it[isoCodeCol] = language.iso6391Code
+            it[conceptIdCol] = null
+        }
+    }
 }

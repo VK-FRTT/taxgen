@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.commons.throwFail
 import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTranslationRole
 import fi.vm.yti.taxgen.sqliteprovider.tables.ConceptTranslationTable
@@ -19,6 +19,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
+// TODO refactor & add protection against writing DB entities with already existing DB IDs
 object DbFixedEntities {
 
     fun writeFixedEntities(

@@ -63,7 +63,7 @@ data class BaselineOpenAxisValueRestriction(
                 domainXbrlCode = domainRow?.get(DomainTable.domainXBRLCodeCol),
                 hierarchyCode = hierarchyRow?.get(HierarchyTable.hierarchyCodeCol),
                 startingMemberXbrlCode = hierarchyStartingMemberRow?.get(MemberTable.memberXBRLCodeCol),
-                isStartingMemberIncluded = openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.isStartingMemberIncluded],
+                isStartingMemberIncluded = openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.isStartingMemberIncludedCol],
                 isStartingMemberPartOfHierarchy = (hierarchyStartingMemberNodeRow != null)
             )
         }

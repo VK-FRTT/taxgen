@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -35,10 +34,6 @@ class OrdinateCategorisationTransform(
                 }
             }
 
-            diagnostic.stopIfSignificantErrorsReceived {
-                "OrdinateCategorisation baseline loading failed"
-            }
-
             return OrdinateCategorisationTransform(
                 baselineCategorisations,
                 diagnostic
@@ -62,27 +57,21 @@ class OrdinateCategorisationTransform(
             }
         }
 
-        diagnostic.stopIfSignificantErrorsReceived {
-            "OrdinateCategorisation transformation failed"
-        }
-
         transaction {
             OrdinateCategorisationTable.deleteAll()
         }
 
         transaction {
-            finalCategorisations.forEach(::insertOrdinateCategorisation)
-        }
-    }
-
-    private fun insertOrdinateCategorisation(categorisation: FinalOrdinateCategorisation) {
-        OrdinateCategorisationTable.insert {
-            it[ordinateIdCol] = categorisation.ordinateId
-            it[dimensionIdCol] = categorisation.dbReferences.dimensionId
-            it[memberIdCol] = categorisation.dbReferences.memberId
-            it[dimensionMemberSignatureCol] = categorisation.databaseIdSignature
-            it[sourceCol] = categorisation.source
-            it[dpsCol] = categorisation.xbrlCodeSignature
+            finalCategorisations.forEach {
+                OrdinateCategorisationTable.insertOrdinateCategorisation(
+                    ordinateId = it.ordinateId,
+                    dimensionId = it.dbReferences.dimensionId,
+                    memberId = it.dbReferences.memberId,
+                    dimensionMemberSignature = it.databaseIdSignature,
+                    source = it.source,
+                    dps = it.xbrlCodeSignature
+                )
+            }
         }
     }
 }

@@ -1,16 +1,13 @@
 package fi.vm.yti.taxgen.sqliteprovider.conceptwriter
 
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbDomains {
@@ -29,11 +26,11 @@ object DbDomains {
                 languageIds
             )
 
-            val domainId = insertExplicitDomain(
+            val domainId = DomainTable.insertExplicitDomain(
                 domain,
                 domainConceptId,
                 owner,
-                processingOptions
+                processingOptions.sqliteDbDpmElementInherentTextLanguage
             )
 
             domain.members.forEach { member ->
@@ -44,13 +41,13 @@ object DbDomains {
                     languageIds
                 )
 
-                insertMember(
+                MemberTable.insertMember(
                     domain,
                     domainId,
                     member,
                     memberConceptId,
                     owner,
-                    processingOptions
+                    processingOptions.sqliteDbDpmElementInherentTextLanguage
                 )
             }
 
@@ -72,77 +69,12 @@ object DbDomains {
                 languageIds
             )
 
-            insertTypedDomain(
+            DomainTable.insertTypedDomain(
                 domain,
                 domainConceptId,
                 owner,
-                processingOptions
+                processingOptions.sqliteDbDpmElementInherentTextLanguage
             )
-        }
-    }
-
-    private fun insertExplicitDomain(
-        domain: ExplicitDomain,
-        domainConceptId: EntityID<Int>,
-        owner: Owner,
-        processingOptions: ProcessingOptions
-    ): EntityID<Int> {
-        val domainXbrlCode = "${owner.prefix}_exp:${domain.domainCode}"
-
-        val domainId = DomainTable.insertAndGetId {
-            it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] =
-                domain.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[domainDescriptionCol] =
-                domain.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[domainXBRLCodeCol] = domainXbrlCode
-            it[dataTypeCol] = null
-            it[isTypedDomainCol] = false
-            it[conceptIdCol] = domainConceptId
-        }
-
-        return domainId
-    }
-
-    private fun insertTypedDomain(
-        domain: TypedDomain,
-        domainConceptId: EntityID<Int>,
-        owner: Owner,
-        processingOptions: ProcessingOptions
-    ): EntityID<Int> {
-        val domainXbrlCode = "${owner.prefix}_typ:${domain.domainCode}"
-
-        return DomainTable.insertAndGetId {
-            it[domainCodeCol] = domain.domainCode
-            it[domainLabelCol] =
-                domain.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[domainDescriptionCol] =
-                domain.concept.description.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[domainXBRLCodeCol] = domainXbrlCode
-            it[dataTypeCol] = domain.dataType
-            it[isTypedDomainCol] = true
-            it[conceptIdCol] = domainConceptId
-        }
-    }
-
-    private fun insertMember(
-        domain: ExplicitDomain,
-        domainId: EntityID<Int>,
-        member: Member,
-        memberConceptId: EntityID<Int>,
-        owner: Owner,
-        processingOptions: ProcessingOptions
-    ) {
-        val memberXbrlCode = "${owner.prefix}_${domain.domainCode}:${member.memberCode}"
-
-        MemberTable.insert {
-            it[memberCodeCol] = member.memberCode
-            it[memberLabelCol] =
-                member.concept.label.translationForLangOrNull(processingOptions.sqliteDbDpmElementInherentTextLanguage)
-            it[memberXBRLCodeCol] = memberXbrlCode
-            it[isDefaultMemberCol] = member.defaultMember
-            it[conceptIdCol] = memberConceptId
-            it[domainIdCol] = domainId
         }
     }
 }

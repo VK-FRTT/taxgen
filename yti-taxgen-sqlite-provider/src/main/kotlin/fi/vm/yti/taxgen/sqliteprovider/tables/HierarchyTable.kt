@@ -1,9 +1,12 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.dpmmodel.Hierarchy
+import fi.vm.yti.taxgen.dpmmodel.Language
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 
 /**
@@ -54,6 +57,24 @@ object HierarchyTable : IntIdTable(name = "mHierarchy", columnName = "HierarchyI
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable()
+
+    fun insertHierarchy(
+        hierarchy: Hierarchy,
+        hierarchyConceptId: EntityID<Int>,
+        domainId: EntityID<Int>,
+        inherentTextLanguage: Language?
+    ): EntityID<Int> {
+
+        val hierarchyId = HierarchyTable.insertAndGetId {
+            it[hierarchyCodeCol] = hierarchy.hierarchyCode
+            it[hierarchyLabelCol] = hierarchy.concept.label.translationForLangOrNull(inherentTextLanguage)
+            it[hierarchyDescriptionCol] = hierarchy.concept.description.translationForLangOrNull(inherentTextLanguage)
+            it[domainIdCol] = domainId
+            it[conceptIdCol] = hierarchyConceptId
+        }
+
+        return hierarchyId
+    }
 
     fun rowWhereHierarchyId(hierarchyId: EntityID<Int>) = select {
         HierarchyTable.id.eq(hierarchyId)

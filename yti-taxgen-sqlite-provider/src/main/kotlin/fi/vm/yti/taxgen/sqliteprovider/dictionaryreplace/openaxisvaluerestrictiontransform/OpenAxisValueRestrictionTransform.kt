@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.tables.OpenAxisValueRestrictionTable
 import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -62,16 +61,14 @@ class OpenAxisValueRestrictionTransform(
         }
 
         transaction {
-            finalRestrictions.forEach(::insertOpenAxisValueRestriction)
-        }
-    }
-
-    private fun insertOpenAxisValueRestriction(restriction: FinalOpenAxisValueRestriction) {
-        OpenAxisValueRestrictionTable.insert {
-            it[axisIdCol] = restriction.axisId
-            it[hierarchyIdCol] = restriction.hierarchyId
-            it[hierarchyStartingMemberIdCol] = restriction.hierarchyStartingMemberId
-            it[isStartingMemberIncluded] = restriction.isStartingMemberIncluded
+            finalRestrictions.forEach {
+                OpenAxisValueRestrictionTable.insertOpenAxisValueRestriction(
+                    axisId = it.axisId,
+                    hierarchyId = it.hierarchyId,
+                    hierarchyStartingMemberId = it.hierarchyStartingMemberId,
+                    isStartingMemberIncluded = it.isStartingMemberIncluded
+                )
+            }
         }
     }
 }

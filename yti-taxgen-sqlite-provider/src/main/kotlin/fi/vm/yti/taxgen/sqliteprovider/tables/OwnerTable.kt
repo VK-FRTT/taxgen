@@ -1,7 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.dpmmodel.Owner
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.insertAndGetId
+import org.jetbrains.exposed.sql.select
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -47,4 +51,23 @@ object OwnerTable : IntIdTable(name = "mOwner", columnName = "OwnerID") {
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable()
+
+    fun insertOwner(
+        owner: Owner
+    ): EntityID<Int> {
+
+        return OwnerTable.insertAndGetId {
+            it[ownerNameCol] = owner.name
+            it[ownerNamespaceCol] = owner.namespace
+            it[ownerLocationCol] = owner.location
+            it[ownerPrefixCol] = owner.prefix
+            it[ownerCopyrightCol] = owner.copyright
+            it[parentOwnerIdCol] = null
+            it[conceptIdCol] = null
+        }
+    }
+
+    fun rowsWhereOwnerPrefix(ownerPrefix: String) = select {
+        OwnerTable.ownerPrefixCol eq ownerPrefix
+    }
 }

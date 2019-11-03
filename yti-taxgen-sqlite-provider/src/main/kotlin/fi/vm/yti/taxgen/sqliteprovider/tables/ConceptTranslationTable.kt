@@ -1,7 +1,11 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.Language
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
 
 enum class ConceptTranslationRole(val value: String) {
     LABEL("label"),
@@ -46,4 +50,21 @@ object ConceptTranslationTable : Table(name = "mConceptTranslation") {
     val textCol = text("Text").nullable()
 
     val roleCol = text("Role").nullable().primaryKey()
+
+    fun insertConceptTranslation(
+        languageIds: Map<Language, EntityID<Int>>,
+        conceptId: EntityID<Int>,
+        role: ConceptTranslationRole,
+        language: Language,
+        text: String
+    ) {
+        val languageId = languageIds[language] ?: thisShouldNeverHappen("Language without DB mapping: $language")
+
+        ConceptTranslationTable.insert {
+            it[conceptIdCol] = conceptId
+            it[languageIdCol] = languageId
+            it[textCol] = text
+            it[roleCol] = role.value
+        }
+    }
 }

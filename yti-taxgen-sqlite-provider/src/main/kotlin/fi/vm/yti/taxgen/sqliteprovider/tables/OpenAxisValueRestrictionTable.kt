@@ -1,7 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
 
 /**
  * Reference DDL (from BR-AG Data Modeler):
@@ -42,5 +44,19 @@ object OpenAxisValueRestrictionTable : Table("mOpenAxisValueRestriction") {
             onUpdate = ReferenceOption.NO_ACTION
         ).nullable()
 
-    val isStartingMemberIncluded = bool("IsStartingMemberIncluded").nullable()
+    val isStartingMemberIncludedCol = bool("IsStartingMemberIncluded").nullable()
+
+    fun insertOpenAxisValueRestriction(
+        axisId: EntityID<Int>?,
+        hierarchyId: EntityID<Int>?,
+        hierarchyStartingMemberId: EntityID<Int>?,
+        isStartingMemberIncluded: Boolean?
+    ) {
+        OpenAxisValueRestrictionTable.insert {
+            it[axisIdCol] = axisId
+            it[hierarchyIdCol] = hierarchyId
+            it[hierarchyStartingMemberIdCol] = hierarchyStartingMemberId
+            it[isStartingMemberIncludedCol] = isStartingMemberIncluded
+        }
+    }
 }

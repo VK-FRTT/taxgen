@@ -1,9 +1,16 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
+import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.Member
+import fi.vm.yti.taxgen.dpmmodel.Metric
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 
 /**
@@ -48,6 +55,43 @@ object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable()
 
+    fun insertMember(
+        domain: ExplicitDomain,
+        domainId: EntityID<Int>,
+        member: Member,
+        memberConceptId: EntityID<Int>,
+        owner: Owner,
+        inherentTextLanguage: Language?
+    ) {
+        MemberTable.insert {
+            it[memberCodeCol] = member.memberCode
+            it[memberLabelCol] = member.concept.label.translationForLangOrNull(inherentTextLanguage)
+            it[memberXBRLCodeCol] = memberXbrlCode(owner, domain.domainCode, member.memberCode)
+            it[isDefaultMemberCol] = member.defaultMember
+            it[conceptIdCol] = memberConceptId
+            it[domainIdCol] = domainId
+        }
+    }
+
+    fun insertMetricMember(
+        metric: Metric,
+        owner: Owner,
+        metricMemberConceptId: EntityID<Int>,
+        metricDomainId: EntityID<Int>,
+        inherentTextLanguage: Language?
+    ): EntityID<Int> {
+        val memberId = MemberTable.insertAndGetId {
+            it[memberCodeCol] = metric.metricCode
+            it[memberLabelCol] = metric.concept.label.translationForLangOrNull(inherentTextLanguage)
+            it[memberXBRLCodeCol] = metricMemberXbrlCode(owner, metric.metricCode)
+            it[isDefaultMemberCol] = false
+            it[conceptIdCol] = metricMemberConceptId
+            it[domainIdCol] = metricDomainId
+        }
+
+        return memberId
+    }
+
     fun rowWhereMemberId(memberId: EntityID<Int>) = select {
         MemberTable.id.eq(memberId)
     }.firstOrNull()
@@ -63,4 +107,8 @@ object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
     fun openMemberRow() = select {
         MemberTable.id.eq(9999)
     }.firstOrNull()
+
+    fun memberXbrlCode(owner: Owner, domainCode: String, memberCode: String) = "${owner.prefix}_$domainCode:$memberCode"
+
+    fun metricMemberXbrlCode(owner: Owner, metricCode: String) = "${owner.prefix}_met:$metricCode"
 }

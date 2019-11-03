@@ -1,9 +1,13 @@
 package fi.vm.yti.taxgen.sqliteprovider.tables
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
+import fi.vm.yti.taxgen.dpmmodel.Language
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
 /**
@@ -85,6 +89,42 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
 
     //Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
     val pathCol = varchar("Path", 3999).nullable()
+
+    fun insertHierarchyNode(
+        hierarchyNodeConceptId: EntityID<Int>,
+        hierarchyId: EntityID<Int>,
+        parentNode: HierarchyNode?,
+        node: HierarchyNode,
+        memberDomainId: EntityID<Int>,
+        level: Int,
+        order: Int,
+        inherentTextLanguage: Language?
+    ) {
+        val memberRow = MemberTable.rowWhereDomainIdAndMemberCode(memberDomainId, node.referencedElementCode)
+            ?: thisShouldNeverHappen("No Member matching CurrentNode.referencedElementCode: ${node.referencedElementCode}")
+
+        val parentMemberRow =
+            if (parentNode == null) {
+                null
+            } else {
+                MemberTable.rowWhereDomainIdAndMemberCode(memberDomainId, parentNode.referencedElementCode)
+                    ?: thisShouldNeverHappen("No Member matching ParentNode.referencedElementCode: ${parentNode.referencedElementCode}")
+            }
+
+        HierarchyNodeTable.insert {
+            it[hierarchyIdCol] = hierarchyId
+            it[memberIdCol] = memberRow[MemberTable.id]
+            it[isAbstractCol] = node.abstract
+            it[comparisonOperatorCol] = node.comparisonOperator
+            it[unaryOperatorCol] = node.unaryOperator
+            it[orderCol] = order
+            it[levelCol] = level
+            it[parentMemberID] = parentMemberRow?.get(MemberTable.id)?.value
+            it[hierarchyNodeLabel] = node.concept.label.translationForLangOrNull(inherentTextLanguage)
+            it[conceptIdCol] = hierarchyNodeConceptId
+            it[pathCol] = null
+        }
+    }
 
     fun rowWhereHierarchyIdAndMemberCode(hierarchyId: EntityID<Int>, memberCode: String) =
         (HierarchyNodeTable innerJoin MemberTable).select {
