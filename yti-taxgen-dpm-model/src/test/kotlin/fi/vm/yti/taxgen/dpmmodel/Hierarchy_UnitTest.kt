@@ -15,7 +15,7 @@ internal class Hierarchy_UnitTest :
     DpmModel_UnitTestBase<Hierarchy>(Hierarchy::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,               required",
         "concept,           required",
@@ -54,7 +54,7 @@ internal class Hierarchy_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -71,7 +71,7 @@ internal class Hierarchy_UnitTest :
     inner class RootNodesProp {
 
         @Test
-        fun `rootNodes should have unique URIs {within flat root}`() {
+        fun `rootNodes should produce validation error when it contains HierarchyNodes with duplicate URIs at root level`() {
             attributeOverrides(
                 "rootNodes" to listOf(
                     hierarchyNode("hn_1", "member_m_1_uri"),
@@ -87,7 +87,7 @@ internal class Hierarchy_UnitTest :
         }
 
         @Test
-        fun `rootNodes should have unique URIs {within hierarchy}`() {
+        fun `rootNodes should produce validation error when it contains HierarchyNodes with duplicate URIs in nested hierarchy`() {
             attributeOverrides(
                 "rootNodes" to listOf(
 
@@ -124,7 +124,7 @@ internal class Hierarchy_UnitTest :
         }
 
         @Test
-        fun `rootNodes should have unique referencedElementCodes {within flat root}`() {
+        fun `rootNodes should produce validation error when it contains HierarchyNodes with duplicate referencedElementCodes at root level`() {
             attributeOverrides(
                 "rootNodes" to listOf(
                     hierarchyNode("hn_1", "member_m_1_code"),
@@ -142,7 +142,7 @@ internal class Hierarchy_UnitTest :
         }
 
         @Test
-        fun `rootNodes should have unique referencedElementCodes {within hierarchy}`() {
+        fun `rootNodes should produce validation error when it contains HierarchyNodes with duplicate referencedElementCodes in nested hierarchy`() {
             attributeOverrides(
                 "rootNodes" to listOf(
 

@@ -15,7 +15,7 @@ internal class ExplicitDomain_UnitTest :
     DpmModel_UnitTestBase<ExplicitDomain>(ExplicitDomain::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,                   required",
         "concept,               required",
@@ -68,7 +68,7 @@ internal class ExplicitDomain_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -85,7 +85,7 @@ internal class ExplicitDomain_UnitTest :
     inner class MembersProp {
 
         @Test
-        fun `members should have unique ids and memberCodes`() {
+        fun `members should produce validation error when it contains Members with duplicate URIs or memberCodes`() {
             attributeOverrides(
                 "members" to listOf(
                     member("m_1", false),
@@ -104,7 +104,7 @@ internal class ExplicitDomain_UnitTest :
         }
 
         @Test
-        fun `members should error with 2 default members`() {
+        fun `members should produce validation error when it contains more than 1 default Member`() {
             attributeOverrides(
                 "members" to listOf(
                     member("m_1", false),
@@ -119,7 +119,7 @@ internal class ExplicitDomain_UnitTest :
         }
 
         @Test
-        fun `members should accept 1 default member`() {
+        fun `members should not produce validation error when it contains 1 default Member`() {
             attributeOverrides(
                 "members" to listOf(
                     member("m_1", false),
@@ -137,7 +137,7 @@ internal class ExplicitDomain_UnitTest :
     inner class HierarchiesProp {
 
         @Test
-        fun `hierarchies should have unique ids and hierarchyCodes`() {
+        fun `hierarchies should produce validation error when it contains Hierarchies with duplicate URIs or hierarchyCodes`() {
             attributeOverrides(
                 "hierarchies" to listOf(
                     hierarchy("h_1"),
@@ -156,7 +156,7 @@ internal class ExplicitDomain_UnitTest :
         }
 
         @Test
-        fun `hierarchies should refer only Members which are from the Domain itself`() {
+        fun `hierarchies should produce validation error when HierarchyNodes refer to Members which are not part of the ExplicitDomain`() {
 
             attributeOverrides(
                 "members" to listOf(

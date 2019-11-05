@@ -16,7 +16,7 @@ internal class HierarchyNode_UnitTest :
     DpmModel_UnitTestBase<HierarchyNode>(HierarchyNode::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,                   required",
         "concept,               required",
@@ -60,7 +60,7 @@ internal class HierarchyNode_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should allow empty label`() {
+        fun `concept should not produce validation error when label has 0 translations (differs from other DPM Elements)`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -71,11 +71,11 @@ internal class HierarchyNode_UnitTest :
             assertThat(validationErrors).isEmpty()
         }
 
-    @Test
-        fun `concept should error if invalid`() {
+        @Test
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
-                    "label" to TranslatedText(listOf( Language.byIso6391CodeOrFail("en") to "").toMap() )
+                    "label" to TranslatedText(listOf(Language.byIso6391CodeOrFail("en") to "").toMap())
                 )
             )
 
@@ -88,7 +88,6 @@ internal class HierarchyNode_UnitTest :
     @Nested
     inner class ComparisonOperatorProp {
 
-        @DisplayName("comparisonOperator validation")
         @ParameterizedTest(name = "`{0}` should be {1} comparisonOperator")
         @CsvSource(
             "=,         valid",
@@ -101,7 +100,7 @@ internal class HierarchyNode_UnitTest :
             "<<,        invalid",
             "foo,       invalid"
         )
-        fun `comparisonOperator should error if invalid`(
+        fun testComparisonOperatorValidation(
             comparisonOperator: String?,
             expectedValidity: String
         ) {
@@ -114,7 +113,7 @@ internal class HierarchyNode_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.comparisonOperator: unsupported arithmetical relationship (comparison operator) '$comparisonOperator'")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }
@@ -122,7 +121,6 @@ internal class HierarchyNode_UnitTest :
     @Nested
     inner class UnaryOperatorProp {
 
-        @DisplayName("unaryOperator validation")
         @ParameterizedTest(name = "`{0}` should be {1} unaryOperator")
         @CsvSource(
             "+,         valid",
@@ -132,7 +130,7 @@ internal class HierarchyNode_UnitTest :
             "<<,        invalid",
             "foo,       invalid"
         )
-        fun `unaryOperator should error if invalid`(
+        fun testUnaryOperatorValidation(
             unaryOperator: String?,
             expectedValidity: String
         ) {
@@ -145,7 +143,7 @@ internal class HierarchyNode_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.unaryOperator: unsupported arithmetical sign (unary operator) '$unaryOperator'")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }

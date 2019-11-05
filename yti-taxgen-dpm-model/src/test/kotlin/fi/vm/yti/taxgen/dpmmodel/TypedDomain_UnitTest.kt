@@ -16,7 +16,7 @@ internal class TypedDomain_UnitTest :
     DpmModel_UnitTestBase<TypedDomain>(TypedDomain::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,                   required",
         "concept,               required",
@@ -35,8 +35,8 @@ internal class TypedDomain_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "uri,                    minLength,      1",
-        "uri,                    maxLength,      500",
+        "uri,                   minLength,      1",
+        "uri,                   maxLength,      500",
         "domainCode,            minLength,      2",
         "domainCode,            maxLength,      50"
     )
@@ -56,7 +56,7 @@ internal class TypedDomain_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -72,7 +72,6 @@ internal class TypedDomain_UnitTest :
     @Nested
     inner class DataTypeProp {
 
-        @DisplayName("dataType validation")
         @ParameterizedTest(name = "`{0}` should be {1} dataType")
         @CsvSource(
             "Boolean,       valid",
@@ -88,7 +87,7 @@ internal class TypedDomain_UnitTest :
             "null,          invalid",
             "foo,           invalid"
         )
-        fun `dataType should error if invalid`(
+        fun testDataTypeValidation(
             dataType: String,
             expectedValidity: String
         ) {
@@ -101,7 +100,7 @@ internal class TypedDomain_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("TypedDomain.dataType: unsupported data type '$dataType'")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }

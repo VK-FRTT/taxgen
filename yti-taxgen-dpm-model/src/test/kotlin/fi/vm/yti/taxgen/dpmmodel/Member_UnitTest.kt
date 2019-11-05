@@ -16,7 +16,7 @@ internal class Member_UnitTest :
     DpmModel_UnitTestBase<Member>(Member::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,               required",
         "concept,           required",
@@ -57,7 +57,7 @@ internal class Member_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -73,7 +73,6 @@ internal class Member_UnitTest :
     @Nested
     inner class MemberCodeProp {
 
-        @DisplayName("memberCode content validation")
         @ParameterizedTest(name = "`{0}` should be {1} memberCode")
         @CsvSource(
             "a,         valid",
@@ -102,7 +101,7 @@ internal class Member_UnitTest :
             "aå,        invalid",
             "aÅ,        invalid"
         )
-        fun testPropertyLengthValidation(
+        fun testCodeValueValidation(
             codeValue: String?,
             expectedValidity: String
         ) {
@@ -115,7 +114,7 @@ internal class Member_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("Member.memberCode: is illegal DPM Code")
-                else -> throwIllegalDpmModelState("Unsupported expected validity $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }

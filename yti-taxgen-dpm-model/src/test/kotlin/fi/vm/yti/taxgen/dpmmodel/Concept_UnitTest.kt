@@ -26,7 +26,7 @@ internal class Concept_UnitTest :
     }
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "label,             required",
         "description,       required",
@@ -50,7 +50,7 @@ internal class Concept_UnitTest :
     inner class CreatedAtProp {
 
         @Test
-        fun `createdAt should be valid timestamp`() {
+        fun `createdAt should produce validation error when timestamp is not valid`() {
             attributeOverrides(
                 "createdAt" to Instant.EPOCH
             )
@@ -64,7 +64,7 @@ internal class Concept_UnitTest :
     inner class ModifiedAtProp {
 
         @Test
-        fun `modifiedAt should be valid timestamp`() {
+        fun `modifiedAt should produce validation error when timestamp is not valid`() {
             attributeOverrides(
                 "modifiedAt" to Instant.EPOCH
             )
@@ -77,7 +77,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `modifiedAt must come after createdAt`() {
+        fun `modifiedAt should produce validation error when it precedes createdAt`() {
             attributeOverrides(
                 "createdAt" to Instant.parse("2018-03-20T10:20:30.40Z"),
                 "modifiedAt" to Instant.parse("2018-03-19T10:20:30.40Z")
@@ -88,7 +88,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `modifiedAt may be equal with createdAt`() {
+        fun `modifiedAt should not produce validation error when it equals with createdAt`() {
             attributeOverrides(
                 "createdAt" to Instant.parse("2018-03-20T10:20:30.40Z"),
                 "modifiedAt" to Instant.parse("2018-03-20T10:20:30.40Z")
@@ -103,7 +103,7 @@ internal class Concept_UnitTest :
     inner class ApplicableUntilProp {
 
         @Test
-        fun `applicableUntil must come after applicableFrom`() {
+        fun `applicableUntil should produce validation error when it precedes applicableFrom`() {
             attributeOverrides(
                 "applicableFrom" to LocalDate.of(2018, 1, 20),
                 "applicableUntil" to LocalDate.of(2018, 1, 19)
@@ -114,7 +114,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `applicableUntil may be equal with applicableFrom`() {
+        fun `applicableUntil should not produce validation error when it equals with applicableFrom`() {
             attributeOverrides(
                 "applicableFrom" to LocalDate.of(2018, 1, 20),
                 "applicableUntil" to LocalDate.of(2018, 1, 20)
@@ -125,7 +125,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `applicableFrom may be defined without applicableUntil`() {
+        fun `applicableFrom should not produce validation error when applicableUntil is undefined (null)`() {
             attributeOverrides(
                 "applicableFrom" to LocalDate.of(2018, 1, 20),
                 "applicableUntil" to null
@@ -136,7 +136,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `applicableUntil may be defined without applicableFrom`() {
+        fun `applicableUntil should not produce validation error when applicableFrom is undefined (null)`() {
             attributeOverrides(
                 "applicableFrom" to null,
                 "applicableUntil" to LocalDate.of(2018, 1, 20)
@@ -147,7 +147,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `applicableUntil and applicableFrom both may be undefined`() {
+        fun `applicableUntil and applicableFrom should not produce validation error when they both are undefined (null)`() {
             attributeOverrides(
                 "applicableFrom" to null,
                 "applicableUntil" to null
@@ -162,7 +162,7 @@ internal class Concept_UnitTest :
     inner class LabelProp {
 
         @Test
-        fun `label should error with 0 translations`() {
+        fun `label should produce validation error when it has 0 translations`() {
             attributeOverrides(
                 "label" to TranslatedText(emptyMap())
             )
@@ -172,7 +172,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `label should succeed with 1 translation`() {
+        fun `label should not produce validation error when it has 1 translation`() {
             attributeOverrides(
                 "label" to TranslatedText(
                     mapOf(
@@ -186,7 +186,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `label should error with 1 characters long translation`() {
+        fun `label should produce validation error when it has 1 character long translation`() {
             attributeOverrides(
                 "label" to TranslatedText(
                     mapOf(
@@ -201,7 +201,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `label should accept 2 characters long translation`() {
+        fun `label should not produce validation error when it has 2 characters long translation`() {
             attributeOverrides(
                 "label" to TranslatedText(mapOf(language("en") to "12"))
             )
@@ -211,7 +211,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `label should error with not Owner defined translation languages`() {
+        fun `label should produce validation error when it has translation for language not supported by the Owner`() {
             attributeOverrides(
                 "label" to TranslatedText(
                     mapOf(
@@ -229,7 +229,7 @@ internal class Concept_UnitTest :
     @Nested
     inner class Description {
         @Test
-        fun `description should error with 1 characters long translation`() {
+        fun `description should produce validation error when it has 1 character long translation`() {
             attributeOverrides(
                 "description" to TranslatedText(
                     mapOf(
@@ -244,7 +244,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `description should accept 2 characters long translation`() {
+        fun `description should not produce validation error when it has 2 characters long translation`() {
             attributeOverrides(
                 "description" to TranslatedText(mapOf(language("en") to "12"))
             )
@@ -254,7 +254,7 @@ internal class Concept_UnitTest :
         }
 
         @Test
-        fun `description should error with not Owner defined translation languages`() {
+        fun `description should produce validation error when it has translation for language not supported by the Owner`() {
             attributeOverrides(
                 "description" to TranslatedText(
                     mapOf(

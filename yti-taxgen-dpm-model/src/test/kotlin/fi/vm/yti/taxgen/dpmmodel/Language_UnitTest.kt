@@ -18,7 +18,7 @@ internal class Language_UnitTest :
     DpmModel_UnitTestBase<Language>(Language::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "iso6391Code,       required",
         "label,             required"
@@ -54,7 +54,7 @@ internal class Language_UnitTest :
     @Nested
     inner class LabelProp {
         @Test
-        fun `label should error with 0 translations`() {
+        fun `label should produce validation error when it has 0 translations`() {
             attributeOverrides(
                 "label" to TranslatedText(emptyMap())
             )
@@ -64,17 +64,21 @@ internal class Language_UnitTest :
         }
 
         @Test
-        fun `label should accept 1 translations`() {
+        fun `label should not produce validation when it has 1 translation`() {
             attributeOverrides(
-                "label" to TranslatedText(emptyMap())
+                "label" to TranslatedText(
+                    mapOf(
+                        language("fi") to "suomi"
+                    )
+                )
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors).containsExactly("Language.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).isEmpty()
         }
 
         @Test
-        fun `label should error with 4 characters long translation`() {
+        fun `label should produce validation error when it has too short translation`() {
             attributeOverrides(
                 "label" to TranslatedText(
                     mapOf(
@@ -90,7 +94,7 @@ internal class Language_UnitTest :
         }
 
         @Test
-        fun `label should accept 5 characters long translation`() {
+        fun `label should produce validation error when it has enough long translation`() {
             attributeOverrides(
                 "label" to TranslatedText(mapOf(language("en") to "12345"))
             )
@@ -104,12 +108,12 @@ internal class Language_UnitTest :
     inner class LanguageConfiguration {
 
         @Test
-        fun `languages should be available`() {
+        fun `languages should be loaded from built-in configuration without exceptions`() {
             assertThat(Language.languages()).isNotEmpty
         }
 
         @Test
-        fun `loading language configuration with unsupported translation language should fail`() {
+        fun `language loading should cause exception when configuration is referring undefined language`() {
             val languageConfigPath: Path =
                 TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
@@ -119,7 +123,7 @@ internal class Language_UnitTest :
         }
 
         @Test
-        fun `loading language configuration with broken JSON syntax should fail`() {
+        fun `language loading should cause exception when configuration is broken JSON`() {
             val languageConfigPath: Path =
                 TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
@@ -129,7 +133,7 @@ internal class Language_UnitTest :
         }
 
         @Test
-        fun `loading language configuration without translations should fail`() {
+        fun `language loading should cause exception when configuration is missing translations for language`() {
             val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "language_no_translations.json")
 
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }

@@ -6,7 +6,6 @@ import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,7 +16,7 @@ internal class Metric_UnitTest :
     DpmModel_UnitTestBase<Metric>(Metric::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,                       required",
         "concept,                   required",
@@ -73,7 +72,6 @@ internal class Metric_UnitTest :
     @Nested
     inner class MetricCodeProp {
 
-        @DisplayName("metricCode validation")
         @ParameterizedTest(name = "`{0}` should be {1} metricCode")
         @CsvSource(
             "b0,           valid",
@@ -100,7 +98,7 @@ internal class Metric_UnitTest :
             "'bi0 ',       invalid",
             "'b-0',        invalid"
         )
-        fun `balanceType should error if invalid`(
+        fun testMetricCodeValidation(
             metricCode: String,
             expectedValidity: String
         ) {
@@ -113,7 +111,7 @@ internal class Metric_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).contains("Metric.metricCode: metric code does not match required pattern '$metricCode'")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }
@@ -122,7 +120,7 @@ internal class Metric_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -138,7 +136,6 @@ internal class Metric_UnitTest :
     @Nested
     inner class DataTypeProp {
 
-        @DisplayName("dataType validation")
         @ParameterizedTest(name = "`{0}` should be {1} dataType with code tag {2}")
         @CsvSource(
             "Enumeration/Code,  valid,      e",
@@ -155,7 +152,7 @@ internal class Metric_UnitTest :
             "null,              invalid,     ",
             "foo,               invalid,     "
         )
-        fun `dataType should error if invalid`(
+        fun testDataTypeValidation(
             dataType: String,
             expectedValidity: String,
             expectedCodeTag: String?
@@ -187,12 +184,12 @@ internal class Metric_UnitTest :
                     assertThat(Metric.codeTagFromDataType(dataType)).isEqualTo("?")
                 }
 
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
 
         @Test
-        fun `enumeration data type should require non null referencedDomainCode`() {
+        fun `enumeration dataType should produce validation error when referencedDomainCode is null`() {
             attributeOverrides(
                 "dataType" to "Enumeration/Code",
                 "referencedDomainCode" to null,
@@ -208,7 +205,6 @@ internal class Metric_UnitTest :
     @Nested
     inner class FlowTypeProp {
 
-        @DisplayName("flowType validation")
         @ParameterizedTest(name = "`{0}` should be {1} flowType")
         @CsvSource(
             "Flow,          valid,      d",
@@ -218,7 +214,7 @@ internal class Metric_UnitTest :
             "null,          invalid,     ",
             "foo,           invalid,     "
         )
-        fun `flowType should error if invalid`(
+        fun testFlowTypeValidation(
             flowType: String?,
             expectedValidity: String,
             expectedCodeTag: String?
@@ -239,7 +235,7 @@ internal class Metric_UnitTest :
                     assertThat(validationErrors).containsExactly("Metric.flowType: unsupported flow type '$flowType'")
                     assertThat(Metric.codeTagFromFlowType(flowType)).isEqualTo("?")
                 }
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }
@@ -247,7 +243,6 @@ internal class Metric_UnitTest :
     @Nested
     inner class BalanceTypeProp {
 
-        @DisplayName("balanceType validation")
         @ParameterizedTest(name = "`{0}` should be {1} balanceType")
         @CsvSource(
             "Credit,        valid",
@@ -257,7 +252,7 @@ internal class Metric_UnitTest :
             "null,          invalid",
             "foo,           invalid"
         )
-        fun `balanceType should error if invalid`(
+        fun testBalanceTypeValidation(
             balanceType: String?,
             expectedValidity: String
         ) {
@@ -270,7 +265,7 @@ internal class Metric_UnitTest :
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
                 "invalid" -> assertThat(validationErrors).containsExactly("Metric.balanceType: unsupported balance type '$balanceType'")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                else -> throwIllegalDpmModelState()
             }
         }
     }
@@ -278,15 +273,13 @@ internal class Metric_UnitTest :
     @Nested
     inner class ReferencedDomainCodeProp {
 
-        @Disabled
-        @DisplayName("code validation")
         @ParameterizedTest(name = "code `{0}` should be {1} referencedDomainCode")
         @CsvSource(
             "1,         valid",
             "'',        invalid",
             "' ',       invalid"
         )
-        fun `referencedDomainCode should error if invalid`(
+        fun testReferencedDomainCodeValidation(
             code: String,
             expectedValidity: String
         ) {
@@ -298,13 +291,13 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedDomainCode: empty or blank id")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedDomainCode: is blank")
+                else -> throwIllegalDpmModelState()
             }
         }
 
         @Test
-        fun `referencedDomainCode should allow null value`() {
+        fun `referencedDomainCode should not produce validation error when it has null value`() {
             attributeOverrides(
                 "dataType" to "String",
                 "referencedDomainCode" to null,
@@ -316,7 +309,7 @@ internal class Metric_UnitTest :
         }
 
         @Test
-        fun `when referencedDomainCode is given data type must be enumeration`() {
+        fun `referencedDomainCode should produce validation error when it is given but dataType is not enumeration`() {
             attributeOverrides(
                 "dataType" to "String",
                 "referencedDomainCode" to "MC",
@@ -332,15 +325,13 @@ internal class Metric_UnitTest :
     @Nested
     inner class ReferencedHierarchyCodeProp {
 
-        @Disabled
-        @DisplayName("code validation")
         @ParameterizedTest(name = "code `{0}` should be {1} referencedHierarchyCode")
         @CsvSource(
             "1,         valid",
             "'',        invalid",
             "' ',       invalid"
         )
-        fun `referencedHierarchyCode should error if invalid`(
+        fun testReferencedHierarchyCodeValidation(
             code: String,
             expectedValidity: String
         ) {
@@ -352,13 +343,13 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedHierarchyCode: empty or blank id")
-                else -> throwIllegalDpmModelState("Unsupported expectedValidity: $expectedValidity")
+                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedHierarchyCode: is blank")
+                else -> throwIllegalDpmModelState()
             }
         }
 
         @Test
-        fun `referencedHierarchyCode should allow null value`() {
+        fun `referencedHierarchyCode should not produce validation error it has null value`() {
             attributeOverrides(
                 "referencedHierarchyCode" to null
             )
@@ -368,7 +359,7 @@ internal class Metric_UnitTest :
         }
 
         @Test
-        fun `when referencedHierarchyCode is given data type must be enumeration`() {
+        fun `referencedHierarchyCode should produce validation error when it is given but dataType is not enumeration`() {
             attributeOverrides(
                 "dataType" to "String",
                 "referencedDomainCode" to null,

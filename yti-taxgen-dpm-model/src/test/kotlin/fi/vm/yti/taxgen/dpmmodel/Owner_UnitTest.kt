@@ -14,7 +14,7 @@ internal class Owner_UnitTest :
     DpmModel_UnitTestBase<Owner>(Owner::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "name,                  required",
         "namespace,             required",
@@ -72,7 +72,7 @@ internal class Owner_UnitTest :
     inner class LanguageCodesProp {
 
         @Test
-        fun `languageCodes should detect duplicates`() {
+        fun `languageCodes should cause validation error when it contains duplicates`() {
             attributeOverrides(
                 "languageCodes" to listOf("fi", "sv", "fi")
             )
@@ -83,7 +83,7 @@ internal class Owner_UnitTest :
         }
 
         @Test
-        fun `languageCodes should detect unknown codes`() {
+        fun `languageCodes should cause validation error when it contains unsupported code`() {
             attributeOverrides(
                 "languageCodes" to listOf("fi", "zyx", "en")
             )
@@ -94,7 +94,7 @@ internal class Owner_UnitTest :
         }
 
         @Test
-        fun `languageCodes should be mapped to languages`() {
+        fun `languageCodes should be mapped to proper Language objects`() {
             attributeOverrides(
                 "languageCodes" to listOf("fi", "sv", "en")
             )
