@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.tables
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Metric
+import fi.vm.yti.taxgen.dpmmodel.Owner
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
@@ -81,11 +82,12 @@ object MetricTable : IntIdTable(name = "mMetric", columnName = "MetricID") {
 
     fun insertMetric(
         metric: Metric,
-        metricMemberId: EntityID<Int>
+        metricMemberId: EntityID<Int>,
+        owner: Owner
     ) {
         val referencedRows = metric.referencedDomainCode?.let { referencedDomainCode ->
 
-            val domainRow = DomainTable.rowWhereDomainCode(referencedDomainCode)
+            val domainRow = DomainTable.rowWhereDomainOwnerAndCode(owner, referencedDomainCode)
                 ?: thisShouldNeverHappen("No Domain matching Metric.ReferencedDomainCode: $referencedDomainCode")
 
             val hierarchyRow = metric.referencedHierarchyCode?.let { referencedHierarchyCode ->

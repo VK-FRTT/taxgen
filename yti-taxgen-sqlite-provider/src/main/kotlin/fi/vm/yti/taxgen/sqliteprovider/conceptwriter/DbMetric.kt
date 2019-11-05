@@ -40,7 +40,8 @@ object DbMetric {
 
                 MetricTable.insertMetric(
                     metric,
-                    metricMemberId
+                    metricMemberId,
+                    owner
                 )
             }
         }

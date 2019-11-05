@@ -66,7 +66,7 @@ internal class DpmDbWriter_DictionaryReplace_Common_ModuleTest : DpmDbWriter_Dic
 
         assertThat(baselineRs.toStringList(includeHeader = false)).contains(*expectedConceptsAndTranslationsResultRows)
 
-        replaceDictionaryInDb()
+        replaceDictionaryInDb(FixtureVariety.ONLY_ONE_DICTIONARY)
 
         val outputRs = outputDbConnection.createStatement().executeQuery(conceptsAndTranslationsQuery)
 

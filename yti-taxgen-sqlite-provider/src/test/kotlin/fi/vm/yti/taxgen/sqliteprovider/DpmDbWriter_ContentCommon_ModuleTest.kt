@@ -75,7 +75,9 @@ internal class DpmDbWriter_ContentCommon_ModuleTest : DpmDbWriter_ContentModuleT
                 if (initMode == DbInitMode.DICTIONARY_CREATE) {
                     assertThat(rs.toStringList()).containsExactlyInAnyOrder(
                         "#OwnerName, #OwnerNamespace, #OwnerLocation, #OwnerPrefix, #OwnerCopyright, #ParentOwnerID, #ConceptID",
+                        "AFixName, FixNSpace, FixLoc, AFixPrfx, FixCop, nil, nil",
                         "FixName, FixNSpace, FixLoc, FixPrfx, FixCop, nil, nil",
+                        "CFixName, FixNSpace, FixLoc, CFixPrfx, FixCop, nil, nil",
                         "EuroFiling, http://www.eurofiling.info/xbrl/, http://www.eurofiling.info/eu/fr/xbrl/, eu, (C) Eurofiling, nil, nil"
                     )
                 }

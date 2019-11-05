@@ -33,6 +33,7 @@ internal class DpmDbWriter_ContentDimension_ModuleTest : DpmDbWriter_ContentModu
                     INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
                     INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
                     INNER JOIN mDomain AS DOM ON D.DomainID = DOM.DomainID
+                    WHERE O.OwnerPrefix = "FixPrfx" OR O.OwnerPrefix = "eu"
                     ORDER BY D.DimensionCode
                     """
                 )
@@ -58,8 +59,10 @@ internal class DpmDbWriter_ContentDimension_ModuleTest : DpmDbWriter_ContentModu
                         T.Text
                     FROM mDimension AS D
                     INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
+                    INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
                     INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                     INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
+                    WHERE O.OwnerPrefix = "FixPrfx" OR O.OwnerPrefix = "eu"
                     ORDER BY D.DimensionCode, T.Role DESC, TL.IsoCode
                     """
                 )
@@ -75,6 +78,36 @@ internal class DpmDbWriter_ContentDimension_ModuleTest : DpmDbWriter_ContentModu
                     "TypDim-1-Code, Dimension, label, fi, TypDim-1-Lbl-Fi",
                     "TypDim-1-Code, Dimension, description, en, TypDim-1-Desc-En",
                     "TypDim-1-Code, Dimension, description, fi, TypDim-1-Desc-Fi"
+                )
+            },
+
+            dynamicTest("should bind Dimension to Domain within same Owner") {
+                executeDpmDbWriterWithDefaults()
+
+                val rs = dbConnection.createStatement().executeQuery(
+                    """
+                    SELECT
+                        Dim.DimensionCode,
+                        Dim.DimensionLabel,
+                        DimO.OwnerPrefix AS "Dimension.Owner.Prefix",
+                        DomO.OwnerPrefix AS "Domain.Owner.Prefix"
+                    FROM mDimension AS Dim
+                    INNER JOIN mConcept AS DimC ON DimC.ConceptID = Dim.ConceptID
+                    INNER JOIN mOwner AS DimO ON DimO.OwnerID = DimC.OwnerID
+                    INNER JOIN mDomain AS Dom ON Dom.DomainID = Dim.DomainID
+                    INNER JOIN mConcept AS DomC ON DomC.ConceptID = Dom.ConceptID
+                    INNER JOIN mOwner AS DomO ON DomO.OwnerID = DomC.OwnerID
+                    """
+                )
+                assertThat(rs.toStringList()).containsExactlyInAnyOrder(
+                    "#DimensionCode, #DimensionLabel, #Dimension.Owner.Prefix, #Domain.Owner.Prefix",
+                    "ExpDim-1-Code, AExpDim-1-Lbl-Fi, AFixPrfx, AFixPrfx",
+                    "TypDim-1-Code, ATypDim-1-Lbl-Fi, AFixPrfx, AFixPrfx",
+                    "ExpDim-1-Code, ExpDim-1-Lbl-Fi, FixPrfx, FixPrfx",
+                    "TypDim-1-Code, TypDim-1-Lbl-Fi, FixPrfx, FixPrfx",
+                    "ExpDim-1-Code, CExpDim-1-Lbl-Fi, CFixPrfx, CFixPrfx",
+                    "TypDim-1-Code, CTypDim-1-Lbl-Fi, CFixPrfx, CFixPrfx",
+                    "MET, Metric dimension, eu, eu"
                 )
             }
         )

@@ -6,7 +6,9 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
 
@@ -99,9 +101,12 @@ object DomainTable : IntIdTable(name = "mDomain", columnName = "DomainID") {
         DomainTable.id.eq(domainId)
     }.firstOrNull()
 
-    fun rowWhereDomainCode(domainCode: String) = select {
-        DomainTable.domainCodeCol.eq(domainCode)
-    }.firstOrNull()
+    fun rowWhereDomainOwnerAndCode(owner: Owner, domainCode: String) =
+        DomainTable
+            .join(ConceptTable, JoinType.INNER, additionalConstraint = { DomainTable.conceptIdCol.eq(ConceptTable.id) })
+            .join(OwnerTable, JoinType.INNER, additionalConstraint = { ConceptTable.ownerIdCol.eq(OwnerTable.id) })
+            .select { DomainTable.domainCodeCol.eq(domainCode) and OwnerTable.ownerPrefixCol.eq(owner.prefix) }
+            .firstOrNull()
 
     fun rowWhereDomainXbrlCode(domainXbrlCode: String) = select {
         DomainTable.domainXBRLCodeCol.eq(domainXbrlCode)

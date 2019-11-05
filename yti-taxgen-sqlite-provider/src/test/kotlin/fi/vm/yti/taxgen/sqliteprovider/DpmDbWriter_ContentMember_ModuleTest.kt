@@ -32,6 +32,7 @@ internal class DpmDbWriter_ContentMember_ModuleTest : DpmDbWriter_ContentModuleT
                     INNER JOIN mDomain AS D ON D.DomainID = M.DomainID
                     INNER JOIN mConcept AS C ON C.ConceptID = M.ConceptID
                     INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+                    WHERE O.OwnerPrefix = "FixPrfx"
                     """
                 )
 
@@ -64,9 +65,10 @@ internal class DpmDbWriter_ContentMember_ModuleTest : DpmDbWriter_ContentModuleT
                         T.Text
                     FROM mMember AS M
                     INNER JOIN mConcept AS C ON C.ConceptID = M.ConceptID
+                    INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
                     INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                     INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
-                    WHERE M.MemberCode = 'Mbr-1-Code'
+                    WHERE M.MemberCode = 'Mbr-1-Code' AND O.OwnerPrefix = "FixPrfx"
                     ORDER BY T.Role DESC, TL.IsoCode ASC
                     """
                 )

@@ -18,7 +18,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             """.trimIndent()
         )
 
-        replaceDictionaryInDb()
+        replaceDictionaryInDb(FixtureVariety.ONLY_ONE_DICTIONARY)
 
         assertThat(diagnosticCollector.events).containsExactly(
             "ENTER [SQLiteDbWriter] []",
@@ -42,7 +42,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             """.trimIndent()
         )
 
-        replaceDictionaryInDb()
+        replaceDictionaryInDb(
+            FixtureVariety.ONLY_ONE_DICTIONARY
+        )
 
         assertThat(diagnosticCollector.events).contains(
             "ENTER [SQLiteDbWriter] []",
@@ -53,7 +55,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
         assertThat(rs.toStringList()).containsExactlyInAnyOrder(
             "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-            "111, 2, 9999, FixPrfx_dim:TypDim-1-Code(*), source, FixPrfx_dim:TypDim-1-Code(*)"
+            "111, 4, 9999, FixPrfx_dim:TypDim-1-Code(*), source, FixPrfx_dim:TypDim-1-Code(*)"
         )
     }
 
@@ -66,7 +68,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             """.trimIndent()
         )
 
-        replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+        replaceDictionaryInDb(
+            FixtureVariety.ONLY_ONE_DICTIONARY
+        )
 
         val rs = readAllOrdinateCategorisations()
 
@@ -85,7 +89,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             """.trimIndent()
         )
 
-        replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+        replaceDictionaryInDb(
+            FixtureVariety.ONLY_ONE_DICTIONARY
+        )
 
         val rs = readAllOrdinateCategorisations()
 

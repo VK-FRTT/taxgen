@@ -51,8 +51,6 @@ internal open class DpmDbWriter_CreateFixtureDbTest {
         )
 
         val model = dpmModelFixture(
-            FixtureVariety.THREE_DISTINCT_DICTIONARIES,
-            FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES
         )
 
         val processingOptions = ProcessingOptions(

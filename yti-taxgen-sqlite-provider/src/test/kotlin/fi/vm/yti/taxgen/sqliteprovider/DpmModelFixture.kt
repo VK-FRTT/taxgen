@@ -23,141 +23,214 @@ import java.time.LocalDate
 enum class FixtureVariety {
     NONE,
     TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
-    THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
-    THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
     TRANSLATIONS_FI_ONLY,
     TRANSLATIONS_FI_SV,
-    THREE_DISTINCT_DICTIONARIES,
+    TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL,
+    ONLY_FIRST_EXPLICIT_DOMAIN,
+    ONLY_FIRST_EXPLICIT_DIMENSION,
     ONLY_FIRST_EXPLICIT_DOMAIN_MEMBER,
     ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY,
-    ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY_NODE
+    ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY_NODE,
+    ONLY_ONE_DICTIONARY,
+    NO_METRIC_DOMAIN,
 }
 
-fun dpmModelFixture(
-    vararg varieties: FixtureVariety
-): DpmModel {
+fun dpmDictionary(
+    varieties: List<FixtureVariety>,
+    scopingPrefix: String = ""
+): DpmDictionary {
 
-    fun dpmDictionary(scopingPrefix: String = ""): DpmDictionary {
+    fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
-        fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
+    val dpmOwner = Owner(
+        name = "${scopingPrefix}FixName",
+        namespace = "FixNSpace",
+        prefix = "${scopingPrefix}FixPrfx",
+        location = "FixLoc",
+        copyright = "FixCop",
+        languageCodes = listOf("en", "fi", "sv")
+    )
 
-        val dpmOwner = Owner(
-            name = "${scopingPrefix}FixName",
-            namespace = "FixNSpace",
-            prefix = "${scopingPrefix}FixPrfx",
-            location = "FixLoc",
-            copyright = "FixCop",
-            languageCodes = listOf("en", "fi", "sv")
+    fun concept(basename: String): Concept {
+
+        fun makeTranslations(basename: String?, kind: String): Map<Language, String> =
+            when {
+                basename == null ->
+                    emptyMap()
+
+                varieties.contains(FixtureVariety.TRANSLATIONS_FI_ONLY) ->
+                    listOf(
+                        Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi")
+                    ).toMap()
+
+                varieties.contains(FixtureVariety.TRANSLATIONS_FI_SV) ->
+                    listOf(
+                        Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi"),
+                        Pair(language("sv"), "$scopingPrefix$basename-$kind-Sv")
+                    ).toMap()
+
+                else ->
+                    listOf(
+                        Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi"),
+                        Pair(language("en"), "$scopingPrefix$basename-$kind-En")
+                    ).toMap()
+            }
+
+        val labelTranslations = makeTranslations(basename, "Lbl")
+        val descriptionTranslations = makeTranslations(basename, "Desc")
+
+        return Concept(
+            createdAt = Instant.parse("2018-09-03T10:12:25.763Z"),
+            modifiedAt = Instant.parse("2018-09-03T22:10:36.863Z"),
+            applicableFrom = LocalDate.of(2018, 2, 22),
+            applicableUntil = LocalDate.of(2018, 5, 15),
+            label = TranslatedText(labelTranslations),
+            description = TranslatedText(descriptionTranslations),
+            owner = dpmOwner
         )
+    }
 
-        fun concept(basename: String): Concept {
+    fun explicitDomains(): List<ExplicitDomain> {
 
-            fun makeTranslations(basename: String?, kind: String): Map<Language, String> =
-                when {
-                    basename == null ->
-                        emptyMap()
+        fun members(): List<Member> {
 
-                    varieties.contains(FixtureVariety.TRANSLATIONS_FI_ONLY) ->
-                        listOf(
-                            Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi")
-                        ).toMap()
-
-                    varieties.contains(FixtureVariety.TRANSLATIONS_FI_SV) ->
-                        listOf(
-                            Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi"),
-                            Pair(language("sv"), "$scopingPrefix$basename-$kind-Sv")
-                        ).toMap()
-
-                    else ->
-                        listOf(
-                            Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi"),
-                            Pair(language("en"), "$scopingPrefix$basename-$kind-En")
-                        ).toMap()
-                }
-
-            val labelTranslations = makeTranslations(basename, "Lbl")
-            val descriptionTranslations = makeTranslations(basename, "Desc")
-
-            return Concept(
-                createdAt = Instant.parse("2018-09-03T10:12:25.763Z"),
-                modifiedAt = Instant.parse("2018-09-03T22:10:36.863Z"),
-                applicableFrom = LocalDate.of(2018, 2, 22),
-                applicableUntil = LocalDate.of(2018, 5, 15),
-                label = TranslatedText(labelTranslations),
-                description = TranslatedText(descriptionTranslations),
-                owner = dpmOwner
+            val members = mutableListOf(
+                Member(
+                    uri = "Mbr-1-Uri",
+                    concept = concept("Mbr-1"),
+                    memberCode = "Mbr-1-Code",
+                    defaultMember = true
+                )
             )
-        }
 
-        fun explicitDomains(): List<ExplicitDomain> {
-
-            fun members(): List<Member> {
-
-                val members = mutableListOf(
+            if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_MEMBER !in varieties) {
+                members.add(
                     Member(
-                        uri = "Mbr-1-Uri",
-                        concept = concept("Mbr-1"),
-                        memberCode = "Mbr-1-Code",
-                        defaultMember = true
+                        uri = "Mbr-2-Uri",
+                        concept = concept("Mbr-2"),
+                        memberCode = "Mbr-2-Code",
+                        defaultMember = false
                     )
                 )
 
-                if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_MEMBER !in varieties) {
-                    members.add(
-                        Member(
-                            uri = "Mbr-2-Uri",
-                            concept = concept("Mbr-2"),
-                            memberCode = "Mbr-2-Code",
-                            defaultMember = false
-                        )
+                members.add(
+                    Member(
+                        uri = "Mbr-3-Uri",
+                        concept = concept("Mbr-3"),
+                        memberCode = "Mbr-3-Code",
+                        defaultMember = false
                     )
+                )
 
-                    members.add(
-                        Member(
-                            uri = "Mbr-3-Uri",
-                            concept = concept("Mbr-3"),
-                            memberCode = "Mbr-3-Code",
-                            defaultMember = false
-                        )
+                members.add(
+                    Member(
+                        uri = "Mbr-4-Uri",
+                        concept = concept("Mbr-4"),
+                        memberCode = "Mbr-4-Code",
+                        defaultMember = false
                     )
+                )
+                members.add(
+                    Member(
+                        uri = "Mbr-5-Uri",
+                        concept = concept("Mbr-5"),
+                        memberCode = "Mbr-5-Code",
+                        defaultMember = false
+                    )
+                )
 
-                    members.add(
-                        Member(
-                            uri = "Mbr-4-Uri",
-                            concept = concept("Mbr-4"),
-                            memberCode = "Mbr-4-Code",
-                            defaultMember = false
-                        )
+                members.add(
+                    Member(
+                        uri = "Mbr-6-Uri",
+                        concept = concept("Mbr-6"),
+                        memberCode = "Mbr-6-Code",
+                        defaultMember = false
                     )
-                    members.add(
-                        Member(
-                            uri = "Mbr-5-Uri",
-                            concept = concept("Mbr-5"),
-                            memberCode = "Mbr-5-Code",
-                            defaultMember = false
-                        )
-                    )
-
-                    members.add(
-                        Member(
-                            uri = "Mbr-6-Uri",
-                            concept = concept("Mbr-6"),
-                            memberCode = "Mbr-6-Code",
-                            defaultMember = false
-                        )
-                    )
-                }
-
-                return members
+                )
             }
 
-            fun hierarchyNodes(): List<HierarchyNode> {
+            return members
+        }
 
-                val hierarchyNodes = mutableListOf(
+        fun hierarchyNodes(): List<HierarchyNode> {
+
+            val hierarchyNodes = mutableListOf(
+
+                HierarchyNode(
+                    uri = "ExpDomHierNode-1-Uri",
+                    concept = concept("ExpDomHierNode-1"),
+                    abstract = false,
+                    comparisonOperator = null,
+                    unaryOperator = null,
+                    referencedElementCode = "Mbr-1-Code",
+                    childNodes = emptyList()
+                )
+            )
+
+            if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_MEMBER !in varieties &&
+                FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY_NODE !in varieties
+            ) {
+                hierarchyNodes.add(
 
                     HierarchyNode(
-                        uri = "ExpDomHierNode-1-Uri",
-                        concept = concept("ExpDomHierNode-1"),
+                        uri = "ExpDomHierNode-2-Uri",
+                        concept = concept("ExpDomHierNode-2"),
+                        abstract = false,
+                        comparisonOperator = "=",
+                        unaryOperator = "+",
+                        referencedElementCode = "Mbr-2-Code",
+                        childNodes = listOf(
+
+                            HierarchyNode(
+                                uri = "ExpDomHierNode-2.1-Uri",
+                                concept = concept("ExpDomHierNode-2.1"),
+                                abstract = false,
+                                comparisonOperator = "=",
+                                unaryOperator = "+",
+                                referencedElementCode = "Mbr-3-Code",
+                                childNodes = listOf(
+
+                                    HierarchyNode(
+                                        uri = "ExpDomHierNode-2.1.1-Uri",
+                                        concept = concept("ExpDomHierNode-2.1.1").let {
+                                            if (FixtureVariety.TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL in varieties) {
+                                                val translations = it.label.translations.toMutableMap()
+                                                translations.remove(Language.byIso6391CodeOrFail("fi"))
+                                                it.copy(
+                                                    label = TranslatedText(translations)
+                                                )
+                                            } else {
+                                                it
+                                            }
+                                        },
+                                        abstract = false,
+                                        comparisonOperator = null,
+                                        unaryOperator = null,
+                                        referencedElementCode = "Mbr-4-Code",
+                                        childNodes = emptyList()
+                                    )
+                                )
+                            ),
+
+                            HierarchyNode(
+                                uri = "ExpDomHierNode-2.2-Uri",
+                                concept = concept("ExpDomHierNode-2.2"),
+                                abstract = false,
+                                comparisonOperator = null,
+                                unaryOperator = null,
+                                referencedElementCode = "Mbr-5-Code",
+                                childNodes = emptyList()
+                            )
+                        )
+                    )
+                )
+            }
+
+            if (FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER in varieties) {
+                hierarchyNodes.add(
+                    HierarchyNode(
+                        uri = "HierNode-SecondReferringSameMember-Uri",
+                        concept = concept("HierNode-SecondReferringSameMember"),
                         abstract = false,
                         comparisonOperator = null,
                         unaryOperator = null,
@@ -165,348 +238,296 @@ fun dpmModelFixture(
                         childNodes = emptyList()
                     )
                 )
-
-                if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_MEMBER !in varieties &&
-                    FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY_NODE !in varieties
-                ) {
-                    hierarchyNodes.add(
-
-                        HierarchyNode(
-                            uri = "ExpDomHierNode-2-Uri",
-                            concept = concept("ExpDomHierNode-2"),
-                            abstract = false,
-                            comparisonOperator = "=",
-                            unaryOperator = "+",
-                            referencedElementCode = "Mbr-2-Code",
-                            childNodes = listOf(
-
-                                HierarchyNode(
-                                    uri = "ExpDomHierNode-2.1-Uri",
-                                    concept = concept("ExpDomHierNode-2.1"),
-                                    abstract = false,
-                                    comparisonOperator = "=",
-                                    unaryOperator = "+",
-                                    referencedElementCode = "Mbr-3-Code",
-                                    childNodes = listOf(
-
-                                        HierarchyNode(
-                                            uri = "ExpDomHierNode-2.1.1-Uri",
-                                            concept = concept("ExpDomHierNode-2.1.1").let {
-                                                val translations = it.label.translations.toMutableMap()
-                                                translations.remove(Language.byIso6391CodeOrFail("fi"))
-                                                it.copy(
-                                                    label = TranslatedText(translations)
-                                                )
-                                            },
-                                            abstract = false,
-                                            comparisonOperator = null,
-                                            unaryOperator = null,
-                                            referencedElementCode = "Mbr-4-Code",
-                                            childNodes = emptyList()
-                                        )
-                                    )
-                                ),
-
-                                HierarchyNode(
-                                    uri = "ExpDomHierNode-2.2-Uri",
-                                    concept = concept("ExpDomHierNode-2.2"),
-                                    abstract = false,
-                                    comparisonOperator = null,
-                                    unaryOperator = null,
-                                    referencedElementCode = "Mbr-5-Code",
-                                    childNodes = emptyList()
-                                )
-                            )
-                        )
-                    )
-                }
-
-                if (FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER in varieties) {
-                    hierarchyNodes.add(
-                        HierarchyNode(
-                            uri = "HierNode-SecondReferringSameMember-Uri",
-                            concept = concept("HierNode-SecondReferringSameMember"),
-                            abstract = false,
-                            comparisonOperator = null,
-                            unaryOperator = null,
-                            referencedElementCode = "Mbr-1-Code",
-                            childNodes = emptyList()
-                        )
-                    )
-                }
-
-                return hierarchyNodes
             }
 
-            fun hierarchies(): List<Hierarchy> {
+            return hierarchyNodes
+        }
 
-                val hierarchies = mutableListOf(
-                    Hierarchy(
-                        uri = "ExpDomHier-1-Uri",
-                        concept = concept("ExpDomHier-1"),
-                        hierarchyCode = "ExpDomHier-1-Code",
-                        rootNodes = emptyList()
+        fun hierarchies(): List<Hierarchy> {
+
+            val hierarchies = mutableListOf(
+                Hierarchy(
+                    uri = "ExpDomHier-1-Uri",
+                    concept = concept("ExpDomHier-1"),
+                    hierarchyCode = "ExpDomHier-1-Code",
+                    rootNodes = emptyList()
+                )
+            )
+
+            if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY !in varieties) {
+                hierarchies.addAll(
+                    listOf(
+                        Hierarchy(
+                            uri = "ExpDomHier-2-Uri",
+                            concept = concept("ExpDomHier-2"),
+                            hierarchyCode = "ExpDomHier-2-Code",
+                            rootNodes = hierarchyNodes()
+                        ),
+
+                        Hierarchy(
+                            uri = "ExpDomHier-3-Uri",
+                            concept = concept("ExpDomHier-3"),
+                            hierarchyCode = "ExpDomHier-3-Code",
+                            rootNodes = emptyList()
+                        )
                     )
                 )
-
-                if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY !in varieties) {
-                    hierarchies.addAll(
-                        listOf(
-                            Hierarchy(
-                                uri = "ExpDomHier-2-Uri",
-                                concept = concept("ExpDomHier-2"),
-                                hierarchyCode = "ExpDomHier-2-Code",
-                                rootNodes = hierarchyNodes()
-                            ),
-
-                            Hierarchy(
-                                uri = "ExpDomHier-3-Uri",
-                                concept = concept("ExpDomHier-3"),
-                                hierarchyCode = "ExpDomHier-3-Code",
-                                rootNodes = emptyList()
-                            )
-                        )
-                    )
-                }
-
-                return hierarchies
             }
 
-            val members = members()
-            val hierarchies = hierarchies()
+            return hierarchies
+        }
 
-            val explicitDomains = mutableListOf(
+        val members = members()
+        val hierarchies = hierarchies()
+
+        val explicitDomains = mutableListOf(
+            ExplicitDomain(
+                uri = "ExpDom-1-Uri",
+                concept = concept("ExpDom-1"),
+                domainCode = "ExpDom-1-Code",
+                members = members,
+                hierarchies = hierarchies
+            )
+        )
+
+        if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN !in varieties) {
+
+            explicitDomains.add(
                 ExplicitDomain(
-                    uri = "ExpDom-1-Uri",
-                    concept = concept("ExpDom-1"),
-                    domainCode = "ExpDom-1-Code",
+                    uri = "ExpDom-2-Uri",
+                    concept = concept("ExpDom-2"),
+                    domainCode = "ExpDom-2-Code",
                     members = members,
                     hierarchies = hierarchies
                 )
             )
 
-            if (FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES in varieties ||
-                FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES in varieties
-            ) {
-
-                explicitDomains.add(
-                    ExplicitDomain(
-                        uri = "ExpDom-2-Uri",
-                        concept = concept("ExpDom-2"),
-                        domainCode = "ExpDom-2-Code",
-                        members = members,
-                        hierarchies = hierarchies
-                    )
-                )
-
-                explicitDomains.add(
-                    ExplicitDomain(
-                        uri = "ExpDom-3-Uri",
-                        concept = concept("ExpDom-3"),
-                        domainCode = "ExpDom-3-Code",
-                        members = members,
-                        hierarchies = hierarchies
-                    )
-                )
-            }
-
-            return explicitDomains
-        }
-
-        fun typedDomains(): List<TypedDomain> {
-            return listOf(
-                TypedDomain(
-                    uri = "TypDom-1-Uri",
-                    concept = concept("TypDom-1"),
-                    domainCode = "TypDom-1-Code",
-                    dataType = "Boolean"
+            explicitDomains.add(
+                ExplicitDomain(
+                    uri = "ExpDom-3-Uri",
+                    concept = concept("ExpDom-3"),
+                    domainCode = "ExpDom-3-Code",
+                    members = members,
+                    hierarchies = hierarchies
                 )
             )
         }
 
-        fun explicitDimensions(): List<ExplicitDimension> {
-            val explicitDimensions = mutableListOf(
-                ExplicitDimension(
-                    uri = "ExpDim-1-Uri",
-                    concept = concept("ExpDim-1"),
-                    dimensionCode = "ExpDim-1-Code",
-                    referencedDomainCode = "ExpDom-1-Code"
-                )
+        return explicitDomains
+    }
+
+    fun typedDomains(): List<TypedDomain> {
+        return listOf(
+            TypedDomain(
+                uri = "TypDom-1-Uri",
+                concept = concept("TypDom-1"),
+                domainCode = "TypDom-1-Code",
+                dataType = "Boolean"
             )
-
-            if (FixtureVariety.THREE_EXPLICIT_DIMENSIONS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES in varieties) {
-                explicitDimensions.add(
-                    ExplicitDimension(
-                        uri = "ExpDim-2-Uri",
-                        concept = concept("ExpDim-2"),
-                        dimensionCode = "ExpDim-2-Code",
-                        referencedDomainCode = "ExpDom-2-Code"
-                    )
-                )
-
-                explicitDimensions.add(
-                    ExplicitDimension(
-                        uri = "ExpDim-3-Uri",
-                        concept = concept("ExpDim-3"),
-                        dimensionCode = "ExpDim-3-Code",
-                        referencedDomainCode = "ExpDom-3-Code"
-                    )
-                )
-            }
-
-            return explicitDimensions
-        }
-
-        fun typedDimensions(): List<TypedDimension> {
-            return listOf(
-                TypedDimension(
-                    uri = "TypDim-1-Uri",
-                    concept = concept("TypDim-1"),
-                    dimensionCode = "TypDim-1-Code",
-                    referencedDomainCode = "TypDom-1-Code"
-                )
-            )
-        }
-
-        fun metricDomain(): MetricDomain {
-            val metrics = listOf(
-                Metric(
-                    uri = "Met-1-Uri",
-                    concept = concept("Met-1"),
-                    metricCode = "ed1",
-                    dataType = "Enumeration/Code",
-                    flowType = "Flow",
-                    balanceType = "Credit",
-                    referencedDomainCode = "ExpDom-1-Code",
-                    referencedHierarchyCode = "ExpDomHier-1-Code"
-                ),
-                Metric(
-                    uri = "Met-2-Uri",
-                    concept = concept("Met-2"),
-                    metricCode = "bd2",
-                    dataType = "Boolean",
-                    flowType = "Flow",
-                    balanceType = "Debit",
-                    referencedDomainCode = null,
-                    referencedHierarchyCode = null
-                ),
-                Metric(
-                    uri = "Met-3-Uri",
-                    concept = concept("Met-3"),
-                    metricCode = "di3",
-                    dataType = "Date",
-                    flowType = "Stock",
-                    balanceType = null,
-                    referencedDomainCode = null,
-                    referencedHierarchyCode = null
-                ),
-                Metric(
-                    uri = "Met-4-Uri",
-                    concept = concept("Met-4"),
-                    metricCode = "ii4",
-                    dataType = "Integer",
-                    flowType = "Stock",
-                    balanceType = null,
-                    referencedDomainCode = null,
-                    referencedHierarchyCode = null
-                ),
-                Metric(
-                    uri = "Met-5-Uri",
-                    concept = concept("Met-5"),
-                    metricCode = "p5",
-                    dataType = "Percent",
-                    flowType = null,
-                    balanceType = null,
-                    referencedDomainCode = null,
-                    referencedHierarchyCode = null
-                )
-            )
-
-            val metricHierarchyNodes = mutableListOf(
-                HierarchyNode(
-                    uri = "MetHierNode-1-Uri",
-                    concept = concept("MetHierNode-1"),
-                    abstract = false,
-                    comparisonOperator = null,
-                    unaryOperator = null,
-                    referencedElementCode = "ed1",
-                    childNodes = emptyList()
-                ),
-
-                HierarchyNode(
-                    uri = "MetHierNode-2-Uri",
-                    concept = concept("MetHierNode-2"),
-                    abstract = false,
-                    comparisonOperator = null,
-                    unaryOperator = null,
-                    referencedElementCode = "bd2",
-                    childNodes = listOf(
-
-                        HierarchyNode(
-                            uri = "MetHierNode-2.1-Uri",
-                            concept = concept("MetHierNode-2.1"),
-                            abstract = false,
-                            comparisonOperator = null,
-                            unaryOperator = null,
-                            referencedElementCode = "di3",
-                            childNodes = emptyList()
-                        ),
-
-                        HierarchyNode(
-                            uri = "MetHierNode-2.2-Uri",
-                            concept = concept("MetHierNode-2.2"),
-                            abstract = false,
-                            comparisonOperator = null,
-                            unaryOperator = null,
-                            referencedElementCode = "ii4",
-                            childNodes = emptyList()
-                        )
-                    )
-                ),
-
-                HierarchyNode(
-                    uri = "MetHierNode-3-Uri",
-                    concept = concept("MetHierNode-3"),
-                    abstract = false,
-                    comparisonOperator = null,
-                    unaryOperator = null,
-                    referencedElementCode = "p5",
-                    childNodes = emptyList()
-                )
-            )
-
-            val metricHierarchies = listOf(
-                Hierarchy(
-                    uri = "MetHier-1-Uri",
-                    concept = concept("MetHier-1"),
-                    hierarchyCode = "MetHier-1-Code",
-                    rootNodes = metricHierarchyNodes
-                )
-            )
-
-            return MetricDomain(
-                uri = "MetDom-1-Uri",
-                concept = concept("MetDom-1"),
-                domainCode = "MetDom-1-Code",
-                metrics = metrics,
-                hierarchies = metricHierarchies
-            )
-        }
-
-        return DpmDictionary(
-            owner = dpmOwner,
-            explicitDomains = explicitDomains(),
-            typedDomains = typedDomains(),
-            explicitDimensions = explicitDimensions(),
-            typedDimensions = typedDimensions(),
-            metricDomain = metricDomain()
         )
     }
 
-    val dictionaries: List<DpmDictionary> = if (FixtureVariety.THREE_DISTINCT_DICTIONARIES in varieties) {
-        listOf(dpmDictionary("A"), dpmDictionary(), dpmDictionary("C"))
+    fun explicitDimensions(): List<ExplicitDimension> {
+        val explicitDimensions = mutableListOf(
+            ExplicitDimension(
+                uri = "ExpDim-1-Uri",
+                concept = concept("ExpDim-1"),
+                dimensionCode = "ExpDim-1-Code",
+                referencedDomainCode = "ExpDom-1-Code"
+            )
+        )
+
+        if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN !in varieties &&
+            FixtureVariety.ONLY_FIRST_EXPLICIT_DIMENSION !in varieties
+        ) {
+            explicitDimensions.add(
+                ExplicitDimension(
+                    uri = "ExpDim-2-Uri",
+                    concept = concept("ExpDim-2"),
+                    dimensionCode = "ExpDim-2-Code",
+                    referencedDomainCode = "ExpDom-2-Code"
+                )
+            )
+
+            explicitDimensions.add(
+                ExplicitDimension(
+                    uri = "ExpDim-3-Uri",
+                    concept = concept("ExpDim-3"),
+                    dimensionCode = "ExpDim-3-Code",
+                    referencedDomainCode = "ExpDom-3-Code"
+                )
+            )
+        }
+
+        return explicitDimensions
+    }
+
+    fun typedDimensions(): List<TypedDimension> {
+        return listOf(
+            TypedDimension(
+                uri = "TypDim-1-Uri",
+                concept = concept("TypDim-1"),
+                dimensionCode = "TypDim-1-Code",
+                referencedDomainCode = "TypDom-1-Code"
+            )
+        )
+    }
+
+    fun metricDomain(): MetricDomain? {
+        if (FixtureVariety.NO_METRIC_DOMAIN in varieties) {
+            return null
+        }
+
+        val metrics = listOf(
+            Metric(
+                uri = "Met-1-Uri",
+                concept = concept("Met-1"),
+                metricCode = "ed1",
+                dataType = "Enumeration/Code",
+                flowType = "Flow",
+                balanceType = "Credit",
+                referencedDomainCode = "ExpDom-1-Code",
+                referencedHierarchyCode = "ExpDomHier-1-Code"
+            ),
+            Metric(
+                uri = "Met-2-Uri",
+                concept = concept("Met-2"),
+                metricCode = "bd2",
+                dataType = "Boolean",
+                flowType = "Flow",
+                balanceType = "Debit",
+                referencedDomainCode = null,
+                referencedHierarchyCode = null
+            ),
+            Metric(
+                uri = "Met-3-Uri",
+                concept = concept("Met-3"),
+                metricCode = "di3",
+                dataType = "Date",
+                flowType = "Stock",
+                balanceType = null,
+                referencedDomainCode = null,
+                referencedHierarchyCode = null
+            ),
+            Metric(
+                uri = "Met-4-Uri",
+                concept = concept("Met-4"),
+                metricCode = "ii4",
+                dataType = "Integer",
+                flowType = "Stock",
+                balanceType = null,
+                referencedDomainCode = null,
+                referencedHierarchyCode = null
+            ),
+            Metric(
+                uri = "Met-5-Uri",
+                concept = concept("Met-5"),
+                metricCode = "p5",
+                dataType = "Percent",
+                flowType = null,
+                balanceType = null,
+                referencedDomainCode = null,
+                referencedHierarchyCode = null
+            )
+        )
+
+        val metricHierarchyNodes = mutableListOf(
+            HierarchyNode(
+                uri = "MetHierNode-1-Uri",
+                concept = concept("MetHierNode-1"),
+                abstract = false,
+                comparisonOperator = null,
+                unaryOperator = null,
+                referencedElementCode = "ed1",
+                childNodes = emptyList()
+            ),
+
+            HierarchyNode(
+                uri = "MetHierNode-2-Uri",
+                concept = concept("MetHierNode-2"),
+                abstract = false,
+                comparisonOperator = null,
+                unaryOperator = null,
+                referencedElementCode = "bd2",
+                childNodes = listOf(
+
+                    HierarchyNode(
+                        uri = "MetHierNode-2.1-Uri",
+                        concept = concept("MetHierNode-2.1"),
+                        abstract = false,
+                        comparisonOperator = null,
+                        unaryOperator = null,
+                        referencedElementCode = "di3",
+                        childNodes = emptyList()
+                    ),
+
+                    HierarchyNode(
+                        uri = "MetHierNode-2.2-Uri",
+                        concept = concept("MetHierNode-2.2"),
+                        abstract = false,
+                        comparisonOperator = null,
+                        unaryOperator = null,
+                        referencedElementCode = "ii4",
+                        childNodes = emptyList()
+                    )
+                )
+            ),
+
+            HierarchyNode(
+                uri = "MetHierNode-3-Uri",
+                concept = concept("MetHierNode-3"),
+                abstract = false,
+                comparisonOperator = null,
+                unaryOperator = null,
+                referencedElementCode = "p5",
+                childNodes = emptyList()
+            )
+        )
+
+        val metricHierarchies = listOf(
+            Hierarchy(
+                uri = "MetHier-1-Uri",
+                concept = concept("MetHier-1"),
+                hierarchyCode = "MetHier-1-Code",
+                rootNodes = metricHierarchyNodes
+            )
+        )
+
+        return MetricDomain(
+            uri = "MetDom-1-Uri",
+            concept = concept("MetDom-1"),
+            domainCode = "MetDom-1-Code",
+            metrics = metrics,
+            hierarchies = metricHierarchies
+        )
+    }
+
+    return DpmDictionary(
+        owner = dpmOwner,
+        explicitDomains = explicitDomains(),
+        typedDomains = typedDomains(),
+        explicitDimensions = explicitDimensions(),
+        typedDimensions = typedDimensions(),
+        metricDomain = metricDomain()
+    )
+}
+
+fun dpmModelFixture(
+    vararg varieties: FixtureVariety
+): DpmModel {
+    val varietiesList =
+        varieties.toList()
+
+    val dictionaries = if (FixtureVariety.ONLY_ONE_DICTIONARY in varieties) {
+        listOf(
+            dpmDictionary(varietiesList)
+        )
     } else {
-        listOf(dpmDictionary())
+        listOf(
+            dpmDictionary(varietiesList + FixtureVariety.NO_METRIC_DOMAIN, "A"),
+            dpmDictionary(varietiesList),
+            dpmDictionary(varietiesList + FixtureVariety.NO_METRIC_DOMAIN, "C")
+        )
     }
 
     val model = DpmModel(

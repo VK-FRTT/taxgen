@@ -33,6 +33,7 @@ internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModu
                     INNER JOIN mConcept AS C ON C.ConceptID = H.ConceptID
                     INNER JOIN mDomain AS D ON D.DomainID = H.DomainID
                     INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+                    WHERE O.OwnerPrefix = "FixPrfx" OR O.OwnerPrefix = "eu"
                     """
                 )
 
@@ -58,9 +59,10 @@ internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModu
                     T.Text
                 FROM mHierarchy AS H
                 INNER JOIN mConcept AS C ON C.ConceptID = H.ConceptID
+                INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
                 INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
                 INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
-                WHERE H.HierarchyCode = 'ExpDomHier-1-Code'
+                WHERE H.HierarchyCode = 'ExpDomHier-1-Code' AND O.OwnerPrefix = "FixPrfx"
                 ORDER BY T.Role DESC, TL.IsoCode ASC
               """
                 )
@@ -79,8 +81,8 @@ internal class DpmDbWriter_ContentHierarchy_ModuleTest : DpmDbWriter_ContentModu
                     executeDpmDbWriter(
                         true,
                         false,
-                        FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER,
-                        processingOptionsWithInherentTextLanguageFi()
+                        processingOptionsWithInherentTextLanguageFi(),
+                        FixtureVariety.TWO_HIERARCHY_NODES_REFER_SAME_MEMBER
                     )
                 }
 

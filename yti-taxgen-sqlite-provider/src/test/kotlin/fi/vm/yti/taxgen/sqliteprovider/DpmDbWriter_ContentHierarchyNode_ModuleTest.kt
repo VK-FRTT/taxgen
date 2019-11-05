@@ -27,8 +27,11 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                         N.Path
                     FROM mHierarchyNode AS N
                     INNER JOIN mHierarchy AS H ON H.HierarchyID = N.HierarchyID
+                    INNER JOIN mConcept AS C ON C.ConceptID = H.ConceptID
+                    INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
                     INNER JOIN mMember AS M ON M.MemberID = N.MemberID
                     LEFT JOIN mMember AS P ON P.MemberID = N.ParentMemberID
+                    WHERE O.OwnerPrefix = "FixPrfx" OR O.OwnerPrefix = "eu"
                     """
                 )
 
@@ -37,7 +40,7 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                     "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 1, 1, nil",
                     "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, nil, nil, 1, 2, nil",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 3, nil",
-                    "ExpDomHier-2-Code, nil, Mbr-4-Code, Mbr-3-Code, Mbr-3-Lbl-Fi, 3, 4, nil",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, Mbr-3-Code, Mbr-3-Lbl-Fi, 3, 4, nil",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, Mbr-2-Code, Mbr-2-Lbl-Fi, 2, 5, nil",
                     "MetHier-1-Code, MetHierNode-1-Lbl-Fi, ed1, nil, nil, 1, 1, nil",
                     "MetHier-1-Code, MetHierNode-2-Lbl-Fi, bd2, nil, nil, 1, 2, nil",
@@ -71,6 +74,7 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                     LEFT JOIN mMember AS P ON P.MemberID = N.ParentMemberID
                     INNER JOIN mConcept AS C ON C.ConceptID = N.ConceptID
                     INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+                    WHERE O.OwnerPrefix = "FixPrfx" OR O.OwnerPrefix = "eu"
                     """
                 )
 
@@ -79,7 +83,7 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                     "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, =, +, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, =, +, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
-                    "ExpDomHier-2-Code, nil, Mbr-4-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "MetHier-1-Code, MetHierNode-1-Lbl-Fi, ed1, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
                     "MetHier-1-Code, MetHierNode-2-Lbl-Fi, bd2, nil, nil, 0, HierarchyNode, 2018-09-03 10:12:25Z, 2018-09-03 22:10:36Z, 2018-02-22, 2018-05-15, FixName",
@@ -126,22 +130,24 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                 executeDpmDbWriter(
                     false,
                     false,
-                    FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
-                    processingOptionsWithInherentTextLanguageFi()
+                    processingOptionsWithInherentTextLanguageFi(),
+                    FixtureVariety.NONE
                 )
 
                 //Verify that data is properly setup
                 val membersRs = dbConnection.createStatement().executeQuery(
                     """
-            SELECT
-                M.MemberCode,
-                M.MemberXBRLCode,
-                D.DomainCode,
-                D.DomainXBRLCode
-            FROM mMember as M
-            INNER JOIN mDomain AS D on M.DomainID = D.DomainID
-            WHERE M.MemberCode = "Mbr-1-Code"
-            """
+                    SELECT
+                        M.MemberCode,
+                        M.MemberXBRLCode,
+                        D.DomainCode,
+                        D.DomainXBRLCode
+                    FROM mMember as M
+                    INNER JOIN mConcept AS C ON C.ConceptID = M.ConceptID
+                    INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+                    INNER JOIN mDomain AS D on M.DomainID = D.DomainID
+                    WHERE M.MemberCode = "Mbr-1-Code" AND O.OwnerPrefix = "FixPrfx"
+                    """
                 )
 
                 assertThat(membersRs.toStringList()).containsExactlyInAnyOrder(
@@ -154,20 +160,22 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                 //Verify that Member linked to HierarchyNode is from same ExplicitDomain where the HierarchyNode belongs to
                 val nodeRs = dbConnection.createStatement().executeQuery(
                     """
-            SELECT
-                H.HierarchyCode,
-                N.HierarchyNodeLabel,
-                M.MemberCode,
-				HD.DomainCode AS "Hierarchy.DomainCode",
-				MD.DomainCode AS "Member.DomainCode"
-            FROM mHierarchyNode AS N
-            INNER JOIN mHierarchy AS H ON H.HierarchyID = N.HierarchyID
-			INNER JOIN mDomain AS HD ON H.DomainID = HD.DomainID
-			INNER JOIN mMember AS M ON M.MemberID = N.MemberID
-			INNER JOIN mDomain AS MD ON M.DomainID = MD.DomainID
-			WHERE H.HierarchyCode = "ExpDomHier-2-Code"
-            ORDER BY HD.DomainCode ASC
-            """
+                    SELECT
+                        H.HierarchyCode,
+                        N.HierarchyNodeLabel,
+                        M.MemberCode,
+                        HD.DomainCode AS "Hierarchy.DomainCode",
+                        MD.DomainCode AS "Member.DomainCode"
+                    FROM mHierarchyNode AS N
+                    INNER JOIN mHierarchy AS H ON H.HierarchyID = N.HierarchyID
+                    INNER JOIN mConcept AS C ON C.ConceptID = H.ConceptID
+                    INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+                    INNER JOIN mDomain AS HD ON H.DomainID = HD.DomainID
+                    INNER JOIN mMember AS M ON M.MemberID = N.MemberID
+                    INNER JOIN mDomain AS MD ON M.DomainID = MD.DomainID
+                    WHERE H.HierarchyCode = "ExpDomHier-2-Code" AND O.OwnerPrefix = "FixPrfx"
+                    ORDER BY HD.DomainCode ASC
+                    """
                 )
 
                 assertThat(nodeRs.toStringList()).containsExactlyInAnyOrder(
@@ -175,19 +183,19 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                     "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-1-Code, ExpDom-1-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-1-Code, ExpDom-1-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-1-Code, ExpDom-1-Code",
-                    "ExpDomHier-2-Code, nil, Mbr-4-Code, ExpDom-1-Code, ExpDom-1-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, ExpDom-1-Code, ExpDom-1-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-1-Code, ExpDom-1-Code",
 
                     "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-2-Code, ExpDom-2-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-2-Code, ExpDom-2-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-2-Code, ExpDom-2-Code",
-                    "ExpDomHier-2-Code, nil, Mbr-4-Code, ExpDom-2-Code, ExpDom-2-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, ExpDom-2-Code, ExpDom-2-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-2-Code, ExpDom-2-Code",
 
                     "ExpDomHier-2-Code, ExpDomHierNode-1-Lbl-Fi, Mbr-1-Code, ExpDom-3-Code, ExpDom-3-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2-Lbl-Fi, Mbr-2-Code, ExpDom-3-Code, ExpDom-3-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.1-Lbl-Fi, Mbr-3-Code, ExpDom-3-Code, ExpDom-3-Code",
-                    "ExpDomHier-2-Code, nil, Mbr-4-Code, ExpDom-3-Code, ExpDom-3-Code",
+                    "ExpDomHier-2-Code, ExpDomHierNode-2.1.1-Lbl-Fi, Mbr-4-Code, ExpDom-3-Code, ExpDom-3-Code",
                     "ExpDomHier-2-Code, ExpDomHierNode-2.2-Lbl-Fi, Mbr-5-Code, ExpDom-3-Code, ExpDom-3-Code"
                 )
             }

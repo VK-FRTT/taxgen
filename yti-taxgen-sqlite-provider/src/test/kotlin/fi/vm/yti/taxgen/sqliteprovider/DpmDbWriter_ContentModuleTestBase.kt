@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
-import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
@@ -60,16 +60,16 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
         executeDpmDbWriter(
             exceptionIsExpected = false,
             diagnosticMessagesAreExpected = false,
-            variety = FixtureVariety.NONE,
-            processingOptions = processingOptionsWithInherentTextLanguageFi()
+            processingOptions = processingOptionsWithInherentTextLanguageFi(),
+            varieties = *arrayOf(FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN)
         )
     }
 
     fun executeDpmDbWriter(
         exceptionIsExpected: Boolean,
         diagnosticMessagesAreExpected: Boolean,
-        variety: FixtureVariety,
-        processingOptions: ProcessingOptions
+        processingOptions: ProcessingOptions,
+        vararg varieties: FixtureVariety
     ) {
         baseTeardown()
 
@@ -107,7 +107,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
                 }
             }
 
-            val model = dpmModelFixture(variety)
+            val model = dpmModelFixture(*varieties)
             dpmDbWriter.writeModel(model, processingOptions)
 
             dbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")

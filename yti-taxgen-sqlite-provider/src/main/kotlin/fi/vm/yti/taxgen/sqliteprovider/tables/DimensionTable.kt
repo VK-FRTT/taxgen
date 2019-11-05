@@ -63,8 +63,8 @@ object DimensionTable : IntIdTable(name = "mDimension", columnName = "DimensionI
         dimensionConceptId: EntityID<Int>,
         inherentTextLanguage: Language?
     ) {
-        val domainRow = DomainTable.rowWhereDomainCode(dimension.referencedDomainCode)
-            ?: thisShouldNeverHappen("No Domain matching Dimension.ReferencedDomainCode: ${dimension.referencedDomainCode}") //TODO - use owner too
+        val domainRow = DomainTable.rowWhereDomainOwnerAndCode(owner, dimension.referencedDomainCode)
+            ?: thisShouldNeverHappen("No Domain matching Dimension.ReferencedDomainCode: ${dimension.referencedDomainCode}, for Owner: ${owner.name}")
 
         DimensionTable.insert {
             it[dimensionCodeCol] = dimension.dimensionCode
@@ -83,7 +83,7 @@ object DimensionTable : IntIdTable(name = "mDimension", columnName = "DimensionI
         dimensionConceptId: EntityID<Int>,
         inherentTextLanguage: Language?
     ) {
-        val domainRow = DomainTable.rowWhereDomainCode(dimension.referencedDomainCode)
+        val domainRow = DomainTable.rowWhereDomainOwnerAndCode(owner, dimension.referencedDomainCode)
             ?: thisShouldNeverHappen("No Domain matching Dimension.ReferencedDomainCode: ${dimension.referencedDomainCode}")
 
         DimensionTable.insert {

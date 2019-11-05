@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
-import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
@@ -20,9 +20,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
             T.Text
         FROM mDomain AS D
         INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
+        INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
         INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
         INNER JOIN mLanguage AS TL ON T.LanguageID = TL.LanguageID
-        WHERE D.DomainCode = 'ExpDom-1-Code'
+        WHERE D.DomainCode = 'ExpDom-1-Code' AND O.OwnerPrefix = "FixPrfx"
         ORDER BY D.DomainCode, T.Role DESC, TL.IsoCode
         """
 
@@ -33,7 +34,9 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
             D.DomainLabel,
             D.DomainDescription
         FROM mDomain AS D
-        WHERE D.DomainCode = 'ExpDom-1-Code'
+        INNER JOIN mConcept AS C ON C.ConceptID = D.ConceptID
+        INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
+        WHERE D.DomainCode = 'ExpDom-1-Code' AND O.OwnerPrefix = "FixPrfx"
         """
 
     val hierarchyNodeTextsQuery =
@@ -50,9 +53,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
         LEFT JOIN mHierarchy AS H ON H.HierarchyID = N.HierarchyID
         INNER JOIN mMember AS M ON M.MemberID = N.MemberID
         INNER JOIN mConcept AS C ON C.ConceptID = N.ConceptID
+        INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
         INNER JOIN mConceptTranslation AS T ON T.ConceptID = N.ConceptID
         INNER JOIN mLanguage AS TL ON TL.LanguageID = T.LanguageID
-        WHERE M.MemberCode IN ("Mbr-1-Code", "Mbr-4-Code", "ed1")
+        WHERE M.MemberCode IN ("Mbr-1-Code", "Mbr-4-Code", "ed1") AND O.OwnerPrefix = "FixPrfx"
         ORDER BY H.HierarchyLabel ASC, M.MemberCode ASC, T.Role DESC, TL.IsoCode ASC
         """
 
@@ -64,9 +68,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
             TL.IsoCode,
             T.Text
         FROM mConcept AS C
+        INNER JOIN mOwner AS O ON C.OwnerID = O.OwnerID
         INNER JOIN mConceptTranslation AS T ON T.ConceptID = C.ConceptID
         INNER JOIN mLanguage AS TL ON TL.LanguageID = T.LanguageID
-        WHERE T.Role = "label" AND TL.IsoCode = "fi"
+        WHERE T.Role = "label" AND TL.IsoCode = "fi" AND O.OwnerPrefix = "FixPrfx"
         ORDER BY C.ConceptType ASC, T.Role DESC, TL.IsoCode ASC
         """
 
@@ -132,10 +137,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.TRANSLATIONS_FI_ONLY,
                             inherentTextLanguageProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("fi")
-                            )
+                            ),
+                            FixtureVariety.TRANSLATIONS_FI_ONLY
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainInherentTextQuery)
@@ -150,10 +155,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.TRANSLATIONS_FI_ONLY,
                             inherentTextLanguageProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en")
-                            )
+                            ),
+                            FixtureVariety.TRANSLATIONS_FI_ONLY
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainInherentTextQuery)
@@ -168,10 +173,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.TRANSLATIONS_FI_ONLY,
                             inherentTextLanguageProcessingOptions(
                                 inherentTextLanguage = null
-                            )
+                            ),
+                            FixtureVariety.TRANSLATIONS_FI_ONLY
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainInherentTextQuery)
@@ -192,14 +197,14 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.TRANSLATIONS_FI_ONLY,
                             mandatoryLabelLanguageProcessingOptions(
                                 mandatoryLabelLanguage = Language.byIso6391CodeOrFail("en"),
                                 mandatoryLabelSourceLanguages = listOf(
                                     Language.byIso6391CodeOrFail("fi"),
                                     Language.byIso6391CodeOrFail("sv")
                                 )
-                            )
+                            ),
+                            FixtureVariety.TRANSLATIONS_FI_ONLY
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainLabelTranslationsQuery)
@@ -216,7 +221,6 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.TRANSLATIONS_FI_SV,
                             mandatoryLabelLanguageProcessingOptions(
                                 mandatoryLabelLanguage = Language.byIso6391CodeOrFail("en"),
                                 mandatoryLabelSourceLanguages = listOf(
@@ -224,7 +228,8 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                                     Language.byIso6391CodeOrFail("sv"),
                                     Language.byIso6391CodeOrFail("fi")
                                 )
-                            )
+                            ),
+                            FixtureVariety.TRANSLATIONS_FI_SV
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainLabelTranslationsQuery)
@@ -243,14 +248,14 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.TRANSLATIONS_FI_ONLY,
                             mandatoryLabelLanguageProcessingOptions(
                                 mandatoryLabelLanguage = Language.byIso6391CodeOrFail("en"),
                                 mandatoryLabelSourceLanguages = listOf(
                                     Language.byIso6391CodeOrFail("fr"),
                                     Language.byIso6391CodeOrFail("sv")
                                 )
-                            )
+                            ),
+                            FixtureVariety.TRANSLATIONS_FI_ONLY
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainLabelTranslationsQuery)
@@ -271,10 +276,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             uriStorageProcessingOptions(
                                 uriStorageLabelLanguage = Language.byIso6391CodeOrFail("pl")
-                            )
+                            ),
+                            FixtureVariety.NONE
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainLabelTranslationsQuery)
@@ -293,10 +298,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             true,
-                            FixtureVariety.NONE,
                             uriStorageProcessingOptions(
                                 uriStorageLabelLanguage = Language.byIso6391CodeOrFail("fi")
-                            )
+                            ),
+                            FixtureVariety.NONE
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(domainLabelTranslationsQuery)
@@ -323,12 +328,13 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
                                 compositionLanguages = null,
                                 fallbackLanguage = null
-                            )
+                            ),
+                            FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN,
+                            FixtureVariety.TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(hierarchyNodeTextsQuery)
@@ -353,14 +359,15 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
                                 compositionLanguages = listOf(
                                     Language.byIso6391CodeOrFail("fi")
                                 ),
                                 fallbackLanguage = null
-                            )
+                            ),
+                            FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN,
+                            FixtureVariety.TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(hierarchyNodeTextsQuery)
@@ -386,7 +393,6 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
                                 compositionLanguages = listOf(
@@ -394,7 +400,9 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                                     Language.byIso6391CodeOrFail("en")
                                 ),
                                 fallbackLanguage = null
-                            )
+                            ),
+                            FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN,
+                            FixtureVariety.TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(hierarchyNodeTextsQuery)
@@ -420,7 +428,6 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
                                 compositionLanguages = listOf(
@@ -428,8 +435,10 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                                     Language.byIso6391CodeOrFail("en")
                                 ),
                                 fallbackLanguage = Language.byIso6391CodeOrFail("en")
+                            ),
+                            FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN,
+                            FixtureVariety.TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL
                             )
-                        )
 
                         val rs = dbConnection.createStatement().executeQuery(hierarchyNodeTextsQuery)
 
@@ -454,7 +463,6 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
                                 compositionLanguages = listOf(
@@ -462,7 +470,9 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                                     Language.byIso6391CodeOrFail("en")
                                 ),
                                 fallbackLanguage = Language.byIso6391CodeOrFail("sv")
-                            )
+                            ),
+                            FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN,
+                            FixtureVariety.TRANSLATIONS_DROP_HIERARCHY_NODE_FI_LABEL
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(hierarchyNodeTextsQuery)
@@ -488,14 +498,14 @@ internal class DpmDbWriter_ContentOptionals_ModuleTest : DpmDbWriter_ContentModu
                         executeDpmDbWriter(
                             false,
                             false,
-                            FixtureVariety.NONE,
                             hierarchyNodeLabelCompositionProcessingOptions(
                                 inherentTextLanguage = Language.byIso6391CodeOrFail("en"),
                                 compositionLanguages = listOf(
                                     Language.byIso6391CodeOrFail("fi")
                                 ),
                                 fallbackLanguage = Language.byIso6391CodeOrFail("sv")
-                            )
+                            ),
+                            FixtureVariety.NONE
                         )
 
                         val rs = dbConnection.createStatement().executeQuery(allFiLabelTranslationsQuery)

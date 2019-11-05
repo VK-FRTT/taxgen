@@ -23,7 +23,9 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             """.trimIndent()
         )
 
-        replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+        replaceDictionaryInDb(
+            FixtureVariety.ONLY_ONE_DICTIONARY
+        )
 
         assertThat(diagnosticCollector.events).containsExactly(
             "ENTER [SQLiteDbWriter] []",
@@ -52,7 +54,9 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             """.trimIndent()
         )
 
-        replaceDictionaryInDb(FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES)
+        replaceDictionaryInDb(
+            FixtureVariety.ONLY_ONE_DICTIONARY
+        )
 
         assertThat(diagnosticCollector.events).containsExactly(
             "ENTER [SQLiteDbWriter] []",
@@ -201,7 +205,9 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
                 """.trimIndent()
             )
 
-            replaceDictionaryInDb()
+            replaceDictionaryInDb(
+                FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN
+            )
 
             assertThat(diagnosticCollector.events).containsSequence(
                 "VALIDATED OBJECT [FinalOpenAxisValueRestriction] [AxisID: 101]",
@@ -227,7 +233,6 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             )
 
             replaceDictionaryInDb(
-                FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
                 FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY
             )
 
@@ -253,7 +258,6 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             )
 
             replaceDictionaryInDb(
-                FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
                 FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_MEMBER
             )
 
@@ -279,7 +283,6 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             )
 
             replaceDictionaryInDb(
-                FixtureVariety.THREE_EXPLICIT_DOMAINS_WITH_EQUALLY_IDENTIFIED_MEMBERS_AND_HIERARCHIES,
                 FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY_NODE
             )
 
