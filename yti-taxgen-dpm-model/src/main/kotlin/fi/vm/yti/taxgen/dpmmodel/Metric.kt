@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateDpmCodeContent
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNullOrNonBlank
 
 data class Metric(
     override val uri: String,
@@ -123,12 +124,24 @@ data class Metric(
             message = { "metric code does not match required pattern '$metricCode'" }
         )
 
+        validateNullOrNonBlank(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::referencedDomainCode
+        )
+
         validateConditionTruthy(
             validationResults = validationResults,
             instance = this,
             property = Metric::dataType,
             condition = { (referencedDomainCode == null) || (dataType == "Enumeration/Code") },
             message = { "ReferencedDomainCode given but data type not Enumeration/Code" }
+        )
+
+        validateNullOrNonBlank(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::referencedHierarchyCode
         )
 
         validateConditionTruthy(

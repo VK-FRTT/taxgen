@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteprovider.helpers
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
@@ -14,10 +14,10 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
-import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 
 internal object ModelTransformer {
 
@@ -65,13 +65,25 @@ internal object ModelTransformer {
                         context
                     ),
 
-                    metricDomains = transformDpmElements(
-                        dpmDictionary.metricDomains,
+                    metricDomain = transformDpmElement(
+                        dpmDictionary.metricDomain,
                         context
                     )
                 )
             }
         )
+    }
+
+    private fun <T : DpmElement> transformDpmElement(
+        originDpmElement: T?,
+        context: Context
+    ): T? {
+        originDpmElement ?: return null
+
+        return transformDpmElements(
+            originDpmElements = listOf(originDpmElement),
+            context = context
+        ).first()
     }
 
     private fun <T : DpmElement> transformDpmElements(

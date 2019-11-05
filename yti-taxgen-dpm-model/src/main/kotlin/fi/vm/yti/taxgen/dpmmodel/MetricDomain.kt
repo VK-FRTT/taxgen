@@ -2,7 +2,6 @@ package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementPropertyValuesUnique
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
 
@@ -34,19 +33,7 @@ data class MetricDomain(
             maxLength = 10000
         )
 
-        validateElementPropertyValuesUnique(
-            validationResults = validationResults,
-            instance = this,
-            iterableProperty = MetricDomain::metrics,
-            valueProperties = listOf(Metric::uri, Metric::metricCode)
-        )
-
-        validateElementPropertyValuesUnique(
-            validationResults = validationResults,
-            instance = this,
-            iterableProperty = MetricDomain::hierarchies,
-            valueProperties = listOf(Hierarchy::uri, Hierarchy::hierarchyCode)
-        )
+        //Note: metrics & hierarchies URI and code uniqueness is validated DPM Model level
 
         validateCustom( //TODO - abstract the validation & share with ExplicitDomain
             validationResults = validationResults,

@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisation
 
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonBlank
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNullAndNonBlank
 
 data class OrdinateCategorisationSignature(
     val identifierKind: IdentifierKind,
@@ -24,32 +24,32 @@ data class OrdinateCategorisationSignature(
     }
 
     fun validate(validationResults: ValidationResults) {
-        validateNonBlank(
+        validateNonNullAndNonBlank(
             validationResults = validationResults,
             instance = this,
             property = OrdinateCategorisationSignature::dimensionIdentifier
         )
 
-        validateNonBlank(
+        validateNonNullAndNonBlank(
             validationResults = validationResults,
             instance = this,
             property = OrdinateCategorisationSignature::memberIdentifier
         )
 
         if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = OrdinateCategorisationSignature::hierarchyIdentifier
             )
 
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = OrdinateCategorisationSignature::hierarchyStartingMemberIdentifier
             )
 
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = OrdinateCategorisationSignature::startingMemberIncluded
@@ -65,7 +65,7 @@ data class OrdinateCategorisationSignature(
         }
 
         if (signatureStructure == OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION) {
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = OrdinateCategorisationSignature::hierarchyIdentifier

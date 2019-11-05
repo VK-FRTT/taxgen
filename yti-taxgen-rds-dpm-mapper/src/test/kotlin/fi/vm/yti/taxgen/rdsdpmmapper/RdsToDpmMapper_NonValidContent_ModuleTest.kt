@@ -96,8 +96,8 @@ internal class RdsToDpmMapper_NonValidContent_ModuleTest : RdsToDpmMapper_Module
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [MetricDomain] [MET]",
-                "VALIDATION [MetricDomain.metrics: duplicate metricCode value 'i6']"
+                "VALIDATED OBJECT [DpmModel] []",
+                "VALIDATION [DpmModel.dictionaries.metricDomain: duplicate Metric.metricCode value 'i6']"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(

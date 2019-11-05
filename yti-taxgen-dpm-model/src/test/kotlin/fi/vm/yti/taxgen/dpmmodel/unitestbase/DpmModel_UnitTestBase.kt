@@ -180,7 +180,7 @@ internal open class DpmModel_UnitTestBase<T : Any>(
             typedDomains = emptyList(),
             explicitDimensions = emptyList(),
             typedDimensions = emptyList(),
-            metricDomains = emptyList()
+            metricDomain = null
         )
     }
 }

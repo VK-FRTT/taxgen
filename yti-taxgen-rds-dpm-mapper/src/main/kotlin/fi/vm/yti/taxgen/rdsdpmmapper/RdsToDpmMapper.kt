@@ -59,7 +59,7 @@ class RdsToDpmMapper(
         lateinit var typedDomains: List<TypedDomain>
         lateinit var explicitDimensions: List<ExplicitDimension>
         lateinit var typedDimensions: List<TypedDimension>
-        lateinit var metricDomains: List<MetricDomain>
+        var metricDomain: MetricDomain? = null
 
         dictionaryModelMapper.dpmOwner {
             owner = it
@@ -82,12 +82,12 @@ class RdsToDpmMapper(
         }
 
         dictionaryModelMapper.metricsCodeListModelMapper {
-            metricDomains = mapAndValidateMetricDomain(it, owner, diagnosticContext)
+            metricDomain = mapAndValidateMetricDomain(it, owner, diagnosticContext)
         }
 
         val dpmDictionary = DpmDictionary(
             owner = owner,
-            metricDomains = metricDomains,
+            metricDomain = metricDomain,
             explicitDomains = explicitDomains,
             typedDomains = typedDomains,
             explicitDimensions = explicitDimensions,

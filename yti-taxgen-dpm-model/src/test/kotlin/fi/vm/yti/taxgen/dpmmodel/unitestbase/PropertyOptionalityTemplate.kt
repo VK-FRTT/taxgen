@@ -19,7 +19,6 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
     val propertyValue = instance.getPropertyValue(propertyName)
 
     assertThat(propertyValue)
-        .isNotNull()
         .isEqualTo(defaultAttributes[propertyName])
 
     //2. Test is the property optional/required

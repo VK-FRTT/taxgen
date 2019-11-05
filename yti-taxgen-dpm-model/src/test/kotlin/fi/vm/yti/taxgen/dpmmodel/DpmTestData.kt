@@ -181,7 +181,7 @@ fun dpmTestData(): Set<DataDefinition> {
             kClass = DpmDictionary::class,
             attributes = mapOf(
                 "owner" to dynamicAttribute { it.instantiate<Owner>() },
-                "metricDomains" to emptyList<ExplicitDomain>(),
+                "metricDomain" to null,
                 "explicitDomains" to emptyList<ExplicitDomain>(),
                 "typedDomains" to emptyList<TypedDomain>(),
                 "explicitDimensions" to emptyList<ExplicitDimension>(),

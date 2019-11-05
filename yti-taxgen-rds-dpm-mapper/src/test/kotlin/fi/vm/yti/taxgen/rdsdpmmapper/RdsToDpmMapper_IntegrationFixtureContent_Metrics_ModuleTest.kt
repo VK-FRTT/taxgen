@@ -13,36 +13,30 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest
     fun `1 Metric Domain`() {
         val dpmDictionary = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture()
 
-        assertThat(dpmDictionary.metricDomains.size).isEqualTo(1)
+        assertThat(dpmDictionary.metricDomain).isNotNull()
 
-        dpmDictionary.metricDomains.forEachIndexed { index, it ->
-            when (index) {
-                0 -> {
-                    assertThat(it.domainCode).isEqualTo("MET")
-                    assertThat(it.uri).isEqualTo("MET")
-                    assertThat(it.type).isEqualTo("MetricDomain")
+        dpmDictionary.metricDomain?.let { it ->
+            assertThat(it.domainCode).isEqualTo("MET")
+            assertThat(it.uri).isEqualTo("MET")
+            assertThat(it.type).isEqualTo("MetricDomain")
 
-                    assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
-                    assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
+            assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
+            assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
 
-                    assertThat(it.concept.applicableFrom).isNull()
-                    assertThat(it.concept.applicableUntil).isNull()
+            assertThat(it.concept.applicableFrom).isNull()
+            assertThat(it.concept.applicableUntil).isNull()
 
-                    assertThat(it.concept.label.translations).isEmpty()
-                    assertThat(it.concept.description.translations).isEmpty()
-                }
-            }
+            assertThat(it.concept.label.translations).isEmpty()
+            assertThat(it.concept.description.translations).isEmpty()
         }
     }
 
     @Nested
     inner class MetricDomain_MET {
 
-        private val domainCode = "MET"
-
         @Test
         fun `13 Metrics`() {
-            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomains.find { it.domainCode == domainCode }!!
+            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomain!!
 
             domain.metrics.forEachIndexed { index, it ->
                 when (index) {
@@ -250,7 +244,7 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest
 
         @Test
         fun `3 Hierarchies`() {
-            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomains.find { it.domainCode == domainCode }!!
+            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomain!!
 
             assertThat(domain.hierarchies.size).isEqualTo(3)
 
@@ -322,7 +316,8 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest
 
         @Test
         fun `10 HierarchyNode within 'MET1' hierarchy`() {
-            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomains.find { it.domainCode == domainCode }!!
+            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomain!!
+
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "MET1" }!!
 
             assertThat(hierarchy.allNodes().size).isEqualTo(10)
@@ -443,7 +438,8 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest
 
         @Test
         fun `12 HierarchyNode within 'MET10' hierarchy`() {
-            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomains.find { it.domainCode == domainCode }!!
+            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomain!!
+
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "MET10" }!!
 
             assertThat(hierarchy.allNodes().size).isEqualTo(12)
@@ -571,7 +567,8 @@ internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest
 
         @Test
         fun `1 HierarchyNode within 'METHIER' hierarchy`() {
-            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomains.find { it.domainCode == domainCode }!!
+            val domain = executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture().metricDomain!!
+
             val hierarchy = domain.hierarchies.find { it.hierarchyCode == "METHIER" }!!
 
             assertThat(hierarchy.allNodes().size).isEqualTo(1)

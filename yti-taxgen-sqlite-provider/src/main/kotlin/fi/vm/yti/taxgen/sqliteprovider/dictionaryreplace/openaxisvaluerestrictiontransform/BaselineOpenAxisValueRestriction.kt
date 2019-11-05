@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.openaxisvaluerestricti
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonBlank
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNullAndNonBlank
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNull
 import fi.vm.yti.taxgen.sqliteprovider.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyNodeTable
@@ -79,13 +79,13 @@ data class BaselineOpenAxisValueRestriction(
                 property = BaselineOpenAxisValueRestriction::axisId
             )
 
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = BaselineOpenAxisValueRestriction::domainXbrlCode
             )
 
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = BaselineOpenAxisValueRestriction::hierarchyCode
@@ -93,7 +93,7 @@ data class BaselineOpenAxisValueRestriction(
         }
 
         if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
-            validateNonBlank(
+            validateNonNullAndNonBlank(
                 validationResults = validationResults,
                 instance = this,
                 property = BaselineOpenAxisValueRestriction::startingMemberXbrlCode

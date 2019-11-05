@@ -16,8 +16,8 @@ internal fun mapAndValidateMetricDomain(
     codeListSource: CodeListModelMapper?,
     owner: Owner,
     diagnostic: Diagnostic
-): List<MetricDomain> {
-    codeListSource ?: return emptyList()
+): MetricDomain? {
+    codeListSource ?: return null
 
     val metrics = mapMetrics(
         codeListSource,
@@ -35,7 +35,7 @@ internal fun mapAndValidateMetricDomain(
         diagnostic
     )
 
-    val domain = MetricDomain(
+    val metricDomain = MetricDomain(
         uri = "MET",
         concept = Concept.empty(owner),
         domainCode = "MET",
@@ -43,11 +43,11 @@ internal fun mapAndValidateMetricDomain(
         hierarchies = hierarchies
     )
 
-    val domains = listOf(domain)
+    diagnostic.validate(metricDomain) {
+        metricDomain.validationContextInfo()
+    }
 
-    validateDpmElements(diagnostic, domains)
-
-    return domains
+    return metricDomain
 }
 
 private fun mapMetrics(

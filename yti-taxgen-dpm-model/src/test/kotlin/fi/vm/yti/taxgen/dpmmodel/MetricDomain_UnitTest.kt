@@ -15,7 +15,7 @@ internal class MetricDomain_UnitTest :
     DpmModel_UnitTestBase<MetricDomain>(MetricDomain::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "uri,                   required",
         "concept,               required",
@@ -68,7 +68,7 @@ internal class MetricDomain_UnitTest :
     inner class ConceptProp {
 
         @Test
-        fun `concept should allow empty label`() {
+        fun `concept should not produce validation error when label has 0 translations (differs from other DPM Elements)`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
                     "label" to TranslatedText(emptyMap())
@@ -80,10 +80,10 @@ internal class MetricDomain_UnitTest :
         }
 
         @Test
-        fun `concept should error if invalid`() {
+        fun `concept should produce validation error when it is not valid`() {
             attributeOverrides(
                 "concept" to Factory.instantiateWithOverrides<Concept>(
-                    "label" to TranslatedText(listOf( Language.byIso6391CodeOrFail("en") to "").toMap() )
+                    "label" to TranslatedText(listOf(Language.byIso6391CodeOrFail("en") to "").toMap())
                 )
             )
 
@@ -94,52 +94,10 @@ internal class MetricDomain_UnitTest :
     }
 
     @Nested
-    inner class MetricsProp {
-
-        @Test
-        fun `metrics should have unique ids and metricCodes`() {
-            attributeOverrides(
-                "metrics" to listOf(
-                    metric("m_1"),
-                    metric("m_2"),
-                    metric("m_2"),
-                    metric("m_4")
-                )
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactlyInAnyOrder(
-                    "MetricDomain.metrics: duplicate uri value 'met_m_2_uri'",
-                    "MetricDomain.metrics: duplicate metricCode value 'met_m_2_code'"
-                )
-        }
-    }
-
-    @Nested
     inner class HierarchiesProp {
 
         @Test
-        fun `hierarchies should have unique ids and hierarchyCodes`() {
-            attributeOverrides(
-                "hierarchies" to listOf(
-                    hierarchy("h_1"),
-                    hierarchy("h_2"),
-                    hierarchy("h_2"),
-                    hierarchy("h_4")
-                )
-            )
-
-            instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly(
-                    "MetricDomain.hierarchies: duplicate hierarchyCode value 'hierarchy_h_2_code'",
-                    "MetricDomain.hierarchies: duplicate uri value 'hierarchy_h_2_uri'"
-                )
-        }
-
-        @Test
-        fun `hierarchies should refer only Metrics which are from the Domain itself`() {
+        fun `hierarchies should produce validation error when HierarchyNodes refer to Metrics which are not part of the MetricDomain`() {
 
             attributeOverrides(
                 "metrics" to listOf(
@@ -164,7 +122,6 @@ internal class MetricDomain_UnitTest :
                                 "met_m_3_code" //External
                             )
                         )
-
                     ),
 
                     hierarchy(

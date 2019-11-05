@@ -368,7 +368,7 @@ fun dpmModelFixture(
             )
         }
 
-        fun metricDomains(): List<MetricDomain> {
+        fun metricDomain(): MetricDomain {
             val metrics = listOf(
                 Metric(
                     uri = "Met-1-Uri",
@@ -484,14 +484,12 @@ fun dpmModelFixture(
                 )
             )
 
-            return listOf(
-                MetricDomain(
-                    uri = "MetDom-1-Uri",
-                    concept = concept("MetDom-1"),
-                    domainCode = "MetDom-1-Code",
-                    metrics = metrics,
-                    hierarchies = metricHierarchies
-                )
+            return MetricDomain(
+                uri = "MetDom-1-Uri",
+                concept = concept("MetDom-1"),
+                domainCode = "MetDom-1-Code",
+                metrics = metrics,
+                hierarchies = metricHierarchies
             )
         }
 
@@ -501,7 +499,7 @@ fun dpmModelFixture(
             typedDomains = typedDomains(),
             explicitDimensions = explicitDimensions(),
             typedDimensions = typedDimensions(),
-            metricDomains = metricDomains()
+            metricDomain = metricDomain()
         )
     }
 
@@ -545,7 +543,7 @@ private fun validateModelContents(dpmModel: DpmModel) {
             typedDimension.validate(collecor)
         }
 
-        dictionary.metricDomains.forEach { metricDomain ->
+        dictionary.metricDomain?.let { metricDomain ->
             metricDomain.metrics.forEach { it.validate(collecor) }
             metricDomain.hierarchies.forEach { it.validate(collecor) }
             metricDomain.validate(collecor)

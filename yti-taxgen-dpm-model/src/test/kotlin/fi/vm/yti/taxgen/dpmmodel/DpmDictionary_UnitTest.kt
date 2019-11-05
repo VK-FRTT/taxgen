@@ -15,10 +15,10 @@ internal class DpmDictionary_UnitTest :
     DpmModel_UnitTestBase<DpmDictionary>(DpmDictionary::class) {
 
     @DisplayName("Property optionality")
-    @ParameterizedTest(name = "{0} should be {1}")
+    @ParameterizedTest(name = "{0} should be {1} property")
     @CsvSource(
         "owner,                 required",
-        "metricDomains,         required",
+        "metricDomain,          optional",
         "explicitDomains,       required",
         "typedDomains,          required",
         "explicitDimensions,    required",
@@ -37,7 +37,6 @@ internal class DpmDictionary_UnitTest :
     @DisplayName("Property length validation")
     @ParameterizedTest(name = "{0} {1} should be {2}")
     @CsvSource(
-        "metricDomains,         maxColLength,   1",
         "explicitDomains,       maxColLength,   10000",
         "typedDomains,          maxColLength,   10000",
         "explicitDimensions,    maxColLength,   10000",
@@ -89,7 +88,7 @@ internal class DpmDictionary_UnitTest :
     inner class ExplicitDomainsProp {
 
         @Test
-        fun `explicitDomains should have unique ids and domainCodes`() {
+        fun `explicitDomains should produce validation error when ExplicitDomain's URIs or domainCodes are not unique within DPM Dictionary`() {
 
             attributeOverrides(
                 "explicitDomains" to listOf(

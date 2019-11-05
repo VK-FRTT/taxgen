@@ -2,27 +2,6 @@ package fi.vm.yti.taxgen.dpmmodel.datavalidation
 
 import kotlin.reflect.KProperty1
 
-fun <I : Any> validateNonBlank(
-    validationResults: ValidationResults,
-    instance: I,
-    property: KProperty1<I, String?>
-) {
-    val value: String? = property.getter.call(instance)
-
-    if (value == null)
-        validationResults.addError(
-            instance = instance,
-            propertyName = property.name,
-            message = "does not have value"
-        )
-    else if (value.isBlank())
-        validationResults.addError(
-            instance = instance,
-            propertyName = property.name,
-            message = "is blank"
-        )
-}
-
 fun <I : Any, T : Any?> validateNonNull(
     validationResults: ValidationResults,
     instance: I,
@@ -36,6 +15,42 @@ fun <I : Any, T : Any?> validateNonNull(
             propertyName = property.name,
             message = "does not have value"
         )
+}
+
+fun <I : Any> validateNullOrNonBlank(
+    validationResults: ValidationResults,
+    instance: I,
+    property: KProperty1<I, String?>
+) {
+    val value: String? = property.getter.call(instance)
+
+    if (value != null) {
+        if (value.isBlank()) {
+            validationResults.addError(
+                instance = instance,
+                propertyName = property.name,
+                message = "is blank"
+            )
+        }
+    }
+}
+
+fun <I : Any> validateNonNullAndNonBlank(
+    validationResults: ValidationResults,
+    instance: I,
+    property: KProperty1<I, String?>
+) {
+    validateNonNull(
+        validationResults,
+        instance,
+        property
+    )
+
+    validateNullOrNonBlank(
+        validationResults,
+        instance,
+        property
+    )
 }
 
 fun <I : Any> validateDpmCodeContent(

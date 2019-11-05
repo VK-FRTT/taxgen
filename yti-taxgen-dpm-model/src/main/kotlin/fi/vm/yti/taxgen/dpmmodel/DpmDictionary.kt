@@ -4,7 +4,6 @@ import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
 
 data class DpmDictionary(
@@ -13,8 +12,15 @@ data class DpmDictionary(
     val typedDomains: List<TypedDomain>,
     val explicitDimensions: List<ExplicitDimension>,
     val typedDimensions: List<TypedDimension>,
-    val metricDomains: List<MetricDomain>
+    val metricDomain: MetricDomain?
 ) : Validatable {
+
+    private fun <T> List<T>.addNotNull(element: T?): List<T> =
+        if (element != null) {
+            this + element
+        } else {
+            this
+        }
 
     override fun validate(validationResults: ValidationResults) {
 
@@ -31,19 +37,11 @@ data class DpmDictionary(
             maxLength = 10000
         )
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = DpmDictionary::metricDomains,
-            minLength = 0,
-            maxLength = 1
-        )
-
         validateElementValueUnique(
             validationResults = validationResults,
             instance = this,
             instancePropertyName = "domains",
-            iterable = explicitDomains + typedDomains + metricDomains,
+            iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
             valueSelector = { it: DpmElement -> it.code() },
             valueDescription = "domainCode"
         )
@@ -52,7 +50,7 @@ data class DpmDictionary(
             validationResults = validationResults,
             instance = this,
             instancePropertyName = "domains",
-            iterable = explicitDomains + typedDomains + metricDomains,
+            iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
             valueSelector = { it: DpmElement -> it.uri },
             valueDescription = "uri"
         )
@@ -112,29 +110,27 @@ data class DpmDictionary(
             instance = this,
             propertyName = "metrics",
             validate = { messages ->
-                metricDomains.forEach { metricDomain ->
-                    metricDomain.metrics.forEach { metric ->
+                metricDomain?.metrics?.forEach { metric ->
 
-                        //TODO - move this particular validation to Metric
-                        if (metric.referencedDomainCode == null && metric.referencedHierarchyCode != null) {
-                            messages.add("Metric ${metric.uri} has Hierarchy reference '${metric.referencedHierarchyCode}' without ExplicitDomain reference")
-                        }
+                    //TODO - move this particular validation to Metric
+                    if (metric.referencedDomainCode == null && metric.referencedHierarchyCode != null) {
+                        messages.add("Metric ${metric.uri} has Hierarchy reference '${metric.referencedHierarchyCode}' without ExplicitDomain reference")
+                    }
 
-                        if (metric.referencedDomainCode != null) {
-                            val referencedDomain =
-                                explicitDomains.find { it.domainCode == metric.referencedDomainCode }
+                    if (metric.referencedDomainCode != null) {
+                        val referencedDomain =
+                            explicitDomains.find { it.domainCode == metric.referencedDomainCode }
 
-                            if (referencedDomain == null) {
-                                messages.add("Metric ${metric.uri} refers non existing ExplicitDomain '${metric.referencedDomainCode}'")
-                            } else {
+                        if (referencedDomain == null) {
+                            messages.add("Metric ${metric.uri} refers non existing ExplicitDomain '${metric.referencedDomainCode}'")
+                        } else {
 
-                                if (metric.referencedHierarchyCode != null) {
-                                    val referencedHierarchy =
-                                        referencedDomain.hierarchies.find { it.hierarchyCode == metric.referencedHierarchyCode }
+                            if (metric.referencedHierarchyCode != null) {
+                                val referencedHierarchy =
+                                    referencedDomain.hierarchies.find { it.hierarchyCode == metric.referencedHierarchyCode }
 
-                                    if (referencedHierarchy == null) {
-                                        messages.add("Metric ${metric.uri} refers Hierarchy '${metric.referencedHierarchyCode}' which is not part of referenced ExplicitDomain '${referencedDomain.uri}'")
-                                    }
+                                if (referencedHierarchy == null) {
+                                    messages.add("Metric ${metric.uri} refers Hierarchy '${metric.referencedHierarchyCode}' which is not part of referenced ExplicitDomain '${referencedDomain.uri}'")
                                 }
                             }
                         }

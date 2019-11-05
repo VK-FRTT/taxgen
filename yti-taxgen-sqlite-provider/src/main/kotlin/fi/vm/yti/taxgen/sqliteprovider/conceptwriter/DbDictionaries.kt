@@ -80,10 +80,10 @@ object DbDictionaries {
         languageIds: Map<Language, EntityID<Int>>,
         processingOptions: ProcessingOptions
     ) {
-        dpmDictionary.metricDomains.forEach { metricDomain ->
+        dpmDictionary.metricDomain?.let {
 
             DbMetric.writeMetricDomainMembers(
-                metricDomain,
+                it,
                 metricDomainId,
                 dpmDictionary.owner,
                 ownerId,
@@ -92,8 +92,7 @@ object DbDictionaries {
             )
 
             DbHierarchies.writeHierarchiesAndAndNodes(
-                metricDomain.hierarchies,
-
+                it.hierarchies,
                 metricDomainId,
                 ownerId,
                 languageIds,
