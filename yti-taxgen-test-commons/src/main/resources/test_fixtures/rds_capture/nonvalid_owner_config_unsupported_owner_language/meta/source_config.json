@@ -1,0 +1,36 @@
+{
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "RdsToDpmMapper tests",
+        "namespace": "namespace",
+        "prefix": "prefix",
+        "location": "location",
+        "copyright": "copyright",
+        "languages": [
+          "en",
+          "fi",
+          "sv"
+        ]
+      },
+      "metrics": {
+        "uri": null
+      },
+      "explicitDomainsAndHierarchies": {
+        "uri": null
+      },
+      "explicitDimensions": {
+        "uri": null
+      },
+      "typedDomains": {
+        "uri": null
+      },
+      "typedDimensions": {
+        "uri": null
+      }
+    }
+  ],
+  "processingOptions": {
+    "diagnosticSourceLanguages": ["fi"]
+  }
+}

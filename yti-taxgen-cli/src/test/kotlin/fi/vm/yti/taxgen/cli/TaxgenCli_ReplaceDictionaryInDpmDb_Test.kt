@@ -36,7 +36,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--baseline-db",
             "$baselineDpmDbPath",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$outputPath"
         )
@@ -74,7 +74,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--baseline-db",
             "$baselineDpmDbPath",
             "--source-config",
-            "$dpmSourceConfigPath",
+            "$integrationFixtureConfigPath",
             "--output",
             "$outputPath"
         )
@@ -112,7 +112,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when DPM source config has Metrics without referenced ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With Metrics",
             retainedElementSources = listOf("metrics")
         )
@@ -142,7 +142,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should replace dictionary within database from DPM source config having Metrics and ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With Metrics and ExpDoms",
             retainedElementSources = listOf("metrics", "explicitDomainsAndHierarchies")
         )
@@ -185,7 +185,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     fun `Should replace dictionary within database from DPM source config having ExpDoms only`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With ExpDoms",
             retainedElementSources = listOf("explicitDomainsAndHierarchies")
         )
@@ -228,7 +228,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     fun `Should replace dictionary within database from DPM source config having TypDoms only`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With TypDoms",
             retainedElementSources = listOf("typedDomains")
         )
@@ -271,7 +271,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     fun `Should replace dictionary within database from DPM source config having ExpDims and ExpDoms`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With ExpDims and ExpDoms",
             retainedElementSources = listOf("explicitDimensions", "explicitDomainsAndHierarchies")
         )
@@ -314,7 +314,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
     fun `Should replace dictionary within database from DPM source config having TypDims and TypDoms`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With TypDims and TypDoms",
             retainedElementSources = listOf("typedDimensions", "typedDomains")
         )
@@ -352,6 +352,60 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Test
+    fun `Should report error when dictionary replace fails to validation error on RDS to DPM mapping`() {
+        val capturePath = cloneTestFixtureToTemp(TestFixture.Type.RDS_CAPTURE, "nonvalid_dpm_elements_explicit_domain").toString()
+
+        val args = arrayOf(
+            "--replace-dictionary-in-dpm-db",
+            "--baseline-db",
+            "$baselineDpmDbPath",
+            "--source-folder",
+            "$capturePath",
+            "--output",
+            "$outputPath"
+        )
+
+        executeCliAndExpectSuccess(args) { outText ->
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "INFO: Mapping failed due content errors"
+            )
+        }
+
+        assertThat(outputPath).doesNotExist()
+    }
+
+    @Test
+    fun `Should report error when dictionary replace fails to validation error on DB write `() {
+        updateDb(
+            baselineDpmDbPath,
+            """
+                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                VALUES (22, 32, 42, "prefix_dim:ed-code(prefix_dom-code:mbr-code)", "source", "prefix_dim:ed-code(prefix_dom-code:mbr-code)")
+                """.trimIndent()
+        )
+
+        val args = arrayOf(
+            "--replace-dictionary-in-dpm-db",
+            "--baseline-db",
+            "$baselineDpmDbPath",
+            "--source-folder",
+            "$integrationFixtureCapturePath",
+            "--output",
+            "$outputPath"
+        )
+
+        executeCliAndExpectSuccess(args) { outText ->
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "INFO: Database creation failed due content errors"
+            )
+        }
+
+        assertThat(outputPath).doesNotExist()
+    }
+
     @Nested
     inner class BaselineDbOption {
 
@@ -360,7 +414,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             val args = arrayOf(
                 "--replace-dictionary-in-dpm-db",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--output",
                 "$outputPath"
             )
@@ -383,7 +437,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             val args = arrayOf(
                 "--replace-dictionary-in-dpm-db",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--output",
                 "$outputPath",
                 "--baseline-db"
@@ -407,7 +461,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--baseline-db",
                 "${tempFolder.resolve("non_existing.db")}",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--output",
                 "$outputPath"
             )
@@ -432,7 +486,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--baseline-db",
                 "$baselineDpmDbPath",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--output",
                 "$outputPath"
             )
@@ -525,9 +579,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--baseline-db",
                 "$baselineDpmDbPath",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--source-config",
-                "$dpmSourceConfigPath",
+                "$integrationFixtureConfigPath",
                 "--output",
                 "$outputPath"
             )
@@ -703,7 +757,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--baseline-db",
                 "$baselineDpmDbPath",
                 "--source-folder",
-                "$dpmSourceCapturePath"
+                "$integrationFixtureCapturePath"
             )
 
             executeCliAndExpectFail(args) { outText, errText ->
@@ -726,7 +780,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--baseline-db",
                 "$baselineDpmDbPath",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--output"
             )
 
@@ -748,7 +802,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--baseline-db",
                 "$baselineDpmDbPath",
                 "--source-folder",
-                "$dpmSourceCapturePath",
+                "$integrationFixtureCapturePath",
                 "--output",
                 "${tempFolder.path()}"
             )

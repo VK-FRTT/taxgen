@@ -26,7 +26,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetFolderPath"
         )
@@ -51,7 +51,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-config",
-            "$dpmSourceConfigPath",
+            "$integrationFixtureConfigPath",
             "--output",
             "$targetFolderPath"
         )
@@ -78,7 +78,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetFolderPath",
             "--force-overwrite"
@@ -103,7 +103,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$integrationFixtureCapturePath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -124,7 +124,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output"
         )
 
@@ -147,7 +147,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetFolderPath"
         )
@@ -174,7 +174,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             workFolderFilePath.toString()
         )
@@ -256,9 +256,9 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-folder",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--source-config",
-            "$dpmSourceConfigPath",
+            "$integrationFixtureConfigPath",
             "--output",
             "$targetFolderPath"
         )

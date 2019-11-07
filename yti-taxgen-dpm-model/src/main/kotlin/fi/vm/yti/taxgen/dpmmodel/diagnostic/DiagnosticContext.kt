@@ -12,6 +12,9 @@ interface DiagnosticContext : Diagnostic {
         action: () -> R
     ): R
 
+    fun significantErrorsReceived(): Boolean
+    fun stopIfSignificantErrorsReceived(messageProvider: () -> String)
+
     override fun updateCurrentContextDetails(contextTitle: String?, contextIdentifier: String?)
 
     override fun fatal(message: String): Nothing
@@ -28,6 +31,4 @@ interface DiagnosticContext : Diagnostic {
     )
 
     override fun diagnosticSourceLanguages(): List<Language>
-
-    override fun stopIfSignificantErrorsReceived(messageProvider: () -> String)
 }

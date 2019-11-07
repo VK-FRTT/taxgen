@@ -43,12 +43,15 @@ internal open class RdsToDpmMapper_ModuleTestBase {
     }
 
     protected fun executeRdsToDpmMapperAndGetDictionariesFrom(fixtureName: String): List<DpmDictionary> {
-        val fixturePath = TestFixture.pathOf(RDS_CAPTURE, fixtureName)
+        val fixturePath = TestFixture.sourcePathOf(RDS_CAPTURE, fixtureName)
 
         lateinit var model: DpmModel
 
         SourceFactory.sourceForFolder(fixturePath, diagnosticBridge).use { sourceHolder ->
             sourceHolder.withDpmSource { dpmSource ->
+
+                dpmSource.config().processingOptions
+
                 val mapper = RdsToDpmMapper(diagnosticBridge)
                 model = mapper.extractDpmModel(dpmSource)
             }
@@ -60,11 +63,13 @@ internal open class RdsToDpmMapper_ModuleTestBase {
     protected fun executeRdsToDpmMapperAndGetDictionariesFromIntegrationFixture(): DpmDictionary {
         val dictionary = executeRdsToDpmMapperAndGetDictionariesFrom("integration_fixture").first()
 
-        if (diagnosticCollector.allMessagesCount() != 0) {
+        val count = diagnosticCollector.criticalMessagesCount() + diagnosticCollector.objectValidationFailureCount()
+
+        if (count != 0) {
             println(diagnosticCollector.eventsString())
         }
 
-        assertThat(diagnosticCollector.allMessagesCount()).isEqualTo(0)
+        assertThat(count).isEqualTo(0)
 
         return dictionary
     }

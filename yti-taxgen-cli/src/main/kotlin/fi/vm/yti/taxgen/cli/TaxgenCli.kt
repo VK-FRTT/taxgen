@@ -128,6 +128,10 @@ class TaxgenCli(
                 dpmModel,
                 processingOptions
             )
+
+            diagnosticBridge.stopIfSignificantErrorsReceived {
+                "Database creation failed due content errors"
+            }
         }
     }
 

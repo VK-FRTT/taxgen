@@ -25,7 +25,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetZipPath"
             )
@@ -49,7 +49,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-config",
-            "$dpmSourceConfigPath",
+            "$integrationFixtureConfigPath",
             "--output",
             "$targetZipPath"
             )
@@ -74,7 +74,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetZipPath",
             "--force-overwrite"
@@ -98,7 +98,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath"
+            "$integrationFixtureCapturePath"
         )
 
         executeCliAndExpectFail(args) { outText, errText ->
@@ -119,7 +119,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output"
         )
 
@@ -141,7 +141,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetZipPath"
         )
@@ -163,7 +163,7 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "${tempFolder.path()}"
         )
@@ -245,9 +245,9 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--capture-dpm-sources-to-zip",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--source-config",
-            "$dpmSourceConfigPath",
+            "$integrationFixtureConfigPath",
             "--output",
             "$targetZipPath"
         )

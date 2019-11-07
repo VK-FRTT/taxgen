@@ -8,7 +8,7 @@ clone_from_integration_fixture(){
 
   rm -r $TARGET_FOLDER
   cp -R "integration_fixture" $TARGET_FOLDER
-  rm -r ${TARGET_FOLDER}/meta
+  rm -r ${TARGET_FOLDER}/meta/capture_info.json
 
   for CONCEPT_NAME in exp_dim exp_dom_hier met typ_dim typ_dom; do
     if [ $CONCEPT_NAME != $RETAINED_CONCEPT ]

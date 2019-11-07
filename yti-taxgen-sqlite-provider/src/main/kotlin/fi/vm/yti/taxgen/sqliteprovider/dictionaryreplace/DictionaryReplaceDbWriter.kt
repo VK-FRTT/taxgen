@@ -98,6 +98,10 @@ class DictionaryReplaceDbWriter(
         }
 
         frameworksTransform.transformFrameworkEntities()
+
+        if (diagnosticContext.significantErrorsReceived()) {
+            Files.delete(outputDbPath)
+        }
     }
 
     companion object {

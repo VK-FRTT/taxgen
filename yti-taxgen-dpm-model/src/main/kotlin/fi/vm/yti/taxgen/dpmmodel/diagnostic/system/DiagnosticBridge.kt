@@ -54,6 +54,17 @@ class DiagnosticBridge(
         }
     }
 
+    override fun significantErrorsReceived(): Boolean = counters[FATAL] != 0 || counters[ERROR] != 0
+
+    override fun stopIfSignificantErrorsReceived(messageProvider: () -> String) {
+        if (significantErrorsReceived()) {
+            val message = messageProvider()
+            info(message)
+
+            stoppingPolicy.stopProcessing()
+        }
+    }
+
     override fun updateCurrentContextDetails(contextTitle: String?, contextIdentifier: String?) {
         val original = contextStack.peekFirst()
 
@@ -120,15 +131,6 @@ class DiagnosticBridge(
     }
 
     override fun diagnosticSourceLanguages(): List<Language> = diagnosticSourceLanguages
-
-    override fun stopIfSignificantErrorsReceived(messageProvider: () -> String) {
-        if (counters[FATAL] != 0 || counters[ERROR] != 0) {
-            val message = messageProvider()
-            info(message)
-
-            stoppingPolicy.stopProcessing()
-        }
-    }
 
     fun setDiagnosticSourceLanguages(sourceLanguages: List<Language>) {
         diagnosticSourceLanguages = sourceLanguages.toCollection(mutableListOf())

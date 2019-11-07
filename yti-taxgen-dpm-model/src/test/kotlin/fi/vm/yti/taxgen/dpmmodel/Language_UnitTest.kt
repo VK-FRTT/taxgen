@@ -115,7 +115,7 @@ internal class Language_UnitTest :
         @Test
         fun `language loading should cause exception when configuration is referring undefined language`() {
             val languageConfigPath: Path =
-                TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
+                TestFixture.sourcePathOf(DPM_LANGUAGE_CONFIG, "label_translation_language_unsupported.json")
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
@@ -125,7 +125,7 @@ internal class Language_UnitTest :
         @Test
         fun `language loading should cause exception when configuration is broken JSON`() {
             val languageConfigPath: Path =
-                TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
+                TestFixture.sourcePathOf(DPM_LANGUAGE_CONFIG, "dpm_language_config_broken_json.json")
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
@@ -134,7 +134,7 @@ internal class Language_UnitTest :
 
         @Test
         fun `language loading should cause exception when configuration is missing translations for language`() {
-            val languageConfigPath: Path = TestFixture.pathOf(DPM_LANGUAGE_CONFIG, "language_no_translations.json")
+            val languageConfigPath: Path = TestFixture.sourcePathOf(DPM_LANGUAGE_CONFIG, "language_no_translations.json")
 
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 

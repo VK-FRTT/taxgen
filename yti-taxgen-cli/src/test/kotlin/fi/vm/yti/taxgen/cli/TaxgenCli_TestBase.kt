@@ -23,8 +23,8 @@ import java.sql.DriverManager
 
 open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
-    protected lateinit var dpmSourceCapturePath: String
-    protected lateinit var dpmSourceConfigPath: String
+    protected lateinit var integrationFixtureCapturePath: String
+    protected lateinit var integrationFixtureConfigPath: String
 
     private lateinit var charset: Charset
     private lateinit var outCollector: PrintStreamCollector
@@ -36,8 +36,8 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     fun baseInit() {
         tempFolder = TempFolder("taxgen_cli")
 
-        dpmSourceCapturePath = cloneTestFixtureToTemp(RDS_CAPTURE, "integration_fixture").toString()
-        dpmSourceConfigPath = cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "integration_fixture.json").toString()
+        integrationFixtureCapturePath = cloneTestFixtureToTemp(RDS_CAPTURE, "integration_fixture").toString()
+        integrationFixtureConfigPath = cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "integration_fixture.json").toString()
 
         charset = StandardCharsets.UTF_8
         outCollector = PrintStreamCollector(charset)
@@ -61,22 +61,22 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         fixtureName: String
     ): Path {
 
-        val fixturePath = TestFixture.pathOf(fixtureType, fixtureName)
+        val fixtureSourcePath = TestFixture.sourcePathOf(fixtureType, fixtureName)
 
         return when (fixtureType) {
 
             RDS_CAPTURE -> tempFolder.copyFolderRecursivelyUnderSubfolder(
-                fixturePath,
-                fixtureType.folderName
+                fixtureSourcePath,
+                "${fixtureType.folderName}_$fixtureName"
             )
 
             RDS_SOURCE_CONFIG -> tempFolder.copyFileToSubfolder(
-                fixturePath,
+                fixtureSourcePath,
                 fixtureType.folderName
             )
 
             DPM_DB -> tempFolder.copyFileToSubfolder(
-                fixturePath,
+                fixtureSourcePath,
                 fixtureType.folderName
             )
 
@@ -141,81 +141,94 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
         val errText: String
     )
 
+    fun updateDb(
+        dbPath: Path,
+        sql: String
+    ) {
+        return DriverManager.getConnection("jdbc:sqlite:$dbPath").use { dbConnection ->
+            dbConnection.createStatement().executeUpdate(sql)
+        }
+    }
+
     fun fetchDpmOwnersFromDb(dbPath: Path): List<String> {
-        val dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
-        val rows = dbConnection.createStatement().executeQuery(
-            """
+        return DriverManager.getConnection("jdbc:sqlite:$dbPath").use { dbConnection ->
+            dbConnection.createStatement().executeQuery(
+                """
                 SELECT
                     mOwner.OwnerName AS 'OwnerNameInDB'
                 FROM mOwner
                 ORDER BY mOwner.OwnerName DESC
             """
-        ).toStringList()
-
-        return rows
+            ).toStringList()
+        }
     }
 
     fun fetchElementCodesFromDb(dbPath: Path): List<String> {
-        val labels = mutableListOf<String>()
 
-        fun populateElementCodes(elementKind: String, query: String) {
-            val dbConnection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
-            val elementLabels = dbConnection.createStatement().executeQuery(query).toStringList(false)
+        return DriverManager.getConnection("jdbc:sqlite:$dbPath").use { dbConnection ->
 
-            labels.add("#$elementKind $elementLabels")
+            val labels = mutableListOf<String>()
+
+            fun populateElementCodes(
+                elementKind: String,
+                query: String
+            ) {
+                val elementLabels = dbConnection.createStatement().executeQuery(query).toStringList(false)
+                labels.add("#$elementKind $elementLabels")
+            }
+
+            populateElementCodes(
+                "Metrics",
+                """
+                SELECT mMember.MemberCode
+                FROM mMetric
+                INNER JOIN mMember on mMetric.CorrespondingMemberID = mMember.MemberID
+                ORDER BY mMember.MemberCode ASC
+                """
+            )
+
+            populateElementCodes(
+                "ExpDoms",
+                """
+                SELECT mDomain.DomainCode
+                FROM mDomain
+                WHERE mDomain.IsTypedDomain = 0
+                ORDER BY mDomain.DomainCode ASC
+                """
+            )
+
+            populateElementCodes(
+                "TypDoms",
+                """
+                SELECT mDomain.DomainCode
+                FROM mDomain
+                WHERE mDomain.IsTypedDomain = 1
+                ORDER BY mDomain.DomainCode ASC
+                """
+            )
+
+            populateElementCodes(
+                "ExpDims",
+                """
+                SELECT mDimension.DimensionCode
+                FROM mDimension
+                WHERE mDimension.IsTypedDimension = 0
+                ORDER BY mDimension.DimensionCode ASC
+                """
+            )
+
+            populateElementCodes(
+                "TypDims",
+                """
+                SELECT mDimension.DimensionCode
+                FROM mDimension
+                WHERE mDimension.IsTypedDimension = 1
+                ORDER BY mDimension.DimensionCode ASC
+                """
+            )
+
+            labels
         }
-
-        populateElementCodes(
-            "Metrics",
-            """
-            SELECT mMember.MemberCode
-            FROM mMetric
-            INNER JOIN mMember on mMetric.CorrespondingMemberID = mMember.MemberID
-            ORDER BY mMember.MemberCode ASC
-            """
-        )
-
-        populateElementCodes(
-            "ExpDoms",
-            """
-            SELECT mDomain.DomainCode
-            FROM mDomain
-            WHERE mDomain.IsTypedDomain = 0
-            ORDER BY mDomain.DomainCode ASC
-            """
-        )
-
-        populateElementCodes(
-            "TypDoms",
-            """
-            SELECT mDomain.DomainCode
-            FROM mDomain
-            WHERE mDomain.IsTypedDomain = 1
-            ORDER BY mDomain.DomainCode ASC
-            """
-        )
-
-        populateElementCodes(
-            "ExpDims",
-            """
-            SELECT mDimension.DimensionCode
-            FROM mDimension
-            WHERE mDimension.IsTypedDimension = 0
-            ORDER BY mDimension.DimensionCode ASC
-            """
-        )
-
-        populateElementCodes(
-            "TypDims",
-            """
-            SELECT mDimension.DimensionCode
-            FROM mDimension
-            WHERE mDimension.IsTypedDimension = 1
-            ORDER BY mDimension.DimensionCode ASC
-            """
-        )
-
-        return labels
     }
 
     fun clonePartialSourceConfigFromConfig(

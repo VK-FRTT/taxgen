@@ -23,6 +23,4 @@ interface Diagnostic {
     )
 
     fun diagnosticSourceLanguages(): List<Language>
-
-    fun stopIfSignificantErrorsReceived(messageProvider: () -> String)
 }

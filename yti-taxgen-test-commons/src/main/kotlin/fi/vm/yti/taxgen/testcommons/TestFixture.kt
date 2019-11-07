@@ -34,7 +34,7 @@ object TestFixture {
         return javaClass.getResource(selfResourceName)
     }
 
-    fun pathOf(fixtureType: Type, fixtureName: String): Path {
+    fun sourcePathOf(fixtureType: Type, fixtureName: String): Path {
         val path = fixtureSource.fixturePath(
             fixtureType.folderName,
             fixtureName

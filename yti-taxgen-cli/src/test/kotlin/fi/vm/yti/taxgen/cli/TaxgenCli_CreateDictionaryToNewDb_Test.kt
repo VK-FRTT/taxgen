@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
@@ -27,7 +28,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetDbPath"
         )
@@ -64,7 +65,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
             "--source-folder",
-            "$dpmSourceCapturePath",
+            "$integrationFixtureCapturePath",
             "--output",
             "$targetDbPath",
             "--force-overwrite"
@@ -81,190 +82,181 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
-    @Test
-    fun `Should fail when no output option is given`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "$dpmSourceCapturePath"
-        )
+    @Nested
+    inner class OutputOption {
 
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(outText).containsSubsequence(
-                "Writing dictionaries to DPM database"
+        @Test
+        fun `Should fail when no output option is given`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-folder",
+                "$integrationFixtureCapturePath"
             )
 
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "Option output must be given"
+            executeCliAndExpectFail(args) { outText, errText ->
+
+                assertThat(outText).containsSubsequence(
+                    "Writing dictionaries to DPM database"
+                )
+
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "Option output must be given"
+                )
+            }
+        }
+
+        @Test
+        fun `Should fail when output option is given without filename`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-folder",
+                "$integrationFixtureCapturePath",
+                "--output"
             )
+
+            executeCliAndExpectFail(args) { outText, errText ->
+
+                assertThat(outText).isBlank()
+
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "Option output requires an argument"
+                )
+            }
+        }
+
+        @Test
+        fun `Should report error when output database file already exists`() {
+            Files.write(targetDbPath, "Existing file".toByteArray())
+
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-folder",
+                "$integrationFixtureCapturePath",
+                "--output",
+                "$targetDbPath"
+            )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "Writing dictionaries to DPM database",
+                    "FATAL: Output file '$targetDbPath' already exists"
+                )
+
+                assertThat(targetDbPath).exists().isRegularFile()
+            }
+        }
+
+        @Test
+        fun `Should report error when given output database path points to folder`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-folder",
+                "$integrationFixtureCapturePath",
+                "--output",
+                "${tempFolder.path()}"
+            )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "Writing dictionaries to DPM database",
+                    "FATAL: Output file '${tempFolder.path()}' already exists"
+                )
+            }
         }
     }
 
-    @Test
-    fun `Should fail when output option is given without filename`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "$dpmSourceCapturePath",
-            "--output"
-        )
+    @Nested
+    inner class SourceOption {
 
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(outText).isBlank()
-
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "Option output requires an argument"
+        @Test
+        fun `Should fail when no source option is given`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectFail(args) { outText, errText ->
+
+                assertThat(outText).containsSubsequence(
+                    "Writing dictionaries to DPM database"
+                )
+
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "One source option with proper argument must be given"
+                )
+            }
         }
-    }
 
-    @Test
-    fun `Should report error when output database file already exists`() {
-        Files.write(targetDbPath, "Existing file".toByteArray())
-
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "$dpmSourceCapturePath",
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "Writing dictionaries to DPM database",
-                "FATAL: Output file '$targetDbPath' already exists"
+        @Test
+        fun `Should fail when source option without filepath is given`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--output",
+                "$targetDbPath",
+                "--source-folder"
             )
 
-            assertThat(targetDbPath).exists().isRegularFile()
+            executeCliAndExpectFail(args) { outText, errText ->
+
+                assertThat(outText).isBlank()
+
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "Option source-folder requires an argument"
+                )
+            }
         }
-    }
 
-    @Test
-    fun `Should report error when given output database path points to folder`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "$dpmSourceCapturePath",
-            "--output",
-            "${tempFolder.path()}"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "Writing dictionaries to DPM database",
-                "FATAL: Output file '${tempFolder.path()}' already exists"
+        @Test
+        fun `Should fail when given source filepath does not exist`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-folder",
+                "${tempFolder.resolve("non_existing_folder")}",
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectFail(args) { outText, errText ->
+
+                assertThat(outText).isBlank()
+
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "Option source-folder: Directory", "does not exist"
+                )
+            }
         }
-    }
 
-    @Test
-    fun `Should fail when no source option is given`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(outText).containsSubsequence(
-                "Writing dictionaries to DPM database"
+        @Test
+        fun `Should fail when more than one source option is given`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-folder",
+                "$integrationFixtureCapturePath",
+                "--source-config",
+                "$integrationFixtureConfigPath",
+                "--output",
+                "$targetDbPath"
             )
 
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "One source option with proper argument must be given"
-            )
-        }
-    }
+            executeCliAndExpectFail(args) { outText, errText ->
 
-    @Test
-    fun `Should fail when source option without filepath is given`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--output",
-            "$targetDbPath",
-            "--source-folder"
-        )
+                assertThat(outText).containsSubsequence(
+                    "Writing dictionaries to DPM database"
+                )
 
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(outText).isBlank()
-
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "Option source-folder requires an argument"
-            )
-        }
-    }
-
-    @Test
-    fun `Should fail when given source filepath does not exist`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "${tempFolder.resolve("non_existing_folder")}",
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(outText).isBlank()
-
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "Option source-folder: Directory", "does not exist"
-            )
-        }
-    }
-
-    @Test
-    fun `Should fail when more than one source option is given`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "$dpmSourceCapturePath",
-            "--source-config",
-            "$dpmSourceConfigPath",
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(outText).containsSubsequence(
-                "Writing dictionaries to DPM database"
-            )
-
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "One source option with proper argument must be given"
-            )
-        }
-    }
-
-    @Disabled
-    @Test
-    fun `Should fail when source capture folder is empty`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-folder",
-            "${tempFolder.path()}",
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectFail(args) { outText, errText ->
-            assertThat(outText).isBlank()
-            assertThat(errText).isBlank()
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "One source option with proper argument must be given"
+                )
+            }
         }
     }
 
@@ -274,7 +266,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
             "--source-config",
-            "$dpmSourceConfigPath",
+            "$integrationFixtureConfigPath",
             "--output",
             "$targetDbPath"
         )
@@ -312,7 +304,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should report error when DPM source config has Metrics without referenced ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With Metrics",
             retainedElementSources = listOf("metrics")
         )
@@ -340,7 +332,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     @Test
     fun `Should produce database from DPM source config having Metrics and ExpDoms`() {
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With Metrics and ExpDoms",
             retainedElementSources = listOf("metrics", "explicitDomainsAndHierarchies")
         )
@@ -381,7 +373,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should produce database from DPM source config having ExpDoms only`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With ExpDoms",
             retainedElementSources = listOf("explicitDomainsAndHierarchies")
         )
@@ -422,7 +414,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should produce database from DPM source config having TypDoms only`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With TypDoms",
             retainedElementSources = listOf("typedDomains")
         )
@@ -463,7 +455,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should produce database from DPM source config having ExpDims and ExpDoms`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With ExpDims and ExpDoms",
             retainedElementSources = listOf("explicitDimensions", "explicitDomainsAndHierarchies")
         )
@@ -504,7 +496,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     fun `Should produce database from DPM source config having TypDims and TypDoms`() {
 
         val partialSourceConfigPath = clonePartialSourceConfigFromConfig(
-            configPath = dpmSourceConfigPath,
+            configPath = integrationFixtureConfigPath,
             nameTag = "Partial With TypDims and TypDoms",
             retainedElementSources = listOf("typedDimensions", "typedDomains")
         )
@@ -541,153 +533,183 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
     }
 
     @Test
-    fun `Should report error when source config file is broken JSON`() {
+    fun `Should report error when database creation fails to validation error on RDS to DPM mapping`() {
+        val capturePath =
+            cloneTestFixtureToTemp(TestFixture.Type.RDS_CAPTURE, "nonvalid_dpm_elements_explicit_domain").toString()
+
         val args = arrayOf(
             "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_source_config_json.json").toString(),
+            "--source-folder",
+            "$capturePath",
             "--output",
             "$targetDbPath"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
-
             assertThat(outText).containsSubsequence(
                 "Writing dictionaries to DPM database",
-                "Configuration file: (broken_source_config_json.json)",
-                "FATAL: Processing JSON content failed: "
+                "INFO: Mapping failed due content errors"
             )
         }
+
+        assertThat(targetDbPath).doesNotExist()
     }
 
-    @Test
-    fun `Should fail when source config file does not exist`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            "${tempFolder.resolve("non_existing_config.json")}",
-            "--output",
-            "$targetDbPath"
-        )
+    @Nested
+    inner class BrokenSourceConfigs {
 
-        executeCliAndExpectFail(args) { outText, errText ->
-
-            assertThat(errText).containsSubsequence(
-                "yti-taxgen:",
-                "Option source-config: File", "does not exist"
+        @Test
+        fun `Should report error when source config file is broken JSON`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_source_config_json.json").toString(),
+                "--output",
+                "$targetDbPath"
             )
 
-            assertThat(outText).isBlank()
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "Writing dictionaries to DPM database",
+                    "Configuration file: (broken_source_config_json.json)",
+                    "FATAL: Processing JSON content failed: "
+                )
+            }
         }
-    }
 
-    @Tag("e2etest")
-    @Test
-    fun `Should report error when source config links to non existing DPM code list`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString(),
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "DPM dictionary", "codelist_uri_unknown_codelist",
-                "Codelist",
-                "Content URLs",
-                "FATAL: JSON content fetch failed: HTTP 404 (Not Found)"
+        @Test
+        fun `Should fail when source config file does not exist`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                "${tempFolder.resolve("non_existing_config.json")}",
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectFail(args) { outText, errText ->
+
+                assertThat(errText).containsSubsequence(
+                    "yti-taxgen:",
+                    "Option source-config: File", "does not exist"
+                )
+
+                assertThat(outText).isBlank()
+            }
         }
-    }
 
-    @Tag("e2etest")
-    @Test
-    fun `Should report error when source config links to unresolvable DPM host name`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json").toString(),
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "DPM dictionary", "codelist_uri_unresolvable_host",
-                "Codelist",
-                "Content URLs",
-                "FATAL: Could not determine the server IP address"
+        @Tag("e2etest")
+        @Test
+        fun `Should report error when source config links to non existing DPM code list`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString(),
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "DPM dictionary", "codelist_uri_unknown_codelist",
+                    "Codelist",
+                    "Content URLs",
+                    "FATAL: JSON content fetch failed: HTTP 404 (Not Found)"
+                )
+            }
         }
-    }
 
-    @Tag("e2etest")
-    @Test
-    fun `Should report error when source config has URI with bad protocol`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json").toString(),
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "DPM dictionary", "codelist_uri_bad_protocol",
-                "Codelist",
-                "Content URLs",
-                "FATAL: Malformed URI"
+        @Tag("e2etest")
+        @Test
+        fun `Should report error when source config links to unresolvable DPM host name`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json").toString(),
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "DPM dictionary", "codelist_uri_unresolvable_host",
+                    "Codelist",
+                    "Content URLs",
+                    "FATAL: Could not determine the server IP address"
+                )
+            }
         }
-    }
 
-    @Tag("e2etest")
-    @Test
-    fun `Should report error when source config URI points to non-responsive host IP`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json").toString(),
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "DPM dictionary", "codelist_uri_non_responsive_host_ip",
-                "Codelist",
-                "Content URLs",
-                "FATAL: Could not connect the server"
+        @Tag("e2etest")
+        @Test
+        fun `Should report error when source config has URI with bad protocol`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json").toString(),
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "DPM dictionary", "codelist_uri_bad_protocol",
+                    "Codelist",
+                    "Content URLs",
+                    "FATAL: Malformed URI"
+                )
+            }
         }
-    }
 
-    @Tag("e2etest")
-    @Test
-    fun `Should report error when source config URI points to non-responsive host domain`() {
-        val args = arrayOf(
-            "--create-dictionary-to-new-dpm-db",
-            "--source-config",
-            cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_domain.json").toString(),
-            "--output",
-            "$targetDbPath"
-        )
-
-        executeCliAndExpectSuccess(args) { outText ->
-
-            assertThat(outText).containsSubsequence(
-                "DPM dictionary", "codelist_uri_non_responsive_host_domain",
-                "Codelist",
-                "Content URLs",
-                "FATAL"
+        @Tag("e2etest")
+        @Test
+        fun `Should report error when source config URI points to non-responsive host IP`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json").toString(),
+                "--output",
+                "$targetDbPath"
             )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "DPM dictionary", "codelist_uri_non_responsive_host_ip",
+                    "Codelist",
+                    "Content URLs",
+                    "FATAL: Could not connect the server"
+                )
+            }
+        }
+
+        @Tag("e2etest")
+        @Test
+        fun `Should report error when source config URI points to non-responsive host domain`() {
+            val args = arrayOf(
+                "--create-dictionary-to-new-dpm-db",
+                "--source-config",
+                cloneTestFixtureToTemp(
+                    RDS_SOURCE_CONFIG,
+                    "broken_metric_uri_non_responsive_host_domain.json"
+                ).toString(),
+                "--output",
+                "$targetDbPath"
+            )
+
+            executeCliAndExpectSuccess(args) { outText ->
+
+                assertThat(outText).containsSubsequence(
+                    "DPM dictionary", "codelist_uri_non_responsive_host_domain",
+                    "Codelist",
+                    "Content URLs",
+                    "FATAL"
+                )
+            }
         }
     }
 }
