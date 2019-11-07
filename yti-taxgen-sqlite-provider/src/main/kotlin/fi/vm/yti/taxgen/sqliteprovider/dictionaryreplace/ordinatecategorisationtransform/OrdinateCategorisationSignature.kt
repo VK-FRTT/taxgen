@@ -3,6 +3,10 @@ package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisation
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNullAndNonBlank
+import fi.vm.yti.taxgen.sqliteprovider.tables.HierarchyTable
+import fi.vm.yti.taxgen.sqliteprovider.tables.MemberTable
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.sql.transactions.transaction
 
 data class OrdinateCategorisationSignature(
     val identifierKind: IdentifierKind,
@@ -70,6 +74,36 @@ data class OrdinateCategorisationSignature(
                 instance = this,
                 property = OrdinateCategorisationSignature::hierarchyIdentifier
             )
+        }
+    }
+
+    fun lookupHierarchyCodeForHierarchyIdentifier(): String? {
+        require(identifierKind == IdentifierKind.DATABASE_ID)
+
+        return transaction {
+            hierarchyIdentifier?.toIntOrNull()?.let {
+                HierarchyTable.rowWhereHierarchyId(
+                    EntityID(
+                        it,
+                        HierarchyTable
+                    )
+                )?.get(HierarchyTable.hierarchyCodeCol)
+            }
+        }
+    }
+
+    fun lookupMemberCodeForHierarchyStartingMemberIdentifier(): String? {
+        require(identifierKind == IdentifierKind.DATABASE_ID)
+
+        return transaction {
+            hierarchyStartingMemberIdentifier?.toIntOrNull()?.let {
+                MemberTable.rowWhereMemberId(
+                    EntityID(
+                        it,
+                        MemberTable
+                    )
+                )?.get(MemberTable.memberCodeCol)
+            }
         }
     }
 }

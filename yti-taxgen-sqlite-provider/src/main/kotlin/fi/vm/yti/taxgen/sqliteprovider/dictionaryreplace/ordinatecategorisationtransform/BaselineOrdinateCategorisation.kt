@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionaryreplace.ordinatecategorisationtransform
 
+import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
-import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.sqliteprovider.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Column
@@ -13,7 +13,10 @@ import org.jetbrains.exposed.sql.ResultRow
 data class BaselineOrdinateCategorisation(
     val ordinateId: EntityID<Int>?,
 
+    //Tokenized from mOrdinateCategorisation.DimensionMemberSignature
     val databaseIdSignature: OrdinateCategorisationSignature,
+
+    //Tokenized from mOrdinateCategorisation.DPS
     val xbrlCodeSignature: OrdinateCategorisationSignature,
 
     val source: String?
@@ -152,11 +155,11 @@ data class BaselineOrdinateCategorisation(
             instance = this,
             propertyName = "signatures",
             validate = { messages ->
-                val mismatchDescriptions = emptyList<String>() //checkSignaturesMatching()
+                val mismatchDescriptions = checkSignaturesMatching()
 
                 if (mismatchDescriptions.any()) {
                     messages.add(
-                        "OrdinateCategorisation signatures do not match. ${mismatchDescriptions.joinToString()}"
+                        "OrdinateCategorisation signatures do not match: ${mismatchDescriptions.joinToString()}"
                     )
                 }
             }
@@ -166,52 +169,40 @@ data class BaselineOrdinateCategorisation(
     private fun checkSignaturesMatching(): List<String> {
         val descriptions = mutableListOf<String>()
 
-        /*
-        TODO - fix + integrate to use
-
-        if (databaseIdSignature.memberIdentifier != xbrlCodeSignature.memberIdentifier) {
-            descriptions.add("Members not same")
-        }
-
-        if (databaseIdSignature.dimensionIdentifier != xbrlCodeSignature.dimensionIdentifier) {
-            descriptions.add("Dimensions not same")
-        }
-
-        if (databaseIdSignature.hasOpenAxisValueRestrictionSignature() xor
-            xbrlCodeSignature.hasOpenAxisValueRestrictionSignature()
-        ) {
-            descriptions.add("OpenAxisValueRestriction parts not matching")
-        }
-
-        if (databaseIdSignature.openAxisValueRestrictionSignature != null &&
-            xbrlCodeSignature.openAxisValueRestrictionSignature != null
-        ) {
-            val xbrlCodeDbReferences =
-                OrdinateCategorisationDbReferences.fromOrdinateCategorisationXbrlCodeSignature(
-                    xbrlCodeSignature
-                )
-
-            require(xbrlCodeDbReferences.openAxisValueRestrictionDbReferences != null)
-
-            if (databaseIdSignature.openAxisValueRestrictionSignature.hierarchyIdentifier !=
-                xbrlCodeDbReferences.openAxisValueRestrictionDbReferences.hierarchyId.toString()
-            ) {
-                descriptions.add("Hierarchies not same")
-            }
-
-            if (databaseIdSignature.openAxisValueRestrictionSignature.hierarchyStartingMemberIdentifier !=
-                xbrlCodeDbReferences.openAxisValueRestrictionDbReferences.hierarchyStartingMemberId.toString()
-            ) {
-                descriptions.add("Hierarchy starting members not same")
-            }
-
-            if (databaseIdSignature.openAxisValueRestrictionSignature.startingMemberIncluded !=
-                xbrlCodeSignature.openAxisValueRestrictionSignature.startingMemberIncluded
-            ) {
-                descriptions.add("Starting member inclusion not same")
+        fun checkSignatureElementsMatching(valueA: String?, valueB: String?, elementDescription: String) {
+            if (valueA != valueB) {
+                descriptions.add(elementDescription)
             }
         }
-        */
+
+        checkSignatureElementsMatching(
+            databaseIdSignature.memberIdentifier,
+            xbrlCodeSignature.memberIdentifier,
+            "Members not same"
+        )
+        checkSignatureElementsMatching(
+            databaseIdSignature.dimensionIdentifier,
+            xbrlCodeSignature.dimensionIdentifier,
+            "Dimensions not same"
+        )
+
+        checkSignatureElementsMatching(
+            databaseIdSignature.lookupHierarchyCodeForHierarchyIdentifier(),
+            xbrlCodeSignature.hierarchyIdentifier,
+            "Hierarchies not same"
+        )
+
+        checkSignatureElementsMatching(
+            databaseIdSignature.lookupMemberCodeForHierarchyStartingMemberIdentifier(),
+            xbrlCodeSignature.hierarchyStartingMemberIdentifier,
+            "Hierarchy starting members not same"
+        )
+
+        checkSignatureElementsMatching(
+            databaseIdSignature.startingMemberIncluded,
+            xbrlCodeSignature.startingMemberIncluded,
+            "Starting member inclusion not same"
+        )
 
         return descriptions
     }
