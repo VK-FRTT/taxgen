@@ -1,15 +1,13 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
 import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-
-//TODO - Test with multiple code & extension member pages
 
 open class DpmSource_FunctionalConformance_ModuleTestBase : DpmSource_ModuleTestBase() {
 

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.rdsprovider.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsprovider.CodeListSource
 import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySource
@@ -10,7 +10,7 @@ import fi.vm.yti.taxgen.rdsprovider.DpmDictionarySourceConfig
 internal class DpmDictionarySourceRdsAdapter(
     private val config: DpmDictionarySourceConfig,
     private val rdsClient: RdsClient,
-    private val diagnostic: Diagnostic
+    private val diagnosticContext: DiagnosticContext
 ) : DpmDictionarySource {
 
     override fun contextTitle(): String = ""
@@ -74,7 +74,7 @@ internal class DpmDictionarySourceRdsAdapter(
                 codeListUri = uri,
                 blueprint = blueprint,
                 rdsClient = rdsClient,
-                diagnostic = diagnostic
+                diagnosticContext = diagnosticContext
             )
         } else {
             null

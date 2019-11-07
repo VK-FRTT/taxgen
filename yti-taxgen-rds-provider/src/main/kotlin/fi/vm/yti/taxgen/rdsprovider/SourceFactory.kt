@@ -39,7 +39,7 @@ object SourceFactory {
 
         return SourceHolderRdsAdapter(
             configHolder = configHolder,
-            diagnostic = diagnosticContext
+            diagnosticContext = diagnosticContext
         )
     }
 
