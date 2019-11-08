@@ -73,7 +73,7 @@ data class DpmDictionary(
             valueDescription = "uri"
         )
 
-        validateCustom( //TODO - tests
+        validateCustom(
             validationResults = validationResults,
             instance = this,
             propertyName = "explicitDimensions",
@@ -83,13 +83,13 @@ data class DpmDictionary(
                         explicitDomains.find { it.domainCode == explicitDimension.referencedDomainCode }
 
                     if (referencedDomain == null) {
-                        messages.add("ExplicitDimension ${explicitDimension.uri} refers non existing domain ${explicitDimension.referencedDomainCode}")
+                        messages.add("ExplicitDimension ${explicitDimension.uri} refers non existing ExplicitDomain '${explicitDimension.referencedDomainCode}'")
                     }
                 }
             }
         )
 
-        validateCustom( //TODO - tests
+        validateCustom(
             validationResults = validationResults,
             instance = this,
             propertyName = "typedDimensions",
@@ -99,23 +99,18 @@ data class DpmDictionary(
                         typedDomains.find { it.domainCode == typedDimension.referencedDomainCode }
 
                     if (referencedDomain == null) {
-                        messages.add("TypedDimension ${typedDimension.uri} refers non existing domain ${typedDimension.referencedDomainCode}")
+                        messages.add("TypedDimension ${typedDimension.uri} refers non existing TypedDomain '${typedDimension.referencedDomainCode}'")
                     }
                 }
             }
         )
 
-        validateCustom( //TODO - tests
+        validateCustom(
             validationResults = validationResults,
             instance = this,
             propertyName = "metrics",
             validate = { messages ->
                 metricDomain?.metrics?.forEach { metric ->
-
-                    //TODO - move this particular validation to Metric
-                    if (metric.referencedDomainCode == null && metric.referencedHierarchyCode != null) {
-                        messages.add("Metric ${metric.uri} has Hierarchy reference '${metric.referencedHierarchyCode}' without ExplicitDomain reference")
-                    }
 
                     if (metric.referencedDomainCode != null) {
                         val referencedDomain =
@@ -130,7 +125,7 @@ data class DpmDictionary(
                                     referencedDomain.hierarchies.find { it.hierarchyCode == metric.referencedHierarchyCode }
 
                                 if (referencedHierarchy == null) {
-                                    messages.add("Metric ${metric.uri} refers Hierarchy '${metric.referencedHierarchyCode}' which is not part of referenced ExplicitDomain '${referencedDomain.uri}'")
+                                    messages.add("Metric ${metric.uri} refers non existing Hierarchy '${metric.referencedHierarchyCode}' (not part of referenced ExplicitDomain ${referencedDomain.uri})")
                                 }
                             }
                         }

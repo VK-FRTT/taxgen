@@ -151,6 +151,14 @@ data class Metric(
             condition = { (referencedHierarchyCode == null) || (dataType == "Enumeration/Code") },
             message = { "ReferencedHierarchyCode given but data type not Enumeration/Code" }
         )
+
+        validateConditionTruthy(
+            validationResults = validationResults,
+            instance = this,
+            property = Metric::referencedHierarchyCode,
+            condition = { (referencedHierarchyCode == null) || (referencedDomainCode != null) },
+            message = { "ReferencedHierarchyCode given without ExplicitDomain reference" }
+        )
     }
 
     override fun code(): String = metricCode

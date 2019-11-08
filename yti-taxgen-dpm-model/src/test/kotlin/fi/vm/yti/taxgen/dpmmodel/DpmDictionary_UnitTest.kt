@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -85,26 +85,303 @@ internal class DpmDictionary_UnitTest :
     }
 
     @Nested
-    inner class ExplicitDomainsProp {
+    inner class DomainProps {
 
         @Test
-        fun `explicitDomains should produce validation error when ExplicitDomain's URIs or domainCodes are not unique within DPM Dictionary`() {
+        fun `should produce validation error when ExplicitDomains and TypedDomains URIs and domainCodes are not unique within DPM Dictionary`() {
 
             attributeOverrides(
                 "explicitDomains" to listOf(
-                    explicitDomain("d_1"),
-                    explicitDomain("d_2"),
-                    explicitDomain("d_2"),
-                    explicitDomain("d_4")
+                    ExplicitDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = emptyList()
+                    ),
+                    ExplicitDomain(
+                        uri = "exp_dom_2_uri",
+                        domainCode = "exp_dom_2_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = emptyList()
+                    )
+                ),
+
+                "typedDomains" to listOf(
+                    TypedDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        dataType = "String"
+                    ),
+
+                    TypedDomain(
+                        uri = "typ_dom_3_uri",
+                        domainCode = "typ_dom_3_code",
+                        concept = Factory.instantiate(),
+                        dataType = "String"
+                    )
                 )
             )
 
             instantiateAndValidate()
-            Assertions.assertThat(validationErrors)
-                .containsExactly(
-                    "DpmDictionary.domains: duplicate domainCode value 'exp_dom_d_2_code'",
-                    "DpmDictionary.domains: duplicate uri value 'exp_dom_d_2_uri'"
+            assertThat(validationErrors).containsExactly(
+                "DpmDictionary.domains: duplicate domainCode value 'dom_1_code'",
+                "DpmDictionary.domains: duplicate uri value 'dom_1_uri'"
+            )
+        }
+    }
+
+    @Nested
+    inner class DimensionProps {
+
+        @Test
+        fun `should produce validation error when ExplicitDimensions and TypedDimensions URIs and domainCodes are not unique within DPM Dictionary`() {
+
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    explicitDomain("e1")
+                ),
+
+                "typedDomains" to listOf(
+                    typedDomain("t1")
+                ),
+
+                "explicitDimensions" to listOf(
+                    ExplicitDimension(
+                        uri = "dim_1_uri",
+                        dimensionCode = "dim_1_code",
+                        concept = Factory.instantiate(),
+                        referencedDomainCode = "exp_dom_e1_code"
+                    ),
+
+                    ExplicitDimension(
+                        uri = "exp_dim_2_uri",
+                        dimensionCode = "exp_dim_2_code",
+                        concept = Factory.instantiate(),
+                        referencedDomainCode = "exp_dom_e1_code"
+                    )
+                ),
+
+                "typedDimensions" to listOf(
+                    TypedDimension(
+                        uri = "dim_1_uri",
+                        dimensionCode = "dim_1_code",
+                        concept = Factory.instantiate(),
+                        referencedDomainCode = "typ_dom_t1_code"
+                    ),
+
+                    TypedDimension(
+                        uri = "typ_dim_3_uri",
+                        dimensionCode = "typ_dim_3_code",
+                        concept = Factory.instantiate(),
+                        referencedDomainCode = "typ_dom_t1_code"
+                    )
                 )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).containsExactly(
+                "DpmDictionary.dimensions: duplicate dimensionCode value 'dim_1_code'",
+                "DpmDictionary.dimensions: duplicate uri value 'dim_1_uri'"
+            )
+        }
+
+        @Test
+        fun `should produce validation error when ExplicitDimension refer unknown ExplicitDomain`() {
+
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    ExplicitDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = emptyList()
+                    )
+                ),
+
+                "typedDomains" to listOf(
+                    TypedDomain(
+                        uri = "dom_2_uri",
+                        domainCode = "dom_2_code",
+                        concept = Factory.instantiate(),
+                        dataType = "String"
+                    )
+                ),
+
+                "explicitDimensions" to listOf(
+                    explicitDimension("e1", "dom_1_code"),
+                    explicitDimension("e2", "dom_2_code")
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).containsExactly(
+                "DpmDictionary.explicitDimensions: ExplicitDimension exp_dim_e2_uri refers non existing ExplicitDomain 'dom_2_code'"
+            )
+        }
+
+        @Test
+        fun `should produce validation error when TypedDimension refer unknown TypedDomain`() {
+
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    ExplicitDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = emptyList()
+                    )
+                ),
+
+                "typedDomains" to listOf(
+                    TypedDomain(
+                        uri = "dom_2_uri",
+                        domainCode = "dom_2_code",
+                        concept = Factory.instantiate(),
+                        dataType = "String"
+                    )
+                ),
+
+                "typedDimensions" to listOf(
+                    typedDimension("t1", "dom_1_code"),
+                    typedDimension("t2", "dom_2_code")
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).containsExactly(
+                "DpmDictionary.typedDimensions: TypedDimension typ_dim_t1_uri refers non existing TypedDomain 'dom_1_code'"
+            )
+        }
+    }
+
+    @Nested
+    inner class MetricsProp {
+
+        @Test
+        fun `should produce validation error when Metric referencedDomainCode refers unknown ExplicitDomain`() {
+
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    ExplicitDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = emptyList()
+                    )
+                ),
+
+                "metricDomain" to MetricDomain(
+                    uri = "MET",
+                    domainCode = "MET",
+                    concept = Factory.instantiate(),
+                    metrics = listOf(
+                        Metric(
+                            uri = "met_1_uri",
+                            metricCode = "met_1_code",
+                            concept = Factory.instantiate(),
+                            dataType = "Enumeration/Code",
+                            flowType = "Instant",
+                            balanceType = "Credit",
+                            referencedDomainCode = "unknown_dom",
+                            referencedHierarchyCode = null
+                        )
+                    ),
+                    hierarchies = listOf()
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).containsExactly(
+                "DpmDictionary.metrics: Metric met_1_uri refers non existing ExplicitDomain 'unknown_dom'"
+            )
+        }
+
+        @Test
+        fun `should produce validation error when Metric referencedHierarchyCode refers unknown Hierarchy`() {
+
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    ExplicitDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = emptyList()
+                    )
+                ),
+
+                "metricDomain" to MetricDomain(
+                    uri = "MET",
+                    domainCode = "MET",
+                    concept = Factory.instantiate(),
+                    metrics = listOf(
+                        Metric(
+                            uri = "met_1_uri",
+                            metricCode = "met_1_code",
+                            concept = Factory.instantiate(),
+                            dataType = "Enumeration/Code",
+                            flowType = "Instant",
+                            balanceType = "Credit",
+                            referencedDomainCode = "dom_1_code",
+                            referencedHierarchyCode = "unknown_hier"
+                        )
+                    ),
+                    hierarchies = listOf()
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).containsExactly(
+                "DpmDictionary.metrics: Metric met_1_uri refers non existing Hierarchy 'unknown_hier' (not part of referenced ExplicitDomain dom_1_uri)"
+            )
+        }
+
+        @Test
+        fun `should not produce validation error when Metric referencedDomainCode and referencedHierarchyCode refers known elements`() {
+
+            attributeOverrides(
+                "explicitDomains" to listOf(
+                    ExplicitDomain(
+                        uri = "dom_1_uri",
+                        domainCode = "dom_1_code",
+                        concept = Factory.instantiate(),
+                        members = emptyList(),
+                        hierarchies = listOf(
+                            hierarchy(
+                                baseId = "h_1"
+                            )
+                        )
+                    )
+                ),
+
+                "metricDomain" to MetricDomain(
+                    uri = "MET",
+                    domainCode = "MET",
+                    concept = Factory.instantiate(),
+                    metrics = listOf(
+                        Metric(
+                            uri = "met_1_uri",
+                            metricCode = "met_1_code",
+                            concept = Factory.instantiate(),
+                            dataType = "Enumeration/Code",
+                            flowType = "Instant",
+                            balanceType = "Credit",
+                            referencedDomainCode = "dom_1_code",
+                            referencedHierarchyCode = "hierarchy_h_1_code"
+                        )
+                    ),
+                    hierarchies = listOf()
+                )
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).isEmpty()
         }
     }
 }

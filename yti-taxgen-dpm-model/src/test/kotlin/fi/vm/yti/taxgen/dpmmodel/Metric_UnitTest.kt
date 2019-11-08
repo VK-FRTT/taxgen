@@ -367,8 +367,22 @@ internal class Metric_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Metric.dataType: ReferencedHierarchyCode given but data type not Enumeration/Code")
+            assertThat(validationErrors).containsExactly(
+                "Metric.dataType: ReferencedHierarchyCode given but data type not Enumeration/Code",
+                "Metric.referencedHierarchyCode: ReferencedHierarchyCode given without ExplicitDomain reference"
+            )
+        }
+
+        @Test
+        fun `referencedHierarchyCode should no produce validation error when it is given with referencedDomainCode`() {
+            attributeOverrides(
+                "dataType" to "Enumeration/Code",
+                "referencedDomainCode" to "MC",
+                "referencedHierarchyCode" to "MC1"
+            )
+
+            instantiateAndValidate()
+            assertThat(validationErrors).isEmpty()
         }
     }
 }

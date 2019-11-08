@@ -146,7 +146,7 @@ internal class RdsToDpmMapper_NonValidContent_ModuleTest : RdsToDpmMapper_Module
 
             assertThat(diagnosticCollector.eventsString()).contains(
                 "VALIDATED OBJECT [DpmDictionary] []",
-                "VALIDATION [DpmDictionary.explicitDimensions: ExplicitDimension http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM refers non existing domain DOME]"
+                "VALIDATION [DpmDictionary.explicitDimensions: ExplicitDimension http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM refers non existing ExplicitDomain 'DOME']"
             )
 
             assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(2)
@@ -175,7 +175,7 @@ internal class RdsToDpmMapper_NonValidContent_ModuleTest : RdsToDpmMapper_Module
 
             assertThat(diagnosticCollector.eventsString()).contains(
                 "VALIDATED OBJECT [DpmDictionary] []",
-                "VALIDATION [DpmDictionary.typedDimensions: TypedDimension http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1 refers non existing domain TDB]"
+                "VALIDATION [DpmDictionary.typedDimensions: TypedDimension http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1 refers non existing TypedDomain 'TDB']"
             )
 
             assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(2)

@@ -35,7 +35,7 @@ data class MetricDomain(
 
         //Note: metrics & hierarchies URI and code uniqueness is validated DPM Model level
 
-        validateCustom( //TODO - abstract the validation & share with ExplicitDomain
+        validateCustom(
             validationResults = validationResults,
             instance = this,
             propertyName = "hierarchies",

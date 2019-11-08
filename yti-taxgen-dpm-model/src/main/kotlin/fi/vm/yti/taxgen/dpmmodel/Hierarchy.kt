@@ -32,7 +32,6 @@ data class Hierarchy(
             valueDescription = "uri"
         )
 
-        //TODO - better error message for this (as it is quite likely user caused modeling issue)
         validateElementValueUnique(
             validationResults = validationResults,
             instance = this,
