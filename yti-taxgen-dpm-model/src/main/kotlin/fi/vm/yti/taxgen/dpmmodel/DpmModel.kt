@@ -19,6 +19,26 @@ data class DpmModel(
             valueDescription = "owner.prefix"
         )
 
+        dictionaries.mapNotNull { it.explicitDomains + it.typedDomains }.flatten().let { allDomains ->
+            validateElementValueUnique(
+                validationResults = validationResults,
+                instance = this,
+                instancePropertyName = "dictionaries.domains",
+                iterable = allDomains,
+                valueSelector = { it: DpmElement -> it.uri },
+                valueDescription = "Domain.uri"
+            )
+
+            validateElementValueUnique(
+                validationResults = validationResults,
+                instance = this,
+                instancePropertyName = "dictionaries.domains",
+                iterable = allDomains,
+                valueSelector = { it: DpmElement -> it.code() },
+                valueDescription = "Domain.code"
+            )
+        }
+
         dictionaries.mapNotNull { it.metricDomain?.metrics }.flatten().let { allMetrics ->
             validateElementValueUnique(
                 validationResults = validationResults,
@@ -39,12 +59,12 @@ data class DpmModel(
             )
         }
 
-        dictionaries.mapNotNull { it.metricDomain?.hierarchies }.flatten().let { allHierarchies ->
+        dictionaries.mapNotNull { it.metricDomain?.hierarchies }.flatten().let { allMetricHierarchies ->
             validateElementValueUnique(
                 validationResults = validationResults,
                 instance = this,
                 instancePropertyName = "dictionaries.metricDomain",
-                iterable = allHierarchies,
+                iterable = allMetricHierarchies,
                 valueSelector = { it: Hierarchy -> it.uri },
                 valueDescription = "Hierarchy.uri"
             )
@@ -53,12 +73,10 @@ data class DpmModel(
                 validationResults = validationResults,
                 instance = this,
                 instancePropertyName = "dictionaries.metricDomain",
-                iterable = allHierarchies,
+                iterable = allMetricHierarchies,
                 valueSelector = { it: Hierarchy -> it.hierarchyCode },
                 valueDescription = "Hierarchy.hierarchyCode"
             )
         }
     }
-
-    //TODO - validate that Domain codes unique within all Dictionaries
 }

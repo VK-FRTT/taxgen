@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel
 
+import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
 import org.assertj.core.api.Assertions
@@ -46,6 +47,52 @@ internal class DpmModel_UnitTest :
             Assertions.assertThat(validationErrors)
                 .containsExactly(
                     "DpmModel.dictionaries: duplicate owner.prefix value 'prefix_o_2'"
+                )
+        }
+
+        @Test
+        fun `dictionaries should produce validation error when Domain URIs and codes are not globally unique`() {
+
+            fun dictionaryWithDomains(
+                ownerBaseId: String,
+                expDomBaseIds: List<String>,
+                typDomBaseIds: List<String>
+            ): DpmDictionary {
+                return emptyDictionaryWithOwner(ownerBaseId).copy(
+                    explicitDomains = expDomBaseIds.map {
+                        ExplicitDomain(
+                            uri = "dom_${it}_uri",
+                            domainCode = "dom_${it}_code",
+                            concept = Factory.instantiate(),
+                            members = emptyList(),
+                            hierarchies = emptyList()
+                        )
+                    },
+                    typedDomains = typDomBaseIds.map {
+                        TypedDomain(
+                            uri = "dom_${it}_uri",
+                            domainCode = "dom_${it}_code",
+                            concept = Factory.instantiate(),
+                            dataType = "String"
+                        )
+                    }
+                )
+            }
+
+            attributeOverrides(
+                "dictionaries" to listOf(
+                    dictionaryWithDomains("o_1", listOf("e_1"), listOf("t_1")),
+                    dictionaryWithDomains("o_2", listOf("e_2"), listOf("t_2", "d_1")),
+                    dictionaryWithDomains("o_3", listOf("e_3", "d_1"), listOf("t_3")),
+                    dictionaryWithDomains("o_4", listOf("e_4"), listOf("t_4"))
+                )
+            )
+
+            instantiateAndValidate()
+            Assertions.assertThat(validationErrors)
+                .containsExactly(
+                    "DpmModel.dictionaries.domains: duplicate Domain.code value 'dom_d_1_code'",
+                    "DpmModel.dictionaries.domains: duplicate Domain.uri value 'dom_d_1_uri'"
                 )
         }
 

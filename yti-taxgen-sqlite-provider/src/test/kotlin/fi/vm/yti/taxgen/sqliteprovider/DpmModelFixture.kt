@@ -37,47 +37,44 @@ enum class FixtureVariety {
 
 fun dpmDictionary(
     varieties: List<FixtureVariety>,
-    scopingPrefix: String = ""
+    dictionaryScopePrefix: String = ""
 ): DpmDictionary {
 
     fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!
 
     val dpmOwner = Owner(
-        name = "${scopingPrefix}FixName",
+        name = "${dictionaryScopePrefix}FixName",
         namespace = "FixNSpace",
-        prefix = "${scopingPrefix}FixPrfx",
+        prefix = "${dictionaryScopePrefix}FixPrfx",
         location = "FixLoc",
         copyright = "FixCop",
         languageCodes = listOf("en", "fi", "sv")
     )
 
-    fun concept(basename: String): Concept {
+    fun concept(conceptBasename: String): Concept {
 
-        fun makeTranslations(basename: String?, kind: String): Map<Language, String> =
+        fun makeTranslations(basename: String, kind: String): Map<Language, String> =
             when {
-                basename == null ->
-                    emptyMap()
-
                 varieties.contains(FixtureVariety.TRANSLATIONS_FI_ONLY) ->
                     listOf(
-                        Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi")
+                        Pair(language("fi"), "$dictionaryScopePrefix$basename-$kind-Fi")
                     ).toMap()
 
                 varieties.contains(FixtureVariety.TRANSLATIONS_FI_SV) ->
                     listOf(
-                        Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi"),
-                        Pair(language("sv"), "$scopingPrefix$basename-$kind-Sv")
+                        Pair(language("fi"), "$dictionaryScopePrefix$basename-$kind-Fi"),
+                        Pair(language("sv"), "$dictionaryScopePrefix$basename-$kind-Sv")
                     ).toMap()
 
                 else ->
                     listOf(
-                        Pair(language("fi"), "$scopingPrefix$basename-$kind-Fi"),
-                        Pair(language("en"), "$scopingPrefix$basename-$kind-En")
+                        Pair(language("fi"), "$dictionaryScopePrefix$basename-$kind-Fi"),
+                        Pair(language("en"), "$dictionaryScopePrefix$basename-$kind-En")
                     ).toMap()
             }
 
-        val labelTranslations = makeTranslations(basename, "Lbl")
-        val descriptionTranslations = makeTranslations(basename, "Desc")
+        val labelTranslations = makeTranslations(conceptBasename, "Lbl")
+        val descriptionTranslations = makeTranslations(conceptBasename, "Desc")
 
         return Concept(
             createdAt = Instant.parse("2018-09-03T10:12:25.763Z"),
@@ -280,35 +277,31 @@ fun dpmDictionary(
         val members = members()
         val hierarchies = hierarchies()
 
+        fun explicitDomain(expDomBasename: String) = ExplicitDomain(
+            uri = "$expDomBasename-Uri",
+            concept = concept(expDomBasename),
+            domainCode = "$expDomBasename-Code",
+            members = members,
+            hierarchies = hierarchies
+        )
+
         val explicitDomains = mutableListOf(
-            ExplicitDomain(
-                uri = "ExpDom-1-Uri",
-                concept = concept("ExpDom-1"),
-                domainCode = "ExpDom-1-Code",
-                members = members,
-                hierarchies = hierarchies
+            explicitDomain(
+                expDomBasename = "${dictionaryScopePrefix}ExpDom-1"
             )
         )
 
         if (FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN !in varieties) {
 
             explicitDomains.add(
-                ExplicitDomain(
-                    uri = "ExpDom-2-Uri",
-                    concept = concept("ExpDom-2"),
-                    domainCode = "ExpDom-2-Code",
-                    members = members,
-                    hierarchies = hierarchies
+                explicitDomain(
+                    expDomBasename = "${dictionaryScopePrefix}ExpDom-2"
                 )
             )
 
             explicitDomains.add(
-                ExplicitDomain(
-                    uri = "ExpDom-3-Uri",
-                    concept = concept("ExpDom-3"),
-                    domainCode = "ExpDom-3-Code",
-                    members = members,
-                    hierarchies = hierarchies
+                explicitDomain(
+                    expDomBasename = "${dictionaryScopePrefix}ExpDom-3"
                 )
             )
         }
@@ -319,9 +312,9 @@ fun dpmDictionary(
     fun typedDomains(): List<TypedDomain> {
         return listOf(
             TypedDomain(
-                uri = "TypDom-1-Uri",
-                concept = concept("TypDom-1"),
-                domainCode = "TypDom-1-Code",
+                uri = "${dictionaryScopePrefix}TypDom-1-Uri",
+                concept = concept("${dictionaryScopePrefix}TypDom-1"),
+                domainCode = "${dictionaryScopePrefix}TypDom-1-Code",
                 dataType = "Boolean"
             )
         )
@@ -333,7 +326,7 @@ fun dpmDictionary(
                 uri = "ExpDim-1-Uri",
                 concept = concept("ExpDim-1"),
                 dimensionCode = "ExpDim-1-Code",
-                referencedDomainCode = "ExpDom-1-Code"
+                referencedDomainCode = "${dictionaryScopePrefix}ExpDom-1-Code"
             )
         )
 
@@ -345,7 +338,7 @@ fun dpmDictionary(
                     uri = "ExpDim-2-Uri",
                     concept = concept("ExpDim-2"),
                     dimensionCode = "ExpDim-2-Code",
-                    referencedDomainCode = "ExpDom-2-Code"
+                    referencedDomainCode = "${dictionaryScopePrefix}ExpDom-2-Code"
                 )
             )
 
@@ -354,7 +347,7 @@ fun dpmDictionary(
                     uri = "ExpDim-3-Uri",
                     concept = concept("ExpDim-3"),
                     dimensionCode = "ExpDim-3-Code",
-                    referencedDomainCode = "ExpDom-3-Code"
+                    referencedDomainCode = "${dictionaryScopePrefix}ExpDom-3-Code"
                 )
             )
         }
@@ -368,7 +361,7 @@ fun dpmDictionary(
                 uri = "TypDim-1-Uri",
                 concept = concept("TypDim-1"),
                 dimensionCode = "TypDim-1-Code",
-                referencedDomainCode = "TypDom-1-Code"
+                referencedDomainCode = "${dictionaryScopePrefix}TypDom-1-Code"
             )
         )
     }
@@ -542,40 +535,40 @@ fun dpmModelFixture(
 }
 
 private fun validateModelContents(dpmModel: DpmModel) {
-    val collecor = ValidationCollector()
+    val collector = ValidationCollector()
 
     dpmModel.dictionaries.forEach { dictionary ->
 
         dictionary.explicitDomains.forEach { explicitDomain ->
-            explicitDomain.members.forEach { it.validate(collecor) }
-            explicitDomain.hierarchies.forEach { it.validate(collecor) }
-            explicitDomain.validate(collecor)
+            explicitDomain.members.forEach { it.validate(collector) }
+            explicitDomain.hierarchies.forEach { it.validate(collector) }
+            explicitDomain.validate(collector)
         }
 
         dictionary.typedDomains.forEach { typedDomain ->
-            typedDomain.validate(collecor)
+            typedDomain.validate(collector)
         }
 
         dictionary.explicitDimensions.forEach { explicitDimension ->
-            explicitDimension.validate(collecor)
+            explicitDimension.validate(collector)
         }
 
         dictionary.typedDimensions.forEach { typedDimension ->
-            typedDimension.validate(collecor)
+            typedDimension.validate(collector)
         }
 
         dictionary.metricDomain?.let { metricDomain ->
-            metricDomain.metrics.forEach { it.validate(collecor) }
-            metricDomain.hierarchies.forEach { it.validate(collecor) }
-            metricDomain.validate(collecor)
+            metricDomain.metrics.forEach { it.validate(collector) }
+            metricDomain.hierarchies.forEach { it.validate(collector) }
+            metricDomain.validate(collector)
         }
 
-        dictionary.validate(collecor)
+        dictionary.validate(collector)
     }
 
-    dpmModel.validate(collecor)
+    dpmModel.validate(collector)
 
     //NOTE: When this assert triggers, it means that most likely something
     //is broken within this test fixture internal relations
-    assertThat(collecor.compileResultsToSimpleStrings()).isEmpty()
+    assertThat(collector.compileResultsToSimpleStrings()).isEmpty()
 }
