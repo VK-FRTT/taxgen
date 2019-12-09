@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
+import java.sql.ResultSet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.sql.ResultSet
 
 internal class DpmDbWriter_DictionaryReplace_TableCellTransform_ModuleTest :
     DpmDbWriter_DictionaryReplaceModuleTestBase() {

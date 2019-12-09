@@ -178,7 +178,7 @@ internal class ExplicitDomain_UnitTest :
 
                             hierarchyNode(
                                 "hn_1.3",
-                                "member_m_3_code" //External
+                                "member_m_3_code" // External
                             )
                         )
 
@@ -196,11 +196,11 @@ internal class ExplicitDomain_UnitTest :
 
                                 hierarchyNode(
                                     "hn_2.2",
-                                    "member_m_4_code", //External
+                                    "member_m_4_code", // External
 
                                     hierarchyNode(
                                         "hn_2.3",
-                                        "member_m_5_code" //External
+                                        "member_m_5_code" // External
                                     )
                                 )
                             )

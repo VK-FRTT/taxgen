@@ -7,15 +7,15 @@ import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.sql.Connection
 import java.sql.DriverManager
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 
 internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
 

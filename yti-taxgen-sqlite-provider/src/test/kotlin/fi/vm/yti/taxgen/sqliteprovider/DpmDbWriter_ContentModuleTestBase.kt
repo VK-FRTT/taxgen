@@ -7,15 +7,15 @@ import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness.withHaltExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DynamicNode
-import org.junit.jupiter.api.TestFactory
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.sql.Connection
 import java.sql.DriverManager
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DynamicNode
+import org.junit.jupiter.api.TestFactory
 
 internal abstract class DpmDbWriter_ContentModuleTestBase {
     enum class DbInitMode {

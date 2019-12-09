@@ -1,17 +1,17 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 
 internal data class RdsExtensionMeta(
-    //uri
-    //codeValue
+    // uri
+    // codeValue
 
-    //created
-    //modified
+    // created
+    // modified
 
-    //startDate
-    //endDate
+    // startDate
+    // endDate
 
-    //prefLabel
-    //description - Currently not present in of Extension JSON
+    // prefLabel
+    // description - Currently not present in of Extension JSON
 
     val propertyType: RdsPropertyType?
 ) : RdsEntity() {

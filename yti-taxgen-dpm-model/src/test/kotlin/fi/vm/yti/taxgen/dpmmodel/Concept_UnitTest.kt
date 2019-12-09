@@ -3,14 +3,14 @@ package fi.vm.yti.taxgen.dpmmodel
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
+import java.time.Instant
+import java.time.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.time.Instant
-import java.time.LocalDate
 
 internal class Concept_UnitTest :
     DpmModel_UnitTestBase<Concept>(Concept::class) {

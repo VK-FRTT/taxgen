@@ -1,12 +1,12 @@
 package fi.vm.yti.taxgen.rdsprovider.configdata
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
 import fi.vm.yti.taxgen.rdsprovider.DpmSourceConfigHolder
 import java.nio.file.Path
 

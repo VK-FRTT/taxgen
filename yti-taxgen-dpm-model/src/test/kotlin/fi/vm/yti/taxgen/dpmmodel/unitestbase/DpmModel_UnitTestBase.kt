@@ -1,8 +1,5 @@
 package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
@@ -16,10 +13,13 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.dpmTestData
+import kotlin.reflect.KClass
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
-import kotlin.reflect.KClass
 
 internal open class DpmModel_UnitTestBase<T : Any>(
     val kClass: KClass<T>

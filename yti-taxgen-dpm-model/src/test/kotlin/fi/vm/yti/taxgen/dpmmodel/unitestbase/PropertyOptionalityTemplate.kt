@@ -13,7 +13,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
     propertyName: String,
     expectedOptionality: String
 ) {
-    //1. Verify that given property really exists within tested class
+    // 1. Verify that given property really exists within tested class
     val defaultAttributes = Factory.Builder.attributesFor(kClass, emptyMap())
     val instance = Factory.Builder.instantiate(kClass, defaultAttributes)
     val propertyValue = instance.getPropertyValue(propertyName)
@@ -21,7 +21,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyOptionalityTemplate(
     assertThat(propertyValue)
         .isEqualTo(defaultAttributes[propertyName])
 
-    //2. Test is the property optional/required
+    // 2. Test is the property optional/required
     val attributes = Factory.Builder.attributesFor(
         kClass = kClass,
         overrideAttributes = mapOf(propertyName to null)

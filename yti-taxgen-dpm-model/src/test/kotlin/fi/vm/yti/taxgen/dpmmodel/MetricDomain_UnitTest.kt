@@ -119,7 +119,7 @@ internal class MetricDomain_UnitTest :
 
                             hierarchyNode(
                                 "hn_1.3",
-                                "met_m_3_code" //External
+                                "met_m_3_code" // External
                             )
                         )
                     ),
@@ -136,11 +136,11 @@ internal class MetricDomain_UnitTest :
 
                                 hierarchyNode(
                                     "hn_2.2",
-                                    "met_m_4_code", //External
+                                    "met_m_4_code", // External
 
                                     hierarchyNode(
                                         "hn_2.3",
-                                        "met_m_5_code" //External
+                                        "met_m_5_code" // External
                                     )
                                 )
                             )

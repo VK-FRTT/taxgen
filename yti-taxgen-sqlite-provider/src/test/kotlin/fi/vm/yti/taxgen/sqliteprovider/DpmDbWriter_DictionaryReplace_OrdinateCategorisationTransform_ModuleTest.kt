@@ -1,17 +1,17 @@
 package fi.vm.yti.taxgen.sqliteprovider
 
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
+import java.sql.ResultSet
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.sql.ResultSet
 
 internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_ModuleTest :
     DpmDbWriter_DictionaryReplaceModuleTestBase() {
 
     val expDimXbrlCode = "FixPrfx_dim:ExpDim-1-Code"
-    val expDimIdBaseline = "5" //Parent domain ID: 5
+    val expDimIdBaseline = "5" // Parent domain ID: 5
     val expDimIdOutput = "1"
 
     val typDimXbrlCode = "FixPrfx_dim:TypDim-1-Code"
@@ -180,9 +180,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
         private fun insertCategorisation(
             id: Int,
             dms: String,
-            dps: String //OpenAxisValueRestriction part is based on element codes
+            dps: String // OpenAxisValueRestriction part is based on element codes
         ) {
-            //OpenAxisValueRestriction in DimensionMemberSignature is based on DB IDs
+            // OpenAxisValueRestriction in DimensionMemberSignature is based on DB IDs
             sanityCheckOpenAxisValueRestrictionElements(
                 dms,
                 listOf(
@@ -196,7 +196,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 "DimensionMemberSignature"
             )
 
-            //OpenAxisValueRestriction in DPS is based on element codes
+            // OpenAxisValueRestriction in DPS is based on element codes
             sanityCheckOpenAxisValueRestrictionElements(
                 dps,
                 listOf(
@@ -228,7 +228,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `extra parentheses around member reference should cause fatal error`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(($memberXbrlCode))",
@@ -240,7 +240,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "MESSAGE [FATAL] [Unsupported signature in OrdinateCategorisation.DimensionMemberSignature: $expDimXbrlCode(($memberXbrlCode))]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode($memberXbrlCode)",
@@ -255,7 +255,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `extra trailing part should cause fatal error`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode($memberXbrlCode)(foo)",
@@ -267,7 +267,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "MESSAGE [FATAL] [Unsupported signature in OrdinateCategorisation.DimensionMemberSignature: $expDimXbrlCode($memberXbrlCode)(foo)]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode($memberXbrlCode)",
@@ -282,7 +282,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `blank dimension value should cause validation failure`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = " ($memberXbrlCode)",
@@ -296,7 +296,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode($memberXbrlCode)",
@@ -314,7 +314,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             @Test
             fun `blank member value should cause validation failure`() {
 
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode( )",
@@ -328,7 +328,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode($memberXbrlCode)",
@@ -345,7 +345,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `blank hierarchy value in full OpenAxisValueRestriction should cause validation failure`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*[ ;$hierarchyStartMemberIdBaseline;0])",
@@ -359,7 +359,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])",
@@ -376,7 +376,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `blank hierarchy starting member value in full OpenAxisValueRestriction should cause validation failure`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline; ;0])",
@@ -390,7 +390,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.hierarchyStartingMemberIdentifier: is blank]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])",
@@ -407,7 +407,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `blank starting member inclusion marker in full OpenAxisValueRestriction should cause validation failure`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline; ])",
@@ -422,7 +422,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value ' ']"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])",
@@ -440,7 +440,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `blank hierarchy value in partial OpenAxisValueRestriction should cause validation failure`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*?[ ])",
@@ -454,7 +454,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*?[$hierarchyIdBaseline])",
@@ -477,7 +477,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `unknown dimension should cause validation failure only for DPS`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "FixPrfx_dim:NonExistingDimension($memberXbrlCode)",
@@ -486,7 +486,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode($memberXbrlCode)",
@@ -502,7 +502,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `unknown member should cause validation failure only for DPS`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(FixPrfx_ExpDom-1-Code:NonExistingMember)",
@@ -511,7 +511,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode($memberXbrlCode)",
@@ -527,7 +527,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `unknown hierarchy in full OpenAxisValueRestriction should cause validation failure only for DPS`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*[4949;$hierarchyStartMemberIdBaseline;0])",
@@ -536,7 +536,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])",
@@ -553,7 +553,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `unknown hierarchy starting member in full OpenAxisValueRestriction should cause validation failure only for DPS`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;4949;0])",
@@ -562,7 +562,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])",
@@ -578,7 +578,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `unsupported starting member inclusion marker in full OpenAxisValueRestriction should cause validation failure only for DPS`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;XYZ])",
@@ -591,7 +591,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                     "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
                 )
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])",
@@ -607,7 +607,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
             @Test
             fun `unknown hierarchy in partial OpenAxisValueRestriction should cause validation failure only for DPS`() {
-                //DimensionMemberSignature
+                // DimensionMemberSignature
                 insertCategorisation(
                     id = 111,
                     dms = "$expDimXbrlCode(*?[4949])",
@@ -616,7 +616,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
 
-                //DPS
+                // DPS
                 insertCategorisation(
                     id = 112,
                     dms = "$expDimXbrlCode(*?[$hierarchyIdBaseline])",

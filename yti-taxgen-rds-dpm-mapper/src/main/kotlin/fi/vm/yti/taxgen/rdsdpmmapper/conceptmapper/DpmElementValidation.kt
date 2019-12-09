@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 
 fun validateDpmElements(
     diagnostic: Diagnostic,

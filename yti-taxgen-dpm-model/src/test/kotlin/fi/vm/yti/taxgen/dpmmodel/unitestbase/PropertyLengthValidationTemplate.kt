@@ -4,12 +4,12 @@ import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
-import org.assertj.core.api.Assertions.assertThat
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.isSupertypeOf
 import kotlin.reflect.full.memberProperties
+import org.assertj.core.api.Assertions.assertThat
 
 internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate(
     propertyName: String,
@@ -74,7 +74,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
         else -> throwIllegalDpmModelState("PropertyLengthValidationTemplate does not support given validation type '$validationType'")
     }
 
-    //Valid value
+    // Valid value
     val validAttributes = Factory.Builder.attributesFor(kClass, validOverrideAttributes)
     val valid = Factory.Builder.instantiate(kClass, validAttributes) as Validatable
 
@@ -82,7 +82,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
     valid.validate(validCollector)
     assertThat(validCollector.compileResultsToSimpleStrings()).isEmpty()
 
-    //Invalid value
+    // Invalid value
     val invalidAttributes = Factory.Builder.attributesFor(kClass, invalidOverrideAttributes)
     val invalid = Factory.Builder.instantiate(kClass, invalidAttributes) as Validatable
 

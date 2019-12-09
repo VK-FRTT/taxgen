@@ -134,7 +134,7 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                     FixtureVariety.NONE
                 )
 
-                //Verify that data is properly setup
+                // Verify that data is properly setup
                 val membersRs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT
@@ -157,7 +157,7 @@ internal class DpmDbWriter_ContentHierarchyNode_ModuleTest : DpmDbWriter_Content
                     "Mbr-1-Code, FixPrfx_ExpDom-3-Code:Mbr-1-Code, ExpDom-3-Code, FixPrfx_exp:ExpDom-3-Code"
                 )
 
-                //Verify that Member linked to HierarchyNode is from same ExplicitDomain where the HierarchyNode belongs to
+                // Verify that Member linked to HierarchyNode is from same ExplicitDomain where the HierarchyNode belongs to
                 val nodeRs = dbConnection.createStatement().executeQuery(
                     """
                     SELECT

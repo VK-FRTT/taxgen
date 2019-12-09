@@ -28,7 +28,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * - None
  */
 object AxisOrdinateTable : IntIdTable(name = "mAxisOrdinate", columnName = "OrdinateID") {
-    //NOTE: In reference DDL OrdinateID is a second column
+    // NOTE: In reference DDL OrdinateID is a second column
 
     val axisIdCol = reference(
         name = "AxisID",

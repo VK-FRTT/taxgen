@@ -1,14 +1,14 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.DimensionItem
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateTypedDimensions(
     codeListSource: CodeListModelMapper?,
@@ -43,7 +43,7 @@ private fun mapDimensions(
 
     val dimensionItems = mutableListOf<DimensionItem>()
 
-    //Base details
+    // Base details
     codeListSource.eachCode { code ->
         val typedDomain = DimensionItem(
             uri = code.validUri(diagnostic),
@@ -55,7 +55,7 @@ private fun mapDimensions(
         dimensionItems.add(typedDomain)
     }
 
-    //Extension based details
+    // Extension based details
     codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 

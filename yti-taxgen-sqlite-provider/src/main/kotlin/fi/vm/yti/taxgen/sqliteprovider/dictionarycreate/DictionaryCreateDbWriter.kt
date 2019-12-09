@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider.dictionarycreate
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.commons.ops.FileOps
-import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteprovider.conceptwriter.DbFixedEntities

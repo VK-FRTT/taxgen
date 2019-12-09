@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 
-internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest
-    : RdsToDpmMapper_ModuleTestBase() {
+internal class RdsToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
+    RdsToDpmMapper_ModuleTestBase() {
 
     @Test
     fun `1 Metric Domain`() {

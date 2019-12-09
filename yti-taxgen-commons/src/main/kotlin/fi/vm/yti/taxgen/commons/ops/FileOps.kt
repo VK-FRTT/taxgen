@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.commons.ops
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import java.io.BufferedWriter
 import java.nio.charset.StandardCharsets
 import java.nio.file.DirectoryStream
@@ -14,7 +14,7 @@ object FileOps {
 
     private val fileCharset = StandardCharsets.UTF_8
 
-    //Create
+    // Create
     fun createIntermediateFolders(path: Path) {
         Files.createDirectories(path.parent)
     }
@@ -65,7 +65,7 @@ object FileOps {
         }
     }
 
-    //Read
+    // Read
     fun readTextFile(path: Path, filename: String): String {
         val filePath = path.resolve(filename)
         return readTextFile(filePath)
@@ -79,7 +79,7 @@ object FileOps {
         }
     }
 
-    //List
+    // List
     fun listSubFoldersMatching(parentFolderPath: Path, subFolderGlob: String): List<Path> {
         val adjustedGlob =
             adjustGlobToFileSystem(subFolderGlob, parentFolderPath.fileSystem)
@@ -108,7 +108,7 @@ object FileOps {
         return Files.newDirectoryStream(directory, glob)
     }
 
-    //Delete
+    // Delete
     fun deleteConflictingOutputFileIfAllowed(
         path: Path,
         allowed: Boolean

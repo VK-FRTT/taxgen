@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.rdsprovider
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson
     .module.kotlin.readValue
+import com.fasterxml.jackson.core.JsonProcessingException
 import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.commons.throwFail
 

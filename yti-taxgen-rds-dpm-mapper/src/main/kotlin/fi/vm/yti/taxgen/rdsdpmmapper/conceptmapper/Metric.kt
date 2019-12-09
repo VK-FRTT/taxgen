@@ -1,16 +1,16 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.MetricItem
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateMetricDomain(
     codeListSource: CodeListModelMapper?,
@@ -59,7 +59,7 @@ private fun mapMetrics(
 
     val metricItems = mutableListOf<MetricItem>()
 
-    //Base details
+    // Base details
     codeListSource.eachCode { code ->
         val metricItem = MetricItem(
             uri = code.validUri(diagnostic),
@@ -75,7 +75,7 @@ private fun mapMetrics(
         metricItems.add(metricItem)
     }
 
-    //Extension based details
+    // Extension based details
     codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 

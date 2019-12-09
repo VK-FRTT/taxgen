@@ -3,16 +3,16 @@ package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 
 internal data class RdsExtensionMember(
-    //uri
-    //codeValue - Currently not present in of ExtensionMember JSON
+    // uri
+    // codeValue - Currently not present in of ExtensionMember JSON
 
-    //created
-    //modified
-    //startDate
-    //endDate
+    // created
+    // modified
+    // startDate
+    // endDate
 
-    //prefLabel
-    //description - Currently not present in of ExtensionMember JSON
+    // prefLabel
+    // description - Currently not present in of ExtensionMember JSON
 
     val code: RdsCode?,
     val memberValues: List<RdsMemberValue>?,

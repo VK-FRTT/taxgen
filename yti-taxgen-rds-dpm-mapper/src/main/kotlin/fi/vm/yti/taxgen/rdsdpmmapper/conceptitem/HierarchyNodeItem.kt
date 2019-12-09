@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptitem
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 
 internal data class HierarchyNodeItem(
     override val uri: String,

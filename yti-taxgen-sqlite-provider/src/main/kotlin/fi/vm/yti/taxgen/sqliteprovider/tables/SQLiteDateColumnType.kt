@@ -13,7 +13,7 @@ import org.joda.time.format.DateTimeFormatterBuilder
  */
 class SQLiteDateColumnType(private val withTime: Boolean) : ColumnType() {
 
-    //YYYY-MM-dd
+    // YYYY-MM-dd
     private val SQLITE_DATE_STRING_FORMATTER =
         DateTimeFormatterBuilder()
             .appendYear(4, 9)
@@ -23,7 +23,7 @@ class SQLiteDateColumnType(private val withTime: Boolean) : ColumnType() {
             .appendDayOfMonth(2)
             .toFormatter()
 
-    //YYYY-MM-dd HH:mm:ssz
+    // YYYY-MM-dd HH:mm:ssz
     private val SQLITE_DATE_TIME_STRING_FORMATTER =
         DateTimeFormatterBuilder()
             .appendYear(4, 9)

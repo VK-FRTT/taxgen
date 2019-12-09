@@ -5,8 +5,8 @@ import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 
-internal class RdsToDpmMapper_IntegrationFixtureContent_TypedDimensions_ModuleTest
-    : RdsToDpmMapper_ModuleTestBase() {
+internal class RdsToDpmMapper_IntegrationFixtureContent_TypedDimensions_ModuleTest :
+    RdsToDpmMapper_ModuleTestBase() {
 
     @Test
     fun `2 Typed Dimensions`() {

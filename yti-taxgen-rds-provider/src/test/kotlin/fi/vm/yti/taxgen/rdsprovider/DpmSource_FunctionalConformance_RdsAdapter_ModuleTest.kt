@@ -13,6 +13,8 @@ import io.specto.hoverfly.junit.dsl.HoverflyDsl.service
 import io.specto.hoverfly.junit.dsl.ResponseCreators.success
 import io.specto.hoverfly.junit.dsl.StubServiceBuilder
 import io.specto.hoverfly.junit5.HoverflyExtension
+import java.nio.file.Path
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -23,8 +25,6 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import java.nio.file.Path
-import java.util.concurrent.TimeUnit
 
 @ExtendWith(HoverflyExtension::class)
 internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val hoverfly: Hoverfly) :
@@ -565,7 +565,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
                                     )
                                 )
                             ),
-                            ExtensionSimConf( //Extension having unrecognized type => should get ignored in RDS source adapter
+                            ExtensionSimConf( // Extension having unrecognized type => should get ignored in RDS source adapter
                                 name = "extension_12",
                                 propertyTypeUri = "http://uri.suomi.fi/datamodel/ns/code#externalType",
                                 memberPages = listOf(
@@ -766,7 +766,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         rdsService: StubServiceBuilder,
         varietyConf: Map<SimulationPhase, SimulationVariety>
     ) {
-        //Content URL resolution: Redirect URI MetaData GET to RDS service
+        // Content URL resolution: Redirect URI MetaData GET to RDS service
         uriService.redirectGet(
             currentPhase = SimulationPhase.URL_RESOLUTION_URI_REDIRECT,
             varietyConf = varietyConf,
@@ -774,7 +774,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
             toTarget = "http://koodistot.suomi.fi/taxgenfixture/${dictionary.name}/${codeList.name}"
         )
 
-        //Content URL resolution: Response to URI MetaData GET
+        // Content URL resolution: Response to URI MetaData GET
         rdsService.respondGetWithJson(
             currentPhase = SimulationPhase.URL_RESOLUTION_URI_METADATA,
             varietyConf = varietyConf,
@@ -787,7 +787,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
             """.trimIndent()
         )
 
-        //Content URL resolution: Response to expanded code list
+        // Content URL resolution: Response to expanded code list
         rdsService.respondGetWithJson(
             currentPhase = SimulationPhase.URL_RESOLUTION_EXPANDED_CODE_LIST,
             varietyConf = varietyConf,
@@ -820,7 +820,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         rdsService: StubServiceBuilder,
         varietyConf: Map<SimulationPhase, SimulationVariety>
     ) {
-        //Content fetch: Code list meta
+        // Content fetch: Code list meta
         rdsService.respondGetWithJson(
             currentPhase = SimulationPhase.CONTENT_CODE_LIST_META,
             varietyConf = varietyConf,
@@ -845,7 +845,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
 
             val queryParams = composePageIterationQueryParams(index, Pair("pretty", ""))
 
-            //Content fetch: Codes page
+            // Content fetch: Codes page
             rdsService.respondGetWithJson(
                 currentPhase = if (index == 0) {
                     SimulationPhase.CONTENT_CODE_PAGE_0
@@ -884,7 +884,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
     ) {
         codeList.extensions.forEach { extension ->
 
-            //Content fetch: Extensions meta
+            // Content fetch: Extensions meta
             rdsService.respondGetWithJson(
                 currentPhase = SimulationPhase.CONTENT_EXTENSION_META,
                 varietyConf = varietyConf,
@@ -909,7 +909,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
                 val queryParams =
                     composePageIterationQueryParams(index, Pair("expand", "memberValue"), Pair("pretty", ""))
 
-                //Content fetch: Extensions members page
+                // Content fetch: Extensions members page
                 rdsService.respondGetWithJson(
                     currentPhase = if (index == 0) {
                         SimulationPhase.CONTENT_EXTENSION_MEMBER_0

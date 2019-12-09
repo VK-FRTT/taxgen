@@ -2,14 +2,14 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
+import java.nio.file.Files
+import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Path
 
 @DisplayName("Command ´--replace-dictionary-in-dpm-db´")
 internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(

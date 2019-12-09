@@ -16,15 +16,6 @@ import fi.vm.yti.taxgen.sqliteprovider.tables.OwnerTable
 import fi.vm.yti.taxgen.sqliteprovider.tables.Tables
 import fi.vm.yti.taxgen.testcommons.TempFolder
 import fi.vm.yti.taxgen.testcommons.ext.java.columnConfigToString
-import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DynamicNode
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.sql.Connection
@@ -39,6 +30,15 @@ import java.sql.DatabaseMetaData.importedKeySetNull
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.ResultSetMetaData
+import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DynamicNode
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
 
 internal class DpmDbWriter_TableStructure_ModuleTest {
 
@@ -382,8 +382,7 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
                     "AxisID, 1"
                 )
 
-                assertThat(foreignKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
-                )
+                assertThat(foreignKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder()
             },
 
             DynamicTest.dynamicTest("mAxisOrdinate") {

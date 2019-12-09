@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.sqliteprovider.helpers
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import java.nio.file.Path
 import java.sql.Connection
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 internal object SqliteOps {
 

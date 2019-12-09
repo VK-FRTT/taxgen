@@ -1,15 +1,15 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Owner
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.ExplicitDomainItem
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.MemberItem
 import fi.vm.yti.taxgen.rdsdpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel.RdsMemberValueType
-import fi.vm.yti.taxgen.rdsdpmmapper.modelmapper.CodeListModelMapper
 
 internal fun mapAndValidateExplicitDomainsAndHierarchies(
     codeListSource: CodeListModelMapper?,
@@ -20,7 +20,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
 
     val explicitDomainItems = mutableListOf<ExplicitDomainItem>()
 
-    //Base details
+    // Base details
     codeListSource.eachCode { code ->
         val domain = ExplicitDomainItem(
             uri = code.validUri(diagnostic),
@@ -36,7 +36,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
         explicitDomainItems.add(domain)
     }
 
-    //Extension based details
+    // Extension based details
     codeListSource.eachExtensionModelMapper { extensionSource ->
         val extensionMetadata = extensionSource.extensionMetaData()
 
@@ -57,7 +57,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
         }
     }
 
-    //SubCodeList based details
+    // SubCodeList based details
     codeListSource.eachSubCodeListModelMapper { subCodeListSource ->
         val subCodeListUri = subCodeListSource.codeListMeta().validUri(diagnostic)
         val domain = explicitDomainItems.find { it.subCodeListUri == subCodeListUri }

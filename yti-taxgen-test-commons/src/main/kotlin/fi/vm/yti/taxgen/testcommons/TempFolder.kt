@@ -36,10 +36,10 @@ class TempFolder(discriminator: String) : Closeable {
                 Files.isRegularFile(it)
             }
             .forEach {
-                //ZIP FS relativizes only paths which have same absoluteness
+                // ZIP FS relativizes only paths which have same absoluteness
                 val sourceSubFilePath = sourceFolderPath.toAbsolutePath().relativize(it.toAbsolutePath())
 
-                //Map sourceSubFilePath to target FileSystem by passing it as String to resolve()
+                // Map sourceSubFilePath to target FileSystem by passing it as String to resolve()
                 val targetFilePath = targetRootPath.resolve("$sourceSubFilePath")
 
                 Files.createDirectories(targetFilePath.parent)

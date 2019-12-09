@@ -1,16 +1,16 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.rdsmodel
 
 internal data class RdsCode(
-    //uri
-    //codeValue
+    // uri
+    // codeValue
 
-    //created
-    //modified
-    //startDate
-    //endDate
+    // created
+    // modified
+    // startDate
+    // endDate
 
-    //prefLabel
-    //description
+    // prefLabel
+    // description
 
     val subCodeScheme: RdsCodeListMeta?
 

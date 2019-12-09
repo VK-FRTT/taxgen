@@ -9,9 +9,6 @@ import fi.vm.yti.taxgen.testcommons.TestFixture.Type.DPM_DB
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_CAPTURE
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.RDS_SOURCE_CONFIG
 import fi.vm.yti.taxgen.testcommons.ext.java.toStringList
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.Charset
@@ -20,6 +17,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.sql.DriverManager
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 
 open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
     protected lateinit var tempFolder: TempFolder
@@ -97,8 +97,8 @@ open class TaxgenCli_TestBase(val primaryCommand: String? = null) {
             errCollector.grabText()
         )
 
-        //println("OUT >>>\n${result.outText}\n<<< OUT")
-        //println("ERR >>>\n${result.errText}\n<<< ERR")
+        // println("OUT >>>\n${result.outText}\n<<< OUT")
+        // println("ERR >>>\n${result.errText}\n<<< ERR")
 
         return result
     }

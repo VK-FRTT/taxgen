@@ -33,7 +33,7 @@ data class MetricDomain(
             maxLength = 10000
         )
 
-        //Note: metrics & hierarchies URI and code uniqueness is validated DPM Model level
+        // Note: metrics & hierarchies URI and code uniqueness is validated DPM Model level
 
         validateCustom(
             validationResults = validationResults,

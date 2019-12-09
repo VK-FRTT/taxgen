@@ -2,8 +2,8 @@ package fi.vm.yti.taxgen.rdsprovider.rds
 
 import com.fasterxml.jackson.databind.JsonNode
 import fi.vm.yti.taxgen.commons.ops.JsonOps
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import okhttp3.HttpUrl
 import okhttp3.Request
 

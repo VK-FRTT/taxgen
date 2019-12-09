@@ -86,7 +86,7 @@ internal class Metric_UnitTest :
             "bi0,          valid",
             "bi00000000,   valid",
 
-            "'',           invalid", //empty
+            "'',           invalid", // empty
             "b,            invalid",
             "bd,           invalid",
             "xy0,          invalid",
@@ -209,7 +209,7 @@ internal class Metric_UnitTest :
         @CsvSource(
             "Flow,          valid,      d",
             "Stock,         valid,      i",
-            ",              valid,     ''", //null flowType value
+            ",              valid,     ''", // null flowType value
             "'',            invalid,     ",
             "null,          invalid,     ",
             "foo,           invalid,     "
@@ -247,7 +247,7 @@ internal class Metric_UnitTest :
         @CsvSource(
             "Credit,        valid",
             "Debit,         valid",
-            ",              valid", //null
+            ",              valid", // null
             "'',            invalid",
             "null,          invalid",
             "foo,           invalid"

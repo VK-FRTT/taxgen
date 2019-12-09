@@ -16,9 +16,9 @@ import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
-import org.assertj.core.api.Assertions.assertThat
 import java.time.Instant
 import java.time.LocalDate
+import org.assertj.core.api.Assertions.assertThat
 
 enum class FixtureVariety {
     NONE,
@@ -568,7 +568,7 @@ private fun validateModelContents(dpmModel: DpmModel) {
 
     dpmModel.validate(collector)
 
-    //NOTE: When this assert triggers, it means that most likely something
-    //is broken within this test fixture internal relations
+    // NOTE: When this assert triggers, it means that most likely something
+    // is broken within this test fixture internal relations
     assertThat(collector.compileResultsToSimpleStrings()).isEmpty()
 }

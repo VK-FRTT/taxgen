@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyLengthValidationTemplate
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
 import fi.vm.yti.taxgen.testcommons.TestFixture
 import fi.vm.yti.taxgen.testcommons.TestFixture.Type.DPM_LANGUAGE_CONFIG
+import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.DisplayName
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.nio.file.Path
 
 internal class Language_UnitTest :
     DpmModel_UnitTestBase<Language>(Language::class) {

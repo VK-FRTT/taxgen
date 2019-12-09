@@ -7,13 +7,13 @@ import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
 import fi.vm.yti.taxgen.testcommons.ExceptionHarness
 import fi.vm.yti.taxgen.testcommons.TempFolder
+import java.nio.file.Files
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
 
 internal class DpmSource_FolderRecorder_ModuleTest : DpmSource_ModuleTestBase() {
 

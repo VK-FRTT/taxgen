@@ -1,6 +1,9 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.throwFail
+import java.io.PrintWriter
+import java.nio.file.Path
+import java.util.LinkedHashSet
 import joptsimple.BuiltinHelpFormatter
 import joptsimple.OptionDescriptor
 import joptsimple.OptionException
@@ -9,9 +12,6 @@ import joptsimple.OptionSpec
 import joptsimple.ValueConversionException
 import joptsimple.util.PathConverter
 import joptsimple.util.PathProperties
-import java.io.PrintWriter
-import java.nio.file.Path
-import java.util.LinkedHashSet
 
 class DefinedOptions {
     private val optionParser = OptionParser()

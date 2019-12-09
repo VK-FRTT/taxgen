@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsprovider.rds
 
-import okhttp3.OkHttpClient
 import java.io.Closeable
+import okhttp3.OkHttpClient
 
 internal object HttpClientHolder : Closeable {
 

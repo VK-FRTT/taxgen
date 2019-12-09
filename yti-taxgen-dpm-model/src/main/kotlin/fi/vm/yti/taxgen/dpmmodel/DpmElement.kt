@@ -3,8 +3,8 @@ package fi.vm.yti.taxgen.dpmmodel
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 

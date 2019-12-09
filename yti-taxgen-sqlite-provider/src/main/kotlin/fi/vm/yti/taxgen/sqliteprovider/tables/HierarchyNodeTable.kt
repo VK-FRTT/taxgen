@@ -40,7 +40,7 @@ import org.jetbrains.exposed.sql.select
  */
 object HierarchyNodeTable : Table(name = "mHierarchyNode") {
 
-    //Hierarchy to which this node belongs
+    // Hierarchy to which this node belongs
     val hierarchyIdCol = reference(
         name = "HierarchyID",
         foreign = HierarchyTable,
@@ -48,7 +48,7 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable().primaryKey()
 
-    //Member this node represents
+    // Member this node represents
     val memberIdCol = reference(
         name = "MemberID",
         foreign = MemberTable,
@@ -59,21 +59,21 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
     //
     val isAbstractCol = bool("IsAbstract").nullable()
 
-    //Indicates the relationship between this node and the aggregation of its children
+    // Indicates the relationship between this node and the aggregation of its children
     val comparisonOperatorCol = text("ComparisonOperator").nullable()
 
-    //Indicates the contribution of this node to the aggregation of its siblings
+    // Indicates the contribution of this node to the aggregation of its siblings
     val unaryOperatorCol = text("UnaryOperator").nullable()
 
-    //Position of this node within its set of siblings, if any (Tree structure information)
+    // Position of this node within its set of siblings, if any (Tree structure information)
     val orderCol = integer("Order").nullable()
 
-    //Level of this node, lower level numbered nodes contain higher numbered ones,
+    // Level of this node, lower level numbered nodes contain higher numbered ones,
     // i.e. lower levels are nearer the root (Tree structure information)
     val levelCol = integer("Level").nullable()
 
-    //Indicates the parent of this node, if any - i.e. the level immediately above (Tree structure information)
-    //i.e ParentMemberID REFERENCES HierarchyNode(MemberID)
+    // Indicates the parent of this node, if any - i.e. the level immediately above (Tree structure information)
+    // i.e ParentMemberID REFERENCES HierarchyNode(MemberID)
     val parentMemberID = integer("ParentMemberID").nullable()
 
     //
@@ -87,7 +87,7 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable()
 
-    //Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
+    // Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
     val pathCol = varchar("Path", 3999).nullable()
 
     fun insertHierarchyNode(

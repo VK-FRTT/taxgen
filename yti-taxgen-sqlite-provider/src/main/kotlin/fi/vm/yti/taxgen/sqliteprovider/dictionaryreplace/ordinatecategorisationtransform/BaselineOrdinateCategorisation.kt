@@ -13,10 +13,10 @@ import org.jetbrains.exposed.sql.ResultRow
 data class BaselineOrdinateCategorisation(
     val ordinateId: EntityID<Int>?,
 
-    //Tokenized from mOrdinateCategorisation.DimensionMemberSignature
+    // Tokenized from mOrdinateCategorisation.DimensionMemberSignature
     val databaseIdSignature: OrdinateCategorisationSignature,
 
-    //Tokenized from mOrdinateCategorisation.DPS
+    // Tokenized from mOrdinateCategorisation.DPS
     val xbrlCodeSignature: OrdinateCategorisationSignature,
 
     val source: String?

@@ -2,15 +2,15 @@ package fi.vm.yti.taxgen.rdsprovider
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.rdsprovider.contextdiagnostic.SourceHolderContextDecorator
 import fi.vm.yti.taxgen.rdsprovider.folder.SourceHolderFolderAdapter
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Path
 import java.nio.file.Paths
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 
 open class DpmSource_ModuleTestBase {
 

@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTranslatedText
+import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
 import java.net.URL
 import java.nio.file.Path
 

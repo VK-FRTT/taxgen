@@ -95,7 +95,7 @@ internal class HierarchyNode_UnitTest :
             ">=,        valid",
             "<,         valid",
             ">,         valid",
-            ",          valid", //NULL
+            ",          valid", // NULL
             "==,        invalid",
             "<<,        invalid",
             "foo,       invalid"
@@ -125,7 +125,7 @@ internal class HierarchyNode_UnitTest :
         @CsvSource(
             "+,         valid",
             "-,         valid",
-            ",          valid", //NULL
+            ",          valid", // NULL
             "==,        invalid",
             "<<,        invalid",
             "foo,       invalid"

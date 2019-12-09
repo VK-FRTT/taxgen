@@ -1,7 +1,5 @@
 package fi.vm.yti.taxgen.rdsdpmmapper
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
@@ -11,6 +9,8 @@ import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDimensions
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateExplicitDomainsAndHierarchies
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper.mapAndValidateMetricDomain

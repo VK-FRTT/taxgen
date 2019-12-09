@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.sqliteprovider.contextdiagnostic
 
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
+import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
+import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
-import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
-import fi.vm.yti.taxgen.dpmmodel.DpmModel
-import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
 import java.nio.file.Path
 

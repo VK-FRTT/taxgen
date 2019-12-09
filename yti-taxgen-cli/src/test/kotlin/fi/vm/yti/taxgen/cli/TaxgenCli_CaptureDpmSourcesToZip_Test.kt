@@ -1,12 +1,12 @@
 package fi.vm.yti.taxgen.cli
 
+import java.nio.file.Files
+import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Path
 
 @DisplayName("Command ´--capture-dpm-sources-to-zip´")
 internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(

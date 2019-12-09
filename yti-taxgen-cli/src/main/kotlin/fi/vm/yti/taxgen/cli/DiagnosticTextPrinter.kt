@@ -2,10 +2,10 @@ package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticContextDescriptor
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticEventConsumer
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 import java.io.PrintWriter
 
 class DiagnosticTextPrinter(

@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.testcommons
 
 import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
+import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticContextDescriptor
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticEventConsumer
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 
 class DiagnosticCollector : DiagnosticEventConsumer {
 
@@ -54,8 +54,8 @@ class DiagnosticCollector : DiagnosticEventConsumer {
         validatableInfo: ValidatableInfo,
         validationResults: List<ValidationResultInfo>
     ) {
-        //TODO - Event should be: VALIDATION [SubjectType] [SubjectIdentifier] [Input] [Explanation]
-        //Input should be: Array<InputName, InputValue>
+        // TODO - Event should be: VALIDATION [SubjectType] [SubjectIdentifier] [Input] [Explanation]
+        // Input should be: Array<InputName, InputValue>
 
         events.add("VALIDATED OBJECT [${validatableInfo.objectKind}] [${validatableInfo.objectAddress}]")
         objectValidationFailureCount++

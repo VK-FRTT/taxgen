@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.rdsdpmmapper.conceptmapper
 
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsdpmmapper.conceptitem.HierarchyNodeItem
 
 internal data class HierarchyNodeRoot(

@@ -86,7 +86,7 @@ class Factory {
             functionName: String
         ): Map<KParameter, Any?> {
 
-            //There must be 1:1 correspondence between attributes & function parameters
+            // There must be 1:1 correspondence between attributes & function parameters
             val attributeKeys = attributes.keys
             val parameterNames = parameters.map { it.name }
 
