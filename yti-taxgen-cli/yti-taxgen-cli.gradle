@@ -74,6 +74,7 @@ jar.dependsOn shadowJar
 shadowJar {
     classifier = null
     configurations = [project.configurations.shadowed]
+    archiveName 'taxgen-cli.jar'
 }
 
 
