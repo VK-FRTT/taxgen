@@ -104,23 +104,6 @@ subprojects { subproj ->
         from sourceSets.main.allSource
     }
 
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                groupId subproj.group
-                artifactId subproj.name
-                version '0.1-SNAPSHOT'
-
-                pom.withXml {
-                    asNode().appendNode('description', subproj.description)
-                }
-                artifact jar
-                artifact sourceJar {
-                    classifier "sources"
-                }
-            }
-        }
-    }
 
     spotless {
 
