@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rddpmmapper.conceptitem.ExplicitDomainItem
 import fi.vm.yti.taxgen.rddpmmapper.conceptitem.MemberItem
-import fi.vm.yti.taxgen.rddpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rddpmmapper.conceptitem.UriIdentifiedItemCollection
 import fi.vm.yti.taxgen.rddpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsMemberValueType
@@ -18,7 +18,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
 ): List<ExplicitDomain> {
     codeListSource ?: return emptyList()
 
-    val explicitDomainItems = mutableListOf<ExplicitDomainItem>()
+    val explicitDomainItems = UriIdentifiedItemCollection<ExplicitDomainItem>()
 
     // Base details
     codeListSource.eachCode { code ->
@@ -33,7 +33,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
             order = code.validOrder(diagnostic)
         )
 
-        explicitDomainItems.add(domain)
+        explicitDomainItems.addItem(domain)
     }
 
     // Extension based details
@@ -44,7 +44,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
 
             extensionSource.eachExtensionMember { extensionMember ->
                 val codeUri = extensionMember.validCodeUri(diagnostic)
-                val domain = explicitDomainItems.find { it.uri == codeUri }
+                val domain = explicitDomainItems.findByUri(codeUri)
 
                 if (domain != null) {
                     val updatedDomain = domain.copy(
@@ -90,7 +90,8 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
     }
 
     val explicitDomains = explicitDomainItems
-        .apply { sortWith(compareBy { it.order }) }
+        .itemsList()
+        .sortedBy { it.order }
         .map { it.toExplicitDomain() }
 
     validateDpmElements(diagnostic, explicitDomains)

@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rddpmmapper.conceptitem.MetricItem
-import fi.vm.yti.taxgen.rddpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rddpmmapper.conceptitem.UriIdentifiedItemCollection
 import fi.vm.yti.taxgen.rddpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsExtensionType
@@ -57,7 +57,7 @@ private fun mapMetrics(
 ): List<Metric> {
     if (codeListSource == null) return emptyList()
 
-    val metricItems = mutableListOf<MetricItem>()
+    val metricItems = UriIdentifiedItemCollection<MetricItem>()
 
     // Base details
     codeListSource.eachCode { code ->
@@ -72,7 +72,7 @@ private fun mapMetrics(
             referencedHierarchyCode = null
         )
 
-        metricItems.add(metricItem)
+        metricItems.addItem(metricItem)
     }
 
     // Extension based details
@@ -83,7 +83,7 @@ private fun mapMetrics(
 
             extensionSource.eachExtensionMember { extensionMember ->
                 val codeUri = extensionMember.validCodeUri(diagnostic)
-                val metricItem = metricItems.find { it.uri == codeUri }
+                val metricItem = metricItems.findByUri(codeUri)
 
                 if (metricItem != null) {
 
@@ -101,7 +101,7 @@ private fun mapMetrics(
         }
     }
 
-    val metrics = metricItems.map { it.toMetric() }
+    val metrics = metricItems.itemsList().map { it.toMetric() }
 
     validateDpmElements(diagnostic, metrics)
 

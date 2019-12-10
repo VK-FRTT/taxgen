@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rddpmmapper.conceptitem.TypedDomainItem
-import fi.vm.yti.taxgen.rddpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rddpmmapper.conceptitem.UriIdentifiedItemCollection
 import fi.vm.yti.taxgen.rddpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsExtensionMember
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsExtensionType
@@ -17,7 +17,7 @@ internal fun mapAndValidateTypedDomains(
 ): List<TypedDomain> {
     codeListSource ?: return emptyList()
 
-    val typedDomainItems = mutableListOf<TypedDomainItem>()
+    val typedDomainItems = UriIdentifiedItemCollection<TypedDomainItem>()
 
     // Base details
     codeListSource.eachCode { code ->
@@ -28,7 +28,7 @@ internal fun mapAndValidateTypedDomains(
             dataType = ""
         )
 
-        typedDomainItems.add(typedDomainItem)
+        typedDomainItems.addItem(typedDomainItem)
     }
 
     // Extension based details
@@ -39,7 +39,7 @@ internal fun mapAndValidateTypedDomains(
 
             extensionSource.eachExtensionMember { extensionMember ->
                 val codeUri = extensionMember.validCodeUri(diagnostic)
-                val typedDomain = typedDomainItems.find { it.uri == codeUri }
+                val typedDomain = typedDomainItems.findByUri(codeUri)
 
                 if (typedDomain != null) {
 
@@ -53,7 +53,7 @@ internal fun mapAndValidateTypedDomains(
         }
     }
 
-    val typedDomains = typedDomainItems.map { it.toTypedDomain() }
+    val typedDomains = typedDomainItems.itemsList().map { it.toTypedDomain() }
 
     validateDpmElements(diagnostic, typedDomains)
 

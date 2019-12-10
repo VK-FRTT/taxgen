@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rddpmmapper.conceptitem.DimensionItem
-import fi.vm.yti.taxgen.rddpmmapper.ext.kotlin.replaceOrAddItemByUri
+import fi.vm.yti.taxgen.rddpmmapper.conceptitem.UriIdentifiedItemCollection
 import fi.vm.yti.taxgen.rddpmmapper.modelmapper.CodeListModelMapper
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsExtensionType
 import fi.vm.yti.taxgen.rddpmmapper.rdsmodel.RdsMemberValueType
@@ -41,7 +41,7 @@ private fun mapDimensions(
 ): List<DimensionItem> {
     codeListSource ?: return emptyList()
 
-    val dimensionItems = mutableListOf<DimensionItem>()
+    val dimensionItems = UriIdentifiedItemCollection<DimensionItem>()
 
     // Base details
     codeListSource.eachCode { code ->
@@ -52,7 +52,7 @@ private fun mapDimensions(
             referencedDomainCode = ""
         )
 
-        dimensionItems.add(typedDomain)
+        dimensionItems.addItem(typedDomain)
     }
 
     // Extension based details
@@ -63,7 +63,7 @@ private fun mapDimensions(
 
             extensionSource.eachExtensionMember { extensionMember ->
                 val codeUri = extensionMember.validCodeUri(diagnostic)
-                val dimensionItem = dimensionItems.find { it.uri == codeUri }
+                val dimensionItem = dimensionItems.findByUri(codeUri)
 
                 if (dimensionItem != null) {
 
@@ -77,5 +77,5 @@ private fun mapDimensions(
         }
     }
 
-    return dimensionItems
+    return dimensionItems.itemsList()
 }
