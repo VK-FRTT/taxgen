@@ -25,9 +25,9 @@ dependencies {
 
     shadowed(project(':yti-taxgen-commons'))
     shadowed(project(':yti-taxgen-dpm-model'))
-    shadowed(project(':yti-taxgen-rds-provider'))
-    shadowed(project(':yti-taxgen-rds-dpm-mapper'))
-    shadowed(project(':yti-taxgen-sqlite-provider'))
+    shadowed(project(':yti-taxgen-rd-source'))
+    shadowed(project(':yti-taxgen-rd-dpm-mapper'))
+    shadowed(project(':yti-taxgen-sqlite-output'))
 
     testCompile libs.kotlinStdLib
     testCompile libs.kotlinStdLib

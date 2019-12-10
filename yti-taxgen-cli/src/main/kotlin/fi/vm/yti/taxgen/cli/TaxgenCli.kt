@@ -9,12 +9,12 @@ import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
-import fi.vm.yti.taxgen.rdsdpmmapper.RdsToDpmMapper
-import fi.vm.yti.taxgen.rdsprovider.DpmSourceRecorder
-import fi.vm.yti.taxgen.rdsprovider.SourceFactory
-import fi.vm.yti.taxgen.rdsprovider.SourceHolder
-import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriter
-import fi.vm.yti.taxgen.sqliteprovider.DpmDbWriterFactory
+import fi.vm.yti.taxgen.rddpmmapper.RdToDpmMapper
+import fi.vm.yti.taxgen.rdsource.DpmSourceRecorder
+import fi.vm.yti.taxgen.rdsource.SourceFactory
+import fi.vm.yti.taxgen.rdsource.SourceHolder
+import fi.vm.yti.taxgen.sqliteoutput.DpmDbWriter
+import fi.vm.yti.taxgen.sqliteoutput.SQLiteDpmDbWriterFactory
 import java.io.BufferedWriter
 import java.io.Closeable
 import java.io.OutputStreamWriter
@@ -114,7 +114,7 @@ class TaxgenCli(
                         processingOptions.diagnosticSourceLanguages
                     )
 
-                    val dpmMapper = RdsToDpmMapper(diagnosticBridge)
+                    val dpmMapper = RdToDpmMapper(diagnosticBridge)
                     dpmModel = dpmMapper.extractDpmModel(dpmSource)
                 }
             }
@@ -217,7 +217,7 @@ class TaxgenCli(
     ): DpmDbWriter {
 
         if (detectedOptions.cmdCreateDictionaryToNewDpmDb) {
-            return DpmDbWriterFactory.dictionaryCreateWriter(
+            return SQLiteDpmDbWriterFactory.dictionaryCreateWriter(
                 outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
                 diagnosticContext = diagnosticBridge
@@ -227,7 +227,7 @@ class TaxgenCli(
         if (detectedOptions.cmdReplaceDictionaryInDpmDb) {
             detectedOptions.ensureBaselineDpmDbGiven()
 
-            return DpmDbWriterFactory.dictionaryReplaceWriter(
+            return SQLiteDpmDbWriterFactory.dictionaryReplaceWriter(
                 baselineDbPath = requiredOption(detectedOptions.baselineDb),
                 outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
