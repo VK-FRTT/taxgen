@@ -1,69 +1,110 @@
-# YTI XBRL Taxonomy Generator
+# TaxGen
 
-## 1. Overview
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
-YTI XBRL Taxonomy Generator is a tool for generating XBRL taxonomy files from given financial data model.
+<br/>
 
-In a high level the Taxonomy Generator:
-1. Accepts financial data models as source (input).
-2. Parses financial data model from its source format and maps model contents to Taxonomy Generator's internal data model.
-3. Maps financial data model (from TaxGen internal model) to requested output format.
+The TaxGen is a utility tool to programmatically generate Data Point Models from data stored in the Reference Data tool. In high level:
 
+1. TaxGen reads source data from the Reference Data tool
+2. TaxGen maps source data content to Data Point Model
+3. TaxGen validates Data Point Model content
+4. TaxGen produces a DPM database from Data Point Model content
 
-### 1.1 Data model input source format
-Currently Taxonomy Generator supports YTI Codelist -service based source data format (YCL-source).
-In practice YCL-source consists from CodeScheme and Code entities with related extensions.
+<br/>
 
-In future Taxonomy Generator might also support YTI Data Model -service based source data format (YDM-source).
-However, details how financial data models are mapped to YTI Data Model are still open.
+## 1. System structure
 
-
-### 1.2 Internal data model
-Taxonomy Generator's internal data model is based on the artifacts of the Data Point Modeling methodology.
-More information about Data Point Modeling methodology can be found from 
-[Eurofiling project](http://www.eurofiling.info/dpm/index.shtml).
-Especially [DPM formal model document](http://www.eba.europa.eu/documents/10180/632822/Description+of+DPM+formal+model.pdf) 
-is useful as it explains DPM artifacts in terms of UML diagrams. 
+TaxGen is split to following modules by their responsibilities.
 
 
-### 1.3 Model output
-Currently Taxonomy Generator is able to produce DPM database in SQLite format.
+#### `yti-taxgen-dpm-model`
+- Implements data structures and data validation rules for Data Point Modeling elements.
+- Standalone, i.e. does not depend from other TaxGen modules.
+- Data Point Modeling methodology is documented in [Eurofiling project](http://www.eurofiling.info/dpm/index.shtml). Especially [DPM formal model document](http://www.eba.europa.eu/documents/10180/632822/Description+of+DPM+formal+model.pdf) is useful, as it explains Data Point Modeling elements in terms of UML diagrams. 
 
 
-## 2. Modularization
-Taxonomy Generator is modularized to isolated modules.
+#### `yti-taxgen-rd-source`
+- Provides abstraction for reading source data from the Reference Data tool.
+- Supports reading data from live Reference Data tool and from the local filesystem based snapshots.
+- [The Reference Data tool](https://koodistot.suomi.fi/) is one of the tools within the Finnish Interoperability Platform. [The Finnish Interoperability Platform itself](https://yhteentoimiva.suomi.fi/en/) is a technical solution for producing and managing the information metadata (i.e. information about information) for the Finnish public sector.
 
 
-### 2.1 `yti-taxgen-commons`
-- Common utilities of Taxonomy Generator.
-- Note: Only production related utilities here.
+#### `yti-taxgen-rd-dpm-mapper`
+- Consumes source data from the Reference Data tool (via `yti-taxgen-rd-source` interfaces) and maps relevant pieces to Data Point Model (to `yti-taxgen-dpm-model` based data structures).
+- Mapping implementation follows rules specified in [Mapping between Data Point metamodel and Reference Data tool data model](docs/data-point-metamodel-mapping-to-reference-data-tool.md) document.
 
 
-### 2.2 `yti-taxgen-test-commons`
-- Common test utilities of Taxonomy Generator.
-- Note: Testing related common stuff goes here.
+#### `yti-taxgen-sqlite-output`
+- Produces SQLite database from `yti-taxgen-dpm-model` based data structures.
+- Produced database structure follows one defined in *Tool for Undertakings DPM Database* -document. Document is embedded within *Solvency 2 DPM database* -packages, which in turn can be found from [EIOPA web pages](https://eiopa.europa.eu/) under *Solvency II Data Point Models and XBRL Taxonomies* section.
 
 
-### 2.3 `yti-taxgen-dpm-model`
-- Taxonomy Generator's internal data model: Data Point Meta Model.
-- In practice this module implements concepts and entities used in Data Point Modeling.
-- Implements also DPM level data validations.
+#### `yti-taxgen-cli`
+- Stand-alone command line application for executing TaxGen operations from command line.
+- Execution is controlled via the command line parameters. See [TaxGen command-line reference](docs/taxgen-command-line-reference.md) for further information.
 
 
-### 2.4 `yti-taxgen-rds-provider`
-- Adapter for reading YTI Codelist (YCL) based data.
-- Able to provide data from remote YCL service or local filesystem based snapshots.
+#### `yti-taxgen-commons`
+- Common utilities used by other modules.
 
 
-### 2.5 `yti-taxgen-rds-dpm-mapper`
-- Parses YTI Codelist (YCL) data and maps its contents to Data Point Meta Model.
+####  `yti-taxgen-test-commons`
+- Common testing utilities and test data fixtures used by other modules.
+
+<br/>
+
+## 2. Development
+
+### 2.1 Building
+
+Prerequisites:
+
+- Java 8+
+- Gradle 4.6
+
+<br/>
+
+Building runnable JAR:
+
+`$ gradlew jar`
+
+<br/>
+
+Executing TaxGen from JAR:
+
+`$ java -jar yti-taxgen-cli/build/libs/taxgen-cli.jar `
+
+<br/>
+
+### 2.2 Testing
+
+TaxGen contains comprehensive test suite, covering most of the TaxGen functionality. Test cases are split to two gategories: *standalone test* and *end-to-end tests*.
 
 
-### 2.6 `yti-taxgen-sqlite-provider`
-- Produces DPM database in SQLite format from Data Point Meta Model data.
+#### Standalone tests
+
+These tests do not depend any external system or setup. They can be executed with:
+
+`$ gradlew test`
 
 
-### 2.7 `yti-taxgen-cli`
-- Stand-alone command line application for executing taxonomy generation from console.
-- Takes taxonomy configuration file as input.
+
+#### End-to-end tests
+
+These tests read test fixtures from the Reference Data tool. Test fixtures should normally stay fully functional in the Reference Data tool. However, if fixtures need to be initialized to the Reference Data tool, they can be created with spreadsheet files in [yti-taxgen-test-commons/src/main/resources/test_fixtures/rds_source_config/dm_integration_fixture](yti-taxgen-test-commons/src/main/resources/test_fixtures/rds_source_config/dm_integration_fixture). And linkage from tests to the Reference Data tool resources happens with  source config file [yti-taxgen-test-commons/src/main/resources/test_fixtures/rds_source_config/integration_fixture.json](yti-taxgen-test-commons/src/main/resources/test_fixtures/rds_source_config/integration_fixture.json).
+
+End-to-end tests can be executed with:
+
+`$ gradlew e2etest`
+
+<br/>
+
+### 2.3 Code style 
+
+Code style is managed by Spotless and ktlint. Source codes can be scanned for format violations with: 
+
+`$ gradlew spotlessCheck`
+
+
 
