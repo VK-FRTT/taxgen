@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel.unitestbase
 
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultCollector
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
@@ -19,56 +19,67 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
 ) {
     var validOverrideAttributes: Map<String, Any>
     var invalidOverrideAttributes: Map<String, Any>
-    val messageComposer: (String) -> String
+    var invalidReason: String
+    var invalidValueName: String
 
     when (validationType) {
         "minLength" -> {
             validOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+
             if (!validOverrideAttributes.containsKey(propertyName)) {
                 validOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit)
             }
 
             invalidOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit - 1, customValueBuilder)
+
             if (!invalidOverrideAttributes.containsKey(propertyName)) {
                 invalidOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit - 1)
             }
 
-            messageComposer =
-                { className -> "$className.$propertyName: is too short (minimum $expectedLimit characters)" }
+            invalidReason = "Too short (minimum $expectedLimit characters)"
+            invalidValueName = propertyName.capitalize()
         }
 
         "minColLength" -> {
             validOverrideAttributes = customOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+
             invalidOverrideAttributes =
                 customOverrideAttributesForProp(propertyName, expectedLimit - 1, customValueBuilder)
-            messageComposer =
-                { className -> "$className.$propertyName: is too short (minimum $expectedLimit elements)" }
+
+            invalidReason = "Too short (minimum $expectedLimit elements)"
+            invalidValueName = propertyName.capitalize()
         }
 
         "maxLength" -> {
             validOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+
             if (!validOverrideAttributes.containsKey(propertyName)) {
                 validOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit)
             }
 
             invalidOverrideAttributes =
                 tryCustomOverrideAttributesForProp(propertyName, expectedLimit + 1, customValueBuilder)
+
             if (!invalidOverrideAttributes.containsKey(propertyName)) {
                 invalidOverrideAttributes = stringOverrideAttributeForProp(propertyName, expectedLimit + 1)
             }
-            messageComposer =
-                { className -> "$className.$propertyName: is too long (maximum $expectedLimit characters)" }
+
+            invalidReason = "Too long (maximum $expectedLimit characters)"
+            invalidValueName = propertyName.capitalize()
         }
 
         "maxColLength" -> {
             validOverrideAttributes =
                 customOverrideAttributesForProp(propertyName, expectedLimit, customValueBuilder)
+
             invalidOverrideAttributes =
                 customOverrideAttributesForProp(propertyName, expectedLimit + 1, customValueBuilder)
-            messageComposer = { className -> "$className.$propertyName: is too long (maximum $expectedLimit elements)" }
+
+            invalidReason = "Too long (maximum $expectedLimit elements)"
+            invalidValueName = propertyName.capitalize()
         }
 
         else -> throwIllegalDpmModelState("PropertyLengthValidationTemplate does not support given validation type '$validationType'")
@@ -78,19 +89,22 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
     val validAttributes = Factory.Builder.attributesFor(kClass, validOverrideAttributes)
     val valid = Factory.Builder.instantiate(kClass, validAttributes) as Validatable
 
-    val validCollector = ValidationCollector()
+    val validCollector = ValidationResultCollector()
     valid.validate(validCollector)
-    assertThat(validCollector.compileResultsToSimpleStrings()).isEmpty()
+    assertThat(validCollector.results()).isEmpty()
 
     // Invalid value
     val invalidAttributes = Factory.Builder.attributesFor(kClass, invalidOverrideAttributes)
     val invalid = Factory.Builder.instantiate(kClass, invalidAttributes) as Validatable
 
-    val invalidCollector = ValidationCollector()
+    val invalidCollector = ValidationResultCollector()
     invalid.validate(invalidCollector)
 
-    val message = messageComposer(invalid.javaClass.simpleName)
-    assertThat(invalidCollector.compileResultsToSimpleStrings()).containsOnlyOnce(message)
+    val filteredResults = invalidCollector.results().filter {
+        it.valueName() == invalidValueName && it.reason() == invalidReason
+    }
+
+    assertThat(filteredResults).hasSize(1)
 }
 
 private fun <T : Any> DpmModel_UnitTestBase<T>.stringOverrideAttributeForProp(

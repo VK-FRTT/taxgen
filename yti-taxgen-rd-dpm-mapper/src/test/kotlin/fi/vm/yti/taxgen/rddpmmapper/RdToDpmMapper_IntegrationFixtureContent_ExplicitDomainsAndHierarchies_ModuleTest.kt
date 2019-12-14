@@ -20,7 +20,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                 0 -> {
                     assertThat(it.domainCode).isEqualTo("DOME")
                     assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/DOME")
-                    assertThat(it.type).isEqualTo("ExplicitDomain")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                     assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -40,7 +39,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                 1 -> {
                     assertThat(it.domainCode).isEqualTo("EDA")
                     assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA")
-                    assertThat(it.type).isEqualTo("ExplicitDomain")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                     assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -116,7 +114,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                         assertThat(it.defaultMember).isFalse()
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/EDA-x1")
-                        assertThat(it.type).isEqualTo("Member")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -134,7 +131,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                         assertThat(it.defaultMember).isFalse()
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/code/MEM")
-                        assertThat(it.type).isEqualTo("Member")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -170,7 +166,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                         assertThat(it.hierarchyCode).isEqualTo("EDA-H1")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/EDA-H1")
-                        assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -189,7 +184,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                         assertThat(it.hierarchyCode).isEqualTo("HIER")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER")
-                        assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -222,7 +216,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                 when (index) {
                     0 -> {
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/DOME-2018-1/extension/HIER/member/1")
-                        assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -278,7 +271,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                         assertThat(it.defaultMember).isFalse()
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x1")
-                        assertThat(it.type).isEqualTo("Member")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -364,7 +356,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDomainsAndHierarc
                         assertThat(it.hierarchyCode).isEqualTo("EDA-H1")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H1")
-                        assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")

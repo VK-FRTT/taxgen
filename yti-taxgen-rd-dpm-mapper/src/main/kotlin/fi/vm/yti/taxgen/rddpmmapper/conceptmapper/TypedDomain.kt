@@ -55,7 +55,7 @@ internal fun mapAndValidateTypedDomains(
 
     val typedDomains = typedDomainItems.itemsList().map { it.toTypedDomain() }
 
-    validateDpmElements(diagnostic, typedDomains)
+    diagnostic.validate(typedDomains)
 
     return typedDomains
 }

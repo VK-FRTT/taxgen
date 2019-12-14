@@ -65,8 +65,9 @@ internal class Member_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[Member] [mem_uri] [Concept.Label] [Too few translations (minimum 1)]"
+            )
         }
     }
 
@@ -113,7 +114,7 @@ internal class Member_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Member.memberCode: is illegal DPM Code")
+                "invalid" -> assertThat(validationErrors).containsExactly("[Member] [mem_uri] [MemberCode] [Illegal DPM Code] [$codeValue]")
                 else -> throwIllegalDpmModelState()
             }
         }

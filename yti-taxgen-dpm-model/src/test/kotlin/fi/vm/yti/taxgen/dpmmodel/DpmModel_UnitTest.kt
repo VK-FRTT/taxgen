@@ -39,14 +39,17 @@ internal class DpmModel_UnitTest :
                     emptyDictionaryWithOwner("o_1"),
                     emptyDictionaryWithOwner("o_2"),
                     emptyDictionaryWithOwner("o_2"),
-                    emptyDictionaryWithOwner("o_4")
+                    emptyDictionaryWithOwner("o_4"),
+                    emptyDictionaryWithOwner("o_5"),
+                    emptyDictionaryWithOwner("o_5")
                 )
             )
 
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "DpmModel.dictionaries: duplicate owner.prefix value 'prefix_o_2'"
+                    "[DPM Model] [] [Owner.Prefix] [Duplicate value] [prefix_o_2]",
+                    "[DPM Model] [] [Owner.Prefix] [Duplicate value] [prefix_o_5]"
                 )
         }
 
@@ -91,8 +94,8 @@ internal class DpmModel_UnitTest :
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "DpmModel.dictionaries.domains: duplicate Domain.code value 'dom_d_1_code'",
-                    "DpmModel.dictionaries.domains: duplicate Domain.uri value 'dom_d_1_uri'"
+                    "[DPM Model] [] [Domain.Uri] [Duplicate value] [dom_d_1_uri]",
+                    "[DPM Model] [] [Domain.DomainCode] [Duplicate value] [dom_d_1_code]"
                 )
         }
 
@@ -122,8 +125,8 @@ internal class DpmModel_UnitTest :
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "DpmModel.dictionaries.metricDomain: duplicate Metric.metricCode value 'met_m_2_code'",
-                    "DpmModel.dictionaries.metricDomain: duplicate Metric.uri value 'met_m_2_uri'"
+                    "[DPM Model] [] [Metric.Uri] [Duplicate value] [met_m_2_uri]",
+                    "[DPM Model] [] [Metric.MetricCode] [Duplicate value] [met_m_2_code]"
                 )
         }
 
@@ -154,8 +157,8 @@ internal class DpmModel_UnitTest :
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "DpmModel.dictionaries.metricDomain: duplicate Hierarchy.hierarchyCode value 'hierarchy_h_2_code'",
-                    "DpmModel.dictionaries.metricDomain: duplicate Hierarchy.uri value 'hierarchy_h_2_uri'"
+                    "[DPM Model] [] [MetricDomain.Hierarchy.Uri] [Duplicate value] [hierarchy_h_2_uri]",
+                    "[DPM Model] [] [MetricDomain.Hierarchy.HierarchyCode] [Duplicate value] [hierarchy_h_2_code]"
                 )
         }
     }

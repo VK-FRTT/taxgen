@@ -1,11 +1,10 @@
 package fi.vm.yti.taxgen.cli
 
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticContextDescriptor
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticEventConsumer
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultDescriptor
 import java.io.PrintWriter
 
 class DiagnosticTextPrinter(
@@ -44,15 +43,21 @@ class DiagnosticTextPrinter(
         printLine("$severity: $message")
     }
 
-    override fun validationResults(
-        validatableInfo: ValidatableInfo,
-        validationResults: List<ValidationResultInfo>
-    ) {
-        validationResults.forEach {
-            message(
-                Severity.ERROR,
-                "${validatableInfo.objectKind} (${validatableInfo.objectAddress}) => ${it.propertyName}: ${it.message}"
-            )
+    override fun validationResults(results: List<ValidationResultDescriptor>) {
+        results.forEach { result ->
+
+            val sb = StringBuilder()
+            sb.append("[${result.valueName()}] ${result.reason()}")
+
+            if (result.hasValue()) {
+                sb.append(" [${result.value()}]")
+            }
+
+            result.subjectChain().reversed().forEach {
+                sb.append(" in ${it.subjectType} (${it.subjectIdentifier})")
+            }
+
+            message(Severity.ERROR, sb.toString())
         }
     }
 

@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteoutput.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.sql.deleteAll
@@ -25,14 +24,7 @@ class OrdinateCategorisationTransform(
                     }
             }
 
-            baselineCategorisations.forEach {
-                diagnostic.validate(it) {
-                    ValidatableInfo(
-                        objectKind = "BaselineOrdinateCategorisation",
-                        objectAddress = "OrdinateID: ${it.ordinateId}"
-                    )
-                }
-            }
+            diagnostic.validate(baselineCategorisations)
 
             return OrdinateCategorisationTransform(
                 baselineCategorisations,
@@ -48,14 +40,7 @@ class OrdinateCategorisationTransform(
             )
         }
 
-        finalCategorisations.forEach {
-            diagnostic.validate(it) {
-                ValidatableInfo(
-                    objectKind = "FinalOrdinateCategorisation",
-                    objectAddress = "OrdinateID: ${it.ordinateId}"
-                )
-            }
-        }
+        diagnostic.validate(finalCategorisations)
 
         transaction {
             OrdinateCategorisationTable.deleteAll()

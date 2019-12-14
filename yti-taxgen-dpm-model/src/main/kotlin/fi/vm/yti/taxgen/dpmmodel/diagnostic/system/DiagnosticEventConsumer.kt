@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel.diagnostic.system
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultDescriptor
 
 interface DiagnosticEventConsumer {
 
@@ -13,8 +12,6 @@ interface DiagnosticEventConsumer {
     )
 
     fun message(severity: Severity, message: String)
-    fun validationResults(
-        validatableInfo: ValidatableInfo,
-        validationResults: List<ValidationResultInfo>
-    )
+
+    fun validationResults(results: List<ValidationResultDescriptor>)
 }

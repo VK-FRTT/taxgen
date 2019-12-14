@@ -62,8 +62,9 @@ internal class Hierarchy_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[Hierarchy] [hie_uri] [Concept.Label] [Too few translations (minimum 1)]"
+            )
         }
     }
 
@@ -82,8 +83,9 @@ internal class Hierarchy_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hierarchy_node_hn_2_uri'")
+            assertThat(validationErrors).containsExactly(
+                "[Hierarchy] [hie_uri] [HierarchyNode.Uri] [Duplicate value] [hierarchy_node_hn_2_uri]"
+            )
         }
 
         @Test
@@ -119,8 +121,9 @@ internal class Hierarchy_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Hierarchy.rootNodes: duplicate uri value 'hierarchy_node_hn_4_uri'")
+            assertThat(validationErrors).containsExactly(
+                "[Hierarchy] [hie_uri] [HierarchyNode.Uri] [Duplicate value] [hierarchy_node_hn_4_uri]"
+            )
         }
 
         @Test
@@ -135,10 +138,9 @@ internal class Hierarchy_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly(
-                    "Hierarchy.rootNodes: duplicate referencedElementCode value 'member_m_2_code'"
-                )
+            assertThat(validationErrors).containsExactly(
+                "[Hierarchy] [hie_uri] [HierarchyNode.ReferencedElementCode] [Duplicate value] [member_m_2_code]"
+            )
         }
 
         @Test
@@ -174,10 +176,9 @@ internal class Hierarchy_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly(
-                    "Hierarchy.rootNodes: duplicate referencedElementCode value 'member_m_4_code'"
-                )
+            assertThat(validationErrors).containsExactly(
+                "[Hierarchy] [hie_uri] [HierarchyNode.ReferencedElementCode] [Duplicate value] [member_m_4_code]"
+            )
         }
     }
 }

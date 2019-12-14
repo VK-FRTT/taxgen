@@ -19,7 +19,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_ExplicitDimensions_Module
                     assertThat(it.dimensionCode).isEqualTo("DIM")
 
                     assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM")
-                    assertThat(it.type).isEqualTo("ExplicitDimension")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                     assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")

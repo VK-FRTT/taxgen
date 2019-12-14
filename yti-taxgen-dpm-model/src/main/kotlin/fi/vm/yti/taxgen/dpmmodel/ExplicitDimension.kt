@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
 data class ExplicitDimension(
     override val uri: String,
@@ -10,14 +10,12 @@ data class ExplicitDimension(
     val referencedDomainCode: String
 ) : DpmElement {
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
+        validateDpmElement(validationResultBuilder)
 
-        validateDpmElement(validationResults)
-
-        validateLengths(
-            validationResults = validationResults,
-            instance = this,
-            properties = listOf(ExplicitDimension::dimensionCode, ExplicitDimension::referencedDomainCode),
+        validatePropsLengths(
+            validationResultBuilder = validationResultBuilder,
+            properties = listOf(this::dimensionCode, this::referencedDomainCode),
             minLength = 2,
             maxLength = 50
         )

@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.openaxisvaluerestrictiontransform
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.sqliteoutput.tables.OpenAxisValueRestrictionTable
 import org.jetbrains.exposed.sql.deleteAll
@@ -22,14 +21,7 @@ class OpenAxisValueRestrictionTransform(
                     }
             }
 
-            baselineRestrictions.forEach {
-                diagnostic.validate(it) {
-                    ValidatableInfo(
-                        objectKind = "BaselineOpenAxisValueRestriction",
-                        objectAddress = "AxisID: ${it.axisId}"
-                    )
-                }
-            }
+            diagnostic.validate(baselineRestrictions)
 
             return OpenAxisValueRestrictionTransform(
                 baselineRestrictions,
@@ -47,14 +39,7 @@ class OpenAxisValueRestrictionTransform(
             }
         }
 
-        finalRestrictions.forEach {
-            diagnostic.validate(it) {
-                ValidatableInfo(
-                    objectKind = "FinalOpenAxisValueRestriction",
-                    objectAddress = "AxisID: ${it.axisId}"
-                )
-            }
-        }
+        diagnostic.validate(finalRestrictions)
 
         transaction {
             OpenAxisValueRestrictionTable.deleteAll()

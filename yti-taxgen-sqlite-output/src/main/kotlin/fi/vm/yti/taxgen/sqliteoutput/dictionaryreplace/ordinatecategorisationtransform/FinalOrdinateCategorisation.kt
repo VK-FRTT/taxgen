@@ -1,8 +1,9 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNull
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
+import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
 import org.jetbrains.exposed.dao.EntityID
 
 data class FinalOrdinateCategorisation(
@@ -93,14 +94,20 @@ data class FinalOrdinateCategorisation(
         }
     }
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
         validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = FinalOrdinateCategorisation::ordinateId
+            validationResultBuilder = validationResultBuilder,
+            property = this::ordinateId
         )
 
-        dbReferences.validate(validationResults)
+        dbReferences.validate(validationResultBuilder)
+    }
+
+    override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
+        return ValidationSubjectDescriptor(
+            subjectType = "OrdinateCategorisation (transformed)",
+            subjectIdentifier = "OrdinateID: $ordinateId"
+        )
     }
 }

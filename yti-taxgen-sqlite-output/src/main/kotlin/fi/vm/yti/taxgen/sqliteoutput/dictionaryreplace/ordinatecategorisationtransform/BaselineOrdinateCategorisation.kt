@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.ordinatecategorisationtransform
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
+import fi.vm.yti.taxgen.dpmmodel.validators.validateCustom
 import fi.vm.yti.taxgen.sqliteoutput.tables.OrdinateCategorisationTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Column
@@ -146,23 +147,30 @@ data class BaselineOrdinateCategorisation(
             """.trimIndent().toRegex(RegexOption.COMMENTS)
     }
 
-    override fun validate(validationResults: ValidationResults) {
-        databaseIdSignature.validate(validationResults)
-        xbrlCodeSignature.validate(validationResults)
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
+        databaseIdSignature.validate(validationResultBuilder)
+        xbrlCodeSignature.validate(validationResultBuilder)
 
         validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "signatures",
-            validate = { messages ->
+            validationResultBuilder = validationResultBuilder,
+            valueName = "DimensionMemberSignature, DPS",
+            validate = { errorReporter ->
                 val mismatchDescriptions = checkSignaturesMatching()
 
                 if (mismatchDescriptions.any()) {
-                    messages.add(
-                        "OrdinateCategorisation signatures do not match: ${mismatchDescriptions.joinToString()}"
+                    errorReporter.error(
+                        reason = "Signatures do not match",
+                        value = mismatchDescriptions.joinToString()
                     )
                 }
             }
+        )
+    }
+
+    override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
+        return ValidationSubjectDescriptor(
+            subjectType = "OrdinateCategorisation (baseline)",
+            subjectIdentifier = "OrdinateID: $ordinateId"
         )
     }
 

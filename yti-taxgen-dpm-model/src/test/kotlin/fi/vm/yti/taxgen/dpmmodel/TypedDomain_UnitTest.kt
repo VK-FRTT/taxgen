@@ -64,8 +64,9 @@ internal class TypedDomain_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[TypedDomain] [typ_dom_uri] [Concept.Label] [Too few translations (minimum 1)]"
+            )
         }
     }
 
@@ -99,7 +100,7 @@ internal class TypedDomain_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("TypedDomain.dataType: unsupported data type '$dataType'")
+                "invalid" -> assertThat(validationErrors).containsExactly("[TypedDomain] [typ_dom_uri] [DataType] [Unsupported value] [$dataType]")
                 else -> throwIllegalDpmModelState()
             }
         }

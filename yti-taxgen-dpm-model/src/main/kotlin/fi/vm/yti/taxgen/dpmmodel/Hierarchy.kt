@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
 
 data class Hierarchy(
     override val uri: String,
@@ -11,40 +11,37 @@ data class Hierarchy(
     val rootNodes: List<HierarchyNode>
 ) : DpmElement {
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateDpmElement(validationResults)
+        validateDpmElement(validationResultBuilder)
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = Hierarchy::hierarchyCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::hierarchyCode,
             minLength = 2,
             maxLength = 50
         )
 
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "rootNodes",
-            iterable = allNodes(),
+        val allNodes = allNodes()
+
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = allNodes,
             valueSelector = { it.uri },
-            valueDescription = "uri"
+            valueName = listOf(HierarchyNode::class, HierarchyNode::uri)
         )
 
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "rootNodes",
-            iterable = allNodes(),
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = allNodes,
             valueSelector = { it.referencedElementCode },
-            valueDescription = "referencedElementCode"
+            valueName = listOf(HierarchyNode::class, HierarchyNode::referencedElementCode)
         )
     }
 
     fun allNodes(): List<HierarchyNode> {
         return rootNodes
-            .map { it.allNodes() }
+            .map { it.nodeAndChildrenAsList() }
             .flatten()
     }
 

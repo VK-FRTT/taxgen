@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTimestamp
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTranslatedText
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropFulfillsCondition
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropTimestamp
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropTranslatedText
 import java.time.Instant
 import java.time.LocalDate
 
@@ -31,58 +31,59 @@ data class Concept(
     }
 
     fun validateConcept(
-        validationResults: ValidationResults,
+        validationResultBuilder: ValidationResultBuilder,
         minLabelLangCount: Int
     ) {
-
-        validateTimestamp(
-            validationResults = validationResults,
-            instance = this,
-            property = Concept::createdAt
+        validatePropTimestamp(
+            validationResultBuilder = validationResultBuilder,
+            property = this::createdAt
         )
 
-        validateTimestamp(
-            validationResults = validationResults,
-            instance = this,
-            property = Concept::modifiedAt
+        validatePropTimestamp(
+            validationResultBuilder = validationResultBuilder,
+            property = this::modifiedAt
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Concept::modifiedAt,
-            condition = { !modifiedAt.isBefore(createdAt) },
-            message = { "is earlier than ${Concept::createdAt.name}" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::modifiedAt,
+            condition = { it.isSameOrAfter(createdAt) },
+            reason = { "Is earlier than ${Concept::createdAt.name.capitalize()}" }
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Concept::applicableUntil,
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::applicableUntil,
             condition = condition@{
-                if (applicableUntil == null) return@condition true
-                if (applicableFrom == null) return@condition true
+                it ?: return@condition true
+                applicableFrom ?: return@condition true
 
-                !applicableUntil.isBefore(applicableFrom)
+                it.isSameOrAfter(applicableFrom)
             },
-            message = { "is earlier than ${Concept::applicableFrom.name}" }
+            reason = { "Is earlier than ${Concept::applicableFrom.name.capitalize()}" }
         )
 
-        validateTranslatedText(
-            validationResults = validationResults,
-            instance = this,
-            property = Concept::label,
+        validatePropTranslatedText(
+            validationResultBuilder = validationResultBuilder,
+            property = this::label,
             minTranslationLength = 2,
             minLangCount = minLabelLangCount,
             acceptedLanguages = owner.languages
         )
 
-        validateTranslatedText(
-            validationResults = validationResults,
-            instance = this,
-            property = Concept::description,
+        validatePropTranslatedText(
+            validationResultBuilder = validationResultBuilder,
+            property = this::description,
             minTranslationLength = 2,
             acceptedLanguages = owner.languages
         )
+    }
+
+    private fun Instant.isSameOrAfter(other: Instant): Boolean {
+        return compareTo(other) >= 0
+    }
+
+    private fun LocalDate.isSameOrAfter(other: LocalDate): Boolean {
+        return compareTo(other) >= 0
     }
 }

@@ -78,8 +78,9 @@ internal class Owner_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Owner.languages: duplicate language code value 'fi'")
+            assertThat(validationErrors).containsExactly(
+                "[DPM Owner] [name_value] [LanguageCodes] [Duplicate value] [fi]"
+            )
         }
 
         @Test
@@ -89,8 +90,9 @@ internal class Owner_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Owner.languages: unsupported language 'zyx'")
+            assertThat(validationErrors).containsExactly(
+                "[DPM Owner] [name_value] [LanguageCodes] [Unsupported language] [zyx]"
+            )
         }
 
         @Test

@@ -1,10 +1,10 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateDpmCodeContent
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNullOrNonBlank
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmCodeContent
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropFulfillsCondition
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropNullOrNonBlank
 
 data class Metric(
     override val uri: String,
@@ -66,98 +66,88 @@ data class Metric(
         }
     }
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateDpmElement(validationResults)
+        validateDpmElement(validationResultBuilder)
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::metricCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::metricCode,
             minLength = 2,
             maxLength = 50
         )
 
         validateDpmCodeContent(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::metricCode
+            validationResultBuilder = validationResultBuilder,
+            property = ::metricCode
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::dataType,
-            condition = { VALID_DATA_TYPES.containsKey(dataType) },
-            message = { "unsupported data type '$dataType'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::dataType,
+            condition = { VALID_DATA_TYPES.containsKey(it) },
+            reason = { "Unsupported value" }
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::dataType,
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedDomainCode,
             condition = { (dataType != "Enumeration/Code") || (referencedDomainCode != null) },
-            message = { "missing ReferencedDomainCode when data type is Enumeration/Code" }
+            reason = { "Value missing (null) but DataType is Enumeration/Code" },
+            includeValueToError = false
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::flowType,
-            condition = { VALID_FLOW_TYPES.containsKey(flowType) },
-            message = { "unsupported flow type '$flowType'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::flowType,
+            condition = { VALID_FLOW_TYPES.containsKey(it) },
+            reason = { "Unsupported value" }
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::balanceType,
-            condition = { VALID_BALANCE_TYPES.contains(balanceType) },
-            message = { "unsupported balance type '$balanceType'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::balanceType,
+            condition = { VALID_BALANCE_TYPES.contains(it) },
+            reason = { "Unsupported value" }
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::metricCode,
-            condition = { isValidMetricCode(metricCode) },
-            message = { "metric code does not match required pattern '$metricCode'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::metricCode,
+            condition = { isValidMetricCode(it) },
+            reason = { "Unsupported code structure" }
         )
 
-        validateNullOrNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::referencedDomainCode
+        validatePropNullOrNonBlank(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedDomainCode
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::dataType,
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedDomainCode,
             condition = { (referencedDomainCode == null) || (dataType == "Enumeration/Code") },
-            message = { "ReferencedDomainCode given but data type not Enumeration/Code" }
+            reason = { "Value given but DataType not Enumeration/Code" }
         )
 
-        validateNullOrNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::referencedHierarchyCode
+        validatePropNullOrNonBlank(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedHierarchyCode
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::dataType,
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedHierarchyCode,
             condition = { (referencedHierarchyCode == null) || (dataType == "Enumeration/Code") },
-            message = { "ReferencedHierarchyCode given but data type not Enumeration/Code" }
+            reason = { "Value given but DataType not Enumeration/Code" }
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = Metric::referencedHierarchyCode,
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedDomainCode,
             condition = { (referencedHierarchyCode == null) || (referencedDomainCode != null) },
-            message = { "ReferencedHierarchyCode given without ExplicitDomain reference" }
+            reason = { "Value missing (null) but ReferencedHierarchyCode is given" },
+            includeValueToError = false
         )
     }
 

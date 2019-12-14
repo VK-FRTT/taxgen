@@ -1,10 +1,9 @@
 package fi.vm.yti.taxgen.testcommons
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationResultInfo
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticContextDescriptor
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticEventConsumer
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultDescriptor
 
 class DiagnosticCollector : DiagnosticEventConsumer {
 
@@ -14,7 +13,7 @@ class DiagnosticCollector : DiagnosticEventConsumer {
     private var errorCount = 0
     private var warningCount = 0
     private var infoCount = 0
-    private var objectValidationFailureCount = 0
+    private var validationResultCount = 0
 
     override fun contextEnter(contextStack: List<DiagnosticContextDescriptor>) {
         val topContext = contextStack.firstOrNull()
@@ -50,18 +49,10 @@ class DiagnosticCollector : DiagnosticEventConsumer {
         }
     }
 
-    override fun validationResults(
-        validatableInfo: ValidatableInfo,
-        validationResults: List<ValidationResultInfo>
-    ) {
-        // TODO - Event should be: VALIDATION [SubjectType] [SubjectIdentifier] [Input] [Explanation]
-        // Input should be: Array<InputName, InputValue>
-
-        events.add("VALIDATED OBJECT [${validatableInfo.objectKind}] [${validatableInfo.objectAddress}]")
-        objectValidationFailureCount++
-
-        validationResults.forEach {
-            events.add("VALIDATION [${it.className.substringAfterLast(".")}.${it.propertyName}: ${it.message}]")
+    override fun validationResults(results: List<ValidationResultDescriptor>) {
+        results.forEach { result ->
+            events.add("VALIDATION $result")
+            validationResultCount++
         }
     }
 
@@ -76,11 +67,11 @@ class DiagnosticCollector : DiagnosticEventConsumer {
         errorCount = 0
         warningCount = 0
         infoCount = 0
-        objectValidationFailureCount = 0
+        validationResultCount = 0
     }
 
-    fun allMessagesCount() = criticalMessagesCount() + informalMessagesCount() + objectValidationFailureCount()
+    fun allMessagesCount() = criticalMessagesCount() + informalMessagesCount() + validationResultCount()
     fun criticalMessagesCount() = fatalCount + errorCount
     fun informalMessagesCount() = warningCount + infoCount
-    fun objectValidationFailureCount() = objectValidationFailureCount
+    fun validationResultCount() = validationResultCount
 }

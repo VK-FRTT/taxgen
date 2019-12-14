@@ -80,8 +80,9 @@ internal class HierarchyNode_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too short translations for languages [en]")
+            assertThat(validationErrors).containsExactly(
+                "[HierarchyNode] [hie_nod_uri] [Concept.Label] [Too short translation content for languages] [en]"
+            )
         }
     }
 
@@ -112,7 +113,7 @@ internal class HierarchyNode_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.comparisonOperator: unsupported arithmetical relationship (comparison operator) '$comparisonOperator'")
+                "invalid" -> assertThat(validationErrors).containsExactly("[HierarchyNode] [hie_nod_uri] [ComparisonOperator] [Unsupported arithmetical relationship] [$comparisonOperator]")
                 else -> throwIllegalDpmModelState()
             }
         }
@@ -142,7 +143,7 @@ internal class HierarchyNode_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("HierarchyNode.unaryOperator: unsupported arithmetical sign (unary operator) '$unaryOperator'")
+                "invalid" -> assertThat(validationErrors).containsExactly("[HierarchyNode] [hie_nod_uri] [UnaryOperator] [Unsupported arithmetical sign] [$unaryOperator]")
                 else -> throwIllegalDpmModelState()
             }
         }

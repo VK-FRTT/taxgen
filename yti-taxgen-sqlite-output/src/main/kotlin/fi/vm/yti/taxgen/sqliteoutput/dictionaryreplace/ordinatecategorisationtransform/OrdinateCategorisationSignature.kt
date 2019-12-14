@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNullAndNonBlank
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNullAndNonBlank
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropFulfillsCondition
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.MemberTable
 import org.jetbrains.exposed.dao.EntityID
@@ -27,52 +27,45 @@ data class OrdinateCategorisationSignature(
         val VALID_STARTING_MEMBER_INCLUDED_VALUES = listOf("0", "1")
     }
 
-    fun validate(validationResults: ValidationResults) {
+    fun validate(validationResultBuilder: ValidationResultBuilder) {
         validateNonNullAndNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = OrdinateCategorisationSignature::dimensionIdentifier
+            validationResultBuilder = validationResultBuilder,
+            property = this::dimensionIdentifier
         )
 
         validateNonNullAndNonBlank(
-            validationResults = validationResults,
-            instance = this,
-            property = OrdinateCategorisationSignature::memberIdentifier
+            validationResultBuilder = validationResultBuilder,
+            property = this::memberIdentifier
         )
 
         if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
             validateNonNullAndNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationSignature::hierarchyIdentifier
+                validationResultBuilder = validationResultBuilder,
+                property = this::hierarchyIdentifier
             )
 
             validateNonNullAndNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationSignature::hierarchyStartingMemberIdentifier
+                validationResultBuilder = validationResultBuilder,
+                property = this::hierarchyStartingMemberIdentifier
             )
 
             validateNonNullAndNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationSignature::startingMemberIncluded
+                validationResultBuilder = validationResultBuilder,
+                property = this::startingMemberIncluded
             )
 
-            validateConditionTruthy(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationSignature::startingMemberIncluded,
+            validatePropFulfillsCondition(
+                validationResultBuilder = validationResultBuilder,
+                property = this::startingMemberIncluded,
                 condition = { VALID_STARTING_MEMBER_INCLUDED_VALUES.contains(startingMemberIncluded) },
-                message = { "unsupported IsStartingMemberIncluded value '$startingMemberIncluded'" }
+                reason = { "Unsupported value" }
             )
         }
 
         if (signatureStructure == OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION) {
             validateNonNullAndNonBlank(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationSignature::hierarchyIdentifier
+                validationResultBuilder = validationResultBuilder,
+                property = this::hierarchyIdentifier
             )
         }
     }

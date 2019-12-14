@@ -66,8 +66,9 @@ internal class TypedDimension_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[TypedDimension] [typ_dim_uri] [Concept.Label] [Too few translations (minimum 1)]"
+            )
         }
     }
 }

@@ -1,9 +1,9 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementCrossReferences
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
 data class MetricDomain(
     override val uri: String,
@@ -13,46 +13,37 @@ data class MetricDomain(
     val hierarchies: List<Hierarchy>
 ) : DpmElement {
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateDpmElement(validationResults, 0)
+        validateDpmElement(validationResultBuilder, 0)
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = MetricDomain::domainCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::domainCode,
             minLength = 2,
             maxLength = 50
         )
 
-        validateLengths(
-            validationResults = validationResults,
-            instance = this,
-            properties = listOf(MetricDomain::metrics, MetricDomain::hierarchies),
+        validatePropsLengths(
+            validationResultBuilder = validationResultBuilder,
+            properties = listOf(this::metrics, this::hierarchies),
             minLength = 0,
             maxLength = 10000
         )
 
         // Note: metrics & hierarchies URI and code uniqueness is validated DPM Model level
 
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "hierarchies",
-            validate = { messages ->
-                val domainMetricCodes = metrics.map { it.metricCode }.toSet()
-
-                hierarchies.forEach { hierarchy ->
-                    hierarchy.allNodes().forEach { node ->
-                        if (!domainMetricCodes.contains(node.referencedElementCode)) {
-                            messages.add(
-                                "DPM HierarchyNode ${node.uri} refers to DPM Metric which is not present in DPM MetricDomain."
-                            )
-                        }
-                    }
-                }
+        hierarchies.forEach { hierarchy ->
+            validationResultBuilder.withSubject(hierarchy.validationSubjectDescriptor()) {
+                validateDpmElementCrossReferences(
+                    validationResultBuilder = validationResultBuilder,
+                    targetElements = metrics,
+                    targetCodeProperty = Metric::metricCode,
+                    referringElements = hierarchy.allNodes(),
+                    referringCodeProperty = HierarchyNode::referencedElementCode
+                )
             }
-        )
+        }
     }
 
     override fun code(): String = domainCode

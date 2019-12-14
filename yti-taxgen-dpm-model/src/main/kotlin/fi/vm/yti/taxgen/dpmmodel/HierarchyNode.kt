@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropFulfillsCondition
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
 
 data class HierarchyNode(
     override val uri: String,
@@ -19,46 +19,37 @@ data class HierarchyNode(
         val VALID_UNARY_OPERATORS = listOf("+", "-", null)
     }
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
         validateDpmElement(
-            validationResults = validationResults,
+            validationResultBuilder = validationResultBuilder,
             minLabelLangCount = 0
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = HierarchyNode::comparisonOperator,
-            condition = { VALID_COMPARISON_OPERATORS.contains(comparisonOperator) },
-            message = { "unsupported arithmetical relationship (comparison operator) '$comparisonOperator'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::comparisonOperator,
+            condition = { VALID_COMPARISON_OPERATORS.contains(it) },
+            reason = { "Unsupported arithmetical relationship" }
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = HierarchyNode::unaryOperator,
-            condition = { VALID_UNARY_OPERATORS.contains(unaryOperator) },
-            message = { "unsupported arithmetical sign (unary operator) '$unaryOperator'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::unaryOperator,
+            condition = { VALID_UNARY_OPERATORS.contains(it) },
+            reason = { "Unsupported arithmetical sign" }
         )
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = HierarchyNode::referencedElementCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::referencedElementCode,
             minLength = 1,
             maxLength = 50
         )
     }
 
-    fun allNodes(): List<HierarchyNode> = mutableListOf(this)
-        .also { nodes ->
-            nodes.addAll(
-                childNodes
-                    .map { it.allNodes() }
-                    .flatten()
-            )
-        }
+    fun nodeAndChildrenAsList(): List<HierarchyNode> =
+        listOf(this) + childNodes.map { it.nodeAndChildrenAsList() }.flatten()
 
     fun traverseInPreOrder(
         theParent: HierarchyNode?,

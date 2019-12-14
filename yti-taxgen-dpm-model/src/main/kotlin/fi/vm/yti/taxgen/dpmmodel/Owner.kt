@@ -1,11 +1,12 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
+import fi.vm.yti.taxgen.dpmmodel.validators.validateCustom
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
 data class Owner(
     val name: String,
@@ -18,44 +19,49 @@ data class Owner(
 
     val languages: Set<Language> by lazy { languageCodes.mapNotNull { Language.findByIso6391Code(it) }.toSet() }
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateLengths(
-            validationResults = validationResults,
-            instance = this,
-            properties = listOf(Owner::name, Owner::namespace, Owner::prefix, Owner::location, Owner::copyright),
+        validatePropsLengths(
+            validationResultBuilder = validationResultBuilder,
+            properties = listOf(this::name, this::namespace, this::prefix, this::location, this::copyright),
             minLength = 2,
             maxLength = 500
         )
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = Owner::languageCodes,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::languageCodes,
             minLength = 1,
             maxLength = 10
         )
 
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "languages",
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
             iterable = languageCodes,
             valueSelector = { it },
-            valueDescription = "language code"
+            valueName = Owner::languageCodes
         )
 
         validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "languages",
-            validate = { messages ->
+            validationResultBuilder = validationResultBuilder,
+            valueName = Owner::languageCodes,
+            validate = { errorReporter ->
                 languageCodes.forEach { code ->
                     if (Language.findByIso6391Code(code) == null) {
-                        messages.add("unsupported language '$code'")
+                        errorReporter.error(
+                            reason = "Unsupported language",
+                            value = code
+                        )
                     }
                 }
             }
+        )
+    }
+
+    override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
+        return ValidationSubjectDescriptor(
+            subjectType = "DPM Owner",
+            subjectIdentifier = name
         )
     }
 }

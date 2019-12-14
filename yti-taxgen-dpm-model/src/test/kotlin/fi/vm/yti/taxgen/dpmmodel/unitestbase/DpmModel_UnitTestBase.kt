@@ -13,10 +13,11 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.datafactory.Factory
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.dpmTestData
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultCollector
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -45,25 +46,33 @@ internal open class DpmModel_UnitTestBase<T : Any>(
     }
 
     protected fun instantiateAndValidate(
-        customValidationAdapter: ((Any, ValidationResults) -> (Unit))? = null
+        customValidationAdapter: ((Any, ValidationResultBuilder) -> (Unit))? = null
     ) {
         require(attributeOverrides != null)
 
         val attributes = Factory.Builder.attributesFor(kClass, attributeOverrides)
 
-        val collector = ValidationCollector()
+        val collector = ValidationResultCollector()
 
         @Suppress("UNCHECKED_CAST")
         instance = Factory.Builder.instantiate(kClass, attributes) as T
         val theInstance = instance!!
 
-        if (customValidationAdapter != null) {
-            customValidationAdapter(theInstance, collector)
+        val subject = if (customValidationAdapter == null) {
+            (theInstance as Validatable).validationSubjectDescriptor()
         } else {
-            (theInstance as Validatable).validate(collector)
+            ValidationSubjectDescriptor("", "")
         }
 
-        validationErrors = collector.compileResultsToSimpleStrings()
+        collector.withSubject(subject) {
+            if (customValidationAdapter == null) {
+                (theInstance as Validatable).validate(collector)
+            } else {
+                customValidationAdapter(theInstance, collector)
+            }
+        }
+
+        validationErrors = collector.results().map { result -> result.toString() }
     }
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!

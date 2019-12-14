@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
+import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementCrossReferences
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
 data class DpmDictionary(
     val owner: Owner,
@@ -15,123 +16,103 @@ data class DpmDictionary(
     val metricDomain: MetricDomain?
 ) : Validatable {
 
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
+
+        validatePropsLengths(
+            validationResultBuilder = validationResultBuilder,
+            properties = listOf(
+                this::explicitDomains,
+                this::typedDomains,
+                this::explicitDimensions,
+                this::typedDimensions
+            ),
+            minLength = 0,
+            maxLength = 10000
+        )
+
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
+            valueSelector = { it: DpmElement -> it.code() },
+            valueName = listOf("Domain", ExplicitDomain::domainCode)
+        )
+
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
+            valueSelector = { it: DpmElement -> it.uri },
+            valueName = listOf("Domain", ExplicitDomain::uri)
+        )
+
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = explicitDimensions + typedDimensions,
+            valueSelector = { it: DpmElement -> it.code() },
+            valueName = listOf("Dimension", ExplicitDimension::dimensionCode)
+        )
+
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = explicitDimensions + typedDimensions,
+            valueSelector = { it: DpmElement -> it.uri },
+            valueName = listOf("Dimension", ExplicitDimension::uri)
+        )
+
+        validateDpmElementCrossReferences(
+            validationResultBuilder = validationResultBuilder,
+            targetElements = explicitDomains,
+            targetCodeProperty = ExplicitDomain::domainCode,
+            referringElements = explicitDimensions,
+            referringCodeProperty = ExplicitDimension::referencedDomainCode
+        )
+
+        validateDpmElementCrossReferences(
+            validationResultBuilder = validationResultBuilder,
+            targetElements = typedDomains,
+            targetCodeProperty = TypedDomain::domainCode,
+            referringElements = typedDimensions,
+            referringCodeProperty = TypedDimension::referencedDomainCode
+        )
+
+        validateDpmElementCrossReferences(
+            validationResultBuilder = validationResultBuilder,
+            targetElements = explicitDomains,
+            targetCodeProperty = ExplicitDomain::domainCode,
+            referringElements = metricDomain?.metrics ?: emptyList(),
+            referringCodeProperty = Metric::referencedDomainCode
+        )
+
+        metricDomain?.metrics?.forEach loop@{ metric ->
+
+            metric.referencedDomainCode ?: return@loop
+            metric.referencedHierarchyCode ?: return@loop
+
+            val domain = explicitDomains.find { it.domainCode == metric.referencedDomainCode }
+
+            if (domain != null) {
+
+                validateDpmElementCrossReferences(
+                    validationResultBuilder = validationResultBuilder,
+                    targetElements = domain.hierarchies,
+                    targetCodeProperty = Hierarchy::hierarchyCode,
+                    referringElements = listOf(metric),
+                    referringCodeProperty = Metric::referencedHierarchyCode
+                )
+            }
+        }
+    }
+
+    override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
+        return ValidationSubjectDescriptor(
+            subjectType = "DPM Dictionary",
+            subjectIdentifier = owner.prefix
+        )
+    }
+
     private fun <T> List<T>.addNotNull(element: T?): List<T> =
         if (element != null) {
             this + element
         } else {
             this
         }
-
-    override fun validate(validationResults: ValidationResults) {
-
-        validateLengths(
-            validationResults = validationResults,
-            instance = this,
-            properties = listOf(
-                DpmDictionary::explicitDomains,
-                DpmDictionary::typedDomains,
-                DpmDictionary::explicitDimensions,
-                DpmDictionary::typedDimensions
-            ),
-            minLength = 0,
-            maxLength = 10000
-        )
-
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "domains",
-            iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
-            valueSelector = { it: DpmElement -> it.code() },
-            valueDescription = "domainCode"
-        )
-
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "domains",
-            iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
-            valueSelector = { it: DpmElement -> it.uri },
-            valueDescription = "uri"
-        )
-
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "dimensions",
-            iterable = explicitDimensions + typedDimensions,
-            valueSelector = { it: DpmElement -> it.code() },
-            valueDescription = "dimensionCode"
-        )
-
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "dimensions",
-            iterable = explicitDimensions + typedDimensions,
-            valueSelector = { it: DpmElement -> it.uri },
-            valueDescription = "uri"
-        )
-
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "explicitDimensions",
-            validate = { messages ->
-                explicitDimensions.forEach { explicitDimension ->
-                    val referencedDomain =
-                        explicitDomains.find { it.domainCode == explicitDimension.referencedDomainCode }
-
-                    if (referencedDomain == null) {
-                        messages.add("ExplicitDimension ${explicitDimension.uri} refers non existing ExplicitDomain '${explicitDimension.referencedDomainCode}'")
-                    }
-                }
-            }
-        )
-
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "typedDimensions",
-            validate = { messages ->
-                typedDimensions.forEach { typedDimension ->
-                    val referencedDomain =
-                        typedDomains.find { it.domainCode == typedDimension.referencedDomainCode }
-
-                    if (referencedDomain == null) {
-                        messages.add("TypedDimension ${typedDimension.uri} refers non existing TypedDomain '${typedDimension.referencedDomainCode}'")
-                    }
-                }
-            }
-        )
-
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "metrics",
-            validate = { messages ->
-                metricDomain?.metrics?.forEach { metric ->
-
-                    if (metric.referencedDomainCode != null) {
-                        val referencedDomain =
-                            explicitDomains.find { it.domainCode == metric.referencedDomainCode }
-
-                        if (referencedDomain == null) {
-                            messages.add("Metric ${metric.uri} refers non existing ExplicitDomain '${metric.referencedDomainCode}'")
-                        } else {
-
-                            if (metric.referencedHierarchyCode != null) {
-                                val referencedHierarchy =
-                                    referencedDomain.hierarchies.find { it.hierarchyCode == metric.referencedHierarchyCode }
-
-                                if (referencedHierarchy == null) {
-                                    messages.add("Metric ${metric.uri} refers non existing Hierarchy '${metric.referencedHierarchyCode}' (not part of referenced ExplicitDomain ${referencedDomain.uri})")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        )
-    }
 }

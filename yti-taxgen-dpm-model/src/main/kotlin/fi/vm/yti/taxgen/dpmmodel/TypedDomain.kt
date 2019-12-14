@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateConditionTruthy
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropFulfillsCondition
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
 
 data class TypedDomain(
     override val uri: String,
@@ -25,24 +25,22 @@ data class TypedDomain(
         )
     }
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateDpmElement(validationResults)
+        validateDpmElement(validationResultBuilder)
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = TypedDomain::domainCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::domainCode,
             minLength = 2,
             maxLength = 50
         )
 
-        validateConditionTruthy(
-            validationResults = validationResults,
-            instance = this,
-            property = TypedDomain::dataType,
-            condition = { VALID_DATA_TYPES.contains(dataType) },
-            message = { "unsupported data type '$dataType'" }
+        validatePropFulfillsCondition(
+            validationResultBuilder = validationResultBuilder,
+            property = this::dataType,
+            condition = { VALID_DATA_TYPES.contains(it) },
+            reason = { "Unsupported value" }
         )
     }
 

@@ -321,8 +321,7 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Configuration file: (partial_source_config.json)",
-                "DPM dictionary #0: ERROR: DpmDictionary () => metrics",
-                "refers non existing ExplicitDomain 'EDA'",
+                "DPM dictionary #0: ERROR: [ReferencedDomainCode] Refers to unknown target [EDA]",
                 "Writing dictionaries to DPM database: INFO: Mapping failed due content errors"
             )
         }

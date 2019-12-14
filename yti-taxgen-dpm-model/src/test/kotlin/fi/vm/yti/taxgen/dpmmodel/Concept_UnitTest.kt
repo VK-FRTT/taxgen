@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.DpmModel_UnitTestBase
 import fi.vm.yti.taxgen.dpmmodel.unitestbase.propertyOptionalityTemplate
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import java.time.Instant
 import java.time.LocalDate
 import org.assertj.core.api.Assertions.assertThat
@@ -17,10 +17,10 @@ internal class Concept_UnitTest :
 
     fun conceptValidationAdapter(
         instance: Any,
-        validationResults: ValidationResults
+        validationResultBuilder: ValidationResultBuilder
     ) {
         (instance as Concept).validateConcept(
-            validationResults = validationResults,
+            validationResultBuilder = validationResultBuilder,
             minLabelLangCount = 1
         )
     }
@@ -56,7 +56,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.createdAt: is illegal timestamp value")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [CreatedAt] [Illegal timestamp value] [1970-01-01T00:00:00Z]"
+            )
         }
     }
 
@@ -71,20 +73,22 @@ internal class Concept_UnitTest :
 
             instantiateAndValidate(::conceptValidationAdapter)
             assertThat(validationErrors).containsExactlyInAnyOrder(
-                "Concept.modifiedAt: is illegal timestamp value",
-                "Concept.modifiedAt: is earlier than createdAt"
+                "[] [] [ModifiedAt] [Illegal timestamp value] [1970-01-01T00:00:00Z]",
+                "[] [] [ModifiedAt] [Is earlier than CreatedAt] [1970-01-01T00:00:00Z]"
             )
         }
 
         @Test
         fun `modifiedAt should produce validation error when it precedes createdAt`() {
             attributeOverrides(
-                "createdAt" to Instant.parse("2018-03-20T10:20:30.40Z"),
-                "modifiedAt" to Instant.parse("2018-03-19T10:20:30.40Z")
+                "createdAt" to Instant.parse("2018-03-20T10:20:30.400Z"),
+                "modifiedAt" to Instant.parse("2018-03-19T10:20:30.400Z")
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.modifiedAt: is earlier than createdAt")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [ModifiedAt] [Is earlier than CreatedAt] [2018-03-19T10:20:30.400Z]"
+            )
         }
 
         @Test
@@ -110,7 +114,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.applicableUntil: is earlier than applicableFrom")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [ApplicableUntil] [Is earlier than ApplicableFrom] [2018-01-19]"
+            )
         }
 
         @Test
@@ -168,7 +174,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [Label] [Too few translations (minimum 1)]"
+            )
         }
 
         @Test
@@ -197,7 +205,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.label: has too short translations for languages [en, fi]")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [Label] [Too short translation content for languages] [en, fi]"
+            )
         }
 
         @Test
@@ -222,7 +232,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.label: contains translations with surplus languages [es, fr]")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [Label] [Surplus translation languages] [es, fr]"
+            )
         }
     }
 
@@ -240,7 +252,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.description: has too short translations for languages [en, fi]")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [Description] [Too short translation content for languages] [en, fi]"
+            )
         }
 
         @Test
@@ -265,7 +279,9 @@ internal class Concept_UnitTest :
             )
 
             instantiateAndValidate(::conceptValidationAdapter)
-            assertThat(validationErrors).containsExactly("Concept.description: contains translations with surplus languages [es, fr]")
+            assertThat(validationErrors).containsExactly(
+                "[] [] [Description] [Surplus translation languages] [es, fr]"
+            )
         }
     }
 }

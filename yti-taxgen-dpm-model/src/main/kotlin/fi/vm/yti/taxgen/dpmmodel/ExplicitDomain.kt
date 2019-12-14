@@ -1,10 +1,11 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateCustom
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementPropertyValuesUnique
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLengths
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateCustom
+import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementCrossReferences
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropElementPropertiesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
 data class ExplicitDomain(
     override val uri: String,
@@ -14,71 +15,63 @@ data class ExplicitDomain(
     val hierarchies: List<Hierarchy>
 ) : DpmElement {
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateDpmElement(validationResults)
+        validateDpmElement(validationResultBuilder)
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = ExplicitDomain::domainCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::domainCode,
             minLength = 2,
             maxLength = 50
         )
 
-        validateLengths(
-            validationResults = validationResults,
-            instance = this,
-            properties = listOf(ExplicitDomain::members, ExplicitDomain::hierarchies),
+        validatePropsLengths(
+            validationResultBuilder = validationResultBuilder,
+            properties = listOf(this::members, this::hierarchies),
             minLength = 0,
             maxLength = 10000
         )
 
-        validateElementPropertyValuesUnique(
-            validationResults = validationResults,
-            instance = this,
-            iterableProperty = ExplicitDomain::members,
-            valueProperties = listOf(Member::uri, Member::memberCode)
+        validatePropElementPropertiesUnique(
+            validationResultBuilder = validationResultBuilder,
+            property = this::members,
+            elementProperties = listOf(Member::uri, Member::memberCode)
         )
 
         validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "members",
-            validate = { messages ->
+            validationResultBuilder = validationResultBuilder,
+            valueName = listOf(Member::class, Member::defaultMember),
+            validate = { errorReporter ->
                 val count = members.count { it.defaultMember }
 
                 if (count > 1) {
-                    messages.add("has $count default members (should have at max 1)")
+                    errorReporter.error(
+                        "Too many default members (maximum 1)",
+                        "$count"
+                    )
                 }
             }
         )
 
-        validateElementPropertyValuesUnique(
-            validationResults = validationResults,
-            instance = this,
-            iterableProperty = ExplicitDomain::hierarchies,
-            valueProperties = listOf(Hierarchy::uri, Hierarchy::hierarchyCode)
+        validatePropElementPropertiesUnique(
+            validationResultBuilder = validationResultBuilder,
+            property = this::hierarchies,
+            elementProperties = listOf(Hierarchy::uri, Hierarchy::hierarchyCode)
         )
 
-        validateCustom(
-            validationResults = validationResults,
-            instance = this,
-            propertyName = "hierarchies",
-            validate = { messages ->
-                val domainMemberCodes = members.map { it.memberCode }.toSet()
+        hierarchies.forEach { hierarchy ->
+            validationResultBuilder.withSubject(hierarchy.validationSubjectDescriptor()) {
 
-                hierarchies.forEach { hierarchy ->
-                    hierarchy.allNodes().forEach { node ->
-                        if (!domainMemberCodes.contains(node.referencedElementCode)) {
-                            messages.add(
-                                "DPM HierarchyNode ${node.uri} refers to DPM Member which is not present in DPM ExplicitDomain."
-                            )
-                        }
-                    }
-                }
+                validateDpmElementCrossReferences(
+                    validationResultBuilder = validationResultBuilder,
+                    targetElements = members,
+                    targetCodeProperty = Member::memberCode,
+                    referringElements = hierarchy.allNodes(),
+                    referringCodeProperty = HierarchyNode::referencedElementCode
+                )
             }
-        )
+        }
     }
 
     override fun code(): String = domainCode

@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.ordinatecategorisationtransform
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateNonNull
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
 import fi.vm.yti.taxgen.sqliteoutput.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyTable
@@ -70,36 +70,32 @@ data class OrdinateCategorisationDbReferences(
         }
     }
 
-    fun validate(validationResults: ValidationResults) {
+    fun validate(validationResultBuilder: ValidationResultBuilder) {
 
         validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = OrdinateCategorisationDbReferences::dimensionId
+            validationResultBuilder = validationResultBuilder,
+            property = this::dimensionId
         )
 
         validateNonNull(
-            validationResults = validationResults,
-            instance = this,
-            property = OrdinateCategorisationDbReferences::memberId
+            validationResultBuilder = validationResultBuilder,
+            property = this::memberId
         )
 
         if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
             signatureStructure == OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
         ) {
             validateNonNull(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationDbReferences::hierarchyId
+                validationResultBuilder = validationResultBuilder,
+                property = this::hierarchyId
             )
         }
 
         if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION
         ) {
             validateNonNull(
-                validationResults = validationResults,
-                instance = this,
-                property = OrdinateCategorisationDbReferences::hierarchyStartingMemberId
+                validationResultBuilder = validationResultBuilder,
+                property = this::hierarchyStartingMemberId
             )
         }
     }

@@ -88,8 +88,9 @@ internal class MetricDomain_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too short translations for languages [en]")
+            assertThat(validationErrors).containsExactly(
+                "[MetricDomain] [MET] [Concept.Label] [Too short translation content for languages] [en]"
+            )
         }
     }
 
@@ -152,9 +153,9 @@ internal class MetricDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Metric which is not present in DPM MetricDomain.",
-                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Metric which is not present in DPM MetricDomain.",
-                    "MetricDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Metric which is not present in DPM MetricDomain."
+                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_1_uri] [HierarchyNode] [hierarchy_node_hn_1.3_uri] [ReferencedElementCode] [Refers to unknown target] [met_m_3_code]",
+                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.2_uri] [ReferencedElementCode] [Refers to unknown target] [met_m_4_code]",
+                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.3_uri] [ReferencedElementCode] [Refers to unknown target] [met_m_5_code]"
                 )
         }
     }

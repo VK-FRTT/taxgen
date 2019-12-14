@@ -44,9 +44,7 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_owner_config_null_owner_name")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION",
-                "Owner.name",
-                "is too short"
+                "VALIDATION [DPM Owner] [] [Name] [Too short (minimum 2 characters)]"
             )
         }
 
@@ -55,9 +53,7 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_owner_config_empty_owner_name")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION",
-                "Owner.name",
-                "is too short"
+                "VALIDATION [DPM Owner] [] [Name] [Too short (minimum 2 characters)]"
             )
         }
 
@@ -66,9 +62,7 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_owner_config_unsupported_owner_language")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION",
-                "Owner.language",
-                "unsupported language 'xyz'"
+                "VALIDATION [DPM Owner] [Unsupported owner language] [LanguageCodes] [Unsupported language] [xyz]"
             )
         }
     }
@@ -81,31 +75,28 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_dpm_elements_metric")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1]",
-                "VALIDATION [Metric.dataType: unsupported data type 'UnsupportedMetricDataType']"
+                "VALIDATION [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1] [MetricCode] [Illegal DPM Code] [?1]",
+                "VALIDATION [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1] [DataType] [Unsupported value] [UnsupportedMetricDataType]",
+                "VALIDATION [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1] [MetricCode] [Unsupported code structure] [?1]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [Hierarchy] []",
-                "VALIDATION [Hierarchy.rootNodes: duplicate referencedElementCode value 'i6']"
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1] [HierarchyNode.ReferencedElementCode] [Duplicate value] [i6]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [Hierarchy] []",
-                "VALIDATION [Hierarchy.rootNodes: duplicate referencedElementCode value 'i6']"
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10] [HierarchyNode.ReferencedElementCode] [Duplicate value] [i6]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [DpmModel] []",
-                "VALIDATION [DpmModel.dictionaries.metricDomain: duplicate Metric.metricCode value 'i6']"
+                "VALIDATION [DPM Model] [] [Metric.MetricCode] [Duplicate value] [i6]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [DpmDictionary] []",
-                "VALIDATION [DpmDictionary.metrics: Metric http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3 refers non existing ExplicitDomain 'EDA']"
+                "VALIDATION [DPM Dictionary] [prefix] [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3] [ReferencedDomainCode] [Refers to unknown target] [EDA]"
             )
 
-            assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(5)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(7)
         }
 
         @Test
@@ -113,26 +104,22 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_dpm_elements_explicit_domain")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [ExplicitDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/DOME]",
-                "VALIDATION [ExplicitDomain.domainCode: is too long (maximum 50 characters)]"
+                "VALIDATION [ExplicitDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/DOME] [DomainCode] [Too long (maximum 50 characters)]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [Member] [http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x1]",
-                "VALIDATION [Member.memberCode: is illegal DPM Code]"
+                "VALIDATION [Member] [http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/code/EDA-x1] [MemberCode] [Illegal DPM Code] [EDA-x1-##-NonValidDpmCode]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [HierarchyNode] []",
-                "VALIDATION [HierarchyNode.comparisonOperator: unsupported arithmetical relationship (comparison operator) 'UnsupportedComparisonOp']"
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2] [HierarchyCode] [Too long (maximum 50 characters)]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [Hierarchy] []",
-                "VALIDATION [Hierarchy.hierarchyCode: is too long (maximum 50 characters)]"
+                "VALIDATION [HierarchyNode] [http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H2/member/1] [ComparisonOperator] [Unsupported arithmetical relationship] [UnsupportedComparisonOp]"
             )
 
-            assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(4)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(4)
         }
 
         @Test
@@ -140,16 +127,17 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_dpm_elements_explicit_dimension")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM]",
-                "VALIDATION [ExplicitDimension.dimensionCode: is too long (maximum 50 characters)]"
+                "VALIDATION [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM] [DimensionCode] [Too long (maximum 50 characters)]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [DpmDictionary] []",
-                "VALIDATION [DpmDictionary.explicitDimensions: ExplicitDimension http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM refers non existing ExplicitDomain 'DOME']"
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM] [ReferencedDomainCode] [Refers to unknown target] [DOME]",
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D1] [ReferencedDomainCode] [Refers to unknown target] [EDA]",
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D2] [ReferencedDomainCode] [Refers to unknown target] [EDA]",
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D10] [ReferencedDomainCode] [Refers to unknown target] [EDA]"
             )
 
-            assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(2)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(5)
         }
 
         @Test
@@ -157,11 +145,10 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_dpm_elements_typed_domain")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [TypedDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/DOMT]",
-                "VALIDATION [TypedDomain.dataType: unsupported data type 'UnsupportedTypeDomainDataType']"
+                "VALIDATION [TypedDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/DOMT] [DataType] [Unsupported value] [UnsupportedTypeDomainDataType]"
             )
 
-            assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(1)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(1)
         }
 
         @Test
@@ -169,16 +156,15 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_dpm_elements_typed_dimension")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1]",
-                "VALIDATION [TypedDimension.dimensionCode: is too long (maximum 50 characters)]"
+                "VALIDATION [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1] [DimensionCode] [Too long (maximum 50 characters)]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [DpmDictionary] []",
-                "VALIDATION [DpmDictionary.typedDimensions: TypedDimension http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1 refers non existing TypedDomain 'TDB']"
+                "VALIDATION [DPM Dictionary] [prefix] [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1] [ReferencedDomainCode] [Refers to unknown target] [TDB]",
+                "VALIDATION [DPM Dictionary] [prefix] [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D2] [ReferencedDomainCode] [Refers to unknown target] [TDB]"
             )
 
-            assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(2)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(3)
         }
 
         @Test
@@ -186,11 +172,10 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             executeRdsToDpmMapperAndGetDictionariesFrom("nonvalid_dpm_model")
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATED OBJECT [DpmModel] []",
-                "VALIDATION [DpmModel.dictionaries: duplicate owner.prefix value 'prefix']"
+                "VALIDATION [DPM Model] [] [Owner.Prefix] [Duplicate value] [prefix]"
             )
 
-            assertThat(diagnosticCollector.objectValidationFailureCount()).isEqualTo(1)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(1)
         }
 
         @Test

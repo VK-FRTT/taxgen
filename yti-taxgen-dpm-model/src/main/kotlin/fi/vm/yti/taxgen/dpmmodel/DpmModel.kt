@@ -1,82 +1,76 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateElementValueUnique
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableValuesUnique
 
 data class DpmModel(
     val dictionaries: List<DpmDictionary>
 ) : Validatable {
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateElementValueUnique(
-            validationResults = validationResults,
-            instance = this,
-            instancePropertyName = "dictionaries",
+        validateIterableValuesUnique(
+            validationResultBuilder = validationResultBuilder,
             iterable = dictionaries,
             valueSelector = { it: DpmDictionary -> it.owner.prefix },
-            valueDescription = "owner.prefix"
+            valueName = listOf(Owner::class, Owner::prefix)
         )
 
         dictionaries.mapNotNull { it.explicitDomains + it.typedDomains }.flatten().let { allDomains ->
-            validateElementValueUnique(
-                validationResults = validationResults,
-                instance = this,
-                instancePropertyName = "dictionaries.domains",
+            validateIterableValuesUnique(
+                validationResultBuilder = validationResultBuilder,
                 iterable = allDomains,
                 valueSelector = { it: DpmElement -> it.uri },
-                valueDescription = "Domain.uri"
+                valueName = listOf("Domain", ExplicitDomain::uri)
             )
 
-            validateElementValueUnique(
-                validationResults = validationResults,
-                instance = this,
-                instancePropertyName = "dictionaries.domains",
+            validateIterableValuesUnique(
+                validationResultBuilder = validationResultBuilder,
                 iterable = allDomains,
                 valueSelector = { it: DpmElement -> it.code() },
-                valueDescription = "Domain.code"
+                valueName = listOf("Domain", ExplicitDomain::domainCode)
             )
         }
 
         dictionaries.mapNotNull { it.metricDomain?.metrics }.flatten().let { allMetrics ->
-            validateElementValueUnique(
-                validationResults = validationResults,
-                instance = this,
-                instancePropertyName = "dictionaries.metricDomain",
+            validateIterableValuesUnique(
+                validationResultBuilder = validationResultBuilder,
                 iterable = allMetrics,
                 valueSelector = { it: Metric -> it.uri },
-                valueDescription = "Metric.uri"
+                valueName = listOf(Metric::class, Metric::uri)
             )
 
-            validateElementValueUnique(
-                validationResults = validationResults,
-                instance = this,
-                instancePropertyName = "dictionaries.metricDomain",
+            validateIterableValuesUnique(
+                validationResultBuilder = validationResultBuilder,
                 iterable = allMetrics,
                 valueSelector = { it: Metric -> it.metricCode },
-                valueDescription = "Metric.metricCode"
+                valueName = listOf(Metric::class, Metric::metricCode)
             )
         }
 
         dictionaries.mapNotNull { it.metricDomain?.hierarchies }.flatten().let { allMetricHierarchies ->
-            validateElementValueUnique(
-                validationResults = validationResults,
-                instance = this,
-                instancePropertyName = "dictionaries.metricDomain",
+            validateIterableValuesUnique(
+                validationResultBuilder = validationResultBuilder,
                 iterable = allMetricHierarchies,
                 valueSelector = { it: Hierarchy -> it.uri },
-                valueDescription = "Hierarchy.uri"
+                valueName = listOf("MetricDomain", Hierarchy::class, Hierarchy::uri)
             )
 
-            validateElementValueUnique(
-                validationResults = validationResults,
-                instance = this,
-                instancePropertyName = "dictionaries.metricDomain",
+            validateIterableValuesUnique(
+                validationResultBuilder = validationResultBuilder,
                 iterable = allMetricHierarchies,
                 valueSelector = { it: Hierarchy -> it.hierarchyCode },
-                valueDescription = "Hierarchy.hierarchyCode"
+                valueName = listOf("MetricDomain", Hierarchy::class, Hierarchy::hierarchyCode)
             )
         }
+    }
+
+    override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
+        return ValidationSubjectDescriptor(
+            subjectType = "DPM Model",
+            subjectIdentifier = ""
+        )
     }
 }

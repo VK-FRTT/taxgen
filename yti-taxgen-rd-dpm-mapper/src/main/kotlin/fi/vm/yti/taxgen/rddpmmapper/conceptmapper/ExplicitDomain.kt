@@ -94,7 +94,7 @@ internal fun mapAndValidateExplicitDomainsAndHierarchies(
         .sortedBy { it.order }
         .map { it.toExplicitDomain() }
 
-    validateDpmElements(diagnostic, explicitDomains)
+    diagnostic.validate(explicitDomains)
 
     return explicitDomains
 }
@@ -126,7 +126,7 @@ private fun mapAndValidateExplicitDomainMembers(
         .apply { sortWith(compareBy { it.order }) }
         .map { it.toMember() }
 
-    validateDpmElements(diagnostic, members)
+    diagnostic.validate(members)
 
     return members
 }

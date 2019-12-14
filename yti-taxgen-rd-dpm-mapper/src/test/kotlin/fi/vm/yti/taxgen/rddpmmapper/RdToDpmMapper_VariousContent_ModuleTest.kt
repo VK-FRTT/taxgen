@@ -57,8 +57,10 @@ internal class RdToDpmMapper_VariousContent_ModuleTest : RdToDpmMapper_ModuleTes
         executeRdsToDpmMapperAndGetDictionariesFrom("explicit_domain_with_node_ref_to_external_member")
 
         assertThat(diagnosticCollector.eventsString()).contains(
-            "VALIDATED OBJECT [ExplicitDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA]",
-            "VALIDATION [ExplicitDomain.hierarchies: DPM HierarchyNode http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10/member/1 refers to DPM Member which is not present in DPM ExplicitDomain.]"
+            "VALIDATION [ExplicitDomain] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-doms-2018-1/code/EDA] " +
+                "[Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10] " +
+                "[HierarchyNode] [http://uri.suomi.fi/codelist/dpm-integration-fixture/EDA-2018-1/extension/EDA-H10/member/1] " +
+                "[ReferencedElementCode] [Refers to unknown target] []"
         )
     }
 }

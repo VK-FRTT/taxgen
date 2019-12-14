@@ -1,8 +1,8 @@
 package fi.vm.yti.taxgen.dpmmodel
 
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateDpmCodeContent
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmCodeContent
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
 
 data class Member(
     override val uri: String,
@@ -11,22 +11,20 @@ data class Member(
     val defaultMember: Boolean
 ) : DpmElement {
 
-    override fun validate(validationResults: ValidationResults) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
-        validateDpmElement(validationResults)
+        validateDpmElement(validationResultBuilder)
 
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = Member::memberCode,
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::memberCode,
             minLength = 1,
             maxLength = 50
         )
 
         validateDpmCodeContent(
-            validationResults = validationResults,
-            instance = this,
-            property = Member::memberCode
+            validationResultBuilder = validationResultBuilder,
+            property = this::memberCode
         )
     }
 }

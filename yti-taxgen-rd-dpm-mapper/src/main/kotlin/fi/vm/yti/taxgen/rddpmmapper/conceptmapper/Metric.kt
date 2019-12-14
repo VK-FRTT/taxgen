@@ -43,9 +43,7 @@ internal fun mapAndValidateMetricDomain(
         hierarchies = hierarchies
     )
 
-    diagnostic.validate(metricDomain) {
-        metricDomain.validationContextInfo()
-    }
+    diagnostic.validate(metricDomain)
 
     return metricDomain
 }
@@ -103,7 +101,7 @@ private fun mapMetrics(
 
     val metrics = metricItems.itemsList().map { it.toMetric() }
 
-    validateDpmElements(diagnostic, metrics)
+    diagnostic.validate(metrics)
 
     return metrics
 }

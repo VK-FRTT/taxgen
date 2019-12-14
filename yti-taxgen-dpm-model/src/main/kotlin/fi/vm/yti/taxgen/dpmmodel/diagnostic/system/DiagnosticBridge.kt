@@ -1,9 +1,6 @@
 package fi.vm.yti.taxgen.dpmmodel.diagnostic.system
 
 import fi.vm.yti.taxgen.dpmmodel.Language
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidatableInfo
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetails
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
@@ -11,6 +8,8 @@ import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.ERROR
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.FATAL
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.INFO
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.WARNING
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultCollector
 import java.util.LinkedList
 
 class DiagnosticBridge(
@@ -106,27 +105,25 @@ class DiagnosticBridge(
     override fun validate(
         validatable: Validatable
     ) {
-        validate(validatable) {
-            ValidatableInfo(
-                objectKind = validatable.javaClass.simpleName,
-                objectAddress = ""
-            )
-        }
+        validate(listOf(validatable))
     }
 
     override fun validate(
-        validatable: Validatable,
-        infoProvider: () -> ValidatableInfo
+        validatables: List<Validatable>
     ) {
-        val collector = ValidationCollector()
-        validatable.validate(collector)
+        val resultCollector = ValidationResultCollector()
 
-        val results = collector.compileResults()
+        validatables.forEach {
+            resultCollector.withSubject(it.validationSubjectDescriptor()) {
+                it.validate(resultCollector)
+            }
+        }
+
+        val results = resultCollector.results()
 
         if (results.any()) {
             incrementCounter(ERROR)
-            val info = infoProvider()
-            eventConsumer.validationResults(info, results)
+            eventConsumer.validationResults(results)
         }
     }
 

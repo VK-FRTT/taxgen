@@ -127,8 +127,8 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "DpmDictionary.domains: duplicate domainCode value 'dom_1_code'",
-                "DpmDictionary.domains: duplicate uri value 'dom_1_uri'"
+                "[DPM Dictionary] [ns_prefix] [Domain.DomainCode] [Duplicate value] [dom_1_code]",
+                "[DPM Dictionary] [ns_prefix] [Domain.Uri] [Duplicate value] [dom_1_uri]"
             )
         }
     }
@@ -183,8 +183,8 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "DpmDictionary.dimensions: duplicate dimensionCode value 'dim_1_code'",
-                "DpmDictionary.dimensions: duplicate uri value 'dim_1_uri'"
+                "[DPM Dictionary] [ns_prefix] [Dimension.DimensionCode] [Duplicate value] [dim_1_code]",
+                "[DPM Dictionary] [ns_prefix] [Dimension.Uri] [Duplicate value] [dim_1_uri]"
             )
         }
 
@@ -219,7 +219,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "DpmDictionary.explicitDimensions: ExplicitDimension exp_dim_e2_uri refers non existing ExplicitDomain 'dom_2_code'"
+                "[DPM Dictionary] [ns_prefix] [ExplicitDimension] [exp_dim_e2_uri] [ReferencedDomainCode] [Refers to unknown target] [dom_2_code]"
             )
         }
 
@@ -254,7 +254,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "DpmDictionary.typedDimensions: TypedDimension typ_dim_t1_uri refers non existing TypedDomain 'dom_1_code'"
+                "[DPM Dictionary] [ns_prefix] [TypedDimension] [typ_dim_t1_uri] [ReferencedDomainCode] [Refers to unknown target] [dom_1_code]"
             )
         }
     }
@@ -298,7 +298,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "DpmDictionary.metrics: Metric met_1_uri refers non existing ExplicitDomain 'unknown_dom'"
+                "[DPM Dictionary] [ns_prefix] [Metric] [met_1_uri] [ReferencedDomainCode] [Refers to unknown target] [unknown_dom]"
             )
         }
 
@@ -338,7 +338,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "DpmDictionary.metrics: Metric met_1_uri refers non existing Hierarchy 'unknown_hier' (not part of referenced ExplicitDomain dom_1_uri)"
+                "[DPM Dictionary] [ns_prefix] [Metric] [met_1_uri] [ReferencedHierarchyCode] [Refers to unknown target] [unknown_hier]"
             )
         }
 

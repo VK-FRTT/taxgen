@@ -15,7 +15,7 @@ import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultCollector
 import java.time.Instant
 import java.time.LocalDate
 import org.assertj.core.api.Assertions.assertThat
@@ -535,7 +535,7 @@ fun dpmModelFixture(
 }
 
 private fun validateModelContents(dpmModel: DpmModel) {
-    val collector = ValidationCollector()
+    val collector = ValidationResultCollector()
 
     dpmModel.dictionaries.forEach { dictionary ->
 
@@ -570,5 +570,5 @@ private fun validateModelContents(dpmModel: DpmModel) {
 
     // NOTE: When this assert triggers, it means that most likely something
     // is broken within this test fixture internal relations
-    assertThat(collector.compileResultsToSimpleStrings()).isEmpty()
+    assertThat(collector.results()).isEmpty()
 }

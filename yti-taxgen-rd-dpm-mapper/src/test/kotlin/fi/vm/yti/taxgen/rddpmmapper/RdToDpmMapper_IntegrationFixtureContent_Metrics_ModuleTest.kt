@@ -18,7 +18,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
         dpmDictionary.metricDomain?.let { it ->
             assertThat(it.domainCode).isEqualTo("MET")
             assertThat(it.uri).isEqualTo("MET")
-            assertThat(it.type).isEqualTo("MetricDomain")
 
             assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
             assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -44,7 +43,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
                         assertThat(it.metricCode).isEqualTo("b1")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/1")
-                        assertThat(it.type).isEqualTo("Metric")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -254,7 +252,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
                         assertThat(it.hierarchyCode).isEqualTo("MET1")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1")
-                        assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -273,7 +270,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
                         assertThat(it.hierarchyCode).isEqualTo("MET10")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10")
-                        assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -292,7 +288,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
                         assertThat(it.hierarchyCode).isEqualTo("METHIER")
 
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER")
-                        assertThat(it.type).isEqualTo("Hierarchy")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -326,7 +321,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
                 when (index) {
                     0 -> {
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1/member/1")
-                        assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")
@@ -577,7 +571,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_Metrics_ModuleTest :
                 when (index) {
                     0 -> {
                         assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/METHIER/member/1")
-                        assertThat(it.type).isEqualTo("HierarchyNode")
 
                         assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                         assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")

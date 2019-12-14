@@ -77,7 +77,9 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+                .containsExactly(
+                    "[ExplicitDomain] [exp_dom_uri] [Concept.Label] [Too few translations (minimum 1)]"
+                )
         }
     }
 
@@ -98,8 +100,8 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactlyInAnyOrder(
-                    "ExplicitDomain.members: duplicate uri value 'member_m_2_uri'",
-                    "ExplicitDomain.members: duplicate memberCode value 'member_m_2_code'"
+                    "[ExplicitDomain] [exp_dom_uri] [Members.Uri] [Duplicate value] [member_m_2_uri]",
+                    "[ExplicitDomain] [exp_dom_uri] [Members.MemberCode] [Duplicate value] [member_m_2_code]"
                 )
         }
 
@@ -115,7 +117,9 @@ internal class ExplicitDomain_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors)
-                .containsExactly("ExplicitDomain.members: has 2 default members (should have at max 1)")
+                .containsExactly(
+                    "[ExplicitDomain] [exp_dom_uri] [Member.DefaultMember] [Too many default members (maximum 1)] [2]"
+                )
         }
 
         @Test
@@ -150,8 +154,8 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "ExplicitDomain.hierarchies: duplicate hierarchyCode value 'hierarchy_h_2_code'",
-                    "ExplicitDomain.hierarchies: duplicate uri value 'hierarchy_h_2_uri'"
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchies.Uri] [Duplicate value] [hierarchy_h_2_uri]",
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchies.HierarchyCode] [Duplicate value] [hierarchy_h_2_code]"
                 )
         }
 
@@ -181,7 +185,6 @@ internal class ExplicitDomain_UnitTest :
                                 "member_m_3_code" // External
                             )
                         )
-
                     ),
 
                     hierarchy(
@@ -212,9 +215,9 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_1.3_uri refers to DPM Member which is not present in DPM ExplicitDomain.",
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.2_uri refers to DPM Member which is not present in DPM ExplicitDomain.",
-                    "ExplicitDomain.hierarchies: DPM HierarchyNode hierarchy_node_hn_2.3_uri refers to DPM Member which is not present in DPM ExplicitDomain."
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_1_uri] [HierarchyNode] [hierarchy_node_hn_1.3_uri] [ReferencedElementCode] [Refers to unknown target] [member_m_3_code]",
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.2_uri] [ReferencedElementCode] [Refers to unknown target] [member_m_4_code]",
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.3_uri] [ReferencedElementCode] [Refers to unknown target] [member_m_5_code]"
                 )
         }
     }

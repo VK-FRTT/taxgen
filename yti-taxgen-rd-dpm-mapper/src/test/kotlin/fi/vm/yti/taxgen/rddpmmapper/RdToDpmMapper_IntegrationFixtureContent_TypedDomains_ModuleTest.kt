@@ -20,7 +20,6 @@ internal class RdToDpmMapper_IntegrationFixtureContent_TypedDomains_ModuleTest :
                     assertThat(it.domainCode).isEqualTo("DOMT")
 
                     assertThat(it.uri).isEqualTo("http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-doms-2018-1/code/DOMT")
-                    assertThat(it.type).isEqualTo("TypedDomain")
 
                     assertThat(it.concept.createdAt).isAfter("2018-09-14T00:00:00.000Z")
                     assertThat(it.concept.modifiedAt).isAfter("2018-09-14T00:00:00.000Z")

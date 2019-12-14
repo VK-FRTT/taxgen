@@ -60,7 +60,9 @@ internal class Language_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors).containsExactly("Language.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[Language] [en] [Label] [Too few translations (minimum 1)]"
+            )
         }
 
         @Test
@@ -89,8 +91,9 @@ internal class Language_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Language.label: has too short translations for languages [en, fi]")
+            assertThat(validationErrors).containsExactly(
+                "[Language] [en] [Label] [Too short translation content for languages] [en, fi]"
+                )
         }
 
         @Test
@@ -139,7 +142,7 @@ internal class Language_UnitTest :
             val thrown = catchThrowable { Language.loadLanguages(languageConfigPath) }
 
             assertThat(thrown)
-                .hasMessage("Language configuration not valid. [Language #1 (fi): [Language.label: has too few translations (minimum 1)]]")
+                .hasMessage("Language configuration not valid. [Language #1 (fi): [Label] [Too few translations (minimum 1)]]")
         }
     }
 }

@@ -110,7 +110,7 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).contains("Metric.metricCode: metric code does not match required pattern '$metricCode'")
+                "invalid" -> assertThat(validationErrors).contains("[Metric] [met_uri] [MetricCode] [Unsupported code structure] [$metricCode]")
                 else -> throwIllegalDpmModelState()
             }
         }
@@ -128,8 +128,9 @@ internal class Metric_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Concept.label: has too few translations (minimum 1)")
+            assertThat(validationErrors).containsExactly(
+                "[Metric] [met_uri] [Concept.Label] [Too few translations (minimum 1)]"
+            )
         }
     }
 
@@ -180,7 +181,7 @@ internal class Metric_UnitTest :
                 }
 
                 "invalid" -> {
-                    assertThat(validationErrors).containsExactly("Metric.dataType: unsupported data type '$dataType'")
+                    assertThat(validationErrors).containsExactly("[Metric] [met_uri] [DataType] [Unsupported value] [$dataType]")
                     assertThat(Metric.codeTagFromDataType(dataType)).isEqualTo("?")
                 }
 
@@ -197,8 +198,9 @@ internal class Metric_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Metric.dataType: missing ReferencedDomainCode when data type is Enumeration/Code")
+            assertThat(validationErrors).containsExactly(
+                "[Metric] [met_uri] [ReferencedDomainCode] [Value missing (null) but DataType is Enumeration/Code]"
+            )
         }
     }
 
@@ -232,7 +234,7 @@ internal class Metric_UnitTest :
                 }
 
                 "invalid" -> {
-                    assertThat(validationErrors).containsExactly("Metric.flowType: unsupported flow type '$flowType'")
+                    assertThat(validationErrors).containsExactly("[Metric] [met_uri] [FlowType] [Unsupported value] [$flowType]")
                     assertThat(Metric.codeTagFromFlowType(flowType)).isEqualTo("?")
                 }
                 else -> throwIllegalDpmModelState()
@@ -264,7 +266,7 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.balanceType: unsupported balance type '$balanceType'")
+                "invalid" -> assertThat(validationErrors).containsExactly("[Metric] [met_uri] [BalanceType] [Unsupported value] [$balanceType]")
                 else -> throwIllegalDpmModelState()
             }
         }
@@ -291,7 +293,7 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedDomainCode: is blank")
+                "invalid" -> assertThat(validationErrors).containsExactly("[Metric] [met_uri] [ReferencedDomainCode] [Value is blank]")
                 else -> throwIllegalDpmModelState()
             }
         }
@@ -317,8 +319,9 @@ internal class Metric_UnitTest :
             )
 
             instantiateAndValidate()
-            assertThat(validationErrors)
-                .containsExactly("Metric.dataType: ReferencedDomainCode given but data type not Enumeration/Code")
+            assertThat(validationErrors).containsExactly(
+                "[Metric] [met_uri] [ReferencedDomainCode] [Value given but DataType not Enumeration/Code] [MC]"
+            )
         }
     }
 
@@ -343,7 +346,7 @@ internal class Metric_UnitTest :
 
             when (expectedValidity) {
                 "valid" -> assertThat(validationErrors).isEmpty()
-                "invalid" -> assertThat(validationErrors).containsExactly("Metric.referencedHierarchyCode: is blank")
+                "invalid" -> assertThat(validationErrors).containsExactly("[Metric] [met_uri] [ReferencedHierarchyCode] [Value is blank]")
                 else -> throwIllegalDpmModelState()
             }
         }
@@ -368,8 +371,8 @@ internal class Metric_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "Metric.dataType: ReferencedHierarchyCode given but data type not Enumeration/Code",
-                "Metric.referencedHierarchyCode: ReferencedHierarchyCode given without ExplicitDomain reference"
+                "[Metric] [met_uri] [ReferencedHierarchyCode] [Value given but DataType not Enumeration/Code] [MC1]",
+                "[Metric] [met_uri] [ReferencedDomainCode] [Value missing (null) but ReferencedHierarchyCode is given]"
             )
         }
 

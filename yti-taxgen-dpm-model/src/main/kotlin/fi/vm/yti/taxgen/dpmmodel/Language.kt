@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.Validatable
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.ValidationResults
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.system.ValidationCollector
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateLength
-import fi.vm.yti.taxgen.dpmmodel.datavalidation.validateTranslatedText
 import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationResultCollector
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
+import fi.vm.yti.taxgen.dpmmodel.validators.validatePropTranslatedText
 import java.net.URL
 import java.nio.file.Path
 
@@ -19,21 +20,26 @@ class Language constructor(
     val label: TranslatedText
 ) : Validatable {
 
-    override fun validate(validationResults: ValidationResults) {
-        validateLength(
-            validationResults = validationResults,
-            instance = this,
-            property = Language::iso6391Code,
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
+        validatePropLength(
+            validationResultBuilder = validationResultBuilder,
+            property = this::iso6391Code,
             minLength = 2,
             maxLength = 2
         )
 
-        validateTranslatedText(
-            validationResults = validationResults,
-            instance = this,
-            property = Language::label,
+        validatePropTranslatedText(
+            validationResultBuilder = validationResultBuilder,
+            property = this::label,
             minTranslationLength = 5,
             minLangCount = 1
+        )
+    }
+
+    override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
+        return ValidationSubjectDescriptor(
+            subjectType = "Language",
+            subjectIdentifier = iso6391Code
         )
     }
 
@@ -146,18 +152,19 @@ class Language constructor(
         }
 
         private fun validateLanguages(languages: Set<Language>) {
-            val validationMessages = mutableListOf<String>()
-            val validationCollector = ValidationCollector()
 
-            languages.forEachIndexed { index, language ->
+            val validationMessages = languages.mapIndexedNotNull { index, language ->
+                val validationCollector = ValidationResultCollector()
                 language.validate(validationCollector)
 
-                validationCollector
-                    .compileResultsToSimpleStrings()
-                    .takeIf { it.any() }
-                    ?.let { validationMessages.add("Language #$index (${language.iso6391Code}): $it") }
+                val results = validationCollector.results()
 
-                validationCollector.clear()
+                if (results.any()) {
+                    val subject = language.validationSubjectDescriptor()
+                    "${subject.subjectType} #$index (${subject.subjectIdentifier}): ${results.joinToString { it.toString() }}"
+                } else {
+                    null
+                }
             }
 
             validationMessages

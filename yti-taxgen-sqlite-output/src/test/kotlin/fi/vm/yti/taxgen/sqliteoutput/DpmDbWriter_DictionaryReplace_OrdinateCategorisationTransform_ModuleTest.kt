@@ -291,9 +291,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Dimensions not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Dimensions not same]"
                 )
 
                 // DPS
@@ -305,9 +304,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Dimensions not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.dimensionIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Dimensions not same]"
                 )
             }
 
@@ -323,9 +321,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Members not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [MemberIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Members not same]"
                 )
 
                 // DPS
@@ -337,9 +334,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Members not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.memberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [MemberIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Members not same]"
                 )
             }
 
@@ -354,9 +350,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Hierarchies not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [HierarchyIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
                 )
 
                 // DPS
@@ -368,9 +363,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Hierarchies not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [HierarchyIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
                 )
             }
 
@@ -385,9 +379,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Hierarchy starting members not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.hierarchyStartingMemberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [HierarchyStartingMemberIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchy starting members not same]"
                 )
 
                 // DPS
@@ -399,9 +392,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Hierarchy starting members not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.hierarchyStartingMemberIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [HierarchyStartingMemberIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchy starting members not same]"
                 )
             }
 
@@ -416,10 +408,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Starting member inclusion not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: is blank]",
-                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value ' ']"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [StartingMemberIncluded] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [StartingMemberIncluded] [Unsupported value] [ ]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Starting member inclusion not same]"
                 )
 
                 // DPS
@@ -431,10 +422,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Starting member inclusion not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: is blank]",
-                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value ' ']"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [StartingMemberIncluded] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [StartingMemberIncluded] [Unsupported value] [ ]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Starting member inclusion not same]"
                 )
             }
 
@@ -449,9 +439,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Hierarchies not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [HierarchyIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
                 )
 
                 // DPS
@@ -463,9 +452,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [BaselineOrdinateCategorisation.signatures: OrdinateCategorisation signatures do not match: Hierarchies not same]",
-                    "VALIDATION [OrdinateCategorisationSignature.hierarchyIdentifier: is blank]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [HierarchyIdentifier] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
                 )
             }
         }
@@ -473,7 +461,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
         @Nested
         inner class SignatureValueErrors {
 
-            val finalOrdinateCategorisationValidationMarker = "VALIDATED OBJECT [FinalOrdinateCategorisation]"
+            val finalOrdinateCategorisationValidationMarker = "VALIDATION [OrdinateCategorisation (transformed)]"
 
             @Test
             fun `unknown dimension should cause validation failure only for DPS`() {
@@ -495,8 +483,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112]",
-                    "VALIDATION [OrdinateCategorisationDbReferences.dimensionId: does not have value]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [DimensionId] [Value missing (null)]"
                 )
             }
 
@@ -520,8 +507,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [FinalOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [OrdinateCategorisationDbReferences.memberId: does not have value]"
+                    "VALIDATION [OrdinateCategorisation (transformed)] [OrdinateID: 112] [MemberId] [Value missing (null)]"
                 )
             }
 
@@ -545,9 +531,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112]",
-                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyId: does not have value]",
-                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyStartingMemberId: does not have value]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [HierarchyId] [Value missing (null)]",
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [HierarchyStartingMemberId] [Value missing (null)]"
                 )
             }
 
@@ -571,8 +556,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112]",
-                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyStartingMemberId: does not have value]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [HierarchyStartingMemberId] [Value missing (null)]"
                 )
             }
 
@@ -587,8 +571,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 111]",
-                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [StartingMemberIncluded] [Unsupported value] [XYZ]"
                 )
 
                 // DPS
@@ -600,8 +583,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATED OBJECT [BaselineOrdinateCategorisation] [OrdinateID: 112]",
-                    "VALIDATION [OrdinateCategorisationSignature.startingMemberIncluded: unsupported IsStartingMemberIncluded value 'XYZ']"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [StartingMemberIncluded] [Unsupported value] [XYZ]"
                 )
             }
 
@@ -625,8 +607,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112]",
-                    "VALIDATION [OrdinateCategorisationDbReferences.hierarchyId: does not have value]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [HierarchyId] [Value missing (null)]"
                 )
             }
 
