@@ -2,8 +2,8 @@ ext {
     versions = [
             kotlin:             "1.3.11",
             joptSimple:         "5.0.4",
-            jacksonKotlin:      "2.8.11.1",
-            jacksonJsr310:      "2.8.11",
+            jacksonKotlin:      "2.10.2",
+            jacksonJsr310:      "2.10.2",
             okhttp:             "3.14.4",
             googleGuava:        "25.0-jre",
             xerialSqliteJdbc:   "3.21.0.1",
