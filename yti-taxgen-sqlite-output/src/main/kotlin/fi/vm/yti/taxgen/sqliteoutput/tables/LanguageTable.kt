@@ -1,8 +1,7 @@
 package fi.vm.yti.taxgen.sqliteoutput.tables
 
 import fi.vm.yti.taxgen.dpmmodel.Language
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.update
@@ -22,7 +21,7 @@ import org.jetbrains.exposed.sql.update
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U):
  * - None
  */
-object LanguageTable : IntIdTable(name = "mLanguage", columnName = "LanguageID") {
+object LanguageTable : IntIdByRowIdTableBase(name = "mLanguage", columnName = "LanguageID") {
 
     val languageNameCol = text("LanguageName").nullable()
 

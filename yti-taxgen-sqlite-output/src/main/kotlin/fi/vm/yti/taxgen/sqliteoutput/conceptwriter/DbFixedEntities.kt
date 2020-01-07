@@ -11,7 +11,7 @@ import fi.vm.yti.taxgen.sqliteoutput.tables.DimensionTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.OwnerTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select

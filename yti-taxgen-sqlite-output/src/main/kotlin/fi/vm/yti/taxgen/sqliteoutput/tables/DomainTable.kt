@@ -4,8 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.ExplicitDomain
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.and
@@ -39,7 +38,7 @@ import org.jetbrains.exposed.sql.select
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - T4U defines DataType as INTEGER (most likely error in spec)
  */
-object DomainTable : IntIdTable(name = "mDomain", columnName = "DomainID") {
+object DomainTable : IntIdByRowIdTableBase(name = "mDomain", columnName = "DomainID") {
 
     val domainCodeCol = text("DomainCode").nullable()
 

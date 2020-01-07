@@ -20,14 +20,11 @@ class TableCellTransform(
         transaction {
             TransactionManager.current()
                 .connection
-                .createStatement()
-                .executeUpdate(
-                    """
-                        UPDATE mTableCell SET
-                            DataPointSignature = null,
-                            DPS = null
-                        """.trimIndent()
+                .prepareStatement(
+                    sql = "UPDATE mTableCell SET DataPointSignature = null, DPS = null",
+                    returnKeys = false
                 )
+                .executeUpdate()
         }
     }
 }

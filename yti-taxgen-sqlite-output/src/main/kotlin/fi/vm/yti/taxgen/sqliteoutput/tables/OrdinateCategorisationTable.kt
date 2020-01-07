@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteoutput.tables
 
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
@@ -31,14 +31,14 @@ object OrdinateCategorisationTable : Table("mOrdinateCategorisation") {
         foreign = AxisOrdinateTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     val dimensionIdCol: Column<EntityID<Int>?> = reference(
         name = "DimensionID",
         foreign = DimensionTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     val memberIdCol: Column<EntityID<Int>?> = reference(
         name = "MemberID",
@@ -52,6 +52,8 @@ object OrdinateCategorisationTable : Table("mOrdinateCategorisation") {
     val sourceCol = text("Source").nullable()
 
     val dpsCol = text("DPS").nullable()
+
+    override val primaryKey = PrimaryKey(ordinateIdCol, dimensionIdCol)
 
     fun insertOrdinateCategorisation(
         ordinateId: EntityID<Int>?,

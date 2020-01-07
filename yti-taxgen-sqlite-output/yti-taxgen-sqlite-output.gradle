@@ -4,7 +4,10 @@ dependencies {
     implementation libs.kotlinStdLib
     implementation libs.kotlinReflect
     implementation libs.xerialSqliteJdbc
-    implementation libs.jetbrainsExposed
+    implementation libs.exposedCore
+    implementation libs.exposedDao
+    implementation libs.exposedJdbc
+    implementation libs.exposedJodaTime
 
     implementation(project(':yti-taxgen-commons'))
     implementation(project(':yti-taxgen-dpm-model'))
@@ -16,5 +19,6 @@ dependencies {
     testCompile(project(':yti-taxgen-test-commons'))
 
     testRuntimeOnly libs.junitJupiterEngine
+    testRuntimeOnly libs.slf4jNop
 }
 

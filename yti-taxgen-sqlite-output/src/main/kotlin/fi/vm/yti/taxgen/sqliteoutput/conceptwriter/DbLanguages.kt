@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteoutput.conceptwriter
 
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteoutput.tables.LanguageTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 

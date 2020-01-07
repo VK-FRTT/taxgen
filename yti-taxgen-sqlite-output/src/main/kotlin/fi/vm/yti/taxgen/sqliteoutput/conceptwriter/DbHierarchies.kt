@@ -5,7 +5,7 @@ import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbHierarchies {

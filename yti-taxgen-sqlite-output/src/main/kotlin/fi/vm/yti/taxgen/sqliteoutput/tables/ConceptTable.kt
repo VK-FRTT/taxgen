@@ -3,8 +3,7 @@ package fi.vm.yti.taxgen.sqliteoutput.tables
 import fi.vm.yti.taxgen.dpmmodel.Concept
 import fi.vm.yti.taxgen.sqliteoutput.ext.java.toJodaDateTime
 import fi.vm.yti.taxgen.sqliteoutput.ext.java.toJodaDateTimeOrNull
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -50,7 +49,7 @@ enum class ConceptType(val value: String) {
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object ConceptTable : IntIdTable(name = "mConcept", columnName = "ConceptID") {
+object ConceptTable : IntIdByRowIdTableBase(name = "mConcept", columnName = "ConceptID") {
 
     val conceptTypeCol = text("ConceptType").nullable()
 

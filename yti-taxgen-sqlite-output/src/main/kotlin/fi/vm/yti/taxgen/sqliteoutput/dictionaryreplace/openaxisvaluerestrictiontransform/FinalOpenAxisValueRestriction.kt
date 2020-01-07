@@ -9,7 +9,7 @@ import fi.vm.yti.taxgen.sqliteoutput.tables.DomainTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.MemberTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 
 data class FinalOpenAxisValueRestriction(
     val restrictionStructure: OpenAxisValueRestrictionStructure,

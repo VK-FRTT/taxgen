@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteoutput.conceptwriter
 
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 
 data class FixedEntitiesLookupItem(
     val metricDomainOwnerId: EntityID<Int>,

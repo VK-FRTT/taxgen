@@ -1,7 +1,5 @@
 package fi.vm.yti.taxgen.sqliteoutput.tables
 
-import org.jetbrains.exposed.dao.IntIdTable
-
 /**
  * Reference DDL (from BR-AG Data Modeler):
  * CREATE TABLE `mAxis` (
@@ -16,7 +14,7 @@ import org.jetbrains.exposed.dao.IntIdTable
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object AxisTable : IntIdTable(name = "mAxis", columnName = "AxisID") {
+object AxisTable : IntIdByRowIdTableBase(name = "mAxis", columnName = "AxisID") {
 
     val axisOrientationCol = text("AxisOrientation").nullable()
 

@@ -6,7 +6,7 @@ import fi.vm.yti.taxgen.dpmmodel.MetricDomain
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.sqliteoutput.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.MetricTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbMetric {

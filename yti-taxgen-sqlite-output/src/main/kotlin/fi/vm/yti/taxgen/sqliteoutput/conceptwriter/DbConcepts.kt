@@ -15,7 +15,7 @@ import fi.vm.yti.taxgen.sqliteoutput.tables.ConceptTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.ConceptTranslationRole
 import fi.vm.yti.taxgen.sqliteoutput.tables.ConceptTranslationTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.ConceptType
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 
 object DbConcepts {
 

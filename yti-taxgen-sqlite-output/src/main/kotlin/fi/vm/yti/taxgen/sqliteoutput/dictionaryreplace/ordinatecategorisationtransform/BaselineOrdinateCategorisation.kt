@@ -7,7 +7,7 @@ import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
 import fi.vm.yti.taxgen.dpmmodel.validators.validateCustom
 import fi.vm.yti.taxgen.sqliteoutput.tables.OrdinateCategorisationTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 

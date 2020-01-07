@@ -3,8 +3,7 @@ package fi.vm.yti.taxgen.sqliteoutput.tables
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.insert
 
@@ -42,7 +41,7 @@ import org.jetbrains.exposed.sql.insert
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - In T4U spec DataType is integer
  */
-object MetricTable : IntIdTable(name = "mMetric", columnName = "MetricID") {
+object MetricTable : IntIdByRowIdTableBase(name = "mMetric", columnName = "MetricID") {
 
     val correspondingMemberCol = reference(
         name = "CorrespondingMemberID",

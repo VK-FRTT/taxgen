@@ -11,7 +11,7 @@ import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyNodeTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.HierarchyTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.MemberTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.OpenAxisValueRestrictionTable
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 
 data class BaselineOpenAxisValueRestriction(

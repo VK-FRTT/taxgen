@@ -1,6 +1,5 @@
 package fi.vm.yti.taxgen.sqliteoutput.tables
 
-import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
 /**
@@ -27,7 +26,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object AxisOrdinateTable : IntIdTable(name = "mAxisOrdinate", columnName = "OrdinateID") {
+object AxisOrdinateTable : IntIdByRowIdTableBase(name = "mAxisOrdinate", columnName = "OrdinateID") {
     // NOTE: In reference DDL OrdinateID is a second column
 
     val axisIdCol = reference(

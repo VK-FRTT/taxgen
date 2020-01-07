@@ -1,6 +1,6 @@
 package fi.vm.yti.taxgen.sqliteoutput.tables
 
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
@@ -27,7 +27,7 @@ object OpenAxisValueRestrictionTable : Table("mOpenAxisValueRestriction") {
         foreign = AxisTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     val hierarchyIdCol = reference(
         name = "HierarchyID",
@@ -45,6 +45,8 @@ object OpenAxisValueRestrictionTable : Table("mOpenAxisValueRestriction") {
         ).nullable()
 
     val isStartingMemberIncludedCol = bool("IsStartingMemberIncluded").nullable()
+
+    override val primaryKey = PrimaryKey(axisIdCol)
 
     fun insertOpenAxisValueRestriction(
         axisId: EntityID<Int>?,

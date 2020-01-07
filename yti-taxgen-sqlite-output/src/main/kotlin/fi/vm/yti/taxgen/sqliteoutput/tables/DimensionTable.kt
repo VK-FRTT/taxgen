@@ -5,8 +5,7 @@ import fi.vm.yti.taxgen.dpmmodel.ExplicitDimension
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Owner
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
@@ -31,7 +30,7 @@ import org.jetbrains.exposed.sql.select
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object DimensionTable : IntIdTable(name = "mDimension", columnName = "DimensionID") {
+object DimensionTable : IntIdByRowIdTableBase(name = "mDimension", columnName = "DimensionID") {
 
     val dimensionLabelCol = text("DimensionLabel").nullable()
 

@@ -2,8 +2,7 @@ package fi.vm.yti.taxgen.sqliteoutput.tables
 
 import fi.vm.yti.taxgen.dpmmodel.Hierarchy
 import fi.vm.yti.taxgen.dpmmodel.Language
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -31,7 +30,7 @@ import org.jetbrains.exposed.sql.select
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object HierarchyTable : IntIdTable(name = "mHierarchy", columnName = "HierarchyID") {
+object HierarchyTable : IntIdByRowIdTableBase(name = "mHierarchy", columnName = "HierarchyID") {
 
     // Short code
     val hierarchyCodeCol = text("HierarchyCode").nullable()

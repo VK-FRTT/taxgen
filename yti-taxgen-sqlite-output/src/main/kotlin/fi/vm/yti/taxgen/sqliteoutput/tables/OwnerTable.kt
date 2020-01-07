@@ -1,8 +1,7 @@
 package fi.vm.yti.taxgen.sqliteoutput.tables
 
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.select
@@ -26,7 +25,7 @@ import org.jetbrains.exposed.sql.select
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object OwnerTable : IntIdTable(name = "mOwner", columnName = "OwnerID") {
+object OwnerTable : IntIdByRowIdTableBase(name = "mOwner", columnName = "OwnerID") {
 
     val ownerNameCol = text("OwnerName").nullable()
 

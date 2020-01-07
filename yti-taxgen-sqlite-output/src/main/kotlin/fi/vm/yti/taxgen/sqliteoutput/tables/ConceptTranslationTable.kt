@@ -2,7 +2,7 @@ package fi.vm.yti.taxgen.sqliteoutput.tables
 
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Language
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
@@ -38,18 +38,20 @@ object ConceptTranslationTable : Table(name = "mConceptTranslation") {
         foreign = ConceptTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     val languageIdCol = reference(
         name = "LanguageID",
         foreign = LanguageTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     val textCol = text("Text").nullable()
 
-    val roleCol = text("Role").nullable().primaryKey()
+    val roleCol = text("Role").nullable()
+
+    override val primaryKey = PrimaryKey(conceptIdCol, languageIdCol, roleCol)
 
     fun insertConceptTranslation(
         languageIds: Map<Language, EntityID<Int>>,

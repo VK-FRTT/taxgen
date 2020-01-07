@@ -6,7 +6,7 @@ ext {
             jacksonJsr310:      "2.10.2",
             okhttp:             "4.3.0",
             xerialSqliteJdbc:   "3.30.1",
-            jetbrainsExposed:   "0.17.5",
+            exposed:            "0.20.2",
             slf4jNop:           "1.7.25",
             jupiter:            "5.1.0",
             assertj:            "3.9.0",
@@ -24,7 +24,11 @@ ext {
             jacksonJsr310:          "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$versions.jacksonJsr310",
             okHttp3:                "com.squareup.okhttp3:okhttp:$versions.okhttp",
             xerialSqliteJdbc:       "org.xerial:sqlite-jdbc:$versions.xerialSqliteJdbc",
-            jetbrainsExposed:       "org.jetbrains.exposed:exposed:$versions.jetbrainsExposed",
+            exposedCore:            "org.jetbrains.exposed:exposed-core:$versions.exposed",
+            exposedDao:             "org.jetbrains.exposed:exposed-dao:$versions.exposed",
+            exposedJdbc:            "org.jetbrains.exposed:exposed-jdbc:$versions.exposed",
+            exposedJodaTime:        "org.jetbrains.exposed:exposed-jodatime:$versions.exposed",
+
             slf4jNop:               "org.slf4j:slf4j-nop:$versions.slf4jNop",
 
             kotlinTest:             "org.jetbrains.kotlin:kotlin-test:$versions.kotlin",

@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
 import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 
 data class FinalOrdinateCategorisation(
     val ordinateId: EntityID<Int>?,

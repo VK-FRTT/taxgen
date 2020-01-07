@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.sqliteoutput.tables
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.HierarchyNode
 import fi.vm.yti.taxgen.dpmmodel.Language
-import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.and
@@ -46,7 +46,7 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
         foreign = HierarchyTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     // Member this node represents
     val memberIdCol = reference(
@@ -54,7 +54,7 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
         foreign = MemberTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
-    ).nullable().primaryKey()
+    ).nullable()
 
     //
     val isAbstractCol = bool("IsAbstract").nullable()
@@ -89,6 +89,11 @@ object HierarchyNodeTable : Table(name = "mHierarchyNode") {
 
     // Path from the root of the hierarchy to this node, only MemberIDs are listed (Tree structure information)
     val pathCol = varchar("Path", 3999).nullable()
+
+    override val primaryKey = PrimaryKey(
+        hierarchyIdCol,
+        memberIdCol
+    )
 
     fun insertHierarchyNode(
         hierarchyNodeConceptId: EntityID<Int>,

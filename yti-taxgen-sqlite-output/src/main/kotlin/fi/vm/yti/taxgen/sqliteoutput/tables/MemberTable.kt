@@ -5,8 +5,7 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.Member
 import fi.vm.yti.taxgen.dpmmodel.Metric
 import fi.vm.yti.taxgen.dpmmodel.Owner
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
@@ -31,7 +30,7 @@ import org.jetbrains.exposed.sql.select
  * Entity differences between the reference (BR-AG DM) and Tool for Undertakings (T4U) specification:
  * - None
  */
-object MemberTable : IntIdTable(name = "mMember", columnName = "MemberID") {
+object MemberTable : IntIdByRowIdTableBase(name = "mMember", columnName = "MemberID") {
 
     val domainIdCol = reference(
         name = "DomainID",
