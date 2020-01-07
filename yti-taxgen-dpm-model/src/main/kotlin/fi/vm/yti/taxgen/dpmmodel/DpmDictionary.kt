@@ -4,7 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.validation.Validatable
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
 import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementCrossReferences
-import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableDpmElementsValueUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
 data class DpmDictionary(
@@ -30,32 +30,32 @@ data class DpmDictionary(
             maxLength = 10000
         )
 
-        validateIterableValuesUnique(
+        validateIterableDpmElementsValueUnique(
             validationResultBuilder = validationResultBuilder,
             iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
             valueSelector = { it: DpmElement -> it.code() },
-            valueName = listOf("Domain", ExplicitDomain::domainCode)
+            valueName = ExplicitDomain::domainCode
         )
 
-        validateIterableValuesUnique(
+        validateIterableDpmElementsValueUnique(
             validationResultBuilder = validationResultBuilder,
             iterable = (explicitDomains + typedDomains).addNotNull(metricDomain),
             valueSelector = { it: DpmElement -> it.uri },
-            valueName = listOf("Domain", ExplicitDomain::uri)
+            valueName = ExplicitDomain::uri
         )
 
-        validateIterableValuesUnique(
+        validateIterableDpmElementsValueUnique(
             validationResultBuilder = validationResultBuilder,
             iterable = explicitDimensions + typedDimensions,
             valueSelector = { it: DpmElement -> it.code() },
-            valueName = listOf("Dimension", ExplicitDimension::dimensionCode)
+            valueName = ExplicitDimension::dimensionCode
         )
 
-        validateIterableValuesUnique(
+        validateIterableDpmElementsValueUnique(
             validationResultBuilder = validationResultBuilder,
             iterable = explicitDimensions + typedDimensions,
             valueSelector = { it: DpmElement -> it.uri },
-            valueName = listOf("Dimension", ExplicitDimension::uri)
+            valueName = ExplicitDimension::uri
         )
 
         validateDpmElementCrossReferences(

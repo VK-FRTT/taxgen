@@ -119,7 +119,7 @@ class DiagnosticBridge(
             }
         }
 
-        val results = resultCollector.results()
+        val results = resultCollector.uniqueResults()
 
         if (results.any()) {
             incrementCounter(ERROR)

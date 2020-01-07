@@ -3,7 +3,7 @@ package fi.vm.yti.taxgen.dpmmodel
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import fi.vm.yti.taxgen.dpmmodel.validators.validateCustom
 import fi.vm.yti.taxgen.dpmmodel.validators.validateDpmElementCrossReferences
-import fi.vm.yti.taxgen.dpmmodel.validators.validatePropElementPropertiesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableDpmElementPropertyValuesUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
 import fi.vm.yti.taxgen.dpmmodel.validators.validatePropsLengths
 
@@ -33,7 +33,7 @@ data class ExplicitDomain(
             maxLength = 10000
         )
 
-        validatePropElementPropertiesUnique(
+        validateIterableDpmElementPropertyValuesUnique(
             validationResultBuilder = validationResultBuilder,
             property = this::members,
             elementProperties = listOf(Member::uri, Member::memberCode)
@@ -54,7 +54,7 @@ data class ExplicitDomain(
             }
         )
 
-        validatePropElementPropertiesUnique(
+        validateIterableDpmElementPropertyValuesUnique(
             validationResultBuilder = validationResultBuilder,
             property = this::hierarchies,
             elementProperties = listOf(Hierarchy::uri, Hierarchy::hierarchyCode)

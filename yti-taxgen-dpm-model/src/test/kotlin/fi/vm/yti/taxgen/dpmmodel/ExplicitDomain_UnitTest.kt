@@ -100,8 +100,8 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactlyInAnyOrder(
-                    "[ExplicitDomain] [exp_dom_uri] [Members.Uri] [Duplicate value] [member_m_2_uri]",
-                    "[ExplicitDomain] [exp_dom_uri] [Members.MemberCode] [Duplicate value] [member_m_2_code]"
+                    "[ExplicitDomain] [exp_dom_uri] [Member] [member_m_2_uri] [Uri] [Duplicate value] [member_m_2_uri]",
+                    "[ExplicitDomain] [exp_dom_uri] [Member] [member_m_2_uri] [MemberCode] [Duplicate value] [member_m_2_code]"
                 )
         }
 
@@ -154,8 +154,8 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "[ExplicitDomain] [exp_dom_uri] [Hierarchies.Uri] [Duplicate value] [hierarchy_h_2_uri]",
-                    "[ExplicitDomain] [exp_dom_uri] [Hierarchies.HierarchyCode] [Duplicate value] [hierarchy_h_2_code]"
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [Uri] [Duplicate value] [hierarchy_h_2_uri]",
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyCode] [Duplicate value] [hierarchy_h_2_code]"
                 )
         }
 
@@ -215,9 +215,9 @@ internal class ExplicitDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_1_uri] [HierarchyNode] [hierarchy_node_hn_1.3_uri] [ReferencedElementCode] [Refers to unknown target] [member_m_3_code]",
-                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.2_uri] [ReferencedElementCode] [Refers to unknown target] [member_m_4_code]",
-                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.3_uri] [ReferencedElementCode] [Refers to unknown target] [member_m_5_code]"
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_1_uri] [HierarchyNode] [hierarchy_node_hn_1.3_uri] [ReferencedElementCode] [Unknown target] [member_m_3_code]",
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.2_uri] [ReferencedElementCode] [Unknown target] [member_m_4_code]",
+                    "[ExplicitDomain] [exp_dom_uri] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.3_uri] [ReferencedElementCode] [Unknown target] [member_m_5_code]"
                 )
         }
     }

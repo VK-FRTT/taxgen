@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel.validators
 
 import fi.vm.yti.taxgen.dpmmodel.DpmElement
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
+import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
 import kotlin.reflect.KProperty0
 import kotlin.reflect.KProperty1
 
@@ -23,11 +24,54 @@ fun <T : DpmElement, R : DpmElement> validateDpmElementCrossReferences(
                 validationResultBuilder.addError(
                     subject = element.validationSubjectDescriptor(),
                     valueName = referringCodeProperty,
-                    reason = "Refers to unknown target",
+                    reason = "Unknown target",
                     value = refCode
                 )
             }
         }
+    }
+}
+
+fun <E : DpmElement> validateIterableDpmElementsValueUnique(
+    validationResultBuilder: ValidationResultBuilder,
+    iterable: Iterable<E>,
+    valueSelector: (E) -> String,
+    valueName: Any
+) {
+    iterable
+        .groupingBy(keySelector = valueSelector)
+        .fold(initialValue = listOf<ValidationSubjectDescriptor>()) { acc, element ->
+            acc + element.validationSubjectDescriptor()
+        }
+        .filter {
+            it.value.size > 1
+        }
+        .forEach { (duplicateValue, subjectDescriptors) ->
+            subjectDescriptors.forEach { subject ->
+                validationResultBuilder.addError(
+                    subject = subject,
+                    valueName = valueName,
+                    reason = "Duplicate value",
+                    value = duplicateValue
+                )
+            }
+        }
+}
+
+fun <T : Iterable<E>, E : DpmElement, K : Any> validateIterableDpmElementPropertyValuesUnique(
+    validationResultBuilder: ValidationResultBuilder,
+    property: KProperty0<T>,
+    elementProperties: List<KProperty1<E, K>>
+) {
+    val iterable: T = property.get()
+
+    elementProperties.forEach { elementProperty ->
+        validateIterableDpmElementsValueUnique(
+            validationResultBuilder = validationResultBuilder,
+            iterable = iterable,
+            valueSelector = { elementProperty.getter.call(it).toString() },
+            valueName = elementProperty
+        )
     }
 }
 

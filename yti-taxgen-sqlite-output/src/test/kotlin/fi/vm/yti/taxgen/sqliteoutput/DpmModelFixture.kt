@@ -570,5 +570,5 @@ private fun validateModelContents(dpmModel: DpmModel) {
 
     // NOTE: When this assert triggers, it means that most likely something
     // is broken within this test fixture internal relations
-    assertThat(collector.results()).isEmpty()
+    assertThat(collector.uniqueResults()).isEmpty()
 }

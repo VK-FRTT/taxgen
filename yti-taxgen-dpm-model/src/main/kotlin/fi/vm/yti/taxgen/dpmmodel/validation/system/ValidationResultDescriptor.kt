@@ -65,4 +65,27 @@ class ValidationResultDescriptor private constructor(
 
         return sb.toString()
     }
+
+    override fun hashCode(): Int =
+        subjectChain.hashCode() * 31 +
+            valueName.hashCode() * 31 +
+            reason.hashCode() * 31 +
+            value.hashCode() * 31 +
+            hasValue.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) {
+            return true
+        }
+
+        if (other !is ValidationResultDescriptor) {
+            return false
+        }
+
+        return subjectChain == other.subjectChain &&
+            valueName == other.valueName &&
+            reason == other.reason &&
+            value == other.value &&
+            hasValue == other.hasValue
+    }
 }

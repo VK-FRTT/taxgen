@@ -157,7 +157,7 @@ class Language constructor(
                 val validationCollector = ValidationResultCollector()
                 language.validate(validationCollector)
 
-                val results = validationCollector.results()
+                val results = validationCollector.uniqueResults()
 
                 if (results.any()) {
                     val subject = language.validationSubjectDescriptor()

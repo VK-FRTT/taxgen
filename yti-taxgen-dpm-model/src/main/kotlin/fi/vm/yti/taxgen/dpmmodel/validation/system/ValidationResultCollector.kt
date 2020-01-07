@@ -77,7 +77,7 @@ class ValidationResultCollector : ValidationResultBuilder {
         nameStack.pop()
     }
 
-    fun results(): List<ValidationResultDescriptor> = results
+    fun uniqueResults(): List<ValidationResultDescriptor> = results.distinct()
 
     private fun combineValueName(valueName: Any): String {
         val valueNameString = stringifyValueName(valueName)

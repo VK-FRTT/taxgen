@@ -84,7 +84,7 @@ internal class Hierarchy_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[Hierarchy] [hie_uri] [HierarchyNode.Uri] [Duplicate value] [hierarchy_node_hn_2_uri]"
+                "[Hierarchy] [hie_uri] [HierarchyNode] [hierarchy_node_hn_2_uri] [Uri] [Duplicate value] [hierarchy_node_hn_2_uri]"
             )
         }
 
@@ -122,7 +122,7 @@ internal class Hierarchy_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[Hierarchy] [hie_uri] [HierarchyNode.Uri] [Duplicate value] [hierarchy_node_hn_4_uri]"
+                "[Hierarchy] [hie_uri] [HierarchyNode] [hierarchy_node_hn_4_uri] [Uri] [Duplicate value] [hierarchy_node_hn_4_uri]"
             )
         }
 
@@ -139,7 +139,8 @@ internal class Hierarchy_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[Hierarchy] [hie_uri] [HierarchyNode.ReferencedElementCode] [Duplicate value] [member_m_2_code]"
+                "[Hierarchy] [hie_uri] [HierarchyNode] [hierarchy_node_hn_2_uri] [ReferencedElementCode] [Duplicate value] [member_m_2_code]",
+                "[Hierarchy] [hie_uri] [HierarchyNode] [hierarchy_node_hn_3_uri] [ReferencedElementCode] [Duplicate value] [member_m_2_code]"
             )
         }
 
@@ -177,7 +178,8 @@ internal class Hierarchy_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[Hierarchy] [hie_uri] [HierarchyNode.ReferencedElementCode] [Duplicate value] [member_m_4_code]"
+                "[Hierarchy] [hie_uri] [HierarchyNode] [hierarchy_node_hn_4_uri] [ReferencedElementCode] [Duplicate value] [member_m_4_code]",
+                "[Hierarchy] [hie_uri] [HierarchyNode] [hierarchy_node_hn_5_uri] [ReferencedElementCode] [Duplicate value] [member_m_4_code]"
             )
         }
     }

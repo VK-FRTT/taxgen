@@ -94,8 +94,10 @@ internal class DpmModel_UnitTest :
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "[DPM Model] [] [Domain.Uri] [Duplicate value] [dom_d_1_uri]",
-                    "[DPM Model] [] [Domain.DomainCode] [Duplicate value] [dom_d_1_code]"
+                    "[DPM Model] [] [TypedDomain] [dom_d_1_uri] [Uri] [Duplicate value] [dom_d_1_uri]",
+                    "[DPM Model] [] [ExplicitDomain] [dom_d_1_uri] [Uri] [Duplicate value] [dom_d_1_uri]",
+                    "[DPM Model] [] [TypedDomain] [dom_d_1_uri] [DomainCode] [Duplicate value] [dom_d_1_code]",
+                    "[DPM Model] [] [ExplicitDomain] [dom_d_1_uri] [DomainCode] [Duplicate value] [dom_d_1_code]"
                 )
         }
 
@@ -125,8 +127,8 @@ internal class DpmModel_UnitTest :
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "[DPM Model] [] [Metric.Uri] [Duplicate value] [met_m_2_uri]",
-                    "[DPM Model] [] [Metric.MetricCode] [Duplicate value] [met_m_2_code]"
+                    "[DPM Model] [] [Metric] [met_m_2_uri] [Uri] [Duplicate value] [met_m_2_uri]",
+                    "[DPM Model] [] [Metric] [met_m_2_uri] [MetricCode] [Duplicate value] [met_m_2_code]"
                 )
         }
 
@@ -157,8 +159,8 @@ internal class DpmModel_UnitTest :
             instantiateAndValidate()
             Assertions.assertThat(validationErrors)
                 .containsExactly(
-                    "[DPM Model] [] [MetricDomain.Hierarchy.Uri] [Duplicate value] [hierarchy_h_2_uri]",
-                    "[DPM Model] [] [MetricDomain.Hierarchy.HierarchyCode] [Duplicate value] [hierarchy_h_2_code]"
+                    "[DPM Model] [] [Hierarchy] [hierarchy_h_2_uri] [Uri] [Duplicate value] [hierarchy_h_2_uri]",
+                    "[DPM Model] [] [Hierarchy] [hierarchy_h_2_uri] [HierarchyCode] [Duplicate value] [hierarchy_h_2_code]"
                 )
         }
     }

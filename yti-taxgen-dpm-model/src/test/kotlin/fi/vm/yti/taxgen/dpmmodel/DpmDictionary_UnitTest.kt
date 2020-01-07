@@ -127,8 +127,10 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[DPM Dictionary] [ns_prefix] [Domain.DomainCode] [Duplicate value] [dom_1_code]",
-                "[DPM Dictionary] [ns_prefix] [Domain.Uri] [Duplicate value] [dom_1_uri]"
+                "[DPM Dictionary] [ns_prefix] [ExplicitDomain] [dom_1_uri] [DomainCode] [Duplicate value] [dom_1_code]",
+                "[DPM Dictionary] [ns_prefix] [TypedDomain] [dom_1_uri] [DomainCode] [Duplicate value] [dom_1_code]",
+                "[DPM Dictionary] [ns_prefix] [ExplicitDomain] [dom_1_uri] [Uri] [Duplicate value] [dom_1_uri]",
+                "[DPM Dictionary] [ns_prefix] [TypedDomain] [dom_1_uri] [Uri] [Duplicate value] [dom_1_uri]"
             )
         }
     }
@@ -183,8 +185,10 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[DPM Dictionary] [ns_prefix] [Dimension.DimensionCode] [Duplicate value] [dim_1_code]",
-                "[DPM Dictionary] [ns_prefix] [Dimension.Uri] [Duplicate value] [dim_1_uri]"
+                "[DPM Dictionary] [ns_prefix] [ExplicitDimension] [dim_1_uri] [DimensionCode] [Duplicate value] [dim_1_code]",
+                "[DPM Dictionary] [ns_prefix] [TypedDimension] [dim_1_uri] [DimensionCode] [Duplicate value] [dim_1_code]",
+                "[DPM Dictionary] [ns_prefix] [ExplicitDimension] [dim_1_uri] [Uri] [Duplicate value] [dim_1_uri]",
+                "[DPM Dictionary] [ns_prefix] [TypedDimension] [dim_1_uri] [Uri] [Duplicate value] [dim_1_uri]"
             )
         }
 
@@ -219,7 +223,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[DPM Dictionary] [ns_prefix] [ExplicitDimension] [exp_dim_e2_uri] [ReferencedDomainCode] [Refers to unknown target] [dom_2_code]"
+                "[DPM Dictionary] [ns_prefix] [ExplicitDimension] [exp_dim_e2_uri] [ReferencedDomainCode] [Unknown target] [dom_2_code]"
             )
         }
 
@@ -254,7 +258,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[DPM Dictionary] [ns_prefix] [TypedDimension] [typ_dim_t1_uri] [ReferencedDomainCode] [Refers to unknown target] [dom_1_code]"
+                "[DPM Dictionary] [ns_prefix] [TypedDimension] [typ_dim_t1_uri] [ReferencedDomainCode] [Unknown target] [dom_1_code]"
             )
         }
     }
@@ -298,7 +302,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[DPM Dictionary] [ns_prefix] [Metric] [met_1_uri] [ReferencedDomainCode] [Refers to unknown target] [unknown_dom]"
+                "[DPM Dictionary] [ns_prefix] [Metric] [met_1_uri] [ReferencedDomainCode] [Unknown target] [unknown_dom]"
             )
         }
 
@@ -338,7 +342,7 @@ internal class DpmDictionary_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[DPM Dictionary] [ns_prefix] [Metric] [met_1_uri] [ReferencedHierarchyCode] [Refers to unknown target] [unknown_hier]"
+                "[DPM Dictionary] [ns_prefix] [Metric] [met_1_uri] [ReferencedHierarchyCode] [Unknown target] [unknown_hier]"
             )
         }
 

@@ -91,7 +91,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
 
     val validCollector = ValidationResultCollector()
     valid.validate(validCollector)
-    assertThat(validCollector.results()).isEmpty()
+    assertThat(validCollector.uniqueResults()).isEmpty()
 
     // Invalid value
     val invalidAttributes = Factory.Builder.attributesFor(kClass, invalidOverrideAttributes)
@@ -100,7 +100,7 @@ internal fun <T : Any> DpmModel_UnitTestBase<T>.propertyLengthValidationTemplate
     val invalidCollector = ValidationResultCollector()
     invalid.validate(invalidCollector)
 
-    val filteredResults = invalidCollector.results().filter {
+    val filteredResults = invalidCollector.uniqueResults().filter {
         it.valueName() == invalidValueName && it.reason() == invalidReason
     }
 

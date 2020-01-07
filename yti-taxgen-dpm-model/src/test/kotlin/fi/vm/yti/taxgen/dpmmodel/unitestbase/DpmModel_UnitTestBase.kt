@@ -72,7 +72,7 @@ internal open class DpmModel_UnitTestBase<T : Any>(
             }
         }
 
-        validationErrors = collector.results().map { result -> result.toString() }
+        validationErrors = collector.uniqueResults().map { result -> result.toString() }
     }
 
     protected fun language(languageCode: String) = Language.findByIso6391Code(languageCode)!!

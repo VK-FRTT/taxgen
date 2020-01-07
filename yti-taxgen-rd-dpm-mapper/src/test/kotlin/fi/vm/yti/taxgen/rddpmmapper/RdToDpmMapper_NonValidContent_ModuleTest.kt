@@ -81,22 +81,25 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1] [HierarchyNode.ReferencedElementCode] [Duplicate value] [i6]"
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1] [HierarchyNode] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1/member/8] [ReferencedElementCode] [Duplicate value] [i6]",
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1] [HierarchyNode] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET1/member/9] [ReferencedElementCode] [Duplicate value] [i6]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10] [HierarchyNode.ReferencedElementCode] [Duplicate value] [i6]"
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10] [HierarchyNode] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/7] [ReferencedElementCode] [Duplicate value] [i6]",
+                "VALIDATION [Hierarchy] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10] [HierarchyNode] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/extension/MET10/member/12] [ReferencedElementCode] [Duplicate value] [i6]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION [DPM Model] [] [Metric.MetricCode] [Duplicate value] [i6]"
+                "VALIDATION [DPM Model] [] [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/6] [MetricCode] [Duplicate value] [i6]",
+                "VALIDATION [DPM Model] [] [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/7] [MetricCode] [Duplicate value] [i6]"
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION [DPM Dictionary] [prefix] [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3] [ReferencedDomainCode] [Refers to unknown target] [EDA]"
+                "VALIDATION [DPM Dictionary] [prefix] [Metric] [http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3] [ReferencedDomainCode] [Unknown target] [EDA]"
             )
 
-            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(7)
+            assertThat(diagnosticCollector.validationResultCount()).isEqualTo(10)
         }
 
         @Test
@@ -131,10 +134,10 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM] [ReferencedDomainCode] [Refers to unknown target] [DOME]",
-                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D1] [ReferencedDomainCode] [Refers to unknown target] [EDA]",
-                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D2] [ReferencedDomainCode] [Refers to unknown target] [EDA]",
-                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D10] [ReferencedDomainCode] [Refers to unknown target] [EDA]"
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/DIM] [ReferencedDomainCode] [Unknown target] [DOME]",
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D1] [ReferencedDomainCode] [Unknown target] [EDA]",
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D2] [ReferencedDomainCode] [Unknown target] [EDA]",
+                "VALIDATION [DPM Dictionary] [prefix] [ExplicitDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/exp-dims-2018-1/code/EDA-D10] [ReferencedDomainCode] [Unknown target] [EDA]"
             )
 
             assertThat(diagnosticCollector.validationResultCount()).isEqualTo(5)
@@ -160,8 +163,8 @@ internal class RdToDpmMapper_NonValidContent_ModuleTest : RdToDpmMapper_ModuleTe
             )
 
             assertThat(diagnosticCollector.eventsString()).contains(
-                "VALIDATION [DPM Dictionary] [prefix] [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1] [ReferencedDomainCode] [Refers to unknown target] [TDB]",
-                "VALIDATION [DPM Dictionary] [prefix] [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D2] [ReferencedDomainCode] [Refers to unknown target] [TDB]"
+                "VALIDATION [DPM Dictionary] [prefix] [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D1] [ReferencedDomainCode] [Unknown target] [TDB]",
+                "VALIDATION [DPM Dictionary] [prefix] [TypedDimension] [http://uri.suomi.fi/codelist/dpm-integration-fixture/typ-dims-2018-1/code/TDB-D2] [ReferencedDomainCode] [Unknown target] [TDB]"
             )
 
             assertThat(diagnosticCollector.validationResultCount()).isEqualTo(3)

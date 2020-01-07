@@ -1,7 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel
 
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
-import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableValuesUnique
+import fi.vm.yti.taxgen.dpmmodel.validators.validateIterableDpmElementsValueUnique
 import fi.vm.yti.taxgen.dpmmodel.validators.validatePropLength
 
 data class Hierarchy(
@@ -24,18 +24,18 @@ data class Hierarchy(
 
         val allNodes = allNodes()
 
-        validateIterableValuesUnique(
+        validateIterableDpmElementsValueUnique(
             validationResultBuilder = validationResultBuilder,
             iterable = allNodes,
             valueSelector = { it.uri },
-            valueName = listOf(HierarchyNode::class, HierarchyNode::uri)
+            valueName = HierarchyNode::uri
         )
 
-        validateIterableValuesUnique(
+        validateIterableDpmElementsValueUnique(
             validationResultBuilder = validationResultBuilder,
             iterable = allNodes,
             valueSelector = { it.referencedElementCode },
-            valueName = listOf(HierarchyNode::class, HierarchyNode::referencedElementCode)
+            valueName = HierarchyNode::referencedElementCode
         )
     }
 

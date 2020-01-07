@@ -131,7 +131,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Configuration file: (partial_source_config.json)",
-                "DPM dictionary #0: ERROR: [ReferencedDomainCode] Refers to unknown target [EDA] in Metric",
+                "DPM dictionary #0: ERROR: Unknown target 'EDA' in ReferencedDomainCode in Metric (http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3) in DPM Dictionary (prefix)",
                 "Writing dictionaries to DPM database: INFO: Mapping failed due content errors"
             )
         }
@@ -650,6 +650,7 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             }
         }
 
+        @Tag("e2etest")
         @Test
         fun `Should report error when source config links to non existing DPM code list`() {
             val args = arrayOf(

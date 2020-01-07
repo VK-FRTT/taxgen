@@ -47,11 +47,13 @@ class DiagnosticTextPrinter(
         results.forEach { result ->
 
             val sb = StringBuilder()
-            sb.append("[${result.valueName()}] ${result.reason()}")
+            sb.append("${result.reason()}")
 
             if (result.hasValue()) {
-                sb.append(" [${result.value()}]")
+                sb.append(" '${result.value()}'")
             }
+
+            sb.append(" in ${result.valueName()}")
 
             result.subjectChain().reversed().forEach {
                 sb.append(" in ${it.subjectType} (${it.subjectIdentifier})")

@@ -153,9 +153,9 @@ internal class MetricDomain_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors)
                 .containsExactly(
-                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_1_uri] [HierarchyNode] [hierarchy_node_hn_1.3_uri] [ReferencedElementCode] [Refers to unknown target] [met_m_3_code]",
-                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.2_uri] [ReferencedElementCode] [Refers to unknown target] [met_m_4_code]",
-                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.3_uri] [ReferencedElementCode] [Refers to unknown target] [met_m_5_code]"
+                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_1_uri] [HierarchyNode] [hierarchy_node_hn_1.3_uri] [ReferencedElementCode] [Unknown target] [met_m_3_code]",
+                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.2_uri] [ReferencedElementCode] [Unknown target] [met_m_4_code]",
+                    "[MetricDomain] [MET] [Hierarchy] [hierarchy_h_2_uri] [HierarchyNode] [hierarchy_node_hn_2.3_uri] [ReferencedElementCode] [Unknown target] [met_m_5_code]"
                 )
         }
     }
