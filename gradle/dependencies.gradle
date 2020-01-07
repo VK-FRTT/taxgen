@@ -8,7 +8,7 @@ ext {
             xerialSqliteJdbc:   "3.30.1",
             exposed:            "0.20.2",
             slf4jNop:           "1.7.25",
-            jupiter:            "5.1.0",
+            jupiter:            "5.5.2",
             assertj:            "3.9.0",
             hoverflyJavaJunit5: "0.11.5",
             mockitokotlin2:     "2.0.0-RC1"
