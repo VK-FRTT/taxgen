@@ -7,6 +7,7 @@ import fi.vm.yti.taxgen.commons.naturalsort.NumberAwareStringComparator
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsource.CodeListBlueprint
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 internal data class ContentAddress(
     val codeListUrl: HttpUrl,
@@ -26,12 +27,12 @@ internal class CodeListContentAddressResolver(
     private val rdsClient: RdsClient,
     private val diagnostic: Diagnostic
 ) {
-    private val codeLisUri = HttpUrl.parse(codeLisUri) ?: diagnostic.fatal("Malformed URI")
+    private val codeLisUri = codeLisUri.toHttpUrlOrNull() ?: diagnostic.fatal("Malformed URI")
     private val passthroughUriParams = resolveUriPassthroughParams()
     val contentAddress = resolveContentAddress()
 
     fun decorateUriWithInheritedParams(uri: String): String {
-        val httpUrlBuilder = HttpUrl.parse(uri)?.newBuilder() ?: diagnostic.fatal("Malformed URI for decoration")
+        val httpUrlBuilder = uri.toHttpUrlOrNull()?.newBuilder() ?: diagnostic.fatal("Malformed URI for decoration")
 
         passthroughUriParams.forEach { (name, values) ->
             values.forEach { value ->
@@ -42,7 +43,7 @@ internal class CodeListContentAddressResolver(
         return httpUrlBuilder.build().toString()
     }
 
-    private fun resolveUriPassthroughParams(): Map<String, List<String>> {
+    private fun resolveUriPassthroughParams(): Map<String, List<String?>> {
         return arrayOf("env").map { name ->
             name to codeLisUri.queryParameterValues(name)
         }.toMap()
@@ -126,6 +127,6 @@ internal class CodeListContentAddressResolver(
     }
 
     private fun parseHttpUrlAt(rawUrl: String, diagnostic: Diagnostic, diagnosticName: String): HttpUrl {
-        return HttpUrl.parse(rawUrl) ?: diagnostic.fatal("Malformed URL ($diagnosticName): $rawUrl")
+        return rawUrl.toHttpUrlOrNull() ?: diagnostic.fatal("Malformed URL ($diagnosticName): $rawUrl")
     }
 }

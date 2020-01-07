@@ -64,10 +64,14 @@ internal class RdsClient(
         }
 
         if (!response.isSuccessful) {
-            diagnostic.fatal("JSON content fetch failed: HTTP ${response.code()} (${fixedReasonPhraseForStatusCode(response.code())})")
+            diagnostic.fatal(
+                "JSON content fetch failed: HTTP ${response.code} (${fixedReasonPhraseForStatusCode(
+                    response.code
+                )})"
+            )
         }
 
-        return response.body().use {
+        return response.body.use {
             it ?: thisShouldNeverHappen("HTTP response body missing")
 
             it.string()

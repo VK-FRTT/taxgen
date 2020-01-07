@@ -4,7 +4,7 @@ ext {
             joptSimple:         "5.0.4",
             jacksonKotlin:      "2.10.2",
             jacksonJsr310:      "2.10.2",
-            okhttp:             "3.14.4",
+            okhttp:             "4.3.0",
             googleGuava:        "25.0-jre",
             xerialSqliteJdbc:   "3.21.0.1",
             jetbrainsExposed:   "0.17.5",

@@ -5,6 +5,7 @@ import fi.vm.yti.taxgen.commons.ext.jackson.nonBlankTextOrNullAt
 import fi.vm.yti.taxgen.commons.ops.JsonOps
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 internal class PaginationAwareCollectionIterator(
     collectionUrl: HttpUrl,
@@ -44,7 +45,7 @@ internal class PaginationAwareCollectionIterator(
         val pageJson = JsonOps.readTree(page, diagnostic)
 
         nextPageUrl = pageJson.nonBlankTextOrNullAt("/meta/nextPage")?.let {
-            HttpUrl.parse(it) ?: diagnostic.fatal("Malformed page URL: $it")
+            it.toHttpUrlOrNull() ?: diagnostic.fatal("Malformed page URL: $it")
         }
 
         iterationObserver.iteratedPage(pageJson)

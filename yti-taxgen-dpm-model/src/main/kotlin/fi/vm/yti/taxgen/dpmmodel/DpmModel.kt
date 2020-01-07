@@ -66,7 +66,6 @@ data class DpmModel(
                 valueName = Hierarchy::hierarchyCode
             )
         }
-
     }
 
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {

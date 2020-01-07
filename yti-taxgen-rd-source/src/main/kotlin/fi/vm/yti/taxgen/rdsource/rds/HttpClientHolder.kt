@@ -8,7 +8,7 @@ internal object HttpClientHolder : Closeable {
     private var httpClient: OkHttpClient? = null
 
     override fun close() {
-        httpClient?.let { it.dispatcher().executorService().shutdown() }
+        httpClient?.let { it.dispatcher.executorService.shutdown() }
         httpClient = null
     }
 
