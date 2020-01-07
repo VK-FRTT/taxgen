@@ -15,7 +15,7 @@ import fi.vm.yti.taxgen.sqliteoutput.tables.OrdinateCategorisationTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.OwnerTable
 import fi.vm.yti.taxgen.sqliteoutput.tables.Tables
 import fi.vm.yti.taxgen.testcommons.TempFolder
-import fi.vm.yti.taxgen.testcommons.ext.java.columnConfigToString
+import fi.vm.yti.taxgen.testcommons.ext.java.columnConfigs
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.sql.Connection
@@ -100,6 +100,7 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
         )
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun createTableStructureTests(
         dbConnection: Connection,
         initMode: StructureInitMode
@@ -112,13 +113,14 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(5)
-
-                assertThat(meta.columnConfigToString(1)).isEqualTo("LanguageID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("LanguageName, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("EnglishName, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("IsoCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "LanguageID, INTEGER, NonNullable, false",
+                    "LanguageName, VARCHAR, Nullable, false",
+                    "EnglishName, VARCHAR, Nullable, false",
+                    "IsoCode, VARCHAR, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "LanguageID, 1"
@@ -135,15 +137,16 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(7)
-
-                assertThat(meta.columnConfigToString(1)).isEqualTo("ConceptID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("ConceptType, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("OwnerID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("CreationDate, DATE, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("ModificationDate, DATE, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("FromDate, DATE, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("ToDate, DATE, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "ConceptID, INTEGER, NonNullable, false",
+                    "ConceptType, VARCHAR, Nullable, false",
+                    "OwnerID, INTEGER, Nullable, false",
+                    "CreationDate, DATE, Nullable, false",
+                    "ModificationDate, DATE, Nullable, false",
+                    "FromDate, DATE, Nullable, false",
+                    "ToDate, DATE, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "ConceptID, 1"
@@ -160,12 +163,13 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(4)
-
-                assertThat(meta.columnConfigToString(1)).isEqualTo("ConceptID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("LanguageID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("Text, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("Role, VARCHAR, NonNullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "ConceptID, INTEGER, NonNullable, false",
+                    "LanguageID, INTEGER, NonNullable, false",
+                    "Text, VARCHAR, Nullable, false",
+                    "Role, VARCHAR, NonNullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "ConceptID, 1",
@@ -185,15 +189,17 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(8)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("OwnerID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("OwnerName, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("OwnerNamespace, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("OwnerLocation, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("OwnerPrefix, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("OwnerCopyright, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("ParentOwnerID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(8)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "OwnerID, INTEGER, NonNullable, false",
+                    "OwnerName, VARCHAR, Nullable, false",
+                    "OwnerNamespace, VARCHAR, Nullable, false",
+                    "OwnerLocation, VARCHAR, Nullable, false",
+                    "OwnerPrefix, VARCHAR, Nullable, false",
+                    "OwnerCopyright, VARCHAR, Nullable, false",
+                    "ParentOwnerID, INTEGER, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "OwnerID, 1"
@@ -211,15 +217,17 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(8)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("DomainID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("DomainCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("DomainLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("DomainDescription, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("DomainXBRLCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("DataType, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("IsTypedDomain, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(8)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "DomainID, INTEGER, NonNullable, false",
+                    "DomainCode, VARCHAR, Nullable, false",
+                    "DomainLabel, VARCHAR, Nullable, false",
+                    "DomainDescription, VARCHAR, Nullable, false",
+                    "DomainXBRLCode, VARCHAR, Nullable, false",
+                    "DataType, VARCHAR, Nullable, false",
+                    "IsTypedDomain, BOOLEAN, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "DomainID, 1"
@@ -236,14 +244,16 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(7)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("MemberID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("DomainID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("MemberCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("MemberLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("MemberXBRLCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("IsDefaultMember, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "MemberID, INTEGER, NonNullable, false",
+                    "DomainID, INTEGER, Nullable, false",
+                    "MemberCode, VARCHAR, Nullable, false",
+                    "MemberLabel, VARCHAR, Nullable, false",
+                    "MemberXBRLCode, VARCHAR, Nullable, false",
+                    "IsDefaultMember, BOOLEAN, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "MemberID, 1"
@@ -261,13 +271,14 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(6)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("HierarchyID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("HierarchyCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("HierarchyLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("DomainID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("HierarchyDescription, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement", "HierarchyID, INTEGER, NonNullable, false",
+                    "HierarchyCode, VARCHAR, Nullable, false",
+                    "HierarchyLabel, VARCHAR, Nullable, false",
+                    "DomainID, INTEGER, Nullable, false",
+                    "HierarchyDescription, VARCHAR, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "HierarchyID, 1"
@@ -285,18 +296,20 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(11)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("HierarchyID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("MemberID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("IsAbstract, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("ComparisonOperator, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("UnaryOperator, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("Order, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("Level, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(8)).isEqualTo("ParentMemberID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(9)).isEqualTo("HierarchyNodeLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(10)).isEqualTo("ConceptID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(11)).isEqualTo("Path, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "HierarchyID, INTEGER, NonNullable, false",
+                    "MemberID, INTEGER, NonNullable, false",
+                    "IsAbstract, BOOLEAN, Nullable, false",
+                    "ComparisonOperator, VARCHAR, Nullable, false",
+                    "UnaryOperator, VARCHAR, Nullable, false",
+                    "Order, INTEGER, Nullable, false",
+                    "Level, INTEGER, Nullable, false",
+                    "ParentMemberID, INTEGER, Nullable, false",
+                    "HierarchyNodeLabel, VARCHAR, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false",
+                    "Path, VARCHAR, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "HierarchyID, 1",
@@ -316,15 +329,17 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(8)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("DimensionID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("DimensionLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("DimensionCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("DimensionDescription, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("DimensionXBRLCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("DomainID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("IsTypedDimension, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(8)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "DimensionID, INTEGER, NonNullable, false",
+                    "DimensionLabel, VARCHAR, Nullable, false",
+                    "DimensionCode, VARCHAR, Nullable, false",
+                    "DimensionDescription, VARCHAR, Nullable, false",
+                    "DimensionXBRLCode, VARCHAR, Nullable, false",
+                    "DomainID, INTEGER, Nullable, false",
+                    "IsTypedDimension, BOOLEAN, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "DimensionID, 1"
@@ -342,16 +357,18 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(9)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("MetricID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("CorrespondingMemberID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("DataType, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("FlowType, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("BalanceType, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("ReferencedDomainID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("ReferencedHierarchyID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(8)).isEqualTo("HierarchyStartingMemberID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(9)).isEqualTo("IsStartingMemberIncluded, BOOLEAN, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "MetricID, INTEGER, NonNullable, false",
+                    "CorrespondingMemberID, INTEGER, Nullable, false",
+                    "DataType, VARCHAR, Nullable, false",
+                    "FlowType, VARCHAR, Nullable, false",
+                    "BalanceType, VARCHAR, Nullable, false",
+                    "ReferencedDomainID, INTEGER, Nullable, false",
+                    "ReferencedHierarchyID, INTEGER, Nullable, false",
+                    "HierarchyStartingMemberID, INTEGER, Nullable, false",
+                    "IsStartingMemberIncluded, BOOLEAN, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "MetricID, 1"
@@ -371,12 +388,14 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(5)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("AxisID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("AxisOrientation, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("AxisLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("IsOpenAxis, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("ConceptID, INTEGER, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "AxisID, INTEGER, NonNullable, false",
+                    "AxisOrientation, VARCHAR, Nullable, false",
+                    "AxisLabel, VARCHAR, Nullable, false",
+                    "IsOpenAxis, BOOLEAN, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "AxisID, 1"
@@ -393,27 +412,24 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 assertThat(meta.columnCount).isEqualTo(12)
 
-                val (axisColumnId, ordinateColumnId) = if (initMode == StructureInitMode.SELF_INITIALIZED) {
-                    listOf(2, 1)
-                } else {
-                    listOf(1, 2)
-                }
+                assertThat(meta.columnConfigs()).containsExactlyInAnyOrder(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "AxisID, INTEGER, Nullable, false",
+                    "OrdinateID, INTEGER, NonNullable, false",
 
-                assertThat(meta.columnConfigToString(axisColumnId)).isEqualTo("AxisID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(ordinateColumnId)).isEqualTo("OrdinateID, INTEGER, NonNullable, false")
+                    "OrdinateLabel, VARCHAR, Nullable, false",
+                    "OrdinateCode, VARCHAR, Nullable, false",
+                    "IsDisplayBeforeChildren, BOOLEAN, Nullable, false",
+                    "IsAbstractHeader, BOOLEAN, Nullable, false",
+                    "IsRowKey, BOOLEAN, Nullable, false",
 
-                assertThat(meta.columnConfigToString(3)).isEqualTo("OrdinateLabel, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("OrdinateCode, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("IsDisplayBeforeChildren, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("IsAbstractHeader, BOOLEAN, Nullable, false")
-                assertThat(meta.columnConfigToString(7)).isEqualTo("IsRowKey, BOOLEAN, Nullable, false")
+                    "Level, INTEGER, Nullable, false",
+                    "Order, INTEGER, Nullable, false",
+                    "ParentOrdinateID, INTEGER, Nullable, false",
+                    "ConceptID, INTEGER, Nullable, false",
 
-                assertThat(meta.columnConfigToString(8)).isEqualTo("Level, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(9)).isEqualTo("Order, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(10)).isEqualTo("ParentOrdinateID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(11)).isEqualTo("ConceptID, INTEGER, Nullable, false")
-
-                assertThat(meta.columnConfigToString(12)).isEqualTo("TypeOfKey, VARCHAR, Nullable, false")
+                    "TypeOfKey, VARCHAR, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "OrdinateID, 1"
@@ -432,13 +448,15 @@ internal class DpmDbWriter_TableStructure_ModuleTest {
 
                 val meta = resultSetMetaDataOfVerifiedTable(dbConnection, table)
 
-                assertThat(meta.columnCount).isEqualTo(6)
-                assertThat(meta.columnConfigToString(1)).isEqualTo("OrdinateID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(2)).isEqualTo("DimensionID, INTEGER, NonNullable, false")
-                assertThat(meta.columnConfigToString(3)).isEqualTo("MemberID, INTEGER, Nullable, false")
-                assertThat(meta.columnConfigToString(4)).isEqualTo("DimensionMemberSignature, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(5)).isEqualTo("Source, VARCHAR, Nullable, false")
-                assertThat(meta.columnConfigToString(6)).isEqualTo("DPS, VARCHAR, Nullable, false")
+                assertThat(meta.columnConfigs()).containsExactly(
+                    "#ColumnName, #ColumnType, #Nullable, #AutoIncrement",
+                    "OrdinateID, INTEGER, NonNullable, false",
+                    "DimensionID, INTEGER, NonNullable, false",
+                    "MemberID, INTEGER, Nullable, false",
+                    "DimensionMemberSignature, VARCHAR, Nullable, false",
+                    "Source, VARCHAR, Nullable, false",
+                    "DPS, VARCHAR, Nullable, false"
+                )
 
                 assertThat(primaryKeysOfVerifiedTable(dbConnection, table)).containsExactlyInAnyOrder(
                     "DimensionID, 2", "OrdinateID, 1"
