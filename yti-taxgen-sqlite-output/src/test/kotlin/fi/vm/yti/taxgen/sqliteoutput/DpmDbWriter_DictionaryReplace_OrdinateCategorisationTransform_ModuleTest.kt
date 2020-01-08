@@ -614,7 +614,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
             private fun diagnosticEventsShouldNotContain(text: String) {
                 diagnosticCollector.events.forEach {
                     if (it.contains(text)) {
-                        Assertions.fail(
+                        Assertions.fail<String>(
                             "\nDiagnostic events should not contain: '$text' \n\nDiagnosticEvents: \n${diagnosticCollector.events.joinToString(
                                 separator = ",\n"
                             )}"

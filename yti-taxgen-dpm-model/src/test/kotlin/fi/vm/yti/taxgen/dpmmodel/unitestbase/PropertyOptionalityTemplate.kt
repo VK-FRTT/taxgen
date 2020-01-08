@@ -78,6 +78,6 @@ private fun shouldBeNullException(exception: Throwable?) {
 }
 
 private fun assertFail(message: String, cause: Throwable? = null): Nothing {
-    Assertions.fail(message, cause)
+    Assertions.fail<String>(message, cause)
     throwIllegalDpmModelState("Unreachable")
 }
