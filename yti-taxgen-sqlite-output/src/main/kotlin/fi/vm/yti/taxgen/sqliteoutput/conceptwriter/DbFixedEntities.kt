@@ -19,21 +19,20 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
-// TODO refactor & add protection against writing DB entities with already existing DB IDs
 object DbFixedEntities {
 
     fun writeFixedEntities(
         languageIds: Map<Language, EntityID<Int>>,
         diagnostic: Diagnostic
-    ): FixedEntitiesLookupItem {
+    ): FixedEntitiesIds {
         val enLang = Language.byIso6391CodeOrFail("en")
         val enLanguageId = languageIds[enLang] ?: throwFail("Missing language id for language 'en'")
 
         return transaction {
             val metricDomainOwnerId = lookupEurofilingOwnerId(diagnostic)
 
-            val (metricDomainId, metricDomainCode) = writeMetricDomain(metricDomainOwnerId, enLanguageId)
-            val (metricDimensionId, metricDimensionCode) = writeMetricDimension(
+            val metricDomainId = writeMetricDomain(metricDomainOwnerId, enLanguageId)
+            val metricDimensionId = writeMetricDimension(
                 metricDomainOwnerId,
                 metricDomainId,
                 enLanguageId
@@ -41,14 +40,10 @@ object DbFixedEntities {
 
             val openMemberId = writeOpenDomainAndMember()
 
-            FixedEntitiesLookupItem(
+            FixedEntitiesIds(
                 metricDomainOwnerId = metricDomainOwnerId,
-                metricDomainCode = metricDomainCode,
                 metricDomainId = metricDomainId,
-
-                metricDimensionXbrlCode = metricDimensionCode,
                 metricDimensionId = metricDimensionId,
-
                 openMemberId = openMemberId
             )
         }
@@ -79,7 +74,7 @@ object DbFixedEntities {
     private fun writeMetricDomain(
         ownerId: EntityID<Int>,
         enLanguageId: EntityID<Int>
-    ): Pair<EntityID<Int>, String> {
+    ): EntityID<Int> {
 
         val label = "Metrics"
         val code = "MET"
@@ -99,14 +94,14 @@ object DbFixedEntities {
             domainConceptId
         )
 
-        return Pair(domainId, code)
+        return domainId
     }
 
     private fun writeMetricDimension(
         ownerId: EntityID<Int>,
         domainId: EntityID<Int>,
         enLanguageId: EntityID<Int>
-    ): Pair<EntityID<Int>, String> {
+    ): EntityID<Int> {
         val label = "Metric dimension"
         val code = "MET"
 
@@ -126,7 +121,7 @@ object DbFixedEntities {
             dimensionConceptId
         )
 
-        return Pair(dimensionId, code)
+        return dimensionId
     }
 
     private fun lookupEurofilingOwnerId(

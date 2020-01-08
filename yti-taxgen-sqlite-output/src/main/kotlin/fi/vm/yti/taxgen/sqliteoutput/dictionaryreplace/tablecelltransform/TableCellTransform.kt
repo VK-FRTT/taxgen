@@ -1,7 +1,6 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.tablecelltransform
 
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class TableCellTransform(
@@ -18,13 +17,7 @@ class TableCellTransform(
 
     fun transformAndWriteTableCells() {
         transaction {
-            TransactionManager.current()
-                .connection
-                .prepareStatement(
-                    sql = "UPDATE mTableCell SET DataPointSignature = null, DPS = null",
-                    returnKeys = false
-                )
-                .executeUpdate()
+            exec("UPDATE mTableCell SET DataPointSignature = null, DPS = null")
         }
     }
 }
