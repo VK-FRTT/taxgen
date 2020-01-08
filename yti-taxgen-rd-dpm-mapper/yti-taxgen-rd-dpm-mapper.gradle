@@ -13,7 +13,6 @@ dependencies {
     testCompile libs.junitJupiterApi
     testCompile libs.junitJupiterParams
     testCompile libs.assertjCore
-    testCompile libs.mockitokotlin2
     testCompile(project(':yti-taxgen-test-commons'))
 
     testRuntimeOnly libs.junitJupiterEngine
