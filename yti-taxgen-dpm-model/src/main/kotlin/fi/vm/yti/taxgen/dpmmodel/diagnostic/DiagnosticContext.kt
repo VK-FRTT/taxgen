@@ -11,14 +11,15 @@ interface DiagnosticContext : Diagnostic {
         action: () -> R
     ): R
 
-    fun significantErrorsReceived(): Boolean
-    fun stopIfSignificantErrorsReceived(messageProvider: () -> String)
+    fun criticalErrorsReceived(): Boolean
+    fun stopIfCriticalErrorsReceived(messageProvider: () -> String)
 
     override fun updateCurrentContextDetails(contextTitle: String?, contextIdentifier: String?)
 
     override fun fatal(message: String): Nothing
     override fun error(message: String)
     override fun info(message: String)
+    override fun debug(message: String)
 
     override fun validate(
         validatable: Validatable

@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticOutputVerbosity
 import fi.vm.yti.taxgen.commons.throwFail
 import java.nio.file.Path
 
@@ -19,7 +20,8 @@ data class DetectedOptions(
     val baselineDb: Path?,
 
     val output: Path?,
-    val forceOverwrite: Boolean
+    val forceOverwrite: Boolean,
+    val verbosity: DiagnosticOutputVerbosity
 ) {
 
     fun ensureSingleCommandGiven() {

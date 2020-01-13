@@ -4,5 +4,6 @@ enum class Severity {
     FATAL,
     ERROR,
     WARNING,
-    INFO
+    INFO,
+    DEBUG
 }

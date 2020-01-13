@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.sqliteoutput
 
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticPassAllFilteringPolicy
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
 import fi.vm.yti.taxgen.testcommons.DiagnosticCollector
@@ -65,7 +66,11 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
             exceptionIsExpected = exceptionIsExpected
         ) {
             val diagnosticContext =
-                DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
+                DiagnosticBridge(
+                    diagnosticCollector,
+                    DiagnosticHaltPolicy(),
+                    DiagnosticPassAllFilteringPolicy()
+                )
 
             val dbWriter = SQLiteDpmDbWriterFactory.dictionaryReplaceWriter(
                 baselineDbPath = baselineDbPath,

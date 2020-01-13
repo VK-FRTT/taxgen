@@ -13,6 +13,7 @@ class DiagnosticCollector : DiagnosticEventConsumer {
     private var errorCount = 0
     private var warningCount = 0
     private var infoCount = 0
+    private var debugCount = 0
     private var validationResultCount = 0
 
     override fun contextEnter(contextStack: List<DiagnosticContextDescriptor>) {
@@ -46,6 +47,7 @@ class DiagnosticCollector : DiagnosticEventConsumer {
             Severity.ERROR -> errorCount++
             Severity.WARNING -> warningCount++
             Severity.INFO -> infoCount++
+            Severity.DEBUG -> debugCount++
         }
     }
 
@@ -67,11 +69,12 @@ class DiagnosticCollector : DiagnosticEventConsumer {
         errorCount = 0
         warningCount = 0
         infoCount = 0
+        debugCount = 0
         validationResultCount = 0
     }
 
     fun allMessagesCount() = criticalMessagesCount() + informalMessagesCount() + validationResultCount()
     fun criticalMessagesCount() = fatalCount + errorCount
-    fun informalMessagesCount() = warningCount + infoCount
+    fun informalMessagesCount() = warningCount + infoCount + debugCount
     fun validationResultCount() = validationResultCount
 }

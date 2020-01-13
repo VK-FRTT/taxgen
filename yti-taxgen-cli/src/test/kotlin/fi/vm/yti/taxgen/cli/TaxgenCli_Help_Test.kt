@@ -25,7 +25,8 @@ internal class TaxgenCli_Help_Test : TaxgenCli_TestBase(
                 "--source-folder",
                 "--source-zip",
                 "--output <Path>",
-                "--force-overwrite"
+                "--force-overwrite",
+                "--verbosity [[NORMAL,DEBUG]]"
             )
         }
     }

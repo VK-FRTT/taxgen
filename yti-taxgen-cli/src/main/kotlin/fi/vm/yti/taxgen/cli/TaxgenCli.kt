@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.commons.FailException
 import fi.vm.yti.taxgen.commons.HaltException
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticVerbosityPolicy
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.commons.throwHalt
@@ -35,10 +36,6 @@ class TaxgenCli(
     private val outWriter = PrintWriter(BufferedWriter(OutputStreamWriter(outStream, charset)), true)
     private val errWriter = PrintWriter(BufferedWriter(OutputStreamWriter(errStream, charset)), true)
 
-    private val eventConsumer = DiagnosticTextPrinter(outWriter)
-    private val stoppingPolicy = DiagnosticHaltPolicy()
-    private val diagnosticBridge = DiagnosticBridge(eventConsumer, stoppingPolicy)
-
     override fun close() {
         outWriter.close()
         errWriter.close()
@@ -47,6 +44,8 @@ class TaxgenCli(
     fun execute(args: Array<String>): Int {
         return withExceptionHarness {
             val detectedOptions = definedOptions.detectOptionsFromArgs(args)
+
+            val diagnosticBridge = setupDiagnosticBridge(detectedOptions)
 
             if (detectedOptions.cmdShowHelp) {
                 definedOptions.printHelp(outWriter)
@@ -63,13 +62,13 @@ class TaxgenCli(
             if (detectedOptions.cmdCaptureDpmSourcesToFolder ||
                 detectedOptions.cmdCaptureDpmSourcesToZip
             ) {
-                captureDpmSources(detectedOptions)
+                captureDpmSources(detectedOptions, diagnosticBridge)
             }
 
             if (detectedOptions.cmdCreateDictionaryToNewDpmDb ||
                 detectedOptions.cmdReplaceDictionaryInDpmDb
             ) {
-                writeDictionaryToDpmDb(detectedOptions)
+                writeDictionaryToDpmDb(detectedOptions, diagnosticBridge)
             }
         }
     }
@@ -94,7 +93,17 @@ class TaxgenCli(
         }
     }
 
-    private fun writeDictionaryToDpmDb(detectedOptions: DetectedOptions) {
+    private fun setupDiagnosticBridge(detectedOptions: DetectedOptions): DiagnosticBridge {
+        val eventConsumer = DiagnosticTextPrinter(outWriter)
+        val stoppingPolicy = DiagnosticHaltPolicy()
+        val filteringPolicy = DiagnosticVerbosityPolicy(detectedOptions.verbosity)
+        return DiagnosticBridge(eventConsumer, stoppingPolicy, filteringPolicy)
+    }
+
+    private fun writeDictionaryToDpmDb(
+        detectedOptions: DetectedOptions,
+        diagnosticBridge: DiagnosticBridge
+    ) {
         diagnosticBridge.withContext(
             contextType = DiagnosticContexts.CmdWriteDictionariesToDpmDb.toType(),
             contextDetails = null
@@ -105,7 +114,7 @@ class TaxgenCli(
             lateinit var processingOptions: ProcessingOptions
             lateinit var dpmModel: DpmModel
 
-            resolveSource(detectedOptions).use { sourceHolder ->
+            resolveSource(detectedOptions, diagnosticBridge).use { sourceHolder ->
                 sourceHolder.withDpmSource { dpmSource ->
 
                     processingOptions = dpmSource.config().processingOptions
@@ -119,23 +128,26 @@ class TaxgenCli(
                 }
             }
 
-            diagnosticBridge.stopIfSignificantErrorsReceived {
+            diagnosticBridge.stopIfCriticalErrorsReceived {
                 "Mapping failed due content errors"
             }
 
-            val dbWriter = resolveDpmDbWriter(detectedOptions)
+            val dbWriter = resolveDpmDbWriter(detectedOptions, diagnosticBridge)
             dbWriter.writeModel(
                 dpmModel,
                 processingOptions
             )
 
-            diagnosticBridge.stopIfSignificantErrorsReceived {
+            diagnosticBridge.stopIfCriticalErrorsReceived {
                 "Database creation failed due content errors"
             }
         }
     }
 
-    private fun captureDpmSources(detectedOptions: DetectedOptions) {
+    private fun captureDpmSources(
+        detectedOptions: DetectedOptions,
+        diagnosticBridge: DiagnosticBridge
+    ) {
         diagnosticBridge.withContext(
             contextType = DiagnosticContexts.CmdCaptureDpmSources.toType(),
             contextDetails = null
@@ -143,7 +155,7 @@ class TaxgenCli(
             detectedOptions.ensureSingleSourceGiven()
             detectedOptions.ensureOutputGiven()
 
-            resolveSource(detectedOptions).use { sourceHolder ->
+            resolveSource(detectedOptions, diagnosticBridge).use { sourceHolder ->
                 sourceHolder.withDpmSource { dpmSource ->
 
                     val processingOptions = dpmSource.config().processingOptions
@@ -152,19 +164,22 @@ class TaxgenCli(
                         processingOptions.diagnosticSourceLanguages
                     )
 
-                    resolveSourceRecorder(detectedOptions).use { sourceRecorder ->
+                    resolveSourceRecorder(detectedOptions, diagnosticBridge).use { sourceRecorder ->
                         sourceRecorder.captureSources(dpmSource)
                     }
                 }
             }
         }
 
-        diagnosticBridge.stopIfSignificantErrorsReceived {
+        diagnosticBridge.stopIfCriticalErrorsReceived {
             "Capturing failed"
         }
     }
 
-    private fun resolveSource(detectedOptions: DetectedOptions): SourceHolder {
+    private fun resolveSource(
+        detectedOptions: DetectedOptions,
+        diagnosticBridge: DiagnosticBridge
+    ): SourceHolder {
         if (detectedOptions.sourceConfigFile != null) {
             return SourceFactory.sourceForConfigFile(
                 configFilePath = detectedOptions.sourceConfigFile,
@@ -190,7 +205,8 @@ class TaxgenCli(
     }
 
     private fun resolveSourceRecorder(
-        detectedOptions: DetectedOptions
+        detectedOptions: DetectedOptions,
+        diagnosticBridge: DiagnosticBridge
     ): DpmSourceRecorder {
 
         if (detectedOptions.cmdCaptureDpmSourcesToFolder) {
@@ -213,7 +229,8 @@ class TaxgenCli(
     }
 
     private fun resolveDpmDbWriter(
-        detectedOptions: DetectedOptions
+        detectedOptions: DetectedOptions,
+        diagnosticBridge: DiagnosticBridge
     ): DpmDbWriter {
 
         if (detectedOptions.cmdCreateDictionaryToNewDpmDb) {

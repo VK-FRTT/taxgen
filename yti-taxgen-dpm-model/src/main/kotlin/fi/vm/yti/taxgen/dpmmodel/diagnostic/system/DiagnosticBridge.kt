@@ -4,6 +4,7 @@ import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetails
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.DEBUG
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.ERROR
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.FATAL
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.INFO
@@ -14,7 +15,8 @@ import java.util.LinkedList
 
 class DiagnosticBridge(
     private val eventConsumer: DiagnosticEventConsumer,
-    private val stoppingPolicy: DiagnosticProcesStoppingPolicy
+    private val stoppingPolicy: DiagnosticProcesStoppingPolicy,
+    private val eventFilteringPolicy: DiagnosticEventFilteringPolicy
 ) : DiagnosticContext {
     private val contextStack = LinkedList<DiagnosticContextDescriptor>()
     private var previousRetiredContext: DiagnosticContextDescriptor? = null
@@ -53,10 +55,10 @@ class DiagnosticBridge(
         }
     }
 
-    override fun significantErrorsReceived(): Boolean = counters[FATAL] != 0 || counters[ERROR] != 0
+    override fun criticalErrorsReceived(): Boolean = counters[FATAL] != 0 || counters[ERROR] != 0
 
-    override fun stopIfSignificantErrorsReceived(messageProvider: () -> String) {
-        if (significantErrorsReceived()) {
+    override fun stopIfCriticalErrorsReceived(messageProvider: () -> String) {
+        if (criticalErrorsReceived()) {
             val message = messageProvider()
             info(message)
 
@@ -82,24 +84,24 @@ class DiagnosticBridge(
     }
 
     override fun fatal(message: String): Nothing {
-        incrementCounter(FATAL)
-        eventConsumer.message(FATAL, message)
+        processMessage(FATAL, message)
         stoppingPolicy.stopProcessing()
     }
 
     override fun error(message: String) {
-        incrementCounter(ERROR)
-        eventConsumer.message(ERROR, message)
+        processMessage(ERROR, message)
     }
 
     override fun warning(message: String) {
-        incrementCounter(WARNING)
-        eventConsumer.message(WARNING, message)
+        processMessage(WARNING, message)
     }
 
     override fun info(message: String) {
-        incrementCounter(INFO)
-        eventConsumer.message(INFO, message)
+        processMessage(INFO, message)
+    }
+
+    override fun debug(message: String) {
+        processMessage(DEBUG, message)
     }
 
     override fun validate(
@@ -131,6 +133,14 @@ class DiagnosticBridge(
 
     fun setDiagnosticSourceLanguages(sourceLanguages: List<Language>) {
         diagnosticSourceLanguages = sourceLanguages.toCollection(mutableListOf())
+    }
+
+    private fun processMessage(severity: Severity, message: String) {
+        incrementCounter(severity)
+
+        if (!eventFilteringPolicy.suppressMessage(severity, message)) {
+            eventConsumer.message(severity, message)
+        }
     }
 
     private fun incrementCounter(severity: Severity) {

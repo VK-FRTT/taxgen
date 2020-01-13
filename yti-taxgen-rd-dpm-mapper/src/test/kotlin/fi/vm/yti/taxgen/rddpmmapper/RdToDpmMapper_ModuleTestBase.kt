@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.rddpmmapper
 
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticPassAllFilteringPolicy
 import fi.vm.yti.taxgen.dpmmodel.DpmDictionary
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
 import fi.vm.yti.taxgen.dpmmodel.Language
@@ -26,7 +27,9 @@ internal open class RdToDpmMapper_ModuleTestBase {
     fun beforeEach() {
         diagnosticCollector = DiagnosticCollector()
         diagnosticBridge = DiagnosticBridge(
-            diagnosticCollector, DiagnosticHaltPolicy()
+            diagnosticCollector,
+            DiagnosticHaltPolicy(),
+            DiagnosticPassAllFilteringPolicy()
         )
 
         en = Language.findByIso6391Code("en")!!

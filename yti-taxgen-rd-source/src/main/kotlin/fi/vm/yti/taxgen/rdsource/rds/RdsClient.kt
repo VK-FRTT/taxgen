@@ -45,6 +45,8 @@ internal class RdsClient(
         url: HttpUrl
     ): String {
 
+        diagnostic.debug("Fetching JSON: $url")
+
         val request = Request.Builder()
             .get()
             .url(url)

@@ -99,7 +99,7 @@ class DictionaryReplaceDbWriter(
 
         frameworksTransform.transformFrameworkEntities()
 
-        if (diagnosticContext.significantErrorsReceived()) {
+        if (diagnosticContext.criticalErrorsReceived()) {
             Files.delete(outputDbPath)
         }
     }

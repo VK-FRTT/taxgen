@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.cli
 
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticOutputVerbosity
 import fi.vm.yti.taxgen.commons.throwFail
 import java.io.PrintWriter
 import java.nio.file.Path
@@ -10,6 +11,7 @@ import joptsimple.OptionException
 import joptsimple.OptionParser
 import joptsimple.OptionSpec
 import joptsimple.ValueConversionException
+import joptsimple.util.EnumConverter
 import joptsimple.util.PathConverter
 import joptsimple.util.PathProperties
 
@@ -31,6 +33,7 @@ class DefinedOptions {
 
     private val output: OptionSpec<Path>
     private val forceOverwrite: OptionSpec<Void>
+    private val verbosity: OptionSpec<DiagnosticOutputVerbosity>
 
     init {
         cmdShowHelp = optionParser
@@ -114,6 +117,15 @@ class DefinedOptions {
                 "force-overwrite",
                 "silently overwrites the possibly existing target file(s)"
             )
+
+        verbosity = optionParser
+            .accepts(
+                "verbosity",
+                "diagnostic verbosity, modes: ${DiagnosticOutputVerbosity.NORMAL}, ${DiagnosticOutputVerbosity.DEBUG}"
+            )
+            .withOptionalArg()
+            .withValuesConvertedBy(VerbosityConverter())
+            .defaultsTo(DiagnosticOutputVerbosity.NORMAL)
     }
 
     fun detectOptionsFromArgs(args: Array<String>): DetectedOptions {
@@ -157,9 +169,12 @@ class DefinedOptions {
             baselineDb = optionSet.valueOf(this.baselineDb),
 
             output = optionSet.valueOf(this.output),
-            forceOverwrite = optionSet.has(this.forceOverwrite)
-        )
+            forceOverwrite = optionSet.has(this.forceOverwrite),
+            verbosity = optionSet.valueOf(verbosity)
+            )
     }
+
+    private class VerbosityConverter : EnumConverter<DiagnosticOutputVerbosity>(DiagnosticOutputVerbosity::class.java)
 
     private class FixedOrderHelpFormatter :
         BuiltinHelpFormatter(120, 4) {

@@ -11,6 +11,7 @@ interface Diagnostic {
     fun error(message: String)
     fun warning(message: String)
     fun info(message: String)
+    fun debug(message: String)
 
     fun validate(
         validatable: Validatable

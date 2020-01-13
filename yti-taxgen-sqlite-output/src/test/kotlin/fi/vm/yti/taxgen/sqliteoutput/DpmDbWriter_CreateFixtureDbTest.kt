@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.sqliteoutput
 
 import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticHaltPolicy
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticPassAllFilteringPolicy
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.DiagnosticBridge
@@ -30,7 +31,11 @@ internal open class DpmDbWriter_CreateFixtureDbTest {
         outputDbPath = tempFolder.resolve("dpm_model_fixture_generated.db")
 
         diagnosticCollector = DiagnosticCollector()
-        diagnosticContext = DiagnosticBridge(diagnosticCollector, DiagnosticHaltPolicy())
+        diagnosticContext = DiagnosticBridge(
+            diagnosticCollector,
+            DiagnosticHaltPolicy(),
+            DiagnosticPassAllFilteringPolicy()
+        )
     }
 
     @AfterEach
