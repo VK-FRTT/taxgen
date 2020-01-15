@@ -531,6 +531,36 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
         }
     }
 
+    @Tag("e2eprodtest")
+    @Test
+    fun `Should produce database from FI SBR PROD source config`() {
+        val sourceConfigPath = cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "fi_sbr_prod.json").toString()
+
+        val args = arrayOf(
+            "--create-dictionary-to-new-dpm-db",
+            "--source-config",
+            "$sourceConfigPath",
+            "--output",
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
+        )
+
+        executeCliAndExpectSuccess(args) { outText ->
+
+            assertThat(outText).containsSubsequence(
+                "Writing dictionaries to DPM database",
+                "Configuration file: (fi_sbr_prod.json)",
+                "Configuration file: OK",
+                "DPM source: Reference Data service",
+                "RDS to DPM mapper",
+                "Writing dictionaries to DPM database: OK"
+            )
+
+            assertThat(targetDbPath).exists().isRegularFile()
+        }
+    }
+
     @Test
     fun `Should report error when database creation fails to validation error on RDS to DPM mapping`() {
         val capturePath =

@@ -49,7 +49,7 @@ allprojects { subproj ->
 
     test {
         useJUnitPlatform {
-            excludeTags 'e2etest'
+            excludeTags('e2etest', 'e2eprodtest')
         }
 
         filter {
@@ -64,8 +64,15 @@ allprojects { subproj ->
         check.dependsOn it
         shouldRunAfter test
     }
-}
 
+    task e2eProdTest(type: Test) {
+        useJUnitPlatform {
+            includeTags 'e2eprodtest'
+        }
+        check.dependsOn it
+        shouldRunAfter e2eTest
+    }
+}
 
 configure(rootProject) {
     jar.enabled = false

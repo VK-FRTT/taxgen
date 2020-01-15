@@ -1,0 +1,50 @@
+{
+  "dpmDictionaries": [
+    {
+      "owner": {
+        "name": "FI SBR E2E TEST",
+        "namespace": "http://www.suomi.fi/xbrl/crr/",
+        "prefix": "fi",
+        "location": "http://www.suomi.fi/fi/fr/xbrl/crr/",
+        "copyright": "E2E TEST",
+        "languages": [
+          "fi",
+          "sv",
+          "en"
+        ]
+      },
+      "metrics": {
+        "uri": "http://uri.suomi.fi/codelist/sbr-fi-dictionary/metrics-2018-1"
+      },
+      "explicitDomainsAndHierarchies": {
+        "uri": "http://uri.suomi.fi/codelist/sbr-fi-dictionary/exp-doms-2018-1"
+      },
+      "explicitDimensions": {
+        "uri": "http://uri.suomi.fi/codelist/sbr-fi-dictionary/exp-dims-2018-1"
+      },
+      "typedDomains": {
+        "uri": "http://uri.suomi.fi/codelist/sbr-fi-dictionary/typ-doms-2018-1"
+      },
+      "typedDimensions": {
+        "uri": "http://uri.suomi.fi/codelist/sbr-fi-dictionary/typ-dims-2018-1"
+      }
+    }
+  ],
+  "processingOptions": {
+    "diagnosticSourceLanguages": ["fi"],
+    "sqliteDbDpmElementInherentTextLanguage": "fi",
+    "sqliteDbMandatoryLabelLanguage": "en",
+    "sqliteDbMandatoryLabelSourceLanguages": [
+      "fi",
+      "sv"
+    ],
+    "sqliteDbDpmElementUriStorageLabelLanguage": "pl",
+    "sqliteDbHierarchyNodeLabelCompositionLanguages": [
+      "fi",
+      "sv",
+      "en"
+    ],
+
+    "sqliteDbHierarchyNodeLabelCompositionNodeFallbackLanguage": "fi"
+  }
+}
