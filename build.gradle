@@ -6,11 +6,16 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinPluginVersion}"
         classpath "com.diffplug.spotless:spotless-plugin-gradle:${spotlessPluginVersion}"
+        classpath "com.adarshr:gradle-test-logger-plugin:${gradleTestLoggerPluginVersion}"
     }
 }
 
@@ -24,6 +29,7 @@ allprojects { subproj ->
     apply plugin: 'kotlin'
     apply plugin: 'java-library'
     apply plugin: 'idea'
+    apply plugin: 'com.adarshr.test-logger'
 
     group = 'fi.vm.yti.taxgen'
 
@@ -72,6 +78,24 @@ allprojects { subproj ->
         check.dependsOn it
         shouldRunAfter e2eTest
     }
+    
+    testlogger {
+        theme 'standard'
+        showExceptions true
+        showStackTraces true
+        showFullStackTraces false
+        showCauses true
+        slowThreshold 2500
+        showSummary true
+        showSimpleNames false
+        showPassed true
+        showSkipped true
+        showFailed true
+        showStandardStreams true
+        showPassedStandardStreams false
+        showSkippedStandardStreams false
+        showFailedStandardStreams true
+        }
 }
 
 configure(rootProject) {
