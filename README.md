@@ -1,6 +1,8 @@
 # TaxGen
 
-[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![Build status](https://github.com/VRK-YTI/yti-taxgen/workflows/build/badge.svg)](#)
+[![E2E test status](https://github.com/VRK-YTI/yti-taxgen/workflows/e2e%20test%20nightly/badge.svg)](#)
+[![E2E prod test status](https://github.com/VRK-YTI/yti-taxgen/workflows/e2e%20prod%20test%20nightly/badge.svg)](#)
 
 <br/>
 
