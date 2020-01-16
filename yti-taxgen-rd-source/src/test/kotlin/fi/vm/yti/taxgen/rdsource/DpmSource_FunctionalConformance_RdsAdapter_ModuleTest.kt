@@ -45,6 +45,7 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
     internal enum class SimulationVariety {
         NONE,
         DELAY_RESPONSE,
+        BAD_GATEWAY_RESPONSE,
     }
 
     internal data class DpmDictionarySimConf(
@@ -280,12 +281,12 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         mode = EnumSource.Mode.MATCH_ANY,
         names = arrayOf(".*")
     )
-    fun `Test request timeouts`(timeoutPhase: SimulationPhase) {
+    fun `Test request timeouts`(simulationPhase: SimulationPhase) {
         useCustomisedHttpClient()
 
         configureHoverflySimulation(
             mapOf(
-                timeoutPhase to SimulationVariety.DELAY_RESPONSE
+                simulationPhase to SimulationVariety.DELAY_RESPONSE
             )
         )
 
@@ -295,7 +296,54 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
         )
 
         val source = DpmSourceRdsAdapter(dpmSourceConfig, diagnosticContext)
+        val (progress, thrown) = runSourceUsageScenario(source)
 
+        assertThat(thrown).isInstanceOf(HaltException::class.java)
+
+        assertThat(diagnosticCollector.eventsString()).contains(
+            "MESSAGE [FATAL] [The server communication timeout. Url:"
+        )
+
+        verifyPhaseMatchesProgress(simulationPhase, progress)
+    }
+
+    @ParameterizedTest(
+        name = "Should handle server errors with retry within {0}"
+    )
+    @EnumSource(
+        value = SimulationPhase::class,
+        mode = EnumSource.Mode.MATCH_ANY,
+        names = arrayOf(".*")
+    )
+    fun `Test request retry on server errors`(simulationPhase: SimulationPhase) {
+        useCustomisedHttpClient()
+
+        configureHoverflySimulation(
+            mapOf(
+                simulationPhase to SimulationVariety.BAD_GATEWAY_RESPONSE
+            )
+        )
+
+        val dpmSourceConfig = ConfigFactory.dpmSourceConfigFromFile(
+            configFilePath,
+            diagnosticContext
+        )
+
+        val source = DpmSourceRdsAdapter(dpmSourceConfig, diagnosticContext)
+        val (progress, thrown) = runSourceUsageScenario(source)
+
+        assertThat(thrown).isInstanceOf(HaltException::class.java)
+
+        assertThat(diagnosticCollector.eventsString()).contains(
+            "MESSAGE [DEBUG] [Server error: HTTP 502 (Bad Gateway), retrying 1]",
+            "MESSAGE [DEBUG] [Server error: HTTP 502 (Bad Gateway), retrying 2]",
+            "MESSAGE [FATAL] [JSON content fetch failed: HTTP 502 (Bad Gateway)]"
+        )
+
+        verifyPhaseMatchesProgress(simulationPhase, progress)
+    }
+
+    private fun runSourceUsageScenario(source: DpmSource): Pair<String, Throwable> {
         var progress = "INIT"
 
         val thrown = catchThrowable {
@@ -324,13 +372,11 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
             progress = "EXTENSION_PAGES_DONE"
         }
 
-        assertThat(thrown).isInstanceOf(HaltException::class.java)
+        return Pair(progress, thrown)
+    }
 
-        assertThat(diagnosticCollector.eventsString()).contains(
-            "MESSAGE [FATAL] [The server communication timeout. Url:"
-        )
-
-        when (timeoutPhase) {
+    private fun verifyPhaseMatchesProgress(alteredPhase: SimulationPhase, progress: String) {
+        when (alteredPhase) {
             SimulationPhase.URL_RESOLUTION_URI_REDIRECT,
             SimulationPhase.URL_RESOLUTION_URI_METADATA,
             SimulationPhase.URL_RESOLUTION_EXPANDED_CODE_LIST,
@@ -981,12 +1027,18 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
     ): StubServiceBuilder {
         val requestMatcherBuilder = get(requestPath)
 
-        val response = response()
-            .status(303)
-            .header("Location", toTarget)
+        val response = if (varietyConf[currentPhase] == SimulationVariety.BAD_GATEWAY_RESPONSE) {
+            response().status(502)
+        } else {
+            val response = response()
+                .status(303)
+                .header("Location", toTarget)
 
-        if (varietyConf[currentPhase] == SimulationVariety.DELAY_RESPONSE) {
-            response.withDelay(100, TimeUnit.MILLISECONDS)
+            if (varietyConf[currentPhase] == SimulationVariety.DELAY_RESPONSE) {
+                response.withDelay(100, TimeUnit.MILLISECONDS)
+            }
+
+            response
         }
 
         requestMatcherBuilder.willReturn(response)
@@ -1007,10 +1059,16 @@ internal class DpmSource_FunctionalConformance_RdsAdapter_ModuleTest(private val
             requestMatcherBuilder.queryParam(it.first, it.second)
         }
 
-        val response = success(responseJson, "application/responseJson")
+        val response = if (varietyConf[currentPhase] == SimulationVariety.BAD_GATEWAY_RESPONSE) {
+            response().status(502)
+        } else {
+            val response = success(responseJson, "application/responseJson")
 
-        if (varietyConf[currentPhase] == SimulationVariety.DELAY_RESPONSE) {
-            response.withDelay(100, TimeUnit.MILLISECONDS)
+            if (varietyConf[currentPhase] == SimulationVariety.DELAY_RESPONSE) {
+                response.withDelay(100, TimeUnit.MILLISECONDS)
+            }
+
+            response
         }
 
         requestMatcherBuilder.willReturn(response)

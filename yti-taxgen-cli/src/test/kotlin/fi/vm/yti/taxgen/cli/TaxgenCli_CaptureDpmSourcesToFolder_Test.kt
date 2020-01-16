@@ -53,7 +53,9 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
             "--source-config",
             "$integrationFixtureConfigPath",
             "--output",
-            "$targetFolderPath"
+            "$targetFolderPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->

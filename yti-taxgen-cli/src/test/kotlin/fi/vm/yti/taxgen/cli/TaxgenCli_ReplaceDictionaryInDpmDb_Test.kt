@@ -76,7 +76,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$integrationFixtureConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -124,7 +126,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -153,7 +157,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -196,7 +202,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -239,7 +247,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -282,7 +292,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -325,7 +337,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$outputPath"
+            "$outputPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -660,7 +674,9 @@ internal class TaxgenCli_ReplaceDictionaryInDpmDb_Test : TaxgenCli_TestBase(
                 "--source-config",
                 cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString(),
                 "--output",
-                "$outputPath"
+                "$outputPath",
+                "--verbosity",
+                "DEBUG"
             )
 
             executeCliAndExpectSuccess(args) { outText ->

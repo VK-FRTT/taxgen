@@ -51,7 +51,9 @@ internal class TaxgenCli_CaptureDpmSourcesToZip_Test : TaxgenCli_TestBase(
             "--source-config",
             "$integrationFixtureConfigPath",
             "--output",
-            "$targetZipPath"
+            "$targetZipPath",
+            "--verbosity",
+            "DEBUG"
             )
 
         executeCliAndExpectSuccess(args) { outText ->

@@ -268,7 +268,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$integrationFixtureConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -314,7 +316,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -341,7 +345,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -382,7 +388,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -423,7 +431,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -464,7 +474,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -505,7 +517,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
             "--source-config",
             "$partialSourceConfigPath",
             "--output",
-            "$targetDbPath"
+            "$targetDbPath",
+            "--verbosity",
+            "DEBUG"
         )
 
         executeCliAndExpectSuccess(args) { outText ->
@@ -636,7 +650,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                 "--source-config",
                 cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unknown_codelist.json").toString(),
                 "--output",
-                "$targetDbPath"
+                "$targetDbPath",
+                "--verbosity",
+                "DEBUG"
             )
 
             executeCliAndExpectSuccess(args) { outText ->
@@ -658,7 +674,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                 "--source-config",
                 cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_unresolvable_host.json").toString(),
                 "--output",
-                "$targetDbPath"
+                "$targetDbPath",
+                "--verbosity",
+                "DEBUG"
             )
 
             executeCliAndExpectSuccess(args) { outText ->
@@ -680,7 +698,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                 "--source-config",
                 cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_bad_protocol.json").toString(),
                 "--output",
-                "$targetDbPath"
+                "$targetDbPath",
+                "--verbosity",
+                "DEBUG"
             )
 
             executeCliAndExpectSuccess(args) { outText ->
@@ -702,7 +722,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                 "--source-config",
                 cloneTestFixtureToTemp(RDS_SOURCE_CONFIG, "broken_metric_uri_non_responsive_host_ip.json").toString(),
                 "--output",
-                "$targetDbPath"
+                "$targetDbPath",
+                "--verbosity",
+                "DEBUG"
             )
 
             executeCliAndExpectSuccess(args) { outText ->
@@ -727,7 +749,9 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
                     "broken_metric_uri_non_responsive_host_domain.json"
                 ).toString(),
                 "--output",
-                "$targetDbPath"
+                "$targetDbPath",
+                "--verbosity",
+                "DEBUG"
             )
 
             executeCliAndExpectSuccess(args) { outText ->

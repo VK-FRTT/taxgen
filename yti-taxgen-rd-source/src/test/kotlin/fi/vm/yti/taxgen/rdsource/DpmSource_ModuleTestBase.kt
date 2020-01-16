@@ -30,9 +30,6 @@ open class DpmSource_ModuleTestBase {
 
     @AfterEach
     fun baseTeardown() {
-        diagnosticCollector.events.forEach {
-            println(it)
-        }
     }
 
     companion object {
