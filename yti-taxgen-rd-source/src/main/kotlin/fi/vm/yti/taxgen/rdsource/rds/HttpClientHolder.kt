@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.rdsource.rds
 
 import java.io.Closeable
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 
 internal object HttpClientHolder : Closeable {
@@ -21,6 +22,8 @@ internal object HttpClientHolder : Closeable {
             .newBuilder()
             .followRedirects(true)
             .followSslRedirects(true)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
             .build()
     }
 
