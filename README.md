@@ -1,8 +1,8 @@
 # TaxGen
 
-[![Build status](https://github.com/VRK-YTI/yti-taxgen/workflows/build/badge.svg)](#)
-[![E2E test status](https://github.com/VRK-YTI/yti-taxgen/workflows/e2e%20test%20nightly/badge.svg)](#)
-[![E2E prod test status](https://github.com/VRK-YTI/yti-taxgen/workflows/e2e%20prod%20test%20nightly/badge.svg)](#)
+[![Build status](https://github.com/VK-FRTT/taxgen/workflows/build/badge.svg)](#)
+[![E2E test status](https://github.com/VK-FRTT/taxgen/workflows/e2e%20test%20nightly/badge.svg)](#)
+[![E2E prod test status](https://github.com/VK-FRTT/taxgen/workflows/e2e%20prod%20test%20nightly/badge.svg)](#)
 
 <br/>
 
