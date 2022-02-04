@@ -10,8 +10,8 @@ import java.nio.file.Path
 
 class DpmDbWriterContextDecorator(
     private val realDpmDbWriter: DpmDbWriter,
-
-    private val diagnosticContext: DiagnosticContext
+    private val diagnosticContext: DiagnosticContext,
+    private val contextTitle: String
 ) : DpmDbWriter {
 
     override fun writeModel(
@@ -20,7 +20,10 @@ class DpmDbWriterContextDecorator(
     ) {
         diagnosticContext.withContext(
             contextType = DiagnosticContexts.SQLiteDbWriter.toType(),
-            contextDetails = DiagnosticContextDetailsData.withContextIdentifier(realDpmDbWriter.outputPath().toString())
+            contextDetails = DiagnosticContextDetailsData.withContextTitleAndIdentifier(
+                contextTitle = contextTitle,
+                contextIdentifier = outputPath().toString()
+            )
         ) {
             realDpmDbWriter.writeModel(dpmModel, processingOptions)
         }

@@ -48,7 +48,7 @@ data class FinalOrdinateCategorisation(
             require(signature.identifierKind == OrdinateCategorisationSignature.IdentifierKind.XBRL_CODE)
 
             return doComposeSignatureLiteral(
-                signatureStructure = signature.signatureStructure,
+                signaturePrecision = signature.signaturePrecision,
                 dimension = signature.dimensionIdentifier,
                 member = signature.memberIdentifier,
                 hierarchy = dbReferences.hierarchyId,
@@ -63,7 +63,7 @@ data class FinalOrdinateCategorisation(
             require(signature.identifierKind == OrdinateCategorisationSignature.IdentifierKind.XBRL_CODE)
 
             return doComposeSignatureLiteral(
-                signatureStructure = signature.signatureStructure,
+                signaturePrecision = signature.signaturePrecision,
                 dimension = signature.dimensionIdentifier,
                 member = signature.memberIdentifier,
                 hierarchy = signature.hierarchyIdentifier,
@@ -73,21 +73,21 @@ data class FinalOrdinateCategorisation(
         }
 
         private fun doComposeSignatureLiteral(
-            signatureStructure: OrdinateCategorisationSignatureStructure,
+            signaturePrecision: OrdinateCategorisationSignature.SignaturePrecision,
             dimension: String,
             member: String,
             hierarchy: Any?,
             startingMember: Any?,
             startingMemberIncluded: Any?
         ): String {
-            return when (signatureStructure) {
-                OrdinateCategorisationSignatureStructure.NO_OPEN_AXIS_VALUE_RESTRICTION -> {
+            return when (signaturePrecision) {
+                OrdinateCategorisationSignature.SignaturePrecision.NO_OPEN_AXIS_VALUE_RESTRICTION -> {
                     "$dimension($member)"
                 }
-                OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION -> {
+                OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION -> {
                     "$dimension($member?[$hierarchy])"
                 }
-                OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION -> {
+                OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION -> {
                     "$dimension($member[$hierarchy;$startingMember;$startingMemberIncluded])"
                 }
             }
@@ -101,13 +101,16 @@ data class FinalOrdinateCategorisation(
             property = this::ordinateId
         )
 
-        dbReferences.validate(validationResultBuilder)
+        validationResultBuilder.validateNestedProperty(this::dbReferences)
     }
 
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "OrdinateCategorisation (transformed)",
-            subjectIdentifier = "OrdinateID: $ordinateId"
+            subjectIdentifiers = listOf(
+                "OrdinateID: $ordinateId",
+                "BaselineDPS: ${dbReferences.signature.originSignatureLiteral}"
+            )
         )
     }
 }

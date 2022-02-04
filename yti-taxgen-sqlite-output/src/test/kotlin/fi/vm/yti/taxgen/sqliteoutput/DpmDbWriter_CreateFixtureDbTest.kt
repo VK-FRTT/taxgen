@@ -75,7 +75,11 @@ internal open class DpmDbWriter_CreateFixtureDbTest {
         outputDbConnection = DriverManager.getConnection("jdbc:sqlite:$outputDbPath")
 
         Assertions.assertThat(diagnosticCollector.events).containsSequence(
-            "ENTER [SQLiteDbWriter] []",
+            "ENTER [SQLiteDbWriter] [Mode DictionaryCreate]",
+            "ENTER [DpmModelProcessingOptionsTransform] []",
+            "EXIT [DpmModelProcessingOptionsTransform]",
+            "ENTER [DpmDictionaryWrite] []",
+            "EXIT [DpmDictionaryWrite]",
             "EXIT [SQLiteDbWriter]"
         )
     }

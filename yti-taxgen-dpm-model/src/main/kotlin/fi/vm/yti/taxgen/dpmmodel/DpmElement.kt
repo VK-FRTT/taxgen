@@ -33,7 +33,7 @@ interface DpmElement : Validatable {
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = this::class.simpleName ?: throwIllegalDpmModelState("Anonymous DpmElement"),
-            subjectIdentifier = uri
+            subjectIdentifiers = listOf(uri)
         )
     }
 

@@ -73,36 +73,39 @@ data class BaselineOrdinateCategorisation(
                 signatureElementValueOrNull("dimension") != null -> {
                     OrdinateCategorisationSignature(
                         identifierKind = identifierKind,
-                        signatureStructure = OrdinateCategorisationSignatureStructure.NO_OPEN_AXIS_VALUE_RESTRICTION,
+                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.NO_OPEN_AXIS_VALUE_RESTRICTION,
                         dimensionIdentifier = signatureElementValue("dimension"),
                         memberIdentifier = signatureElementValue("member"),
                         hierarchyIdentifier = null,
                         hierarchyStartingMemberIdentifier = null,
-                        startingMemberIncluded = null
+                        startingMemberIncluded = null,
+                        originSignatureLiteral = signatureLiteral
                     )
                 }
 
                 (signatureElementValueOrNull("partialOavrDimension") != null) -> {
                     OrdinateCategorisationSignature(
                         identifierKind = identifierKind,
-                        signatureStructure = OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION,
+                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION,
                         dimensionIdentifier = signatureElementValue("partialOavrDimension"),
                         memberIdentifier = signatureElementValue("partialOavrMember"),
                         hierarchyIdentifier = signatureElementValue("partialOavrHierarchy"),
                         hierarchyStartingMemberIdentifier = null,
-                        startingMemberIncluded = null
+                        startingMemberIncluded = null,
+                        originSignatureLiteral = signatureLiteral
                     )
                 }
 
                 (signatureElementValueOrNull("oavrDimension") != null) -> {
                     OrdinateCategorisationSignature(
                         identifierKind = identifierKind,
-                        signatureStructure = OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION,
+                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION,
                         dimensionIdentifier = signatureElementValue("oavrDimension"),
                         memberIdentifier = signatureElementValue("oavrMember"),
                         hierarchyIdentifier = signatureElementValue("oavrHierarchy"),
                         hierarchyStartingMemberIdentifier = signatureElementValue("oavrStartMember"),
-                        startingMemberIncluded = signatureElementValue("oavrStartMemberIncluded")
+                        startingMemberIncluded = signatureElementValue("oavrStartMemberIncluded"),
+                        originSignatureLiteral = signatureLiteral
                     )
                 }
 
@@ -148,8 +151,8 @@ data class BaselineOrdinateCategorisation(
     }
 
     override fun validate(validationResultBuilder: ValidationResultBuilder) {
-        databaseIdSignature.validate(validationResultBuilder)
-        xbrlCodeSignature.validate(validationResultBuilder)
+        validationResultBuilder.validateNestedProperty(this::databaseIdSignature)
+        validationResultBuilder.validateNestedProperty(this::xbrlCodeSignature)
 
         validateCustom(
             validationResultBuilder = validationResultBuilder,
@@ -170,7 +173,7 @@ data class BaselineOrdinateCategorisation(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "OrdinateCategorisation (baseline)",
-            subjectIdentifier = "OrdinateID: $ordinateId"
+            subjectIdentifiers = listOf("OrdinateID: $ordinateId")
         )
     }
 

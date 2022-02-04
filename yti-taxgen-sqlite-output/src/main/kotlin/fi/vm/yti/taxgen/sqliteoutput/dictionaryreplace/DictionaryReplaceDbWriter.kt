@@ -1,8 +1,10 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace
 
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
+import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.sqliteoutput.DpmDbWriter
@@ -17,6 +19,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.sql.DriverManager
 import java.sql.SQLException
+import org.jetbrains.exposed.dao.id.EntityID
 
 class DictionaryReplaceDbWriter(
     baselineDbPath: Path,
@@ -42,6 +45,10 @@ class DictionaryReplaceDbWriter(
         SqliteOps.connectDatabase(outputDbPath)
 
         doWriteModel(updatedDpmModel, processingOptions)
+
+        if (diagnosticContext.criticalErrorsReceived()) {
+            Files.delete(outputDbPath)
+        }
     }
 
     override fun outputPath(): Path = outputDbPath
@@ -63,12 +70,45 @@ class DictionaryReplaceDbWriter(
         DbLanguages.configureLanguages()
         val languageIds = DbLanguages.resolveLanguageIds()
 
-        val frameworksTransform = FrameworksTransform.loadInitialState(
+        val frameworksTransform = FrameworksTransform.captureInitialState(
             diagnosticContext
         )
 
         DbDictionaries.purgeDictionaryContent()
 
+        writeDictionaryContents(
+            dpmModel,
+            processingOptions,
+            languageIds,
+            diagnosticContext
+        )
+
+        frameworksTransform.updateFrameworkEntities()
+    }
+
+    private fun writeDictionaryContents(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions,
+        languageIds: Map<Language, EntityID<Int>>,
+        diagnosticContext: DiagnosticContext
+    ) {
+        diagnosticContext.withContext(
+            contextType = DiagnosticContexts.DpmDictionaryWrite.toType(),
+            contextDetails = null
+        ) {
+            doWriteDictionaryContents(
+                dpmModel,
+                processingOptions,
+                languageIds
+            )
+        }
+    }
+
+    private fun doWriteDictionaryContents(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions,
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
         val dictionaryAndOwnerIds = dpmModel.dictionaries.map {
             val ownerId = DbOwners.lookupOwnerIdByPrefix(it.owner, diagnosticContext)
 
@@ -95,12 +135,6 @@ class DictionaryReplaceDbWriter(
                 languageIds,
                 processingOptions
             )
-        }
-
-        frameworksTransform.transformFrameworkEntities()
-
-        if (diagnosticContext.criticalErrorsReceived()) {
-            Files.delete(outputDbPath)
         }
     }
 

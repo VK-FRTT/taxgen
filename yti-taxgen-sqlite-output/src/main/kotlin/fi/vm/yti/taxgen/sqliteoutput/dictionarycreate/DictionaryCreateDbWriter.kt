@@ -1,9 +1,11 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionarycreate
 
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.ops.FileOps
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.dpmmodel.DpmModel
-import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.Language
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.sqliteoutput.DpmDbWriter
 import fi.vm.yti.taxgen.sqliteoutput.conceptwriter.DbDictionaries
 import fi.vm.yti.taxgen.sqliteoutput.conceptwriter.DbFixedEntities
@@ -14,11 +16,12 @@ import fi.vm.yti.taxgen.sqliteoutput.helpers.SqliteOps
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import org.jetbrains.exposed.dao.id.EntityID
 
 class DictionaryCreateDbWriter(
     outputDbPath: Path,
     private val forceOverwrite: Boolean,
-    private val diagnostic: Diagnostic
+    private val diagnosticContext: DiagnosticContext
 ) : DpmDbWriter {
     private val outputDbPath: Path = outputDbPath.toAbsolutePath().normalize()
 
@@ -29,7 +32,7 @@ class DictionaryCreateDbWriter(
         val updatedDpmModel = ModelTransformer.transformDpmModelByProcessingOptions(
             dpmModel,
             processingOptions,
-            diagnostic
+            diagnosticContext
         )
 
         initOutputDbFile()
@@ -37,13 +40,17 @@ class DictionaryCreateDbWriter(
         SqliteOps.connectDatabase(outputDbPath)
 
         doWriteModel(updatedDpmModel, processingOptions)
+
+        if (diagnosticContext.criticalErrorsReceived()) {
+            Files.delete(outputDbPath)
+        }
     }
 
     override fun outputPath(): Path = outputDbPath
 
     private fun initOutputDbFile() {
         FileOps.deleteConflictingOutputFileIfAllowed(outputDbPath, forceOverwrite)
-        FileOps.failIfOutputFileExists(outputDbPath, diagnostic)
+        FileOps.failIfOutputFileExists(outputDbPath, diagnosticContext)
         FileOps.createIntermediateFolders(outputDbPath)
 
         val stream = this::class.java.getResourceAsStream("/dm_database_seed.db")
@@ -59,6 +66,37 @@ class DictionaryCreateDbWriter(
 
         DbDictionaries.purgeDictionaryContent()
 
+        writeDictionaryContents(
+            dpmModel,
+            processingOptions,
+            languageIds,
+            diagnosticContext
+        )
+    }
+
+    private fun writeDictionaryContents(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions,
+        languageIds: Map<Language, EntityID<Int>>,
+        diagnosticContext: DiagnosticContext
+    ) {
+        diagnosticContext.withContext(
+            contextType = DiagnosticContexts.DpmDictionaryWrite.toType(),
+            contextDetails = null
+        ) {
+            doWriteDictionaryContents(
+                dpmModel,
+                processingOptions,
+                languageIds
+            )
+        }
+    }
+
+    private fun doWriteDictionaryContents(
+        dpmModel: DpmModel,
+        processingOptions: ProcessingOptions,
+        languageIds: Map<Language, EntityID<Int>>
+    ) {
         val dictionaryAndOwnerIds = dpmModel.dictionaries.map {
             val ownerId = DbOwners.writeOwner(it.owner)
 
@@ -74,7 +112,7 @@ class DictionaryCreateDbWriter(
 
         val fixedEntitiesLookupItem = DbFixedEntities.writeFixedEntities(
             languageIds,
-            diagnostic
+            diagnosticContext
         )
 
         dictionaryAndOwnerIds.forEach { (dictionary, ownerId) ->

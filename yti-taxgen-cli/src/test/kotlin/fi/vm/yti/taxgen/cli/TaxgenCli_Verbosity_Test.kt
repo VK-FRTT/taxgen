@@ -40,8 +40,8 @@ internal class TaxgenCli_Verbosity_Test : TaxgenCli_TestBase(
                 "Configuration file: OK",
                 "DPM source: Reference Data service",
                 "RDS to DPM mapper",
-                "Content URLs: DEBUG: Fetching JSON: https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1?expand=extension",
-                "Codelist #0: DEBUG: Fetching JSON: https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1?expand=code&pretty",
+                "DEBUG: Fetching JSON: https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1?expand=extension",
+                "DEBUG: Fetching JSON: https://koodistot.test.yti.cloud.vrk.fi/codelist-api/api/v1/coderegistries/dpm-integration-fixture/codeschemes/exp-doms-2018-1?expand=code&pretty",
                 "Writing dictionaries to DPM database: OK"
             )
 

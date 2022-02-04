@@ -11,6 +11,11 @@ interface DiagnosticContext : Diagnostic {
         action: () -> R
     ): R
 
+    fun <R> runActionsWithContextTitle(
+        contextType: DiagnosticContextType,
+        actionsWithContextTitle: List<Pair<String, () -> R>>
+    ): List<R>
+
     fun criticalErrorsReceived(): Boolean
     fun stopIfCriticalErrorsReceived(messageProvider: () -> String)
 

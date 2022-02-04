@@ -2,6 +2,7 @@ package fi.vm.yti.taxgen.dpmmodel.validation
 
 import fi.vm.yti.taxgen.dpmmodel.validation.system.ValidationSubjectDescriptor
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty0
 
 interface ValidationResultBuilder {
 
@@ -25,4 +26,6 @@ interface ValidationResultBuilder {
 
     fun withSubject(subject: ValidationSubjectDescriptor, block: () -> Unit)
     fun withNestedObject(objectClass: KClass<*>, block: () -> Unit)
-}
+
+    fun <T : ValidatableNestedObject> validateNestedProperty(property: KProperty0<T>)
+    }

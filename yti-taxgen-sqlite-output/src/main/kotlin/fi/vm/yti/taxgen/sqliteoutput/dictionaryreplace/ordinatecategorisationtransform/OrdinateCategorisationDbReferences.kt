@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteoutput.dictionaryreplace.ordinatecategorisationtransform
 
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidatableNestedObject
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import fi.vm.yti.taxgen.dpmmodel.validators.validateNonNull
 import fi.vm.yti.taxgen.sqliteoutput.tables.DimensionTable
@@ -11,14 +12,14 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 data class OrdinateCategorisationDbReferences(
 
-    val signatureStructure: OrdinateCategorisationSignatureStructure,
+    val signature: OrdinateCategorisationSignature,
 
     val dimensionId: EntityID<Int>?,
     val memberId: EntityID<Int>?,
 
     val hierarchyId: EntityID<Int>?,
     val hierarchyStartingMemberId: EntityID<Int>?
-) {
+) : ValidatableNestedObject {
     companion object {
         private const val OPEN_MEMBER_MARKER = "*"
 
@@ -60,7 +61,7 @@ data class OrdinateCategorisationDbReferences(
                 }
 
                 OrdinateCategorisationDbReferences(
-                    signatureStructure = signature.signatureStructure,
+                    signature = signature,
                     dimensionId = dimensionRow?.get(DimensionTable.id),
                     memberId = memberRow?.get(MemberTable.id),
                     hierarchyId = hierarchyRow?.get(HierarchyTable.id),
@@ -70,7 +71,7 @@ data class OrdinateCategorisationDbReferences(
         }
     }
 
-    fun validate(validationResultBuilder: ValidationResultBuilder) {
+    override fun validate(validationResultBuilder: ValidationResultBuilder) {
 
         validateNonNull(
             validationResultBuilder = validationResultBuilder,
@@ -82,8 +83,8 @@ data class OrdinateCategorisationDbReferences(
             property = this::memberId
         )
 
-        if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
-            signatureStructure == OrdinateCategorisationSignatureStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
+            signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
@@ -91,7 +92,7 @@ data class OrdinateCategorisationDbReferences(
             )
         }
 
-        if (signatureStructure == OrdinateCategorisationSignatureStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION
+        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,

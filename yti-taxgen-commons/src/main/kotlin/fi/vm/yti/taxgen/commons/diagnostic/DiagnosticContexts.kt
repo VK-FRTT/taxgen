@@ -19,7 +19,12 @@ enum class DiagnosticContexts(val recurringContext: Boolean, val displayName: St
     RdsCodeList(true, "Codelist"),
     RdsCodesPage(true, "Codes Page"),
     RdsExtension(true, "Extension"),
-    RdsExtensionMembersPage(true, "Extension members page");
+    RdsExtensionMembersPage(true, "Extension members page"),
+
+    DpmModelProcessingOptionsTransform(false, "DPM Model ProcessingOptions Transform"),
+    FrameworksTransformCaptureBaseline(false, "Frameworks Transform capture baseline"),
+    FrameworksTransformUpdateEntities(true, "Frameworks Transform update entities"),
+    DpmDictionaryWrite(false, "DPM Dictionary write");
 
     fun toType() = DiagnosticContextType(
         typeName = this.name,

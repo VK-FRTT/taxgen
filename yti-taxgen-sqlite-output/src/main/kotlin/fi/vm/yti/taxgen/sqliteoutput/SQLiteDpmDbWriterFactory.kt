@@ -16,12 +16,13 @@ object SQLiteDpmDbWriterFactory {
         val writer = DictionaryCreateDbWriter(
             outputDbPath = outputDbPath,
             forceOverwrite = forceOverwrite,
-            diagnostic = diagnosticContext
+            diagnosticContext = diagnosticContext
         )
 
         return DpmDbWriterContextDecorator(
             realDpmDbWriter = writer,
-            diagnosticContext = diagnosticContext
+            diagnosticContext = diagnosticContext,
+            contextTitle = "Mode DictionaryCreate"
         )
     }
 
@@ -40,7 +41,8 @@ object SQLiteDpmDbWriterFactory {
 
         return DpmDbWriterContextDecorator(
             realDpmDbWriter = writer,
-            diagnosticContext = diagnosticContext
+            diagnosticContext = diagnosticContext,
+            contextTitle = "Mode DictionaryReplace"
         )
     }
 }

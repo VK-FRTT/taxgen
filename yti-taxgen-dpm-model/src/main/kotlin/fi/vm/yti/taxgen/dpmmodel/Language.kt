@@ -39,7 +39,7 @@ class Language constructor(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "Language",
-            subjectIdentifier = iso6391Code
+            subjectIdentifiers = listOf(iso6391Code)
         )
     }
 
@@ -161,7 +161,7 @@ class Language constructor(
 
                 if (results.any()) {
                     val subject = language.validationSubjectDescriptor()
-                    "${subject.subjectType} #$index (${subject.subjectIdentifier}): ${results.joinToString { it.toString() }}"
+                    "${subject.subjectType} #$index (${subject.subjectIdentifiers.first()}): ${results.joinToString { it.toString() }}"
                 } else {
                     null
                 }

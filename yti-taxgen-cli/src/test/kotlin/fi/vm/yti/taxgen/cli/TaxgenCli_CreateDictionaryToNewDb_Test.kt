@@ -325,8 +325,10 @@ internal class TaxgenCli_CreateDictionaryToNewDb_Test : TaxgenCli_TestBase(
 
             assertThat(outText).containsSubsequence(
                 "Configuration file: (partial_source_config.json)",
-                "DPM dictionary #0: ERROR: Unknown target 'EDA' in ReferencedDomainCode in Metric (http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3) in DPM Dictionary (prefix)",
-                "Writing dictionaries to DPM database: INFO: Mapping failed due content errors"
+                "DPM source:",
+                "ERROR: Unknown target 'EDA' in ReferencedDomainCode in Metric (http://uri.suomi.fi/codelist/dpm-integration-fixture/metrics-2018-1/code/3) in DPM Dictionary (prefix)",
+                "DPM source: OK",
+                "INFO: Mapping failed due content errors"
             )
         }
     }

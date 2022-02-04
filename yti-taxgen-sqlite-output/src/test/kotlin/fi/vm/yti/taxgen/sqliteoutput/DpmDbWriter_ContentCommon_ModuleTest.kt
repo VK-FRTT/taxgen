@@ -96,10 +96,35 @@ internal class DpmDbWriter_ContentCommon_ModuleTest : DpmDbWriter_ContentModuleT
             dynamicTest("should produce proper context events") {
                 executeDpmDbWriterWithDefaults()
 
-                assertThat(diagnosticCollector.eventsString()).contains(
-                    "ENTER [SQLiteDbWriter]",
-                    "EXIT [SQLiteDbWriter]"
-                )
+                if (initMode == DbInitMode.DICTIONARY_CREATE) {
+                    assertThat(diagnosticCollector.events).contains(
+                        "ENTER [SQLiteDbWriter] [Mode DictionaryCreate]",
+                        "ENTER [DpmModelProcessingOptionsTransform] []",
+                        "EXIT [DpmModelProcessingOptionsTransform]",
+                        "ENTER [DpmDictionaryWrite] []",
+                        "EXIT [DpmDictionaryWrite]",
+                        "EXIT [SQLiteDbWriter]"
+                    )
+                }
+
+                if (initMode == DbInitMode.DICTIONARY_REPLACE) {
+                    assertThat(diagnosticCollector.events).contains(
+                        "ENTER [SQLiteDbWriter] [Mode DictionaryReplace]",
+                        "ENTER [DpmModelProcessingOptionsTransform] []",
+                        "EXIT [DpmModelProcessingOptionsTransform]",
+                        "ENTER [FrameworksTransformCaptureBaseline] []",
+                        "EXIT [FrameworksTransformCaptureBaseline]",
+                        "ENTER [DpmDictionaryWrite] []",
+                        "EXIT [DpmDictionaryWrite]",
+                        "ENTER [FrameworksTransformUpdateEntities] [OrdinateCategorisations]",
+                        "EXIT [FrameworksTransformUpdateEntities]",
+                        "ENTER [FrameworksTransformUpdateEntities] [OpenAxisValueRestrictions]",
+                        "EXIT [FrameworksTransformUpdateEntities]",
+                        "ENTER [FrameworksTransformUpdateEntities] [TableCells]",
+                        "EXIT [FrameworksTransformUpdateEntities]",
+                        "EXIT [SQLiteDbWriter]"
+                    )
+                }
             }
         )
     }

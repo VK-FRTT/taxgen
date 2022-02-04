@@ -11,36 +11,36 @@ class DiagnosticTextPrinter(
     private val printWriter: PrintWriter
 ) : DiagnosticEventConsumer {
 
-    private var level = 0
+    private var currentIndentationLevel = 0
     private var lineHeader: String = ""
 
     override fun contextEnter(contextStack: List<DiagnosticContextDescriptor>) {
-        level = levelFromStack(contextStack)
+        currentIndentationLevel = levelFromStack(contextStack)
 
         val context = contextStack.first()
         lineHeader = context.contextHeader()
-        printLine(context.contextDetails())
+        printLineWithHeader(context.contextDetails())
     }
 
     override fun contextExit(
         contextStack: List<DiagnosticContextDescriptor>,
         retiredContext: DiagnosticContextDescriptor
     ) {
-        printLine("OK")
+        printLineWithHeader("OK")
 
         lineHeader = contextStack.firstOrNull()?.contextHeader() ?: ""
-        level = levelFromStack(contextStack)
+        currentIndentationLevel = levelFromStack(contextStack)
     }
 
     override fun topContextDetailsChange(
         contextStack: List<DiagnosticContextDescriptor>,
         originalContext: DiagnosticContextDescriptor
     ) {
-        printLine(contextStack.first().contextDetailsForUpdate(originalContext))
+        printLineWithHeader(contextStack.first().contextDetailsForUpdate(originalContext))
     }
 
     override fun message(severity: Severity, message: String) {
-        printLine("$severity: $message")
+        printLineWithIndentation(currentIndentationLevel + 1, "$severity: $message")
     }
 
     override fun validationResults(results: List<ValidationResultDescriptor>) {
@@ -56,7 +56,7 @@ class DiagnosticTextPrinter(
             sb.append(" in ${result.valueName()}")
 
             result.subjectChain().reversed().forEach {
-                sb.append(" in ${it.subjectType} (${it.subjectIdentifier})")
+                sb.append(" in ${it.subjectType} (${it.subjectIdentifiers.joinToString() })")
             }
 
             message(Severity.ERROR, sb.toString())
@@ -66,8 +66,12 @@ class DiagnosticTextPrinter(
     private fun levelFromStack(contextStack: List<DiagnosticContextDescriptor>) =
         (contextStack.size - 1).coerceAtLeast(0)
 
-    private fun printLine(message: String) {
-        printWriter.println("${"   ".repeat(level)}$lineHeader $message")
+    private fun printLineWithHeader(message: String) {
+        printLineWithIndentation(currentIndentationLevel, "$lineHeader $message")
+    }
+
+    private fun printLineWithIndentation(indentationLevel: Int, message: String) {
+        printWriter.println("${"   ".repeat(indentationLevel)}$message")
     }
 
     private fun DiagnosticContextDescriptor.contextHeader(): String {

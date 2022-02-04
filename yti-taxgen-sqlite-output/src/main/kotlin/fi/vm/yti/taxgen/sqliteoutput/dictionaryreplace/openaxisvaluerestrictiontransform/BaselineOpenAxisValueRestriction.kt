@@ -114,7 +114,7 @@ data class BaselineOpenAxisValueRestriction(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "OpenAxisValueRestriction (baseline)",
-            subjectIdentifier = "AxisID: $axisId"
+            subjectIdentifiers = listOf("AxisID: $axisId")
         )
     }
 }

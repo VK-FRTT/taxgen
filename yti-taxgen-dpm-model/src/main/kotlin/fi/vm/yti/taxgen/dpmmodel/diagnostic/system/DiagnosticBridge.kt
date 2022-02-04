@@ -3,6 +3,7 @@ package fi.vm.yti.taxgen.dpmmodel.diagnostic.system
 import fi.vm.yti.taxgen.dpmmodel.Language
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetails
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextDetailsData
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContextType
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.DEBUG
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.system.Severity.ERROR
@@ -52,6 +53,19 @@ class DiagnosticBridge(
             return ret
         } catch (ex: Exception) {
             stoppingPolicy.exceptionCaughtStopProcessing(ex, this)
+        }
+    }
+
+    override fun <R> runActionsWithContextTitle(
+        contextType: DiagnosticContextType,
+        actionsWithContextTitle: List<Pair<String, () -> R>>
+    ): List<R> {
+        return actionsWithContextTitle.map { (contextTitle, action) ->
+            withContext(
+                contextType,
+                DiagnosticContextDetailsData.withContextTitle(contextTitle),
+                action
+            )
         }
     }
 

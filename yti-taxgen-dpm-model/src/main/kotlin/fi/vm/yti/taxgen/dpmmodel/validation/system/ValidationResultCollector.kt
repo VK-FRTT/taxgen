@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.dpmmodel.validation.system
 
 import fi.vm.yti.taxgen.dpmmodel.exception.throwIllegalDpmModelState
+import fi.vm.yti.taxgen.dpmmodel.validation.ValidatableNestedObject
 import fi.vm.yti.taxgen.dpmmodel.validation.ValidationResultBuilder
 import java.util.LinkedList
 import kotlin.reflect.KClass
@@ -73,6 +74,16 @@ class ValidationResultCollector : ValidationResultBuilder {
         nameStack.push(name)
 
         block()
+
+        nameStack.pop()
+    }
+
+    override fun <T : ValidatableNestedObject> validateNestedProperty(property: KProperty0<T>) {
+        val name = property.name?.capitalize()
+
+        nameStack.push(name)
+
+        property.get().validate(this)
 
         nameStack.pop()
     }

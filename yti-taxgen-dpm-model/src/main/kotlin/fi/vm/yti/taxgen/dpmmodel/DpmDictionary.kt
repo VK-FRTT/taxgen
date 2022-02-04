@@ -105,7 +105,7 @@ data class DpmDictionary(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "DPM Dictionary",
-            subjectIdentifier = owner.prefix
+            subjectIdentifiers = listOf(owner.prefix)
         )
     }
 

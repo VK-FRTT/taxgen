@@ -53,8 +53,16 @@ class ValidationResultDescriptor private constructor(
     override fun toString(): String {
         val sb = StringBuilder()
 
-        subjectChain().forEach {
-            sb.append("[${it.subjectType}] [${it.subjectIdentifier}] ")
+        subjectChain().forEach { subject ->
+            sb.append("[${subject.subjectType}] ")
+
+            if (subject.subjectIdentifiers.isEmpty()) {
+                sb.append("[] ")
+            } else {
+                subject.subjectIdentifiers.forEach {
+                    sb.append("[$it] ")
+                }
+            }
         }
 
         sb.append("[${valueName()}] [${reason()}]")
@@ -68,10 +76,10 @@ class ValidationResultDescriptor private constructor(
 
     override fun hashCode(): Int =
         subjectChain.hashCode() * 31 +
-            valueName.hashCode() * 31 +
-            reason.hashCode() * 31 +
-            value.hashCode() * 31 +
-            hasValue.hashCode()
+                valueName.hashCode() * 31 +
+                reason.hashCode() * 31 +
+                value.hashCode() * 31 +
+                hasValue.hashCode()
 
     override fun equals(other: Any?): Boolean {
         if (other === this) {
@@ -83,9 +91,9 @@ class ValidationResultDescriptor private constructor(
         }
 
         return subjectChain == other.subjectChain &&
-            valueName == other.valueName &&
-            reason == other.reason &&
-            value == other.value &&
-            hasValue == other.hasValue
+                valueName == other.valueName &&
+                reason == other.reason &&
+                value == other.value &&
+                hasValue == other.hasValue
     }
 }

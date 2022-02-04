@@ -19,8 +19,8 @@ internal class DpmDbWriter_DictionaryReplace_TableCellTransform_ModuleTest :
 
         replaceDictionaryInDb()
 
-        assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [SQLiteDbWriter] []",
+        assertThat(diagnosticCollector.events).containsSubsequence(
+            "ENTER [SQLiteDbWriter] [Mode DictionaryReplace]",
             "EXIT [SQLiteDbWriter]"
         )
 

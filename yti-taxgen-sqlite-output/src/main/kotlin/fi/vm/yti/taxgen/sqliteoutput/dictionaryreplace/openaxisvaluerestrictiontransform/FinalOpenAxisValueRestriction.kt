@@ -143,7 +143,7 @@ data class FinalOpenAxisValueRestriction(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "OpenAxisValueRestriction (transformed)",
-            subjectIdentifier = "AxisID: $axisId"
+            subjectIdentifiers = listOf("AxisID: $axisId")
         )
     }
 }

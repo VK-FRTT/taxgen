@@ -160,7 +160,7 @@ internal class TaxgenCli_CaptureDpmSourcesToFolder_Test : TaxgenCli_TestBase(
                 "Capturing DPM sources",
                 "DPM source: folder",
                 "DPM source recorder: folder",
-                "DPM source recorder: FATAL: Target file 'dpm_sources/meta/source_config.json' already exists"
+                "FATAL: Target file 'dpm_sources/meta/source_config.json' already exists"
             )
 
             assertThat(targetFolderPath).exists().isDirectory()

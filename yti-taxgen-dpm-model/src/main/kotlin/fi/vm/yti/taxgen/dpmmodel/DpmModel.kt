@@ -71,7 +71,7 @@ data class DpmModel(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "DPM Model",
-            subjectIdentifier = ""
+            subjectIdentifiers = emptyList()
         )
     }
 }

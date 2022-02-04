@@ -61,7 +61,7 @@ data class Owner(
     override fun validationSubjectDescriptor(): ValidationSubjectDescriptor {
         return ValidationSubjectDescriptor(
             subjectType = "DPM Owner",
-            subjectIdentifier = name
+            subjectIdentifiers = listOf(name)
         )
     }
 }

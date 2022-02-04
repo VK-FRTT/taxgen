@@ -1,5 +1,6 @@
 package fi.vm.yti.taxgen.sqliteoutput.helpers
 
+import fi.vm.yti.taxgen.commons.diagnostic.DiagnosticContexts
 import fi.vm.yti.taxgen.commons.processingoptions.ProcessingOptions
 import fi.vm.yti.taxgen.commons.thisShouldNeverHappen
 import fi.vm.yti.taxgen.dpmmodel.Concept
@@ -18,6 +19,7 @@ import fi.vm.yti.taxgen.dpmmodel.TranslatedText
 import fi.vm.yti.taxgen.dpmmodel.TypedDimension
 import fi.vm.yti.taxgen.dpmmodel.TypedDomain
 import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.DiagnosticContext
 
 internal object ModelTransformer {
 
@@ -28,6 +30,23 @@ internal object ModelTransformer {
     )
 
     fun transformDpmModelByProcessingOptions(
+        originDpmModel: DpmModel,
+        processingOptions: ProcessingOptions,
+        diagnosticContext: DiagnosticContext
+    ): DpmModel {
+        return diagnosticContext.withContext(
+            contextType = DiagnosticContexts.DpmModelProcessingOptionsTransform.toType(),
+            contextDetails = null
+        ) {
+            doTransformDpmModelByProcessingOptions(
+                originDpmModel = originDpmModel,
+                processingOptions = processingOptions,
+                diagnostic = diagnosticContext
+            )
+        }
+    }
+
+    private fun doTransformDpmModelByProcessingOptions(
         originDpmModel: DpmModel,
         processingOptions: ProcessingOptions,
         diagnostic: Diagnostic
@@ -113,7 +132,8 @@ internal object ModelTransformer {
                     val transformedHierarchies = transformDpmElements(
                         originElement.hierarchies,
                         context.copy(
-                            referencedElementConceptsByCode = transformedMembers.map { it.memberCode to it.concept }.toMap()
+                            referencedElementConceptsByCode = transformedMembers.map { it.memberCode to it.concept }
+                                .toMap()
                         )
                     )
 
@@ -180,7 +200,8 @@ internal object ModelTransformer {
                     val transformedHierarchies = transformDpmElements(
                         originElement.hierarchies,
                         context.copy(
-                            referencedElementConceptsByCode = transformedMetrics.map { it.metricCode to it.concept }.toMap()
+                            referencedElementConceptsByCode = transformedMetrics.map { it.metricCode to it.concept }
+                                .toMap()
                         )
                     )
 

@@ -61,7 +61,7 @@ internal open class DpmModel_UnitTestBase<T : Any>(
         val subject = if (customValidationAdapter == null) {
             (theInstance as Validatable).validationSubjectDescriptor()
         } else {
-            ValidationSubjectDescriptor("", "")
+            ValidationSubjectDescriptor("", emptyList())
         }
 
         collector.withSubject(subject) {

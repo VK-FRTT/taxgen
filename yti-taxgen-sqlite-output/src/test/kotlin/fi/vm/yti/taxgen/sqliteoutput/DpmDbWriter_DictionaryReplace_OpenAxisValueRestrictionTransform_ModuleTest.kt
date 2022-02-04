@@ -27,8 +27,8 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             FixtureVariety.ONLY_ONE_DICTIONARY
         )
 
-        assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [SQLiteDbWriter] []",
+        assertThat(diagnosticCollector.events).containsSubsequence(
+            "ENTER [SQLiteDbWriter] [Mode DictionaryReplace]",
             "EXIT [SQLiteDbWriter]"
         )
 
@@ -58,8 +58,8 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             FixtureVariety.ONLY_ONE_DICTIONARY
         )
 
-        assertThat(diagnosticCollector.events).containsExactly(
-            "ENTER [SQLiteDbWriter] []",
+        assertThat(diagnosticCollector.events).containsSubsequence(
+            "ENTER [SQLiteDbWriter] [Mode DictionaryReplace]",
             "EXIT [SQLiteDbWriter]"
         )
 
@@ -278,8 +278,8 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
                 FixtureVariety.ONLY_FIRST_EXPLICIT_DOMAIN_HIERARCHY_NODE
             )
 
-            assertThat(diagnosticCollector.events).containsSequence(
-                "ENTER [SQLiteDbWriter] []",
+            assertThat(diagnosticCollector.events).containsSubsequence(
+                "ENTER [SQLiteDbWriter] [Mode DictionaryReplace]",
                 "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (ID 26) is not part of Hierarchy (ID 14)]",
                 "EXIT [SQLiteDbWriter]"
             )
