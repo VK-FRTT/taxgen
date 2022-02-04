@@ -237,6 +237,7 @@ class TaxgenCli(
             return SQLiteDpmDbWriterFactory.dictionaryCreateWriter(
                 outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
+                keepPartialOutput = detectedOptions.keepPartialOutput,
                 diagnosticContext = diagnosticBridge
             )
         }
@@ -248,6 +249,7 @@ class TaxgenCli(
                 baselineDbPath = requiredOption(detectedOptions.baselineDb),
                 outputDbPath = requiredOption(detectedOptions.output),
                 forceOverwrite = detectedOptions.forceOverwrite,
+                keepPartialOutput = detectedOptions.keepPartialOutput,
                 diagnosticContext = diagnosticBridge
             )
         }

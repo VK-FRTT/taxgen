@@ -21,6 +21,7 @@ data class DetectedOptions(
 
     val output: Path?,
     val forceOverwrite: Boolean,
+    val keepPartialOutput: Boolean,
     val verbosity: DiagnosticOutputVerbosity
 ) {
 

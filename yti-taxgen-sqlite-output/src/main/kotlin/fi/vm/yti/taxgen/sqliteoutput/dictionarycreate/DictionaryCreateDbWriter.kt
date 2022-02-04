@@ -21,6 +21,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 class DictionaryCreateDbWriter(
     outputDbPath: Path,
     private val forceOverwrite: Boolean,
+    private val keepPartialOutput: Boolean,
     private val diagnosticContext: DiagnosticContext
 ) : DpmDbWriter {
     private val outputDbPath: Path = outputDbPath.toAbsolutePath().normalize()
@@ -42,7 +43,11 @@ class DictionaryCreateDbWriter(
         doWriteModel(updatedDpmModel, processingOptions)
 
         if (diagnosticContext.criticalErrorsReceived()) {
-            Files.delete(outputDbPath)
+            if (keepPartialOutput) {
+                diagnosticContext.info("Output file is partial and has content errors")
+            } else {
+                Files.delete(outputDbPath)
+            }
         }
     }
 

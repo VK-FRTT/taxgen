@@ -33,6 +33,7 @@ class DefinedOptions {
 
     private val output: OptionSpec<Path>
     private val forceOverwrite: OptionSpec<Void>
+    private val keepPartialOutput: OptionSpec<Void>
     private val verbosity: OptionSpec<DiagnosticOutputVerbosity>
 
     init {
@@ -118,6 +119,12 @@ class DefinedOptions {
                 "silently overwrites the possibly existing target file(s)"
             )
 
+        keepPartialOutput = optionParser
+            .accepts(
+                "keep-partial-output",
+                "in error situations, keep the partially produced output files"
+            )
+
         verbosity = optionParser
             .accepts(
                 "verbosity",
@@ -170,6 +177,7 @@ class DefinedOptions {
 
             output = optionSet.valueOf(this.output),
             forceOverwrite = optionSet.has(this.forceOverwrite),
+            keepPartialOutput = optionSet.has(this.keepPartialOutput),
             verbosity = optionSet.valueOf(verbosity)
             )
     }

@@ -76,6 +76,7 @@ internal open class DpmDbWriter_DictionaryReplaceModuleTestBase {
                 baselineDbPath = baselineDbPath,
                 outputDbPath = outputDbPath,
                 forceOverwrite = true,
+                keepPartialOutput = true,
                 diagnosticContext = diagnosticContext
             )
 

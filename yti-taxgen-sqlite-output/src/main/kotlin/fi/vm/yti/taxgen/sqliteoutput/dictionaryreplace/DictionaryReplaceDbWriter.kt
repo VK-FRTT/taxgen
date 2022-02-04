@@ -25,6 +25,7 @@ class DictionaryReplaceDbWriter(
     baselineDbPath: Path,
     outputDbPath: Path,
     private val forceOverwrite: Boolean,
+    private val keepPartialOutput: Boolean,
     private val diagnosticContext: DiagnosticContext
 ) : DpmDbWriter {
     private val baselineDbPath: Path = baselineDbPath.toAbsolutePath().normalize()
@@ -47,7 +48,11 @@ class DictionaryReplaceDbWriter(
         doWriteModel(updatedDpmModel, processingOptions)
 
         if (diagnosticContext.criticalErrorsReceived()) {
-            Files.delete(outputDbPath)
+            if (keepPartialOutput) {
+                diagnosticContext.info("Output file is partial and has content errors")
+            } else {
+                Files.delete(outputDbPath)
+            }
         }
     }
 

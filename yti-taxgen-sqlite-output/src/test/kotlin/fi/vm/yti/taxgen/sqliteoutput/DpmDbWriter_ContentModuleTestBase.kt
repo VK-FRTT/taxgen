@@ -91,6 +91,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
                     SQLiteDpmDbWriterFactory.dictionaryCreateWriter(
                         outputDbPath,
                         false,
+                        false,
                         diagnosticContext
                     )
                 }
@@ -106,6 +107,7 @@ internal abstract class DpmDbWriter_ContentModuleTestBase {
                         baselineDbPath = baselineDbPath,
                         outputDbPath = outputDbPath,
                         forceOverwrite = false,
+                        keepPartialOutput = false,
                         diagnosticContext = diagnosticContext
                     )
                 }

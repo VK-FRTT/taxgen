@@ -11,11 +11,13 @@ object SQLiteDpmDbWriterFactory {
     fun dictionaryCreateWriter(
         outputDbPath: Path,
         forceOverwrite: Boolean,
+        keepPartialOutput: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmDbWriter {
         val writer = DictionaryCreateDbWriter(
             outputDbPath = outputDbPath,
             forceOverwrite = forceOverwrite,
+            keepPartialOutput = keepPartialOutput,
             diagnosticContext = diagnosticContext
         )
 
@@ -30,12 +32,14 @@ object SQLiteDpmDbWriterFactory {
         baselineDbPath: Path,
         outputDbPath: Path,
         forceOverwrite: Boolean,
+        keepPartialOutput: Boolean,
         diagnosticContext: DiagnosticContext
     ): DpmDbWriter {
         val writer = DictionaryReplaceDbWriter(
             baselineDbPath = baselineDbPath,
             outputDbPath = outputDbPath,
             forceOverwrite = forceOverwrite,
+            keepPartialOutput = keepPartialOutput,
             diagnosticContext = diagnosticContext
         )
 

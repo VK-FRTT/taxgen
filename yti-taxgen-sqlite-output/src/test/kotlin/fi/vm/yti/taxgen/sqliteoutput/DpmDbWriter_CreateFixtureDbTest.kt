@@ -52,6 +52,7 @@ internal open class DpmDbWriter_CreateFixtureDbTest {
         val dbWriter = SQLiteDpmDbWriterFactory.dictionaryCreateWriter(
             outputDbPath,
             false,
+            false,
             diagnosticContext
         )
 
