@@ -495,7 +495,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-2-Code)] [DbReferences.DimensionId] [Value missing (null)]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:NonExistingDimension(FixPrfx_ExpDom-1-Code:Mbr-2-Code)] [DbReferences.DimensionId] [Value missing (No Dimension with XBRL code `FixPrfx_dim:NonExistingDimension´)]"
                 )
             }
 
@@ -519,7 +519,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATION [OrdinateCategorisation (transformed)] [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)] [DbReferences.MemberId] [Value missing (null)]"
+                    "VALIDATION [OrdinateCategorisation (transformed)] [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(FixPrfx_ExpDom-1-Code:NonExistingMember)] [DbReferences.MemberId] [Value missing (No Member with XBRL code `FixPrfx_ExpDom-1-Code:NonExistingMember´)]"
                 )
             }
 
@@ -543,8 +543,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*[NonExistingHierarchyCode;Mbr-4-Code;0])] [DbReferences.HierarchyId] [Value missing (null)]",
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*[NonExistingHierarchyCode;Mbr-4-Code;0])] [DbReferences.HierarchyStartingMemberId] [Value missing (null)]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*[NonExistingHierarchyCode;Mbr-4-Code;0])] [DbReferences.HierarchyId] [Value missing (No Hierarchy with HierarchyCode `NonExistingHierarchyCode´ within Domain `5´)]",
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*[NonExistingHierarchyCode;Mbr-4-Code;0])] [DbReferences.HierarchyStartingMemberId] [Value missing (No HierarchyNode with MemberCode `Mbr-4-Code´ within Hierarchy `null´)]"
                 )
             }
 
@@ -568,7 +568,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-2-Code;NonExistingMemberCode;0])] [DbReferences.HierarchyStartingMemberId] [Value missing (null)]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*[ExpDomHier-2-Code;NonExistingMemberCode;0])] [DbReferences.HierarchyStartingMemberId] [Value missing (No HierarchyNode with MemberCode `NonExistingMemberCode´ within Hierarchy `11´)]"
                 )
             }
 
@@ -619,7 +619,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*?[NonExistingHierarchyCode])] [DbReferences.HierarchyId] [Value missing (null)]"
+                    "$finalOrdinateCategorisationValidationMarker [OrdinateID: 112] [BaselineDPS: FixPrfx_dim:ExpDim-1-Code(*?[NonExistingHierarchyCode])] [DbReferences.HierarchyId] [Value missing (No Hierarchy with HierarchyCode `NonExistingHierarchyCode´ within Domain `5´)]"
                 )
             }
 

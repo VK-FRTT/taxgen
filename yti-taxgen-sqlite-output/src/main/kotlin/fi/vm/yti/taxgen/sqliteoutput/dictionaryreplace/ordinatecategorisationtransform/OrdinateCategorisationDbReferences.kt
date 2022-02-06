@@ -16,9 +16,13 @@ data class OrdinateCategorisationDbReferences(
 
     val dimensionId: EntityID<Int>?,
     val memberId: EntityID<Int>?,
-
     val hierarchyId: EntityID<Int>?,
-    val hierarchyStartingMemberId: EntityID<Int>?
+    val hierarchyStartingMemberId: EntityID<Int>?,
+
+    val dimensionIdReasonDetail: String,
+    val memberIdReasonDetail: String,
+    val hierarchyIdReasonDetail: String,
+    val hierarchyStartingMemberIdReasonDetail: String
 ) : ValidatableNestedObject {
     companion object {
         private const val OPEN_MEMBER_MARKER = "*"
@@ -31,16 +35,17 @@ data class OrdinateCategorisationDbReferences(
 
             return transaction {
                 val dimensionRow = DimensionTable.rowWhereXbrlCode(signature.dimensionIdentifier)
+                val dimensionIdReasonDetail = "No Dimension with XBRL code `${signature.dimensionIdentifier}´"
 
                 val memberRow = if (signature.memberIdentifier == OPEN_MEMBER_MARKER) {
                     MemberTable.openMemberRow()
                 } else {
                     MemberTable.rowWhereMemberXbrlCode(signature.memberIdentifier)
                 }
+                val memberIdReasonDetail = "No Member with XBRL code `${signature.memberIdentifier}´"
 
+                val scopingDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
                 val hierarchyRow = signature.hierarchyIdentifier?.run {
-                    val scopingDomainId = dimensionRow?.get(DimensionTable.domainIdCol)
-
                     scopingDomainId?.run {
                         HierarchyTable.rowWhereDomainIdAndHierarchyCode(
                             scopingDomainId,
@@ -48,24 +53,31 @@ data class OrdinateCategorisationDbReferences(
                         )
                     }
                 }
+                val hierarchyIdReasonDetail = "No Hierarchy with HierarchyCode `${signature.hierarchyIdentifier}´ within Domain `$scopingDomainId´"
 
+                val scopingHierarchyId = hierarchyRow?.get(HierarchyTable.id)
                 val hierarchyNodeRow = signature.hierarchyStartingMemberIdentifier?.run {
-                    val hierarchyId = hierarchyRow?.get(HierarchyTable.id)
 
-                    hierarchyId?.run {
+                    scopingHierarchyId?.run {
                         HierarchyNodeTable.rowWhereHierarchyIdAndMemberCode(
-                            hierarchyId,
+                            scopingHierarchyId,
                             signature.hierarchyStartingMemberIdentifier
                         )
                     }
                 }
+                val hierarchyStartingMemberIdReasonDetail = "No HierarchyNode with MemberCode `${signature.hierarchyStartingMemberIdentifier}´ within Hierarchy `$scopingHierarchyId´"
 
                 OrdinateCategorisationDbReferences(
                     signature = signature,
                     dimensionId = dimensionRow?.get(DimensionTable.id),
                     memberId = memberRow?.get(MemberTable.id),
                     hierarchyId = hierarchyRow?.get(HierarchyTable.id),
-                    hierarchyStartingMemberId = hierarchyNodeRow?.get(HierarchyNodeTable.memberIdCol)
+                    hierarchyStartingMemberId = hierarchyNodeRow?.get(HierarchyNodeTable.memberIdCol),
+
+                    dimensionIdReasonDetail = dimensionIdReasonDetail,
+                    memberIdReasonDetail = memberIdReasonDetail,
+                    hierarchyIdReasonDetail = hierarchyIdReasonDetail,
+                    hierarchyStartingMemberIdReasonDetail = hierarchyStartingMemberIdReasonDetail
                 )
             }
         }
@@ -75,12 +87,14 @@ data class OrdinateCategorisationDbReferences(
 
         validateNonNull(
             validationResultBuilder = validationResultBuilder,
-            property = this::dimensionId
+            property = this::dimensionId,
+            reasonDetail = dimensionIdReasonDetail
         )
 
         validateNonNull(
             validationResultBuilder = validationResultBuilder,
-            property = this::memberId
+            property = this::memberId,
+            reasonDetail = memberIdReasonDetail
         )
 
         if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
@@ -88,7 +102,8 @@ data class OrdinateCategorisationDbReferences(
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
-                property = this::hierarchyId
+                property = this::hierarchyId,
+                reasonDetail = hierarchyIdReasonDetail
             )
         }
 
@@ -96,7 +111,8 @@ data class OrdinateCategorisationDbReferences(
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
-                property = this::hierarchyStartingMemberId
+                property = this::hierarchyStartingMemberId,
+                reasonDetail = hierarchyStartingMemberIdReasonDetail
             )
         }
     }

@@ -5,14 +5,15 @@ import kotlin.reflect.KProperty0
 
 fun <T : Any?> validateNonNull(
     validationResultBuilder: ValidationResultBuilder,
-    property: KProperty0<T>
+    property: KProperty0<T>,
+    reasonDetail: String? = null
 ) {
     val value: T = property.get()
 
     if (value == null)
         validationResultBuilder.addError(
             valueName = property,
-            reason = "Value missing (null)"
+            reason = "Value missing${if (reasonDetail == null) "" else " ($reasonDetail)"}"
         )
 }
 

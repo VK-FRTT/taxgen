@@ -93,7 +93,7 @@ data class Metric(
             validationResultBuilder = validationResultBuilder,
             property = this::referencedDomainCode,
             condition = { (dataType != "Enumeration/Code") || (referencedDomainCode != null) },
-            reason = { "Value missing (null) but DataType is Enumeration/Code" },
+            reason = { "Value missing but DataType is Enumeration/Code" },
             includeValueToError = false
         )
 
@@ -146,7 +146,7 @@ data class Metric(
             validationResultBuilder = validationResultBuilder,
             property = this::referencedDomainCode,
             condition = { (referencedHierarchyCode == null) || (referencedDomainCode != null) },
-            reason = { "Value missing (null) but ReferencedHierarchyCode is given" },
+            reason = { "Value missing but ReferencedHierarchyCode is given" },
             includeValueToError = false
         )
     }

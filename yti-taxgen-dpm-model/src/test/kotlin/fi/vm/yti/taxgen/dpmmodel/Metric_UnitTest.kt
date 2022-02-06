@@ -199,7 +199,7 @@ internal class Metric_UnitTest :
 
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
-                "[Metric] [met_uri] [ReferencedDomainCode] [Value missing (null) but DataType is Enumeration/Code]"
+                "[Metric] [met_uri] [ReferencedDomainCode] [Value missing but DataType is Enumeration/Code]"
             )
         }
     }
@@ -372,7 +372,7 @@ internal class Metric_UnitTest :
             instantiateAndValidate()
             assertThat(validationErrors).containsExactly(
                 "[Metric] [met_uri] [ReferencedHierarchyCode] [Value given but DataType not Enumeration/Code] [MC1]",
-                "[Metric] [met_uri] [ReferencedDomainCode] [Value missing (null) but ReferencedHierarchyCode is given]"
+                "[Metric] [met_uri] [ReferencedDomainCode] [Value missing but ReferencedHierarchyCode is given]"
             )
         }
 
