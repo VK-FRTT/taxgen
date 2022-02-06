@@ -84,6 +84,6 @@ internal class DpmDictionarySourceFolderAdapter(
             return null
         }
 
-        return CodeListSourceFolderAdapter(path, blueprint)
+        return CodeListSourceFolderAdapter(path, blueprint, diagnostic)
     }
 }

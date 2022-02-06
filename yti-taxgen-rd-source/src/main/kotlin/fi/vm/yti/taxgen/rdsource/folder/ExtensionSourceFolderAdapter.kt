@@ -1,11 +1,13 @@
 package fi.vm.yti.taxgen.rdsource.folder
 
 import fi.vm.yti.taxgen.commons.ops.FileOps
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsource.ExtensionSource
 import java.nio.file.Path
 
 internal class ExtensionSourceFolderAdapter(
-    private val extensionPath: Path
+    private val extensionPath: Path,
+    private val diagnostic: Diagnostic
 ) : ExtensionSource {
 
     override fun contextTitle(): String = ""
@@ -18,7 +20,8 @@ internal class ExtensionSourceFolderAdapter(
     override fun eachExtensionMemberPageData(action: (String) -> Unit) {
         NumberedFilesIterator(
             extensionPath,
-            "members_page_*.json"
+            "members_page_*.json",
+            diagnostic
         ).forEach(action)
     }
 }

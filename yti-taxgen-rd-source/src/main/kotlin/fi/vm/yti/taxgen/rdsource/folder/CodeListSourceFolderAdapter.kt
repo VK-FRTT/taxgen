@@ -1,6 +1,7 @@
 package fi.vm.yti.taxgen.rdsource.folder
 
 import fi.vm.yti.taxgen.commons.ops.FileOps
+import fi.vm.yti.taxgen.dpmmodel.diagnostic.Diagnostic
 import fi.vm.yti.taxgen.rdsource.CodeListBlueprint
 import fi.vm.yti.taxgen.rdsource.CodeListSource
 import fi.vm.yti.taxgen.rdsource.ExtensionSource
@@ -9,7 +10,8 @@ import java.nio.file.Path
 
 internal class CodeListSourceFolderAdapter(
     private val codeListRootPath: Path,
-    private val blueprint: CodeListBlueprint
+    private val blueprint: CodeListBlueprint,
+    private val diagnostic: Diagnostic
 ) : CodeListSource {
 
     override fun contextTitle(): String = ""
@@ -24,7 +26,8 @@ internal class CodeListSourceFolderAdapter(
     override fun eachCodePageData(action: (String) -> Unit) {
         NumberedFilesIterator(
             codeListRootPath,
-            "codes_page_*.json"
+            "codes_page_*.json",
+            diagnostic
         ).forEach(action)
     }
 
@@ -33,7 +36,7 @@ internal class CodeListSourceFolderAdapter(
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
 
         sortedPaths.forEach { path ->
-            val extensionSource = ExtensionSourceFolderAdapter(path)
+            val extensionSource = ExtensionSourceFolderAdapter(path, diagnostic)
             action(extensionSource)
         }
     }
@@ -45,7 +48,7 @@ internal class CodeListSourceFolderAdapter(
         val sortedPaths = SortOps.folderContentSortedByNumberAwareFilename(paths)
 
         sortedPaths.forEach { path ->
-            val codeListSource = CodeListSourceFolderAdapter(path, blueprint.subCodeListBlueprint)
+            val codeListSource = CodeListSourceFolderAdapter(path, blueprint.subCodeListBlueprint, diagnostic)
 
             action(codeListSource)
         }
