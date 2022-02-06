@@ -25,6 +25,8 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
     val openMemberMarker = "*"
     val openMemberFixedId = "9999"
 
+    val defaultMemberInclusionMarker = "?"
+
     val hierarchyCode = "ExpDomHier-2-Code"
     val hierarchyIdBaseline = "11"
     val hierarchyIdOutput = "2"
@@ -94,16 +96,54 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
         }
 
         @Test
-        fun `ordinate categorisation having partial OpenAxisValueRestriction should get updated`() {
+        fun `ordinate categorisation having full OpenAxisValueRestriction and DefaultMemberInclusion marker should get updated`() {
             val updateStatement =
                 """
                 INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
-                VALUES (111, $expDimIdBaseline, 3333, "$expDimXbrlCode($openMemberMarker?[$hierarchyIdBaseline])", "source", "$expDimXbrlCode($openMemberMarker?[$hierarchyCode])")
+                VALUES (111, $expDimIdBaseline, 3333, "$expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyIdBaseline;$hierarchyStartMemberIdBaseline;0])", "source", "$expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyCode;$hierarchyStartMemberCode;0])")
                 """.trimIndent()
 
             val expectedCategorisations = arrayOf(
                 "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
-                "111, $expDimIdOutput, $openMemberFixedId, $expDimXbrlCode($openMemberMarker?[$hierarchyIdOutput]), source, $expDimXbrlCode($openMemberMarker?[$hierarchyCode])"
+                "111, $expDimIdOutput, $openMemberFixedId, $expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyIdOutput;$hierarchyStartMemberIdOutput;0]), source, $expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyCode;$hierarchyStartMemberCode;0])"
+            )
+
+            updateBaseline_ExecuteDictionaryReplace_VerifyResult(
+                updateStatement = updateStatement,
+                expectedCategorisations = expectedCategorisations
+            )
+        }
+
+        @Test
+        fun `ordinate categorisation having partial OpenAxisValueRestriction should get updated`() {
+            val updateStatement =
+                """
+                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                VALUES (111, $expDimIdBaseline, 3333, "$expDimXbrlCode($openMemberMarker[$hierarchyIdBaseline])", "source", "$expDimXbrlCode($openMemberMarker[$hierarchyCode])")
+                """.trimIndent()
+
+            val expectedCategorisations = arrayOf(
+                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+                "111, $expDimIdOutput, $openMemberFixedId, $expDimXbrlCode($openMemberMarker[$hierarchyIdOutput]), source, $expDimXbrlCode($openMemberMarker[$hierarchyCode])"
+            )
+
+            updateBaseline_ExecuteDictionaryReplace_VerifyResult(
+                updateStatement = updateStatement,
+                expectedCategorisations = expectedCategorisations
+            )
+        }
+
+        @Test
+        fun `ordinate categorisation having partial OpenAxisValueRestriction and DefaultMemberInclusion marker should get updated`() {
+            val updateStatement =
+                """
+                INSERT INTO mOrdinateCategorisation(OrdinateID, DimensionID, MemberID, DimensionMemberSignature, Source, DPS)
+                VALUES (111, $expDimIdBaseline, 3333, "$expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyIdBaseline])", "source", "$expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyCode])")
+                """.trimIndent()
+
+            val expectedCategorisations = arrayOf(
+                "#OrdinateID, #DimensionID, #MemberID, #DimensionMemberSignature, #Source, #DPS",
+                "111, $expDimIdOutput, $openMemberFixedId, $expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyIdOutput]), source, $expDimXbrlCode($openMemberMarker$defaultMemberInclusionMarker[$hierarchyCode])"
             )
 
             updateBaseline_ExecuteDictionaryReplace_VerifyResult(
@@ -304,7 +344,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.DimensionIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Dimensions not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Dimensions not same, DB Dimension identifier ` ´ XBRL Dimension identifier `FixPrfx_dim:ExpDim-1-Code´]"
                 )
 
                 // DPS
@@ -317,7 +357,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.DimensionIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Dimensions not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Dimensions not same, DB Dimension identifier `FixPrfx_dim:ExpDim-1-Code´ XBRL Dimension identifier ` ´]"
                 )
             }
 
@@ -334,7 +374,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.MemberIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Members not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Members not same, DB Member identifier ` ´ XBRL Member identifier `FixPrfx_ExpDom-1-Code:Mbr-2-Code´]"
                 )
 
                 // DPS
@@ -347,7 +387,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.MemberIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Members not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Members not same, DB Member identifier `FixPrfx_ExpDom-1-Code:Mbr-2-Code´ XBRL Member identifier ` ´]"
                 )
             }
 
@@ -363,7 +403,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.HierarchyIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same, DB Hierarchy identifier `null´ XBRL Hierarchy identifier `ExpDomHier-2-Code´]"
                 )
 
                 // DPS
@@ -376,7 +416,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.HierarchyIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same, DB Hierarchy identifier `ExpDomHier-2-Code´ XBRL Hierarchy identifier ` ´]"
                 )
             }
 
@@ -392,7 +432,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.HierarchyStartingMemberIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchy starting members not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchy starting Members not same, DB Member identifier `null´ XBRL Member identifier `Mbr-4-Code´]"
                 )
 
                 // DPS
@@ -405,7 +445,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.HierarchyStartingMemberIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchy starting members not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchy starting Members not same, DB Member identifier `Mbr-4-Code´ XBRL Member identifier ` ´]"
                 )
             }
 
@@ -420,9 +460,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.StartingMemberIncluded] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.StartingMemberIncluded] [Unsupported value] [ ]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Starting member inclusion not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.IsStartingMemberIncluded] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.IsStartingMemberIncluded] [Unsupported value] [ ]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Starting member inclusion not same, DB inclusion ` ´ XBRL inclusion `0´]"
                 )
 
                 // DPS
@@ -434,9 +474,9 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.StartingMemberIncluded] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.StartingMemberIncluded] [Unsupported value] [ ]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Starting member inclusion not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.IsStartingMemberIncluded] [Value is blank]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.IsStartingMemberIncluded] [Unsupported value] [ ]",
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Starting member inclusion not same, DB inclusion `0´ XBRL inclusion ` ´]"
                 )
             }
 
@@ -452,7 +492,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.HierarchyIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same, DB Hierarchy identifier `null´ XBRL Hierarchy identifier `ExpDomHier-2-Code´]"
                 )
 
                 // DPS
@@ -465,7 +505,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
 
                 assertThat(diagnosticCollector.events).containsSubsequence(
                     "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.HierarchyIdentifier] [Value is blank]",
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [DimensionMemberSignature, DPS] [Signatures do not match] [Hierarchies not same, DB Hierarchy identifier `ExpDomHier-2-Code´ XBRL Hierarchy identifier ` ´]"
                 )
             }
         }
@@ -583,7 +623,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.StartingMemberIncluded] [Unsupported value] [XYZ]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 111] [DatabaseIdSignature.IsStartingMemberIncluded] [Unsupported value] [XYZ]"
                 )
 
                 // DPS
@@ -595,7 +635,7 @@ internal class DpmDbWriter_DictionaryReplace_OrdinateCategorisationTransform_Mod
                 replaceDictionaryInDb()
                 diagnosticEventsShouldNotContain(finalOrdinateCategorisationValidationMarker)
                 assertThat(diagnosticCollector.events).containsSubsequence(
-                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.StartingMemberIncluded] [Unsupported value] [XYZ]"
+                    "VALIDATION [OrdinateCategorisation (baseline)] [OrdinateID: 112] [XbrlCodeSignature.IsStartingMemberIncluded] [Unsupported value] [XYZ]"
                 )
             }
 

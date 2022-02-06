@@ -51,9 +51,10 @@ data class FinalOrdinateCategorisation(
                 signaturePrecision = signature.signaturePrecision,
                 dimension = signature.dimensionIdentifier,
                 member = signature.memberIdentifier,
+                defaultMemberIncluded = signature.isDefaultMemberIncluded,
                 hierarchy = dbReferences.hierarchyId,
                 startingMember = dbReferences.hierarchyStartingMemberId,
-                startingMemberIncluded = signature.startingMemberIncluded
+                startingMemberIncluded = signature.isStartingMemberIncluded
             )
         }
 
@@ -66,9 +67,10 @@ data class FinalOrdinateCategorisation(
                 signaturePrecision = signature.signaturePrecision,
                 dimension = signature.dimensionIdentifier,
                 member = signature.memberIdentifier,
+                defaultMemberIncluded = signature.isDefaultMemberIncluded,
                 hierarchy = signature.hierarchyIdentifier,
                 startingMember = signature.hierarchyStartingMemberIdentifier,
-                startingMemberIncluded = signature.startingMemberIncluded
+                startingMemberIncluded = signature.isStartingMemberIncluded
             )
         }
 
@@ -76,19 +78,20 @@ data class FinalOrdinateCategorisation(
             signaturePrecision: OrdinateCategorisationSignature.SignaturePrecision,
             dimension: String,
             member: String,
+            defaultMemberIncluded: String?,
             hierarchy: Any?,
             startingMember: Any?,
             startingMemberIncluded: Any?
         ): String {
             return when (signaturePrecision) {
-                OrdinateCategorisationSignature.SignaturePrecision.NO_OPEN_AXIS_VALUE_RESTRICTION -> {
+                OrdinateCategorisationSignature.SignaturePrecision.CLOSED_AXIS -> {
                     "$dimension($member)"
                 }
-                OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION -> {
-                    "$dimension($member?[$hierarchy])"
+                OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_PARTIAL_RESTRICTION -> {
+                    "$dimension($member$defaultMemberIncluded[$hierarchy])"
                 }
-                OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION -> {
-                    "$dimension($member[$hierarchy;$startingMember;$startingMemberIncluded])"
+                OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION -> {
+                    "$dimension($member$defaultMemberIncluded[$hierarchy;$startingMember;$startingMemberIncluded])"
                 }
             }
         }

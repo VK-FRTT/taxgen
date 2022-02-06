@@ -84,21 +84,25 @@ data class OrdinateCategorisationDbReferences(
     }
 
     override fun validate(validationResultBuilder: ValidationResultBuilder) {
+        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.CLOSED_AXIS ||
+            signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_PARTIAL_RESTRICTION ||
+            signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION
+        ) {
+            validateNonNull(
+                validationResultBuilder = validationResultBuilder,
+                property = this::dimensionId,
+                reasonDetail = dimensionIdReasonDetail
+            )
 
-        validateNonNull(
-            validationResultBuilder = validationResultBuilder,
-            property = this::dimensionId,
-            reasonDetail = dimensionIdReasonDetail
-        )
+            validateNonNull(
+                validationResultBuilder = validationResultBuilder,
+                property = this::memberId,
+                reasonDetail = memberIdReasonDetail
+            )
+        }
 
-        validateNonNull(
-            validationResultBuilder = validationResultBuilder,
-            property = this::memberId,
-            reasonDetail = memberIdReasonDetail
-        )
-
-        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
-            signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_PARTIAL_RESTRICTION ||
+            signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
@@ -107,7 +111,7 @@ data class OrdinateCategorisationDbReferences(
             )
         }
 
-        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION
+        if (signature.signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,

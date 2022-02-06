@@ -79,7 +79,7 @@ class ValidationResultCollector : ValidationResultBuilder {
     }
 
     override fun <T : ValidatableNestedObject> validateNestedProperty(property: KProperty0<T>) {
-        val name = property.name?.capitalize()
+        val name = property.name.capitalize()
 
         nameStack.push(name)
 

@@ -70,41 +70,44 @@ data class BaselineOrdinateCategorisation(
                 ?: thisShouldNeverHappen("SignaturePattern configuration mismatch")
 
             return when {
-                signatureElementValueOrNull("dimension") != null -> {
+                signatureElementValueOrNull("ClosedAxisDimension") != null -> {
                     OrdinateCategorisationSignature(
                         identifierKind = identifierKind,
-                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.NO_OPEN_AXIS_VALUE_RESTRICTION,
-                        dimensionIdentifier = signatureElementValue("dimension"),
-                        memberIdentifier = signatureElementValue("member"),
+                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.CLOSED_AXIS,
+                        dimensionIdentifier = signatureElementValue("ClosedAxisDimension"),
+                        memberIdentifier = signatureElementValue("ClosedAxisMember"),
+                        isDefaultMemberIncluded = null,
                         hierarchyIdentifier = null,
                         hierarchyStartingMemberIdentifier = null,
-                        startingMemberIncluded = null,
+                        isStartingMemberIncluded = null,
                         originSignatureLiteral = signatureLiteral
                     )
                 }
 
-                (signatureElementValueOrNull("partialOavrDimension") != null) -> {
+                (signatureElementValueOrNull("SoAxisPartialDimension") != null) -> {
                     OrdinateCategorisationSignature(
                         identifierKind = identifierKind,
-                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION,
-                        dimensionIdentifier = signatureElementValue("partialOavrDimension"),
-                        memberIdentifier = signatureElementValue("partialOavrMember"),
-                        hierarchyIdentifier = signatureElementValue("partialOavrHierarchy"),
+                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_PARTIAL_RESTRICTION,
+                        dimensionIdentifier = signatureElementValue("SoAxisPartialDimension"),
+                        memberIdentifier = signatureElementValue("SoAxisPartialMember"),
+                        isDefaultMemberIncluded = signatureElementValue("SoAxisPartialDefMemberIncluded"),
+                        hierarchyIdentifier = signatureElementValue("SoAxisPartialHierarchy"),
                         hierarchyStartingMemberIdentifier = null,
-                        startingMemberIncluded = null,
+                        isStartingMemberIncluded = null,
                         originSignatureLiteral = signatureLiteral
                     )
                 }
 
-                (signatureElementValueOrNull("oavrDimension") != null) -> {
+                (signatureElementValueOrNull("SoAxisFullDimension") != null) -> {
                     OrdinateCategorisationSignature(
                         identifierKind = identifierKind,
-                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION,
-                        dimensionIdentifier = signatureElementValue("oavrDimension"),
-                        memberIdentifier = signatureElementValue("oavrMember"),
-                        hierarchyIdentifier = signatureElementValue("oavrHierarchy"),
-                        hierarchyStartingMemberIdentifier = signatureElementValue("oavrStartMember"),
-                        startingMemberIncluded = signatureElementValue("oavrStartMemberIncluded"),
+                        signaturePrecision = OrdinateCategorisationSignature.SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION,
+                        dimensionIdentifier = signatureElementValue("SoAxisFullDimension"),
+                        memberIdentifier = signatureElementValue("SoAxisFullMember"),
+                        isDefaultMemberIncluded = signatureElementValue("SoAxisFullDefMemberIncluded"),
+                        hierarchyIdentifier = signatureElementValue("SoAxisFullHierarchy"),
+                        hierarchyStartingMemberIdentifier = signatureElementValue("SoAxisFullStartMember"),
+                        isStartingMemberIncluded = signatureElementValue("SoAxisFullStartMemberIncluded"),
                         originSignatureLiteral = signatureLiteral
                     )
                 }
@@ -119,31 +122,34 @@ data class BaselineOrdinateCategorisation(
             """
             \A
 
-            (?<dimension>[^\(\)]+)
+            (?<ClosedAxisDimension>[^\(\)]+)
                 \(
-                (?<member>[^\(\)\[\]]+)
+                (?<ClosedAxisMember>[^\(\)\[\]]+)
                 \)
 
             |
 
-            (?<oavrDimension>[^\(\)]+)
+            (?<SoAxisPartialDimension>[^\(\)]+)
                 \(
-                (?<oavrMember>[^\(\)\[\]]+)
+                (?<SoAxisPartialMember>[^\(\)\[\]\?]+)
+                (?<SoAxisPartialDefMemberIncluded>[?]?)
                     \[
-                    (?<oavrHierarchy>[^\(\)\[\];]+)
-                    ;
-                    (?<oavrStartMember>[^\(\)\[\];]+)
-                    ;
-                    (?<oavrStartMemberIncluded>[^\(\)\[\];]+)
+                    (?<SoAxisPartialHierarchy>[^\(\)\[\];]+)
                     \]
                 \)
+
             |
 
-            (?<partialOavrDimension>[^\(\)]+)
+            (?<SoAxisFullDimension>[^\(\)]+)
                 \(
-                (?<partialOavrMember>[^\(\)\[\]\?]+)
-                    \?\[
-                    (?<partialOavrHierarchy>[^\(\)\[\]]+)
+                (?<SoAxisFullMember>[^\(\)\[\]\?]+)
+                (?<SoAxisFullDefMemberIncluded>[?]?)
+                    \[
+                    (?<SoAxisFullHierarchy>[^\(\)\[\];]+)
+                    ;
+                    (?<SoAxisFullStartMember>[^\(\)\[\];]+)
+                    ;
+                    (?<SoAxisFullStartMemberIncluded>[^\(\)\[\];]+)
                     \]
                 \)
             \z
@@ -187,32 +193,41 @@ data class BaselineOrdinateCategorisation(
         }
 
         checkSignatureElementsMatching(
-            databaseIdSignature.memberIdentifier,
-            xbrlCodeSignature.memberIdentifier,
-            "Members not same"
-        )
-        checkSignatureElementsMatching(
             databaseIdSignature.dimensionIdentifier,
             xbrlCodeSignature.dimensionIdentifier,
-            "Dimensions not same"
+            "Dimensions not same, DB Dimension identifier `${databaseIdSignature.dimensionIdentifier}´ XBRL Dimension identifier `${xbrlCodeSignature.dimensionIdentifier}´"
         )
 
         checkSignatureElementsMatching(
-            databaseIdSignature.lookupHierarchyCodeForHierarchyIdentifier(),
+            databaseIdSignature.memberIdentifier,
+            xbrlCodeSignature.memberIdentifier,
+            "Members not same, DB Member identifier `${databaseIdSignature.memberIdentifier}´ XBRL Member identifier `${xbrlCodeSignature.memberIdentifier}´"
+        )
+
+        checkSignatureElementsMatching(
+            databaseIdSignature.isDefaultMemberIncluded,
+            xbrlCodeSignature.isDefaultMemberIncluded,
+            "Default Member inclusion not same, DB inclusion `${databaseIdSignature.isDefaultMemberIncluded}´ XBRL inclusion `${xbrlCodeSignature.isDefaultMemberIncluded}´"
+        )
+
+        val dbHierarchyCode = databaseIdSignature.lookupHierarchyCodeForHierarchyIdentifier()
+        checkSignatureElementsMatching(
+            dbHierarchyCode,
             xbrlCodeSignature.hierarchyIdentifier,
-            "Hierarchies not same"
+            "Hierarchies not same, DB Hierarchy identifier `$dbHierarchyCode´ XBRL Hierarchy identifier `${xbrlCodeSignature.hierarchyIdentifier}´"
         )
 
+        val dbMemberCode = databaseIdSignature.lookupMemberCodeForHierarchyStartingMemberIdentifier()
         checkSignatureElementsMatching(
-            databaseIdSignature.lookupMemberCodeForHierarchyStartingMemberIdentifier(),
+            dbMemberCode,
             xbrlCodeSignature.hierarchyStartingMemberIdentifier,
-            "Hierarchy starting members not same"
+            "Hierarchy starting Members not same, DB Member identifier `$dbMemberCode´ XBRL Member identifier `${xbrlCodeSignature.hierarchyStartingMemberIdentifier}´"
         )
 
         checkSignatureElementsMatching(
-            databaseIdSignature.startingMemberIncluded,
-            xbrlCodeSignature.startingMemberIncluded,
-            "Starting member inclusion not same"
+            databaseIdSignature.isStartingMemberIncluded,
+            xbrlCodeSignature.isStartingMemberIncluded,
+            "Starting member inclusion not same, DB inclusion `${databaseIdSignature.isStartingMemberIncluded}´ XBRL inclusion `${xbrlCodeSignature.isStartingMemberIncluded}´"
         )
 
         return descriptions

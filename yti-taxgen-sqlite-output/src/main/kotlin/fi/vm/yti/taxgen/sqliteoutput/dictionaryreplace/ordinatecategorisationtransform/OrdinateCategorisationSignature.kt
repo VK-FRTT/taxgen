@@ -15,9 +15,11 @@ data class OrdinateCategorisationSignature(
 
     val dimensionIdentifier: String,
     val memberIdentifier: String,
+    val isDefaultMemberIncluded: String?,
+
     val hierarchyIdentifier: String?,
     val hierarchyStartingMemberIdentifier: String?,
-    val startingMemberIncluded: String?,
+    val isStartingMemberIncluded: String?,
 
     val originSignatureLiteral: String
 ) : ValidatableNestedObject {
@@ -27,32 +29,49 @@ data class OrdinateCategorisationSignature(
     }
 
     enum class SignaturePrecision {
-        NO_OPEN_AXIS_VALUE_RESTRICTION,
-        PARTIAL_OPEN_AXIS_VALUE_RESTRICTION,
-        FULL_OPEN_AXIS_VALUE_RESTRICTION
+        CLOSED_AXIS,
+        SEMI_OPEN_AXIS_PARTIAL_RESTRICTION,
+        SEMI_OPEN_AXIS_FULL_RESTRICTION
     }
 
     companion object {
-        val VALID_STARTING_MEMBER_INCLUDED_VALUES = listOf("0", "1")
+        val VALID_IS_STARTING_MEMBER_INCLUDED_VALUES = listOf("0", "1")
+        val VALID_IS_DEFAULT_MEMBER_INCLUDED_VALUES = listOf("", "?")
     }
 
     override fun validate(validationResultBuilder: ValidationResultBuilder) {
-        validateNonNullAndNonBlank(
-            validationResultBuilder = validationResultBuilder,
-            property = this::dimensionIdentifier
-        )
+        if (signaturePrecision == SignaturePrecision.CLOSED_AXIS ||
+            signaturePrecision == SignaturePrecision.SEMI_OPEN_AXIS_PARTIAL_RESTRICTION ||
+            signaturePrecision == SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION
+        ) {
+            validateNonNullAndNonBlank(
+                validationResultBuilder = validationResultBuilder,
+                property = this::dimensionIdentifier
+            )
 
-        validateNonNullAndNonBlank(
-            validationResultBuilder = validationResultBuilder,
-            property = this::memberIdentifier
-        )
+            validateNonNullAndNonBlank(
+                validationResultBuilder = validationResultBuilder,
+                property = this::memberIdentifier
+            )
+        }
 
-        if (signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
+        if (signaturePrecision == SignaturePrecision.SEMI_OPEN_AXIS_PARTIAL_RESTRICTION ||
+            signaturePrecision == SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION
+        ) {
+            validatePropFulfillsCondition(
+                validationResultBuilder = validationResultBuilder,
+                property = this::isDefaultMemberIncluded,
+                condition = { VALID_IS_DEFAULT_MEMBER_INCLUDED_VALUES.contains(isDefaultMemberIncluded) },
+                reason = { "Unsupported value `$isDefaultMemberIncluded´" }
+            )
+
             validateNonNullAndNonBlank(
                 validationResultBuilder = validationResultBuilder,
                 property = this::hierarchyIdentifier
             )
+        }
 
+        if (signaturePrecision == SignaturePrecision.SEMI_OPEN_AXIS_FULL_RESTRICTION) {
             validateNonNullAndNonBlank(
                 validationResultBuilder = validationResultBuilder,
                 property = this::hierarchyStartingMemberIdentifier
@@ -60,21 +79,14 @@ data class OrdinateCategorisationSignature(
 
             validateNonNullAndNonBlank(
                 validationResultBuilder = validationResultBuilder,
-                property = this::startingMemberIncluded
+                property = this::isStartingMemberIncluded
             )
 
             validatePropFulfillsCondition(
                 validationResultBuilder = validationResultBuilder,
-                property = this::startingMemberIncluded,
-                condition = { VALID_STARTING_MEMBER_INCLUDED_VALUES.contains(startingMemberIncluded) },
+                property = this::isStartingMemberIncluded,
+                condition = { VALID_IS_STARTING_MEMBER_INCLUDED_VALUES.contains(isStartingMemberIncluded) },
                 reason = { "Unsupported value" }
-            )
-        }
-
-        if (signaturePrecision == OrdinateCategorisationSignature.SignaturePrecision.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION) {
-            validateNonNullAndNonBlank(
-                validationResultBuilder = validationResultBuilder,
-                property = this::hierarchyIdentifier
             )
         }
     }
