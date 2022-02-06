@@ -12,7 +12,7 @@ import fi.vm.yti.taxgen.sqliteoutput.tables.MemberTable
 import org.jetbrains.exposed.dao.id.EntityID
 
 data class FinalOpenAxisValueRestriction(
-    val restrictionStructure: OpenAxisValueRestrictionStructure,
+    val restrictionPrecision: OpenAxisValueRestrictionPrecision,
 
     val axisId: EntityID<Int>?,
     val domainId: EntityID<Int>?,
@@ -31,7 +31,7 @@ data class FinalOpenAxisValueRestriction(
             val (domainId, hierarchyId, hierarchyStartingMemberId) = resolveIds(baseline)
 
             return FinalOpenAxisValueRestriction(
-                restrictionStructure = baseline.restrictionStructure,
+                restrictionPrecision = baseline.restrictionPrecision,
                 axisId = baseline.axisId,
                 domainId = domainId,
                 hierarchyId = hierarchyId,
@@ -100,8 +100,8 @@ data class FinalOpenAxisValueRestriction(
     }
 
     override fun validate(validationResultBuilder: ValidationResultBuilder) {
-        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
-            restrictionStructure == OpenAxisValueRestrictionStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        if (restrictionPrecision == OpenAxisValueRestrictionPrecision.OPEN_AXIS_FULL_RESTRICTION ||
+            restrictionPrecision == OpenAxisValueRestrictionPrecision.OPEN_AXIS_PARTIAL_RESTRICTION
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
@@ -119,7 +119,7 @@ data class FinalOpenAxisValueRestriction(
             )
         }
 
-        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
+        if (restrictionPrecision == OpenAxisValueRestrictionPrecision.OPEN_AXIS_FULL_RESTRICTION) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
                 property = this::hierarchyStartingMemberId
@@ -134,7 +134,7 @@ data class FinalOpenAxisValueRestriction(
                 validationResultBuilder = validationResultBuilder,
                 property = this::isHierarchyStartingMemberPartOfHierarchy,
                 condition = { it },
-                reason = { "HierarchyStartingMember (ID $hierarchyStartingMemberId) is not part of Hierarchy (ID $hierarchyId)" },
+                reason = { "HierarchyStartingMember `ID $hierarchyStartingMemberId´ is not part of Hierarchy `ID $hierarchyId´" },
                 includeValueToError = false
             )
         }

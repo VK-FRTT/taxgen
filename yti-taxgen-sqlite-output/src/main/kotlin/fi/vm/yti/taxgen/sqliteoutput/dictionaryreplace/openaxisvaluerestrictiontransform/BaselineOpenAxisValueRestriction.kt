@@ -15,7 +15,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 
 data class BaselineOpenAxisValueRestriction(
-    val restrictionStructure: OpenAxisValueRestrictionStructure,
+    val restrictionPrecision: OpenAxisValueRestrictionPrecision,
 
     val axisId: EntityID<Int>?,
 
@@ -35,11 +35,11 @@ data class BaselineOpenAxisValueRestriction(
             openAxisValueRestrictionRow: ResultRow
         ): BaselineOpenAxisValueRestriction {
 
-            val restrictionStructure =
+            val restrictionPrecision =
                 if (openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.hierarchyStartingMemberIdCol] != null) {
-                    OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION
+                    OpenAxisValueRestrictionPrecision.OPEN_AXIS_FULL_RESTRICTION
                 } else {
-                    OpenAxisValueRestrictionStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+                    OpenAxisValueRestrictionPrecision.OPEN_AXIS_PARTIAL_RESTRICTION
                 }
 
             val hierarchyId = openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.hierarchyIdCol]
@@ -59,7 +59,7 @@ data class BaselineOpenAxisValueRestriction(
             val domainRow = domainId?.let { DomainTable.rowWhereDomainId(it) }
 
             return BaselineOpenAxisValueRestriction(
-                restrictionStructure = restrictionStructure,
+                restrictionPrecision = restrictionPrecision,
                 axisId = openAxisValueRestrictionRow[OpenAxisValueRestrictionTable.axisIdCol],
                 domainXbrlCode = domainRow?.get(DomainTable.domainXBRLCodeCol),
                 hierarchyCode = hierarchyRow?.get(HierarchyTable.hierarchyCodeCol),
@@ -71,8 +71,8 @@ data class BaselineOpenAxisValueRestriction(
     }
 
     override fun validate(validationResultBuilder: ValidationResultBuilder) {
-        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION ||
-            restrictionStructure == OpenAxisValueRestrictionStructure.PARTIAL_OPEN_AXIS_VALUE_RESTRICTION
+        if (restrictionPrecision == OpenAxisValueRestrictionPrecision.OPEN_AXIS_FULL_RESTRICTION ||
+            restrictionPrecision == OpenAxisValueRestrictionPrecision.OPEN_AXIS_PARTIAL_RESTRICTION
         ) {
             validateNonNull(
                 validationResultBuilder = validationResultBuilder,
@@ -90,7 +90,7 @@ data class BaselineOpenAxisValueRestriction(
             )
         }
 
-        if (restrictionStructure == OpenAxisValueRestrictionStructure.FULL_OPEN_AXIS_VALUE_RESTRICTION) {
+        if (restrictionPrecision == OpenAxisValueRestrictionPrecision.OPEN_AXIS_FULL_RESTRICTION) {
             validateNonNullAndNonBlank(
                 validationResultBuilder = validationResultBuilder,
                 property = this::hierarchyStartingMemberXbrlCode
@@ -105,7 +105,7 @@ data class BaselineOpenAxisValueRestriction(
                 validationResultBuilder = validationResultBuilder,
                 property = this::isHierarchyStartingMemberPartOfHierarchy,
                 condition = { it },
-                reason = { "HierarchyStartingMember ($hierarchyStartingMemberXbrlCode) is not part of Hierarchy ($hierarchyCode)" },
+                reason = { "HierarchyStartingMember `$hierarchyStartingMemberXbrlCode´ is not part of Hierarchy `$hierarchyCode´" },
                 includeValueToError = false
             )
         }

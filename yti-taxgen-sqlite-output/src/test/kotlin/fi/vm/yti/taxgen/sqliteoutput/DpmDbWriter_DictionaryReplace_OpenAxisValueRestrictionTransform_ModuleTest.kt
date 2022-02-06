@@ -114,7 +114,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             assertThat(diagnosticCollector.events).containsSequence(
                 "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [DomainXbrlCode] [Value missing]",
                 "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [HierarchyCode] [Value missing]",
-                "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (FixPrfx_ExpDom-2-Code:Mbr-2-Code) is not part of Hierarchy (null)]"
+                "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `FixPrfx_ExpDom-2-Code:Mbr-2-Code´ is not part of Hierarchy `null´]"
             )
         }
 
@@ -136,7 +136,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
 
             assertThat(diagnosticCollector.events).containsSequence(
                 "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [HierarchyStartingMemberXbrlCode] [Value missing]",
-                "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (null) is not part of Hierarchy (ExpDomHier-2-Code)]"
+                "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `null´ is not part of Hierarchy `ExpDomHier-2-Code´]"
             )
         }
 
@@ -157,7 +157,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
             replaceDictionaryInDb()
 
             assertThat(diagnosticCollector.events).containsSequence(
-                "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (FixPrfx_ExpDom-1-Code:Mbr-2-Code) is not part of Hierarchy (ExpDomHier-2-Code)]"
+                "VALIDATION [OpenAxisValueRestriction (baseline)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `FixPrfx_ExpDom-1-Code:Mbr-2-Code´ is not part of Hierarchy `ExpDomHier-2-Code´]"
             )
         }
 
@@ -208,7 +208,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
                 "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [DomainId] [Value missing]",
                 "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [HierarchyId] [Value missing]",
                 "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [HierarchyStartingMemberId] [Value missing]",
-                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (ID null) is not part of Hierarchy (ID null)]"
+                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `ID null´ is not part of Hierarchy `ID null´]"
             )
         }
 
@@ -232,7 +232,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
 
             assertThat(diagnosticCollector.events).containsSequence(
                 "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [HierarchyId] [Value missing]",
-                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (ID 26) is not part of Hierarchy (ID null)]"
+                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `ID 26´ is not part of Hierarchy `ID null´]"
             )
         }
 
@@ -256,7 +256,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
 
             assertThat(diagnosticCollector.events).containsSequence(
                 "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [HierarchyStartingMemberId] [Value missing]",
-                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (ID null) is not part of Hierarchy (ID 14)]"
+                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `ID null´ is not part of Hierarchy `ID 14´]"
             )
         }
 
@@ -280,7 +280,7 @@ internal class DpmDbWriter_DictionaryReplace_OpenAxisValueRestrictionTransform_M
 
             assertThat(diagnosticCollector.events).containsSubsequence(
                 "ENTER [SQLiteDbWriter] [Mode DictionaryReplace]",
-                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember (ID 26) is not part of Hierarchy (ID 14)]",
+                "VALIDATION [OpenAxisValueRestriction (transformed)] [AxisID: 101] [IsHierarchyStartingMemberPartOfHierarchy] [HierarchyStartingMember `ID 26´ is not part of Hierarchy `ID 14´]",
                 "EXIT [SQLiteDbWriter]"
             )
         }
